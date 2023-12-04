@@ -14,7 +14,9 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis-Plus，Kafka等框�
 - 官网地址：
 
 ```
-oh-system 
+oh-system 系统基础、入口
+oh-framework 系统框架
+oh-module 系统模块
 ```
 
 ## 沟通交流
