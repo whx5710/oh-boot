@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.iris</groupId>
+		<artifactId>oh-module</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>oh-module-quartz</artifactId>
+	<description>定时任务</description>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.iris</groupId>
+			<artifactId>oh-framework</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

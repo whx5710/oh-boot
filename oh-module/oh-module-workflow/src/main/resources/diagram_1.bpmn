@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0f1aos7" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.12.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:process id="Process_wodeliucheng" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_kaishi" name="开始">
+      <bpmn:extensionElements>
+        <camunda:formData />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1txpag8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1txpag8" sourceRef="StartEvent_kaishi" targetRef="Activity_dagezhaohu" />
+    <bpmn:userTask id="Activity_dagezhaohu" name="打个招呼">
+      <bpmn:extensionElements>
+        <camunda:formData />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1txpag8</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nlxbwy</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0nlxbwy" sourceRef="Activity_dagezhaohu" targetRef="Activity_nihao" />
+    <bpmn:userTask id="Activity_nihao" name="你好camunda">
+      <bpmn:extensionElements>
+        <camunda:formData />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0nlxbwy</bpmn:incoming>
+      <bpmn:outgoing>Flow_11n6tpv</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_jieshu" name="结束">
+      <bpmn:incoming>Flow_11n6tpv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11n6tpv" sourceRef="Activity_nihao" targetRef="Event_jieshu" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="Process_wodeliucheng_di" bpmnElement="Process_wodeliucheng">
+      <bpmndi:BPMNEdge id="Flow_11n6tpv_di" bpmnElement="Flow_11n6tpv">
+        <di:waypoint x="530" y="117" />
+        <di:waypoint x="592" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nlxbwy_di" bpmnElement="Flow_0nlxbwy">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="430" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1txpag8_di" bpmnElement="Flow_1txpag8">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_kaishi_di" bpmnElement="StartEvent_kaishi">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="186" y="142" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_dagezhaohu_di" bpmnElement="Activity_dagezhaohu">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_nihao_di" bpmnElement="Activity_nihao">
+        <dc:Bounds x="430" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_jieshu_di" bpmnElement="Event_jieshu">
+        <dc:Bounds x="592" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="599" y="142" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

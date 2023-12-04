@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.iris</groupId>
+        <artifactId>oh-module</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>oh-module-generator</artifactId>
+    <description>代码生成器</description>
+    <packaging>jar</packaging>
+
+    <properties>
+        <oracle.version>11.2.0.3</oracle.version>
+        <freemarker.version>2.3.31</freemarker.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-framework</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${oracle.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

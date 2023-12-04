@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iris.system.dao.SysVersionInfoDao">
+
+    <resultMap type="com.iris.system.entity.SysVersionInfoEntity" id="sysVersionInfoMap">
+        <result property="id" column="id"/>
+        <result property="versionNum" column="version_num"/>
+        <result property="content" column="content"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="deleted" column="deleted"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isCurrVersion" column="is_curr_version"/>
+    </resultMap>
+
+</mapper>

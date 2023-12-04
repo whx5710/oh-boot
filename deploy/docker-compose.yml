@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  oh-boot:
+    image: oh-iris:1.0.0
+    container_name: oh-boot
+    ports:
+      - 8080:8080
+    environment:
+      - spring.profiles.active=prod
+    volumes:
+      - /work/oh-server.jar:/app/oh-server.jar
