@@ -20,6 +20,10 @@ spring:
       max-lifetime: 1800000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟
       connection-test-query: SELECT 1
       pool-name: OhHikariCP
+      prepStmtCacheSize: 300        # 【mysql】在每个连接中缓存的语句的数量。默认值为保守值25。建议将其设置为250-500之间
+      prepStmtCacheSqlLimit: 500    # 缓存的已准备SQL语句的最大长度，默认值是256
+      cachePrepStmts: true          # 缓存开关，如果这里设置为false，上面两个参数都不生效
+      useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
     dynamic:
       #  dynamic主从设置
       primary: master  #设置默认的数据源或者数据源组,默认值即为master

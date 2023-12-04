@@ -17,8 +17,8 @@ oh:
     exclude-urls:
       - /oh-generator/**
   security:
-    # 2小时过期
-    access-token-expire: 7200
+    # 12小时过期
+    access-token-expire: 43200
     # 14天过期
     refresh-token-expire: 1209600
   open-api:
@@ -46,7 +46,7 @@ spring:
       max-request-size: 1024MB
   main:
     # 关闭 banner CONSOLE、LOG、OFF
-    banner-mode: "CONSOLE"
+    banner-mode: "OFF"
 # 接口文档
 knife4j:
   enable: true
