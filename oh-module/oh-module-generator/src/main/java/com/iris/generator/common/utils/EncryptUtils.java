@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 /**
  * 加解密工具类
  *
- * @author 李淼 Milo 505754686@qq.com
  */
 public class EncryptUtils {
 
