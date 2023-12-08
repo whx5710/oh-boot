@@ -4,7 +4,6 @@ import com.iris.workflow.service.TaskHandlerService;
 import jakarta.annotation.Resource;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,15 +28,14 @@ public class TaskController {
     @Resource
     ProcessHandlerService processHandlerService;
 
+    /**
+     * 部署流程
+     * @param path
+     * @return
+     */
     @GetMapping("/deploy/{path}")
     public String deplopy(@PathVariable String path){
-//        Deployment deploy = repositoryService.createDeployment()
-//                .name("部署的第一个流程") // 定义部署文件的名称
-//                .addClasspathResource("diagram_1.bpmn") // 绑定需要部署的流程文件
-//                .deploy();// 部署流程
-//        System.out.println(deploy.getTenantId());
-        Deployment deploy = processHandlerService.deploy(path, "流程"+System.currentTimeMillis());
-        return processHandlerService.getProcessByDeploymentId(deploy.getId()).getId();
+        return processHandlerService.getProcDefIdByDeploy(path, "流程"+System.currentTimeMillis());
     }
 
     @GetMapping("/getProcessByKey/{key}")
