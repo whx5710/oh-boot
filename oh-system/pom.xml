@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.iris</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>oh-system</artifactId>
+    <description>系统基础功能</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-framework</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ========================= 导入其他模块   ========================= -->
+        <!-- 协同任务 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-team</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 对外接口 -->
+        <!--<dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-api</artifactId>
+            <version>${revision}</version>
+        </dependency>-->
+        <!-- 定时任务 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-quartz</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 代码生成器 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-generator</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 监控 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-monitor</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 工作流 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-workflow</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- ========================= 导入其他 ========================= -->
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

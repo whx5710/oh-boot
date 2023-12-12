@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.iris</groupId>
+		<artifactId>oh-boot</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>oh-module</artifactId>
+	<description>系统模块集合</description>
+	<packaging>pom</packaging>
+
+	<modules>
+		<!-- 定时任务 -->
+		<module>oh-module-quartz</module>
+		<!-- 代码生成器 -->
+		<module>oh-module-generator</module>
+		<!-- 监控 -->
+		<module>oh-module-monitor</module>
+		<!-- 协同任务 -->
+		<module>oh-module-team</module>
+		<!-- api接口 -->
+		<module>oh-module-api</module>
+		<!-- 工作流 -->
+		<module>oh-module-workflow</module>
+    </modules>
+	
+</project>

@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>oh-module</artifactId>
+		<groupId>com.iris</groupId>
+		<version>${revision}</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>oh-module-api</artifactId>
+	<description>接口集合工程</description>
+	<!--<packaging>jar</packaging>-->
+
+	<dependencies>
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>-->
+
+		<dependency>
+			<groupId>com.iris</groupId>
+			<artifactId>oh-framework</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>3.0.9</version>
+		</dependency>
+
+	</dependencies>
+
+</project>
