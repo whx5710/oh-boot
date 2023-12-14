@@ -40,7 +40,6 @@ import java.net.InetAddress;
 
 /**
  * 项目启动入口
- * 王小费
  */
 @SpringBootApplication
 public class ServerApplication extends SpringBootServletInitializer implements ApplicationRunner {
