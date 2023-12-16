@@ -25,7 +25,6 @@ package com.iris;
 
 import cn.hutool.core.util.URLUtil;
 import com.iris.framework.common.config.properties.ProjectProperties;
-import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -38,19 +37,18 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import java.net.InetAddress;
 
-/**
- * 项目启动入口
- * 王小费
- */
 @SpringBootApplication
 public class ServerApplication extends SpringBootServletInitializer implements ApplicationRunner {
 	private final Logger log = LoggerFactory.getLogger(ServerApplication.class);
 
-	@Resource
-	private ServerProperties serverProperties;
+	private final ServerProperties serverProperties;
 
-	@Resource
-	private ProjectProperties projectProperties;
+	private final ProjectProperties projectProperties;
+
+	public ServerApplication(ServerProperties serverProperties, ProjectProperties projectProperties){
+		this.serverProperties = serverProperties;
+		this.projectProperties = projectProperties;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-
 @Service
 public class TaskHandlerService {
     private final RuntimeService runtimeService;
@@ -51,6 +50,5 @@ public class TaskHandlerService {
             throw new ServerException("任务ID错误，环节未完成！【" + taskId + "】");
         }
     }
-
 
 }
