@@ -1,9 +1,10 @@
 package com.iris.workflow.controller;
+
+import cn.hutool.json.JSONUtil;
+import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
 import jakarta.annotation.Resource;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/task")
 public class TaskController {
-
-    @Resource
-    private RepositoryService repositoryService;
-
-    @Resource
-    RuntimeService runtimeService;
 
     @Resource
     TaskHandlerService taskHandlerService;
@@ -34,19 +32,26 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deploy/{path}")
-    public String deplopy(@PathVariable String path){
-        return processHandlerService.getProcDefIdByDeploy(path, "流程"+System.currentTimeMillis());
+    public Result<String> deplopy(@PathVariable String path){
+        return Result.ok(processHandlerService.getProcessDefIdByDeploy(path, "流程"+System.currentTimeMillis()));
     }
 
     @GetMapping("/getProcessByKey/{key}")
-    public String getProcessByKey(@PathVariable String key){
+    public Result<String> getProcessByKey(@PathVariable String key){
         ProcessDefinition processDefinition = processHandlerService.getProcessByKey(key);
-        return processDefinition.getId();
+        return Result.ok(processDefinition.getId());
     }
 
     @GetMapping("/startFlow/{processId}")
-    private String startFlow(@PathVariable String processId){
+    private Result<String> startFlow(@PathVariable String processId){
         ProcessInstance processInstance = taskHandlerService.startFlow(processId);
+        System.out.println(JSONUtil.toJsonStr(processInstance));
+        return Result.ok(processInstance.getId());
+    }
+
+    @GetMapping("/startByProcessKey/{processKey}")
+    private String startByProcessKey(@PathVariable String processKey){
+        ProcessInstance processInstance = taskHandlerService.startByProcessKey(processKey);
         return "启动流程";
     }
 
@@ -76,7 +81,9 @@ public class TaskController {
      */
     @GetMapping("/completeTask/{taskId}")
     public String completeTask(@PathVariable String taskId){
-        taskHandlerService.completeTask(taskId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("money", 99);
+        taskHandlerService.completeTask(taskId, map);
         return "ok";
     }
 }

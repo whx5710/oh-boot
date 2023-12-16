@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0h3vrm2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="15.1.3">
+  <bpmn:process id="Process_0in5sjp" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1s3b1oq" name="开始">
+      <bpmn:outgoing>Flow_15u340k</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_15u340k" sourceRef="StartEvent_1s3b1oq" targetRef="Activity_0e8dnds" />
+    <bpmn:userTask id="Activity_0e8dnds" name="申请金额">
+      <bpmn:incoming>Flow_15u340k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n95qae</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1175j6c" default="Flow_1sxpx33">
+      <bpmn:incoming>Flow_0n95qae</bpmn:incoming>
+      <bpmn:outgoing>Flow_1bpt2xh</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1sxpx33</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0n95qae" sourceRef="Activity_0e8dnds" targetRef="Gateway_1175j6c" />
+    <bpmn:sequenceFlow id="Flow_1bpt2xh" name="金额大于100" sourceRef="Gateway_1175j6c" targetRef="Activity_11eh56a">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${money &gt; 100}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_104f95a" sourceRef="Activity_11eh56a" targetRef="Activity_0vu4duk" />
+    <bpmn:endEvent id="Event_04q0avn" name="结束">
+      <bpmn:incoming>Flow_07lrcry</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_07lrcry" sourceRef="Activity_0vu4duk" targetRef="Event_04q0avn" />
+    <bpmn:sequenceFlow id="Flow_1sxpx33" name="金额小于或等于100" sourceRef="Gateway_1175j6c" targetRef="Activity_0vu4duk" />
+    <bpmn:userTask id="Activity_11eh56a" name="财务审批">
+      <bpmn:incoming>Flow_1bpt2xh</bpmn:incoming>
+      <bpmn:outgoing>Flow_104f95a</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0vu4duk" name="审批完成">
+      <bpmn:incoming>Flow_104f95a</bpmn:incoming>
+      <bpmn:incoming>Flow_1sxpx33</bpmn:incoming>
+      <bpmn:outgoing>Flow_07lrcry</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0in5sjp">
+      <bpmndi:BPMNEdge id="Flow_1sxpx33_di" bpmnElement="Flow_1sxpx33">
+        <di:waypoint x="440" y="125" />
+        <di:waypoint x="440" y="220" />
+        <di:waypoint x="750" y="220" />
+        <di:waypoint x="750" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="554" y="202" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07lrcry_di" bpmnElement="Flow_07lrcry">
+        <di:waypoint x="800" y="100" />
+        <di:waypoint x="872" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_104f95a_di" bpmnElement="Flow_104f95a">
+        <di:waypoint x="630" y="100" />
+        <di:waypoint x="700" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bpt2xh_di" bpmnElement="Flow_1bpt2xh">
+        <di:waypoint x="465" y="100" />
+        <di:waypoint x="530" y="100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="467" y="82" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0n95qae_di" bpmnElement="Flow_0n95qae">
+        <di:waypoint x="350" y="100" />
+        <di:waypoint x="415" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15u340k_di" bpmnElement="Flow_15u340k">
+        <di:waypoint x="192" y="100" />
+        <di:waypoint x="250" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1s3b1oq">
+        <dc:Bounds x="156" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="163" y="125" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x77opo_di" bpmnElement="Activity_0e8dnds">
+        <dc:Bounds x="250" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1175j6c_di" bpmnElement="Gateway_1175j6c" isMarkerVisible="true">
+        <dc:Bounds x="415" y="75" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04q0avn_di" bpmnElement="Event_04q0avn">
+        <dc:Bounds x="872" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="879" y="125" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qg85rv_di" bpmnElement="Activity_11eh56a">
+        <dc:Bounds x="530" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zd5hro_di" bpmnElement="Activity_0vu4duk">
+        <dc:Bounds x="700" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

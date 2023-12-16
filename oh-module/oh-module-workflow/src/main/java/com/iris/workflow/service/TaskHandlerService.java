@@ -1,53 +1,56 @@
 package com.iris.workflow.service;
 
-import jakarta.annotation.Resource;
-import org.camunda.bpm.engine.RepositoryService;
+import com.iris.framework.common.exception.ServerException;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.exception.NotFoundException;
+import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 
 @Service
 public class TaskHandlerService {
+    private final RuntimeService runtimeService;
 
-    @Resource
-    private RepositoryService repositoryService;
+    private final TaskService taskService;
 
-    @Resource
-    RuntimeService runtimeService;
-
-
-    @Resource
-    TaskService taskService;
+    public TaskHandlerService(RuntimeService runtimeService, TaskService taskService){
+        this.runtimeService = runtimeService;
+        this.taskService = taskService;
+    }
 
     /**
      * 启动流程
      */
     public ProcessInstance startFlow(String processId){
-        return runtimeService.startProcessInstanceById(processId);
+        try{
+            return runtimeService.startProcessInstanceById(processId);
+        }catch (NotFoundException e1){
+            throw new ServerException("根据流程ID未找到对应的流程，启动流程失败！");
+        }
+    }
+
+    /**
+     * 启动流程
+     */
+    public ProcessInstance startByProcessKey(String processKey){
+        return runtimeService.startProcessInstanceByKey(processKey);
     }
 
     /**
      * 完成任务
      * @param taskId
      */
-    public void completeTask(String taskId){
-        // 根据用户找到关联的Task
-//        Task task = taskService.createTaskQuery()
-//                //.processInstanceId("eff78817-2e58-11ed-aa3f-c03c59ad2248")
-//                .taskAssignee("admin")
-//                .singleResult();
-//        if(task != null ){
-//            taskService.complete(task.getId());
-//            System.out.println("任务审批完成...");
-//        }
-//        List<Task> list = taskService.createTaskQuery().orderByFollowUpDate().desc().list();
-//        list.forEach(item -> {
-//            System.out.println(item);
-//            taskService.complete(item.getId());
-//        });
-//        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        taskService.complete(taskId);
+    public void completeTask(String taskId, Map<String, Object> map){
+        try {
+            taskService.complete(taskId, map);
+        }catch (NullValueException e1){
+            throw new ServerException("任务ID错误，环节未完成！【" + taskId + "】");
+        }
     }
+
+
 }

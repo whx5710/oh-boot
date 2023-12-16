@@ -10,11 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RunHandle {
 
-    @Value("${camunda.bpm.admin-user.id}")
-    String str;
     @PostConstruct
     public void run(){
-        System.out.println("==============================工作流===============================");
-        System.out.println(str);
+        System.out.println("==============================导入了工作流模块===============================");
     }
 }

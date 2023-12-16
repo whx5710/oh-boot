@@ -2,6 +2,7 @@ package com.iris.workflow.service;
 
 import org.camunda.bpm.engine.ParseException;
 import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,13 @@ public class ProcessHandlerService {
         Deployment deployment = null;
         try{
             deployment = repositoryService.createDeployment()
-                        .name(name) // 定义部署文件的名称
-                        .addClasspathResource(path) // 绑定需要部署的流程文件
-                        .deploy();// 部署流程
+                    .name(name) // 定义部署文件的名称
+                    .addClasspathResource(path) // 绑定需要部署的流程文件
+                    .deploy();// 部署流程
         }catch(ParseException e1){
             throw new ServerException("流程定义格式异常，请检查！");
+        }catch (NullValueException e2){
+            throw new ServerException("未找到流程文件，请检查是否存在！【" + path + "】");
         }
         return deployment;
     }
@@ -43,8 +46,8 @@ public class ProcessHandlerService {
      * @param name 流程名称
      * @return 流程定义ID
      */
-    public String getProcDefIdByDeploy(String path, String name){
-        return getProcDefID(deploy(path, name));
+    public String getProcessDefIdByDeploy(String path, String name){
+        return getProcessDefID(deploy(path, name));
     }
 
     /**
@@ -52,7 +55,7 @@ public class ProcessHandlerService {
      * @param deployment 部署对象
      * @return 流程定义ID （ACT_RE_PROCDEF）
      */
-    public String getProcDefID(Deployment deployment){
+    public String getProcessDefID(Deployment deployment){
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
         if(processDefinition == null){
             throw new ServerException("未找到流程定义对象，请检查是否已部署成功！");
