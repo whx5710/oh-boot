@@ -1,5 +1,8 @@
 package com.iris.framework.common.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serial;
 import java.util.Objects;
 
@@ -12,6 +15,8 @@ import java.util.Objects;
 public class ServerException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    private final Logger log = LoggerFactory.getLogger(ServerException.class);
 
     private int code;
     private String msg;
@@ -48,18 +53,21 @@ public class ServerException extends RuntimeException {
         super(msg);
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
+        log.error("【{}】{}", code, msg);
     }
 
     public ServerException(ErrorCode errorCode) {
         super(errorCode.getMsg());
         this.code = errorCode.getCode();
         this.msg = errorCode.getMsg();
+        log.error("【{}】{}", this.code, this.msg);
     }
 
     public ServerException(String msg, Throwable e) {
         super(msg, e);
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
+        log.error("【{}】{}", this.code, this.msg);
     }
 
 }
