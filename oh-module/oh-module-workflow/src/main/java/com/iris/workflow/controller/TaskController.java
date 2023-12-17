@@ -1,19 +1,18 @@
 package com.iris.workflow.controller;
 
 import cn.hutool.json.JSONUtil;
+import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
 import jakarta.annotation.Resource;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.camunda.bpm.engine.task.Task;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 
 @RestController
@@ -50,9 +49,9 @@ public class TaskController {
     }
 
     @GetMapping("/startByProcessKey/{processKey}")
-    private String startByProcessKey(@PathVariable String processKey){
+    private Result<String> startByProcessKey(@PathVariable String processKey){
         ProcessInstance processInstance = taskHandlerService.startByProcessKey(processKey);
-        return "启动流程";
+        return Result.ok(processInstance.getId());
     }
 
     /**
@@ -79,11 +78,27 @@ public class TaskController {
     /**
      * 完成任务
      */
-    @GetMapping("/completeTask/{taskId}")
-    public String completeTask(@PathVariable String taskId){
-        Map<String, Object> map = new HashMap<>();
-        map.put("money", 99);
+    @PostMapping("/completeTask")
+    public String completeTask(@RequestBody HashMap map){
+        if(!map.containsKey("taskId") || map.get("taskId") == null){
+            throw new ServerException("参数异常,【taskId】不能为空.");
+        }
+        String taskId = (String) map.get("taskId");
+        if(taskId.equals("")){
+            throw new ServerException("参数异常,【taskId】不能为空!");
+        }
         taskHandlerService.completeTask(taskId, map);
         return "ok";
+    }
+
+    @GetMapping("/getTaskByProInsId/{proInsId}")
+    public Result<String> getTaskByProInsId(String proInsId){
+        List<Task> list = taskHandlerService.getTaskByProInsId(proInsId);
+        if(list != null){
+            for(Task task: list){
+                System.out.println(task.getName());
+            }
+        }
+        return Result.ok("");
     }
 }
