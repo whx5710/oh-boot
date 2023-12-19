@@ -1,5 +1,6 @@
 package com.iris.workflow.service;
 
+import com.iris.workflow.vo.FlowVO;
 import org.camunda.bpm.engine.ParseException;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.exception.NullValueException;
@@ -9,14 +10,20 @@ import org.springframework.stereotype.Service;
 
 import com.iris.framework.common.exception.ServerException;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 
 @Service
 public class ProcessHandlerService {
 
     private final RepositoryService repositoryService;
 
-    public ProcessHandlerService(RepositoryService repositoryService){
+    private final FlowService flowService;
+
+    public ProcessHandlerService(RepositoryService repositoryService, FlowService flowService){
         this.repositoryService = repositoryService;
+        this.flowService = flowService;
     }
 
     /**
@@ -36,6 +43,33 @@ public class ProcessHandlerService {
             throw new ServerException("流程定义格式异常，请检查！");
         }catch (NullValueException e2){
             throw new ServerException("未找到流程文件，请检查是否存在！【" + path + "】");
+        }
+        return deployment;
+    }
+
+    /**
+     * 根据流程定义KEY部署流程
+     * @param key
+     * @return
+     */
+    public Deployment deployByKey(String key){
+        FlowVO flowVO = flowService.getByKey(key);
+        if(flowVO == null){
+            throw new ServerException("未找到自定义的流程，请检查");
+        }
+        String dbXml = flowVO.getXml();
+        InputStream inputStream = new ByteArrayInputStream(dbXml.getBytes());
+        Deployment deployment = null;
+        String name = key.endsWith(".bpmn")?key:key + ".bpmn";
+        try{
+            deployment = repositoryService.createDeployment()
+                    .name(name) // 定义部署文件的名称
+                    .addInputStream(name, inputStream)
+                    .deploy();// 部署流程
+        }catch(ParseException e1){
+            throw new ServerException("流程定义格式异常，请检查！");
+        }catch (NullValueException e2){
+            throw new ServerException("未找到流程文件，请检查是否存在！");
         }
         return deployment;
     }

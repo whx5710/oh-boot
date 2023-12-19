@@ -8,7 +8,7 @@
 
     <logger name="com.iris" level="DEBUG"/>
     <!-- camunda 流程日志打印 -->
-    <!-- <logger name="org.camunda.bpm" level="DEBUG"/>-->
+    <!--<logger name="org.camunda.bpm" level="DEBUG"/>-->
 
     <!-- 关闭 Logback 的状态监听器（通过更换默认状态监听器实现） -->
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />

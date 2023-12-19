@@ -6,6 +6,7 @@ import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
 import jakarta.annotation.Resource;
+import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -26,13 +27,24 @@ public class TaskController {
     ProcessHandlerService processHandlerService;
 
     /**
-     * 部署流程
+     * 根据文件路径，部署流程
      * @param path
      * @return
      */
     @GetMapping("/deploy/{path}")
-    public Result<String> deplopy(@PathVariable String path){
+    public Result<String> deploy(@PathVariable String path){
         return Result.ok(processHandlerService.getProcessDefIdByDeploy(path, "流程"+System.currentTimeMillis()));
+    }
+
+    /**
+     * 根据自定义流程key部署流程
+     * @param key
+     * @return
+     */
+    @GetMapping("/deployByKey/{key}")
+    public Result<String> deployByKey(@PathVariable String key){
+        Deployment deployment = processHandlerService.deployByKey(key);
+        return Result.ok(processHandlerService.getProcessDefID(deployment));
     }
 
     @GetMapping("/getProcessByKey/{key}")

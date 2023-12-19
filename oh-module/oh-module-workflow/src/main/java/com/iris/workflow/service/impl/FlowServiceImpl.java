@@ -1,0 +1,84 @@
+package com.iris.workflow.service.impl;
+
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iris.framework.common.utils.AssertUtils;
+import com.iris.workflow.convert.FlowConvert;
+import com.iris.workflow.dao.FlowDao;
+import com.iris.workflow.entity.FlowEntity;
+import com.iris.workflow.query.FlowQuery;
+import com.iris.workflow.service.FlowService;
+import com.iris.workflow.vo.FlowVO;
+import com.iris.framework.common.utils.PageResult;
+import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * 自定义流程表
+ *
+ * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2023-12-19
+ */
+@Service
+public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implements FlowService {
+
+    @Override
+    public PageResult<FlowVO> page(FlowQuery query) {
+        IPage<FlowEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+
+        return new PageResult<>(FlowConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+    }
+
+    private LambdaQueryWrapper<FlowEntity> getWrapper(FlowQuery query){
+        LambdaQueryWrapper<FlowEntity> wrapper = Wrappers.lambdaQuery();
+        if(query.getKeyCode() != null && !query.getKeyCode().equals("")){
+            wrapper.like(FlowEntity::getKeyCode, query.getKeyCode());
+        }
+        if(query.getName() != null && !query.getName().equals("")){
+            wrapper.like(FlowEntity::getName, query.getName());
+        }
+        return wrapper;
+    }
+
+    @Override
+    public void save(FlowVO vo) {
+        FlowEntity entity = FlowConvert.INSTANCE.convert(vo);
+
+        baseMapper.insert(entity);
+    }
+
+    @Override
+    public void update(FlowVO vo) {
+        FlowEntity entity = FlowConvert.INSTANCE.convert(vo);
+
+        updateById(entity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(List<Long> idList) {
+        removeByIds(idList);
+    }
+
+    /**
+     * 根据流程key获取自定义的流程信息
+     * @param key
+     * @return
+     */
+    @Override
+    public FlowVO getByKey(String key) {
+        AssertUtils.isBlank(key, "流程key");
+        LambdaQueryWrapper<FlowEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(FlowEntity::getKeyCode, key);
+        List<FlowEntity> list = this.list(wrapper);
+        if(list == null || list.size() == 0){
+            return null;
+        }
+        return FlowConvert.INSTANCE.convert(list.get(0));
+    }
+
+}
