@@ -23,6 +23,9 @@ public class FlowVO extends IDEntity implements Serializable{
 	@Schema(description = "bpmn的xml字符串")
 	private String xml;
 
+	@Schema(description = "svg图片字符串")
+	private String svgStr;
+
 	@Schema(description = "说明")
 	private String note;
 
@@ -56,5 +59,13 @@ public class FlowVO extends IDEntity implements Serializable{
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getSvgStr() {
+		return svgStr;
+	}
+
+	public void setSvgStr(String svgStr) {
+		this.svgStr = svgStr;
 	}
 }

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.annotation.*;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-12-19
  */
-@TableName("oh_flow")
+@TableName("bpmn_flow")
 public class FlowEntity extends BaseEntity {
 	/**
 	* 流程code
@@ -25,6 +25,10 @@ public class FlowEntity extends BaseEntity {
 	*/
 	private String xml;
 
+	/**
+	 * svg图片字符串格式
+	 */
+	private String svgStr;
 	/**
 	* 说明
 	*/
@@ -60,5 +64,13 @@ public class FlowEntity extends BaseEntity {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getSvgStr() {
+		return svgStr;
+	}
+
+	public void setSvgStr(String svgStr) {
+		this.svgStr = svgStr;
 	}
 }

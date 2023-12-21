@@ -806,11 +806,12 @@ CREATE TABLE `sys_message`  (
 -- ----------------------------
 -- Table structure for oh_flow
 -- ----------------------------
-CREATE TABLE `oh_flow`  (
+CREATE TABLE `bpmn_flow`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
   `key_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '流程code',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程名称',
   `xml` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'bpmn的xml字符串',
+  `svg_str` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'svg图片字符串',
   `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '说明',
   `deleted` tinyint(0) NULL DEFAULT 0 COMMENT '删除标识  0：正常   1：已删除',
   `creator` bigint(0) NULL DEFAULT NULL COMMENT '创建者',
