@@ -49,10 +49,10 @@ public class FlowController {
         return Result.ok(FlowConvert.INSTANCE.convert(entity));
     }
 
-    @PostMapping
-    @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('iris:flow:save')")
-    public Result<String> save(@RequestBody FlowVO vo){
+    @PostMapping("/saveOrUpdate")
+    @Operation(summary = "根据keyCode保存或更新")
+//    @PreAuthorize("hasAuthority('iris:flow:saveOrUpdate')")
+    public Result<String> saveOrUpdate(@RequestBody FlowVO vo){
         flowService.save(vo);
 
         return Result.ok();

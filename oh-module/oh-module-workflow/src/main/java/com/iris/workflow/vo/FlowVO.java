@@ -2,6 +2,8 @@ package com.iris.workflow.vo;
 
 import com.iris.framework.common.entity.IDEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 
 /**
@@ -15,26 +17,31 @@ public class FlowVO extends IDEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Schema(description = "流程code")
-	private String key;
+	@NotBlank(message = "流程编码不能为空")
+	private String keyCode;
 
 	@Schema(description = "流程名称")
 	private String name;
 
 	@Schema(description = "bpmn的xml字符串")
+	@NotBlank(message = "绘制的流程不能为空")
 	private String xml;
 
 	@Schema(description = "svg图片字符串")
 	private String svgStr;
 
+	@Schema(description = "标签")
+	private String versionTag;
+
 	@Schema(description = "说明")
 	private String note;
 
-	public String getKey() {
-		return key;
+	public String getKeyCode() {
+		return keyCode;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setKeyCode(String keyCode) {
+		this.keyCode = keyCode;
 	}
 
 	public String getName() {
@@ -67,5 +74,13 @@ public class FlowVO extends IDEntity implements Serializable{
 
 	public void setSvgStr(String svgStr) {
 		this.svgStr = svgStr;
+	}
+
+	public String getVersionTag() {
+		return versionTag;
+	}
+
+	public void setVersionTag(String versionTag) {
+		this.versionTag = versionTag;
 	}
 }

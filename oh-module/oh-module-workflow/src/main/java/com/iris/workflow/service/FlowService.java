@@ -24,5 +24,5 @@ public interface FlowService extends BaseService<FlowEntity> {
 
     void delete(List<Long> idList);
 
-    FlowVO getByKey(String key);
+    FlowEntity getByKey(String key);
 }

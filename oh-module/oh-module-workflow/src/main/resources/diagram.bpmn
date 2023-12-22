@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0h3vrm2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="15.1.3">
-  <bpmn:process id="Process_0in5sjp" isExecutable="true">
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0h3vrm2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="15.1.3">
+  <bpmn:process id="Process_demo20231222" name="流程例子" isExecutable="true" camunda:versionTag="demo">
     <bpmn:startEvent id="StartEvent_1s3b1oq" name="开始">
       <bpmn:outgoing>Flow_15u340k</bpmn:outgoing>
     </bpmn:startEvent>
@@ -16,7 +16,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0n95qae" sourceRef="Activity_0e8dnds" targetRef="Gateway_1175j6c" />
     <bpmn:sequenceFlow id="Flow_1bpt2xh" name="金额大于100" sourceRef="Gateway_1175j6c" targetRef="Activity_11eh56a">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${money &gt; 100}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${money > 100}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_104f95a" sourceRef="Activity_11eh56a" targetRef="Activity_0vu4duk" />
     <bpmn:endEvent id="Event_04q0avn" name="结束">
@@ -35,7 +35,7 @@
     </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0in5sjp">
+    <bpmndi:BPMNPlane id="Process_demo20231222_di" bpmnElement="Process_demo20231222">
       <bpmndi:BPMNEdge id="Flow_1sxpx33_di" bpmnElement="Flow_1sxpx33">
         <di:waypoint x="440" y="125" />
         <di:waypoint x="440" y="220" />

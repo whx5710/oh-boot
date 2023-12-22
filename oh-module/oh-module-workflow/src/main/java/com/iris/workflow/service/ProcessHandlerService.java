@@ -1,6 +1,6 @@
 package com.iris.workflow.service;
 
-import com.iris.workflow.vo.FlowVO;
+import com.iris.workflow.entity.FlowEntity;
 import org.camunda.bpm.engine.ParseException;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.exception.NullValueException;
@@ -53,11 +53,11 @@ public class ProcessHandlerService {
      * @return
      */
     public Deployment deployByKey(String key){
-        FlowVO flowVO = flowService.getByKey(key);
-        if(flowVO == null){
+        FlowEntity flow = flowService.getByKey(key);
+        if(flow == null){
             throw new ServerException("未找到自定义的流程，请检查");
         }
-        String dbXml = flowVO.getXml();
+        String dbXml = flow.getXml();
         InputStream inputStream = new ByteArrayInputStream(dbXml.getBytes());
         Deployment deployment = null;
         String name = key.endsWith(".bpmn")?key:key + ".bpmn";

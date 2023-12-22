@@ -1,8 +1,10 @@
 package com.iris.workflow.service.impl;
 
+import cn.hutool.core.util.EscapeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.sql.StringEscape;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.workflow.convert.FlowConvert;
 import com.iris.workflow.dao.FlowDao;
@@ -44,11 +46,28 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
         return wrapper;
     }
 
+    /**
+     * 保存或更新
+     * @param vo
+     */
     @Override
     public void save(FlowVO vo) {
         FlowEntity entity = FlowConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
+        String keyCode = entity.getKeyCode();
+        FlowEntity flowEntity = getByKey(keyCode);
+        // 反转义
+        String xml = EscapeUtil.unescapeXml(entity.getXml());
+        entity.setXml(xml);
+        if(entity.getSvgStr() != null){
+            entity.setSvgStr(EscapeUtil.unescapeXml(entity.getSvgStr()));
+        }
+        if(flowEntity == null){
+            baseMapper.insert(entity);
+        }else{
+            entity.setId(flowEntity.getId());
+            entity.setDeleted(0);
+            baseMapper.updateById(entity);
+        }
     }
 
     @Override
@@ -70,7 +89,7 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
      * @return
      */
     @Override
-    public FlowVO getByKey(String key) {
+    public FlowEntity getByKey(String key) {
         AssertUtils.isBlank(key, "流程key");
         LambdaQueryWrapper<FlowEntity> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(FlowEntity::getKeyCode, key);
@@ -78,7 +97,7 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
         if(list == null || list.size() == 0){
             return null;
         }
-        return FlowConvert.INSTANCE.convert(list.get(0));
+        return list.get(0);
     }
 
 }

@@ -29,6 +29,8 @@ public class FlowEntity extends BaseEntity {
 	 * svg图片字符串格式
 	 */
 	private String svgStr;
+
+	private String versionTag;
 	/**
 	* 说明
 	*/
@@ -72,5 +74,13 @@ public class FlowEntity extends BaseEntity {
 
 	public void setSvgStr(String svgStr) {
 		this.svgStr = svgStr;
+	}
+
+	public String getVersionTag() {
+		return versionTag;
+	}
+
+	public void setVersionTag(String versionTag) {
+		this.versionTag = versionTag;
 	}
 }
