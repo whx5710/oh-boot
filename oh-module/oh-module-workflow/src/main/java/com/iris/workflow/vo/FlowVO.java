@@ -1,10 +1,16 @@
 package com.iris.workflow.vo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.entity.IDEntity;
+import com.iris.framework.common.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
 * 自定义流程表
@@ -35,6 +41,15 @@ public class FlowVO extends IDEntity implements Serializable{
 
 	@Schema(description = "说明")
 	private String note;
+
+
+	/**
+	 * 创建时间
+	 */
+	@Schema(description = "创建时间")
+	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	private LocalDateTime createTime;
 
 	public String getKeyCode() {
 		return keyCode;
@@ -82,5 +97,13 @@ public class FlowVO extends IDEntity implements Serializable{
 
 	public void setVersionTag(String versionTag) {
 		this.versionTag = versionTag;
+	}
+
+	public LocalDateTime getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(LocalDateTime createTime) {
+		this.createTime = createTime;
 	}
 }

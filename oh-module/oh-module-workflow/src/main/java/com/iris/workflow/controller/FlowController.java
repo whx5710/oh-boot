@@ -34,7 +34,7 @@ public class FlowController {
 
     @GetMapping("page")
     @Operation(summary = "分页")
-    @PreAuthorize("hasAuthority('iris:flow:page')")
+    @PreAuthorize("hasAuthority('flow:page')")
     public Result<PageResult<FlowVO>> page(@ParameterObject @Valid FlowQuery query){
         PageResult<FlowVO> page = flowService.page(query);
         return Result.ok(page);

@@ -168,6 +168,9 @@ INSERT INTO `sys_menu` VALUES (45, 0, '在线开发', '', '', 0, 0, 'icon-cloud'
 INSERT INTO `sys_menu` VALUES (46, 45, 'Online表单开发', 'online/table/index', 'online:table:all', 0, 0, 'icon-table', 0, 0, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (47, 39, '操作日志', 'sys/log/operate', 'sys:operate:all', 0, 0, 'icon-file-text', 1, 0, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (48, 69, '踢出', '', 'monitor:user:user', 1, 0, '', 1, 0, 10000, '2023-09-25 21:16:17', 10000, '2023-09-25 21:16:17');
+INSERT INTO `sys_menu` VALUES (49, 34, '流程管理', '', '', 0, 0, 'icon-switchuser', 1, 0, 10000, '2023-12-23 16:02:38', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (50, 49, '流程设计', 'workflow/index', '', 0, 0, 'icon-expand', 0, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-07-16 11:54:26');
+INSERT INTO `sys_menu` VALUES (51, 49, '自定义流程', 'workflow/index-list', 'flow:page', 0, 0, 'icon-menu', 0, 0, 10000, '2023-12-18 04:48:26', 10000, '2023-12-18 04:48:26');
 INSERT INTO `sys_menu` VALUES (59, 2, '定时任务', 'quartz/schedule/index', NULL, 0, 0, 'icon-reloadtime', 0, 0, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO `sys_menu` VALUES (60, 59, '查看', '', 'schedule:page', 1, 0, '', 0, 0, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO `sys_menu` VALUES (61, 59, '新增', '', 'schedule:save', 1, 0, '', 1, 0, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
@@ -187,7 +190,6 @@ INSERT INTO `sys_menu` VALUES (74, 72, '新增', '', 'sms:platform:save', 1, 0, 
 INSERT INTO `sys_menu` VALUES (75, 72, '修改', '', 'sms:platform:update,sms:platform:info', 1, 0, '', 2, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO `sys_menu` VALUES (76, 72, '删除', '', 'sms:platform:delete', 1, 0, '', 3, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO `sys_menu` VALUES (77, 34, '代码生成器', '{{apiUrl}}/sysApi/oh-generator/index.html', '', 0, 1, 'icon-rocket', 2, 0, 10000, '2023-06-12 13:47:50', 10000, '2023-06-24 21:35:28');
-INSERT INTO `sys_menu` VALUES (78, 34, '流程设计', 'workflow/index', '', 0, 0, 'icon-expand', 0, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-07-16 11:54:26');
 INSERT INTO `sys_menu` VALUES (80, 84, '查看', '', 'external:app:page,external:function:page,external:authority:page', 1, 0, '', 0, 0, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:00');
 INSERT INTO `sys_menu` VALUES (81, 84, '新增', '', 'external:app:save,external:function:save', 1, 0, '', 1, 0, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:09');
 INSERT INTO `sys_menu` VALUES (82, 84, '修改', '', 'external:app:update,external:app:info,external:function:update,external:function:info', 1, 0, '', 2, 0, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:21');
@@ -209,7 +211,6 @@ INSERT INTO `sys_menu` VALUES (107, 106, '查看', '', 'team:task:page', 1, 0, '
 INSERT INTO `sys_menu` VALUES (108, 106, '新增', '', 'team:task:save', 1, 0, '', 1, 0, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO `sys_menu` VALUES (109, 106, '修改', '', 'team:task:update,oneHill:task:info', 1, 0, '', 2, 0, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO `sys_menu` VALUES (110, 106, '删除', '', 'team:task:delete', 1, 0, '', 3, 0, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
-
 -- ----------------------------
 -- Records of sys_org
 -- ----------------------------
