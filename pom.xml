@@ -45,6 +45,9 @@
         <easyexcel.version>3.3.2</easyexcel.version>
         <!-- 数据字典翻译 -->
         <easytrans.version>2.1.11</easytrans.version>
+        <!-- 数据字典翻译 -->
+        <svg.trans.version>1.17</svg.trans.version>
+
         <!-- camunda 工作流相关 -->
         <camunda.version>7.20.0</camunda.version>
     </properties>
@@ -112,6 +115,20 @@
                 <artifactId>easy-trans-mybatis-plus-extend</artifactId>
                 <version>${easytrans.version}</version>
             </dependency>
+            <!-- 通用SVG代码转换器 -->
+            <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-transcoder -->
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-transcoder</artifactId>
+                <version>${svg.trans.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-codec</artifactId>
+                <version>${svg.trans.version}</version>
+            </dependency>
+
             <!-- 工作流 -->
             <!-- https://mvnrepository.com/artifact/org.camunda.bpm.springboot/camunda-bpm-spring-boot-starter -->
             <dependency>

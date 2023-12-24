@@ -1,7 +1,5 @@
 package com.iris.workflow.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.entity.IDEntity;
 import com.iris.framework.common.utils.DateUtils;
@@ -42,6 +40,10 @@ public class FlowVO extends IDEntity implements Serializable{
 	@Schema(description = "说明")
 	private String note;
 
+	/**
+	 * 删除标志
+	 */
+	private Integer deleted;
 
 	/**
 	 * 创建时间
@@ -105,5 +107,13 @@ public class FlowVO extends IDEntity implements Serializable{
 
 	public void setCreateTime(LocalDateTime createTime) {
 		this.createTime = createTime;
+	}
+
+	public Integer getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
 	}
 }
