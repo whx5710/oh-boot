@@ -2,3 +2,4 @@ auth:
   ignore_urls:
     - /task/**
     - /flow/svg2png/**
+    - /flow/listProcessByKey/**

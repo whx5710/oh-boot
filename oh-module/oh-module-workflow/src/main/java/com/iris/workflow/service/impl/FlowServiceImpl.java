@@ -4,7 +4,6 @@ import cn.hutool.core.util.EscapeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.sql.StringEscape;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.workflow.convert.FlowConvert;
 import com.iris.workflow.dao.FlowDao;
@@ -37,11 +36,8 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
 
     private LambdaQueryWrapper<FlowEntity> getWrapper(FlowQuery query){
         LambdaQueryWrapper<FlowEntity> wrapper = Wrappers.lambdaQuery();
-        if(query.getKeyCode() != null && !query.getKeyCode().equals("")){
-            wrapper.like(FlowEntity::getKeyCode, query.getKeyCode());
-        }
         if(query.getName() != null && !query.getName().equals("")){
-            wrapper.like(FlowEntity::getName, query.getName());
+            wrapper.like(FlowEntity::getName, query.getName()).or().like(FlowEntity::getKeyCode, query.getName());
         }
         return wrapper;
     }

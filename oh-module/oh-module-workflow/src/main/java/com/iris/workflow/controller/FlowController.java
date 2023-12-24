@@ -5,6 +5,7 @@ import com.iris.workflow.convert.FlowConvert;
 import com.iris.workflow.entity.FlowEntity;
 import com.iris.workflow.query.FlowQuery;
 import com.iris.workflow.service.FlowService;
+import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.utils.Tools;
 import com.iris.workflow.vo.FlowVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.batik.transcoder.TranscoderException;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,8 +37,11 @@ import java.util.List;
 public class FlowController {
     private final FlowService flowService;
 
-    public FlowController(FlowService flowService){
+    private final ProcessHandlerService processHandlerService;
+
+    public FlowController(FlowService flowService, ProcessHandlerService processHandlerService){
         this.flowService = flowService;
+        this.processHandlerService = processHandlerService;
     }
 
     @GetMapping("page")
@@ -76,7 +81,7 @@ public class FlowController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('iris:flow:delete')")
+    @PreAuthorize("hasAuthority('flow:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         flowService.delete(idList);
 
@@ -94,5 +99,14 @@ public class FlowController {
         } catch (IOException e) {
             throw new ServerException(e.getMessage());
         }
+    }
+
+    @GetMapping("/listProcessByKey/{processCode}")
+    public Result<String> listProcessByKey(@PathVariable("processCode") String processCode){
+        List<ProcessDefinition> list = processHandlerService.listProcessByKey(processCode);
+        for(ProcessDefinition processDefinition: list){
+            System.out.println(processDefinition);
+        }
+        return Result.ok();
     }
 }

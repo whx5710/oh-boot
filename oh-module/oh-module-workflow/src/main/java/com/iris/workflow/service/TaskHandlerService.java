@@ -46,7 +46,9 @@ public class TaskHandlerService {
         try{
             return runtimeService.startProcessInstanceByKey(processKey);
         }catch (NotFoundException e1){
-            throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败！");
+            throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败！", e1.getMessage());
+        }catch (NullValueException e2){
+            throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败！", e2.getMessage());
         }
     }
 

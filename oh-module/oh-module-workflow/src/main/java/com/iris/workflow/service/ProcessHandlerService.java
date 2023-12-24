@@ -12,6 +12,7 @@ import com.iris.framework.common.exception.ServerException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 
 @Service
@@ -107,6 +108,21 @@ public class ProcessHandlerService {
                 .processDefinitionKey(processKey)
                 .latestVersion().singleResult();
     }
+
+    /**
+     * 获取部署列表
+     * @param processKey
+     * @return
+     */
+    public List<ProcessDefinition> listProcessByKey(String processKey){
+        return repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey(processKey)
+                .orderByProcessDefinitionVersion()
+                .desc()
+                .listPage(0, 99);
+    }
+
+
 
     /**
      * 根据部署的ID获取流程
