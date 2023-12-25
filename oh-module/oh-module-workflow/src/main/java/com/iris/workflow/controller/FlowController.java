@@ -8,12 +8,14 @@ import com.iris.workflow.service.FlowService;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.utils.Tools;
 import com.iris.workflow.vo.FlowVO;
+import com.iris.workflow.vo.ProcessVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.batik.transcoder.TranscoderException;
+import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,7 +66,7 @@ public class FlowController {
 
     @PostMapping("/saveOrUpdate")
     @Operation(summary = "根据keyCode保存或更新")
-//    @PreAuthorize("hasAuthority('iris:flow:saveOrUpdate')")
+    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> saveOrUpdate(@RequestBody FlowVO vo){
         flowService.save(vo);
 
@@ -102,11 +105,22 @@ public class FlowController {
     }
 
     @GetMapping("/listProcessByKey/{processCode}")
-    public Result<String> listProcessByKey(@PathVariable("processCode") String processCode){
+    public Result<List<ProcessVO>> listProcessByKey(@PathVariable("processCode") String processCode){
+        List<ProcessVO> processVOList = new ArrayList<>();
         List<ProcessDefinition> list = processHandlerService.listProcessByKey(processCode);
         for(ProcessDefinition processDefinition: list){
-            System.out.println(processDefinition);
+            ProcessVO processVO = new ProcessVO();
+            processVO.setId(processDefinition.getId());
+            String id = processDefinition.getDeploymentId();
+            Deployment deployment = processHandlerService.getDeployment(id);
+            processVO.setDeploymentId(id);
+            processVO.setCreateTime(deployment.getDeploymentTime());
+            processVO.setProcessKey(processDefinition.getKey());
+            processVO.setVersion(processDefinition.getVersion());
+            processVO.setVersionTag(processDefinition.getVersionTag());
+            processVO.setName(processDefinition.getName());
+            processVOList.add(processVO);
         }
-        return Result.ok();
+        return Result.ok(processVOList);
     }
 }

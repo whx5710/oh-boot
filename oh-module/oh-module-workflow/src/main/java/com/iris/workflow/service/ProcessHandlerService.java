@@ -122,6 +122,15 @@ public class ProcessHandlerService {
                 .listPage(0, 99);
     }
 
+    /**
+     * 获取部署对象
+     * @param id
+     * @return
+     */
+    public Deployment getDeployment(String id){
+        return repositoryService.createDeploymentQuery().deploymentId(id).singleResult();
+    }
+
 
 
     /**
