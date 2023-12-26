@@ -6,12 +6,14 @@ import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,5 +114,12 @@ public class TaskController {
             }
         }
         return Result.ok("");
+    }
+
+
+    @GetMapping("/foo/{deploymentId}")
+    public void foo(@PathVariable String deploymentId, HttpServletResponse response) throws IOException {
+//        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        processHandlerService.processByKeySvg(deploymentId, response.getOutputStream());
     }
 }
