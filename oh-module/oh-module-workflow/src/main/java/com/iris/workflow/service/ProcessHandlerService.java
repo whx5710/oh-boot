@@ -12,9 +12,14 @@ import org.springframework.stereotype.Service;
 import com.iris.framework.common.exception.ServerException;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-
+/**
+ * 流程相关操作
+ * 2023-12-27
+ * @author 王小费 whx5710@qq.com
+ */
 @Service
 public class ProcessHandlerService {
 
@@ -58,23 +63,22 @@ public class ProcessHandlerService {
         if(flow == null){
             throw new ServerException("未找到自定义的流程，请检查");
         }
-        // svg
-        String svgStr = flow.getSvgStr();
         String dbXml = flow.getXml();
-        InputStream inputStream = new ByteArrayInputStream(dbXml.getBytes());
+        // svg图片
+        String svgStr = flow.getSvgStr();
         Deployment deployment = null;
         String name = key.endsWith(".bpmn")?key:key + ".bpmn";
         String svgName = key + ".svg";
         try{
             deployment = repositoryService.createDeployment()
-                    .name(name) // 定义部署文件的名称
-                    .addInputStream(name, inputStream) // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
-                    .addInputStream(svgName, new ByteArrayInputStream(svgStr.getBytes())) // svg图片(ACT_GE_BYTEARRAY) 名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
-                    .deploy();// 部署流程
+                    .name(name)                 // 定义部署文件的名称
+                    .addString(name, dbXml)     // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
+                    .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
+                    .deploy();                  // 部署流程
         }catch(ParseException e1){
-            throw new ServerException("流程定义格式异常，请检查！");
+            throw new ServerException("流程定义格式异常，请检查！", e1.getMessage());
         }catch (NullValueException e2){
-            throw new ServerException("未找到流程文件，请检查是否存在！");
+            throw new ServerException("未找到流程文件，请检查是否存在！", e2.getMessage());
         }
         return deployment;
     }
@@ -147,15 +151,27 @@ public class ProcessHandlerService {
     }
 
     /**
-     * 获取svg 图片，(待完善)
+     * 获取svg 图片
      * @param processKey
      * @return
      */
-    public void processByKeySvg(String processKey, OutputStream outputStream){
+    public String processByKeySvg(String processKey) throws IOException {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(processKey)
                 .latestVersion().singleResult();
+        if(processDefinition == null){
+            throw new ServerException("未找到流程定义对象!【" + processKey + "】");
+        }
         InputStream inputStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),processDefinition.getDiagramResourceName());
-        IoUtil.copy(inputStream, outputStream, IoUtil.DEFAULT_BUFFER_SIZE);
+        if(inputStream == null){
+            throw new ServerException("该流程没有svg图片!【" + processKey + "】");
+        }
+        BufferedReader bufferedReader = IoUtil.getUtf8Reader(inputStream);
+        StringBuffer stringBuffer = new StringBuffer();
+        String svgStr = "";
+        while ((svgStr = bufferedReader.readLine()) != null){
+            stringBuffer.append(svgStr);
+        }
+        return stringBuffer.toString();
     }
 }

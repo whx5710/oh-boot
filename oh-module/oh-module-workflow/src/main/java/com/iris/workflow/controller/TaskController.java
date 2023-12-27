@@ -5,8 +5,6 @@ import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -17,16 +15,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * 任务操作
+ *
+ * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2023-12-19
+ */
 @RestController
 @RequestMapping("/task")
 public class TaskController {
 
-    @Resource
-    TaskHandlerService taskHandlerService;
+    private final TaskHandlerService taskHandlerService;
 
-    @Resource
-    ProcessHandlerService processHandlerService;
+    private final ProcessHandlerService processHandlerService;
+
+    public TaskController(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService){
+        this.taskHandlerService = taskHandlerService;
+        this.processHandlerService = processHandlerService;
+    }
 
     /**
      * 根据文件路径，部署流程
@@ -117,9 +123,8 @@ public class TaskController {
     }
 
 
-    @GetMapping("/foo/{deploymentId}")
-    public void foo(@PathVariable String deploymentId, HttpServletResponse response) throws IOException {
-//        response.setContentType(MediaType.IMAGE_PNG_VALUE);
-        processHandlerService.processByKeySvg(deploymentId, response.getOutputStream());
+    @GetMapping("/foo/{processKey}")
+    public Result<String> foo(@PathVariable String processKey) throws IOException {
+        return Result.ok(processHandlerService.processByKeySvg(processKey));
     }
 }
