@@ -127,7 +127,7 @@ public class ProcessHandlerService {
                 .processDefinitionKey(processKey)
                 .orderByProcessDefinitionVersion()
                 .desc()
-                .listPage(0, 99);
+                .listPage(0, 50);
     }
 
     /**
