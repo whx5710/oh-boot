@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * websocket 消息相关处理
  */
 @Component
-@ServerEndpoint("/websocket/{userId}")  // 接口路径 ws://localhost:8080/webSocket/userId;
+@ServerEndpoint("/websocket/{userId}")  // 接口路径 ws://localhost:8080/webSocket/10001;
 public class WebSocketHandler {
 
     private final Logger log = LoggerFactory.getLogger(WebSocketHandler.class);
@@ -41,9 +41,9 @@ public class WebSocketHandler {
      */
     private String userId;
 
-    //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
-    //虽然@Component默认是单例模式的，但spring boot还是会为每个websocket连接初始化一个bean，所以可以用一个静态set保存起来。
-    //  注：底下WebSocketHandler是当前类名
+    // concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+    // 虽然@Component默认是单例模式的，但spring boot还是会为每个websocket连接初始化一个bean，所以可以用一个静态set保存起来。
+    // 注：底下WebSocketHandler是当前类名
     private static final CopyOnWriteArraySet<WebSocketHandler> webSockets =new CopyOnWriteArraySet<>();
     // 用来存在线连接用户信息
     private static final ConcurrentHashMap<String,Session> sessionPool = new ConcurrentHashMap<String,Session>();
@@ -84,7 +84,7 @@ public class WebSocketHandler {
                 sysMessageVO.setType("success");
                 int i = this.sendMessage(userId, sysMessageVO.toJson());
             }
-            log.info("【websocket消息】有新的连接，总数为:"+webSockets.size());
+            log.info("【websocket消息】有新的连接，总数为:" + webSockets.size());
         } catch (Exception e) {
             log.error("websocket打开连接异常！" + e.getMessage());
         }
@@ -110,15 +110,16 @@ public class WebSocketHandler {
      */
     @OnMessage
     public void onMessage(String message) {
-        log.info("【websocket消息】收到客户端消息:" + message);
         SysMessageVO sysMessageVO = JSONUtil.toBean(message, SysMessageVO.class);
         if(ObjectUtils.isEmpty(sysMessageVO.getType())){
             sysMessageVO.setType("success");
         }else if(sysMessageVO.getType().equals("heartBeat")){ // 心跳
+            log.debug("【websocket消息】收到客户端消息:" + message);
             return;
         }
+        log.info("【websocket消息】收到客户端消息:" + message);
         sysMessageVO.setState("0");
-        int i = 0; // 0未发生成功1发送成功-1发送一场
+        int i = 0; // 0未发生成功1发送成功-1发送异常
         if(!ObjectUtils.isEmpty(sysMessageVO.getToId())){
             i = sendMessage(String.valueOf(sysMessageVO.getToId()), sysMessageVO.toJson());
         }
@@ -141,7 +142,7 @@ public class WebSocketHandler {
 
     // 此为广播消息
     public void sendAllMessage(String message) {
-        log.info("【websocket消息】广播消息:"+message);
+        log.info("【websocket消息】广播消息:" + message);
         for(WebSocketHandler webSocket : webSockets) {
             try {
                 if(webSocket.session.isOpen()) {
@@ -189,6 +190,6 @@ public class WebSocketHandler {
                 }
             }
         }
-
     }
+
 }

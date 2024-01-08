@@ -91,15 +91,18 @@ public class FlowController {
         return Result.ok();
     }
 
+    /**
+     * 根据流程code，将svg图片转成png图片
+     * @param keyCode
+     * @param response
+     */
     @GetMapping("/svg2png/{keyCode}")
     public void svg2png(@PathVariable("keyCode") String keyCode, HttpServletResponse response){
         FlowEntity flowEntity = flowService.getByKey(keyCode);
         try {
             response.setContentType(MediaType.IMAGE_PNG_VALUE);
             Tools.convertToPng(flowEntity.getSvgStr(), response.getOutputStream());
-        } catch (TranscoderException e) {
-            throw new ServerException(e.getMessage());
-        } catch (IOException e) {
+        } catch (TranscoderException | IOException e) {
             throw new ServerException(e.getMessage());
         }
     }

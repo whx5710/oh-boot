@@ -9,6 +9,7 @@ import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deploy/{path}")
+    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> deploy(@PathVariable String path){
         return Result.ok(processHandlerService.getProcessDefIdByDeploy(path, "流程"+System.currentTimeMillis()));
     }
@@ -50,6 +52,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deployByKey/{key}")
+    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> deployByKey(@PathVariable String key){
         Deployment deployment = processHandlerService.deployByKey(key);
         return Result.ok(processHandlerService.getProcessDefID(deployment));

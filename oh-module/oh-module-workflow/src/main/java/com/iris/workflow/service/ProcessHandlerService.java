@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.iris.framework.common.exception.ServerException;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -118,7 +117,7 @@ public class ProcessHandlerService {
     }
 
     /**
-     * 获取部署列表
+     * 获取部署列表，默认获取最近50次部署记录
      * @param processKey
      * @return
      */

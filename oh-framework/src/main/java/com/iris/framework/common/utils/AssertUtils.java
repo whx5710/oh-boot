@@ -38,7 +38,7 @@ public class AssertUtils {
      * @param grade 强度等级
      *              1、弱密码；必须包含字母
      *              2、中等 ；必须包含字母、数字
-     *              3、复杂密码；必须包含小写字母、数字、大写字母、特殊字符
+     *              3、复杂密码；必须包含大小写字母、数字、特殊字符
      * @param password 密码值
      */
     public static boolean passwordStrength(int grade, String password){
