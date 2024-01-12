@@ -60,19 +60,19 @@ public class TaskController {
 
     @GetMapping("/getProcessByKey/{key}")
     public Result<String> getProcessByKey(@PathVariable String key){
-        ProcessDefinition processDefinition = processHandlerService.getProcessByKey(key);
+        ProcessDefinition processDefinition = this.processHandlerService.getProcessByKey(key);
         return Result.ok(processDefinition.getId());
     }
 
     @GetMapping("/startFlow/{processId}")
-    private Result<String> startFlow(@PathVariable String processId){
+    public Result<String> startFlow(@PathVariable String processId){
         ProcessInstance processInstance = taskHandlerService.startFlow(processId);
         System.out.println(JSONUtil.toJsonStr(processInstance));
         return Result.ok(processInstance.getId());
     }
 
     @GetMapping("/startByProcessKey/{processKey}")
-    private Result<String> startByProcessKey(@PathVariable String processKey){
+    public Result<String> startByProcessKey(@PathVariable String processKey){
         ProcessInstance processInstance = taskHandlerService.startByProcessKey(processKey);
         return Result.ok(processInstance.getId());
     }
