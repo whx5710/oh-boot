@@ -128,6 +128,7 @@ public class TaskController {
 
     @GetMapping("/foo/{processKey}")
     public Result<String> foo(@PathVariable String processKey) throws IOException {
-        return Result.ok(processHandlerService.processByKeySvg(processKey));
+        processHandlerService.test(processKey);
+        return Result.ok();
     }
 }

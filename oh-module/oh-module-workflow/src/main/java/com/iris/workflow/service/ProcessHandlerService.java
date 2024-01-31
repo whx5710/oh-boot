@@ -1,17 +1,24 @@
 package com.iris.workflow.service;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.json.JSONUtil;
 import com.iris.workflow.entity.FlowEntity;
+import com.iris.workflow.utils.BpmnUtils;
 import org.camunda.bpm.engine.ParseException;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.xml.instance.DomElement;
 import org.springframework.stereotype.Service;
 
 import com.iris.framework.common.exception.ServerException;
+import org.springframework.util.ObjectUtils;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -172,5 +179,25 @@ public class ProcessHandlerService {
             stringBuffer.append(svgStr);
         }
         return stringBuffer.toString();
+    }
+
+
+    /**
+     * 测试方法
+     * @param p
+     */
+    public void test(String p){
+        BpmnModelInstance bpmnModelInstance = repositoryService.getBpmnModelInstance(p);
+        ArrayList nodeList = BpmnUtils.getBpmNodeList(bpmnModelInstance);
+        System.out.println(nodeList.size());
+        System.out.println(nodeList);
+        System.out.println("==============================================================");
+
+        List<DomElement> domElementList = bpmnModelInstance.getDocument().getRootElement().getChildElements();
+        if(!ObjectUtils.isEmpty(domElementList)){
+            DomElement domElement = domElementList.stream().filter(it -> "process".equals(it.getLocalName())).findFirst().orElse(null);
+            HashMap<String,String> nodeMao = BpmnUtils.getNode(domElement);
+            System.out.println("所有节点" + JSONUtil.toJsonStr(nodeMao));
+        }
     }
 }

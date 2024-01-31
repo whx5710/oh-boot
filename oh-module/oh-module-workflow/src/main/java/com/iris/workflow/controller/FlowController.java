@@ -6,7 +6,7 @@ import com.iris.workflow.entity.FlowEntity;
 import com.iris.workflow.query.FlowQuery;
 import com.iris.workflow.service.FlowService;
 import com.iris.workflow.service.ProcessHandlerService;
-import com.iris.workflow.utils.Tools;
+import com.iris.workflow.utils.BpmnUtils;
 import com.iris.workflow.vo.FlowVO;
 import com.iris.workflow.vo.ProcessVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -101,7 +101,7 @@ public class FlowController {
         FlowEntity flowEntity = flowService.getByKey(keyCode);
         try {
             response.setContentType(MediaType.IMAGE_PNG_VALUE);
-            Tools.convertToPng(flowEntity.getSvgStr(), response.getOutputStream());
+            BpmnUtils.convertToPng(flowEntity.getSvgStr(), response.getOutputStream());
         } catch (TranscoderException | IOException e) {
             throw new ServerException(e.getMessage());
         }
