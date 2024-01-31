@@ -4,6 +4,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONUtil;
 import com.iris.workflow.entity.FlowEntity;
 import com.iris.workflow.utils.BpmnUtils;
+import com.iris.workflow.vo.FlowNodeVO;
 import org.camunda.bpm.engine.ParseException;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.exception.NullValueException;
@@ -33,9 +34,12 @@ public class ProcessHandlerService {
 
     private final FlowService flowService;
 
-    public ProcessHandlerService(RepositoryService repositoryService, FlowService flowService){
+    private final FlowNodeService flowNodeService;
+
+    public ProcessHandlerService(RepositoryService repositoryService, FlowService flowService, FlowNodeService flowNodeService){
         this.repositoryService = repositoryService;
         this.flowService = flowService;
+        this.flowNodeService = flowNodeService;
     }
 
     /**
@@ -62,9 +66,9 @@ public class ProcessHandlerService {
     /**
      * 根据流程定义KEY部署流程
      * @param key
-     * @return
+     * @return 流程定义ID
      */
-    public Deployment deployByKey(String key){
+    public String deployByKey(String key){
         FlowEntity flow = flowService.getByKey(key);
         if(flow == null){
             throw new ServerException("未找到自定义的流程，请检查");
@@ -86,7 +90,18 @@ public class ProcessHandlerService {
         }catch (NullValueException e2){
             throw new ServerException("未找到流程文件，请检查是否存在！", e2.getMessage());
         }
-        return deployment;
+        String procDefId = getProcessDefID(deployment);
+        BpmnModelInstance bpmnModelInstance = repositoryService.getBpmnModelInstance(procDefId);
+        List<DomElement> domElementList = bpmnModelInstance.getDocument().getRootElement().getChildElements();
+        if(!ObjectUtils.isEmpty(domElementList)){
+            DomElement domElement = domElementList.stream().filter(it -> "process".equals(it.getLocalName())).findFirst().orElse(null);
+            List<FlowNodeVO> nodes = BpmnUtils.getNodeList(domElement);
+            for(FlowNodeVO f: nodes){
+                f.setProcDefId(procDefId);
+                flowNodeService.save(f);
+            }
+        }
+        return procDefId;
     }
 
     /**

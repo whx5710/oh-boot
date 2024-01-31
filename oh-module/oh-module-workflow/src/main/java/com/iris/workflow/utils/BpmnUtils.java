@@ -1,6 +1,6 @@
 package com.iris.workflow.utils;
 
-import cn.hutool.json.JSONUtil;
+import com.iris.workflow.vo.FlowNodeVO;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -78,6 +78,31 @@ public class BpmnUtils {
                     }
                 });
         return nodeMap;
+    }
+
+    /**
+     * 获取流程设计的所有节点列表
+     * @param e
+     * @return
+     */
+    public static List<FlowNodeVO> getNodeList(DomElement e){
+        List<FlowNodeVO> list = new ArrayList<>();
+        e.getChildElements().stream()
+                .filter(it -> "startEvent".equals(it.getLocalName()) || "endEvent".equals(it.getLocalName()) || "userTask".equals(it.getLocalName()) || "subProcess".equals(it.getLocalName()))
+                .forEach(item ->{
+                    switch (item.getLocalName()){
+                        case "userTask", "startEvent", "endEvent":
+                            FlowNodeVO flowNodeVO = new FlowNodeVO();
+                            flowNodeVO.setActDefId(item.getAttribute("id"));
+                            flowNodeVO.setNodeName(item.getAttribute("name"));
+                            list.add(flowNodeVO);
+                            break;
+                        case "subProcess":
+                            list.addAll(getNodeList(item));
+                            break;
+                    }
+                });
+        return list;
     }
 
 

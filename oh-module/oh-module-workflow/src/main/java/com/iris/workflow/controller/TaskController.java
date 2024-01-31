@@ -5,7 +5,6 @@ import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
-import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -54,8 +53,7 @@ public class TaskController {
     @GetMapping("/deployByKey/{key}")
     @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> deployByKey(@PathVariable String key){
-        Deployment deployment = processHandlerService.deployByKey(key);
-        return Result.ok(processHandlerService.getProcessDefID(deployment));
+        return Result.ok(processHandlerService.deployByKey(key));
     }
 
     @GetMapping("/getProcessByKey/{key}")
