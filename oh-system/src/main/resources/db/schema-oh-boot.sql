@@ -804,7 +804,7 @@ CREATE TABLE `sys_message`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统消息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for oh_flow
+-- Table structure for bpmn_flow
 -- ----------------------------
 CREATE TABLE `bpmn_flow`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
@@ -822,5 +822,23 @@ CREATE TABLE `bpmn_flow`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_01`(`key_code`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '自定义流程表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for bpmn_flow_node
+-- ----------------------------
+CREATE TABLE `bpmn_flow_node`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `proc_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
+  `act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '环节ID',
+  `node_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节名称',
+  `note` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `deleted` tinyint NULL DEFAULT 0 COMMENT '删除标识  0：正常   1：已删除',
+  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_01`(`proc_def_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节定义表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
