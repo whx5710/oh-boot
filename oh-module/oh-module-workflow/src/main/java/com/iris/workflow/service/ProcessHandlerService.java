@@ -1,7 +1,6 @@
 package com.iris.workflow.service;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.json.JSONUtil;
 import com.iris.workflow.entity.FlowEntity;
 import com.iris.workflow.utils.BpmnUtils;
 import com.iris.workflow.vo.FlowNodeVO;
@@ -18,8 +17,6 @@ import com.iris.framework.common.exception.ServerException;
 import org.springframework.util.ObjectUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -90,6 +87,7 @@ public class ProcessHandlerService {
         }catch (NullValueException e2){
             throw new ServerException("未找到流程文件，请检查是否存在！", e2.getMessage());
         }
+        // 保存环节
         String procDefId = getProcessDefID(deployment);
         BpmnModelInstance bpmnModelInstance = repositoryService.getBpmnModelInstance(procDefId);
         List<DomElement> domElementList = bpmnModelInstance.getDocument().getRootElement().getChildElements();
@@ -202,17 +200,6 @@ public class ProcessHandlerService {
      * @param p
      */
     public void test(String p){
-        BpmnModelInstance bpmnModelInstance = repositoryService.getBpmnModelInstance(p);
-        ArrayList nodeList = BpmnUtils.getBpmNodeList(bpmnModelInstance);
-        System.out.println(nodeList.size());
-        System.out.println(nodeList);
-        System.out.println("==============================================================");
 
-        List<DomElement> domElementList = bpmnModelInstance.getDocument().getRootElement().getChildElements();
-        if(!ObjectUtils.isEmpty(domElementList)){
-            DomElement domElement = domElementList.stream().filter(it -> "process".equals(it.getLocalName())).findFirst().orElse(null);
-            HashMap<String,String> nodeMao = BpmnUtils.getNode(domElement);
-            System.out.println("所有节点" + JSONUtil.toJsonStr(nodeMao));
-        }
     }
 }
