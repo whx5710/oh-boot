@@ -1,12 +1,10 @@
 package com.iris.framework.common.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
-import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.util.ReflectUtils;
@@ -29,7 +27,7 @@ import java.util.stream.Collectors;
  * The type Excel utils.
  * {@link <a href="https://easyexcel.opensource.alibaba.com/"></a>}
  *
- * @author eden
+ * @author wang
  */
 public class ExcelUtils {
 
@@ -155,43 +153,17 @@ public class ExcelUtils {
      * @param dataList 需要被反向解析的数据
      */
     public static <T extends TransPojo> void parseDict(List<T> dataList) {
-        try {
-            //没有数据就不需要初始化
-            if (CollectionUtil.isEmpty(dataList)) {
-                return;
-            }
-            Class<? extends TransPojo> clazz = dataList.get(0).getClass();
-            //拿到所有需要反向翻译的字段
-            List<Field> fields = ReflectUtils.getAnnotationField(clazz, Trans.class);
-            //过滤出字典翻译
-            fields = fields.stream().filter(field -> TransType.DICTIONARY.equals(field.getAnnotation(Trans.class).type())).collect(Collectors.toList());
-            DictionaryTransService dictionaryTransService = SpringUtil.getBean(DictionaryTransService.class);
-            for (T data : dataList) {
-                for (Field field : fields) {
-                    Trans trans = field.getAnnotation(Trans.class);
-                    // key不能为空并且ref不为空的才自动处理
-                    if (StrUtil.isAllNotBlank(trans.key(), trans.ref())) {
-                        Field ref = ReflectUtils.getDeclaredField(clazz, trans.ref());
-                        ref.setAccessible(true);
-                        // 获取字典反向值
-                        String value = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + ref.get(data));
-                        if (StringUtils.isBlank(value)) {
-                            continue;
-                        }
-                        // 一般目标字段是int或者string字段 后面有添加单独抽离方法
-                        if (Integer.class.equals(field.getType())) {
-                            field.setAccessible(true);
-                            field.set(data, ConverterUtils.toInteger(value));
-                        } else {
-                            field.setAccessible(true);
-                            field.set(data, ConverterUtils.toString(value));
-                        }
-                    }
-                }
-            }
-        }catch (IllegalAccessException e){
-            e.printStackTrace();
+        //没有数据就不需要初始化
+        if (CollectionUtil.isEmpty(dataList)) {
+            return;
         }
+        Class<? extends TransPojo> clazz = dataList.get(0).getClass();
+        //拿到所有需要反向翻译的字段
+        List<Field> fields = ReflectUtils.getAnnotationField(clazz, Trans.class);
+        //过滤出字典翻译
+        fields = fields.stream().filter(field -> TransType.DICTIONARY.equals(field.getAnnotation(Trans.class).type())).collect(Collectors.toList());
+        DictionaryTransService dictionaryTransService = SpringUtil.getBean(DictionaryTransService.class);
+        dictionaryTransService.unTransMore(dataList, fields);
     }
 
 }
