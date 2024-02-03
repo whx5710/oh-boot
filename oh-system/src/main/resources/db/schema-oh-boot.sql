@@ -841,4 +841,25 @@ CREATE TABLE `bpmn_flow_node`  (
   INDEX `idx_01`(`proc_def_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节定义表' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for bpmn_task_run
+-- ----------------------------
+CREATE TABLE `bpmn_task_run` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `proc_def_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
+  `proc_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节实例ID',
+  `task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '任务ID',
+  `act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节key',
+  `node_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节名称',
+  `from_act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节ID',
+  `from_node_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节名称',
+  `from_task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于任务key',
+  `deleted` tinyint DEFAULT '0' COMMENT '删除标识  0：正常   1：已删除',
+  `creator` bigint DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='环节运行表';
+
 SET FOREIGN_KEY_CHECKS = 1;
