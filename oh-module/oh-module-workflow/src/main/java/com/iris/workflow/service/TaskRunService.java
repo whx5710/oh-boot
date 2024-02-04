@@ -22,4 +22,6 @@ public interface TaskRunService extends BaseService<TaskRunEntity> {
     void update(TaskRunEntity vo);
 
     void delete(List<Long> idList);
+
+    boolean updateRunMark(String procInstId);
 }

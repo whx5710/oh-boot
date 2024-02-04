@@ -74,6 +74,7 @@ public class TaskHandlerService {
                 taskRun.setTaskId(task.getId());
                 taskRun.setActDefId(task.getTaskDefinitionKey());
                 taskRun.setNodeName(task.getName());
+                taskRun.setRunMark(1); // 当前标识，默认0，1标识当前环节
                 taskRunService.save(taskRun);
             }
             ExecutionEntity entity = processInstance.getExecutionEntity();
@@ -128,12 +129,14 @@ public class TaskHandlerService {
             taskService.complete(taskVO.getTaskId(), taskVO.getParams());
             // 获取最新的任务
             list = getTaskByProInsId(taskVO.getProcInstId());
+            taskRunService.updateRunMark(taskVO.getProcInstId()); // 修改当前环节标识
             if(!ObjectUtils.isEmpty(list)){
                 task = list.get(0);
                 taskRun.setTaskId(task.getId());
                 taskRun.setActDefId(task.getTaskDefinitionKey());
                 taskRun.setNodeName(task.getName());
-                taskRunService.save(taskRun);
+                taskRun.setRunMark(1);
+                taskRunService.save(taskRun); // 保存
                 return task.getId();
             }else {
                 taskRunService.save(taskRun);

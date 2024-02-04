@@ -56,4 +56,9 @@ public class TaskRunServiceImpl extends BaseServiceImpl<TaskRunDao, TaskRunEntit
         removeByIds(idList);
     }
 
+    @Override
+    public boolean updateRunMark(String procInstId) {
+        return this.baseMapper.updateRunMark(procInstId);
+    }
+
 }

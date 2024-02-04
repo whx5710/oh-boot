@@ -854,12 +854,14 @@ CREATE TABLE `bpmn_task_run` (
   `from_act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节ID',
   `from_node_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节名称',
   `from_task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于任务key',
+  `run_mark` int DEFAULT '0' COMMENT '当前标识，默认0，1标识当前环节',
   `deleted` tinyint DEFAULT '0' COMMENT '删除标识  0：正常   1：已删除',
   `creator` bigint DEFAULT NULL COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updater` bigint DEFAULT NULL COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `bpmn_task_run_proc_inst_id_IDX` (`proc_inst_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='环节运行表';
 
 SET FOREIGN_KEY_CHECKS = 1;

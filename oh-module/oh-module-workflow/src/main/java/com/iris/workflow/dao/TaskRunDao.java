@@ -3,6 +3,7 @@ package com.iris.workflow.dao;
 import com.iris.framework.mybatis.dao.BaseDao;
 import com.iris.workflow.entity.TaskRunEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * 环节运行表
@@ -12,5 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TaskRunDao extends BaseDao<TaskRunEntity> {
-	
+
+    // 修改当前运行标志
+    boolean updateRunMark(@Param("procInstId") String procInstId);
 }

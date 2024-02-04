@@ -53,6 +53,11 @@ public class TaskRunEntity extends BaseEntity {
 	*/
 	private String fromTaskId;
 
+	/**
+	 * 当前标识，默认0，1标识当前环节
+	 */
+	private int runMark;
+
 	public String getProcDefId() {
 		return procDefId;
 	}
@@ -115,5 +120,13 @@ public class TaskRunEntity extends BaseEntity {
 
 	public void setFromTaskId(String fromTaskId) {
 		this.fromTaskId = fromTaskId;
+	}
+
+	public int getRunMark() {
+		return runMark;
+	}
+
+	public void setRunMark(int runMark) {
+		this.runMark = runMark;
 	}
 }
