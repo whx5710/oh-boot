@@ -78,31 +78,10 @@ public class TaskController {
     }
 
     /**
-     * 查询任务
-     *    待办
-     *
-     *  流程定义ID:processDefinition : 我们部署流程的时候会，每一个流程都会产生一个流程定义ID
-     *  流程实例ID:processInstance ：我们启动流程实例的时候，会产生一个流程实例ID
-     */
-    @GetMapping("/queryTask")
-    public void queryTask(){
-//        List<Task> list = taskService.createTaskQuery()
-//                //.processInstanceId("eff78817-2e58-11ed-aa3f-c03c59ad2248")
-//                .taskAssignee("admin")
-//                .list();
-//        if(list != null && list.size() > 0){
-//            for (Task task : list) {
-//                System.out.println("task.getId() = " + task.getId());
-//                System.out.println("task.getAssignee() = " + task.getAssignee());
-//            }
-//        }
-    }
-
-    /**
      * 完成任务
      */
     @PostMapping("/completeTask")
-    public Result<String> completeTask(@RequestBody TaskVO taskVO){
+    public Result<TaskDto> completeTask(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.completeTask(taskVO));
     }
 

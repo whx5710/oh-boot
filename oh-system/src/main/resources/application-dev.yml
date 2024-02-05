@@ -101,13 +101,15 @@ camunda.bpm:
   database:
     type: mysql
     schema-update: true
-    # auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
   generic-properties.properties:
     javaSerializationFormatEnabled: true
     historyTimeToLive: P365D
   admin-user:
     id: admin
     password: 123456
+  # 定时任务
+  job-execution:
+    enabled: false # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
   run:
     # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
     cors:

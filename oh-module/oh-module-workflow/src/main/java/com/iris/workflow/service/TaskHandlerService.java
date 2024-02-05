@@ -108,7 +108,7 @@ public class TaskHandlerService {
      * 完成任务前，先保存前后任务信息
      * @param taskVO
      */
-    public String completeTask(TaskVO taskVO){
+    public TaskDto completeTask(TaskVO taskVO){
         AssertUtils.isBlank(taskVO.getTaskId(), "【参数异常】任务ID");
         AssertUtils.isBlank(taskVO.getProcInstId(), "【参数异常】流程实例ID");
         // 根据流程实例ID获取流程列表，如果为空，说明无待完成的流程
@@ -116,6 +116,8 @@ public class TaskHandlerService {
         if(ObjectUtils.isEmpty(list)){
             throw new ServerException("没有找到待操作的流程，请检查！");
         }
+
+        TaskDto dto = new TaskDto();
         TaskRunEntity taskRun = new TaskRunEntity();
         taskRun.setProcInstId(taskVO.getProcInstId());
 
@@ -136,17 +138,20 @@ public class TaskHandlerService {
                 taskRun.setActDefId(task.getTaskDefinitionKey());
                 taskRun.setNodeName(task.getName());
                 taskRun.setRunMark(1);
-                taskRunService.save(taskRun); // 保存
-                return task.getId();
-            }else {
-                taskRunService.save(taskRun);
+
+                dto.setTaskId(taskRun.getTaskId());
+                dto.setNodeName(taskRun.getNodeName());
+                dto.setProcInstId(taskRun.getProcInstId());
+                dto.setProcDefId(taskRun.getProcDefId());
+                dto.setTaskDefKey(taskRun.getActDefId());
             }
+            taskRunService.save(taskRun); // 保存
         }catch (NullValueException e1){
             throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
         }catch (ProcessEngineException e2){
             throw new ServerException("完成环节发生异常，请联系管理员！", e2.getMessage());
         }
-        return "";
+        return dto;
     }
 
 
