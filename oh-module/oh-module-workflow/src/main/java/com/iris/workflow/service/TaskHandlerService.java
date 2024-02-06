@@ -2,14 +2,19 @@ package com.iris.workflow.service;
 
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
+import com.iris.framework.security.user.SecurityUser;
 import com.iris.workflow.entity.TaskRunEntity;
 import com.iris.workflow.vo.TaskDto;
 import com.iris.workflow.vo.TaskVO;
+import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.exception.NotFoundException;
 import org.camunda.bpm.engine.exception.NullValueException;
+import org.camunda.bpm.engine.history.HistoricActivityInstance;
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessInstanceWithVariablesImpl;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -19,8 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 任务相关操作
@@ -37,10 +44,14 @@ public class TaskHandlerService {
 
     private final TaskRunService taskRunService;
 
-    public TaskHandlerService(RuntimeService runtimeService, TaskService taskService, TaskRunService taskRunService){
+    private final HistoryService historyService;
+
+    public TaskHandlerService(RuntimeService runtimeService, TaskService taskService, TaskRunService taskRunService,
+                              HistoryService historyService){
         this.runtimeService = runtimeService;
         this.taskService = taskService;
         this.taskRunService = taskRunService;
+        this.historyService = historyService;
     }
 
     /**
@@ -154,7 +165,6 @@ public class TaskHandlerService {
         return dto;
     }
 
-
     /**
      * 根据流程实例ID获取待办任务(正在运行的)
      * @param proInsId
@@ -162,6 +172,34 @@ public class TaskHandlerService {
      */
     public List<Task> getTaskByProInsId(String proInsId){
         return taskService.createTaskQuery().processInstanceId(proInsId).orderByTaskCreateTime().desc().list();
+    }
+
+    public void getHighlightNode(String proInsId){
+        HistoricProcessInstance hisProIns = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(proInsId).singleResult();
+        System.out.println(hisProIns.getProcessDefinitionName()+" "+hisProIns.getProcessDefinitionKey());
+        //===================已完成节点
+        List<HistoricActivityInstance> finished = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(proInsId)
+                .finished()
+                .orderByHistoricActivityInstanceStartTime()
+                .asc()
+                .orderByHistoricActivityInstanceEndTime()
+                .asc()
+                .list();
+        Set<String> highPoint = new HashSet<>();
+        finished.forEach(t -> highPoint.add(t.getActivityId()));
+
+        //=================待完成节点
+        List<HistoricActivityInstance> unfinished = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(proInsId).unfinished().list();
+        Set<String> waitingToDo = new HashSet<>();
+        unfinished.forEach(t -> waitingToDo.add(t.getActivityId()));
+
+        //=================iDo 我执行过的
+        Set<String> iDo = new HashSet<>(); //存放 高亮 我的办理节点
+        List<HistoricTaskInstance> taskInstanceList = historyService.createHistoricTaskInstanceQuery().taskAssignee(SecurityUser.getUser().getUsername()).finished().processInstanceId(proInsId).list();
+        taskInstanceList.forEach(a -> iDo.add(a.getTaskDefinitionKey()));
     }
 
 }
