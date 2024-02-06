@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
  * 自定义ID
  *
  * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2024-02-05
  *
  */
 @Component
