@@ -10,5 +10,5 @@ import com.iris.framework.common.query.Query;
 * @since 1.0.0 2024-02-03
 */
 @Schema(description = "环节运行表查询")
-public class TaskRunQuery extends Query {
+public class TaskRecordQuery extends Query {
 }

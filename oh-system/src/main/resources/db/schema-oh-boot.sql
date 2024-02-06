@@ -842,26 +842,33 @@ CREATE TABLE `bpmn_flow_node`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节定义表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for bpmn_task_run
+-- Table structure for bpmn_task_record
 -- ----------------------------
-CREATE TABLE `bpmn_task_run` (
+CREATE TABLE `bpmn_task_record` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `proc_def_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
+  `proc_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
   `proc_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节实例ID',
+  `act_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节实例ID',
   `task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '任务ID',
-  `act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节key',
-  `node_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节名称',
-  `from_act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节ID',
-  `from_node_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节名称',
+  `task_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节key',
+  `task_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '环节名称',
+  `from_act_inst_id` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节实例ID',
   `from_task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于任务key',
+  `from_task_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节ID',
+  `from_task_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '来自于环节名称',
   `run_mark` int DEFAULT '0' COMMENT '当前标识，默认0，1标识当前环节',
+  `assignee` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '受理人ID',
+  `assignee_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '受理人',
+  `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `duration` bigint DEFAULT NULL COMMENT '时长',
   `deleted` tinyint DEFAULT '0' COMMENT '删除标识  0：正常   1：已删除',
   `creator` bigint DEFAULT NULL COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updater` bigint DEFAULT NULL COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `bpmn_task_run_proc_inst_id_IDX` (`proc_inst_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='环节运行表';
+  KEY `bpmn_task_record_proc_inst_id_IDX` (`proc_inst_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='环节运行记录表';
 
 SET FOREIGN_KEY_CHECKS = 1;

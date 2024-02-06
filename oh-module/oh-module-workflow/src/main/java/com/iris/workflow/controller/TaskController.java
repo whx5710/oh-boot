@@ -4,15 +4,12 @@ import cn.hutool.json.JSONUtil;
 import com.iris.framework.common.utils.Result;
 import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
-import com.iris.workflow.vo.TaskDto;
+import com.iris.workflow.vo.TaskRecordVO;
 import com.iris.workflow.vo.TaskVO;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessInstanceWithVariablesImpl;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -73,7 +70,7 @@ public class TaskController {
     }
 
     @GetMapping("/startByProcessKey/{processKey}")
-    public Result<TaskDto> startByProcessKey(@PathVariable String processKey){
+    public Result<List<TaskRecordVO>> startByProcessKey(@PathVariable String processKey){
         return Result.ok(taskHandlerService.startByProcessKey(processKey));
     }
 
@@ -81,7 +78,7 @@ public class TaskController {
      * 完成任务
      */
     @PostMapping("/completeTask")
-    public Result<TaskDto> completeTask(@RequestBody TaskVO taskVO){
+    public Result<List<TaskRecordVO>> completeTask(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.completeTask(taskVO));
     }
 
@@ -99,7 +96,7 @@ public class TaskController {
 
     @GetMapping("/foo/{processKey}")
     public Result<String> foo(@PathVariable String processKey) throws IOException {
-        processHandlerService.test(processKey);
+        taskHandlerService.getHighlightNode(processKey);
         return Result.ok();
     }
 }

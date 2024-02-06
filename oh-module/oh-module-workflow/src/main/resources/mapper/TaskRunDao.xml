@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.workflow.dao.TaskRunDao">
+<mapper namespace="com.iris.workflow.dao.TaskRecordDao">
 
     <!-- 修改当前运行标志 -->
     <update id="updateRunMark">
-        update bpmn_task_run set run_mark = 0
+        update bpmn_task_record set run_mark = 0
         where proc_inst_id = #{procInstId}
         and run_mark = 1
     </update>
