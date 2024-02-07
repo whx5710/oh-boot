@@ -20,12 +20,14 @@ public interface TaskRecordService extends BaseService<TaskRecordEntity> {
 
     boolean save(TaskRecordEntity vo);
 
-    void update(TaskRecordEntity vo);
+    void update(TaskRecordVO vo);
 
     void delete(List<Long> idList);
 
     // 修改当前运行标志
     boolean updateRunMark(String procInstId);
 
-    List<TaskRecordVO> activityTask(String procInstId);
+    List<TaskRecordVO> taskList(TaskRecordQuery query);
+
+    List<TaskRecordVO> saveTaskRecord(String proInsId, String taskId);
 }

@@ -3,7 +3,7 @@ package com.iris.workflow.service;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.security.user.SecurityUser;
-import com.iris.workflow.entity.TaskRecordEntity;
+import com.iris.workflow.query.TaskRecordQuery;
 import com.iris.workflow.vo.TaskRecordVO;
 import com.iris.workflow.vo.TaskVO;
 import org.camunda.bpm.engine.HistoryService;
@@ -72,16 +72,15 @@ public class TaskHandlerService {
             ProcessInstanceWithVariablesImpl processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey);
             List<HistoricTaskInstance> list = getHisTaskByProInsId(processInstance.getProcessInstanceId());
             if(!ObjectUtils.isEmpty(list)){
-                String fromActInstId = ""; // 来自于环节实例ID
-                String fromTaskId = ""; // 来自于任务ID
-                String fromTaskDefId = ""; // 来自于任务key
-                String fromTaskName = ""; // 环节名称
                 for(int i = 0; i < list.size(); i++){
                     HistoricTaskInstance his = list.get(i);
-                    saveTaskRecord(processInstance.getProcessInstanceId(), his.getId());
+                    taskRecordService.saveTaskRecord(processInstance.getProcessInstanceId(), his.getId());
                 }
             }
-            return taskRecordService.activityTask(processInstance.getProcessInstanceId());
+            TaskRecordQuery query = new TaskRecordQuery();
+            query.setRunMark(1);
+            query.setProcInstId(processInstance.getProcessInstanceId());
+            return taskRecordService.taskList(query);
         }catch (NotFoundException e1){
             throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败，请确认是否部署！", e1.getMessage());
         }catch (NullValueException e2){
@@ -121,13 +120,16 @@ public class TaskHandlerService {
             // 完成任务
             taskService.complete(taskVO.getTaskId(), taskVO.getParams());
             // 保存环节
-            saveTaskRecord(taskVO.getProcInstId(), taskVO.getTaskId());
+            taskRecordService.saveTaskRecord(taskVO.getProcInstId(), taskVO.getTaskId());
         }catch (NullValueException e1){
             throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
         }catch (ProcessEngineException e2){
             throw new ServerException("完成环节发生异常，请联系管理员！", e2.getMessage());
         }
-        return taskRecordService.activityTask(taskVO.getProcInstId());
+        TaskRecordQuery query = new TaskRecordQuery();
+        query.setRunMark(1);
+        query.setProcInstId(taskVO.getProcInstId());
+        return taskRecordService.taskList(query);
     }
 
     /**
@@ -150,69 +152,9 @@ public class TaskHandlerService {
     }
 
     /**
-     * 保存 环节运行记录表
+     * 高亮已执行的环节
      * @param proInsId
-     * @param taskId
      */
-    public void saveTaskRecord(String proInsId, String taskId){
-        AssertUtils.isBlank(proInsId, "【参数异常】流程实例ID");
-        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
-                .processInstanceId(proInsId).unfinished()
-                .orderByHistoricActivityInstanceStartTime().asc()
-                .orderByHistoricTaskInstanceEndTime().asc().list();
-        if(!ObjectUtils.isEmpty(list)){
-            // 修改当前运行标志,全部改为已完成
-            /******************************************************************************
-             *
-             * 不能批量更新运行状态，需直接找到上一个运行状态进行更新，还行更新结束时间，时长，受理人等
-             *
-            /****************************************************************************/
-            taskRecordService.updateRunMark(proInsId);
-            for(HistoricTaskInstance his: list){
-                TaskRecordEntity taskRecord = new TaskRecordEntity();
-                taskRecord.setProcDefId(his.getProcessDefinitionId());
-                taskRecord.setProcInstId(his.getProcessInstanceId());
-                taskRecord.setActInstId(his.getActivityInstanceId());
-                taskRecord.setTaskId(his.getId());
-                taskRecord.setTaskDefId(his.getTaskDefinitionKey());
-                taskRecord.setTaskName(his.getName());
-
-                // 当前标识，默认0，1标识当前环节
-                taskRecord.setRunMark((his.getEndTime()!=null && his.getDeleteReason()!= null && his.getDeleteReason().equalsIgnoreCase("completed"))?0:1);
-                taskRecord.setAssignee(his.getAssignee());
-                taskRecord.setAssigneeName(SecurityUser.getUser().getRealName());
-                taskRecord.setStartTime(his.getStartTime());
-                taskRecord.setEndTime(his.getEndTime());
-                taskRecord.setDuration(his.getDurationInMillis());
-
-                taskRecord.setFromActInstId("");
-                taskRecord.setFromTaskDefId("");
-                taskRecord.setFromTaskId("");
-                taskRecord.setFromTaskName("");
-
-                if(!ObjectUtils.isEmpty(taskId) && !taskId.equals(his.getId())){
-                    List<HistoricTaskInstance> parentList = historyService.createHistoricTaskInstanceQuery()
-                            .processInstanceId(proInsId).taskId(taskId).orderByHistoricActivityInstanceStartTime().desc()
-                            .orderByHistoricTaskInstanceEndTime().desc().list();
-                    if(!ObjectUtils.isEmpty(parentList)){
-                        for(HistoricTaskInstance hisParent: parentList){
-                            taskRecord.setFromActInstId(hisParent.getActivityInstanceId());
-                            taskRecord.setFromTaskDefId(hisParent.getTaskDefinitionKey());
-                            taskRecord.setFromTaskId(hisParent.getId());
-                            taskRecord.setFromTaskName(hisParent.getName());
-                            taskRecordService.save(taskRecord);
-                        }
-                    }else{
-                        taskRecordService.save(taskRecord);
-                    }
-                }else{
-                    taskRecordService.save(taskRecord);
-                }
-            }
-        }
-    }
-
-
     public void getHighlightNode(String proInsId){
         HistoricProcessInstance hisProIns = historyService.createHistoricProcessInstanceQuery()
                 .processInstanceId(proInsId).singleResult();
