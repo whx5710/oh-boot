@@ -638,19 +638,22 @@ CREATE TABLE `sys_params`  (
 -- ----------------------------
 -- Table structure for sys_post
 -- ----------------------------
-CREATE TABLE `sys_post`  (
-  `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `post_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '岗位编码',
-  `post_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '岗位名称',
-  `sort` int(0) NULL DEFAULT NULL COMMENT '排序',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态  0：停用   1：正常',
-  `deleted` tinyint(0) NULL DEFAULT NULL COMMENT '删除标识  0：正常   1：已删除',
-  `creator` bigint(0) NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位管理' ROW_FORMAT = Dynamic;
+-- `oh-boot`.sys_post definition
+
+CREATE TABLE `sys_post` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `post_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位编码',
+  `post_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '岗位名称',
+  `sort` int DEFAULT NULL COMMENT '排序',
+  `status` tinyint DEFAULT NULL COMMENT '状态  0：停用   1：正常',
+  `deleted` tinyint DEFAULT NULL COMMENT '删除标识  0：正常   1：已删除',
+  `creator` bigint DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `sys_post_post_code_IDX` (`post_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='岗位管理';
 
 -- ----------------------------
 -- Table structure for sys_role

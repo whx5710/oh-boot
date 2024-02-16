@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.common.utils.AssertUtils;
 import com.iris.system.convert.SysPostConvert;
 import com.iris.system.service.SysUserPostService;
 import com.iris.framework.common.utils.PageResult;
@@ -15,6 +17,7 @@ import com.iris.system.query.SysPostQuery;
 import com.iris.system.vo.SysPostVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -62,14 +65,29 @@ public class SysPostServiceImpl extends BaseServiceImpl<SysPostDao, SysPostEntit
     @Override
     public void save(SysPostVO vo) {
         SysPostEntity entity = SysPostConvert.INSTANCE.convert(vo);
-
+        AssertUtils.isBlank(entity.getPostCode(), "岗位编码");
+        LambdaQueryWrapper<SysPostEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysPostEntity::getDeleted, 0).eq(SysPostEntity::getPostCode, entity.getPostCode());
+        List<SysPostEntity> list = baseMapper.selectList(wrapper);
+        if(!ObjectUtils.isEmpty(list)){
+            throw new ServerException("岗位编码已存在");
+        }
         baseMapper.insert(entity);
     }
 
     @Override
     public void update(SysPostVO vo) {
         SysPostEntity entity = SysPostConvert.INSTANCE.convert(vo);
-
+        String postCode = entity.getPostCode();
+        if(postCode != null && !postCode.isEmpty()){
+            LambdaQueryWrapper<SysPostEntity> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(SysPostEntity::getDeleted, 0).eq(SysPostEntity::getPostCode, postCode)
+                    .ne(SysPostEntity::getId, entity.getId());
+            List<SysPostEntity> list = baseMapper.selectList(wrapper);
+            if(!ObjectUtils.isEmpty(list)){
+                throw new ServerException("岗位编码已存在!");
+            }
+        }
         updateById(entity);
     }
 
