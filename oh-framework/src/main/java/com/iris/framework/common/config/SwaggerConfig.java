@@ -31,8 +31,8 @@ public class SwaggerConfig {
         contact.setName("王小费 whx5710@qq.com");
 
         return new OpenAPI().info(new Info()
-                .title("OhBoot")
-                .description("OhBoot")
+                .title("OhBoot接口文档")
+                .description("OhBoot管理系统后台接口文档")
                 .contact(contact)
                 .version("3.0")
                 .termsOfService("https://www")
