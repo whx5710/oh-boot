@@ -23,10 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 任务相关操作
@@ -55,22 +52,55 @@ public class TaskHandlerService {
 
     /**
      * 启动流程
+     * @param processKey 流程定义编码
+     * @return
      */
-    public ProcessInstance startFlow(String processId){
-        try{
-            return runtimeService.startProcessInstanceById(processId);
-        }catch (NotFoundException e1){
-            throw new ServerException("根据流程ID未找到对应的流程，启动流程失败！");
-        }
+    public List<TaskRecordVO> startByProcessKey(String processKey){
+        return startByProcessKey(processKey, null, null);
     }
 
     /**
      * 启动流程
+     * @param processKey 流程定义编码
+     * @param params 参数
+     * @return
      */
-    public List<TaskRecordVO> startByProcessKey(String processKey){
-        try{
-            ProcessInstanceWithVariablesImpl processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey);
-            List<HistoricTaskInstance> list = getHisTaskByProInsId(processInstance.getProcessInstanceId());
+    public List<TaskRecordVO> startByProcessKey(String processKey, Map<String,Object> params){
+        return startByProcessKey(processKey, null, params);
+    }
+
+    /**
+     * 启动流程
+     * @param processKey 流程定义编码
+     * @param businessKey 业务ID
+     * @return
+     */
+    public List<TaskRecordVO> startByProcessKey(String processKey, String businessKey){
+        return startByProcessKey(processKey, businessKey, null);
+    }
+
+    /**
+     * 启动流程
+     * @param processKey 流程定义编码
+     * @param businessKey 业务ID
+     * @param params 参数
+     * @return
+     */
+    public List<TaskRecordVO> startByProcessKey(String processKey, String businessKey, Map<String,Object> params){
+        AssertUtils.isBlank(processKey, "流程定义编码");
+        ProcessInstanceWithVariablesImpl processInstance;
+        try {
+            if(ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
+                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey);
+            }else if(ObjectUtils.isEmpty(businessKey) && !ObjectUtils.isEmpty(params)){
+                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey, params);
+            }else if(!ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
+                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey, businessKey);
+            }else{
+                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey, businessKey, params);
+            }
+            // 正在运行的任务
+            List<HistoricTaskInstance> list = getTaskInstByProInsId(processInstance.getProcessInstanceId());
             if(!ObjectUtils.isEmpty(list)){
                 for(int i = 0; i < list.size(); i++){
                     HistoricTaskInstance his = list.get(i);
@@ -90,29 +120,14 @@ public class TaskHandlerService {
 
     /**
      * 完成任务
-     * @param taskId
-     * @param map
-     */
-    public void completeTask(String taskId, Map<String, Object> map){
-        try {
-            taskService.complete(taskId, map);
-        }catch (NullValueException e1){
-            throw new ServerException("任务ID错误，环节未完成！【" + taskId + "】");
-        }catch (ProcessEngineException e2){
-            throw new ServerException("完成环节发生异常，请联系管理员！", e2.getMessage());
-        }
-    }
-
-    /**
-     * 完成任务
      * 完成任务前，先保存前后任务信息
      * @param taskVO
      */
     public List<TaskRecordVO> completeTask(TaskVO taskVO){
         AssertUtils.isBlank(taskVO.getTaskId(), "【参数异常】任务ID");
-        AssertUtils.isBlank(taskVO.getProcInstId(), "【参数异常】流程实例ID");
+        AssertUtils.isBlank(taskVO.getProInstId(), "【参数异常】流程实例ID");
         // 根据流程实例ID获取流程列表，如果为空，说明无待完成的流程
-        List<Task> list = getTaskByProInsId(taskVO.getProcInstId());
+        List<Task> list = getTaskByProInsId(taskVO.getProInstId());
         if(ObjectUtils.isEmpty(list)){
             throw new ServerException("没有找到待操作的流程，请检查！");
         }
@@ -120,7 +135,7 @@ public class TaskHandlerService {
             // 完成任务
             taskService.complete(taskVO.getTaskId(), taskVO.getParams());
             // 保存环节
-            taskRecordService.saveTaskRecord(taskVO.getProcInstId(), taskVO.getTaskId());
+            taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
         }catch (NullValueException e1){
             throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
         }catch (ProcessEngineException e2){
@@ -128,7 +143,7 @@ public class TaskHandlerService {
         }
         TaskRecordQuery query = new TaskRecordQuery();
         query.setRunMark(1);
-        query.setProcInstId(taskVO.getProcInstId());
+        query.setProcInstId(taskVO.getProInstId());
         return taskRecordService.taskList(query);
     }
 
@@ -141,12 +156,29 @@ public class TaskHandlerService {
         return taskService.createTaskQuery().processInstanceId(proInsId).orderByTaskCreateTime().desc().list();
     }
 
+
+    /**
+     * 根据流程实例ID获取待办任务(正在运行的)
+     * @param proInsId
+     * @return
+     */
+    public List<HistoricTaskInstance> getTaskInstByProInsId(String proInsId){
+        List<Task> list = taskService.createTaskQuery().processInstanceId(proInsId).orderByTaskCreateTime().desc().list();
+        List<HistoricTaskInstance> taskInstanceList = new ArrayList<>();
+        if(!ObjectUtils.isEmpty(list)){
+            for(Task task: list){
+                taskInstanceList.add(historyService.createHistoricTaskInstanceQuery().processInstanceId(proInsId).taskId(task.getId()).singleResult());
+            }
+        }
+        return taskInstanceList;
+    }
+
     /**
      * 根据流程实例ID获取历史任务
      * @param proInsId
      * @return
      */
-    public List<HistoricTaskInstance> getHisTaskByProInsId(String proInsId){
+    public List<HistoricTaskInstance> getHisTaskInstByProInsId(String proInsId){
         return historyService.createHistoricTaskInstanceQuery().processInstanceId(proInsId)
                 .orderByHistoricActivityInstanceStartTime().asc().orderByHistoricTaskInstanceEndTime().asc().list();
     }

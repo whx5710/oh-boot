@@ -19,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * websocket 消息相关处理
+ * @author 王小费 whx5710@qq.com
  */
 @Component
 @ServerEndpoint("/websocket/{userId}")  // 接口路径 ws://localhost:8080/webSocket/10001;

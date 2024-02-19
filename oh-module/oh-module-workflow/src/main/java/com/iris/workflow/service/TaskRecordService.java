@@ -29,5 +29,13 @@ public interface TaskRecordService extends BaseService<TaskRecordEntity> {
 
     List<TaskRecordVO> taskList(TaskRecordQuery query);
 
+    /**
+     * 保存环节运行记录表，在执行完 complete或启动流程 后再执行该方法
+     * 1、更新上个任务的数据
+     * 2、新增当前任务
+     * @param proInsId 环节实例ID
+     * @param taskId 上一环节任务ID
+     * @return
+     */
     List<TaskRecordVO> saveTaskRecord(String proInsId, String taskId);
 }

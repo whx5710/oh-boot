@@ -100,7 +100,7 @@ public class TaskRecordServiceImpl extends BaseServiceImpl<TaskRecordDao, TaskRe
 
 
     /**
-     * 保存环节运行记录表，在执行完 complete 后再执行该方法
+     * 保存环节运行记录表，在执行完 complete或启动流程 后再执行该方法
      * 1、更新上个任务的数据
      * 2、新增当前任务
      * @param proInsId 环节实例ID
