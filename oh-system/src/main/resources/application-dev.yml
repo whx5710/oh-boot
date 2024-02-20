@@ -2,7 +2,7 @@ spring:
   data:
     redis:
       database: 0
-      host: 192.168.239.128
+      host: 127.0.0.1
       port: 6379
       #password:
       # 连接超时时间
@@ -31,7 +31,7 @@ spring:
       datasource:
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://192.168.239.128:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
@@ -46,7 +46,7 @@ spring:
             separator: ;
         extendDB:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://192.168.239.128:3306/oh-extend?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/oh-extend?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
@@ -92,7 +92,15 @@ spring:
       ack-mode: MANUAL_IMMEDIATE
       concurrency: 1  #推荐设置为topic的分区数
       type: BATCH #开启批量监听
-
+# 接口文档
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 是否生产环境，生产环境屏蔽，开发环境需显示接口文档
+  # production: true
+  setting:
+    custom-code: 500
+    enable-footer-custom: false
 # 工作流配置 https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/
 camunda.bpm:
   #enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.

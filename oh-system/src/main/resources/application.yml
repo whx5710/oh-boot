@@ -1,3 +1,8 @@
+#######################################
+# 每个环境有对应的配置，请规范使用每个环境配置
+# 比如开发环境需要访问swagger接口文档，但在正式环境需要屏蔽
+#######################################
+
 # Tomcat
 server:
   tomcat:
@@ -47,12 +52,6 @@ spring:
   main:
     # 关闭 banner CONSOLE、LOG、OFF
     banner-mode: "OFF"
-# 接口文档
-knife4j:
-  enable: true
-  setting:
-    custom-code: 500
-    enable-footer-custom: false
 storage:
   enabled: true
   config:

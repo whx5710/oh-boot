@@ -1,11 +1,15 @@
 spring:
   data:
     redis:
-      database: 1
-      host: 192.168.239.131
+      database: 0
+      host: 127.0.0.1
       port: 6379
       #password:
-      #timeout: 6000ms  # 连接超时时长（毫秒）
+      # 连接超时时间
+      timeout: 10s
+      # 是否开启 SSL
+      ssl:
+        enabled: false
   datasource:
     hikari:
       connection-timeout: 30000     # 等待连接池分配链接的最大时长（毫秒），超过这个时长还没有可用的连接则发生 SQLException，默认：30 秒
@@ -16,6 +20,10 @@ spring:
       max-lifetime: 1800000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟
       connection-test-query: SELECT 1
       pool-name: OhHikariCP
+      prepStmtCacheSize: 300        # 【mysql】在每个连接中缓存的语句的数量。默认值为保守值25。建议将其设置为250-500之间
+      prepStmtCacheSqlLimit: 500    # 缓存的已准备SQL语句的最大长度，默认值是256
+      cachePrepStmts: true          # 缓存开关，如果这里设置为false，上面两个参数都不生效
+      useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
     dynamic:
       #  dynamic主从设置
       primary: master  #设置默认的数据源或者数据源组,默认值即为master
@@ -23,7 +31,7 @@ spring:
       datasource:
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://192.168.239.131:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
@@ -38,7 +46,7 @@ spring:
             separator: ;
         extendDB:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://192.168.239.131:3306/oh-extend?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/oh-extend?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
@@ -52,7 +60,7 @@ spring:
             # 分隔符 默认 ;
             separator: ;
   kafka:
-    bootstrap-servers: 192.168.239.131:9092
+    bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze
     consumer:
       group-id: oh-group
@@ -84,14 +92,32 @@ spring:
       ack-mode: MANUAL_IMMEDIATE
       concurrency: 1  #推荐设置为topic的分区数
       type: BATCH #开启批量监听
-
-# 工作流
+# 接口文档
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 是否生产环境，生产环境屏蔽接口文档，开发环境需显示接口文档
+  production: true
+  setting:
+    custom-code: 500
+    enable-footer-custom: false
+# 工作流配置 https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/
 camunda.bpm:
+  #enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.
+  process-engine-name: OH工作流 # Name of the process engine
+  auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
+  database:
+    type: mysql
+    schema-update: true
   generic-properties.properties:
     javaSerializationFormatEnabled: true
+    historyTimeToLive: P365D
   admin-user:
     id: admin
     password: 123456
+  # 定时任务
+  job-execution:
+    enabled: false # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
   run:
     # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
     cors:
