@@ -1,6 +1,5 @@
 package com.iris.api.service.impl;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -23,7 +22,6 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-07-30
  */
-@DS("extendDB")
 @Service
 public class DataFunctionServiceImpl extends BaseServiceImpl<DataFunctionDao, DataFunctionEntity> implements DataFunctionService {
 

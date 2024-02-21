@@ -26,10 +26,10 @@ spring:
       useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
     dynamic:
       #  dynamic主从设置
-      primary: master  #设置默认的数据源或者数据源组,默认值即为master
+      primary: sysDB #设置默认的数据源或者数据源组,默认值即为master
       strict: false  #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       datasource:
-        master:
+        sysDB:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
@@ -44,7 +44,7 @@ spring:
             continue-on-error: true
             # 分隔符 默认 ;
             separator: ;
-        extendDB:
+        businessDB:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-extend?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root

@@ -1,7 +1,6 @@
 package com.iris.api.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.api.dao.DataMessageDao;
 import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.service.DataMsgService;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
-@DS("extendDB")
 @Service
 public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgEntity> implements DataMsgService {
 
