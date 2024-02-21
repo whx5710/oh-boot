@@ -874,4 +874,30 @@ CREATE TABLE `bpmn_task_record` (
   KEY `bpmn_task_record_proc_inst_id_IDX` (`proc_inst_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='环节运行记录表';
 
+-- ----------------------------
+-- Table structure for oh_work_order
+-- ----------------------------
+CREATE TABLE `oh_work_order` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `order_code` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '工单编码',
+  `order_source` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '工单来源',
+  `report_time` datetime DEFAULT NULL COMMENT '上报时间',
+  `incident_time` datetime DEFAULT NULL COMMENT '事发时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `title` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标题',
+  `comment` varchar(2000) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '内容',
+  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '位置',
+  `geo_x` decimal(12,9) DEFAULT NULL COMMENT '经度',
+  `geo_y` decimal(12,9) DEFAULT NULL COMMENT '纬度',
+  `category` int DEFAULT NULL COMMENT '类别',
+  `note` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '删除标识  0：正常   1：已删除',
+  `creator` bigint DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_order_code` (`order_code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='工单表';
+
 SET FOREIGN_KEY_CHECKS = 1;
