@@ -1,6 +1,5 @@
 package com.iris.api;
 
-import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.iris.api.common.BaseController;
 import com.iris.api.entity.DataMsgEntity;
@@ -17,15 +16,20 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+/***
+ * 公共接口入口
+ */
 @RestController
 @RequestMapping("/openApi")
 public class OpenApiController extends BaseController {
+    /**
+     * 启动Kafka命令
+     * nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
+     * nohup sh bin/kafka-server-start.sh config/server.properties &
+     */
 
     private final Logger log = LoggerFactory.getLogger(OpenApiController.class);
 
@@ -77,7 +81,7 @@ public class OpenApiController extends BaseController {
         return Result.ok(result);
     }
 
-    public static void main(String[] args) {
+    /**public static void main(String[] args) {
         String url = "http://localhost:8080/openApi/send";
         Map<String,String> head = new HashMap<>();
         head.put("OH-CLIENT-ID","C0001");
@@ -88,11 +92,11 @@ public class OpenApiController extends BaseController {
         data.set("address","湖南长沙");
         data.set("sex","name");
         System.out.println("开始请求");
-        for(int i = 0; i< 9; i++){
+        for(int i = 0; i< 99; i++){
             data.set("createDate", new Date());
             String str = HttpUtil.createPost(url).addHeaders(head).body(data.toJSONString(0)).execute().body();
             System.out.println(str);
         }
         System.out.println("结束");
-    }
+    }**/
 }
