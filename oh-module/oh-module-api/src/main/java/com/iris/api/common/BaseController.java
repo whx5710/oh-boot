@@ -40,17 +40,17 @@ public class BaseController {
         List<DataAppVO> list = (List<DataAppVO>) obj;
         JSONObject object = new JSONObject();
         if(!list.isEmpty()){
-            DataAppVO dataAppVO = list.get(0);
+            DataAppVO dataAppVO = list.getFirst();
             if(!dataAppVO.getSecretKey().equals(secretKey)){
                 throw new ServerException("密钥错误，请求非法");
             }
-            object.put("isAsync", dataAppVO.getAsync());// 接口是否支持异步
+            object.set("isAsync", dataAppVO.getAsync());// 接口是否支持异步
         }
 
         DataMsgEntity data = new DataMsgEntity();
         data.setClientId(clientId);
         data.setFunCode(funcCode);
-        object.put("data", data);
+        object.set("data", data);
         return object;
     }
 }

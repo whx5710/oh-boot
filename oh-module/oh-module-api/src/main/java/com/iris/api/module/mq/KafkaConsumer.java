@@ -3,8 +3,8 @@ package com.iris.api.module.mq;
 import cn.hutool.json.JSONUtil;
 import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.service.DataMsgService;
-import com.iris.api.service.TaskService;
-import com.iris.api.utils.ServiceFactory;
+import com.iris.framework.common.service.JobService;
+import com.iris.framework.common.utils.ServiceFactory;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +35,10 @@ public class KafkaConsumer {
             DataMsgEntity dataMsg = JSONUtil.toBean(message, DataMsgEntity.class);
             dataMsg.setTopic("asyncSend");
             dataMsg = dataMsgService.saveData(dataMsg);
-            Optional<TaskService> optional = ServiceFactory.getService(dataMsg.getFunCode());
+            Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFunCode());
             if(optional.isPresent()){
-                TaskService taskService = optional.get();
-                taskService.handle(dataMsg);
+                JobService taskService = optional.get();
+                taskService.handle(dataMsg.getJsonObj());
                 dataMsg.setState("1");
                 dataMsgService.updateById(dataMsg);
             }

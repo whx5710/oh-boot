@@ -868,7 +868,7 @@ CREATE TABLE `data_message`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `deleted` int(0) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `idx_01`(`topic`, `client_id`, `fun_code`) USING BTREE
+  KEY `idx_01` (`topic`,`client_id`,`fun_code`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '接口参数数据' ROW_FORMAT = Dynamic;
 
 

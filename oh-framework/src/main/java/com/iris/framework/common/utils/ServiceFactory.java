@@ -1,7 +1,7 @@
-package com.iris.api.utils;
+package com.iris.framework.common.utils;
 
-import com.iris.api.service.TaskService;
 import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.common.service.JobService;
 import org.springframework.util.Assert;
 
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ServiceFactory {
     // 保存服务类
-    private static final Map<String, TaskService> serviceMap = new ConcurrentHashMap<String, TaskService>();
+    private static final Map<String, JobService> serviceMap = new ConcurrentHashMap<String, JobService>();
 
     /**
      * 根据指令，获取消息处理服务
@@ -21,8 +21,8 @@ public class ServiceFactory {
      * @return
      * @throws Exception
      */
-    public static Optional<TaskService> getService(String funCode){
-        Optional<TaskService> optionalService = Optional.ofNullable(serviceMap.get(funCode));
+    public static Optional<JobService> getService(String funCode){
+        Optional<JobService> optionalService = Optional.ofNullable(serviceMap.get(funCode));
         if(optionalService.isPresent()){
             return optionalService;
         }else{
@@ -35,7 +35,7 @@ public class ServiceFactory {
      * @param funCode 指令
      * @param messageService 消息服务
      */
-    public static void register(String funCode , TaskService messageService) {
+    public static void register(String funCode , JobService messageService) {
         Assert.notNull(funCode, "注册的服务不能为空");
         serviceMap.put(funCode, messageService);
     }

@@ -1,12 +1,13 @@
 package com.iris.api;
 
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.iris.api.common.BaseController;
 import com.iris.api.entity.DataMsgEntity;
-import com.iris.api.service.TaskService;
-import com.iris.api.utils.ServiceFactory;
 import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.Result;
+import com.iris.framework.common.utils.ServiceFactory;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -16,6 +17,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -48,12 +52,12 @@ public class OpenApiController extends BaseController {
 
         JSONObject result = new JSONObject();
         result.set("msg","发送成功");
-        Optional<TaskService> optional = ServiceFactory.getService(data.getFunCode());
+        Optional<JobService> optional = ServiceFactory.getService(data.getFunCode());
         if(optional.isPresent()){
-            TaskService taskService = optional.get();
-            taskService.check(data);
+            JobService taskService = optional.get();
+            taskService.check(jsonObj);
             if (!isAsync || apiType == 1) { // 直接业务处理
-                result = taskService.handle(data);
+                result = taskService.handle(jsonObj);
             }else{
                 data.setState("0"); // 状态0未处理1处理
                 CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("asyncSend", data.toJson());
@@ -73,7 +77,7 @@ public class OpenApiController extends BaseController {
         return Result.ok(result);
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         String url = "http://localhost:8080/openApi/send";
         Map<String,String> head = new HashMap<>();
         head.put("OH-CLIENT-ID","C0001");
@@ -84,11 +88,11 @@ public class OpenApiController extends BaseController {
         data.set("address","湖南长沙");
         data.set("sex","name");
         System.out.println("开始请求");
-        for(int i = 0; i< 99999; i++){
+        for(int i = 0; i< 9; i++){
             data.set("createDate", new Date());
             String str = HttpUtil.createPost(url).addHeaders(head).body(data.toJSONString(0)).execute().body();
             System.out.println(str);
         }
         System.out.println("结束");
-    }*/
+    }
 }
