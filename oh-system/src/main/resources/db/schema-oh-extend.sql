@@ -82,24 +82,28 @@ CREATE TABLE `oh_task_user`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务人员表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for online_table
+-- Table structure for oh_work_order
 -- ----------------------------
-CREATE TABLE `online_table`  (
-  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'id',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表名',
-  `comments` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表描述',
-  `form_layout` tinyint(0) NULL DEFAULT NULL COMMENT '表单布局',
-  `tree` tinyint(0) NULL DEFAULT NULL COMMENT '是否树  0：否   1：是',
-  `tree_pid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '树父id',
-  `tree_label` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '树展示列',
-  `table_type` tinyint(0) NULL DEFAULT NULL COMMENT '表类型  0：单表',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '是否更新  0：否   1：是',
-  `deleted` tinyint(0) NULL DEFAULT NULL COMMENT '删除标识  0：正常   1：已删除',
-  `creator` bigint(0) NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'Online表单' ROW_FORMAT = Dynamic;
-
+CREATE TABLE `oh_work_order` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `order_code` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '工单编码',
+  `order_source` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '工单来源',
+  `report_time` datetime DEFAULT NULL COMMENT '上报时间',
+  `incident_time` datetime DEFAULT NULL COMMENT '事发时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `title` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标题',
+  `comment` varchar(2000) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '内容',
+  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '位置',
+  `geo_x` decimal(12,9) DEFAULT NULL COMMENT '经度',
+  `geo_y` decimal(12,9) DEFAULT NULL COMMENT '纬度',
+  `category` int DEFAULT NULL COMMENT '类别',
+  `note` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '删除标识  0：正常   1：已删除',
+  `creator` bigint DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_order_code` (`order_code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='工单表';
 SET FOREIGN_KEY_CHECKS = 1;

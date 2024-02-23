@@ -16,6 +16,8 @@ import java.util.Optional;
 
 /**
  * 消息消费，业务处理
+ * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2023-07-29
  */
 @Component
 public class KafkaConsumer {
@@ -29,18 +31,21 @@ public class KafkaConsumer {
         DataMsgService dataMsgService;
 
         // 监听到消息就会执行此方法
-        @KafkaListener(topics = "asyncSend", groupId = "oh-group-id")
+        @KafkaListener(topics = "asyncSend", groupId = "open-api-group-id")
         public void consume(String message) {
-            log.info("消费数据了 Received message: " + message);
+            log.debug("消费数据: " + message);
             DataMsgEntity dataMsg = JSONUtil.toBean(message, DataMsgEntity.class);
             dataMsg.setTopic("asyncSend");
             dataMsg = dataMsgService.saveData(dataMsg);
             Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFunCode());
             if(optional.isPresent()){
                 JobService taskService = optional.get();
+                // 参数校验在 OpenApiController 中已进行校验过，因此此处可以不许要再调用，可直接进行业务处理
                 taskService.handle(dataMsg.getJsonObj());
                 dataMsg.setState("1");
                 dataMsgService.updateById(dataMsg);
+            }else{
+                log.error("未找到对应服务，处理失败！" + dataMsg.getFunCode());
             }
         }
     }

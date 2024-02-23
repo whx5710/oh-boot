@@ -59,6 +59,7 @@ public class OpenApiController extends BaseController {
         Optional<JobService> optional = ServiceFactory.getService(data.getFunCode());
         if(optional.isPresent()){
             JobService taskService = optional.get();
+            // 校验参数
             taskService.check(jsonObj);
             if (!isAsync || apiType == 1) { // 直接业务处理
                 result = taskService.handle(jsonObj);
@@ -67,7 +68,7 @@ public class OpenApiController extends BaseController {
                 CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("asyncSend", data.toJson());
                 //执行成功回调
                 completableFuture.thenAccept(msg -> {
-                    log.info("发送成功");
+                    log.debug("发送成功");
                 });
                 //执行失败回调
                 completableFuture.exceptionally(e -> {
@@ -81,7 +82,7 @@ public class OpenApiController extends BaseController {
         return Result.ok(result);
     }
 
-    /**public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String url = "http://localhost:8080/openApi/send";
         Map<String,String> head = new HashMap<>();
         head.put("OH-CLIENT-ID","C0001");
@@ -98,5 +99,5 @@ public class OpenApiController extends BaseController {
             System.out.println(str);
         }
         System.out.println("结束");
-    }**/
+    }*/
 }
