@@ -29,6 +29,9 @@ public class OpenApiController extends BaseController {
      * 启动Kafka命令
      * nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
      * nohup sh bin/kafka-server-start.sh config/server.properties &
+     *
+     * bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+     * bin\windows\kafka-server-start.bat config\server.properties
      */
 
     private final Logger log = LoggerFactory.getLogger(OpenApiController.class);
@@ -87,14 +90,19 @@ public class OpenApiController extends BaseController {
         Map<String,String> head = new HashMap<>();
         head.put("OH-CLIENT-ID","C0001");
         head.put("OH-SECRET-KEY","c28a8120682d4b4fa50325ed34748e0e");
-        head.put("OH-FUNC-CODE","F1001");
+        head.put("OH-FUNC-CODE","F1003");
         JSONObject data = new JSONObject();
         data.set("name","王小费");
-        data.set("address","湖南长沙");
         data.set("sex","name");
+
         System.out.println("开始请求");
-        for(int i = 0; i< 99; i++){
+        for(int i = 0; i< 9; i++){
+            data.set("address","湖南长沙" + System.currentTimeMillis());
             data.set("createDate", new Date());
+            data.set("reportTime", new Date());
+            data.set("incidentTime", new Date());
+            data.set("orderCode", IdUtil.simpleUUID());
+            data.set("note", System.currentTimeMillis());
             String str = HttpUtil.createPost(url).addHeaders(head).body(data.toJSONString(0)).execute().body();
             System.out.println(str);
         }

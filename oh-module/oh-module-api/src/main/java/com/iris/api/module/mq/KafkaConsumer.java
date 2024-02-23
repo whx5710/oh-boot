@@ -43,10 +43,11 @@ public class KafkaConsumer {
                 // 参数校验在 OpenApiController 中已进行校验过，因此此处可以不许要再调用，可直接进行业务处理
                 taskService.handle(dataMsg.getJsonObj());
                 dataMsg.setState("1");
-                dataMsgService.updateById(dataMsg);
             }else{
                 log.error("未找到对应服务，处理失败！" + dataMsg.getFunCode());
+                dataMsg.setState("2"); // 未找到对应的服务类，处理失败
             }
+            dataMsgService.updateById(dataMsg);
         }
     }
 }
