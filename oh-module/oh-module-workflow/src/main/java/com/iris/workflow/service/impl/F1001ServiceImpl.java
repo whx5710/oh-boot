@@ -1,4 +1,4 @@
-package com.iris.api.service.impl;
+package com.iris.workflow.service.impl;
 
 import cn.hutool.json.JSONObject;
 import com.iris.framework.common.service.JobService;
@@ -21,7 +21,7 @@ public class F1001ServiceImpl implements JobService, InitializingBean{
 
     @Override
     public JSONObject handle(JSONObject data) {
-        log.info("处理业务一数据 F1001" + data.toJSONString(0));
+        log.info("流程里面的-------------------------处理业务一数据 F1001" + data.toJSONString(0));
         JSONObject object = new JSONObject();
         object.set("msg","ok");
         return object;
