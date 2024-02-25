@@ -35,4 +35,13 @@ public class RedisKeys {
         return "sys:openapi:" + clientId;
     }
 
+    /**
+     * 登录失败次数
+     * @param loginName 用户
+     * @return key
+     */
+    public static String getAuthCountKey(String loginName){
+        return "sys:account:authCount:" + loginName;
+    }
+
 }

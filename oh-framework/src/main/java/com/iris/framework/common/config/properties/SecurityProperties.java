@@ -1,7 +1,9 @@
 package com.iris.framework.common.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 @ConfigurationProperties(prefix = "oh.security")
 public class SecurityProperties {
 
@@ -14,6 +16,14 @@ public class SecurityProperties {
      * token刷新时间
      */
     private Long refreshTokenExpire;
+    /**
+     * 多少次鉴权失败锁定，0表示不开启
+     */
+    private int authCount = 0;
+    /**
+     * 账号锁定时间(秒)
+     */
+    private Long lockTime = 0L;
 
     public Long getAccessTokenExpire() {
         return accessTokenExpire;
@@ -29,5 +39,29 @@ public class SecurityProperties {
 
     public void setRefreshTokenExpire(Long refreshTokenExpire) {
         this.refreshTokenExpire = refreshTokenExpire;
+    }
+
+    /**
+     * 多少次鉴权失败锁定，0表示不开启
+     * @return 次数
+     */
+    public int getAuthCount() {
+        return authCount;
+    }
+
+    public void setAuthCount(int authCount) {
+        this.authCount = authCount;
+    }
+
+    /**
+     * 锁定时间
+     * @return long
+     */
+    public Long getLockTime() {
+        return lockTime;
+    }
+
+    public void setLockTime(Long lockTime) {
+        this.lockTime = lockTime;
     }
 }

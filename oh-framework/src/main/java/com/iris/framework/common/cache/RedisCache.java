@@ -56,10 +56,20 @@ public class RedisCache {
         return value;
     }
 
+    /**
+     * 根据key获取对象
+     * @param key
+     * @return
+     */
     public Object get(String key) {
         return get(key, NOT_EXPIRE);
     }
 
+    /**
+     * 增量 自增
+     * @param key
+     * @return
+     */
     public Long increment(String key) {
         return redisTemplate.opsForValue().increment(key);
     }
@@ -127,6 +137,11 @@ public class RedisCache {
         redisTemplate.expireAt(key, expire);
     }
 
+    /**
+     * 获取过期时间
+     * @param key
+     * @return
+     */
     public Long getExpire(String key) {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
