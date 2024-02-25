@@ -43,11 +43,27 @@ public class SysUserController {
 
     @GetMapping("page")
     @Operation(summary = "分页")
-//    @PreAuthorize("hasAuthority('sys:user:page')")
+    @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<PageResult<SysUserVO>> page(@ParameterObject @Valid SysUserQuery query) {
         PageResult<SysUserVO> page = sysUserService.page(query);
 
         return Result.ok(page);
+    }
+
+    @GetMapping("clockPage")
+    @Operation(summary = "被锁定的用户列表")
+    @PreAuthorize("hasAuthority('sys:user:page')")
+    public Result<PageResult<SysUserVO>> clockPage(@ParameterObject @Valid SysUserQuery query) {
+        PageResult<SysUserVO> page = sysUserService.clockPage(query);
+        return Result.ok(page);
+    }
+
+    @GetMapping("unlock/{userName}")
+    @Operation(summary = "解锁用户")
+    @PreAuthorize("hasAuthority('sys:user:page')")
+    public Result<String> unlock(@PathVariable("userName")String userName) {
+        sysUserService.unlock(userName);
+        return Result.ok();
     }
 
     // 根据用户ID获取用户信息

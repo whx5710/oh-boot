@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fhs.trans.service.impl.TransService;
+import com.iris.framework.common.cache.RedisCache;
+import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.constant.CommonEnum;
 import com.iris.framework.common.utils.*;
 import com.iris.framework.security.user.SecurityUser;
@@ -30,10 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户管理
@@ -46,16 +45,19 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     private final SysUserRoleService sysUserRoleService;
     private final SysUserPostService sysUserPostService;
     private final TransService transService;
+    private final RedisCache redisCache;
 
     @Resource
     private PasswordEncoder passwordEncoder;
 
     @Resource
     private SysParamsService sysParamsService;
-    public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserPostService sysUserPostService, TransService transService) {
+    public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserPostService sysUserPostService,
+                              TransService transService, RedisCache redisCache) {
         this.sysUserRoleService = sysUserRoleService;
         this.sysUserPostService = sysUserPostService;
         this.transService = transService;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -73,6 +75,28 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
+    // 被锁定、待锁定的用户列表（由于有次数限制，此方法不判断多少次被锁定）
+    @Override
+    public PageResult<SysUserVO> clockPage(SysUserQuery query) {
+        Set<String> set = redisCache.keys(RedisKeys.getAuthCountKey("*"));
+        if(!set.isEmpty()){
+            List<String> names = new ArrayList<>();
+            for(String key: set){
+                names.add(key.substring(key.lastIndexOf(":") + 1));
+            }
+            query.setUserNames(names);
+            return page(query);
+        }else{
+            return new PageResult<>(new ArrayList<SysUserVO>(),0);
+        }
+    }
+
+    // 解锁用户
+    @Override
+    public void unlock(String userName) {
+        redisCache.delete(RedisKeys.getAuthCountKey(userName));
+    }
+
     private Map<String, Object> getParams(SysUserQuery query) {
         Map<String, Object> params = new HashMap<>();
         params.put("username", query.getUsername());
@@ -81,6 +105,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         params.put("realName", query.getRealName());
         params.put("orgId", query.getOrgId());
         params.put("keyWord", query.getKeyWord());
+
+        params.put("userNames", query.getUserNames());
 
         // 数据权限
         params.put(Constant.DATA_SCOPE, getDataScope("t1", null));

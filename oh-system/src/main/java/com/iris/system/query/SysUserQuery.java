@@ -3,6 +3,7 @@ package com.iris.system.query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.iris.framework.common.query.Query;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,6 +31,9 @@ public class SysUserQuery extends Query {
 
     @Schema(description = "关键字")
     private String keyWord;
+
+    @Schema(description = "用户名集合")
+    private List<String> userNames;
 
     public String getUsername() {
         return username;
@@ -77,6 +81,14 @@ public class SysUserQuery extends Query {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public List<String> getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(List<String> userNames) {
+        this.userNames = userNames;
     }
 
     @Override

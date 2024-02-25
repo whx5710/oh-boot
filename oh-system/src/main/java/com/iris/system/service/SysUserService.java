@@ -20,6 +20,12 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 
     PageResult<SysUserVO> page(SysUserQuery query);
 
+    // 被锁定、待锁定的用户列表（由于有次数限制，此方法不判断多少次被锁定）
+    PageResult<SysUserVO> clockPage(SysUserQuery query);
+
+    // 解锁用户
+    void unlock(String userName);
+
     void save(SysUserVO vo);
 
     void update(SysUserVO vo);

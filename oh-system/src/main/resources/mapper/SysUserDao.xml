@@ -10,6 +10,12 @@
 		<if test="username != null and username.trim() != ''">
 			and t1.username = #{username}
 		</if>
+		<if test="userNames != null and userNames.size() > 0">
+			and t1.username in
+			<foreach item="item" index="index" collection="userNames" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
 		<if test="mobile != null and mobile.trim() != ''">
 			and t1.mobile = #{mobile}
 		</if>
