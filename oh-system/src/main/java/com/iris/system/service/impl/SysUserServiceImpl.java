@@ -75,14 +75,28 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
-    // 被锁定、待锁定的用户列表（由于有次数限制，此方法不判断多少次被锁定）
+    /**
+     * 被锁定、待锁定的用户列表（由于有次数限制，此方法不判断多少次被锁定）
+     * username 不为空，说明只查单个用户
+     * @param query
+     * @return
+     */
     @Override
     public PageResult<SysUserVO> clockPage(SysUserQuery query) {
         Set<String> set = redisCache.keys(RedisKeys.getAuthCountKey("*"));
         if(!set.isEmpty()){
             List<String> names = new ArrayList<>();
-            for(String key: set){
-                names.add(key.substring(key.lastIndexOf(":") + 1));
+            // 查具体某个账号
+            if(!ObjectUtils.isEmpty(query.getUsername())){
+                if(set.contains(query.getUsername())){
+                    names.add(query.getUsername());
+                }else{
+                    return new PageResult<>(new ArrayList<SysUserVO>(),0);
+                }
+            }else{
+                for(String key: set){
+                    names.add(key.substring(key.lastIndexOf(":") + 1));
+                }
             }
             query.setUserNames(names);
             return page(query);
@@ -94,6 +108,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     // 解锁用户
     @Override
     public void unlock(String userName) {
+        if(ObjectUtils.isEmpty(userName) || userName.equals("*")){
+            throw new ServerException("");
+        }
         redisCache.delete(RedisKeys.getAuthCountKey(userName));
     }
 
