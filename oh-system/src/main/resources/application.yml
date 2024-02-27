@@ -29,7 +29,7 @@ oh:
     # 多少次鉴权失败锁定，0表示不开启
     auth-count: 5
     # 账号锁定时间(秒)
-    lock-time: 300
+    lock-time: 3600
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
   project:

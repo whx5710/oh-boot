@@ -176,7 +176,7 @@ INSERT INTO `sys_menu` VALUES (65, 59, '日志', '', 'schedule:log', 1, 0, '', 4
 INSERT INTO `sys_menu` VALUES (66, 34, '系统监控', '', '', 0, 0, 'icon-Report', 10, 0, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
 INSERT INTO `sys_menu` VALUES (67, 66, '服务监控', 'monitor/server/index', 'monitor:server:all', 0, 0, 'icon-sever', 0, 0, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
 INSERT INTO `sys_menu` VALUES (68, 66, '缓存监控', 'monitor/cache/index', 'monitor:cache:all', 0, 0, 'icon-fund-fill', 2, 0, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
-INSERT INTO `sys_menu` VALUES (69, 66, '在线用户', 'monitor/user/index', 'monitor:user:all', 0, 0, 'icon-user', 3, 0, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
+INSERT INTO `sys_menu` VALUES (69, 66, '用户监控', 'monitor/user/index', 'monitor:user:all', 0, 0, 'icon-user', 3, 0, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
 INSERT INTO `sys_menu` VALUES (70, 34, '消息管理', '', '', 0, 0, 'icon-message', 2, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO `sys_menu` VALUES (71, 70, '短信日志', 'message/sms/log/index', 'sms:log', 0, 0, 'icon-detail', 1, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO `sys_menu` VALUES (72, 70, '短信平台', 'message/sms/platform/index', NULL, 0, 0, 'icon-whatsapp', 0, 0, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');

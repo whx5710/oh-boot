@@ -86,9 +86,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         Set<String> set = redisCache.keys(RedisKeys.getAuthCountKey("*"));
         if(!set.isEmpty()){
             List<String> names = new ArrayList<>();
+            Set<String> tmp = new HashSet<>();
+            for(String key: set){
+                tmp.add(key.substring(key.lastIndexOf(":") + 1));
+            }
             // 查具体某个账号
             if(!ObjectUtils.isEmpty(query.getUsername())){
-                if(set.contains(query.getUsername())){
+                if(tmp.contains(query.getUsername())){
                     names.add(query.getUsername());
                 }else{
                     return new PageResult<>(new ArrayList<SysUserVO>(),0);
