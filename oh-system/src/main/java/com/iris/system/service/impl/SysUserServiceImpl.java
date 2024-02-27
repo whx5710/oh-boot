@@ -109,7 +109,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     @Override
     public void unlock(String userName) {
         if(ObjectUtils.isEmpty(userName) || userName.equals("*")){
-            throw new ServerException("");
+            throw new ServerException("用户名不能为空或非法");
         }
         redisCache.delete(RedisKeys.getAuthCountKey(userName));
     }
@@ -123,7 +123,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         params.put("orgId", query.getOrgId());
         params.put("keyWord", query.getKeyWord());
 
-        params.put("userNames", query.getUserNames());
+        params.put("userNames", query.getUserNames());// 用户名集合
 
         // 数据权限
         params.put(Constant.DATA_SCOPE, getDataScope("t1", null));

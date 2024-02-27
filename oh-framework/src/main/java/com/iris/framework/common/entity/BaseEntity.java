@@ -2,7 +2,6 @@ package com.iris.framework.common.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
