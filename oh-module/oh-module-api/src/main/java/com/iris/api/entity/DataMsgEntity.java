@@ -1,7 +1,5 @@
 package com.iris.api.entity;
 
-import cn.hutool.json.JSONObject;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
@@ -12,9 +10,6 @@ import com.iris.framework.common.entity.BaseEntity;
 public class DataMsgEntity extends BaseEntity {
     // 数据字符串
     private String jsonStr;
-
-    @TableField(exist = false)
-    private JSONObject jsonObj;
     // 功能号
     private String funCode;
     // 客户端ID
@@ -47,14 +42,6 @@ public class DataMsgEntity extends BaseEntity {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
-    }
-
-    public JSONObject getJsonObj() {
-        return jsonObj;
-    }
-
-    public void setJsonObj(JSONObject jsonObj) {
-        this.jsonObj = jsonObj;
     }
 
     public String getTopic() {

@@ -1,8 +1,11 @@
 package com.iris.api;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.iris.api.common.BaseController;
-import com.iris.api.entity.DataMsgEntity;
+import com.iris.api.vo.MsgVO;
+import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.Result;
@@ -16,6 +19,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -50,25 +56,25 @@ public class OpenApiController extends BaseController {
      * @param request 请求
      * @return 返回
      */
-    @PostMapping("/send")
-    public Result<JSONObject> asyncSend(@RequestBody JSONObject jsonObj, HttpServletRequest request) {
-        JSONObject object = this.checkData(request);
-        DataMsgEntity data = object.getBean("data", DataMsgEntity.class);
-        data.setJsonObj(jsonObj);
-        Boolean isAsync = object.getBool("isAsync"); // 接口是否支持异步
+    @PostMapping("/submit")
+    public Result<JSONObject> submit(@RequestBody JSONObject jsonObj, HttpServletRequest request) {
+        MsgVO msgVO = this.basicCheck(request);
+        MetaEntity data = msgVO.getMetaEntity();
+        data.setData(jsonObj);
+        Boolean isAsync = msgVO.getAsync(); // 接口是否支持异步
 
         JSONObject result = new JSONObject();
         result.set("msg","发送成功");
         Optional<JobService> optional = ServiceFactory.getService(data.getFunCode());
         if(optional.isPresent()){
-            JobService taskService = optional.get();
+            JobService jobService = optional.get();
             // 校验参数
-            taskService.check(jsonObj);
+            jobService.check(jsonObj);
             if (!isAsync || apiType == 1) { // 直接业务处理
-                result = taskService.handle(jsonObj);
+                result = jobService.handle(jsonObj);
             }else{
-                data.setState("0"); // 状态0未处理1处理
-                CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("asyncSend", data.toJson());
+                data.setState(0); // 状态0未处理1处理
+                CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("topic-submit", data.toJson());
                 //执行成功回调
                 completableFuture.thenAccept(msg -> {
                     log.debug("发送成功");
@@ -85,8 +91,8 @@ public class OpenApiController extends BaseController {
         return Result.ok(result);
     }
 
-    /*public static void main(String[] args) {
-        String url = "http://localhost:8080/openApi/send";
+    public static void main(String[] args) {
+        String url = "http://localhost:8080/openApi/submit";
         Map<String,String> head = new HashMap<>();
         head.put("OH-CLIENT-ID","C0001");
         head.put("OH-SECRET-KEY","c28a8120682d4b4fa50325ed34748e0e");
@@ -96,8 +102,8 @@ public class OpenApiController extends BaseController {
         data.set("sex","name");
 
         System.out.println("开始请求");
-        for(int i = 0; i< 9; i++){
-            data.set("address","湖南长沙" + System.currentTimeMillis());
+        for(int i = 0; i< 99; i++){
+            data.set("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.set("createDate", new Date());
             data.set("reportTime", new Date());
             data.set("incidentTime", new Date());
@@ -107,5 +113,5 @@ public class OpenApiController extends BaseController {
             System.out.println(str);
         }
         System.out.println("结束");
-    }*/
+    }
 }

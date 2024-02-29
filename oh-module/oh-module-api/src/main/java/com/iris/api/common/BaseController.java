@@ -1,10 +1,10 @@
 package com.iris.api.common;
 
-import cn.hutool.json.JSONObject;
-import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.vo.DataAppVO;
+import com.iris.api.vo.MsgVO;
 import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
+import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +16,9 @@ public class BaseController {
     @Resource
     RedisCache redisCache;
 
-    protected JSONObject checkData(HttpServletRequest request){
-//        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-//        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+
+
+    protected MsgVO basicCheck(HttpServletRequest request){
         String clientId = request.getHeader("OH-CLIENT-ID");
         String secretKey = request.getHeader("OH-SECRET-KEY");
         String funcCode = request.getHeader("OH-FUNC-CODE");
@@ -38,19 +38,19 @@ public class BaseController {
         }
 
         List<DataAppVO> list = (List<DataAppVO>) obj;
-        JSONObject object = new JSONObject();
+        MsgVO msgVO = new MsgVO();
         if(!list.isEmpty()){
             DataAppVO dataAppVO = list.getFirst();
             if(!dataAppVO.getSecretKey().equals(secretKey)){
                 throw new ServerException("密钥错误，请求非法");
             }
-            object.set("isAsync", dataAppVO.getAsync());// 接口是否支持异步
+            msgVO.setAsync(dataAppVO.getAsync()); // 接口是否支持异步
         }
-
-        DataMsgEntity data = new DataMsgEntity();
-        data.setClientId(clientId);
-        data.setFunCode(funcCode);
-        object.set("data", data);
-        return object;
+        MetaEntity metaEntity = new MetaEntity();
+        metaEntity.setClientId(clientId);
+        metaEntity.setFunCode(funcCode);
+        metaEntity.setState(0);
+        msgVO.setMetaEntity(metaEntity);
+        return msgVO;
     }
 }
