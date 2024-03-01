@@ -33,9 +33,11 @@ import java.util.concurrent.CompletableFuture;
 public class OpenApiController extends BaseController {
     /**
      * 启动Kafka命令
+     * linux
      * nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
      * nohup sh bin/kafka-server-start.sh config/server.properties &
      *
+     * windows
      * bin\windows\zookeeper-server-start.bat config\zookeeper.properties
      * bin\windows\kafka-server-start.bat config\server.properties
      */
@@ -82,7 +84,7 @@ public class OpenApiController extends BaseController {
                 //执行失败回调
                 completableFuture.exceptionally(e -> {
                     log.error("发送失败", e);
-                    throw new ServerException("发送失败！");
+                    throw new ServerException("发送失败！" + e.getMessage());
                 });
             }
         }else{
@@ -102,7 +104,7 @@ public class OpenApiController extends BaseController {
         data.set("sex","name");
 
         System.out.println("开始请求");
-        for(int i = 0; i< 99; i++){
+        for(int i = 0; i< 9999; i++){
             data.set("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.set("createDate", new Date());
             data.set("reportTime", new Date());
