@@ -194,6 +194,15 @@ public class ProcessHandlerService {
         return stringBuffer.toString();
     }
 
+    /**
+     * 判断是否部署流程
+     * @param processKey
+     * @return 是否
+     */
+    public Boolean isPeploy(String processKey){
+        return !ObjectUtils.isEmpty(repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).active().list());
+    }
+
 
     /**
      * 测试方法

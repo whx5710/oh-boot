@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.ServiceFactory;
@@ -12,6 +13,7 @@ import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
 import com.iris.workflow.convert.WorkOrderConvert;
 import com.iris.workflow.entity.WorkOrderEntity;
 import com.iris.workflow.query.WorkOrderQuery;
+import com.iris.workflow.service.ProcessHandlerService;
 import com.iris.workflow.service.TaskHandlerService;
 import com.iris.workflow.vo.TaskRecordVO;
 import com.iris.workflow.vo.WorkOrderVO;
@@ -33,10 +35,14 @@ import java.util.List;
 @Service
 public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrderEntity> implements WorkOrderService, JobService, InitializingBean {
 
+    private String processKey = "Process_demo20231222";
     private final TaskHandlerService taskHandlerService;
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService){
+    private final ProcessHandlerService processHandlerService;
+
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService){
         this.taskHandlerService = taskHandlerService;
+        this.processHandlerService = processHandlerService;
     }
 
 
@@ -79,8 +85,12 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
      */
     @Override
     public void check(JSONObject data) {
+        // 判断流程是否部署
+        if(!processHandlerService.isPeploy(processKey)){
+            throw new ServerException("流程还未部署，请部署");
+        }
         WorkOrderVO workOrderVO = JSONUtil.toBean(data, WorkOrderVO.class);
-        System.out.println(workOrderVO);
+        System.out.println("参数：" + workOrderVO);
     }
 
     /**
@@ -94,7 +104,7 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
         this.save(workOrderVO);
 
         // 启动流程
-        List<TaskRecordVO> list = taskHandlerService.startByProcessKey("Process_demo20231222", String.valueOf(workOrderVO.getId()), null);
+        List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
         JSONObject object = new JSONObject();
         object.set("msg","ok");
         object.set("data", list);
