@@ -1,6 +1,6 @@
 package com.iris.framework.common.service;
 
-import cn.hutool.json.JSONObject;
+import java.util.Map;
 
 /**
  * 任务接口，可通过 ServiceFactory 注册和获取服务操作相关业务
@@ -12,14 +12,14 @@ public interface JobService {
 
     /**
      * 校验参数，如果参数非法，直接抛出异常即可
-     * @param data
+     * @param data 参数
      */
-    void check(JSONObject data);
+    void check(Map<String, Object> data);
 
     /**
      * 业务处理
-     * @param data
-     * @return
+     * @param data 参数
+     * @return map
      */
-    JSONObject handle(JSONObject data);
+    Map<String, Object> handle(Map<String, Object> data);
 }

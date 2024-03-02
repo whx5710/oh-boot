@@ -1,6 +1,5 @@
 package com.iris.system.service;
 
-import cn.hutool.json.JSONObject;
 import com.iris.system.entity.SysParamsEntity;
 import com.iris.system.query.SysParamsQuery;
 import com.iris.system.vo.SysParamsVO;
@@ -8,6 +7,7 @@ import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.mybatis.service.BaseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 参数管理
@@ -80,5 +80,5 @@ public interface SysParamsService extends BaseService<SysParamsEntity> {
      * @param keys 参数Key
      * @return 集合
      */
-    JSONObject getByKeys(List<String> keys);
+    Map<String, String> getByKeys(List<String> keys);
 }

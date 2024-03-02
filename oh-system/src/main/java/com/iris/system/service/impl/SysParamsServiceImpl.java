@@ -1,11 +1,10 @@
 package com.iris.system.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.system.convert.SysParamsConvert;
 import jakarta.annotation.PostConstruct;
@@ -18,12 +17,13 @@ import com.iris.system.entity.SysParamsEntity;
 import com.iris.system.query.SysParamsQuery;
 import com.iris.system.service.SysParamsService;
 import com.iris.system.vo.SysParamsVO;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 参数管理
@@ -34,8 +34,14 @@ import java.util.List;
 @Service
 public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParamsEntity> implements SysParamsService {
 
-    @Resource
-    private SysParamsCache sysParamsCache;
+    private final SysParamsCache sysParamsCache;
+
+    private final ObjectMapper objectMapper;
+
+    public SysParamsServiceImpl(SysParamsCache sysParamsCache, ObjectMapper objectMapper){
+        this.sysParamsCache = sysParamsCache;
+        this.objectMapper = objectMapper;
+    }
 
     @PostConstruct
     public void init() {
@@ -172,7 +178,7 @@ public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParam
     @Override
     public <T> T getJSONObject(String paramKey, Class<T> valueType) {
         String value = getString(paramKey);
-        return JSONUtil.toBean(value, valueType);
+        return objectMapper.convertValue(value, valueType);
     }
 
     /**
@@ -193,15 +199,15 @@ public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParam
      * @return 集合
      */
     @Override
-    public JSONObject getByKeys(List<String> keys) {
-        JSONObject jsonObject = new JSONObject();
+    public Map<String, String> getByKeys(List<String> keys) {
+        Map<String, String> data = new HashMap<>();
         for(String key: keys){
             String value = getDefaultString(key.toUpperCase());
             if(value != null){
-                jsonObject.set(key.toUpperCase(), value);
+                data.put(key.toUpperCase(), value);
             }
         }
-        return jsonObject;
+        return data;
     }
 
 }

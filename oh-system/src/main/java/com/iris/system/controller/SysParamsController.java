@@ -1,6 +1,5 @@
 package com.iris.system.controller;
 
-import cn.hutool.json.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 参数管理
@@ -49,7 +49,7 @@ public class SysParamsController {
     }
 
     @PostMapping("/getByKeys")
-    public Result<JSONObject> getByKeys(@RequestBody List<String> keys){
+    public Result<Map<String, String>> getByKeys(@RequestBody List<String> keys){
         return Result.ok(sysParamsService.getByKeys(keys));
     }
 

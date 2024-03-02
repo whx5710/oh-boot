@@ -1,10 +1,9 @@
 package com.iris.workflow.service.impl;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.PageResult;
@@ -23,7 +22,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 工单表
@@ -35,14 +36,18 @@ import java.util.List;
 @Service
 public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrderEntity> implements WorkOrderService, JobService, InitializingBean {
 
-    private String processKey = "Process_demo20231222";
+    private final String processKey = "Process_demo20231222";
     private final TaskHandlerService taskHandlerService;
 
     private final ProcessHandlerService processHandlerService;
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService){
+    private final ObjectMapper objectMapper;
+
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,
+                                ObjectMapper objectMapper){
         this.taskHandlerService = taskHandlerService;
         this.processHandlerService = processHandlerService;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -84,12 +89,13 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
      * @param data
      */
     @Override
-    public void check(JSONObject data) {
+    public void check(Map<String, Object> data) {
         // 判断流程是否部署
         if(!processHandlerService.isPeploy(processKey)){
             throw new ServerException("流程还未部署，请部署");
         }
-        WorkOrderVO workOrderVO = JSONUtil.toBean(data, WorkOrderVO.class);
+        WorkOrderVO workOrderVO = objectMapper.convertValue(data, WorkOrderVO.class);
+
         System.out.println("参数：" + workOrderVO);
     }
 
@@ -99,15 +105,15 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
      * @return
      */
     @Override
-    public JSONObject handle(JSONObject data) {
-        WorkOrderVO workOrderVO = JSONUtil.toBean(data, WorkOrderVO.class);
+    public Map<String, Object> handle(Map<String, Object> data) {
+        WorkOrderVO workOrderVO = objectMapper.convertValue(data, WorkOrderVO.class);
         this.save(workOrderVO);
 
         // 启动流程
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
-        JSONObject object = new JSONObject();
-        object.set("msg","ok");
-        object.set("data", list);
+        Map<String, Object> object = new HashMap<>();
+        object.put("msg","ok");
+        object.put("data", list);
         return object;
     }
 

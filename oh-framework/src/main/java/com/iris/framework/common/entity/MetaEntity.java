@@ -1,6 +1,6 @@
 package com.iris.framework.common.entity;
 
-import cn.hutool.json.JSONObject;
+import java.util.Map;
 
 /**
  * 元素 Entity基类
@@ -21,7 +21,7 @@ public class MetaEntity extends IDEntity {
     private int state;
 
     // 数据
-    private JSONObject data;
+    private Map<String, Object> data;
 
     public String getFunCode() {
         return funCode;
@@ -55,11 +55,11 @@ public class MetaEntity extends IDEntity {
         this.state = state;
     }
 
-    public JSONObject getData() {
+    public Map<String, Object> getData() {
         return data;
     }
 
-    public void setData(JSONObject data) {
+    public void setData(Map<String, Object> data) {
         this.data = data;
     }
 }
