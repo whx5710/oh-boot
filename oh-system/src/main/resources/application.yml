@@ -1,9 +1,12 @@
-#######################################
+##############################################################################
 # 1、每个环境有对应的配置，请规范使用每个环境配置;比如开发环境需要访问swagger接口文档，但在正式环境需要屏蔽
-# 2、如果使用nacos配置中心，建议将本地环境 “dev|test|prod” 配置屏蔽，防止使用过程中混淆
-#    nacos启动命令（单机模式）：sh startup.sh -m standalone 或 bash startup.sh -m standalone
+# 2、如果使用nacos配置中心，建议将本地环境 “dev|test|prod” 配置屏蔽，防止使用过程中混淆;使用本地配置，屏蔽下面nacos配置即可
+#    nacos启动命令（单机模式）：
+#      linux:   sh startup.sh -m standalone 或 bash startup.sh -m standalone
+#      windows: startup.cmd -m standalone
+#    nacos关闭命令：sh shutdown.sh   或   shutdown.cmd
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
-#######################################
+##############################################################################
 spring:
   # 环境 dev|test|prod
   profiles:
