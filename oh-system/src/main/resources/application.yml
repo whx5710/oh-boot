@@ -1,135 +1,37 @@
 #######################################
-# 每个环境有对应的配置，请规范使用每个环境配置
-# 比如开发环境需要访问swagger接口文档，但在正式环境需要屏蔽
+# 1、每个环境有对应的配置，请规范使用每个环境配置;比如开发环境需要访问swagger接口文档，但在正式环境需要屏蔽
+# 2、如果使用nacos配置中心，建议将本地环境 “dev|test|prod” 配置屏蔽，防止使用过程中混淆
+#
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 #######################################
-
-# Tomcat
-server:
-  tomcat:
-    uri-encoding: UTF-8
-    threads:
-      max: 1000
-      min-spare: 30
-  port: 8080
-  servlet:
-    context-path: /
-    session:
-      cookie:
-        http-only: true
-oh:
-  xss:
-    enabled: true
-    exclude-urls:
-      - /oh-generator/**
-  security:
-    # 12小时过期
-    access-token-expire: 43200
-    # 14天过期
-    refresh-token-expire: 1209600
-    # 多少次鉴权失败锁定，0表示不开启
-    auth-count: 5
-    # 账号锁定时间(秒)
-    lock-time: 3600
-  open-api:
-    type: 2 # 1直接保存 2使用MQ异步保存
-  project:
-    # 名称
-    name: Oh Boot
-    # 应用名称
-    appName: oh-boot
-    # 版本
-    version: 1.0.0-SNAPSHOT
-    # 描述
-    description: 欢迎使用OH-Boot，让开发更简单！ - 王小费【whx5710@qq.com】
 spring:
   # 环境 dev|test|prod
   profiles:
     active: dev
   application:
     name: oh-boot
-  jackson:
-    # 设置 java.util.Date, Calendar 序列化、反序列化的格式
-    date-format: yyyy-MM-dd HH:mm:ss
-    # 当地时区
-    locale: zh
-    # 设置全局时区
-    time-zone: GMT+8
-    # 设置对象或被@JsonInclude注解的属性的序列化方式。NON_NULL 表示不为空的属性才会序列化,具体属性可看JsonInclude.Include
-    # default-property-inclusion: NON_NULL
-    serialization:
-      # 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
-      WRITE_DATES_AS_TIMESTAMPS: false
-      # 序列化时，对象为 null，是否抛异常
-      FAIL_ON_EMPTY_BEANS: false
-    deserialization:
-      # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
-      FAIL_ON_UNKNOWN_PROPERTIES: false
-  servlet:
-    multipart:
-      max-file-size: 1024MB
-      max-request-size: 1024MB
-  main:
-    # 关闭 banner CONSOLE、LOG、OFF
-    banner-mode: "OFF"
-storage:
-  enabled: true
+
+# nacos相关配置
+nacos:
   config:
-    # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
-    type: local
-    domain: http://localhost:8080
-  local:
-    path: /home/whx/图片/upload
-
-mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
-  # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.iris.*.entity
-  global-config:
-    # 数据库相关配置
-    db-config:
-      # ID自增
-      id-type: AUTO
-      # 逻辑已删除值
-      logic-delete-value: 1
-      # 逻辑未删除值
-      logic-not-delete-value: 0
-    banner: false
-  # 原生配置
-  configuration:
-    map-underscore-to-camel-case: true
-    cache-enabled: false
-    call-setters-on-nulls: true
-    jdbc-type-for-null: 'null'
-  configuration-properties:
-    prefix:
-    blobType: BLOB
-    boolValue: TRUE
-
-#easy trans 数据翻译组件
-easy-trans:
-  #启用redis缓存 如果不用redis请设置为false
-  is-enable-redis: false
-  #启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
-  is-enable-global: true
-  #启用平铺模式
-  is-enable-tile: true
-
-# 日志信息
-#logging:
-#  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-#  level:
-#    com.iris: INFO
-#    # root: info
-#    # org.springframework.web: debug # web相关的日志级别
-#  pattern:
-#    #在控制台输出的日志格式 '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n'
-#    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n'
-#  file:
-#    #日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
-#    # path: /home/whx/文档/workspace/logs
-#    name: logs/iris.log
-#  logback:
-#    rollingpolicy:
-#      max-history: 30
-#      max-file-size: 100MB
+    # nacos会根据配置怎么找到对应的配置文件规则：prefix−{spring.profile.active}.${file-extension}
+    # spring.profiles.active 为空时，对应的连接符 - 也将不存在，，dataId 的拼接格式变成 ${prefix}.${file-extension}
+    bootstrap:
+      #开启系统启动时预读取nacos的配置，用于满足@Value注入数据的场景
+      enable: true
+    #配置所属命名空间的id,此处我们配置名称为dev的id，可以在命名空间列表查看id的值
+    namespace: 3b00ce0d-eca1-4ef0-a764-199212d930ac
+    # 配置文件的前缀,默认为 spring.application.name 的值
+    prefix: iris
+    # 配置所属分组
+    group: dev
+    # 配置ID
+    data-id: iris-dev.yaml
+    # 配置文件类型,对应nacos配置页面的配置格式，默认是properties
+    type: yaml
+    # nacos服务器地址
+    server-addr: localhost:8848
+    # 开启自动刷新nacos配置
+    auto-refresh: true
+    # 针对配置项同名的情况，是否允许nacos的配置覆盖本地的配置
+    remote-first: true

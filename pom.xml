@@ -31,11 +31,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- jdk 版本 -->
         <java.version>21</java.version>
+        <!-- mysql jdbc 连接驱动 -->
         <mysql.jdbc.version>8.3.0</mysql.jdbc.version>
         <!-- mybatis-plus 版本 -->
         <mybatisplus.version>3.5.5</mybatisplus.version>
         <!-- 动态数据源 -->
         <dynamic.datasource.version>4.3.0</dynamic.datasource.version>
+        <!-- nacos配置中心 -->
+        <nacos.version>0.3.0-RC</nacos.version>
         <!-- swaager（xiaoymin版本）生成在线文档 -->
         <knife4j.version>4.5.0</knife4j.version>
         <!-- hutool 工具包 -->
@@ -83,6 +86,14 @@
                 <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
                 <version>${dynamic.datasource.version}</version>
             </dependency>
+
+            <!-- nacos 配置中心 https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter -->
+            <dependency>
+                <groupId>com.alibaba.boot</groupId>
+                <artifactId>nacos-config-spring-boot-starter</artifactId>
+                <version>${nacos.version}</version>
+            </dependency>
+
             <!-- swaager（xiaoymin版本）生成在线文档 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
