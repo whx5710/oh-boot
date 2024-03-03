@@ -64,7 +64,7 @@ spring:
     client-id: dc-device-flow-analyze
     listener:
       ack-mode: MANUAL_IMMEDIATE
-      concurrency: 30  # 多任务
+      concurrency: 10  # 多任务
       # type: BATCH #开启批量监听
     consumer:
       group-id: oh-group

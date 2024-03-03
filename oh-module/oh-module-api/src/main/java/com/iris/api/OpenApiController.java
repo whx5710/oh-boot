@@ -103,7 +103,7 @@ public class OpenApiController extends BaseController {
 
         System.out.println("开始请求");
 
-        for(int i = 0; i< 9; i++){
+        for(int i = 0; i< 99999; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", new Date());
             data.put("reportTime", new Date());
