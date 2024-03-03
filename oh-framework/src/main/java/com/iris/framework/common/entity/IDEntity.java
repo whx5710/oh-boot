@@ -1,8 +1,8 @@
 package com.iris.framework.common.entity;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fhs.core.trans.vo.TransPojo;
+import com.iris.framework.common.utils.JsonUtils;
 
 import java.io.Serializable;
 
@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author 王小费 whx5710@qq.com
  */
 public class IDEntity implements TransPojo, Serializable {
+
     /**
      * id
      */
@@ -31,6 +32,6 @@ public class IDEntity implements TransPojo, Serializable {
      * @return json字符串
      */
     public String toJson(){
-        return JSONUtil.toJsonStr(this);
+        return JsonUtils.toJsonString(this);
     }
 }

@@ -1,7 +1,7 @@
 package com.iris.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONUtil;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.system.entity.SysMessageEntity;
 import com.iris.system.vo.SysMessageVO;
 import jakarta.websocket.*;
@@ -111,7 +111,7 @@ public class WebSocketHandler {
      */
     @OnMessage
     public void onMessage(String message) {
-        SysMessageVO sysMessageVO = JSONUtil.toBean(message, SysMessageVO.class);
+        SysMessageVO sysMessageVO = JsonUtils.parseObject(message, SysMessageVO.class);
         if(ObjectUtils.isEmpty(sysMessageVO.getType())){
             sysMessageVO.setType("success");
         }else if(sysMessageVO.getType().equals("heartBeat")){ // 心跳

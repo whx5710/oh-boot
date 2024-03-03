@@ -34,6 +34,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.net.InetAddress;
 
@@ -46,6 +47,9 @@ import java.net.InetAddress;
 public class ServerApplication extends SpringBootServletInitializer implements ApplicationRunner {
 	private final Logger log = LoggerFactory.getLogger(ServerApplication.class);
 
+	// 上下文
+	public static ConfigurableApplicationContext applicationContext;
+
 	private final ServerProperties serverProperties;
 
 	private final ProjectProperties projectProperties;
@@ -56,7 +60,7 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
+		applicationContext = SpringApplication.run(ServerApplication.class, args);
 	}
 
 	@Override

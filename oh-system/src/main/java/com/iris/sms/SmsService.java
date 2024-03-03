@@ -1,10 +1,10 @@
 package com.iris.sms;
 
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.json.JSONUtil;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.ExceptionUtils;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.sms.config.SmsConfig;
 import com.iris.system.cache.SmsPlatformCache;
 import com.iris.system.entity.SmsLogEntity;
@@ -78,7 +78,7 @@ public class SmsService {
         logEntity.setPlatform(config.getPlatform());
         logEntity.setPlatformId(config.getId());
         logEntity.setMobile(mobile);
-        logEntity.setParams(JSONUtil.toJsonStr(params));
+        logEntity.setParams(JsonUtils.toJsonString(params));
 
         if(e != null) {
             String error = StringUtils.substring(ExceptionUtils.getExceptionMessage(e), 0, 2000);

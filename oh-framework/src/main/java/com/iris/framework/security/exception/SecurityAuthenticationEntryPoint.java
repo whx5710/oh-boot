@@ -1,7 +1,7 @@
 package com.iris.framework.security.exception;
 
-import cn.hutool.json.JSONUtil;
 import com.iris.framework.common.utils.IpUtils;
+import com.iris.framework.common.utils.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.iris.framework.common.exception.ErrorCode;
@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+
     private final Logger log = LoggerFactory.getLogger(SecurityAuthenticationEntryPoint.class);
 
     @Override
@@ -34,6 +35,6 @@ public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoin
         Result<Object> result = Result.error(ErrorCode.UNAUTHORIZED);
         String ip = IpUtils.getIpAddr(request);
         log.warn("IP:" + ip + " 请求方法:" + request.getMethod() + " 请求路径:" + request.getRequestURI() + " " + result.getMsg());
-        response.getWriter().print(JSONUtil.toJsonStr(result));
+        response.getWriter().print(JsonUtils.toJsonString(request));
     }
 }

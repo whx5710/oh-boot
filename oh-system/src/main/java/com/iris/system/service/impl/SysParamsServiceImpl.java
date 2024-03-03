@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iris.framework.common.utils.AssertUtils;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.system.convert.SysParamsConvert;
 import jakarta.annotation.PostConstruct;
 import com.iris.framework.common.exception.ServerException;
@@ -36,11 +36,8 @@ public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParam
 
     private final SysParamsCache sysParamsCache;
 
-    private final ObjectMapper objectMapper;
-
-    public SysParamsServiceImpl(SysParamsCache sysParamsCache, ObjectMapper objectMapper){
+    public SysParamsServiceImpl(SysParamsCache sysParamsCache){
         this.sysParamsCache = sysParamsCache;
-        this.objectMapper = objectMapper;
     }
 
     @PostConstruct
@@ -178,7 +175,7 @@ public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParam
     @Override
     public <T> T getJSONObject(String paramKey, Class<T> valueType) {
         String value = getString(paramKey);
-        return objectMapper.convertValue(value, valueType);
+        return JsonUtils.parseObject(value, valueType);
     }
 
     /**

@@ -3,7 +3,7 @@ package com.iris.framework.operatelog.aspect;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.operatelog.annotations.OperateLog;
 import com.iris.framework.operatelog.dto.OperateLogDTO;
 import com.iris.framework.operatelog.service.OperateLogService;
@@ -134,7 +134,7 @@ public class OperateLogAspect {
             args.put(argName, ignoreArgs(argValue) ? "[ignore]" : argValue);
         }
 
-        return JSONUtil.toJsonStr(args);
+        return JsonUtils.toJsonString(args);
     }
 
     private static boolean ignoreArgs(Object object) {

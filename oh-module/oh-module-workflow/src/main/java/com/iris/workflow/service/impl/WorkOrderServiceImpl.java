@@ -3,9 +3,9 @@ package com.iris.workflow.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.ServiceFactory;
 import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
@@ -41,13 +41,10 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
 
     private final ProcessHandlerService processHandlerService;
 
-    private final ObjectMapper objectMapper;
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,
-                                ObjectMapper objectMapper){
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService){
         this.taskHandlerService = taskHandlerService;
         this.processHandlerService = processHandlerService;
-        this.objectMapper = objectMapper;
     }
 
 
@@ -94,7 +91,7 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
         if(!processHandlerService.isPeploy(processKey)){
             throw new ServerException("流程还未部署，请部署");
         }
-        WorkOrderVO workOrderVO = objectMapper.convertValue(data, WorkOrderVO.class);
+        WorkOrderVO workOrderVO = JsonUtils.convertValue(data, WorkOrderVO.class);
 
         System.out.println("参数：" + workOrderVO);
     }
@@ -106,7 +103,8 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
      */
     @Override
     public Map<String, Object> handle(Map<String, Object> data) {
-        WorkOrderVO workOrderVO = objectMapper.convertValue(data, WorkOrderVO.class);
+//        JsonUtils.parseObject()
+        WorkOrderVO workOrderVO = JsonUtils.convertValue(data, WorkOrderVO.class);
         this.save(workOrderVO);
 
         // 启动流程

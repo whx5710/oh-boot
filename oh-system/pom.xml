@@ -21,6 +21,10 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-captcha</artifactId>
+        </dependency>
 
         <!-- ========================= 导入其他模块   ========================= -->
         <!-- 协同任务 -->
@@ -30,11 +34,11 @@
             <version>${revision}</version>
         </dependency>
         <!-- 对外接口 -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-api</artifactId>
             <version>${revision}</version>
-        </dependency>-->
+        </dependency>
         <!-- 定时任务 -->
         <dependency>
             <groupId>com.iris</groupId>
@@ -42,11 +46,11 @@
             <version>${revision}</version>
         </dependency>
         <!-- 代码生成器 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-generator</artifactId>
             <version>${revision}</version>
-        </dependency>
+        </dependency>-->
         <!-- 监控 -->
         <dependency>
             <groupId>com.iris</groupId>

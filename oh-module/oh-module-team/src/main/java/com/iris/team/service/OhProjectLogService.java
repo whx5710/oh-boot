@@ -1,5 +1,6 @@
 package com.iris.team.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.team.vo.OhProjectLogVO;
 import com.iris.team.entity.OhProjectLogEntity;
 import com.iris.team.query.OhProjectLogQuery;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
+@DS("businessDB")
 public interface OhProjectLogService extends BaseService<OhProjectLogEntity> {
 
     PageResult<OhProjectLogVO> page(OhProjectLogQuery query);

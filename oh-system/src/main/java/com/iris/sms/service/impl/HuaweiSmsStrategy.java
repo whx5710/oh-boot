@@ -3,8 +3,8 @@ package com.iris.sms.service.impl;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.json.JSONUtil;
 import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.sms.config.SmsConfig;
 import com.iris.sms.service.SmsStrategy;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,7 @@ public class HuaweiSmsStrategy implements SmsStrategy {
         // 有参数则设置
         String templateParas = null;
         if (MapUtil.isNotEmpty(params)) {
-            templateParas = JSONUtil.toJsonStr(params.values().toArray(new String[0]));
+            templateParas = JsonUtils.toJsonString(params.values().toArray(new String[0]));
         }
 
         // 请求Body,不携带签名名称时,signature请填null
@@ -81,7 +81,7 @@ public class HuaweiSmsStrategy implements SmsStrategy {
             int status = connection.getResponseCode();
             if (status == HttpStatus.OK.value()) {
                 String response = IoUtil.read(connection.getInputStream(), CharsetUtil.CHARSET_UTF_8);
-                HuaweiSmsResult result = JSONUtil.toBean(response, HuaweiSmsResult.class);
+                HuaweiSmsResult result = JsonUtils.parseObject(response, HuaweiSmsResult.class);
                 // 短信是否发送成功
                 assert result != null;
                 if (!"000000".equals(result.code)) {

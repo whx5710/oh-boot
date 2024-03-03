@@ -3,12 +3,12 @@ package com.iris.api;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iris.api.common.BaseController;
 import com.iris.api.vo.MsgVO;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
+import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
 import jakarta.annotation.Resource;
@@ -103,7 +103,6 @@ public class OpenApiController extends BaseController {
 
         System.out.println("开始请求");
 
-        ObjectMapper mapper = new ObjectMapper();
         for(int i = 0; i< 9; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", new Date());
@@ -111,7 +110,7 @@ public class OpenApiController extends BaseController {
             data.put("incidentTime", new Date());
             data.put("orderCode", IdUtil.simpleUUID());
             data.put("note", System.currentTimeMillis());
-            String str = HttpUtil.createPost(url).addHeaders(head).body(mapper.writeValueAsString(data)).execute().body();
+            String str = HttpUtil.createPost(url).addHeaders(head).body(JsonUtils.toJsonString(data)).execute().body();
             System.out.println(str);
         }
         System.out.println("结束");

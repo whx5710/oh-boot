@@ -1,7 +1,6 @@
 package com.iris.framework.common.utils;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +36,7 @@ public class AddressUtils {
                 log.error("根据IP获取地址异常 " + ip);
                 return UNKNOWN;
             }
-
-            Address address = JSONUtil.toBean(response, Address.class);
+            Address address = JsonUtils.parseObject(response, Address.class);
             return String.format("%s %s", address.getPro(), address.getCity());
         } catch (Exception e) {
 //            e.printStackTrace();
