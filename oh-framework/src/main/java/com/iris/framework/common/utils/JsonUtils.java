@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class JsonUtils {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e) {
             log.error("对象转json字符串失败！" + e.getMessage());
-            return "{}";
+            throw new RuntimeException(e);
         }
     }
 
@@ -43,8 +42,7 @@ public class JsonUtils {
             return objectMapper.readValue(text, clazz);
         } catch (Exception e) {
             log.error(text + " json字符串转化对象失败!！" + e.getMessage());
-            return null;
-            // throw new RuntimeException(e);
+             throw new RuntimeException(e);
         }
     }
 
@@ -55,9 +53,8 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(bytes, clazz);
         } catch (Exception e) {
-            // throw new RuntimeException(e);
             log.error("byte [] 转化对象失败!！" + e.getMessage());
-            return null;
+             throw new RuntimeException(e);
         }
     }
 
@@ -65,9 +62,8 @@ public class JsonUtils {
         try {
             return objectMapper.convertValue(fromValue, clazz);
         } catch (Exception e) {
-            // throw new RuntimeException(e);
             log.error("对象转换失败!！" + e.getMessage());
-            return null;
+             throw new RuntimeException(e);
         }
     }
 
@@ -76,8 +72,7 @@ public class JsonUtils {
             return objectMapper.readValue(text, typeReference);
         } catch (Exception e) {
             log.error(text + " json字符串转化对象失败！" + e.getMessage());
-//            throw new RuntimeException(e);
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -85,8 +80,8 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(text, objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
         } catch (Exception e) {
-            // throw new RuntimeException(e);
-            return new ArrayList<>();
+            log.error(text + " 转list失败！" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
