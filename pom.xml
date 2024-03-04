@@ -39,7 +39,7 @@
         <dynamic.datasource.version>4.3.0</dynamic.datasource.version>
         <!-- nacos配置中心 -->
         <nacos.version>0.3.0-RC</nacos.version>
-        <!-- swaager（xiaoymin版本）生成在线文档 -->
+        <!-- swagger（xiaoymin版本）生成在线文档 -->
         <knife4j.version>4.5.0</knife4j.version>
         <!-- hutool 工具包 -->
         <hutool.version>5.8.25</hutool.version>
@@ -51,7 +51,6 @@
         <easytrans.version>3.0.0</easytrans.version>
         <!-- svg 图片转换 -->
         <svg.trans.version>1.17</svg.trans.version>
-
         <!-- camunda 工作流相关 -->
         <camunda.version>7.20.0</camunda.version>
     </properties>
@@ -69,18 +68,19 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+            <!-- mysql驱动 https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.jdbc.version}</version>
             </dependency>
+            <!-- mybatis plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatisplus.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot3-starter -->
+            <!-- 多数据源 https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot3-starter -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
@@ -94,7 +94,7 @@
                 <version>${nacos.version}</version>
             </dependency>
 
-            <!-- swaager（xiaoymin版本）生成在线文档 -->
+            <!-- swagger（xiaoymin版本）生成在线文档 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
@@ -150,9 +150,7 @@
                 <artifactId>batik-codec</artifactId>
                 <version>${svg.trans.version}</version>
             </dependency>
-
-            <!-- 工作流 -->
-            <!-- https://mvnrepository.com/artifact/org.camunda.bpm.springboot/camunda-bpm-spring-boot-starter -->
+            <!-- 工作流 https://mvnrepository.com/artifact/org.camunda.bpm.springboot/camunda-bpm-spring-boot-starter -->
             <dependency>
                 <groupId>org.camunda.bpm.springboot</groupId>
                 <artifactId>camunda-bpm-spring-boot-starter</artifactId>
