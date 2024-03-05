@@ -13,11 +13,21 @@ import com.iris.framework.common.query.Query;
 public class DataFunctionQuery extends Query {
     String clientId;
 
+    String keyWord;
+
     public String getClientId() {
         return clientId;
     }
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }

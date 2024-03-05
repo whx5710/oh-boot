@@ -2,8 +2,10 @@ package com.iris.api.controller;
 
 import com.iris.api.convert.DataAppConvert;
 import com.iris.api.entity.DataAppEntity;
+import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.query.DataAppQuery;
 import com.iris.api.service.DataAppService;
+import com.iris.api.service.DataMsgService;
 import com.iris.api.utils.RunnerHandler;
 import com.iris.api.vo.DataAppVO;
 import com.iris.framework.common.utils.PageResult;
@@ -34,6 +36,9 @@ public class DataAppController {
 
     @Resource
     RunnerHandler runnerHandler;
+
+    @Resource
+    DataMsgService dataMsgService;
 
     @GetMapping("/page")
     @Operation(summary = "分页")
@@ -83,5 +88,13 @@ public class DataAppController {
     public Result<String> appAuthority(){
         runnerHandler.appAuthority();
         return Result.ok();
+    }
+
+    @GetMapping("/logPage")
+    @Operation(summary = "接口日志分页")
+    @PreAuthorize("hasAuthority('external:app:page')")
+    public Result<PageResult<DataMsgEntity>> logPage(@ParameterObject @Valid DataAppQuery query){
+        PageResult<DataMsgEntity> page = dataMsgService.page(query);
+        return Result.ok(page);
     }
 }

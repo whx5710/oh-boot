@@ -13,6 +13,7 @@ import com.iris.api.dao.DataFunctionDao;
 import com.iris.api.service.DataFunctionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -44,7 +45,12 @@ public class DataFunctionServiceImpl extends BaseServiceImpl<DataFunctionDao, Da
 
     private LambdaQueryWrapper<DataFunctionEntity> getWrapper(DataFunctionQuery query){
         LambdaQueryWrapper<DataFunctionEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataFunctionEntity::getDeleted, 0).orderByAsc(DataFunctionEntity::getFuncCode);
+        wrapper.eq(DataFunctionEntity::getDeleted, 0);
+        if(!ObjectUtils.isEmpty(query.getKeyWord())){
+            wrapper.and(w -> w.like(DataFunctionEntity::getName, query.getKeyWord())
+                    .or().like(DataFunctionEntity::getFuncCode, query.getKeyWord()));
+        }
+        wrapper.orderByAsc(DataFunctionEntity::getFuncCode);
         return wrapper;
     }
 
