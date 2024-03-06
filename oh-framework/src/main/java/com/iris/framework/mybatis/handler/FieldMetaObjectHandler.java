@@ -19,8 +19,16 @@ public class FieldMetaObjectHandler implements MetaObjectHandler {
     private final static String UPDATE_TIME = "updateTime";
     private final static String UPDATER = "updater";
     private final static String ORG_ID = "orgId";
-    private final static String DELETED = "deleted";
 
+    /**
+     * 数据状态标记，0删除1有效
+     */
+    private final static String DB_STATUS = "dbStatus";
+
+    /**
+     * 新增
+     * @param metaObject
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
         UserDetail user = SecurityUser.getUser();
@@ -35,10 +43,14 @@ public class FieldMetaObjectHandler implements MetaObjectHandler {
         }
         // 创建时间
         setFieldValByName(CREATE_TIME, date, metaObject);
-        // 删除标志
-        setFieldValByName(DELETED, 0, metaObject);
+        // 数据状态标记，0删除1有效
+        setFieldValByName(DB_STATUS, 1, metaObject);
     }
 
+    /**
+     * 更新
+     * @param metaObject
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
         // 更新者
@@ -46,8 +58,8 @@ public class FieldMetaObjectHandler implements MetaObjectHandler {
         // 更新时间
         setFieldValByName(UPDATE_TIME, LocalDateTime.now(), metaObject);
         // 更新删除标志
-        if(metaObject.hasGetter(DELETED) && metaObject.getValue(DELETED) == null){
-            setFieldValByName(DELETED, 0, metaObject);
+        if(metaObject.hasGetter(DB_STATUS) && metaObject.getValue(DB_STATUS) == null){
+            setFieldValByName(DB_STATUS, 1, metaObject);
         }
     }
 }

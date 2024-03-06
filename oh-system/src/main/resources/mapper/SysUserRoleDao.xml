@@ -4,7 +4,7 @@
 <mapper namespace="com.iris.system.dao.SysUserRoleDao">
 
     <select id="getRoleIdList" resultType="long">
-        select role_id from sys_user_role where user_id = #{userId} and deleted = 0
+        select role_id from sys_user_role where user_id = #{userId} and db_status = 1
     </select>
 
 </mapper>

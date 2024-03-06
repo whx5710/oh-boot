@@ -8,7 +8,7 @@
         FROM
         data_function a
         WHERE
-        a.deleted = 0
-        AND EXISTS ( SELECT 1 FROM data_function_authority b WHERE a.func_code = b.func_code AND b.deleted = 0 AND b.client_id = #{clientId})
+        a.db_status = 1
+        AND EXISTS ( SELECT 1 FROM data_function_authority b WHERE a.func_code = b.func_code AND b.db_status = 1 AND b.client_id = #{clientId})
     </select>
 </mapper>

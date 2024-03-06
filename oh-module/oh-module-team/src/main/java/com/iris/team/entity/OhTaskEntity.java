@@ -63,9 +63,9 @@ public class OhTaskEntity extends BaseEntity {
 	private String remark;
 
 	/**
-	* 删除标识  0：正常   1：已删除
+	* 数据状态标识  1：正常   0：已删除
 	*/
-	private Integer deleted;
+	private Integer dbStatus;
 
 	// 负责人ID
 	@TableField(exist=false)
@@ -163,12 +163,14 @@ public class OhTaskEntity extends BaseEntity {
 		this.remark = remark;
 	}
 
-	public Integer getDeleted() {
-		return deleted;
+	@Override
+	public Integer getDbStatus() {
+		return dbStatus;
 	}
 
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	@Override
+	public void setDbStatus(Integer dbStatus) {
+		this.dbStatus = dbStatus;
 	}
 
 	public String getDirectorUserId() {

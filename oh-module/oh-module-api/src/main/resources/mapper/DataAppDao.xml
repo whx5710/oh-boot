@@ -18,9 +18,9 @@
         WHERE
         a.client_id = b.client_id
         AND b.func_code = c.func_code
-        AND a.deleted = 0
-        AND b.deleted = 0
-        AND c.deleted = 0
+        AND a.db_status = 1
+        AND b.db_status = 1
+        AND c.db_status = 1
         <if test="params != null and params.clientId != null and params.clientId !='' ">
             and a.client_id = #{params.clientId}
         </if>

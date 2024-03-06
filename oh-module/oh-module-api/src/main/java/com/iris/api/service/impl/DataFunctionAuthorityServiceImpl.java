@@ -37,7 +37,7 @@ public class DataFunctionAuthorityServiceImpl extends BaseServiceImpl<DataFuncti
 
     private LambdaQueryWrapper<DataFunctionAuthorityEntity> getWrapper(DataFunctionAuthorityQuery query){
         LambdaQueryWrapper<DataFunctionAuthorityEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataFunctionAuthorityEntity::getDeleted,0);
+        wrapper.eq(DataFunctionAuthorityEntity::getDbStatus,1);
         if(!ObjectUtils.isEmpty(query.getClientId())){
             wrapper.eq(DataFunctionAuthorityEntity::getClientId, query.getClientId());
         }
@@ -70,15 +70,15 @@ public class DataFunctionAuthorityServiceImpl extends BaseServiceImpl<DataFuncti
      */
     @Override
     public void make(DataFunctionAuthorityVO data) {
-        // 0 新增 1 删除
-        int i = data.getDeleted();
+        // 1 新增 0 删除
+        int i = data.getDbStatus();
         if(ObjectUtils.isEmpty(data.getFuncCodes())){
             throw new ServerException("功能号不能为空");
         }
         if(ObjectUtils.isEmpty(data.getClientId())){
             throw new ServerException("客户端不能为空");
         }
-        if(i == 1){ // 删除
+        if(i == 0){ // 删除
             for(String funcCode: data.getFuncCodes()){
                 QueryWrapper<DataFunctionAuthorityEntity> wrappers = new QueryWrapper<>();
                 wrappers.lambda().eq(DataFunctionAuthorityEntity::getClientId, data.getClientId())

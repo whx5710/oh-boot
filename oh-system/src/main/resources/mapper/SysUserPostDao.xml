@@ -4,7 +4,7 @@
 <mapper namespace="com.iris.system.dao.SysUserPostDao">
 
     <select id="getPostIdList" resultType="long">
-        select post_id from sys_user_post where user_id = #{userId} and deleted = 0
+        select post_id from sys_user_post where user_id = #{userId} and db_status = 1
     </select>
 
 </mapper>

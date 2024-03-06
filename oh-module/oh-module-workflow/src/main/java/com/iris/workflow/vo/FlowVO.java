@@ -41,9 +41,9 @@ public class FlowVO extends IDEntity implements Serializable{
 	private String note;
 
 	/**
-	 * 删除标志
+	 * 标志
 	 */
-	private Integer deleted;
+	private Integer dbStatus;
 
 	/**
 	 * 创建时间
@@ -109,11 +109,11 @@ public class FlowVO extends IDEntity implements Serializable{
 		this.createTime = createTime;
 	}
 
-	public Integer getDeleted() {
-		return deleted;
+	public Integer getDbStatus() {
+		return dbStatus;
 	}
 
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	public void setDbStatus(Integer dbStatus) {
+		this.dbStatus = dbStatus;
 	}
 }

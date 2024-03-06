@@ -82,7 +82,7 @@ public class TaskRecordServiceImpl extends BaseServiceImpl<TaskRecordDao, TaskRe
     @Override
     public List<TaskRecordVO> taskList(TaskRecordQuery query) {
         LambdaQueryWrapper<TaskRecordEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(TaskRecordEntity::getDeleted, 0);
+        wrapper.eq(TaskRecordEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getProcInstId())){
             wrapper.eq(TaskRecordEntity::getProcInstId, query.getProcInstId());
         }

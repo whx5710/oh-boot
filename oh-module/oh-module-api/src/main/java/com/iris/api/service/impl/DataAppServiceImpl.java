@@ -38,7 +38,7 @@ public class DataAppServiceImpl extends BaseServiceImpl<DataAppDao, DataAppEntit
 
     private LambdaQueryWrapper<DataAppEntity> getWrapper(DataAppQuery query){
         LambdaQueryWrapper<DataAppEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataAppEntity::getDeleted, 0);
+        wrapper.eq(DataAppEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getKeyWord())){
             wrapper.and(w -> w.like(DataAppEntity::getClientId, query.getKeyWord())
                     .or().like(DataAppEntity::getName, query.getKeyWord()));

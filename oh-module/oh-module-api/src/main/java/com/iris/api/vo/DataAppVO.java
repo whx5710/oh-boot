@@ -74,7 +74,7 @@ public class DataAppVO {
 	 */
 	@TableLogic
 	@TableField(fill = FieldFill.INSERT)
-	private Integer deleted;
+	private Integer dbStatus;
 
 	public String getName() {
 		return name;
@@ -164,12 +164,12 @@ public class DataAppVO {
 		this.updateTime = updateTime;
 	}
 
-	public Integer getDeleted() {
-		return deleted;
+	public Integer getDbStatus() {
+		return dbStatus;
 	}
 
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	public void setDbStatus(Integer dbStatus) {
+		this.dbStatus = dbStatus;
 	}
 
 	public Boolean getAsync() {

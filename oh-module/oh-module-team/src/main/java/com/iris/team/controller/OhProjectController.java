@@ -53,7 +53,7 @@ public class OhProjectController {
     @Operation(summary = "保存")
     @PreAuthorize("hasAuthority('team:project:save')")
     public Result<String> save(@RequestBody OhProjectVO vo){
-        vo.setDeleted(0);
+        vo.setDbStatus(1);
         ohProjectService.save(vo);
 
         return Result.ok();

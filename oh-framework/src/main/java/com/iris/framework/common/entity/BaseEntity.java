@@ -43,10 +43,10 @@ public abstract class BaseEntity extends IDEntity{
     private LocalDateTime updateTime;
 
     /**
-     * 删除标记
+     * 数据状态标记，0删除1有效
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer deleted;
+    private Integer dbStatus;
 
     public Long getCreator() {
         return creator;
@@ -80,12 +80,17 @@ public abstract class BaseEntity extends IDEntity{
         this.updateTime = updateTime;
     }
 
-    public Integer getDeleted() {
-        return deleted;
+    /**
+     * 数据状态标记，0删除1有效
+     */
+    public Integer getDbStatus() {
+        return dbStatus;
     }
 
-    public void setDeleted(Integer deleted) {
-        this.deleted = deleted;
+    /**
+     * 数据状态标记，0删除1有效
+     */
+    public void setDbStatus(Integer dbStatus) {
+        this.dbStatus = dbStatus;
     }
-
 }

@@ -61,7 +61,7 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
             baseMapper.insert(entity);
         }else{
             entity.setId(flowEntity.getId());
-            entity.setDeleted(0);
+            entity.setDbStatus(1);
             baseMapper.updateById(entity);
         }
     }

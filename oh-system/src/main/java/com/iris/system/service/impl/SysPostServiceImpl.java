@@ -67,7 +67,7 @@ public class SysPostServiceImpl extends BaseServiceImpl<SysPostDao, SysPostEntit
         SysPostEntity entity = SysPostConvert.INSTANCE.convert(vo);
         AssertUtils.isBlank(entity.getPostCode(), "岗位编码");
         LambdaQueryWrapper<SysPostEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysPostEntity::getDeleted, 0).eq(SysPostEntity::getPostCode, entity.getPostCode());
+        wrapper.eq(SysPostEntity::getDbStatus, 1).eq(SysPostEntity::getPostCode, entity.getPostCode());
         List<SysPostEntity> list = baseMapper.selectList(wrapper);
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("岗位编码已存在");
@@ -81,7 +81,7 @@ public class SysPostServiceImpl extends BaseServiceImpl<SysPostDao, SysPostEntit
         String postCode = entity.getPostCode();
         if(postCode != null && !postCode.isEmpty()){
             LambdaQueryWrapper<SysPostEntity> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(SysPostEntity::getDeleted, 0).eq(SysPostEntity::getPostCode, postCode)
+            wrapper.eq(SysPostEntity::getDbStatus, 1).eq(SysPostEntity::getPostCode, postCode)
                     .ne(SysPostEntity::getId, entity.getId());
             List<SysPostEntity> list = baseMapper.selectList(wrapper);
             if(!ObjectUtils.isEmpty(list)){

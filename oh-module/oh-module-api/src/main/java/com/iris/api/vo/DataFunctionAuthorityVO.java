@@ -45,7 +45,7 @@ public class DataFunctionAuthorityVO implements Serializable {
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime updateTime;
 
-	private Integer deleted;
+	private Integer dbStatus;
 
 	public Integer getId() {
 		return id;
@@ -111,12 +111,12 @@ public class DataFunctionAuthorityVO implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Integer getDeleted() {
-		return deleted;
+	public Integer getDbStatus() {
+		return dbStatus;
 	}
 
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	public void setDbStatus(Integer dbStatus) {
+		this.dbStatus = dbStatus;
 	}
 
 	public String getFuncName() {

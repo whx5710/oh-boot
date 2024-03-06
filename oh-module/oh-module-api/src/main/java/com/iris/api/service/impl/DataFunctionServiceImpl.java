@@ -45,7 +45,7 @@ public class DataFunctionServiceImpl extends BaseServiceImpl<DataFunctionDao, Da
 
     private LambdaQueryWrapper<DataFunctionEntity> getWrapper(DataFunctionQuery query){
         LambdaQueryWrapper<DataFunctionEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataFunctionEntity::getDeleted, 0);
+        wrapper.eq(DataFunctionEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getKeyWord())){
             wrapper.and(w -> w.like(DataFunctionEntity::getName, query.getKeyWord())
                     .or().like(DataFunctionEntity::getFuncCode, query.getKeyWord()));

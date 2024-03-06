@@ -35,11 +35,8 @@ public class SysParamsVO implements Serializable {
     @Schema(description = "备注")
     private String remark;
 
-    @Schema(description = "版本号")
-    private Integer version;
-
-    @Schema(description = "删除标识")
-    private Integer deleted;
+    @Schema(description = "数据状态标识，0删除1有效")
+    private Integer dbStatus;
 
     @Schema(description = "创建者")
     private Long creator;
@@ -103,20 +100,12 @@ public class SysParamsVO implements Serializable {
         this.remark = remark;
     }
 
-    public Integer getVersion() {
-        return version;
+    public Integer getDbStatus() {
+        return dbStatus;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public Integer getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Integer deleted) {
-        this.deleted = deleted;
+    public void setDbStatus(Integer dbStatus) {
+        this.dbStatus = dbStatus;
     }
 
     public Long getCreator() {

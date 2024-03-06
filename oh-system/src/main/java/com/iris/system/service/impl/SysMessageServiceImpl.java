@@ -36,7 +36,7 @@ public class SysMessageServiceImpl extends BaseServiceImpl<SysMessageDao, SysMes
 
     private LambdaQueryWrapper<SysMessageEntity> getWrapper(SysMessageQuery query){
         LambdaQueryWrapper<SysMessageEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SysMessageEntity::getDeleted, 0);
+        wrapper.eq(SysMessageEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getTitle())){
             wrapper.like(SysMessageEntity::getTitle, query.getTitle());
         }

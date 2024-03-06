@@ -39,7 +39,7 @@ public class FlowNodeServiceImpl extends BaseServiceImpl<FlowNodeDao, FlowNodeEn
      */
     private LambdaQueryWrapper<FlowNodeEntity> getWrapper(FlowNodeQuery query){
         LambdaQueryWrapper<FlowNodeEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(FlowNodeEntity::getDeleted, 0);
+        wrapper.eq(FlowNodeEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getProcDefId())){
             wrapper.eq(FlowNodeEntity::getProcDefId, query.getProcDefId());
         }

@@ -35,7 +35,7 @@ public class OhProjectServiceImpl extends BaseServiceImpl<OhProjectDao, OhProjec
 
     private LambdaQueryWrapper<OhProjectEntity> getWrapper(OhProjectQuery query){
         LambdaQueryWrapper<OhProjectEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(OhProjectEntity::getDeleted, 0);
+        wrapper.eq(OhProjectEntity::getDbStatus, 1);
 
         // 状态（1开始2暂停3关闭）
         Integer status = query.getStatus();

@@ -9,7 +9,7 @@
         <result property="userId" column="user_id"/>
         <result property="nickName" column="nick_name"/>
         <result property="personType" column="person_type"/>
-        <result property="deleted" column="deleted"/>
+        <result property="dbStatus" column="db_status"/>
         <result property="creator" column="creator"/>
         <result property="createTime" column="create_time"/>
         <result property="updater" column="updater"/>

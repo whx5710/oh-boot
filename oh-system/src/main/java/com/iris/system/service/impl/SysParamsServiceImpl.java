@@ -186,7 +186,7 @@ public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParam
     @Override
     public SysParamsEntity getByKey(String key) {
         LambdaQueryWrapper<SysParamsEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SysParamsEntity::getParamKey, key).eq(SysParamsEntity::getDeleted, 0);
+        wrapper.eq(SysParamsEntity::getParamKey, key).eq(SysParamsEntity::getDbStatus, 1);
         return this.baseMapper.selectOne(wrapper);
     }
 

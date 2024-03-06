@@ -76,7 +76,7 @@ public class SysVersionInfoServiceImpl extends BaseServiceImpl<SysVersionInfoDao
     @Override
     public SysVersionInfoEntity latestVersion() {
         LambdaQueryWrapper<SysVersionInfoEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SysVersionInfoEntity::getIsCurrVersion, true).eq(SysVersionInfoEntity::getDeleted, 0);
+        wrapper.eq(SysVersionInfoEntity::getIsCurrVersion, true).eq(SysVersionInfoEntity::getDbStatus, 1);
         return baseMapper.selectOne(wrapper);
     }
 

@@ -9,7 +9,7 @@
         <result property="name" column="name"/>
         <result property="xml" column="xml"/>
         <result property="note" column="note"/>
-        <result property="deleted" column="deleted"/>
+        <result property="dbStatus" column="db_status"/>
         <result property="creator" column="creator"/>
         <result property="createTime" column="create_time"/>
         <result property="updater" column="updater"/>

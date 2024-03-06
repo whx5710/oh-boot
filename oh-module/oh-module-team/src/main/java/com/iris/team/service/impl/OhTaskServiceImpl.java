@@ -54,7 +54,7 @@ public class OhTaskServiceImpl extends BaseServiceImpl<OhTaskDao, OhTaskEntity> 
     }
     private LambdaQueryWrapper<OhTaskEntity> getWrapper(OhTaskQuery query){
         LambdaQueryWrapper<OhTaskEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(OhTaskEntity::getDeleted, 0);
+        wrapper.eq(OhTaskEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getTaskType())){ // 1任务2需求3设计4缺陷9其他
             wrapper.in(OhTaskEntity::getTaskType, query.getTaskType());
         }
