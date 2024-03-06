@@ -27,7 +27,7 @@ nacos:
     # 配置文件的前缀,默认为 spring.application.name 的值
     prefix: iris
     # 配置所属分组
-    group: dev
+    group: ${spring.profiles.active}
     # 配置ID
     data-id: iris-dev.yaml
     # 配置文件类型,对应nacos配置页面的配置格式，默认是properties
