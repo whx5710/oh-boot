@@ -139,7 +139,7 @@ spring:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
-          password: 123456
+          password: Tips1123@~
           type: com.zaxxer.hikari.HikariDataSource
           init:
             # 自动运行的建表脚本
@@ -154,7 +154,7 @@ spring:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
-          password: 123456
+          password: Tips1123@~
           type: com.zaxxer.hikari.HikariDataSource
           init:
             # 自动运行的建表脚本
@@ -230,20 +230,27 @@ camunda.bpm:
     create: 所有任务
 
 # 日志信息
-#logging:
-#  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-#  level:
-#    com.iris: INFO
-#    # root: info
-#    # org.springframework.web: debug # web相关的日志级别
-#  pattern:
-#    #在控制台输出的日志格式 '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n'
-#    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n'
+logging:
+  # 字符集设置
+  charset:
+    file: UTF-8
+    console: UTF-8
+  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+  level:
+    com.iris: DEBUG
+    # root: DEBUG
+    # org.springframework.web: debug # web相关的日志级别
+  pattern:
+    # 在控制台输出的日志格式
+    console: '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
 #  file:
-#    #日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
-#    # path: /home/whx/文档/workspace/logs
-#    name: logs/iris.log
+#    # 日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
+#    # path: logs
+#    name: logs/${spring.application.name}.out.log
 #  logback:
 #    rollingpolicy:
-#      max-history: 30
-#      max-file-size: 100MB
+#      clean-history-on-start: false                       # 是否在启动时清除存档日志文件
+#      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz # 滚动日志文件名的模式
+#      max-history: 10                                     # 要保留的存档日志文件的最大数量
+#      max-file-size: 100MB                                # 最大文件大小，默认10MB
+
