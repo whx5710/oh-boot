@@ -17,53 +17,39 @@ oh:
     exclude-urls:
       - /oh-generator/**
   security:
-    # 12小时过期
-    access-token-expire: 43200
-    # 14天过期
-    refresh-token-expire: 1209600
-    # 多少次鉴权失败锁定，0表示不开启
-    auth-count: 5
-    # 账号锁定时间(秒)
-    lock-time: 3600
-    # 忽略鉴权的url
-    ignore-urls:
+    access-token-expire: 43200      # 过期时间，12小时过期
+    refresh-token-expire: 1209600   # 14天过期
+    auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
+    lock-time: 3600                 # 账号锁定时间(秒)
+    ignore-urls:                    # 忽略鉴权的url
       - /demo
       - /test
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
   project:
-    # 名称
-    name: Oh Boot
-    # 应用名称
-    appName: oh-boot
-    # 版本
-    version: 1.0.0-SNAPSHOT
-    # 描述
+    name: Oh Boot              # 名称
+    appName: oh-boot           # 应用名称
+    version: 1.0.0-SNAPSHOT    # 版本
     description: 欢迎使用OH-Boot，让开发更简单！ - 王小费【whx5710@qq.com】
 
 storage:
   enabled: true
   config:
-    # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
-    type: local
+    type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
     domain: http://localhost:8080
   local:
     path: /home/whx/图片/upload
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
-  # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.iris.*.entity
+  typeAliasesPackage: com.iris.*.entity # 实体扫描，多个package用逗号或者分号分隔
   global-config:
     # 数据库相关配置
     db-config:
-      # ID自增
-      id-type: AUTO
+      id-type: AUTO  # ID自增
       # logic-delete-field: db_status # 全局逻辑删除的实体字段名(since 3.3.0)
-      # 逻辑已删除值
-      logic-delete-value: 0
-      # 逻辑未删除值
-      logic-not-delete-value: 1
+      logic-delete-value: 0      # 逻辑已删除值
+      logic-not-delete-value: 1  # 逻辑未删除值
     banner: false
   # 原生配置
   configuration:
@@ -78,46 +64,35 @@ mybatis-plus:
 
 #easy trans 数据翻译组件
 easy-trans:
-  #启用redis缓存 如果不用redis请设置为false
-  is-enable-redis: false
-  #启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
-  is-enable-global: true
-  #启用平铺模式
-  is-enable-tile: true
+  is-enable-redis: false  # 启用redis缓存 如果不用redis请设置为false
+  is-enable-global: true  # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
+  is-enable-tile: true    # 启用平铺模式
 
 spring:
   jackson:
-    # 设置 java.util.Date, Calendar 序列化、反序列化的格式
-    date-format: yyyy-MM-dd HH:mm:ss
-    # 当地时区
-    locale: zh
-    # 设置全局时区
-    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss  # 设置 java.util.Date, Calendar 序列化、反序列化的格式
+    locale: zh                        # 当地时区
+    time-zone: GMT+8                  # 设置全局时区
     # 设置对象或被@JsonInclude注解的属性的序列化方式。NON_NULL 表示不为空的属性才会序列化,具体属性可看JsonInclude.Include
     # default-property-inclusion: NON_NULL
     serialization:
-      # 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
-      WRITE_DATES_AS_TIMESTAMPS: false
-      # 序列化时，对象为 null，是否抛异常
-      FAIL_ON_EMPTY_BEANS: false
+      WRITE_DATES_AS_TIMESTAMPS: false   # 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
+      FAIL_ON_EMPTY_BEANS: false         # 序列化时，对象为 null，是否抛异常
     deserialization:
-      # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
-      FAIL_ON_UNKNOWN_PROPERTIES: false
+      FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
   servlet:
     multipart:
       max-file-size: 1024MB
       max-request-size: 1024MB
   main:
-    # 关闭 banner CONSOLE、LOG、OFF
-    banner-mode: "OFF"
+    banner-mode: "OFF"  # 关闭 banner CONSOLE、LOG、OFF
   data:
     redis:
       database: 0
       host: 127.0.0.1
       port: 6379
       #password:
-      # 连接超时时间
-      timeout: 10s
+      timeout: 10s  # 连接超时时间
       # 是否开启 SSL
       ssl:
         enabled: false
@@ -167,7 +142,7 @@ spring:
     client-id: dc-device-flow-analyze
     listener:
       ack-mode: MANUAL_IMMEDIATE
-      concurrency: 10  # 多任务
+      concurrency: 3  # 多任务
       # type: BATCH #开启批量监听
     consumer:
       group-id: oh-group
@@ -194,8 +169,7 @@ spring:
         max.request.size: 126951500
 # 接口文档
 knife4j:
-  # 开启增强配置
-  enable: true
+  enable: true  # 开启增强配置
   # 是否生产环境，生产环境屏蔽，开发环境需显示接口文档
   # production: true
   setting:
@@ -232,8 +206,7 @@ logging:
   charset:
     file: UTF-8
     console: UTF-8
-  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-  level:
+  level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
     com.iris: INFO
     # root: INFO
     # org.springframework.web: debug # web相关的日志级别

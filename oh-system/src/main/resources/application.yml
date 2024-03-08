@@ -20,24 +20,15 @@ spring:
 #    # nacos会根据配置怎么找到对应的配置文件规则：prefix−{spring.profile.active}.${file-extension}
 #    # spring.profiles.active 为空时，对应的连接符 - 也将不存在，，dataId 的拼接格式变成 ${prefix}.${file-extension}
 #    bootstrap:
-#      #开启系统启动时预读取nacos的配置，用于满足@Value注入数据的场景
-#      enable: true
-#    # 配置所属命名空间的id,此处我们配置名称为dev的id，可以在命名空间列表查看id的值
-#    namespace: 3b00ce0d-eca1-4ef0-a764-199212d930ac
-#    # 配置文件的前缀,默认为 spring.application.name 的值
-#    prefix: iris
-#    # 配置所属分组
-#    group: ${spring.profiles.active}
-#    # 配置ID
-#    data-id: iris-dev.yaml
-#    # 配置文件类型,对应nacos配置页面的配置格式，默认是properties
-#    type: yaml
-#    # nacos服务器地址
-#    server-addr: localhost:8848
-#    # 开启自动刷新nacos配置
-#    auto-refresh: true
-#    # 针对配置项同名的情况，是否允许nacos的配置覆盖本地的配置
-#    remote-first: true
+#      enable: true                                   #开启系统启动时预读取nacos的配置，用于满足@Value注入数据的场景
+#    namespace: 3b00ce0d-eca1-4ef0-a764-199212d930ac  # 配置所属命名空间的id,此处我们配置名称为dev的id，可以在命名空间列表查看id的值
+#    prefix: iris                                     # 配置文件的前缀,默认为 spring.application.name 的值
+#    group: ${spring.profiles.active}                 # 配置所属分组
+#    data-id: iris-dev.yaml                           # 配置ID
+#    type: yaml                                       # 配置文件类型,对应nacos配置页面的配置格式，默认是properties
+#    server-addr: localhost:8848                      # nacos服务器地址
+#    auto-refresh: true                               # 开启自动刷新nacos配置
+#    remote-first: true                               # 针对配置项同名的情况，是否允许nacos的配置覆盖本地的配置
 #    # 如果开启了鉴权，需配置用户名和密码
 #    username: nacos
 #    password: nacos
