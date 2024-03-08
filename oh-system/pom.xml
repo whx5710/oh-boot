@@ -16,11 +16,18 @@
             <artifactId>oh-framework</artifactId>
             <version>${revision}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-captcha</artifactId>
@@ -55,11 +62,11 @@
             <version>${revision}</version>
         </dependency>-->
         <!-- 定时任务 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-quartz</artifactId>
             <version>${revision}</version>
-        </dependency>
+        </dependency>-->
         <!-- 代码生成器 -->
         <dependency>
             <groupId>com.iris</groupId>

@@ -1,23 +1,31 @@
 package com.iris.quartz.query;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.iris.framework.common.query.Query;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
-* 定时任务查询
+* 定时任务日志查询
 *
 * @author 王小费 whx5710@qq.com
 */
-@Schema(description = "定时任务查询")
-public class ScheduleJobQuery extends Query {
+@Schema(description = "定时任务日志查询")
+public class ScheduleJobLogQuery extends Query {
+    @Schema(description = "任务id")
+    private Long jobId;
+
     @Schema(description = "任务名称")
     private String jobName;
 
     @Schema(description = "任务组名")
     private String jobGroup;
 
-    @Schema(description = "状态")
-    private Integer status;
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
 
     public String getJobName() {
         return jobName;
@@ -33,13 +41,5 @@ public class ScheduleJobQuery extends Query {
 
     public void setJobGroup(String jobGroup) {
         this.jobGroup = jobGroup;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 }

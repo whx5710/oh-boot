@@ -1,6 +1,7 @@
 package com.iris.quartz.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 

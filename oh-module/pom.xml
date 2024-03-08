@@ -10,8 +10,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!-- 定时任务 -->
-		<module>oh-module-quartz</module>
 		<!-- 代码生成器 -->
 		<module>oh-module-generator</module>
 		<!-- 协同任务 -->

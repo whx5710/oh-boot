@@ -1,7 +1,7 @@
 package com.iris.quartz.dao;
 
-import com.iris.quartz.entity.ScheduleJobEntity;
 import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.quartz.entity.ScheduleJobEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
