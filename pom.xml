@@ -43,6 +43,7 @@
         <knife4j.version>4.5.0</knife4j.version>
         <!-- hutool 工具包 -->
         <hutool.version>5.8.25</hutool.version>
+        <oshi.version>6.4.0</oshi.version>
         <!-- bean 拷贝 -->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <!-- excel 工具 -->
@@ -109,6 +110,13 @@
                 <!-- 注意这里是import -->
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>

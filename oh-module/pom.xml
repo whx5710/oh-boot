@@ -14,8 +14,6 @@
 		<module>oh-module-quartz</module>
 		<!-- 代码生成器 -->
 		<module>oh-module-generator</module>
-		<!-- 监控 -->
-		<module>oh-module-monitor</module>
 		<!-- 协同任务 -->
 		<module>oh-module-team</module>
 		<!-- api接口 -->
