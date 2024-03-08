@@ -55,10 +55,11 @@ mybatis-plus:
     db-config:
       # ID自增
       id-type: AUTO
+      # logic-delete-field: db_status # 全局逻辑删除的实体字段名(since 3.3.0)
       # 逻辑已删除值
-      logic-delete-value: 1
+      logic-delete-value: 0
       # 逻辑未删除值
-      logic-not-delete-value: 0
+      logic-not-delete-value: 1
     banner: false
   # 原生配置
   configuration:
@@ -139,32 +140,24 @@ spring:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
-          password: Tips1123@~
+          password: 123456
           type: com.zaxxer.hikari.HikariDataSource
           init:
-            # 自动运行的建表脚本
-            schema: classpath*:db/schema-oh-boot.sql
-            # 自动运行的数据脚本
-            data: classpath*:db/data-oh-boot.sql
-            # 错误是否继续 默认 true
-            continue-on-error: true
-            # 分隔符 默认 ;
-            separator: ;
+            schema: classpath*:db/schema-oh-boot.sql  # 自动运行的建表脚本
+            data: classpath*:db/data-oh-boot.sql      # 自动运行的数据脚本
+            continue-on-error: true                   # 错误是否继续 默认 true
+            separator: ;                              # 分隔符 默认 ;
         businessDB:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
-          password: Tips1123@~
+          password: 123456
           type: com.zaxxer.hikari.HikariDataSource
           init:
-            # 自动运行的建表脚本
-            schema: classpath*:db/schema-oh-extend.sql
-            # 自动运行的数据脚本
-            data: classpath*:db/data-oh-extend.sql
-            # 错误是否继续 默认 true
-            continue-on-error: true
-            # 分隔符 默认 ;
-            separator: ;
+            schema: classpath*:db/schema-oh-extend.sql  # 自动运行的建表脚本
+            data: classpath*:db/data-oh-extend.sql      # 自动运行的数据脚本
+            continue-on-error: true                     # 错误是否继续 默认 true
+            separator: ;                                # 分隔符 默认 ;
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze
@@ -175,9 +168,9 @@ spring:
     consumer:
       group-id: oh-group
       max-poll-records: 10
-      auto-offset-reset: earliest #Kafka中没有初始偏移或如果当前偏移在服务器上不再存在时,默认区最新 ，有三个选项 【latest, earliest, none】
-      enable-auto-commit: false #是否开启自动提交
-      auto-commit-interval: 1000 #自动提交的时间间隔
+      auto-offset-reset: earliest  # Kafka中没有初始偏移或如果当前偏移在服务器上不再存在时,默认区最新 ，有三个选项 【latest, earliest, none】
+      enable-auto-commit: false    # 是否开启自动提交
+      auto-commit-interval: 1000   # 自动提交的时间间隔
       key-serializer: org.apache.kafka.common.serialization.StringDeserializer
       value-serializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
@@ -242,6 +235,8 @@ logging:
     # org.springframework.web: debug # web相关的日志级别
   pattern:
     # 在控制台输出的日志格式
+    # 无颜色 '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'
+    # 有颜色 '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
     console: '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
 #  file:
 #    # 日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
