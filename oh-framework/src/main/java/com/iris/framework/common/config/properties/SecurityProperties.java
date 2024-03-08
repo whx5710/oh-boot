@@ -3,6 +3,8 @@ package com.iris.framework.common.config.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @ConfigurationProperties(prefix = "oh.security")
 public class SecurityProperties {
@@ -24,6 +26,10 @@ public class SecurityProperties {
      * 账号锁定时间(秒)
      */
     private Long lockTime = 0L;
+    /**
+     * 忽略路径
+     */
+    private List<String> ignoreUrls;
 
     public Long getAccessTokenExpire() {
         return accessTokenExpire;
@@ -63,5 +69,13 @@ public class SecurityProperties {
 
     public void setLockTime(Long lockTime) {
         this.lockTime = lockTime;
+    }
+
+    public List<String> getIgnoreUrls() {
+        return ignoreUrls;
+    }
+
+    public void setIgnoreUrls(List<String> ignoreUrls) {
+        this.ignoreUrls = ignoreUrls;
     }
 }

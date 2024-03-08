@@ -25,6 +25,10 @@ oh:
     auth-count: 5
     # 账号锁定时间(秒)
     lock-time: 3600
+    # 忽略鉴权的url
+    ignore-urls:
+      - /demo
+      - /test
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
   project:

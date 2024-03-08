@@ -1,5 +1,5 @@
 auth:
-  ignore_urls:
+  ignore-urls:
     - /sys/auth/captcha
     - /sys/auth/login
     - /sys/auth/send/code

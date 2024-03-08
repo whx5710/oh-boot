@@ -1,5 +1,5 @@
 auth:
-  ignore_urls:
+  ignore-urls:
     - /task/**
     - /flow/svg2png/**
     - /flow/listProcessByKey/**

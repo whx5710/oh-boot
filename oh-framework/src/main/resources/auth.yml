@@ -1,5 +1,5 @@
 auth:
-  ignore_urls:
+  ignore-urls:
     - /actuator/**
     - /v3/api-docs/**
     - /webjars/**
