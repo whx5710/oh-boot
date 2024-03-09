@@ -122,8 +122,8 @@ spring:
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
           init:
-            schema: classpath*:db/schema-oh-boot.sql  # 自动运行的建表脚本
-            data: classpath*:db/data-oh-boot.sql      # 自动运行的数据脚本
+            schema: classpath*:db/sys-schema.sql  # 自动运行的建表脚本
+            data: classpath*:db/sys-data.sql      # 自动运行的数据脚本
             continue-on-error: true                   # 错误是否继续 默认 true
             separator: ;                              # 分隔符 默认 ;
         master:
@@ -133,8 +133,8 @@ spring:
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
           init:
-            schema: classpath*:db/schema-oh-extend.sql  # 自动运行的建表脚本
-            data: classpath*:db/data-oh-extend.sql      # 自动运行的数据脚本
+            schema: classpath*:db/project-schema.sql  # 自动运行的建表脚本
+            data: classpath*:db/project-data.sql      # 自动运行的数据脚本
             continue-on-error: true                     # 错误是否继续 默认 true
             separator: ;                                # 分隔符 默认 ;
   kafka:

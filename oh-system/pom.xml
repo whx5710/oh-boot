@@ -56,17 +56,11 @@
             <version>${revision}</version>
         </dependency>
         <!-- 对外接口 -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-api</artifactId>
             <version>${revision}</version>
-        </dependency>-->
-        <!-- 定时任务 -->
-        <!--<dependency>
-            <groupId>com.iris</groupId>
-            <artifactId>oh-module-quartz</artifactId>
-            <version>${revision}</version>
-        </dependency>-->
+        </dependency>
         <!-- 代码生成器 -->
         <dependency>
             <groupId>com.iris</groupId>
