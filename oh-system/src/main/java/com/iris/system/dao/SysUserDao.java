@@ -1,6 +1,8 @@
 package com.iris.system.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.iris.framework.common.constant.Constant;
 import com.iris.system.entity.SysUserEntity;
 import com.iris.framework.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +18,7 @@ import java.util.Map;
  *
  */
 @Mapper
+@DS(Constant.SYS_DB)
 public interface SysUserDao extends BaseDao<SysUserEntity> {
 
 	List<SysUserEntity> getList(Map<String, Object> params);

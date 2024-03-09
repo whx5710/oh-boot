@@ -1,6 +1,5 @@
 package com.iris.team.service;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.team.vo.OhTaskUserVO;
 import com.iris.team.entity.OhTaskUserEntity;
 import com.iris.team.query.OhTaskUserQuery;
@@ -15,7 +14,6 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@DS("businessDB")
 public interface OhTaskUserService extends BaseService<OhTaskUserEntity> {
 
     PageResult<OhTaskUserVO> page(OhTaskUserQuery query);

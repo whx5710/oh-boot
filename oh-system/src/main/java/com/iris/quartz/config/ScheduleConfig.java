@@ -1,5 +1,6 @@
 package com.iris.quartz.config;
 
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.iris.framework.common.constant.Constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -46,17 +47,20 @@ public class ScheduleConfig {
         if (Constant.PGSQL_DRIVER.equals(driver)) {
             prop.put("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.PostgreSQLDelegate");
         }
+        return getSchedulerFactoryBean((DynamicRoutingDataSource) dataSource, prop);
+    }
 
+    private static SchedulerFactoryBean getSchedulerFactoryBean(DynamicRoutingDataSource dataSource, Properties prop) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
-        factory.setDataSource(dataSource);
+        // 切换数据源，使用系统内置数据源
+        factory.setDataSource(dataSource.getDataSource(Constant.SYS_DB));
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);
         factory.setApplicationContextSchedulerContextKey("applicationContextKey");
         // 启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了
         factory.setOverwriteExistingJobs(true);
-
         return factory;
     }
 }

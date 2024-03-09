@@ -2,6 +2,8 @@ package com.iris.system.dao;
 
 import java.util.List;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.iris.framework.common.constant.Constant;
 import com.iris.system.entity.SysLogLoginEntity;
 import com.iris.framework.mybatis.dao.BaseDao;
 import com.iris.system.vo.AnalysisVO;
@@ -15,6 +17,7 @@ import org.apache.ibatis.annotations.Param;
  * 
  */
 @Mapper
+@DS(Constant.SYS_DB)
 public interface SysLogLoginDao extends BaseDao<SysLogLoginEntity> {
 
     /**

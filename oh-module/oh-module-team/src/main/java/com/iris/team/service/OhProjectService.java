@@ -1,6 +1,5 @@
 package com.iris.team.service;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.mybatis.service.BaseService;
 import com.iris.team.vo.OhProjectVO;
@@ -15,7 +14,6 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@DS("businessDB")
 public interface OhProjectService extends BaseService<OhProjectEntity> {
 
     PageResult<OhProjectVO> page(OhProjectQuery query);

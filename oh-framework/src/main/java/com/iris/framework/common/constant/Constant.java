@@ -59,4 +59,13 @@ public interface Constant {
      */
     int PASSWORD_MAX_LENGTH = 30;
 
+    /**
+     * 系统数据库
+     */
+    String SYS_DB = "sysDb";
+    /**
+     * 业务主库
+     */
+    String MASTER = "master";
+
 }
