@@ -61,18 +61,6 @@
             <artifactId>oh-module-api</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!-- 代码生成器 -->
-        <dependency>
-            <groupId>com.iris</groupId>
-            <artifactId>oh-module-generator</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <!-- 监控 -->
-        <!--<dependency>
-            <groupId>com.iris</groupId>
-            <artifactId>oh-module-monitor</artifactId>
-            <version>${revision}</version>
-        </dependency>-->
         <!-- 工作流 -->
         <dependency>
             <groupId>com.iris</groupId>

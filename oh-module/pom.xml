@@ -10,8 +10,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!-- 代码生成器 -->
-		<module>oh-module-generator</module>
 		<!-- 协同任务 -->
 		<module>oh-module-team</module>
 		<!-- api接口 -->
