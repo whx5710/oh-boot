@@ -84,7 +84,9 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <!-- 打jar包命名 -->
+        <!--<finalName>${project.artifactId}</finalName>-->
+        <finalName>oh-server-${revision}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
