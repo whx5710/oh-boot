@@ -3,24 +3,18 @@ oh-boot 是采用组件模式，扩展不同的业务功能，可以很方便的
 
 `oh-module-api` 对外开放的接口
 
-`oh-module-generator` 代码生成器
-
-`oh-module-monitor` 监控
-
-`oh-module-quartz` 定时任务
-
 `oh-module-team` 协同工作
 
 `oh-module-workflow` 工作流
 
 ## 引入
-如果需要使用对应的组件，如：`oh-module-quartz`，则需要在`oh-boot/oh-server/pom.xml`里面引入，如下所示：
+如果需要使用对应的组件，如：`oh-module-workflow`，则需要在`oh-boot/oh-system/pom.xml`里面引入，如下所示：
 
 ```xml
 
 <dependency>
     <groupId>com.iris</groupId>
-    <artifactId>oh-module-quartz</artifactId>
+    <artifactId>oh-module-workflow</artifactId>
     <version>${revision}</version>
 </dependency>
 ```
