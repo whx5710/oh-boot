@@ -3,6 +3,8 @@ package com.iris.framework.common.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -31,6 +33,15 @@ public class DateUtils {
     /**
      * 日期格式化 日期格式为：yyyy-MM-dd
      * @param date  日期
+     * @return  返回yyyy-MM-dd格式日期
+     */
+    public static String format(LocalDateTime date) {
+        return format(date, DATE_PATTERN);
+    }
+
+    /**
+     * 日期格式化 日期格式为：yyyy-MM-dd
+     * @param date  日期
      * @param pattern  格式，如：DateUtils.DATE_TIME_PATTERN
      * @return  返回yyyy-MM-dd格式日期
      */
@@ -38,6 +49,20 @@ public class DateUtils {
         if(date != null){
             SimpleDateFormat df = new SimpleDateFormat(pattern);
             return df.format(date);
+        }
+        return null;
+    }
+
+    /**
+     * 日期格式化 日期格式为：yyyy-MM-dd
+     * @param date 日期
+     * @param pattern 格式，如：DateUtils.DATE_TIME_PATTERN
+     * @return 日期格式化
+     */
+    public static String format(LocalDateTime date, String pattern) {
+        if(date != null){
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+            return dateTimeFormatter.format(date);
         }
         return null;
     }
