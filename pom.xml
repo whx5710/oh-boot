@@ -47,7 +47,7 @@
         <!-- bean 拷贝 -->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <!-- excel 工具 -->
-        <easyexcel.version>3.3.3</easyexcel.version>
+        <easyexcel.version>3.3.4</easyexcel.version>
         <!-- 数据字典翻译 -->
         <easytrans.version>3.0.0</easytrans.version>
         <!-- svg 图片转换 -->
