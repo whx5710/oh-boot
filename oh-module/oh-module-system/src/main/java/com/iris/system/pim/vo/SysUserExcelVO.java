@@ -7,6 +7,7 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.TransPojo;
 import com.iris.framework.common.excel.LocalDateTimeConverter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  * 
  */
 public class SysUserExcelVO implements Serializable, TransPojo {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
