@@ -16,9 +16,10 @@
     </parent>
 
     <modules>
-        <module>oh-system</module>
+        <!--<module>oh-system</module>-->
         <module>oh-module</module>
         <module>oh-framework</module>
+        <module>oh-server</module>
     </modules>
 
     <properties>

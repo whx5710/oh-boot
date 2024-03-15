@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.iris</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>oh-server</artifactId>
+    <description>系统启动入口</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- ========================= 导入其他模块 ========================= -->
+        <!-- 系统管理模块；用户管理、监控、鉴权等
+        注意：如果不引用，需实现框架中的 ***UserDetailsService接口（账号、手机、验证码等），接口鉴权可通过忽略鉴权进行配置 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-system</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 协同任务 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-team</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 对外接口 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 工作流 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-workflow</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- ========================= 导入其他 ========================= -->
+    </dependencies>
+
+    <build>
+        <!-- 打jar包命名-${revision} -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

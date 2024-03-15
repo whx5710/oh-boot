@@ -46,7 +46,9 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public SecurityConfig(OncePerRequestFilter authenticationTokenFilter, PermitResource permitResource, UserDetailsService userDetailsService, MobileUserDetailsService mobileUserDetailsService, MobileVerifyCodeService mobileVerifyCodeService, PasswordEncoder passwordEncoder, ApplicationEventPublisher applicationEventPublisher) {
+    public SecurityConfig(OncePerRequestFilter authenticationTokenFilter, PermitResource permitResource, UserDetailsService userDetailsService,
+                          MobileUserDetailsService mobileUserDetailsService, MobileVerifyCodeService mobileVerifyCodeService,
+                          PasswordEncoder passwordEncoder, ApplicationEventPublisher applicationEventPublisher) {
         this.authenticationTokenFilter = authenticationTokenFilter;
         this.permitResource = permitResource;
         this.userDetailsService = userDetailsService;
