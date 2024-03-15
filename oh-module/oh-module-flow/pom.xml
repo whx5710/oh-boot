@@ -8,7 +8,7 @@
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>oh-module-workflow</artifactId>
+    <artifactId>oh-module-flow</artifactId>
     <description>工作流</description>
 
     <dependencies>

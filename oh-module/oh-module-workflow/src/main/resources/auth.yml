@@ -1,5 +1,0 @@
-auth:
-  ignore-urls:
-    - /task/**
-    - /flow/svg2png/**
-    - /flow/listProcessByKey/**

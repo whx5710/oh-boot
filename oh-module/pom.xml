@@ -18,6 +18,6 @@
 		<!-- api接口 -->
 		<module>oh-module-api</module>
 		<!-- 工作流 -->
-		<module>oh-module-workflow</module>
+		<module>oh-module-flow</module>
     </modules>
 </project>

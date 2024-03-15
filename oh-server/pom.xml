@@ -42,7 +42,7 @@
         <!-- 工作流 -->
         <dependency>
             <groupId>com.iris</groupId>
-            <artifactId>oh-module-workflow</artifactId>
+            <artifactId>oh-module-flow</artifactId>
             <version>${revision}</version>
         </dependency>
         <!-- ========================= 导入其他 ========================= -->
