@@ -146,7 +146,7 @@ spring:
     client-id: dc-device-flow-analyze
     listener:
       ack-mode: MANUAL_IMMEDIATE
-      concurrency: 3  # 多任务
+      concurrency: 1  # 多任务
       # type: BATCH #开启批量监听
     consumer:
       group-id: oh-group
@@ -187,9 +187,26 @@ camunda.bpm:
   database:
     type: mysql
     schema-update: true
+    # 自定义配置属性 #
+    url: ${spring.datasource.dynamic.datasource.sysDb.url}
+    username: ${spring.datasource.dynamic.datasource.sysDb.username}
+    password: ${spring.datasource.dynamic.datasource.sysDb.password}
+    driver: ${spring.datasource.dynamic.datasource.sysDb.driver-class-name}
+    # 自定义配置属性 #
   generic-properties.properties:
     javaSerializationFormatEnabled: true
-    historyTimeToLive: P365D
+    history: full # 历史记录级别设置
+    historyTimeToLive: P1000D # 历史数据保存时间 1000天
+    # 批量清理运行时间窗口：设置在每天20：00-22：00
+    # historyCleanupBatchWindowStartTime: "20:00"
+    # historyCleanupBatchWindowEndTime: "22:00"
+
+    # 批量清理运行时间窗口：设置在周日19：00-23：00
+    sundayHistoryCleanupBatchWindowStartTime: "19:00"
+    sundayHistoryCleanupBatchWindowEndTime: "23:00"
+
+    historyCleanupDegreeOfParallelism: 4 # 用于历史清理的并行作业数
+    historyCleanupBatchSize: 100 # 单次批量处理实例数
   admin-user:
     id: admin
     password: 123456
