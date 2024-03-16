@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.iris.framework.common.utils.DateUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "操作日志")
 public class SysLogOperateVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")

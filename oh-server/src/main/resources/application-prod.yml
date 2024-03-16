@@ -64,7 +64,8 @@ mybatis-plus:
 
 #easy trans 数据翻译组件
 easy-trans:
-  is-enable-redis: false      # 启用redis缓存 如果不用redis请设置为false
+  is-enable-redis: true       # 启用redis缓存 如果不用redis请设置为false
+  dict-use-redis: true        # 字典缓存放到redis
   is-enable-global: true      # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
   is-enable-tile: true        # 启用平铺模式
   multiple-data-sources: true # 启用多数据源

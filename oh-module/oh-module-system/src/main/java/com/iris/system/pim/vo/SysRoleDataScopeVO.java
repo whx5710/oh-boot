@@ -2,6 +2,8 @@ package com.iris.system.pim.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
  */
 @Schema(description = "角色数据权限")
 public class SysRoleDataScopeVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")

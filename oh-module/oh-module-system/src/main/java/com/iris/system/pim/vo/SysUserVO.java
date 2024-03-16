@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @Schema(description = "用户")
 public class SysUserVO implements Serializable, TransPojo {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")

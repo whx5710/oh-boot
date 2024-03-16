@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import com.iris.framework.common.utils.DateUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "字典数据")
 public class SysDictDataVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")

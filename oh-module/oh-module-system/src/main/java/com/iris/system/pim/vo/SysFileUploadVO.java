@@ -2,6 +2,7 @@ package com.iris.system.pim.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 @Schema(description = "文件上传")
 public class SysFileUploadVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "文件名称")

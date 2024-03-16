@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import com.iris.framework.common.utils.DateUtils;
 import org.hibernate.validator.constraints.Range;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "岗位管理")
 public class SysPostVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")

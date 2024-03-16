@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import com.iris.framework.common.excel.DateConverter;
 import com.iris.framework.common.utils.DateUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "登录日志")
 public class SysLogLoginVO implements Serializable, TransPojo {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ExcelIgnore

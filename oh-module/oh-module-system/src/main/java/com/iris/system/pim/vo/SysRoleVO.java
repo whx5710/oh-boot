@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import com.iris.framework.common.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Schema(description = "角色")
 public class SysRoleVO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")
