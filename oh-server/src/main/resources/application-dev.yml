@@ -64,9 +64,12 @@ mybatis-plus:
 
 #easy trans 数据翻译组件
 easy-trans:
-  is-enable-redis: false  # 启用redis缓存 如果不用redis请设置为false
-  is-enable-global: true  # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
-  is-enable-tile: true    # 启用平铺模式
+  is-enable-redis: false      # 启用redis缓存 如果不用redis请设置为false
+  is-enable-global: true      # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
+  is-enable-tile: true        # 启用平铺模式
+  multiple-data-sources: true # 启用多数据源
+  # db-type: mysql            # 反向翻译数据库类型 mysql
+
 
 spring:
   jackson:
@@ -208,7 +211,7 @@ logging:
     console: UTF-8
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
     com.iris: DEBUG
-    # root: DEBUG
+    root: DEBUG
     # org.springframework.web: debug # web相关的日志级别
   pattern:
     # 在控制台输出的日志格式
@@ -221,7 +224,7 @@ logging:
     name: logs/${spring.application.name}.out.log
   logback:
     rollingpolicy:
-      clean-history-on-start: false                       # 是否在启动时清除存档日志文件
+      clean-history-on-start: true                        # 是否在启动时清除存档日志文件
       file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz # 滚动日志文件名的模式
       max-history: 10                                     # 要保留的存档日志文件的最大数量
       max-file-size: 100MB                                # 最大文件大小，默认10MB

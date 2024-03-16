@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.TransPojo;
+import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.DateUtils;
 import com.iris.system.pim.entity.SysOrgEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -59,7 +60,7 @@ public class SysUserVO implements Serializable, TransPojo {
 
     @Schema(description = "机构ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "机构ID不能为空")
-    @Trans(type = TransType.SIMPLE, target = SysOrgEntity.class, fields = "name", ref = "orgName")
+    @Trans(type = TransType.SIMPLE, target = SysOrgEntity.class, fields = "name", ref = "orgName", dataSource = Constant.SYS_DB)
     private Long orgId;
 
     @Schema(description = "状态 0：停用    1：正常", requiredMode = Schema.RequiredMode.REQUIRED)

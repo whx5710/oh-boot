@@ -1,5 +1,6 @@
 package com.iris.system.pim.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iris.system.pim.convert.SysOrgConvert;
 import com.iris.framework.common.constant.Constant;
@@ -34,6 +35,7 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 		this.sysUserDao = sysUserDao;
 	}
 
+	@DS(Constant.SYS_DB)
 	@Override
 	public List<SysOrgVO> getList() {
 		Map<String, Object> params = new HashMap<>();

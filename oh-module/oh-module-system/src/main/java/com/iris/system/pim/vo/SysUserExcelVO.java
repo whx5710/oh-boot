@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.TransPojo;
+import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.excel.LocalDateTimeConverter;
 
 import java.io.Serial;
@@ -34,7 +35,7 @@ public class SysUserExcelVO implements Serializable, TransPojo {
     private String realName;
 
     @ExcelIgnore
-    @Trans(type = TransType.DICTIONARY, key = "user_gender", ref = "genderLabel")
+    @Trans(type = TransType.DICTIONARY, key = "user_gender", ref = "genderLabel", dataSource = Constant.SYS_DB)
     private Integer gender;
 
     @ExcelProperty(value = "性别")
@@ -50,14 +51,14 @@ public class SysUserExcelVO implements Serializable, TransPojo {
     private Long orgId;
 
     @ExcelIgnore
-    @Trans(type = TransType.DICTIONARY, key = "user_status", ref = "statusLabel")
+    @Trans(type = TransType.DICTIONARY, key = "user_status", ref = "statusLabel", dataSource = Constant.SYS_DB)
     private Integer status;
 
     @ExcelProperty(value = "状态")
     private String statusLabel;
 
     @ExcelIgnore
-    @Trans(type = TransType.DICTIONARY, key = "user_super_admin", ref = "superAdminLabel")
+    @Trans(type = TransType.DICTIONARY, key = "user_super_admin", ref = "superAdminLabel", dataSource = Constant.SYS_DB)
     private Integer superAdmin;
 
     @ExcelProperty(value = "超级管理员")
