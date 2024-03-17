@@ -4,7 +4,5 @@ auth:
     - /sys/auth/login
     - /sys/auth/send/code
     - /sys/auth/mobile
-    - /sys/params/getByKey/**
     - /sys/params/getByKeys
     - /sys/info/latestVersion
-    - /upload/**

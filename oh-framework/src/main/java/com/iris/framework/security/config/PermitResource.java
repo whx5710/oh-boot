@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * 允许访问的资源
@@ -47,7 +48,9 @@ public class PermitResource {
         String key = "auth.ignore-urls";
         List<String> list = getPropertiesList(key, resources);
         list.addAll(securityProperties.getIgnoreUrls());
-        log.info("忽略鉴权的URL:{}", list);
+        // 去重
+        list = list.stream().distinct().collect(Collectors.toList());
+        log.info("忽略鉴权的URL总计：{}个 ---> {}", list.size(), list);
         return list;
     }
 
