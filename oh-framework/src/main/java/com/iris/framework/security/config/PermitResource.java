@@ -28,7 +28,7 @@ public class PermitResource {
 
     private final Logger log = LoggerFactory.getLogger(PermitResource.class);
 
-    private SecurityProperties securityProperties;
+    private final SecurityProperties securityProperties;
     public PermitResource(SecurityProperties securityProperties){
         this.securityProperties = securityProperties;
     }
