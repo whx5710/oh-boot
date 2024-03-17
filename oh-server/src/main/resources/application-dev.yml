@@ -116,10 +116,10 @@ spring:
       useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
     dynamic:
       #  dynamic主从设置
-      primary: master #设置默认的数据源或者数据源组,默认值即为master
-      strict: false  #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
+      primary: masterDb #设置默认的数据源或者数据源组,默认值即为master
+      strict: false     #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       datasource:
-        sysDb:
+        masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: dev
@@ -130,7 +130,7 @@ spring:
             data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
             continue-on-error: true                   # 错误是否继续 默认 true
             separator: ;                              # 分隔符 默认 ;
-        master:
+        projectDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: dev
@@ -187,12 +187,6 @@ camunda.bpm:
   database:
     type: mysql
     schema-update: true
-    # 自定义配置属性 #
-    url: ${spring.datasource.dynamic.datasource.sysDb.url}
-    username: ${spring.datasource.dynamic.datasource.sysDb.username}
-    password: ${spring.datasource.dynamic.datasource.sysDb.password}
-    driver: ${spring.datasource.dynamic.datasource.sysDb.driver-class-name}
-    # 自定义配置属性 #
   generic-properties.properties:
     javaSerializationFormatEnabled: true
     history: full # 历史记录级别设置
@@ -212,7 +206,7 @@ camunda.bpm:
     password: 123456
   # 定时任务
   job-execution:
-    enabled: false # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
+    enabled: true # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
   run:
     # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
     cors:

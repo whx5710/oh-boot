@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.workflow.dao.FlowNodeDao">
+<mapper namespace="com.iris.flow.dao.FlowNodeDao">
 
-    <resultMap type="com.iris.workflow.entity.FlowNodeEntity" id="bpmnFlowNodeMap">
+    <resultMap type="com.iris.flow.entity.FlowNodeEntity" id="bpmnFlowNodeMap">
         <result property="id" column="id"/>
         <result property="procDefId" column="proc_def_id"/>
         <result property="actDefId" column="act_def_id"/>

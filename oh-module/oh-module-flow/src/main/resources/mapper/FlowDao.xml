@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.workflow.dao.FlowDao">
+<mapper namespace="com.iris.flow.dao.FlowDao">
 
-    <resultMap type="com.iris.workflow.entity.FlowEntity" id="flowMap">
+    <resultMap type="com.iris.flow.entity.FlowEntity" id="flowMap">
         <result property="id" column="id"/>
         <result property="keyCode" column="keyCode"/>
         <result property="name" column="name"/>

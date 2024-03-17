@@ -1,5 +1,7 @@
 package com.iris.team.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.iris.framework.common.constant.Constant;
 import com.iris.framework.mybatis.dao.BaseDao;
 import com.iris.team.entity.OhTaskEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,6 +16,7 @@ import java.util.Map;
 * @since 1.0.0 2022-11-25
 */
 @Mapper
+@DS(Constant.PROJECT_DB)
 public interface OhTaskDao extends BaseDao<OhTaskEntity> {
 
     List<OhTaskEntity> getList(Map<String, Object> params);

@@ -1,7 +1,5 @@
 package com.iris.system.pim.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.iris.framework.common.constant.Constant;
 import com.iris.system.pim.entity.SysRoleEntity;
 import com.iris.framework.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,7 +12,6 @@ import org.apache.ibatis.annotations.Param;
  * 
  */
 @Mapper
-@DS(Constant.SYS_DB)
 public interface SysRoleDao extends BaseDao<SysRoleEntity> {
 
     /**

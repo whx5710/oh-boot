@@ -1,8 +1,6 @@
 package com.iris.api.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.api.entity.DataMsgEntity;
-import com.iris.framework.common.constant.Constant;
 import com.iris.framework.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,7 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2023-07-21
 */
 @Mapper
-@DS(Constant.SYS_DB)
 public interface DataMessageDao extends BaseDao<DataMsgEntity> {
 
 }

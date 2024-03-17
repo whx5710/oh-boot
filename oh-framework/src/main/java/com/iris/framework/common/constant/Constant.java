@@ -62,10 +62,10 @@ public interface Constant {
     /**
      * 系统数据库
      */
-    String SYS_DB = "sysDb";
+    String PROJECT_DB = "projectDb";
     /**
      * 业务主库
      */
-    String MASTER = "master";
+    String MASTER_DB = "masterDb";
 
 }

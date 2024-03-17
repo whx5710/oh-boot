@@ -115,29 +115,29 @@ spring:
       useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
     dynamic:
       #  dynamic主从设置
-      primary: master #设置默认的数据源或者数据源组,默认值即为master
-      strict: false  #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
+      primary: masterDb #设置默认的数据源或者数据源组,默认值即为master
+      strict: false     #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       datasource:
-        sysDb:
+        masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: root
-          password: 123456
+          username: dev
+          password: 123456@hA
           type: com.zaxxer.hikari.HikariDataSource
           init:
-            schema: classpath*:db/sys-schema.sql  # 自动运行的建表脚本
-            data: classpath*:db/sys-data.sql      # 自动运行的数据脚本
+            schema: classpath*:db/sys-schema.sql      # 自动运行的建表脚本
+            data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
             continue-on-error: true                   # 错误是否继续 默认 true
             separator: ;                              # 分隔符 默认 ;
-        master:
+        projectDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: root
-          password: 123456
+          username: dev
+          password: 123456@hA
           type: com.zaxxer.hikari.HikariDataSource
           init:
-            schema: classpath*:db/project-schema.sql  # 自动运行的建表脚本
-            data: classpath*:db/project-data.sql      # 自动运行的数据脚本
+            schema: classpath*:db/project-schema.sql    # 自动运行的建表脚本
+            data: classpath*:db/project-data.sql        # 自动运行的数据脚本
             continue-on-error: true                     # 错误是否继续 默认 true
             separator: ;                                # 分隔符 默认 ;
   kafka:
@@ -188,13 +188,24 @@ camunda.bpm:
     schema-update: true
   generic-properties.properties:
     javaSerializationFormatEnabled: true
-    historyTimeToLive: P365D
+    history: full # 历史记录级别设置
+    historyTimeToLive: P1000D # 历史数据保存时间 1000天
+    # 批量清理运行时间窗口：设置在每天20：00-22：00
+    # historyCleanupBatchWindowStartTime: "20:00"
+    # historyCleanupBatchWindowEndTime: "22:00"
+
+    # 批量清理运行时间窗口：设置在周日19：00-23：00
+    sundayHistoryCleanupBatchWindowStartTime: "19:00"
+    sundayHistoryCleanupBatchWindowEndTime: "23:00"
+
+    historyCleanupDegreeOfParallelism: 4 # 用于历史清理的并行作业数
+    historyCleanupBatchSize: 100 # 单次批量处理实例数
   admin-user:
     id: admin
     password: 123456
   # 定时任务
   job-execution:
-    enabled: false # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
+    enabled: true # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
   run:
     # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
     cors:

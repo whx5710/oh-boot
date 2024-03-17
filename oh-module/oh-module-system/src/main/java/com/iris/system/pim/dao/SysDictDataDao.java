@@ -1,7 +1,5 @@
 package com.iris.system.pim.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.iris.framework.common.constant.Constant;
 import com.iris.framework.mybatis.dao.BaseDao;
 import com.iris.system.pim.entity.SysDictDataEntity;
 import com.iris.system.pim.vo.SysDictVO;
@@ -18,7 +16,6 @@ import java.util.List;
  *
  */
 @Mapper
-@DS(Constant.SYS_DB)
 public interface SysDictDataDao extends BaseDao<SysDictDataEntity> {
 
     @Select("${sql}")
