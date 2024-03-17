@@ -46,7 +46,7 @@ public abstract class BaseEntity extends IDEntity{
      * 数据状态标记，0删除1有效
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer dbStatus;
+    private Integer dbStatus = 1;
 
     public Long getCreator() {
         return creator;

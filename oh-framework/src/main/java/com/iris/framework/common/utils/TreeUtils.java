@@ -19,7 +19,7 @@ public class TreeUtils {
      */
     public static <T extends TreeNode<T>> List<T> build(List<T> treeNodes, Long pid) {
         // pid不能为空
-        AssertUtils.isNull(pid, "pid");
+        AssertUtils.isNull(pid, "pid[上级ID]");
 
         List<T> treeList = new ArrayList<>();
         for (T treeNode : treeNodes) {

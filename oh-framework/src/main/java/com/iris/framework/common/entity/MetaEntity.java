@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * 元素 Entity基类
- *
+ * 数据传输
  * @author 王小费 whx5710@qq.com
  */
 public class MetaEntity extends IDEntity {
@@ -18,7 +18,7 @@ public class MetaEntity extends IDEntity {
     private String topic;
 
     // 状态0未处理1处理2处理失败
-    private int state;
+    private int state = 0;
 
     // 数据
     private Map<String, Object> data;

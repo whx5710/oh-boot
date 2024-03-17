@@ -3,6 +3,7 @@ package com.iris.framework.common.utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  *
  */
 public class TreeNode<T> implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * 主键

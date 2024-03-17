@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.iris.framework.common.excel.ExcelDataListener;
 import com.iris.framework.common.excel.ExcelFinishCallBack;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -31,6 +33,8 @@ import java.util.stream.Collectors;
  */
 public class ExcelUtils {
 
+    private static final Logger log = LoggerFactory.getLogger(ExcelUtils.class);
+
     /**
      * 读取excel文件
      *
@@ -44,7 +48,7 @@ public class ExcelUtils {
         try {
             EasyExcel.read(file.getInputStream(), head, new ExcelDataListener<>(callBack)).sheet().doRead();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("读取excel文件失败！{}", e.getMessage());
         }
     }
 
@@ -61,7 +65,7 @@ public class ExcelUtils {
         try {
             EasyExcel.read(new FileInputStream(file), head, new ExcelDataListener<>(callBack)).sheet().doRead();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("读取excel文件失败！！{}", e.getMessage());
         }
     }
 
@@ -71,7 +75,7 @@ public class ExcelUtils {
      * @param <T>   数据类型
      * @param file  文件
      * @param clazz 模板类
-     * @return java.util.List list
+     * @return java.util.List
      */
     public static <T> List<T> readSync(File file, Class<T> clazz) {
         return readSync(file, clazz, 1, 0, ExcelTypeEnum.XLSX);
@@ -86,7 +90,7 @@ public class ExcelUtils {
      * @param rowNum    数据开始行 1
      * @param sheetNo   第几张表
      * @param excelType 数据表格式类型
-     * @return java.util.List list
+     * @return java.util.List
      */
     public static <T> List<T> readSync(File file, Class<T> clazz, Integer rowNum, Integer sheetNo, ExcelTypeEnum excelType) {
         return EasyExcel.read(file).headRowNumber(rowNum).excelType(excelType).head(clazz).sheet(sheetNo).doReadSync();
@@ -157,7 +161,7 @@ public class ExcelUtils {
         if (CollectionUtil.isEmpty(dataList)) {
             return;
         }
-        Class<? extends TransPojo> clazz = dataList.get(0).getClass();
+        Class<? extends TransPojo> clazz = dataList.getFirst().getClass();
         //拿到所有需要反向翻译的字段
         List<Field> fields = ReflectUtils.getAnnotationField(clazz, Trans.class);
         //过滤出字典翻译

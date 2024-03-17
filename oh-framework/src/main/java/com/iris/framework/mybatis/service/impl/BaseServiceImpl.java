@@ -90,7 +90,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
             return null;
         }
         // 数据过滤
-        if (dataScopeList.size() > 0) {
+        if (!dataScopeList.isEmpty()) {
             if (StringUtils.isBlank(orgIdAlias)) {
                 orgIdAlias = "org_id";
             }

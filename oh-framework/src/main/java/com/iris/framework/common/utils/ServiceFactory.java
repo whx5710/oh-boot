@@ -22,8 +22,7 @@ public class ServiceFactory {
     /**
      * 根据指令，获取消息处理服务
      * @param funCode 消息指令
-     * @return
-     * @throws Exception
+     * @return Optional
      */
     public static Optional<JobService> getService(String funCode){
         Optional<JobService> optionalService = Optional.ofNullable(serviceMap.get(funCode));

@@ -1,6 +1,9 @@
 package com.iris.framework.common.utils;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -14,6 +17,9 @@ import java.util.Date;
  * 
  */
 public class DateUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(DateUtils.class);
+
 	/** 时间格式(yyyy-MM-dd) */
 	public final static String DATE_PATTERN = "yyyy-MM-dd";
 	/** 时间格式(yyyy-MM-dd HH:mm:ss) */
@@ -77,7 +83,7 @@ public class DateUtils {
         try {
             return new SimpleDateFormat(pattern).parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("日期转换失败！{}", e.getMessage());
         }
         return null;
     }
