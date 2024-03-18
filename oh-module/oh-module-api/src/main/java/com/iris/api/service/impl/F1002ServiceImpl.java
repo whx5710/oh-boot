@@ -2,13 +2,13 @@ package com.iris.api.service.impl;
 
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
+import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,11 +24,9 @@ public class F1002ServiceImpl implements JobService, InitializingBean {
     }
 
     @Override
-    public Map<String, Object> handle(Map<String, Object> data) {
+    public Result<String> handle(Map<String, Object> data) {
         log.info("处理业务二数据 F1002");
-        Map<String, Object> object = new HashMap<>();
-        object.put("msg","操作成功");
-        return object;
+        return Result.ok("操作成功");
     }
 
     @Override

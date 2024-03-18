@@ -7,6 +7,7 @@ import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
+import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
 import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
 import com.iris.flow.convert.WorkOrderConvert;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +83,7 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
 
     /**
      * 校验工单参数
-     * @param data
+     * @param data 数据
      */
     @Override
     public void check(Map<String, Object> data) {
@@ -98,26 +98,23 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
 
     /**
      * 保存工单信息，启动工作流
-     * @param data
-     * @return
+     * @param data 数据
+     * @return map
      */
     @Override
-    public Map<String, Object> handle(Map<String, Object> data) {
+    public Result<List<TaskRecordVO>> handle(Map<String, Object> data) {
 //        JsonUtils.parseObject()
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data, WorkOrderVO.class);
         this.save(workOrderVO);
 
         // 启动流程
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
-        Map<String, Object> object = new HashMap<>();
-        object.put("msg","ok");
-        object.put("data", list);
-        return object;
+        return Result.ok(list);
     }
 
     /**
      * 注册服务
-     * @throws Exception
+     * @throws Exception e
      */
     @Override
     public void afterPropertiesSet() throws Exception {

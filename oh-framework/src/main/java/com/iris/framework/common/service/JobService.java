@@ -1,5 +1,7 @@
 package com.iris.framework.common.service;
 
+import com.iris.framework.common.utils.Result;
+
 import java.util.Map;
 
 /**
@@ -21,5 +23,5 @@ public interface JobService {
      * @param data 参数
      * @return map
      */
-    Map<String, Object> handle(Map<String, Object> data);
+    Result<?> handle(Map<String, Object> data);
 }
