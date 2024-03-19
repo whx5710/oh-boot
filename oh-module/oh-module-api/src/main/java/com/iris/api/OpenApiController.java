@@ -85,9 +85,9 @@ public class OpenApiController extends BaseController {
                         throw new ServerException("发送失败！" + e.getMessage());
                     });
                 }catch (KafkaException e){
-                    log.error("Kafka异常！{}", e.getMessage());
+                    log.error("Kafka异常（{}），切换直接调用业务接口。", e.getMessage());
                     apiType = 1; // 1直接保存 2使用MQ异步保存
-                    return Result.error("操作失败！" + e.getMessage());
+                    return jobService.handle(params);
                 }
                 return Result.ok("发送成功！");
             }

@@ -77,7 +77,7 @@ easy-trans:
   multiple-data-sources: true # 启用多数据源
   # db-type: mysql            # 反向翻译数据库类型 mysql
 
-
+# https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss  # 设置 java.util.Date, Calendar 序列化、反序列化的格式
@@ -128,7 +128,7 @@ spring:
         masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: dev
+          username: root
           password: 123456@hA
           type: com.zaxxer.hikari.HikariDataSource
           init:
@@ -139,7 +139,7 @@ spring:
         projectDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: dev
+          username: root
           password: 123456@hA
           type: com.zaxxer.hikari.HikariDataSource
           init:
@@ -177,6 +177,7 @@ spring:
       properties:
         spring.json.add.type.headers: false
         max.request.size: 126951500
+        max.block.ms: 30000 # 最大阻塞时间默认60000ms
 # 接口文档
 knife4j:
   enable: true  # 开启增强配置
