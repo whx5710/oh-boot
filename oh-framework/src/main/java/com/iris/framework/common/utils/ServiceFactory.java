@@ -41,7 +41,7 @@ public class ServiceFactory {
     public static void register(String funCode , JobService jobService) {
         AssertUtils.isBlank(funCode, "注册的服务不能为空");
         if(serviceMap.containsKey(funCode)){
-            log.warn("服务编号【" + funCode + ":" + jobService.getClass().getName() + "】已存在，请检查！");
+            log.warn("服务编号【" + funCode + ":" + serviceMap.get(funCode).getClass().getName() + "】已存在，已注册 " + jobService.getClass().getName() + "，请检查！");
         }
         serviceMap.put(funCode, jobService);
     }
