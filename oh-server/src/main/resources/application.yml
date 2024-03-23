@@ -13,6 +13,26 @@ spring:
     active: dev
   application:
     name: oh-boot
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss  # 设置 java.util.Date, Calendar 序列化、反序列化的格式
+    locale: zh                        # 当地时区
+    time-zone: GMT+8                  # 设置全局时区
+    # 设置对象或被@JsonInclude注解的属性的序列化方式。NON_NULL 表示不为空的属性才会序列化,具体属性可看JsonInclude.Include
+    # default-property-inclusion: NON_NULL
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false   # 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
+      FAIL_ON_EMPTY_BEANS: false         # 序列化时，对象为 null，是否抛异常
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
+
+#easy trans 数据翻译组件
+easy-trans:
+  is-enable-redis: true       # 启用redis缓存 如果不用redis请设置为false
+  dict-use-redis: true        # 字典缓存放到redis
+  is-enable-global: true      # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
+  is-enable-tile: true        # 启用平铺模式
+  multiple-data-sources: true # 启用多数据源
+  # db-type: mysql            # 反向翻译数据库类型 mysql
 
 # nacos相关配置
 #nacos:

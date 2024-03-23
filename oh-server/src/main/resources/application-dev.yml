@@ -68,28 +68,8 @@ mybatis-plus:
     blobType: BLOB
     boolValue: TRUE
 
-#easy trans 数据翻译组件
-easy-trans:
-  is-enable-redis: true       # 启用redis缓存 如果不用redis请设置为false
-  dict-use-redis: true        # 字典缓存放到redis
-  is-enable-global: true      # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
-  is-enable-tile: true        # 启用平铺模式
-  multiple-data-sources: true # 启用多数据源
-  # db-type: mysql            # 反向翻译数据库类型 mysql
-
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss  # 设置 java.util.Date, Calendar 序列化、反序列化的格式
-    locale: zh                        # 当地时区
-    time-zone: GMT+8                  # 设置全局时区
-    # 设置对象或被@JsonInclude注解的属性的序列化方式。NON_NULL 表示不为空的属性才会序列化,具体属性可看JsonInclude.Include
-    # default-property-inclusion: NON_NULL
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false   # 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
-      FAIL_ON_EMPTY_BEANS: false         # 序列化时，对象为 null，是否抛异常
-    deserialization:
-      FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
   servlet:
     multipart:
       max-file-size: 1024MB
@@ -128,7 +108,7 @@ spring:
         masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: root
+          username: dev
           password: 123456@hA
           type: com.zaxxer.hikari.HikariDataSource
           init:
@@ -139,7 +119,7 @@ spring:
         projectDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: root
+          username: dev
           password: 123456@hA
           type: com.zaxxer.hikari.HikariDataSource
           init:
@@ -236,7 +216,7 @@ logging:
     # 在控制台输出的日志格式
     # 无颜色 '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'
     # 有颜色 '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
-    console: '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
+    console: '%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
   file:
     # 日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
     # path: logs
