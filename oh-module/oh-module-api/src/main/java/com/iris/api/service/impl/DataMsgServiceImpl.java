@@ -4,10 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.iris.api.convert.DataMsgConvert;
 import com.iris.api.dao.DataMessageDao;
 import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.query.DataAppQuery;
 import com.iris.api.service.DataMsgService;
+import com.iris.api.vo.DataMsgVO;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
@@ -32,7 +34,7 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
     }
 
     @Override
-    public PageResult<DataMsgEntity> page(DataAppQuery query) {
+    public PageResult<DataMsgVO> page(DataAppQuery query) {
         LambdaQueryWrapper<DataMsgEntity> wrapper = Wrappers.lambdaQuery();
         if(!ObjectUtils.isEmpty(query.getKeyWord())){
             wrapper.and(w -> w.like(DataMsgEntity::getFunCode, query.getKeyWord())
@@ -40,6 +42,6 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
         }
         wrapper.orderByDesc(DataMsgEntity::getCreateTime);
         IPage<DataMsgEntity> page = baseMapper.selectPage(getPage(query), wrapper);
-        return new PageResult<>(page.getRecords(), page.getTotal());
+        return new PageResult<>(DataMsgConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
     }
 }
