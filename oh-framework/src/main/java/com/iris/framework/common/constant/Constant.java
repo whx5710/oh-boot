@@ -68,4 +68,6 @@ public interface Constant {
      */
     String MASTER_DB = "masterDb";
 
+    String SYS_DB = "sysDb";
+
 }

@@ -1,7 +1,5 @@
 package com.iris.flow.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.iris.framework.common.constant.Constant;
 import com.iris.framework.mybatis.dao.BaseDao;
 import com.iris.flow.entity.FlowEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2023-12-19
 */
 @Mapper
-@DS(Constant.PROJECT_DB)
 public interface FlowDao extends BaseDao<FlowEntity> {
 	
 }

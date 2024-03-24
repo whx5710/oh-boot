@@ -30,6 +30,11 @@ oh:
       - /swagger-ui.html
       - /swagger-ui/**
       - /doc.html
+  sys-data-source: # 通过请求的uri切换到系统数据源
+    include:
+      - /sys/
+      - /sms/
+      - /external/
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
   project:

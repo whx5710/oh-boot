@@ -54,7 +54,7 @@ public class ScheduleConfig {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
         // 切换数据源，使用系统内置数据源
-        factory.setDataSource(dataSource.getDataSource(Constant.MASTER_DB));
+        factory.setDataSource(dataSource.getDataSource(Constant.SYS_DB));
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);
