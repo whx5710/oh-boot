@@ -7,13 +7,18 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "oh.sys-data-source")
 public class SysDataSourceProperties {
 
-    private String [] include;
+    // uri请求前缀
+    private String [] prefixUris;
 
-    public String[] getInclude() {
-        return include;
+    /**
+     * uri请求前缀
+     * @return
+     */
+    public String[] getPrefixUris() {
+        return prefixUris;
     }
 
-    public void setInclude(String[] include) {
-        this.include = include;
+    public void setPrefixUris(String[] prefixUris) {
+        this.prefixUris = prefixUris;
     }
 }

@@ -30,8 +30,8 @@ oh:
       - /swagger-ui.html
       - /swagger-ui/**
       - /doc.html
-  sys-data-source: # 通过请求的uri切换到系统数据源
-    include:
+  sys-data-source:
+    prefix-uris: # 通过请求的uri前缀切换到系统内部数据源
       - /sys/
       - /sms/
       - /external/
@@ -110,7 +110,7 @@ spring:
       primary: masterDb #设置默认的数据源或者数据源组,默认值即为master
       strict: false     #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       datasource:
-        masterDb:
+        sysDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
@@ -121,7 +121,7 @@ spring:
             data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
             continue-on-error: true                   # 错误是否继续 默认 true
             separator: ;                              # 分隔符 默认 ;
-        projectDb:
+        masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root

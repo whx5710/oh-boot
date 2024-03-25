@@ -32,10 +32,10 @@ public class DataSourceFilter extends OncePerRequestFilter {
         this.sysDataSourceProperties = sysDataSourceProperties;
     }
 
-    private static final String DATA_SOURCE_HEADER = "X-Data-Source"; // 假设 Header 名称为 "X-Data-Source"
+    private static final String DATA_SOURCE_HEADER = "X-Data-Source"; //Header 名称为 "X-Data-Source"
 
     /**
-     * 数据源过滤
+     * 数据源过滤;根据URI请求和header中的参数设置数据源
      * @param request
      * @param response
      * @param filterChain
@@ -76,7 +76,7 @@ public class DataSourceFilter extends OncePerRequestFilter {
      * @return
      */
     private Boolean filterURI(String uri){
-        for(String regex:sysDataSourceProperties.getInclude()){
+        for(String regex:sysDataSourceProperties.getPrefixUris()){
             if(uri.startsWith(regex)){
                 return true;
             }

@@ -58,16 +58,14 @@ public interface Constant {
      * 密码最大长度
      */
     int PASSWORD_MAX_LENGTH = 30;
-
-    /**
-     * 系统数据库
-     */
-    String PROJECT_DB = "projectDb";
     /**
      * 业务主库
      */
     String MASTER_DB = "masterDb";
 
+    /**
+     * 系统内部数据源
+     */
     String SYS_DB = "sysDb";
 
 }
