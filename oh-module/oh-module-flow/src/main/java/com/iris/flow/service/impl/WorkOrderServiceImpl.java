@@ -3,6 +3,7 @@ package com.iris.flow.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
@@ -102,14 +103,19 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
      * @return map
      */
     @Override
-    public Result<List<TaskRecordVO>> handle(Map<String, Object> data) {
+    public Result<List<TaskRecordVO>> handle(MetaEntity data) throws ServerException {
 //        JsonUtils.parseObject()
-        WorkOrderVO workOrderVO = JsonUtils.convertValue(data, WorkOrderVO.class);
+        WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
         this.save(workOrderVO);
 
         // 启动流程
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
-        return Result.ok(list);
+
+        // 模拟业务处理异常
+        throw new ServerException("模拟异常！！！");
+
+
+//        return Result.ok(list);
     }
 
     /**

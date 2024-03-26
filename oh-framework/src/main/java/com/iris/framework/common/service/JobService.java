@@ -1,5 +1,6 @@
 package com.iris.framework.common.service;
 
+import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.utils.Result;
 
 import java.util.Map;
@@ -23,5 +24,5 @@ public interface JobService {
      * @param data 参数
      * @return map
      */
-    Result<?> handle(Map<String, Object> data);
+    Result<?> handle(MetaEntity data);
 }

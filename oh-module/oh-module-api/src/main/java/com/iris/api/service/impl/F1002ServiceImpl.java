@@ -1,5 +1,6 @@
 package com.iris.api.service.impl;
 
+import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.Result;
@@ -24,7 +25,7 @@ public class F1002ServiceImpl implements JobService, InitializingBean {
     }
 
     @Override
-    public Result<String> handle(Map<String, Object> data) {
+    public Result<String> handle(MetaEntity data) {
         log.info("处理业务二数据 F1002");
         return Result.ok("操作成功");
     }

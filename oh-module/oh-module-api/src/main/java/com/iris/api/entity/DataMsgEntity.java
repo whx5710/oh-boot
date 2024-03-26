@@ -8,6 +8,7 @@ import com.iris.framework.common.entity.BaseEntity;
  */
 @TableName("data_message")
 public class DataMsgEntity extends BaseEntity {
+
     // 数据字符串
     private String jsonStr;
     // 功能号
@@ -17,8 +18,11 @@ public class DataMsgEntity extends BaseEntity {
 
     private String topic;
 
-    // 状态0未处理1处理
+    // 状态0未处理1处理2未找到对应的服务类3业务处理失败
     private String state;
+
+    // 备注
+    private String note;
 
     public String getJsonStr() {
         return jsonStr;
@@ -56,7 +60,19 @@ public class DataMsgEntity extends BaseEntity {
         return state;
     }
 
+    /**
+     * 状态0未处理1处理2未找到对应的服务类3业务处理失败
+     * @param state
+     */
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

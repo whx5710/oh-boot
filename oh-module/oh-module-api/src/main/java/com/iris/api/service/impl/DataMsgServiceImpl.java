@@ -1,6 +1,5 @@
 package com.iris.api.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -10,8 +9,6 @@ import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.query.DataAppQuery;
 import com.iris.api.service.DataMsgService;
 import com.iris.api.vo.DataMsgVO;
-import com.iris.framework.common.entity.MetaEntity;
-import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
 import org.slf4j.Logger;
@@ -24,14 +21,6 @@ import org.springframework.util.ObjectUtils;
 public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgEntity> implements DataMsgService {
 
     private final Logger log = LoggerFactory.getLogger(DataMsgServiceImpl.class);
-
-    @Override
-    public void saveMsg(MetaEntity data) {
-        DataMsgEntity dataMsg = new DataMsgEntity();
-        BeanUtil.copyProperties(data, dataMsg);
-        dataMsg.setJsonStr(JsonUtils.toJsonString(data.getData()));
-        this.save(dataMsg);
-    }
 
     @Override
     public PageResult<DataMsgVO> page(DataAppQuery query) {

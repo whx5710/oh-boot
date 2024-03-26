@@ -1,5 +1,6 @@
 package com.iris.api;
 
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -50,6 +51,8 @@ public class OpenApiController extends BaseController {
     @Resource
     KafkaTemplate<String, String> kafkaTemplate;
 
+    Snowflake snowflake = IdUtil.getSnowflake(1, 1);
+
 
     /**
      * 接收数据
@@ -70,9 +73,10 @@ public class OpenApiController extends BaseController {
             // 校验参数
             jobService.check(params);
             if (!isAsync || apiType == 1) { // 直接业务处理
-                return jobService.handle(params);
+                return jobService.handle(data);
             }else{
-                data.setState(0); // 状态0未处理1处理
+                data.setState(0); // 状态0未处理1处理2未找到对应的服务类3业务处理失败
+                data.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
                     CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("topic-submit", data.toJson());
                     //执行成功回调
@@ -87,7 +91,7 @@ public class OpenApiController extends BaseController {
                 }catch (KafkaException e){
                     log.error("Kafka异常（{}），切换直接调用业务接口。", e.getMessage());
                     apiType = 1; // 1直接保存 2使用MQ异步保存
-                    return jobService.handle(params);
+                    return jobService.handle(data);
                 }
                 return Result.ok("发送成功！");
             }
@@ -108,7 +112,7 @@ public class OpenApiController extends BaseController {
 
         System.out.println("开始请求");
 
-        for(int i = 0; i< 999; i++){
+        for(int i = 0; i< 9; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", new Date());
             data.put("reportTime", new Date());
