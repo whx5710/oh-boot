@@ -118,6 +118,15 @@ public class DataAppController {
         return Result.ok(page);
     }
 
+    @DeleteMapping("/deleteLog")
+    @Operation(summary = "删除请求记录")
+    @PreAuthorize("hasAuthority('external:app:delete')")
+    public Result<String> deleteLog(@RequestBody List<Long> idList){
+        dataMsgService.delete(idList);
+
+        return Result.ok();
+    }
+
     @GetMapping("/deleteByDate/{date}")
     @Operation(summary = "根据时间删除报文记录")
     @PreAuthorize("hasAuthority('external:app:delete')")

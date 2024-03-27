@@ -2,6 +2,8 @@ package com.iris.api.vo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.TransPojo;
@@ -26,6 +28,7 @@ public class DataMsgVO implements Serializable, TransPojo {
     private static final long serialVersionUID = 1L;
 
     @TableId
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     // 数据字符串
