@@ -34,6 +34,7 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
     @Override
     public PageResult<DataMsgVO> page(DataMsgQuery query) {
         LambdaQueryWrapper<DataMsgEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(DataMsgEntity::getDbStatus, 1);
         if(!ObjectUtils.isEmpty(query.getClientId())){
             wrapper.eq(DataMsgEntity::getClientId, query.getClientId()); // 客户端ID
         }
