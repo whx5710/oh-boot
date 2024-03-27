@@ -1,6 +1,5 @@
 package com.iris.framework.common.utils;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,5 +85,26 @@ public class DateUtils {
             log.error("日期转换失败！{}", e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * 日期解析
+     * @param date  日期
+     * @param pattern  格式，如：DateUtils.DATE_TIME_PATTERN
+     * @return  返回LocalDateTime
+     */
+    public static LocalDateTime parseLocalDateTime(String date, String pattern) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        return LocalDateTime.parse(date, df);
+    }
+
+    /**
+     * 日期解析
+     * @param date  日期 默认 yyyy-MM-dd HH:mm:ss
+     * @return  返回LocalDateTime
+     */
+    public static LocalDateTime parseLocalDateTime(String date) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+        return LocalDateTime.parse(date, df);
     }
 }
