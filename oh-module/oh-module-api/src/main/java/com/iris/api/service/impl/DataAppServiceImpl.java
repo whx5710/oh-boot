@@ -76,4 +76,18 @@ public class DataAppServiceImpl extends BaseServiceImpl<DataAppDao, DataAppEntit
     public List<DataAppVO> listAuthority(DataFunctionAuthorityQuery params) {
         return baseMapper.listAuthority(params);
     }
+
+    /**
+     * 根据客户端ID查询
+     * @param clientId
+     * @return
+     */
+    @Override
+    public DataAppVO findByClientId(String clientId) {
+        AssertUtils.isBlank(clientId,"客户端ID");
+        LambdaQueryWrapper<DataAppEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(DataAppEntity::getDbStatus, 1).eq(DataAppEntity::getClientId, clientId);
+        DataAppEntity dataAppEntity = this.baseMapper.selectOne(wrapper);
+        return DataAppConvert.INSTANCE.convert(dataAppEntity);
+    }
 }

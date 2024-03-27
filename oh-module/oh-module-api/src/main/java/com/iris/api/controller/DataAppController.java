@@ -9,12 +9,14 @@ import com.iris.api.service.DataMsgService;
 import com.iris.api.utils.RunnerHandler;
 import com.iris.api.vo.DataAppVO;
 import com.iris.api.vo.DataMsgVO;
+import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import com.iris.framework.common.utils.Result;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -101,12 +103,26 @@ public class DataAppController {
     }
 
     @GetMapping("/logErrPage")
-    @Operation(summary = "接口日志分页-根据客户端ID查询的接口")
-    public Result<PageResult<DataMsgVO>> logErrPage(@ParameterObject @Valid DataMsgQuery query){
+    @Operation(summary = "根据客户端ID查询接口日志（无鉴权）")
+    public Result<PageResult<DataMsgVO>> logErrPage(@ParameterObject @Valid DataMsgQuery query, HttpServletRequest request){
         String clientId = query.getClientId();
         AssertUtils.isBlank(clientId,"客户端ID");
+        String secretKey = request.getHeader("OH-SECRET-KEY");
+        AssertUtils.isBlank(secretKey,"客户端密钥");
+        DataAppVO dataAppVO = dataAppService.findByClientId(clientId);
+        if(dataAppVO == null || dataAppVO.getSecretKey() == null || !dataAppVO.getSecretKey().equals(secretKey)){
+            throw new ServerException("客户端和密钥不匹配，请检查。");
+        }
         query.setState("3"); // 状态0未处理1处理2未找到对应的服务类3业务处理失败
         PageResult<DataMsgVO> page = dataMsgService.page(query);
         return Result.ok(page);
+    }
+
+    @GetMapping("/deleteByDate/{date}")
+    @Operation(summary = "根据时间删除报文记录")
+    @PreAuthorize("hasAuthority('external:app:delete')")
+    public Result<String> deleteByDate(@PathVariable("date")String date){
+        dataMsgService.deleteByDate(date);
+        return Result.ok();
     }
 }

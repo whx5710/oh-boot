@@ -26,4 +26,6 @@ public interface DataAppService extends BaseService<DataAppEntity> {
     void delete(List<Long> idList);
 
     List<DataAppVO> listAuthority(DataFunctionAuthorityQuery params);
+
+    DataAppVO findByClientId(String clientId);
 }
