@@ -55,7 +55,11 @@ public class OpenApiController extends BaseController {
 
 
     /**
-     * 接收数据
+     * 公共接口
+     * 1、支持同步、异步调用
+     * 2、直接调用，表中无日志记录，异步调用会记录消费数据以及业务是否处理成功（异常需抛出来才能记录）
+     * 3、如果Kafka没有启动，会直接调用，不进行异步处理
+     * 4、提供消费失败的查询功能（接口），方便排查
      * @param params 请求参数
      * @param request 请求
      * @return 返回
@@ -63,22 +67,21 @@ public class OpenApiController extends BaseController {
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         MsgVO msgVO = this.basicCheck(request);
-        MetaEntity data = msgVO.getMetaEntity();
-        data.setData(params);
+        MetaEntity metaEntity = msgVO.getMetaEntity();
+        metaEntity.setData(params);
         Boolean isAsync = msgVO.getAsync(); // 接口是否支持异步
 
-        Optional<JobService> optional = ServiceFactory.getService(data.getFunCode());
+        Optional<JobService> optional = ServiceFactory.getService(metaEntity.getFunCode());
         if(optional.isPresent()){
             JobService jobService = optional.get();
             // 校验参数
             jobService.check(params);
             if (!isAsync || apiType == 1) { // 直接业务处理
-                return jobService.handle(data);
+                return jobService.handle(metaEntity);
             }else{
-                data.setState(0); // 状态0未处理1处理2未找到对应的服务类3业务处理失败
-                data.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
+                metaEntity.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
-                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("topic-submit", data.toJson());
+                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("topic-submit", metaEntity.toJson());
                     //执行成功回调
                     completableFuture.thenAccept(msg -> {
                         log.debug("发送成功");
@@ -91,12 +94,12 @@ public class OpenApiController extends BaseController {
                 }catch (KafkaException e){
                     log.error("Kafka异常（{}），切换直接调用业务接口。", e.getMessage());
                     apiType = 1; // 1直接保存 2使用MQ异步保存
-                    return jobService.handle(data);
+                    return jobService.handle(metaEntity);
                 }
                 return Result.ok("发送成功！");
             }
         }else{
-            throw new ServerException("未获取到相关服务，功能号【" + data.getFunCode() + "】无效！ ");
+            throw new ServerException("未获取到相关服务，功能号【" + metaEntity.getFunCode() + "】无效！ ");
         }
     }
 

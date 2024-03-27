@@ -3,11 +3,13 @@ package com.iris.api.controller;
 import com.iris.api.convert.DataAppConvert;
 import com.iris.api.entity.DataAppEntity;
 import com.iris.api.query.DataAppQuery;
+import com.iris.api.query.DataMsgQuery;
 import com.iris.api.service.DataAppService;
 import com.iris.api.service.DataMsgService;
 import com.iris.api.utils.RunnerHandler;
 import com.iris.api.vo.DataAppVO;
 import com.iris.api.vo.DataMsgVO;
+import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -93,7 +95,17 @@ public class DataAppController {
     @GetMapping("/logPage")
     @Operation(summary = "接口日志分页")
     @PreAuthorize("hasAuthority('external:app:page')")
-    public Result<PageResult<DataMsgVO>> logPage(@ParameterObject @Valid DataAppQuery query){
+    public Result<PageResult<DataMsgVO>> logPage(@ParameterObject @Valid DataMsgQuery query){
+        PageResult<DataMsgVO> page = dataMsgService.page(query);
+        return Result.ok(page);
+    }
+
+    @GetMapping("/logErrPage")
+    @Operation(summary = "接口日志分页-根据客户端ID查询的接口")
+    public Result<PageResult<DataMsgVO>> logErrPage(@ParameterObject @Valid DataMsgQuery query){
+        String clientId = query.getClientId();
+        AssertUtils.isBlank(clientId,"客户端ID");
+        query.setState("3"); // 状态0未处理1处理2未找到对应的服务类3业务处理失败
         PageResult<DataMsgVO> page = dataMsgService.page(query);
         return Result.ok(page);
     }

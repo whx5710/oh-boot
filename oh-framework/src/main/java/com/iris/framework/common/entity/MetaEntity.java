@@ -17,9 +17,6 @@ public class MetaEntity extends IDEntity {
     // 主题
     private String topic;
 
-    // 状态0未处理1处理2处理失败
-    private int state = 0;
-
     // 数据
     private Map<String, Object> data;
 
@@ -45,14 +42,6 @@ public class MetaEntity extends IDEntity {
 
     public void setTopic(String topic) {
         this.topic = topic;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 
     public Map<String, Object> getData() {

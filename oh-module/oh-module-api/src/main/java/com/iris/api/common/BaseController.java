@@ -16,8 +16,6 @@ public class BaseController {
     @Resource
     RedisCache redisCache;
 
-
-
     protected MsgVO basicCheck(HttpServletRequest request){
         String clientId = request.getHeader("OH-CLIENT-ID");
         String secretKey = request.getHeader("OH-SECRET-KEY");
@@ -49,7 +47,6 @@ public class BaseController {
         MetaEntity metaEntity = new MetaEntity();
         metaEntity.setClientId(clientId);
         metaEntity.setFunCode(funcCode);
-        metaEntity.setState(0);
         msgVO.setMetaEntity(metaEntity);
         return msgVO;
     }

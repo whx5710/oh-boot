@@ -40,7 +40,7 @@ public class DataMsgVO implements Serializable, TransPojo {
 
     private String topic;
 
-    // 状态0未处理1处理
+    // 状态0未处理1处理2未找到对应的服务类3业务处理失败
     private String state;
 
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)

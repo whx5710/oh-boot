@@ -1,13 +1,17 @@
-package com.iris.api.entity;
+package com.iris.api.query;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.common.query.Query;
 
 /**
- * 传输数据
+ * 消息日志查询
+ *
+ * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2023-07-29
  */
-@TableName("data_message")
-public class DataMsgEntity extends BaseEntity {
+public class DataMsgQuery extends Query {
+    String keyWord;
+
+    private Long id;
 
     // 数据字符串
     private String jsonStr;
@@ -15,14 +19,27 @@ public class DataMsgEntity extends BaseEntity {
     private String funCode;
     // 客户端ID
     private String clientId;
-
+    // topic
     private String topic;
 
     // 状态0未处理1处理2未找到对应的服务类3业务处理失败
     private String state;
 
-    // 备注
-    private String note;
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getJsonStr() {
         return jsonStr;
@@ -56,27 +73,11 @@ public class DataMsgEntity extends BaseEntity {
         this.topic = topic;
     }
 
-    /**
-     * 状态0未处理1处理2未找到对应的服务类3业务处理失败
-     * @return
-     */
     public String getState() {
         return state;
     }
 
-    /**
-     * 状态0未处理1处理2未找到对应的服务类3业务处理失败
-     * @param state
-     */
     public void setState(String state) {
         this.state = state;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 }

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.iris.api.convert.DataMsgConvert;
 import com.iris.api.dao.DataMessageDao;
 import com.iris.api.entity.DataMsgEntity;
-import com.iris.api.query.DataAppQuery;
+import com.iris.api.query.DataMsgQuery;
 import com.iris.api.service.DataMsgService;
 import com.iris.api.vo.DataMsgVO;
 import com.iris.framework.common.utils.PageResult;
@@ -23,8 +23,21 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
     private final Logger log = LoggerFactory.getLogger(DataMsgServiceImpl.class);
 
     @Override
-    public PageResult<DataMsgVO> page(DataAppQuery query) {
+    public PageResult<DataMsgVO> page(DataMsgQuery query) {
         LambdaQueryWrapper<DataMsgEntity> wrapper = Wrappers.lambdaQuery();
+        if(!ObjectUtils.isEmpty(query.getClientId())){
+            wrapper.eq(DataMsgEntity::getClientId, query.getClientId()); // 客户端ID
+        }
+        if(!ObjectUtils.isEmpty(query.getState())){
+            wrapper.eq(DataMsgEntity::getState, query.getState()); // 状态0未处理1处理2未找到对应的服务类3业务处理失败
+        }
+        if(!ObjectUtils.isEmpty(query.getFunCode())){
+            wrapper.like(DataMsgEntity::getFunCode, query.getFunCode()); // 功能号
+        }
+        if(!ObjectUtils.isEmpty(query.getTopic())){
+            wrapper.like(DataMsgEntity::getTopic, query.getTopic()); // topic
+        }
+        // 搜索功能号、客户端
         if(!ObjectUtils.isEmpty(query.getKeyWord())){
             wrapper.and(w -> w.like(DataMsgEntity::getFunCode, query.getKeyWord())
                     .or().like(DataMsgEntity::getClientId, query.getKeyWord()));
@@ -33,4 +46,5 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
         IPage<DataMsgEntity> page = baseMapper.selectPage(getPage(query), wrapper);
         return new PageResult<>(DataMsgConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
     }
+
 }

@@ -45,12 +45,16 @@ public class KafkaConsumer {
         BeanUtil.copyProperties(dataMsg, dataMsgEntity);
         try {
             if(optional.isPresent()){
-                // 参数校验在 OpenApiController 中已进行校验过，因此此处可以不许要再调用，可直接进行业务处理
+                /**
+                 * 参数校验在 OpenApiController 中已进行校验过，因此此处可以不需要再调用，可直接进行业务处理，
+                 * 在业务处理过程中，发生异常，可直接抛出异常，状态会记录在消息表中
+                 */
                 optional.get().handle(dataMsg);
                 dataMsgEntity.setState("1");
             }else{
                 log.error("未找到对应服务，处理失败！" + dataMsg.getFunCode());
                 dataMsgEntity.setState("2"); // 未找到对应的服务类，处理失败
+                dataMsgEntity.setNote("未找到对应的服务类，处理失败!");
             }
         }catch (Exception e){
             log.error("处理业务发生错误！{}", e.getMessage());
