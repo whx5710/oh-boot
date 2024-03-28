@@ -1,6 +1,7 @@
 package com.iris.api.module.mq;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.iris.api.constant.ConstantApi;
 import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.service.DataMsgService;
 import com.iris.framework.common.entity.MetaEntity;
@@ -36,11 +37,11 @@ public class KafkaConsumer {
      * 消费消息
      * @param message 消息
      */
-    @KafkaListener(topics = "topic-submit", groupId = "open-api-group-id")
+    @KafkaListener(topics = ConstantApi.TOPIC_SUBMIT, groupId = "open-api-group-id")
     public void jobConsume(String message, Acknowledgment ack) {
         MetaEntity dataMsg = JsonUtils.parseObject(message, MetaEntity.class);
-        dataMsg.setTopic("topic-submit");
-        Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFunCode());
+        dataMsg.setTopic(ConstantApi.TOPIC_SUBMIT);
+        Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFuncCode());
         DataMsgEntity dataMsgEntity = new DataMsgEntity();
         BeanUtil.copyProperties(dataMsg, dataMsgEntity);
         try {
@@ -52,7 +53,7 @@ public class KafkaConsumer {
                 optional.get().handle(dataMsg);
                 dataMsgEntity.setState("1");
             }else{
-                log.error("未找到对应服务，处理失败！" + dataMsg.getFunCode());
+                log.error("未找到对应服务，处理失败！" + dataMsg.getFuncCode());
                 dataMsgEntity.setState("2"); // 未找到对应的服务类，处理失败
                 dataMsgEntity.setNote("未找到对应的服务类，处理失败!");
             }

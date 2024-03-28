@@ -41,15 +41,15 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
         if(!ObjectUtils.isEmpty(query.getState())){
             wrapper.eq(DataMsgEntity::getState, query.getState()); // 状态0未处理1处理2未找到对应的服务类3业务处理失败
         }
-        if(!ObjectUtils.isEmpty(query.getFunCode())){
-            wrapper.like(DataMsgEntity::getFunCode, query.getFunCode()); // 功能号
+        if(!ObjectUtils.isEmpty(query.getFuncCode())){
+            wrapper.like(DataMsgEntity::getFuncCode, query.getFuncCode()); // 功能号
         }
         if(!ObjectUtils.isEmpty(query.getTopic())){
             wrapper.like(DataMsgEntity::getTopic, query.getTopic()); // topic
         }
         // 搜索功能号、客户端
         if(!ObjectUtils.isEmpty(query.getKeyWord())){
-            wrapper.and(w -> w.like(DataMsgEntity::getFunCode, query.getKeyWord())
+            wrapper.and(w -> w.like(DataMsgEntity::getFuncCode, query.getKeyWord())
                     .or().like(DataMsgEntity::getClientId, query.getKeyWord()));
         }
         wrapper.orderByDesc(DataMsgEntity::getCreateTime);

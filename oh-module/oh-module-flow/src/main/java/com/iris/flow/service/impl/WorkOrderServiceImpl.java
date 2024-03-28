@@ -112,10 +112,10 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
 
         // 模拟业务处理异常
-        throw new ServerException("模拟异常！！！");
+//        throw new ServerException("模拟异常！！！");
 
 
-//        return Result.ok(list);
+        return Result.ok(list);
     }
 
     /**

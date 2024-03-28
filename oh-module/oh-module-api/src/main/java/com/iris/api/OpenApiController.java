@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iris.api.common.BaseController;
+import com.iris.api.constant.ConstantApi;
 import com.iris.api.vo.MsgVO;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
@@ -59,7 +60,7 @@ public class OpenApiController extends BaseController {
      * 1、支持同步、异步调用
      * 2、直接调用，表中无日志记录，异步调用会记录消费数据以及业务是否处理成功（异常需抛出来才能记录）
      * 3、如果Kafka没有启动，会直接调用，不进行异步处理
-     * 4、提供消费失败的查询功能（接口），方便排查
+     * 4、提供消费失败的查询功能（/external/app/logErrPage接口），方便排查
      * @param params 请求参数
      * @param request 请求
      * @return 返回
@@ -71,7 +72,7 @@ public class OpenApiController extends BaseController {
         metaEntity.setData(params);
         Boolean isAsync = msgVO.getAsync(); // 接口是否支持异步
 
-        Optional<JobService> optional = ServiceFactory.getService(metaEntity.getFunCode());
+        Optional<JobService> optional = ServiceFactory.getService(metaEntity.getFuncCode());
         if(optional.isPresent()){
             JobService jobService = optional.get();
             // 校验参数
@@ -99,23 +100,23 @@ public class OpenApiController extends BaseController {
                 return Result.ok("发送成功！");
             }
         }else{
-            throw new ServerException("未获取到相关服务，功能号【" + metaEntity.getFunCode() + "】无效！ ");
+            throw new ServerException("未获取到相关服务，功能号【" + metaEntity.getFuncCode() + "】无效！ ");
         }
     }
 
     public static void main(String[] args) throws JsonProcessingException {
         String url = "http://localhost:8080/openApi/submit";
         Map<String,String> head = new HashMap<>();
-        head.put("OH-CLIENT-ID","C0001");
-        head.put("OH-SECRET-KEY","c28a8120682d4b4fa50325ed34748e0e");
-        head.put("OH-FUNC-CODE","F1003");
+        head.put(ConstantApi.CLIENT_ID,"C0001");
+        head.put(ConstantApi.SECRET_KEY,"c28a8120682d4b4fa50325ed34748e0e");
+        head.put(ConstantApi.FUNC_CODE,"F1003");
         Map<String, Object> data = new HashMap<>();
         data.put("name","王小费");
         data.put("sex","name");
 
         System.out.println("开始请求");
 
-        for(int i = 0; i< 9; i++){
+        for(int i = 0; i< 99; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", new Date());
             data.put("reportTime", new Date());

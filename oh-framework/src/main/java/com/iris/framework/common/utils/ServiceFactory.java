@@ -21,28 +21,28 @@ public class ServiceFactory {
 
     /**
      * 根据指令，获取消息处理服务
-     * @param funCode 消息指令
+     * @param funcCode 消息指令
      * @return Optional
      */
-    public static Optional<JobService> getService(String funCode){
-        Optional<JobService> optionalService = Optional.ofNullable(serviceMap.get(funCode));
+    public static Optional<JobService> getService(String funcCode){
+        Optional<JobService> optionalService = Optional.ofNullable(serviceMap.get(funcCode));
         if(optionalService.isPresent()){
             return optionalService;
         }else{
-            throw new ServerException("找不到服务【"+funCode+"】");
+            throw new ServerException("找不到服务【"+funcCode+"】");
         }
     }
 
     /**
      * 注册消息处理服务
-     * @param funCode 指令
+     * @param funcCode 指令
      * @param jobService 消息服务
      */
-    public static void register(String funCode , JobService jobService) {
-        AssertUtils.isBlank(funCode, "注册的服务不能为空");
-        if(serviceMap.containsKey(funCode)){
-            log.warn("服务编号【" + funCode + ":" + serviceMap.get(funCode).getClass().getName() + "】已存在，已注册 " + jobService.getClass().getName() + "，请检查！");
+    public static void register(String funcCode , JobService jobService) {
+        AssertUtils.isBlank(funcCode, "注册的服务不能为空");
+        if(serviceMap.containsKey(funcCode)){
+            log.warn("服务编号【" + funcCode + ":" + serviceMap.get(funcCode).getClass().getName() + "】已存在，已注册 " + jobService.getClass().getName() + "，请检查！");
         }
-        serviceMap.put(funCode, jobService);
+        serviceMap.put(funcCode, jobService);
     }
 }

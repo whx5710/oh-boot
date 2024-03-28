@@ -39,7 +39,7 @@ public class RequestService {
         log.info("POST请求返回: {}", result);
         DataMsgEntity dataMsg = new DataMsgEntity();
         dataMsg.setJsonStr(result);
-        dataMsg.setFunCode(url);
+        dataMsg.setFuncCode(url);
         dataMsg.setTopic(topic);
         return mqQueue(dataMsg, topic);
     }
@@ -57,7 +57,7 @@ public class RequestService {
         log.info("GET请求返回: {}", result);
         DataMsgEntity dataMsg = new DataMsgEntity();
         dataMsg.setJsonStr(result);
-        dataMsg.setFunCode(url);
+        dataMsg.setFuncCode(url);
         dataMsg.setTopic(topic);
         return mqQueue(dataMsg, topic);
     }

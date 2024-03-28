@@ -10,7 +10,7 @@ import java.util.Map;
 public class MetaEntity extends IDEntity {
 
     // 功能号
-    private String funCode;
+    private String funcCode;
     // 客户端ID
     private String clientId;
 
@@ -20,12 +20,12 @@ public class MetaEntity extends IDEntity {
     // 数据
     private Map<String, Object> data;
 
-    public String getFunCode() {
-        return funCode;
+    public String getFuncCode() {
+        return funcCode;
     }
 
-    public void setFunCode(String funCode) {
-        this.funCode = funCode;
+    public void setFuncCode(String funcCode) {
+        this.funcCode = funcCode;
     }
 
     public String getClientId() {

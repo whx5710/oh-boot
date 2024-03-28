@@ -8,6 +8,7 @@ import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.TransPojo;
 import com.iris.api.entity.DataAppEntity;
+import com.iris.api.entity.DataFunctionEntity;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,12 +35,15 @@ public class DataMsgVO implements Serializable, TransPojo {
     // 数据字符串
     private String jsonStr;
     // 功能号
-    private String funCode;
+    @Trans(type = TransType.SIMPLE, target = DataFunctionEntity.class, fields = "name", ref = "funcCodeName", uniqueField = "funcCode", dataSource = Constant.SYS_DB)
+    private String funcCode;
     // 客户端ID
     @Trans(type = TransType.SIMPLE, target = DataAppEntity.class, fields = "name", ref = "clientName", uniqueField = "clientId", dataSource = Constant.SYS_DB)
     private String clientId;
 
     private String clientName;
+
+    private String funcCodeName;
 
     private String topic;
 
@@ -66,12 +70,12 @@ public class DataMsgVO implements Serializable, TransPojo {
         this.jsonStr = jsonStr;
     }
 
-    public String getFunCode() {
-        return funCode;
+    public String getFuncCode() {
+        return funcCode;
     }
 
-    public void setFunCode(String funCode) {
-        this.funCode = funCode;
+    public void setFuncCode(String funcCode) {
+        this.funcCode = funcCode;
     }
 
     public String getClientId() {
@@ -112,5 +116,13 @@ public class DataMsgVO implements Serializable, TransPojo {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getFuncCodeName() {
+        return funcCodeName;
+    }
+
+    public void setFuncCodeName(String funcCodeName) {
+        this.funcCodeName = funcCodeName;
     }
 }

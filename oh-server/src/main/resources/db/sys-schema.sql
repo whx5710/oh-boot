@@ -651,7 +651,7 @@ CREATE TABLE `data_function_authority`  (
 CREATE TABLE `data_message`  (
   `id` bigint NOT NULL,
   `client_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端ID',
-  `fun_code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
+  `func_code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
   `topic` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '主题',
   `json_str` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `state` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态0未处理1处理2未找到对应的服务类3业务处理失败',
@@ -662,7 +662,7 @@ CREATE TABLE `data_message`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `db_status` tinyint DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_01` (`topic`,`client_id`,`fun_code`) USING BTREE
+  KEY `idx_01` (`topic`,`client_id`,`func_code`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '接口参数数据' ROW_FORMAT = Dynamic;
 
 

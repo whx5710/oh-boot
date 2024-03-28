@@ -1,5 +1,6 @@
 package com.iris.api.controller;
 
+import com.iris.api.constant.ConstantApi;
 import com.iris.api.convert.DataAppConvert;
 import com.iris.api.entity.DataAppEntity;
 import com.iris.api.query.DataAppQuery;
@@ -102,12 +103,18 @@ public class DataAppController {
         return Result.ok(page);
     }
 
+    /**
+     * 供查询异步报错的业务
+     * @param query p
+     * @param request r
+     * @return r
+     */
     @GetMapping("/logErrPage")
     @Operation(summary = "根据客户端ID查询接口日志（无鉴权）")
     public Result<PageResult<DataMsgVO>> logErrPage(@ParameterObject @Valid DataMsgQuery query, HttpServletRequest request){
         String clientId = query.getClientId();
         AssertUtils.isBlank(clientId,"客户端ID");
-        String secretKey = request.getHeader("OH-SECRET-KEY");
+        String secretKey = request.getHeader(ConstantApi.SECRET_KEY);
         AssertUtils.isBlank(secretKey,"客户端密钥");
         DataAppVO dataAppVO = dataAppService.findByClientId(clientId);
         if(dataAppVO == null || dataAppVO.getSecretKey() == null || !dataAppVO.getSecretKey().equals(secretKey)){

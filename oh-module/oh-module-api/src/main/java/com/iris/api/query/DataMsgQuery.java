@@ -16,7 +16,7 @@ public class DataMsgQuery extends Query {
     // 数据字符串
     private String jsonStr;
     // 功能号
-    private String funCode;
+    private String funcCode;
     // 客户端ID
     private String clientId;
     // topic
@@ -49,12 +49,12 @@ public class DataMsgQuery extends Query {
         this.jsonStr = jsonStr;
     }
 
-    public String getFunCode() {
-        return funCode;
+    public String getFuncCode() {
+        return funcCode;
     }
 
-    public void setFunCode(String funCode) {
-        this.funCode = funCode;
+    public void setFuncCode(String funcCode) {
+        this.funcCode = funcCode;
     }
 
     public String getClientId() {

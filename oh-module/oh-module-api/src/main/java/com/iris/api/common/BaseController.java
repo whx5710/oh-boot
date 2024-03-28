@@ -1,5 +1,6 @@
 package com.iris.api.common;
 
+import com.iris.api.constant.ConstantApi;
 import com.iris.api.vo.DataAppVO;
 import com.iris.api.vo.MsgVO;
 import com.iris.framework.common.cache.RedisCache;
@@ -16,10 +17,15 @@ public class BaseController {
     @Resource
     RedisCache redisCache;
 
+    /**
+     * 校验接口基本信息
+     * @param request
+     * @return
+     */
     protected MsgVO basicCheck(HttpServletRequest request){
-        String clientId = request.getHeader("OH-CLIENT-ID");
-        String secretKey = request.getHeader("OH-SECRET-KEY");
-        String funcCode = request.getHeader("OH-FUNC-CODE");
+        String clientId = request.getHeader(ConstantApi.CLIENT_ID);
+        String secretKey = request.getHeader(ConstantApi.SECRET_KEY);
+        String funcCode = request.getHeader(ConstantApi.FUNC_CODE);
         if(clientId == null || clientId.isEmpty()){
             throw new ServerException("客户端ID不能为空，请求非法");
         }
@@ -27,7 +33,7 @@ public class BaseController {
             throw new ServerException("密钥不能为空，请求非法");
         }
         if(funcCode == null || funcCode.isEmpty()){
-            throw new ServerException("参数错误【功能号 OH-FUNC-CODE 不能为空】");
+            throw new ServerException("参数错误【功能号 "+ ConstantApi.FUNC_CODE +" 不能为空】");
         }
 
         Object obj = redisCache.get(RedisKeys.getClientKey(clientId + ":" + funcCode));
@@ -46,7 +52,7 @@ public class BaseController {
         }
         MetaEntity metaEntity = new MetaEntity();
         metaEntity.setClientId(clientId);
-        metaEntity.setFunCode(funcCode);
+        metaEntity.setFuncCode(funcCode);
         msgVO.setMetaEntity(metaEntity);
         return msgVO;
     }
