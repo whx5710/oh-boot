@@ -82,7 +82,7 @@ public class OpenApiController extends BaseController {
             }else{
                 metaEntity.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
-                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send("topic-submit", metaEntity.toJson());
+                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(ConstantApi.TOPIC_SUBMIT, metaEntity.toJson());
                     //执行成功回调
                     completableFuture.thenAccept(msg -> {
                         log.debug("发送成功");
