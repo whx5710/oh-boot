@@ -7,6 +7,7 @@ import com.iris.api.service.DataMsgService;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
+import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,8 @@ public class KafkaConsumer {
                  * 参数校验在 OpenApiController 中已进行校验过，因此此处可以不需要再调用，可直接进行业务处理，
                  * 在业务处理过程中，发生异常，可直接抛出异常，状态会记录在消息表中
                  */
-                optional.get().handle(dataMsg);
+                Result<?> result = optional.get().handle(dataMsg);
+                dataMsgEntity.setResultMsg(JsonUtils.toJsonString(result));
                 dataMsgEntity.setState("1");
             }else{
                 log.error("未找到对应服务，处理失败！" + dataMsg.getFuncCode());

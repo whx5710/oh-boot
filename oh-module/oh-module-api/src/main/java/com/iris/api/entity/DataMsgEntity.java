@@ -20,6 +20,8 @@ public class DataMsgEntity extends BaseEntity {
 
     // 状态0未处理1处理2未找到对应的服务类3业务处理失败
     private String state;
+    // 响应消息
+    private String resultMsg;
 
     // 备注
     private String note;
@@ -78,5 +80,13 @@ public class DataMsgEntity extends BaseEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getResultMsg() {
+        return resultMsg;
+    }
+
+    public void setResultMsg(String resultMsg) {
+        this.resultMsg = resultMsg;
     }
 }

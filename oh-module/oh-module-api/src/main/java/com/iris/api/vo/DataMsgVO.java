@@ -50,6 +50,9 @@ public class DataMsgVO implements Serializable, TransPojo {
     // 状态0未处理1处理2未找到对应的服务类3业务处理失败
     private String state;
 
+    // 响应消息
+    private String resultMsg;
+
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
@@ -124,5 +127,13 @@ public class DataMsgVO implements Serializable, TransPojo {
 
     public void setFuncCodeName(String funcCodeName) {
         this.funcCodeName = funcCodeName;
+    }
+
+    public String getResultMsg() {
+        return resultMsg;
+    }
+
+    public void setResultMsg(String resultMsg) {
+        this.resultMsg = resultMsg;
     }
 }
