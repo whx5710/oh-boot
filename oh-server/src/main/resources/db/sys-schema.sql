@@ -658,7 +658,7 @@ CREATE TABLE `data_message`  (
   `result_msg` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '响应消息',
   `note` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
   `creator` bigint(0) NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
+  `create_time` datetime(3) DEFAULT NULL,
   `updater` bigint(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   `db_status` tinyint DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
