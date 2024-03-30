@@ -11,7 +11,6 @@ import com.iris.api.entity.DataAppEntity;
 import com.iris.api.entity.DataFunctionEntity;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.DateUtils;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -53,8 +52,7 @@ public class DataMsgVO implements Serializable, TransPojo {
     // 响应消息
     private String resultMsg;
 
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    @JsonFormat(pattern = DateUtils.DATE_TIME_MIL_PATTERN)
     private LocalDateTime createTime;
 
     public Long getId() {
