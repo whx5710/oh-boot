@@ -173,7 +173,7 @@ public class WebSocketHandler {
                 return -1;
             }
         } else{
-            log.warn("还未与客户端建立连接，请稍后操作！【" + userId + "】");
+            log.warn("还未与客户端建立连接！【" + userId + "】");
             return 0;
         }
     }
