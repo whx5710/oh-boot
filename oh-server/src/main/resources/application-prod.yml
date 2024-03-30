@@ -35,6 +35,7 @@ oh:
       - /sys/
       - /sms/
       - /external/
+      - /schedule/
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
   project:
