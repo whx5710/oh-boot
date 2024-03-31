@@ -11,6 +11,10 @@ import com.iris.framework.common.query.Query;
 public class DataMsgQuery extends Query {
     String keyWord;
 
+    String startDate;
+
+    String endDate;
+
     private Long id;
 
     // 数据字符串
@@ -79,5 +83,21 @@ public class DataMsgQuery extends Query {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

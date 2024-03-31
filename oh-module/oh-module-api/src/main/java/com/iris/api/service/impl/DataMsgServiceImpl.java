@@ -47,6 +47,12 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
         if(!ObjectUtils.isEmpty(query.getTopic())){
             wrapper.like(DataMsgEntity::getTopic, query.getTopic()); // topic
         }
+        if(!ObjectUtils.isEmpty(query.getStartDate())){
+            wrapper.ge(DataMsgEntity::getCreateTime, query.getStartDate());
+        }
+        if(!ObjectUtils.isEmpty(query.getEndDate())){
+            wrapper.le(DataMsgEntity::getCreateTime, query.getEndDate());
+        }
         // 搜索功能号、客户端
         if(!ObjectUtils.isEmpty(query.getKeyWord())){
             wrapper.and(w -> w.like(DataMsgEntity::getFuncCode, query.getKeyWord())
@@ -73,7 +79,7 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
     @Override
     public void deleteByDate(String date) {
         LambdaUpdateWrapper<DataMsgEntity> updateWrapper = Wrappers.lambdaUpdate();
-        updateWrapper.le(DataMsgEntity::getCreateTime, DateUtils.parseLocalDateTime(date))
+        updateWrapper.le(DataMsgEntity::getCreateTime, date) // DateUtils.parseLocalDateTime(date)
                 .eq(DataMsgEntity::getDbStatus, 1);
         DataMsgEntity dataMsgEntity = new DataMsgEntity();
         dataMsgEntity.setDbStatus(0); // 删除标志
