@@ -23,4 +23,9 @@ public interface ConstantApi {
      * 消息主题
      */
     String TOPIC_SUBMIT = "topic-submit";
+
+    /**
+     * 公共接口标识
+     */
+    String OPEN_API = "openApi";
 }

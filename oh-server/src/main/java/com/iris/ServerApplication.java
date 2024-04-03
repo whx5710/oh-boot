@@ -38,9 +38,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import java.net.InetAddress;
 
 /**
- * 项目启动入口默认在oh-system中
- * 如果不需要oh-system基础功能，入口可设置到其他模块中（注意导入相关模块）
- *
+ * 项目启动入口
+ * 可设置到其他模块中，注意引入模块
  */
 @SpringBootApplication
 public class ServerApplication extends SpringBootServletInitializer implements ApplicationRunner {

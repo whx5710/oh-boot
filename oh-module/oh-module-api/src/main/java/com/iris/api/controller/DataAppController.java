@@ -7,6 +7,7 @@ import com.iris.api.query.DataAppQuery;
 import com.iris.api.query.DataMsgQuery;
 import com.iris.api.service.DataAppService;
 import com.iris.api.service.DataMsgService;
+import com.iris.api.utils.ListenerHandler;
 import com.iris.api.utils.RunnerHandler;
 import com.iris.api.vo.DataAppVO;
 import com.iris.api.vo.DataMsgVO;
@@ -44,6 +45,9 @@ public class DataAppController {
 
     @Resource
     DataMsgService dataMsgService;
+
+    @Resource
+    ListenerHandler listenerHandler;
 
     @GetMapping("/page")
     @Operation(summary = "分页")
@@ -141,4 +145,29 @@ public class DataAppController {
         dataMsgService.deleteByDate(date);
         return Result.ok();
     }
+
+    /**
+     * 启动监听
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('external:app:info')")
+    @GetMapping("/startListener/{id}")
+    public Result<String> startListener(@PathVariable("id")String id){
+        listenerHandler.start(id);
+        return Result.ok("启动监听");
+    }
+
+    /**
+     * 暂停监听
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('external:app:info')")
+    @GetMapping("/stopListener/{id}")
+    public Result<String> stopListener(@PathVariable("id")String id){
+        listenerHandler.stop(id);
+        return Result.ok("暂停监听");
+    }
+
 }

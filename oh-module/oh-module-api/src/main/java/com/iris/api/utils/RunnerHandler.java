@@ -25,6 +25,9 @@ public class RunnerHandler {
     @Resource
     RedisCache redisCache;
 
+    /**
+     * 缓存客户端、接口授权等信息
+     */
     @PostConstruct
     public void appAuthority(){
         // 先清除
@@ -34,7 +37,6 @@ public class RunnerHandler {
         if(!ObjectUtils.isEmpty(list)){
             // 根据客户端ID+ funcCode 进行分组
             Map<String,List<DataAppVO>> map = list.stream().collect(
-//                    Collectors.groupingBy(DataFunctionAuthorityEntity::getClientId)
                     Collectors.groupingBy(item -> item.getClientId() + ":" + item.getFuncCode())
             );
             for (Map.Entry<String, List<DataAppVO>> entry : map.entrySet()) {

@@ -1,4 +1,4 @@
-package com.iris.api.module.mq;
+package com.iris.api.mq;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.iris.api.constant.ConstantApi;
@@ -33,13 +33,13 @@ public class KafkaConsumer {
         this.dataMsgService = dataMsgService;
     }
 
-
     /**
-     * 消费消息
+     * 公共接口消费消息
+     * 默认不监听，可通过调用方法开启监听
      * @param message 消息
      */
-    @KafkaListener(topics = ConstantApi.TOPIC_SUBMIT, groupId = "open-api-group-id")
-    public void jobConsume(String message, Acknowledgment ack) {
+    @KafkaListener(id = ConstantApi.OPEN_API, topics = ConstantApi.TOPIC_SUBMIT, autoStartup = "${oh.open-api.auto-start-up:false}", groupId = "open-api-group-id")
+    public void openApiJobConsume(String message, Acknowledgment ack) {
         MetaEntity dataMsg = JsonUtils.parseObject(message, MetaEntity.class);
         dataMsg.setTopic(ConstantApi.TOPIC_SUBMIT);
         Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFuncCode());

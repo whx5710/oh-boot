@@ -38,6 +38,7 @@ oh:
       - /schedule/
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
+    auto-start-up: false # Kafka监听是否开启
   project:
     name: Oh Boot              # 名称
     appName: oh-boot           # 应用名称
