@@ -2,6 +2,7 @@ package com.iris.framework.common.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -44,7 +46,11 @@ public class JacksonConfig {
                     new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DateUtils.TIME_PATTERN)));
             builder.serializationInclusion(JsonInclude.Include.NON_NULL);
             builder.failOnUnknownProperties(false);
-            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
+
+            // 全局转化Long类型为String，解决序列化后传入前端Long类型精度丢失问题
+            builder.serializerByType(BigInteger.class, ToStringSerializer.instance);
+            builder.serializerByType(Long.class,ToStringSerializer.instance);
         };
     }
 }
