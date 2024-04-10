@@ -1,4 +1,4 @@
-package com.iris.framework.mybatis.dao;
+package com.iris.framework.datasource.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

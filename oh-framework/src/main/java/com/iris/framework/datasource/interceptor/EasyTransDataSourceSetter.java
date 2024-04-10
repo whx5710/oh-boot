@@ -1,4 +1,4 @@
-package com.iris.framework.mybatis.interceptor;
+package com.iris.framework.datasource.interceptor;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.fhs.trans.ds.DataSourceSetter;

@@ -1,6 +1,6 @@
 package com.iris.system.pim.service;
 
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.pim.entity.SysRoleDataScopeEntity;
 
 import java.util.List;

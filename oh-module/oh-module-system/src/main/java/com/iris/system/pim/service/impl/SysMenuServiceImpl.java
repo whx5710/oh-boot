@@ -7,7 +7,7 @@ import com.iris.system.pim.service.SysRoleMenuService;
 import com.iris.system.pim.vo.SysMenuVO;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.framework.common.utils.TreeUtils;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.system.pim.dao.SysMenuDao;

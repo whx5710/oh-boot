@@ -1,4 +1,4 @@
-package com.iris.framework.mybatis.service.impl;
+package com.iris.framework.datasource.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -9,9 +9,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.mybatis.interceptor.DataScope;
+import com.iris.framework.datasource.interceptor.DataScope;
 import com.iris.framework.common.query.Query;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
 

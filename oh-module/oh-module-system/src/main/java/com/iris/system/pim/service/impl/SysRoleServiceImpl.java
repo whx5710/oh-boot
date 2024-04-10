@@ -10,7 +10,7 @@ import com.iris.system.pim.service.SysRoleService;
 import com.iris.system.pim.service.SysRoleDataScopeService;
 import com.iris.system.pim.service.SysUserRoleService;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.dao.SysRoleDao;
 import com.iris.system.pim.entity.SysRoleEntity;
 import com.iris.system.pim.enums.DataScopeEnum;

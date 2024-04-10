@@ -8,7 +8,7 @@ import com.iris.framework.security.user.SecurityUser;
 import com.iris.flow.convert.TaskRecordConvert;
 import com.iris.flow.entity.TaskRecordEntity;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.flow.query.TaskRecordQuery;
 import com.iris.flow.dao.TaskRecordDao;
 import com.iris.flow.service.TaskRecordService;

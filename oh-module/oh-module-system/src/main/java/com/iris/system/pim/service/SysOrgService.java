@@ -2,7 +2,7 @@ package com.iris.system.pim.service;
 
 import com.iris.system.pim.entity.SysOrgEntity;
 import com.iris.system.pim.vo.SysOrgVO;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@ package com.iris.flow.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.flow.convert.FlowNodeConvert;
 import com.iris.flow.dao.FlowNodeDao;
 import com.iris.flow.entity.FlowNodeEntity;

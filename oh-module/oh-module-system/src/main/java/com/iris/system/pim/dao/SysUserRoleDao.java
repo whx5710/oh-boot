@@ -1,6 +1,6 @@
 package com.iris.system.pim.dao;
 
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.pim.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

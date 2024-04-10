@@ -5,7 +5,7 @@ import com.iris.api.query.DataAppQuery;
 import com.iris.api.query.DataFunctionAuthorityQuery;
 import com.iris.api.vo.DataAppVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 

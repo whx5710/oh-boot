@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.convert.SmsLogConvert;
 import com.iris.system.pim.dao.SmsLogDao;
 import com.iris.system.pim.entity.SmsLogEntity;

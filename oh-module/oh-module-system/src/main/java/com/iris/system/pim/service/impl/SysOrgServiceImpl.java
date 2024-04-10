@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iris.system.pim.convert.SysOrgConvert;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.framework.common.utils.TreeUtils;
 import com.iris.system.pim.dao.SysOrgDao;
 import com.iris.system.pim.dao.SysUserDao;

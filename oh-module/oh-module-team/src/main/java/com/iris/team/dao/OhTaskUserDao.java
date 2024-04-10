@@ -1,6 +1,6 @@
 package com.iris.team.dao;
 
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.team.entity.OhTaskUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 

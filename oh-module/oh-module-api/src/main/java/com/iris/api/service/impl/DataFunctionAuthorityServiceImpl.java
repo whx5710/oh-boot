@@ -12,7 +12,7 @@ import com.iris.api.service.DataFunctionAuthorityService;
 import com.iris.api.vo.DataFunctionAuthorityVO;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;

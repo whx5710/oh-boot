@@ -1,7 +1,7 @@
 package com.iris.api.dao;
 
 import com.iris.api.entity.DataFunctionAuthorityEntity;
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

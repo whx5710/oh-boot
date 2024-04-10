@@ -10,7 +10,7 @@ import com.iris.framework.common.utils.*;
 import com.iris.system.pim.service.SysLogLoginService;
 import com.iris.system.pim.vo.AnalysisVO;
 import jakarta.servlet.http.HttpServletRequest;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.convert.SysLogLoginConvert;
 import com.iris.system.pim.dao.SysLogLoginDao;
 import com.iris.system.pim.entity.SysLogLoginEntity;

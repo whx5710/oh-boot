@@ -10,7 +10,7 @@ import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.flow.convert.WorkOrderConvert;
 import com.iris.flow.entity.WorkOrderEntity;
 import com.iris.flow.query.WorkOrderQuery;

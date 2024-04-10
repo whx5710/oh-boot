@@ -3,7 +3,7 @@ package com.iris.system.pim.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.pim.service.SysRoleDataScopeService;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.dao.SysRoleDataScopeDao;
 import com.iris.system.pim.entity.SysRoleDataScopeEntity;
 import org.springframework.stereotype.Service;

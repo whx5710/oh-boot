@@ -2,7 +2,7 @@ package com.iris.api.dao;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iris.api.entity.DataFunctionEntity;
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

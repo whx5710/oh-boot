@@ -9,7 +9,7 @@ import com.iris.framework.common.utils.AssertUtils;
 import com.iris.system.pim.convert.SysPostConvert;
 import com.iris.system.pim.service.SysUserPostService;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.dao.SysPostDao;
 import com.iris.system.pim.entity.SysPostEntity;
 import com.iris.system.pim.service.SysPostService;

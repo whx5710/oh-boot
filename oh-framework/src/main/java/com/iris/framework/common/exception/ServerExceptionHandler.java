@@ -8,6 +8,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
 /**
@@ -47,6 +48,17 @@ public class ServerExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public Result<String> handleAccessDeniedException(Exception ex) {
         return Result.error(ErrorCode.FORBIDDEN);
+    }
+
+    /**
+     * 未找到资源
+     * @param ex e
+     * @return 404
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Result<String> handleNotFoundException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        return Result.error(ErrorCode.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

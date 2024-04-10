@@ -2,7 +2,7 @@ package com.iris.system.pim.service;
 
 import com.iris.system.pim.entity.SysMenuEntity;
 import com.iris.system.pim.vo.SysMenuVO;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.security.user.UserDetail;
 
 import java.util.List;

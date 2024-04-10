@@ -1,4 +1,4 @@
-package com.iris.framework.datasource;
+package com.iris.framework.datasource.config;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.iris.framework.common.config.properties.SysDataSourceProperties;

@@ -11,7 +11,7 @@ import com.iris.system.pim.service.SysParamsService;
 import jakarta.annotation.PostConstruct;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.cache.SysParamsCache;
 import com.iris.system.pim.dao.SysParamsDao;
 import com.iris.system.pim.entity.SysParamsEntity;

@@ -3,7 +3,7 @@ package com.iris.system.pim.dao;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
 import com.iris.system.pim.entity.SysLogOperateEntity;
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

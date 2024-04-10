@@ -4,7 +4,7 @@ import com.iris.system.pim.entity.SysDictTypeEntity;
 import com.iris.system.pim.vo.SysDictTypeVO;
 import com.iris.system.pim.vo.SysDictVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.pim.query.SysDictTypeQuery;
 
 import java.util.List;

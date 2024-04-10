@@ -13,7 +13,7 @@ import com.iris.system.pim.vo.SysDictTypeVO;
 import com.iris.system.pim.vo.SysDictVO;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.convert.SysDictTypeConvert;
 import com.iris.system.pim.dao.SysDictDataDao;
 import com.iris.system.pim.dao.SysDictTypeDao;

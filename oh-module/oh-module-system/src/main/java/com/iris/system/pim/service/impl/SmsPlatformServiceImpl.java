@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.sms.config.SmsConfig;
 import com.iris.system.pim.cache.SmsPlatformCache;
 import com.iris.system.pim.convert.SmsPlatformConvert;

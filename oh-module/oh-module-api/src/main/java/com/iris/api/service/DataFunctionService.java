@@ -1,7 +1,7 @@
 package com.iris.api.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.api.vo.DataFunctionVO;
 import com.iris.api.query.DataFunctionQuery;
 import com.iris.api.entity.DataFunctionEntity;

@@ -4,7 +4,7 @@ import com.iris.api.entity.DataMsgEntity;
 import com.iris.api.query.DataMsgQuery;
 import com.iris.api.vo.DataMsgVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 

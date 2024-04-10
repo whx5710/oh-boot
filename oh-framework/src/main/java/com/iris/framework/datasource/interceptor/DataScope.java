@@ -1,4 +1,4 @@
-package com.iris.framework.mybatis.interceptor;
+package com.iris.framework.datasource.interceptor;
 
 /**
  * 数据范围

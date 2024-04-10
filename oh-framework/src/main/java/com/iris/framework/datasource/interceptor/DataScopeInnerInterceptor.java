@@ -1,4 +1,4 @@
-package com.iris.framework.mybatis.interceptor;
+package com.iris.framework.datasource.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;

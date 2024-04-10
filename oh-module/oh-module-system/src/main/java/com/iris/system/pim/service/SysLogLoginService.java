@@ -5,7 +5,7 @@ import com.iris.system.pim.entity.SysLogLoginEntity;
 import java.util.List;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.pim.query.SysLogLoginQuery;
 import com.iris.system.pim.vo.AnalysisVO;
 import com.iris.system.pim.vo.SysLogLoginVO;

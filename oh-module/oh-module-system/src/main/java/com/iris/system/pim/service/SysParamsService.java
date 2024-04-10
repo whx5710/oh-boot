@@ -4,7 +4,7 @@ import com.iris.system.pim.entity.SysParamsEntity;
 import com.iris.system.pim.query.SysParamsQuery;
 import com.iris.system.pim.vo.SysParamsVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 import java.util.Map;

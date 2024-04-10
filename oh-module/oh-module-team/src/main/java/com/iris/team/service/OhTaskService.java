@@ -4,7 +4,7 @@ import com.iris.team.vo.OhTaskVO;
 import com.iris.team.entity.OhTaskEntity;
 import com.iris.team.query.OhTaskQuery;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.iris.system.quartz.dao;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.quartz.entity.ScheduleJobLogEntity;
 import org.apache.ibatis.annotations.Mapper;
 

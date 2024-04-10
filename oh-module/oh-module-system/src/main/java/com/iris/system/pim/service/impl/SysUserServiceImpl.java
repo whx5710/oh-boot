@@ -18,7 +18,7 @@ import com.iris.system.pim.service.SysUserRoleService;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.excel.ExcelFinishCallBack;
 import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.pim.dao.SysUserDao;
 import com.iris.system.pim.entity.SysUserEntity;
 import com.iris.system.pim.enums.SuperAdminEnum;

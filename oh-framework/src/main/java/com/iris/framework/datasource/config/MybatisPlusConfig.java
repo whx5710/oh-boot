@@ -1,11 +1,11 @@
-package com.iris.framework.mybatis.config;
+package com.iris.framework.datasource.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.iris.framework.mybatis.interceptor.DataScopeInnerInterceptor;
-import com.iris.framework.mybatis.handler.FieldMetaObjectHandler;
+import com.iris.framework.datasource.interceptor.DataScopeInnerInterceptor;
+import com.iris.framework.datasource.handler.FieldMetaObjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

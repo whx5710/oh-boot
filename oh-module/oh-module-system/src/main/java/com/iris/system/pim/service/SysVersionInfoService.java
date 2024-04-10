@@ -1,6 +1,6 @@
 package com.iris.system.pim.service;
 
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.pim.vo.SysVersionInfoVO;
 import com.iris.system.pim.query.SysVersionInfoQuery;

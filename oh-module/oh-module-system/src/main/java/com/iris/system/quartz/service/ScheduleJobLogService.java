@@ -1,7 +1,7 @@
 package com.iris.system.quartz.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.quartz.entity.ScheduleJobLogEntity;
 import com.iris.system.quartz.query.ScheduleJobLogQuery;
 import com.iris.system.quartz.vo.ScheduleJobLogVO;

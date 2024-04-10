@@ -4,7 +4,7 @@ import com.iris.system.pim.entity.SysLogOperateEntity;
 import com.iris.system.pim.query.SysLogOperateQuery;
 import com.iris.system.pim.vo.SysLogOperateVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 /**
  * 操作日志

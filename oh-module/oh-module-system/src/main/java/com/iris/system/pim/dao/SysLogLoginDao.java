@@ -3,7 +3,7 @@ package com.iris.system.pim.dao;
 import java.util.List;
 
 import com.iris.system.pim.entity.SysLogLoginEntity;
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.pim.vo.AnalysisVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -4,7 +4,7 @@ import com.iris.api.entity.DataFunctionAuthorityEntity;
 import com.iris.api.query.DataFunctionAuthorityQuery;
 import com.iris.api.vo.DataFunctionAuthorityVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 

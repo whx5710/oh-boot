@@ -1,6 +1,6 @@
 package com.iris.flow.dao;
 
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.flow.entity.FlowEntity;
 import org.apache.ibatis.annotations.Mapper;
 

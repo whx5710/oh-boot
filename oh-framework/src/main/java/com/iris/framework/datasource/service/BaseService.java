@@ -1,4 +1,4 @@
-package com.iris.framework.mybatis.service;
+package com.iris.framework.datasource.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 

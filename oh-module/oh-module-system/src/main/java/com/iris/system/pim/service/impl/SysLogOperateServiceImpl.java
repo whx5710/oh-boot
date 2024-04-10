@@ -13,7 +13,7 @@ import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.utils.ExceptionUtils;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.framework.operatelog.dto.OperateLogDTO;
 import com.iris.system.pim.convert.SysLogOperateConvert;
 import com.iris.system.pim.dao.SysLogOperateDao;

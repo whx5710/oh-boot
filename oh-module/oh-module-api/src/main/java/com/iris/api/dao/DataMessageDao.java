@@ -3,7 +3,7 @@ package com.iris.api.dao;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.api.entity.DataMsgEntity;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.mybatis.dao.BaseDao;
+import com.iris.framework.datasource.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

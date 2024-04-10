@@ -1,7 +1,7 @@
 package com.iris.flow.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.BaseService;
+import com.iris.framework.datasource.service.BaseService;
 import com.iris.flow.vo.WorkOrderVO;
 import com.iris.flow.query.WorkOrderQuery;
 import com.iris.flow.entity.WorkOrderEntity;
