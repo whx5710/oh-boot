@@ -85,9 +85,9 @@ public class WebSocketHandler {
                 sysMessageVO.setType("success");
                 int i = this.sendMessage(userId, sysMessageVO.toJson());
             }
-            log.info("【websocket消息】有新的连接，总数为:" + webSockets.size());
+            log.info("【websocket消息】有新的连接，总数为:{}", webSockets.size());
         } catch (Exception e) {
-            log.error("websocket打开连接异常！" + e.getMessage());
+            log.error("websocket打开连接异常！{}", e.getMessage());
         }
     }
 
@@ -99,9 +99,9 @@ public class WebSocketHandler {
         try {
             webSockets.remove(this);
             sessionPool.remove(this.userId);
-            log.info("【websocket消息】连接断开，总数为:"+webSockets.size());
+            log.info("【websocket消息】连接断开，总数为:{}", webSockets.size());
         } catch (Exception e) {
-            log.error("断开连接异常！" + e.getMessage());
+            log.error("断开连接异常！{}", e.getMessage());
         }
     }
     /**
@@ -115,10 +115,10 @@ public class WebSocketHandler {
         if(ObjectUtils.isEmpty(sysMessageVO.getType())){
             sysMessageVO.setType("success");
         }else if(sysMessageVO.getType().equals("heartBeat")){ // 心跳
-            log.debug("【websocket消息】收到客户端消息:" + message);
+            log.debug("【websocket消息】收到客户端消息:{}", message);
             return;
         }
-        log.info("【websocket消息】收到客户端消息:" + message);
+        log.info("【websocket消息】收到客户端消息:{}", message);
         sysMessageVO.setState("0");
         int i = 0; // 0未发生成功1发送成功-1发送异常
         if(!ObjectUtils.isEmpty(sysMessageVO.getToId())){
@@ -137,20 +137,20 @@ public class WebSocketHandler {
     @OnError
     public void onError(Session session, Throwable error) {
 //        error.printStackTrace();
-        log.error("发生异常！" + error.getMessage());
+        log.error("发生异常！{}", error.getMessage());
     }
 
 
     // 此为广播消息
     public void sendAllMessage(String message) {
-        log.info("【websocket消息】广播消息:" + message);
+        log.info("【websocket消息】广播消息:{}", message);
         for(WebSocketHandler webSocket : webSockets) {
             try {
                 if(webSocket.session.isOpen()) {
                     webSocket.session.getAsyncRemote().sendText(message);
                 }
             } catch (Exception e) {
-                log.error("发送广播消息异常！", e);
+                log.error("发送广播消息异常！{}", e);
             }
         }
     }
@@ -165,15 +165,15 @@ public class WebSocketHandler {
         Session session = sessionPool.get(userId);
         if (session != null && session.isOpen()) {
             try {
-                log.info("【websocket消息】 单点消息:"+message);
+                log.info("【websocket消息】 单点消息:{}", message);
                 session.getAsyncRemote().sendText(message);
                 return 1;
             } catch (Exception e) {
-                log.error("发送消息异常！", e);
+                log.error("发送消息异常！{}", e);
                 return -1;
             }
         } else{
-            log.warn("还未与客户端建立连接！【" + userId + "】");
+            log.warn("还未与客户端建立连接！【{}】", userId);
             return 0;
         }
     }
@@ -184,7 +184,7 @@ public class WebSocketHandler {
             Session session = sessionPool.get(userId);
             if (session != null&&session.isOpen()) {
                 try {
-                    log.info("【websocket消息】 单点消息:"+message);
+                    log.info("【websocket消息】 单点消息:{}", message);
                     session.getAsyncRemote().sendText(message);
                 } catch (Exception e) {
                     log.error("发送消息异常（多人）！", e);

@@ -33,16 +33,15 @@ public class AddressUtils {
             paramMap.put("json", true);
             String response = HttpUtil.get(ADDRESS_URL, paramMap);
             if (StringUtils.isBlank(response)) {
-                log.error("根据IP获取地址异常 " + ip);
+                log.error("根据IP获取地址异常 {}", ip);
                 return UNKNOWN;
             }
             Address address = JsonUtils.parseObject(response, Address.class);
             return String.format("%s %s", address.getPro(), address.getCity());
         } catch (Exception e) {
 //            e.printStackTrace();
-            log.error("根据IP获取地址异常; " + ip + " " + e.getMessage());
+            log.error("根据IP获取地址异常; {} {}", ip, e.getMessage());
         }
-
         return UNKNOWN;
     }
 

@@ -34,7 +34,7 @@ public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoin
         }
         Result<Object> result = Result.error(ErrorCode.UNAUTHORIZED);
         String ip = IpUtils.getIpAddr(request);
-        log.warn("IP:" + ip + " 请求方法:" + request.getMethod() + " 请求路径:" + request.getRequestURI() + " " + result.getMsg());
+        log.warn("IP:{} 请求方法:{} 请求路径:{} {}", ip, request.getMethod(), request.getRequestURI(), result.getMsg());
         response.getWriter().print(JsonUtils.toJsonString(result));
     }
 }

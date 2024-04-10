@@ -19,6 +19,8 @@ import com.iris.system.pim.convert.SysLogOperateConvert;
 import com.iris.system.pim.dao.SysLogOperateDao;
 import com.iris.system.pim.entity.SysLogOperateEntity;
 import com.iris.system.pim.query.SysLogOperateQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -32,6 +34,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class SysLogOperateServiceImpl extends BaseServiceImpl<SysLogOperateDao, SysLogOperateEntity> implements SysLogOperateService {
+
+    private final static Logger log = LoggerFactory.getLogger(SysLogOperateServiceImpl.class);
+
     private final RedisCache redisCache;
 
     public SysLogOperateServiceImpl(RedisCache redisCache) {
@@ -78,7 +83,7 @@ public class SysLogOperateServiceImpl extends BaseServiceImpl<SysLogOperateDao, 
                     baseMapper.insert(entity);
                 }
             } catch (Exception e) {
-                log.error("SysLogOperateServiceImpl.saveLog Error：" + ExceptionUtils.getExceptionMessage(e));
+                log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
         }, 1, 10, TimeUnit.SECONDS);
     }
