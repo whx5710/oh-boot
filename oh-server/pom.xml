@@ -20,8 +20,7 @@
             <optional>true</optional>
         </dependency>
         <!-- ========================= 导入其他模块 ========================= -->
-        <!-- 系统管理模块；用户管理、监控、鉴权等
-        注意：如果不引用，需实现框架中的 ***UserDetailsService接口（账号、手机、验证码等），接口鉴权可通过忽略鉴权进行配置 -->
+        <!-- 系统管理模块；用户管理、监控、鉴权等 -->
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-system</artifactId>

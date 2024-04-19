@@ -10,8 +10,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!-- 系统管理：用户管理、监控、鉴权等
-        注意：如果不引用，需实现框架中的 ***UserDetailsService接口（账号、手机、验证码等），接口鉴权可通过忽略鉴权进行配置 -->
+		<!-- 系统管理：用户管理、监控、鉴权等 -->
 		<module>oh-module-system</module>
 		<!-- 协同任务 -->
 		<module>oh-module-team</module>
