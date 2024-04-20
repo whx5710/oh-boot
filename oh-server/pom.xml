@@ -20,12 +20,12 @@
             <optional>true</optional>
         </dependency>
         <!-- ========================= 导入其他模块 ========================= -->
-        <!-- 系统管理模块；用户管理、监控、鉴权等 -->
-        <dependency>
+        <!-- 系统管理模块；用户管理、监控、鉴权等，可单独一个工程，与业务资源不进行共享 【oh-sys】 -->
+        <!--<dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-system</artifactId>
             <version>${revision}</version>
-        </dependency>
+        </dependency>-->
         <!-- 协同任务 -->
         <dependency>
             <groupId>com.iris</groupId>

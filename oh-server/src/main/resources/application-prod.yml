@@ -31,7 +31,7 @@ oh:
       - /swagger-ui/**
       - /doc.html
   sys-data-source:
-    prefix-uris: # 通过请求的uri前缀切换到系统内部数据源
+    prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
       - /sys/
       - /sms/
       - /external/
