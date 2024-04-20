@@ -32,7 +32,7 @@ public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoin
         if(HttpContextUtils.getOrigin() != null){
             response.setHeader("Access-Control-Allow-Origin", HttpContextUtils.getOrigin());
         }
-        authException.printStackTrace();
+        // authException.printStackTrace();
         Result<Object> result = Result.error(ErrorCode.UNAUTHORIZED);
         String ip = IpUtils.getIpAddr(request);
         log.warn("IP:{} 请求方法:{} 请求路径:{} {}", ip, request.getMethod(), request.getRequestURI(), result.getMsg());
