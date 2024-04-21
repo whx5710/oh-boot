@@ -6,3 +6,4 @@ auth:
     - /sys/auth/mobile
     - /sys/params/getByKeys
     - /sys/info/latestVersion
+    - /sys/app/logErrPage

@@ -1,4 +1,3 @@
 auth:
   ignore-urls:
     - /openApi/submit
-    - /external/app/logErrPage

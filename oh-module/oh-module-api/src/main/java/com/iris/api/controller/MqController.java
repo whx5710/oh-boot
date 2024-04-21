@@ -28,7 +28,7 @@ public class MqController {
      * @param id
      * @return
      */
-//    @PreAuthorize("hasAuthority('external:app:info')")
+//    @PreAuthorize("hasAuthority('sys:app:info')")
     @GetMapping("/startListener/{id}")
     public Result<String> startListener(@PathVariable("id")String id){
         listenerHandler.start(id);
@@ -40,7 +40,7 @@ public class MqController {
      * @param id
      * @return
      */
-//    @PreAuthorize("hasAuthority('external:app:info')")
+//    @PreAuthorize("hasAuthority('sys:app:info')")
     @GetMapping("/stopListener/{id}")
     public Result<String> stopListener(@PathVariable("id")String id){
         listenerHandler.stop(id);

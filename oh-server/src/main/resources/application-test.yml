@@ -34,7 +34,6 @@ oh:
     prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
       - /sys/
       - /sms/
-      - /external/
       - /schedule/
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
