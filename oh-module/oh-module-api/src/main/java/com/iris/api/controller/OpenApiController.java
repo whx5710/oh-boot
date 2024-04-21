@@ -1,4 +1,4 @@
-package com.iris.api;
+package com.iris.api.controller;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;

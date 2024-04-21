@@ -24,7 +24,7 @@ import java.util.List;
 * @since 1.0.0 2023-07-30
 */
 @RestController
-@RequestMapping("external/function")
+@RequestMapping("/sys/function")
 @Tag(name="功能列表")
 public class DataFunctionController {
     @Resource
@@ -32,7 +32,7 @@ public class DataFunctionController {
 
     @GetMapping("page")
     @Operation(summary = "分页")
-    @PreAuthorize("hasAuthority('external:function:page')")
+    @PreAuthorize("hasAuthority('sys:function:page')")
     public Result<PageResult<DataFunctionVO>> page(@ParameterObject @Valid DataFunctionQuery query){
         PageResult<DataFunctionVO> page = dataFunctionService.page(query);
         return Result.ok(page);
@@ -40,7 +40,7 @@ public class DataFunctionController {
 
     @GetMapping("{id}")
     @Operation(summary = "信息")
-    @PreAuthorize("hasAuthority('external:function:info')")
+    @PreAuthorize("hasAuthority('sys:function:info')")
     public Result<DataFunctionVO> get(@PathVariable("id") Long id){
         DataFunctionEntity entity = dataFunctionService.getById(id);
 
@@ -49,7 +49,7 @@ public class DataFunctionController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('external:function:save')")
+    @PreAuthorize("hasAuthority('sys:function:save')")
     public Result<String> save(@RequestBody DataFunctionVO vo){
         dataFunctionService.save(vo);
 
@@ -58,7 +58,7 @@ public class DataFunctionController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('external:function:update')")
+    @PreAuthorize("hasAuthority('sys:function:update')")
     public Result<String> update(@RequestBody @Valid DataFunctionVO vo){
         dataFunctionService.update(vo);
 
@@ -67,7 +67,7 @@ public class DataFunctionController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('external:function:delete')")
+    @PreAuthorize("hasAuthority('sys:function:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataFunctionService.delete(idList);
 
@@ -76,7 +76,7 @@ public class DataFunctionController {
 
     @GetMapping("pageByClientId")
     @Operation(summary = "根据客户端获取分页数据")
-    @PreAuthorize("hasAuthority('external:function:page')")
+    @PreAuthorize("hasAuthority('sys:function:page')")
     public Result<PageResult<DataFunctionVO>> pageByClientId(@ParameterObject @Valid DataFunctionQuery query){
         PageResult<DataFunctionVO> page = dataFunctionService.pageByClientId(query);
         return Result.ok(page);

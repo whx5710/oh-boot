@@ -118,12 +118,22 @@ spring:
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
+          init:
+            schema: classpath*:db/sys-schema.sql      # 自动运行的建表脚本
+            data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
+            continue-on-error: true                   # 错误是否继续 默认 true
+            separator: ;                              # 分隔符 默认 ;
         masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://192.168.122.129:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
+          init:
+            schema: classpath*:db/project-schema.sql    # 自动运行的建表脚本
+            data: classpath*:db/project-data.sql        # 自动运行的数据脚本
+            continue-on-error: true                     # 错误是否继续 默认 true
+            separator: ;                                # 分隔符 默认 ;
   kafka:
     bootstrap-servers: 192.168.122.129:9092
     client-id: dc-device-flow-analyze

@@ -32,7 +32,7 @@ import java.util.List;
 * @since 1.0.0 2023-07-29
 */
 @RestController
-@RequestMapping("/external/app")
+@RequestMapping("/sys/app")
 @Tag(name="客户端")
 public class DataAppController {
 
@@ -47,7 +47,7 @@ public class DataAppController {
 
     @GetMapping("/page")
     @Operation(summary = "分页")
-    @PreAuthorize("hasAuthority('external:app:page')")
+    @PreAuthorize("hasAuthority('sys:app:page')")
     public Result<PageResult<DataAppDTO>> page(@ParameterObject @Valid DataAppQuery query){
         PageResult<DataAppDTO> page = dataAppService.page(query);
 
@@ -56,7 +56,7 @@ public class DataAppController {
 
     @GetMapping("/{id}")
     @Operation(summary = "信息")
-    @PreAuthorize("hasAuthority('external:app:info')")
+    @PreAuthorize("hasAuthority('sys:app:info')")
     public Result<DataAppDTO> get(@PathVariable("id") Long id){
         DataAppEntity entity = dataAppService.getById(id);
         return Result.ok(DataAppConvert.INSTANCE.convert(entity));
@@ -64,7 +64,7 @@ public class DataAppController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('external:app:save')")
+    @PreAuthorize("hasAuthority('sys:app:save')")
     public Result<String> save(@RequestBody DataAppDTO vo){
         dataAppService.save(vo);
         return Result.ok();
@@ -72,7 +72,7 @@ public class DataAppController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('external:app:update')")
+    @PreAuthorize("hasAuthority('sys:app:update')")
     public Result<String> update(@RequestBody @Valid DataAppDTO vo){
         dataAppService.update(vo);
 
@@ -81,7 +81,7 @@ public class DataAppController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('external:app:delete')")
+    @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataAppService.delete(idList);
 
@@ -97,7 +97,7 @@ public class DataAppController {
 
     @GetMapping("/logPage")
     @Operation(summary = "接口日志分页")
-    @PreAuthorize("hasAuthority('external:app:page')")
+    @PreAuthorize("hasAuthority('sys:app:page')")
     public Result<PageResult<DataMsgVO>> logPage(@ParameterObject @Valid DataMsgQuery query){
         PageResult<DataMsgVO> page = dataMsgService.page(query);
         return Result.ok(page);
@@ -127,7 +127,7 @@ public class DataAppController {
 
     @DeleteMapping("/deleteLog")
     @Operation(summary = "删除请求记录")
-    @PreAuthorize("hasAuthority('external:app:delete')")
+    @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> deleteLog(@RequestBody List<Long> idList){
         dataMsgService.delete(idList);
 
@@ -136,7 +136,7 @@ public class DataAppController {
 
     @GetMapping("/deleteByDate/{date}")
     @Operation(summary = "根据时间删除报文记录")
-    @PreAuthorize("hasAuthority('external:app:delete')")
+    @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> deleteByDate(@PathVariable("date")String date){
         dataMsgService.deleteByDate(date);
         return Result.ok();

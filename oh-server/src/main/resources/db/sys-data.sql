@@ -188,11 +188,11 @@ INSERT INTO `sys_menu` VALUES (74, 72, '新增', '', 'sms:platform:save', 1, 0, 
 INSERT INTO `sys_menu` VALUES (75, 72, '修改', '', 'sms:platform:update,sms:platform:info', 1, 0, '', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO `sys_menu` VALUES (76, 72, '删除', '', 'sms:platform:delete', 1, 0, '', 3, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO `sys_menu` VALUES (77, 34, '代码生成器', '{{apiUrl}}/sysApi/oh-generator/index.html', '', 0, 1, 'icon-rocket', 2, 1, 10000, '2023-06-12 13:47:50', 10000, '2023-06-24 21:35:28');
-INSERT INTO `sys_menu` VALUES (80, 84, '查看', '', 'external:app:page,external:function:page,external:authority:page', 1, 0, '', 0, 1, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:00');
-INSERT INTO `sys_menu` VALUES (81, 84, '新增', '', 'external:app:save,external:function:save', 1, 0, '', 1, 1, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:09');
-INSERT INTO `sys_menu` VALUES (82, 84, '修改', '', 'external:app:update,external:app:info,external:function:update,external:function:info', 1, 0, '', 2, 1, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:21');
-INSERT INTO `sys_menu` VALUES (83, 84, '删除', '', 'external:app:delete,external:function:delete', 1, 0, '', 3, 1, 10000, '2023-07-29 12:35:41', 10000, '2023-07-29 12:45:33');
-INSERT INTO `sys_menu` VALUES (84, 34, '接口管理', 'external/app/index', '', 0, 0, 'icon-drag', 5, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-08-09 21:49:46');
+INSERT INTO `sys_menu` VALUES (80, 84, '查看', '', 'sys:app:page,sys:function:page,sys:authority:page', 1, 0, '', 0, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:05:51');
+INSERT INTO `sys_menu` VALUES (81, 84, '新增', '', 'sys:app:save,sys:function:save', 1, 0, '', 1, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:04');
+INSERT INTO `sys_menu` VALUES (82, 84, '修改', '', 'sys:app:update,sys:app:info,sys:function:update,sys:function:info', 1, 0, '', 2, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:24');
+INSERT INTO `sys_menu` VALUES (83, 84, '删除', '', 'sys:app:delete,sys:function:delete', 1, 0, '', 3, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:34');
+INSERT INTO `sys_menu` VALUES (84, 34, '接口管理', 'sys/app/index', '', 0, 0, 'icon-drag', 5, 1, 10000, '2023-06-12 13:47:41', 10000, '2024-04-21 20:03:08');
 INSERT INTO `sys_menu` VALUES (85, 2, '版本信息', 'sys/info/index', '', 0, 0, 'icon-menu', 11, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-09-16 16:02:27');
 INSERT INTO `sys_menu` VALUES (86, 85, '查看', '', 'system:info:page', 1, 0, '', 0, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
 INSERT INTO `sys_menu` VALUES (87, 85, '新增', '', 'system:info:save', 1, 0, '', 1, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');

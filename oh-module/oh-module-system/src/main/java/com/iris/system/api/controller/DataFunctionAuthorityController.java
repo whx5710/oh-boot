@@ -25,7 +25,7 @@ import java.util.List;
 * @since 1.0.0 2023-07-29
 */
 @RestController
-@RequestMapping("external/authority")
+@RequestMapping("/sys/authority")
 @Tag(name="客户端接口授权")
 public class DataFunctionAuthorityController {
 
@@ -37,7 +37,7 @@ public class DataFunctionAuthorityController {
 
     @GetMapping("page")
     @Operation(summary = "分页")
-    @PreAuthorize("hasAuthority('external:authority:page')")
+    @PreAuthorize("hasAuthority('sys:authority:page')")
     public Result<PageResult<DataFunctionAuthorityVO>> page(@ParameterObject @Valid DataFunctionAuthorityQuery query){
         PageResult<DataFunctionAuthorityVO> page = dataFunctionAuthorityService.page(query);
         return Result.ok(page);
@@ -45,7 +45,7 @@ public class DataFunctionAuthorityController {
 
     @GetMapping("{id}")
     @Operation(summary = "信息")
-    @PreAuthorize("hasAuthority('external:authority:info')")
+    @PreAuthorize("hasAuthority('sys:authority:info')")
     public Result<DataFunctionAuthorityVO> get(@PathVariable("id") Long id){
         DataFunctionAuthorityEntity entity = dataFunctionAuthorityService.getById(id);
 
@@ -54,7 +54,7 @@ public class DataFunctionAuthorityController {
 
     @PostMapping("save")
     @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('external:authority:save')")
+    @PreAuthorize("hasAuthority('sys:authority:save')")
     public Result<String> save(@RequestBody DataFunctionAuthorityVO vo){
         dataFunctionAuthorityService.save(vo);
 
@@ -63,7 +63,7 @@ public class DataFunctionAuthorityController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('external:authority:update')")
+    @PreAuthorize("hasAuthority('sys:authority:update')")
     public Result<String> update(@RequestBody @Valid DataFunctionAuthorityVO vo){
         dataFunctionAuthorityService.update(vo);
         return Result.ok();
@@ -71,7 +71,7 @@ public class DataFunctionAuthorityController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('external:authority:delete')")
+    @PreAuthorize("hasAuthority('sys:authority:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataFunctionAuthorityService.delete(idList);
         return Result.ok();
