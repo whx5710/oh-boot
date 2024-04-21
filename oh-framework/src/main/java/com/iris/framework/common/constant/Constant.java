@@ -68,4 +68,27 @@ public interface Constant {
      */
     String SYS_DB = "sysDb";
 
+
+    /**
+     * 客户端ID
+     */
+    String CLIENT_ID = "OH-CLIENT-ID";
+    /**
+     * 密钥
+     */
+    String SECRET_KEY = "OH-SECRET-KEY";
+    /**
+     * 功能号
+     */
+    String FUNC_CODE = "OH-FUNC-CODE";
+    /**
+     * 消息主题
+     */
+    String TOPIC_SUBMIT = "topic-submit";
+
+    /**
+     * 公共接口标识
+     */
+    String OPEN_API = "openApi";
+
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iris.system.api.dao.DataAppDao">
+    <select id="listAuthority" resultType="com.iris.framework.common.entity.api.DataAppDTO">
+        SELECT
+        b.id,
+        a.name,
+        a.client_id,
+        a.secret_key,
+        b.func_code,
+        c.name as funcName,
+        c.is_async
+        FROM
+        data_app a,
+        data_function_authority b,
+        data_function c
+        WHERE
+        a.client_id = b.client_id
+        AND b.func_code = c.func_code
+        AND a.db_status = 1
+        AND b.db_status = 1
+        AND c.db_status = 1
+        <if test="params != null and params.clientId != null and params.clientId !='' ">
+            and a.client_id = #{params.clientId}
+        </if>
+        order by a.id,c.func_code
+    </select>
+</mapper>

@@ -5,9 +5,8 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iris.api.common.BaseController;
-import com.iris.api.constant.ConstantApi;
-import com.iris.api.vo.MsgVO;
-import com.iris.framework.common.entity.MetaEntity;
+import com.iris.framework.common.constant.Constant;
+import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
@@ -67,22 +66,21 @@ public class OpenApiController extends BaseController {
      */
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
-        MsgVO msgVO = this.basicCheck(request);
-        MetaEntity metaEntity = msgVO.getMetaEntity();
-        metaEntity.setData(params);
-        Boolean isAsync = msgVO.getAsync(); // 接口是否支持异步
+        MsgEntity msgEntity = this.basicCheck(request);
+        msgEntity.setData(params);
+        Boolean isAsync = msgEntity.getAsync(); // 接口是否支持异步
 
-        Optional<JobService> optional = ServiceFactory.getService(metaEntity.getFuncCode());
+        Optional<JobService> optional = ServiceFactory.getService(msgEntity.getFuncCode());
         if(optional.isPresent()){
             JobService jobService = optional.get();
             // 校验参数
             jobService.check(params);
             if (!isAsync || apiType == 1) { // 直接业务处理
-                return jobService.handle(metaEntity);
+                return jobService.handle(msgEntity);
             }else{
-                metaEntity.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
+                msgEntity.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
-                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(ConstantApi.TOPIC_SUBMIT, metaEntity.toJson());
+                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(Constant.TOPIC_SUBMIT, JsonUtils.toJsonString(msgEntity));
                     //执行成功回调
                     completableFuture.thenAccept(msg -> {
                         log.debug("发送成功");
@@ -95,21 +93,21 @@ public class OpenApiController extends BaseController {
                 }catch (KafkaException e){
                     log.error("Kafka异常（{}），切换直接调用业务接口。", e.getMessage());
                     apiType = 1; // 1直接保存 2使用MQ异步保存
-                    return jobService.handle(metaEntity);
+                    return jobService.handle(msgEntity);
                 }
                 return Result.ok("发送成功！");
             }
         }else{
-            throw new ServerException("未获取到相关服务，功能号【" + metaEntity.getFuncCode() + "】无效！ ");
+            throw new ServerException("未获取到相关服务，功能号【" + msgEntity.getFuncCode() + "】无效！ ");
         }
     }
 
     public static void main(String[] args) throws JsonProcessingException {
         String url = "http://localhost:8080/openApi/submit";
         Map<String,String> head = new HashMap<>();
-        head.put(ConstantApi.CLIENT_ID,"C0001");
-        head.put(ConstantApi.SECRET_KEY,"c28a8120682d4b4fa50325ed34748e0e");
-        head.put(ConstantApi.FUNC_CODE,"F1003");
+        head.put(Constant.CLIENT_ID,"C0001");
+        head.put(Constant.SECRET_KEY,"c28a8120682d4b4fa50325ed34748e0e");
+        head.put(Constant.FUNC_CODE,"F1003");
         Map<String, Object> data = new HashMap<>();
         data.put("name","王小费");
         data.put("sex","name");

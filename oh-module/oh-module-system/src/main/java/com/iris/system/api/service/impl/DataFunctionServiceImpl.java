@@ -1,0 +1,77 @@
+package com.iris.system.api.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.iris.framework.common.utils.PageResult;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
+import com.iris.system.api.convert.DataFunctionConvert;
+import com.iris.system.api.dao.DataFunctionDao;
+import com.iris.system.api.entity.DataFunctionEntity;
+import com.iris.system.api.query.DataFunctionQuery;
+import com.iris.system.api.service.DataFunctionService;
+import com.iris.system.api.vo.DataFunctionVO;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import java.util.List;
+
+/**
+ * 功能列表
+ *
+ * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2023-07-30
+ */
+@Service
+public class DataFunctionServiceImpl extends BaseServiceImpl<DataFunctionDao, DataFunctionEntity> implements DataFunctionService {
+
+    @Override
+    public PageResult<DataFunctionVO> page(DataFunctionQuery query) {
+        IPage<DataFunctionEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+    }
+
+    @Override
+    public PageResult<DataFunctionVO> pageByClientId(DataFunctionQuery query) {
+        IPage<DataFunctionEntity> page =  this.baseMapper.pageByClientId(getPage(query), query.getClientId());
+        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+    }
+
+    @Override
+    public List<DataFunctionVO> list(DataFunctionQuery query) {
+        return DataFunctionConvert.INSTANCE.convertList(baseMapper.selectList(getWrapper(query)));
+    }
+
+    private LambdaQueryWrapper<DataFunctionEntity> getWrapper(DataFunctionQuery query){
+        LambdaQueryWrapper<DataFunctionEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(DataFunctionEntity::getDbStatus, 1);
+        if(!ObjectUtils.isEmpty(query.getKeyWord())){
+            wrapper.and(w -> w.like(DataFunctionEntity::getName, query.getKeyWord())
+                    .or().like(DataFunctionEntity::getFuncCode, query.getKeyWord()));
+        }
+        wrapper.orderByAsc(DataFunctionEntity::getFuncCode);
+        return wrapper;
+    }
+
+    @Override
+    public void save(DataFunctionVO vo) {
+        DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
+
+        baseMapper.insert(entity);
+    }
+
+    @Override
+    public void update(DataFunctionVO vo) {
+        DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
+
+        updateById(entity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(List<Long> idList) {
+        removeByIds(idList);
+    }
+
+}

@@ -11,7 +11,7 @@
 
 	<modules>
 		<!-- 系统管理：用户管理、监控、鉴权等 -->
-		<!--<module>oh-module-system</module>-->
+		<module>oh-module-system</module>
 		<!-- 协同任务 -->
 		<module>oh-module-team</module>
 		<!-- api接口 -->

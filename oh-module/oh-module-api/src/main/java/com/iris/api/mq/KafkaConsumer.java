@@ -1,10 +1,9 @@
 package com.iris.api.mq;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.iris.api.constant.ConstantApi;
-import com.iris.api.entity.DataMsgEntity;
-import com.iris.api.service.DataMsgService;
-import com.iris.framework.common.entity.MetaEntity;
+import com.iris.framework.common.cache.RedisCache;
+import com.iris.framework.common.cache.RedisKeys;
+import com.iris.framework.common.constant.Constant;
+import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.Result;
@@ -27,10 +26,10 @@ public class KafkaConsumer {
 
     private final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
-    private final DataMsgService dataMsgService;
+    private final RedisCache redisCache;
 
-    public KafkaConsumer(DataMsgService dataMsgService){
-        this.dataMsgService = dataMsgService;
+    public KafkaConsumer(RedisCache redisCache){
+        this.redisCache = redisCache;
     }
 
     /**
@@ -38,13 +37,11 @@ public class KafkaConsumer {
      * 默认不监听，可通过调用方法开启监听
      * @param message 消息
      */
-    @KafkaListener(id = ConstantApi.OPEN_API, topics = ConstantApi.TOPIC_SUBMIT, autoStartup = "${oh.open-api.auto-start-up:false}", groupId = "open-api-group-id")
+    @KafkaListener(id = Constant.OPEN_API, topics = Constant.TOPIC_SUBMIT, autoStartup = "${oh.open-api.auto-start-up:false}", groupId = "open-api-group-id")
     public void openApiJobConsume(String message, Acknowledgment ack) {
-        MetaEntity dataMsg = JsonUtils.parseObject(message, MetaEntity.class);
-        dataMsg.setTopic(ConstantApi.TOPIC_SUBMIT);
+        MsgEntity dataMsg = JsonUtils.parseObject(message, MsgEntity.class);
+        dataMsg.setTopic(Constant.TOPIC_SUBMIT);
         Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFuncCode());
-        DataMsgEntity dataMsgEntity = new DataMsgEntity();
-        BeanUtil.copyProperties(dataMsg, dataMsgEntity);
         try {
             if(optional.isPresent()){
                 /**
@@ -52,20 +49,20 @@ public class KafkaConsumer {
                  * 在业务处理过程中，发生异常，可直接抛出异常，状态会记录在消息表中
                  */
                 Result<?> result = optional.get().handle(dataMsg);
-                dataMsgEntity.setResultMsg(JsonUtils.toJsonString(result));
-                dataMsgEntity.setState("1");
+                dataMsg.setResultMsg(JsonUtils.toJsonString(result));
+                dataMsg.setState("1");
             }else{
-                log.error("未找到对应服务，处理失败！" + dataMsg.getFuncCode());
-                dataMsgEntity.setState("2"); // 未找到对应的服务类，处理失败
-                dataMsgEntity.setNote("未找到对应的服务类，处理失败!");
+                log.error("未找到对应服务，处理失败！{}", dataMsg.getFuncCode());
+                dataMsg.setState("2"); // 未找到对应的服务类，处理失败
+                dataMsg.setNote("未找到对应的服务类，处理失败!");
             }
         }catch (Exception e){
             log.error("处理业务发生错误！{}", e.getMessage());
-            dataMsgEntity.setNote(e.getMessage());
-            dataMsgEntity.setState("3");
+            dataMsg.setNote(e.getMessage());
+            dataMsg.setState("3");
         }finally {
-            dataMsgEntity.setJsonStr(JsonUtils.toJsonString(dataMsg.getData()));
-            dataMsgService.save(dataMsgEntity);
+//            dataMsg.setJsonStr(JsonUtils.toJsonString(dataMsg.getData()));
+            redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, RedisCache.NOT_EXPIRE);
             ack.acknowledge();
         }
     }

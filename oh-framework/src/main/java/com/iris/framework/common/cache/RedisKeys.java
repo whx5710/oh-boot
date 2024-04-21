@@ -44,4 +44,12 @@ public class RedisKeys {
         return "sys:account:authCount:" + loginName;
     }
 
+    /**
+     * mq 报文日志
+     * @return s
+     */
+    public static String getDataMsgKey() {
+        return "sys:msg:log";
+    }
+
 }
