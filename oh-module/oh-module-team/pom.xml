@@ -5,11 +5,12 @@
     <parent>
         <artifactId>oh-module</artifactId>
         <groupId>com.iris</groupId>
-        <version>${revision}</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <description>协同工作</description>
     <artifactId>oh-module-team</artifactId>
+    <packaging>jar</packaging>
 
     <properties>
 <!--        <maven.compiler.source>11</maven.compiler.source>-->
@@ -21,7 +22,7 @@
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-framework</artifactId>
-            <version>${revision}</version>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 

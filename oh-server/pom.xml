@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.iris</groupId>
-        <artifactId>oh-boot</artifactId>
-        <version>${revision}</version>
+        <artifactId>oh-parent</artifactId>
+        <version>1.0.0</version>
     </parent>
     <artifactId>oh-server</artifactId>
     <description>系统启动入口</description>
@@ -30,19 +30,19 @@
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-team</artifactId>
-            <version>${revision}</version>
+            <version>1.0.0</version>
         </dependency>
         <!-- 对外接口 -->
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-api</artifactId>
-            <version>${revision}</version>
+            <version>1.0.0</version>
         </dependency>
         <!-- 工作流 -->
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-flow</artifactId>
-            <version>${revision}</version>
+            <version>1.0.0</version>
         </dependency>
         <!-- ========================= 导入其他 ========================= -->
     </dependencies>

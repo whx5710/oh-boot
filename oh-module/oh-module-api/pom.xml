@@ -2,12 +2,12 @@
 	<parent>
 		<artifactId>oh-module</artifactId>
 		<groupId>com.iris</groupId>
-		<version>${revision}</version>
+		<version>1.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>oh-module-api</artifactId>
 	<description>接口集合工程</description>
-	<!--<packaging>jar</packaging>-->
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<!--<dependency>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.iris</groupId>
 			<artifactId>oh-framework</artifactId>
-			<version>${revision}</version>
+			<version>0.0.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
