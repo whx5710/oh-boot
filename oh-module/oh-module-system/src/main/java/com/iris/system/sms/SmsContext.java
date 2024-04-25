@@ -2,7 +2,7 @@ package com.iris.system.sms;
 
 import com.iris.framework.common.exception.ServerException;
 import com.iris.system.sms.config.SmsConfig;
-import com.iris.system.pim.enums.SmsPlatformEnum;
+import com.iris.system.base.enums.SmsPlatformEnum;
 import com.iris.system.sms.service.impl.HuaweiSmsStrategy;
 import com.iris.system.sms.service.SmsStrategy;
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.system.pim.dao.SysMenuDao">
+<mapper namespace="com.iris.system.base.dao.SysMenuDao">
 
-	<select id="getMenuList" resultType="com.iris.system.pim.entity.SysMenuEntity">
+	<select id="getMenuList" resultType="com.iris.system.base.entity.SysMenuEntity">
 		select * from sys_menu where db_status = 1
 		<if test="type != null">
 			and type = #{type}
@@ -11,7 +11,7 @@
 		order by sort asc
 	</select>
 
-	<select id="getUserMenuList" resultType="com.iris.system.pim.entity.SysMenuEntity">
+	<select id="getUserMenuList" resultType="com.iris.system.base.entity.SysMenuEntity">
 		select t3.* from sys_user_role t1
 			left join sys_role_menu t2 on t1.role_id = t2.role_id
 			left join sys_menu t3 on t2.menu_id = t3.id

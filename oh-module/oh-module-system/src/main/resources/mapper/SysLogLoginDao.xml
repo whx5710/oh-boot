@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.system.pim.dao.SysLogLoginDao">
+<mapper namespace="com.iris.system.base.dao.SysLogLoginDao">
 
     <!-- 统计最近几天相关操作情况 -->
-    <select id="latestDateCount" resultType="com.iris.system.pim.vo.AnalysisVO">
+    <select id="latestDateCount" resultType="com.iris.system.base.vo.AnalysisVO">
         select '登录情况' as label,t1.dates as analysisTime,IFNULL(t2.analysisCount, 0) analysisValue from (
         select * from (
         SELECT
