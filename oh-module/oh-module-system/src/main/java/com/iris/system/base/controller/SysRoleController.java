@@ -7,7 +7,7 @@ import com.iris.system.base.vo.SysMenuVO;
 import com.iris.system.base.vo.SysRoleDataScopeVO;
 import com.iris.system.base.vo.SysRoleVO;
 import com.iris.system.base.vo.SysUserVO;
-import com.iris.system.pim.service.*;
+import com.iris.system.base.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
