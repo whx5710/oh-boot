@@ -73,7 +73,7 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 		Integer port = serverProperties.getPort();
 		String contextPath = serverProperties.getServlet().getContextPath();
 		String baseUrl = String.format("%s:%s%s", hostAddress, port, contextPath);
-		if(!baseUrl.startsWith("http")){
+		if(!baseUrl.startsWith("http://")){
 			baseUrl = "http://" + baseUrl;
 		}
 		log.info("-----------------------------------------------------------");

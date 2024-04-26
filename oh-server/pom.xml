@@ -13,18 +13,12 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
         <!-- ========================= 导入其他模块 ========================= -->
         <!-- 系统管理模块；用户管理、监控、鉴权等，可单独一个工程，与业务资源不进行共享 【oh-sys】 -->
         <!--<dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-system</artifactId>
-            <version>${revision}</version>
+            <version>1.0.0</version>
         </dependency>-->
         <!-- 协同任务 -->
         <dependency>
@@ -49,7 +43,7 @@
 
     <build>
         <!-- 打jar包命名-${revision} -->
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${revision}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

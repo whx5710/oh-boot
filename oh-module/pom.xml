@@ -11,13 +11,27 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!-- 系统管理：用户管理、监控、鉴权等 -->
-		<module>oh-module-system</module>
-		<!-- 协同任务 -->
-		<module>oh-module-team</module>
 		<!-- api接口 -->
 		<module>oh-module-api</module>
 		<!-- 工作流 -->
 		<module>oh-module-flow</module>
+		<!-- 系统管理：用户管理、监控、鉴权等 -->
+		<module>oh-module-system</module>
+		<!-- 协同任务 -->
+		<module>oh-module-team</module>
     </modules>
+
+	<dependencies>
+		<!-- ========================= 公共依赖 ========================= -->
+		<!-- bean映射 -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+		</dependency>
+		<!-- bean映射 -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+		</dependency>
+	</dependencies>
 </project>

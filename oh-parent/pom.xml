@@ -21,7 +21,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 框架版本信息 -->
         <framework.version>0.0.1</framework.version>
-
         <!-- 系统版本 -->
         <revision>1.0.0</revision>
         <!-- 跳过测试打包 -->
@@ -56,17 +55,6 @@
         <camunda.version>7.20.0</camunda.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-        </dependency>
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <!-- mysql驱动 https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
@@ -87,14 +75,12 @@
                 <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
                 <version>${dynamic.datasource.version}</version>
             </dependency>
-
             <!-- nacos 配置中心 https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter -->
             <dependency>
                 <groupId>com.alibaba.boot</groupId>
                 <artifactId>nacos-config-spring-boot-starter</artifactId>
                 <version>${nacos.version}</version>
             </dependency>
-
             <!-- swagger（xiaoymin版本）生成在线文档 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -110,13 +96,13 @@
                 <!-- 注意这里是import -->
                 <scope>import</scope>
             </dependency>
-
+            <!--系统监控-->
             <dependency>
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
             </dependency>
-
+            <!--bean映射-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
@@ -152,7 +138,7 @@
                 <artifactId>batik-transcoder</artifactId>
                 <version>${svg.trans.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->
+            <!-- svg图片转换 https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-codec</artifactId>
@@ -166,7 +152,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 
     <repositories>
         <repository>

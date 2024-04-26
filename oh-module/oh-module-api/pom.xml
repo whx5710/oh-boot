@@ -10,18 +10,14 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<!--<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>-->
-
+		<!-- 系统框架 -->
 		<dependency>
 			<groupId>com.iris</groupId>
 			<artifactId>oh-framework</artifactId>
-			<version>0.0.1</version>
+			<version>${framework.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+		<!-- Kafka https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>

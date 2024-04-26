@@ -85,7 +85,7 @@ spring:
   data:
     redis:
       database: 0
-      host: 192.168.122.129
+      host: 127.0.0.1
       port: 6379
       #password:
       timeout: 10s  # 连接超时时间
@@ -113,7 +113,7 @@ spring:
       datasource:
         sysDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://192.168.122.129:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
@@ -124,7 +124,7 @@ spring:
             separator: ;                              # 分隔符 默认 ;
         masterDb:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://192.168.122.129:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://127.0.0.1:3306/oh-business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
           username: root
           password: 123456
           type: com.zaxxer.hikari.HikariDataSource
@@ -134,7 +134,7 @@ spring:
             continue-on-error: true                     # 错误是否继续 默认 true
             separator: ;                                # 分隔符 默认 ;
   kafka:
-    bootstrap-servers: 192.168.122.129:9092
+    bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze
     listener:
       ack-mode: MANUAL_IMMEDIATE
