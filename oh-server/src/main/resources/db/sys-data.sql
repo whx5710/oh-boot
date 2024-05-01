@@ -161,7 +161,7 @@ INSERT INTO `sys_menu` VALUES (40, 39, '登录日志', 'sys/log/login', 'sys:log
 INSERT INTO `sys_menu` VALUES (41, 29, '导入', '', 'sys:user:import', 1, 0, '', 5, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (42, 29, '导出', '', 'sys:user:export', 1, 0, '', 6, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (43, 2, '参数管理', 'sys/params/index', 'sys:params:all', 0, 0, 'icon-filedone', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (44, 2, '接口文档', '{{apiUrl}}/doc.html', NULL, 0, 1, 'icon-file-text-fill', 10, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO `sys_menu` VALUES (44, 2, '接口文档', 'http://localhost:8080/doc.html', NULL, 0, 1, 'icon-file-text-fill', 10, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (45, 0, '在线开发', '', '', 0, 0, 'icon-cloud', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (46, 45, 'Online表单开发', 'online/table/index', 'online:table:all', 0, 0, 'icon-table', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO `sys_menu` VALUES (47, 39, '操作日志', 'sys/log/operate', 'sys:operate:all', 0, 0, 'icon-file-text', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
