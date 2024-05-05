@@ -59,10 +59,10 @@ public class KafkaConsumer {
         }catch (Exception e){
             log.error("处理业务发生错误！{}", e.getMessage());
             dataMsg.setNote(e.getMessage());
-            dataMsg.setState("3");
+            dataMsg.setState("3"); // 异常
         }finally {
 //            dataMsg.setJsonStr(JsonUtils.toJsonString(dataMsg.getData()));
-            redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, RedisCache.NOT_EXPIRE);
+            redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, 60*60*48); // 缓存2天
             ack.acknowledge();
         }
     }

@@ -112,7 +112,7 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
     @PostConstruct
     public void saveMsgLog() {
         ScheduledExecutorService scheduledService = ThreadUtil.createScheduledExecutor(1);
-        // 每隔10秒钟，执行一次
+        // 每隔20秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
                 String key = RedisKeys.getDataMsgKey();
@@ -130,7 +130,7 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
             } catch (Exception e) {
                 log.error("保存消息日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 1, 10, TimeUnit.SECONDS);
+        }, 1, 20, TimeUnit.SECONDS);
 
     }
 

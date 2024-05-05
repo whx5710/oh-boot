@@ -46,7 +46,7 @@ public class RedisKeys {
 
     /**
      * mq 报文日志
-     * @return s
+     * @return sys:msg:log
      */
     public static String getDataMsgKey() {
         return "sys:msg:log";
