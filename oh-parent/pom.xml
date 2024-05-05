@@ -76,11 +76,11 @@
                 <version>${dynamic.datasource.version}</version>
             </dependency>
             <!-- nacos 配置中心 https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter -->
-            <dependency>
+            <!--<dependency>
                 <groupId>com.alibaba.boot</groupId>
                 <artifactId>nacos-config-spring-boot-starter</artifactId>
                 <version>${nacos.version}</version>
-            </dependency>
+            </dependency>-->
             <!-- swagger（xiaoymin版本）生成在线文档 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
