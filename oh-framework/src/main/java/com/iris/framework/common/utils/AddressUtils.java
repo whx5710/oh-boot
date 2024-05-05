@@ -1,9 +1,9 @@
 package com.iris.framework.common.utils;
 
 import cn.hutool.http.HttpUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class AddressUtils {
             paramMap.put("ip", ip);
             paramMap.put("json", true);
             String response = HttpUtil.get(ADDRESS_URL, paramMap);
-            if (StringUtils.isBlank(response)) {
+            if (ObjectUtils.isEmpty(response)) {
                 log.error("根据IP获取地址异常 {}", ip);
                 return UNKNOWN;
             }
