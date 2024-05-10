@@ -17,11 +17,10 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis-Plus，Kafka等框�
 ```
 oh-parent    父级结构，依赖版本管理
 oh-framework 系统框架
-oh-serer     系统启动入口
+oh-system    系统启动入口、基础功能管理【根据实际情况可独立部署】
 oh-module    业务模块
     - oh-module-api    对外服务接口
     - oh-module-flow   工作流程管理
-    - oh-module-system 系统基础功能管理【根据实际情况可独立部署】
     - oh-module-team   协同管理【业务功能，未开发】
     - ...              扩展其他业务模块
 ```

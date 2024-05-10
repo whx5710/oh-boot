@@ -1,15 +1,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>oh-module</artifactId>
         <groupId>com.iris</groupId>
+        <artifactId>oh-parent</artifactId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>oh-module-system</artifactId>
+    <artifactId>oh-system</artifactId>
     <description>系统基础功能</description>
 
     <dependencies>
+        <!-- 协同任务 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-team</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- 对外接口 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- 工作流 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-flow</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- 系统框架 -->
         <dependency>
             <groupId>com.iris</groupId>

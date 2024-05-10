@@ -15,8 +15,6 @@
 		<module>oh-module-api</module>
 		<!-- 工作流 -->
 		<module>oh-module-flow</module>
-		<!-- 系统管理：用户管理、监控、鉴权等 -->
-		<module>oh-module-system</module>
 		<!-- 协同任务 -->
 		<module>oh-module-team</module>
     </modules>

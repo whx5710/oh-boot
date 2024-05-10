@@ -23,6 +23,7 @@
  */
 package com.iris;
 
+import cn.hutool.core.util.URLUtil;
 import com.iris.framework.common.config.properties.ProjectProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,15 +73,11 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 		String hostAddress = InetAddress.getLocalHost().getHostAddress();
 		Integer port = serverProperties.getPort();
 		String contextPath = serverProperties.getServlet().getContextPath();
-		String baseUrl = String.format("%s:%s%s", hostAddress, port, contextPath);
-		if(!baseUrl.startsWith("http://")){
-			baseUrl = "http://" + baseUrl;
-		}
+		String baseUrl = URLUtil.normalize(String.format("%s:%s%s", hostAddress, port, contextPath));
 		log.info("-----------------------------------------------------------");
 		log.info("{} 后台服务启动成功.", projectProperties.getName());
 		log.info("API 地址：{}", baseUrl);
 		log.info(projectProperties.getDescription());
 		log.info("-----------------------------------------------------------");
-
 	}
 }
