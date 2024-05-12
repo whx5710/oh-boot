@@ -39,7 +39,11 @@ public class FieldMetaObjectHandler implements MetaObjectHandler {
             // 创建人
             setFieldValByName(CREATOR, user.getId(), metaObject);
             // 创建者所属机构
-            setFieldValByName(ORG_ID, user.getOrgId(), metaObject);
+            if(metaObject.hasGetter(ORG_ID) && metaObject.getValue(ORG_ID) != null){
+                setFieldValByName(ORG_ID, metaObject.getValue(ORG_ID), metaObject);
+            }else{
+                setFieldValByName(ORG_ID, user.getOrgId(), metaObject);
+            }
         }
         // 创建时间
         setFieldValByName(CREATE_TIME, date, metaObject);
@@ -49,7 +53,7 @@ public class FieldMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * 更新
-     * @param metaObject
+     * @param metaObject params
      */
     @Override
     public void updateFill(MetaObject metaObject) {
