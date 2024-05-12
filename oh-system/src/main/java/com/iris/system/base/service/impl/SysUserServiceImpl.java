@@ -157,7 +157,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         if (user != null) {
             throw new ServerException("手机号已经存在");
         }
-
+        if(entity.getStatus()==null){
+            entity.setStatus(1);
+        }
         // 保存用户
         baseMapper.insert(entity);
 

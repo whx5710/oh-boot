@@ -8,6 +8,7 @@ import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysUserRoleEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,9 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
     public void saveOrUpdate(Long userId, List<Long> roleIdList) {
         // 数据库角色ID列表
         List<Long> dbRoleIdList = getRoleIdList(userId);
-
+        if(roleIdList == null){
+            roleIdList = new ArrayList<>();
+        }
         // 需要新增的角色ID
         Collection<Long> insertRoleIdList = CollUtil.subtract(roleIdList, dbRoleIdList);
         if (CollUtil.isNotEmpty(insertRoleIdList)){

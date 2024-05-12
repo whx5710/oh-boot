@@ -102,7 +102,7 @@ public class SysUserController {
     public Result<String> save(@RequestBody @Valid SysUserVO vo) {
         // 新增密码不能为空
         if (StrUtil.isBlank(vo.getPassword())) {
-            Result.error("密码不能为空");
+            return Result.error("密码不能为空");
         }
         // 保存
         sysUserService.save(vo);

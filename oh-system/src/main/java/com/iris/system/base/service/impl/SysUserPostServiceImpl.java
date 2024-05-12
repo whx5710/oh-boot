@@ -8,6 +8,7 @@ import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysUserPostEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,9 @@ public class SysUserPostServiceImpl extends BaseServiceImpl<SysUserPostDao, SysU
     public void saveOrUpdate(Long userId, List<Long> postIdList) {
         // 数据库岗位ID列表
         List<Long> dbPostIdList = getPostIdList(userId);
-
+        if(postIdList == null){
+            postIdList = new ArrayList<>();
+        }
         // 需要新增的岗位ID
         Collection<Long> insertPostIdList = CollUtil.subtract(postIdList, dbPostIdList);
         if (CollUtil.isNotEmpty(insertPostIdList)){
