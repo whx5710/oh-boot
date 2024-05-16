@@ -62,7 +62,7 @@ public class KafkaConsumer {
             dataMsg.setState("3"); // 异常
         }finally {
 //            dataMsg.setJsonStr(JsonUtils.toJsonString(dataMsg.getData()));
-            redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, 60*60*48); // 缓存2天
+            redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, 172800); // 缓存2天 60*60*48
             ack.acknowledge();
         }
     }

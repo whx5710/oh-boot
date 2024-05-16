@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -109,12 +110,15 @@ public class DataAppController {
      * @param request r
      * @return r
      */
-    @GetMapping("/logErrPage")
+    @GetMapping("/errLogPage")
     @Operation(summary = "根据客户端ID查询接口日志（无鉴权）")
-    public Result<PageResult<DataMsgVO>> logErrPage(@ParameterObject @Valid DataMsgQuery query, HttpServletRequest request){
+    public Result<PageResult<DataMsgVO>> errLogPage(@ParameterObject @Valid DataMsgQuery query, HttpServletRequest request){
         String clientId = query.getClientId();
         AssertUtils.isBlank(clientId,"客户端ID");
-        String secretKey = request.getHeader(Constant.SECRET_KEY);
+        String secretKey = query.getSecretKey();
+        if(ObjectUtils.isEmpty(secretKey)){
+            secretKey = request.getHeader(Constant.SECRET_KEY);
+        }
         AssertUtils.isBlank(secretKey,"客户端密钥");
         DataAppDTO dataAppDTO = dataAppService.findByClientId(clientId);
         if(dataAppDTO == null || dataAppDTO.getSecretKey() == null || !dataAppDTO.getSecretKey().equals(secretKey)){

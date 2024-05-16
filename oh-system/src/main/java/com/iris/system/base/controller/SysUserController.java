@@ -1,6 +1,5 @@
 package com.iris.system.base.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.iris.system.base.query.SysUserQuery;
 import com.iris.system.base.vo.SysUserPasswordVO;
 import com.iris.system.base.vo.SysUserVO;
@@ -17,6 +16,7 @@ import com.iris.framework.security.user.UserDetail;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,9 +101,24 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid SysUserVO vo) {
         // 新增密码不能为空
-        if (StrUtil.isBlank(vo.getPassword())) {
+        if (ObjectUtils.isEmpty(vo.getPassword())) {
             return Result.error("密码不能为空");
         }
+        // 保存
+        sysUserService.save(vo);
+        return Result.ok();
+    }
+
+    @PostMapping("register")
+    @Operation(summary = "用户注册")
+    @OperateLog(type = OperateTypeEnum.INSERT)
+    public Result<String> register(@RequestBody @Valid SysUserVO vo) {
+        // 新增密码不能为空
+        if (ObjectUtils.isEmpty(vo.getPassword())) {
+            return Result.error("密码不能为空");
+        }
+        // 自己注册的用户不分配角色，由管理员进行配置
+        vo.setRoleIdList(null);
         // 保存
         sysUserService.save(vo);
         return Result.ok();

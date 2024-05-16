@@ -23,6 +23,8 @@ public class DataMsgQuery extends Query {
     private String funcCode;
     // 客户端ID
     private String clientId;
+
+    private String secretKey;
     // topic
     private String topic;
 
@@ -67,6 +69,14 @@ public class DataMsgQuery extends Query {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 
     public String getTopic() {
