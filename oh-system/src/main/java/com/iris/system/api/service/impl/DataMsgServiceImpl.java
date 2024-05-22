@@ -106,31 +106,37 @@ public class DataMsgServiceImpl extends BaseServiceImpl<DataMessageDao, DataMsgE
         this.baseMapper.update(dataMsgEntity, updateWrapper);
     }
 
+    // 保存报文
+    @Override
+    public void saveMsgLog() {
+        try {
+            String key = RedisKeys.getDataMsgKey();
+            // 每次插入100条
+            int count = 100;
+            for (int i = 0; i < count; i++) {
+                MsgEntity msgEntity = (MsgEntity) redisCache.rightPop(key);
+                if (msgEntity == null) {
+                    return;
+                }
+                DataMsgEntity entity = BeanUtil.copyProperties(msgEntity, DataMsgEntity.class);
+                entity.setJsonStr(JsonUtils.toJsonString(msgEntity.getData()));
+                baseMapper.insert(entity);
+            }
+        } catch (Exception e) {
+            log.error("保存消息日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
+        }
+    }
+
     /**
      * 启动项目时，从Redis队列获取MQ日志并保存
      */
     @PostConstruct
-    public void saveMsgLog() {
+    public void saveLogJob() {
         ScheduledExecutorService scheduledService = ThreadUtil.createScheduledExecutor(1);
-        // 每隔20秒，执行一次
+        // 每隔30秒，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
-            try {
-                String key = RedisKeys.getDataMsgKey();
-                // 每次插入20条
-                int count = 20;
-                for (int i = 0; i < count; i++) {
-                    MsgEntity msgEntity = (MsgEntity) redisCache.rightPop(key);
-                    if (msgEntity == null) {
-                        return;
-                    }
-                    DataMsgEntity entity = BeanUtil.copyProperties(msgEntity, DataMsgEntity.class);
-                    entity.setJsonStr(JsonUtils.toJsonString(msgEntity.getData()));
-                    baseMapper.insert(entity);
-                }
-            } catch (Exception e) {
-                log.error("保存消息日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
-            }
-        }, 1, 20, TimeUnit.SECONDS);
+            saveMsgLog();
+        }, 1, 30, TimeUnit.SECONDS);
 
     }
 

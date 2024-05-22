@@ -21,4 +21,7 @@ public interface DataMsgService extends BaseService<DataMsgEntity> {
     void delete(List<Long> idList);
 
     void deleteByDate(String date);
+
+    // 保存报文
+    void saveMsgLog();
 }
