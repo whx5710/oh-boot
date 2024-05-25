@@ -617,7 +617,7 @@ CREATE TABLE `data_app`  (
 CREATE TABLE `data_function`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能名称',
-  `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功能号',
+  `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
   `is_async` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否异步0否1是',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `creator` bigint(0) NULL DEFAULT NULL,
@@ -635,7 +635,7 @@ CREATE TABLE `data_function`  (
 CREATE TABLE `data_function_authority`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
   `client_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端ID',
-  `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功能号',
+  `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `creator` bigint(0) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
