@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 import com.iris.system.base.enums.UserStatusEnum;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -55,6 +56,11 @@ public class SysUserEntity extends BaseEntity {
      * 状态  {@link UserStatusEnum}
      */
     private Integer status;
+
+    /**
+     * 修改吗密码时间
+     */
+    private LocalDateTime pwdModifyTime;
     /**
      * 机构名称
      */
@@ -147,6 +153,14 @@ public class SysUserEntity extends BaseEntity {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public LocalDateTime getPwdModifyTime() {
+        return pwdModifyTime;
+    }
+
+    public void setPwdModifyTime(LocalDateTime pwdModifyTime) {
+        this.pwdModifyTime = pwdModifyTime;
     }
 
     @Override

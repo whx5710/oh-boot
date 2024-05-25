@@ -85,6 +85,13 @@ public class SysUserVO implements Serializable, TransPojo {
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
+    /**
+     * 修改吗密码时间
+     */
+    @Schema(description = "修改吗密码时间")
+    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    private LocalDateTime pwdModifyTime;
+
     public Long getId() {
         return id;
     }
@@ -203,5 +210,13 @@ public class SysUserVO implements Serializable, TransPojo {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public LocalDateTime getPwdModifyTime() {
+        return pwdModifyTime;
+    }
+
+    public void setPwdModifyTime(LocalDateTime pwdModifyTime) {
+        this.pwdModifyTime = pwdModifyTime;
     }
 }
