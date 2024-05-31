@@ -7,8 +7,22 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "oh.sys-data-source")
 public class SysDataSourceProperties {
 
+    private Boolean enable = false;
+
     // uri请求前缀
     private String [] prefixUris;
+
+    /**
+     * 是否开启数据源过滤拦截
+     * @return
+     */
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
 
     /**
      * uri请求前缀

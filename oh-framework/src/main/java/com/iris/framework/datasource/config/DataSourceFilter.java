@@ -44,28 +44,32 @@ public class DataSourceFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String dataSourceCode = request.getHeader(DATA_SOURCE_HEADER);
-        if(!ObjectUtils.isEmpty(dataSourceCode)){
-            try {
-                log.debug("切换数据源!{}", dataSourceCode);
-                DynamicDataSourceContextHolder.push(dataSourceCode);
+        if(sysDataSourceProperties.getEnable()){
+            String dataSourceCode = request.getHeader(DATA_SOURCE_HEADER);
+            if(!ObjectUtils.isEmpty(dataSourceCode)){
+                try {
+                    log.debug("切换数据源!{}", dataSourceCode);
+                    DynamicDataSourceContextHolder.push(dataSourceCode);
+                    filterChain.doFilter(request, response);
+                }finally {
+                    // 清除数据源标识
+                    log.debug("清除数据源!{}", dataSourceCode);
+                    DynamicDataSourceContextHolder.poll();
+                }
+            } else if (filterURI(request.getRequestURI())) {
+                try {
+                    log.debug("使用系统数据源!{}", Constant.SYS_DB);
+                    DynamicDataSourceContextHolder.push(Constant.SYS_DB);
+                    filterChain.doFilter(request, response);
+                }finally {
+                    // 清除数据源标识
+                    log.debug("清除系统数据源!{}", Constant.SYS_DB);
+                    DynamicDataSourceContextHolder.poll();
+                }
+            } else {
                 filterChain.doFilter(request, response);
-            }finally {
-                // 清除数据源标识
-                log.debug("清除数据源!{}", dataSourceCode);
-                DynamicDataSourceContextHolder.poll();
             }
-        } else if (filterURI(request.getRequestURI())) {
-            try {
-                log.debug("使用系统数据源!{}", Constant.SYS_DB);
-                DynamicDataSourceContextHolder.push(Constant.SYS_DB);
-                filterChain.doFilter(request, response);
-            }finally {
-                // 清除数据源标识
-                log.debug("清除系统数据源!{}", Constant.SYS_DB);
-                DynamicDataSourceContextHolder.poll();
-            }
-        } else {
+        }else{
             filterChain.doFilter(request, response);
         }
     }

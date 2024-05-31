@@ -1,6 +1,6 @@
 package com.iris.system.quartz.task;
 
-import com.iris.system.api.service.DataMsgService;
+import com.iris.system.app.service.DataMsgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
