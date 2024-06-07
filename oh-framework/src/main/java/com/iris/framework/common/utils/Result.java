@@ -14,6 +14,9 @@ public class Result<T> {
     @Schema(description = "编码 0表示成功，其他值表示失败")
     private int code = 0;
 
+    @Schema(description = "请求是否成功")
+    private Boolean success = true;
+
     @Schema(description = "消息内容")
     private String msg = "success";
 
@@ -26,6 +29,14 @@ public class Result<T> {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 
     public String getMsg() {
@@ -51,6 +62,7 @@ public class Result<T> {
     public static <T> Result<T> ok(T data) {
         Result<T> result = new Result<>();
         result.setData(data);
+        result.setSuccess(true);
         return result;
     }
 
@@ -70,6 +82,7 @@ public class Result<T> {
         Result<T> result = new Result<>();
         result.setCode(code);
         result.setMsg(msg);
+        result.setSuccess(false);
         return result;
     }
 }

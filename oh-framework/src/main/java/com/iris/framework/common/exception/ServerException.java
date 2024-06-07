@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serial;
-import java.util.Objects;
 
 /**
  * 自定义异常
@@ -22,6 +21,8 @@ public class ServerException extends RuntimeException {
      * 错误代码
      */
     private int code;
+
+    private boolean success;
     /**
      * 提示消息
      */
@@ -33,25 +34,20 @@ public class ServerException extends RuntimeException {
      */
     private String stackInfo;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ServerException that = (ServerException) o;
-        return code == that.code && Objects.equals(msg, that.msg) && Objects.equals(stackInfo, that.stackInfo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(code, msg, stackInfo);
-    }
-
     public int getCode() {
         return code;
     }
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getMsg() {
@@ -79,6 +75,7 @@ public class ServerException extends RuntimeException {
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
         this.stackInfo = msg;
+        this.success = false;
         log.error("【{}】{}", code, msg);
     }
 
@@ -92,6 +89,7 @@ public class ServerException extends RuntimeException {
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
         this.stackInfo = stackInfo;
+        this.success = false;
         log.error("【{}】{} 异常提示:{}", code, msg, stackInfo);
     }
 
@@ -100,6 +98,7 @@ public class ServerException extends RuntimeException {
         this.code = errorCode.getCode();
         this.msg = errorCode.getMsg();
         this.stackInfo = errorCode.getMsg();
+        this.success = false;
         log.error("【{}】{}", this.code, this.msg);
     }
 
@@ -108,6 +107,7 @@ public class ServerException extends RuntimeException {
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
         this.stackInfo = msg;
+        this.success = false;
         log.error("【{}】{}", this.code, this.msg);
     }
 
