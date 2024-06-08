@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysMenuDao;
 import com.iris.system.base.enums.SuperAdminEnum;
+import com.iris.system.base.vo.SysMenuNativeVO;
 import com.iris.system.base.vo.SysMenuVO;
 import com.iris.system.base.convert.SysMenuConvert;
 import com.iris.system.base.service.SysRoleMenuService;
@@ -88,6 +89,28 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
         }
 
         return TreeUtils.build(SysMenuConvert.INSTANCE.convertList(menuList));
+    }
+
+    @Override
+    public List<SysMenuNativeVO> getUserNativeMenuList(UserDetail user, Integer type) {
+        List<SysMenuEntity> menuList;
+
+        // 系统管理员，拥有最高权限
+        if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
+            menuList = baseMapper.getMenuList(type);
+        } else {
+            menuList = baseMapper.getUserMenuList(user.getId(), type);
+        }
+        List<SysMenuNativeVO> list = SysMenuConvert.INSTANCE.convertNativeList(menuList);
+        for(SysMenuNativeVO item: list){
+            String url = item.getUrl();
+            if(url != null && url.length() > 1 && !url.startsWith("/")){
+                url = "/" + url;
+                item.setUrl(url);
+            }
+            item.setPath(item.getUrl());
+        }
+        return TreeUtils.build(list);
     }
 
     @Override

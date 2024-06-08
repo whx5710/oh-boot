@@ -1,5 +1,6 @@
 package com.iris.system.base.service;
 
+import com.iris.system.base.vo.SysMenuNativeVO;
 import com.iris.system.base.vo.SysMenuVO;
 import com.iris.system.base.entity.SysMenuEntity;
 import com.iris.framework.datasource.service.BaseService;
@@ -37,6 +38,15 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
 	 * @param type 菜单类型
 	 */
 	List<SysMenuVO> getUserMenuList(UserDetail user, Integer type);
+
+
+	/**
+	 * 用户菜单列表
+	 *
+	 * @param user  用户
+	 * @param type 菜单类型
+	 */
+	List<SysMenuNativeVO> getUserNativeMenuList(UserDetail user, Integer type);
 
 	/**
 	 * 获取子菜单的数量

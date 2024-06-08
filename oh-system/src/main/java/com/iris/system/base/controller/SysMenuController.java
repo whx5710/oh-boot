@@ -1,6 +1,7 @@
 package com.iris.system.base.controller;
 
 import com.iris.system.base.enums.MenuTypeEnum;
+import com.iris.system.base.vo.SysMenuNativeVO;
 import com.iris.system.base.vo.SysMenuVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,6 +44,14 @@ public class SysMenuController {
         UserDetail user = SecurityUser.getUser();
         List<SysMenuVO> list = sysMenuService.getUserMenuList(user, MenuTypeEnum.MENU.getValue());
 
+        return Result.ok(list);
+    }
+
+    @GetMapping("navPlus")
+    @Operation(summary = "菜单导航plus")
+    public Result<List<SysMenuNativeVO>> navPlus() {
+        UserDetail user = SecurityUser.getUser();
+        List<SysMenuNativeVO> list = sysMenuService.getUserNativeMenuList(user, MenuTypeEnum.MENU.getValue());
         return Result.ok(list);
     }
 
