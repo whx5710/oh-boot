@@ -2,7 +2,9 @@ package com.iris.framework.security.utils;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import com.iris.framework.common.constant.Constant;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.util.ObjectUtils;
 
 /**
  * Token 工具类
@@ -26,6 +28,9 @@ public class TokenUtils {
         String accessToken = request.getHeader("Authorization");
         if (StrUtil.isBlank(accessToken)) {
             accessToken = request.getParameter("access_token");
+        }
+        if(!ObjectUtils.isEmpty(accessToken) && accessToken.startsWith(Constant.TOKEN_PREFIX)){
+            accessToken = accessToken.substring(Constant.TOKEN_PREFIX.length());
         }
         return accessToken;
     }

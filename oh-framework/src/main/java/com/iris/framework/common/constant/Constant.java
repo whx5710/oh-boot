@@ -43,6 +43,10 @@ public interface Constant {
      * OK
      */
     String OK = "OK";
+    /**
+     * token前缀，注意有空格
+     */
+    String TOKEN_PREFIX = "Bearer ";
 
     /**
      * pgsql的driver

@@ -142,10 +142,12 @@ public class SysAuthServiceImpl implements SysAuthService {
         // 生成 accessToken
         String accessToken = TokenUtils.generator();
 
+        String refreshToken = TokenUtils.generator();
+
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, user);
 
-        return new SysTokenVO(accessToken);
+        return new SysTokenVO(accessToken, refreshToken);
     }
 
     @Override
@@ -165,10 +167,12 @@ public class SysAuthServiceImpl implements SysAuthService {
         // 生成 accessToken
         String accessToken = TokenUtils.generator();
 
+        String refreshToken = TokenUtils.generator();
+
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, user);
 
-        return new SysTokenVO(accessToken);
+        return new SysTokenVO(accessToken, refreshToken);
     }
 
     @Override

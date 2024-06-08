@@ -16,18 +16,30 @@ public class SysTokenVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public SysTokenVO(String access_token) {
-        this.access_token = access_token;
-    }
-
     @Schema(description = "access_token")
-    private String access_token;
+    private String accessToken;
 
-    public String getAccess_token() {
-        return access_token;
+    @Schema(description = "refresh_token")
+    private String refreshToken;
+
+    public SysTokenVO(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
-    public void setAccess_token(String access_token) {
-        this.access_token = access_token;
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
