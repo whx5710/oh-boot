@@ -1,14 +1,9 @@
 package com.iris.system.base.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iris.framework.common.utils.DateUtils;
 import com.iris.framework.common.utils.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
-
-import java.time.LocalDateTime;
 
 /**
  * 菜单管理
@@ -24,7 +19,7 @@ public class SysMenuNativeVO extends TreeNode<SysMenuNativeVO> {
     private String name;
 
     @Schema(description = "菜单URL")
-    private String url;
+    private String path;
 
     @Schema(description = "类型  0：菜单   1：按钮   2：接口")
     @Range(min = 0, max = 2, message = "类型不正确")
@@ -34,25 +29,8 @@ public class SysMenuNativeVO extends TreeNode<SysMenuNativeVO> {
     @Range(min = 0, max = 1, message = "打开方式不正确")
     private Integer openStyle;
 
-    @Schema(description = "菜单图标")
-    private String icon;
-
-    @Schema(description = "授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)")
-    private String authority;
-
-    @Schema(description = "排序")
-    @Min(value = 0, message = "排序值不能小于0")
-    private Integer sort;
-
-    @Schema(description = "创建时间")
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    private LocalDateTime createTime;
-
-    @Schema(description = "上级菜单名称")
-    private String parentName;
-
-    @Schema(description = "菜单URL")
-    private String path;
+    // 菜单元素
+    private SysMenuMetaVO meta;
 
     public @NotBlank(message = "菜单名称不能为空") String getName() {
         return name;
@@ -60,14 +38,6 @@ public class SysMenuNativeVO extends TreeNode<SysMenuNativeVO> {
 
     public void setName(@NotBlank(message = "菜单名称不能为空") String name) {
         this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public @Range(min = 0, max = 2, message = "类型不正确") Integer getType() {
@@ -86,51 +56,19 @@ public class SysMenuNativeVO extends TreeNode<SysMenuNativeVO> {
         this.openStyle = openStyle;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-    public @Min(value = 0, message = "排序值不能小于0") Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(@Min(value = 0, message = "排序值不能小于0") Integer sort) {
-        this.sort = sort;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
     public String getPath() {
         return path;
     }
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public SysMenuMetaVO getMeta() {
+        return meta;
+    }
+
+    public void setMeta(SysMenuMetaVO meta) {
+        this.meta = meta;
     }
 }

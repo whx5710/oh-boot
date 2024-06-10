@@ -1,6 +1,5 @@
 package com.iris.system.base.convert;
 
-import com.iris.system.base.vo.SysMenuNativeVO;
 import com.iris.system.base.vo.SysMenuVO;
 import com.iris.system.base.entity.SysMenuEntity;
 import org.mapstruct.Mapper;
@@ -18,7 +17,5 @@ public interface SysMenuConvert {
     SysMenuVO convert(SysMenuEntity entity);
 
     List<SysMenuVO> convertList(List<SysMenuEntity> list);
-
-    List<SysMenuNativeVO> convertNativeList(List<SysMenuEntity> list);
 
 }

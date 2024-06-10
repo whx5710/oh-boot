@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysMenuDao;
 import com.iris.system.base.enums.SuperAdminEnum;
+import com.iris.system.base.vo.SysMenuMetaVO;
 import com.iris.system.base.vo.SysMenuNativeVO;
 import com.iris.system.base.vo.SysMenuVO;
 import com.iris.system.base.convert.SysMenuConvert;
@@ -17,11 +18,9 @@ import com.iris.system.base.entity.SysMenuEntity;
 import com.iris.system.base.service.SysMenuService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 菜单管理
@@ -95,22 +94,39 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
     public List<SysMenuNativeVO> getUserNativeMenuList(UserDetail user, Integer type) {
         List<SysMenuEntity> menuList;
 
+        List<SysMenuNativeVO> menuNativeList = new ArrayList<>();
+
         // 系统管理员，拥有最高权限
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
             menuList = baseMapper.getMenuList(type);
         } else {
             menuList = baseMapper.getUserMenuList(user.getId(), type);
         }
-        List<SysMenuNativeVO> list = SysMenuConvert.INSTANCE.convertNativeList(menuList);
-        for(SysMenuNativeVO item: list){
-            String url = item.getUrl();
+        for(SysMenuEntity sysMenuEntity: menuList){
+            SysMenuNativeVO sysMenuNativeVO = new SysMenuNativeVO();
+
+            sysMenuNativeVO.setId(sysMenuEntity.getId());
+            String url = sysMenuEntity.getUrl();
             if(url != null && url.length() > 1 && !url.startsWith("/")){
                 url = "/" + url;
-                item.setUrl(url);
             }
-            item.setPath(item.getUrl());
+            sysMenuNativeVO.setPath(url);
+            sysMenuNativeVO.setName(sysMenuEntity.getName());
+            sysMenuNativeVO.setType(sysMenuEntity.getType());
+            sysMenuNativeVO.setOpenStyle(sysMenuEntity.getOpenStyle());
+            sysMenuNativeVO.setPid(sysMenuEntity.getPid());
+
+            SysMenuMetaVO sysMenuMetaVO = new SysMenuMetaVO();
+            sysMenuMetaVO.setRank(sysMenuEntity.getSort());
+            sysMenuMetaVO.setIcon(sysMenuEntity.getIcon());
+            sysMenuMetaVO.setTitle(sysMenuEntity.getName());
+            if(!ObjectUtils.isEmpty(sysMenuEntity.getAuthority())){
+                sysMenuMetaVO.setAuths(sysMenuEntity.getAuthority().split(","));
+            }
+            sysMenuNativeVO.setMeta(sysMenuMetaVO);
+            menuNativeList.add(sysMenuNativeVO);
         }
-        return TreeUtils.build(list);
+        return TreeUtils.build(menuNativeList);
     }
 
     @Override
