@@ -365,24 +365,25 @@ CREATE TABLE `sys_log_operate`  (
 -- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
-CREATE TABLE `sys_menu`  (
-  `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `pid` bigint(0) NULL DEFAULT NULL COMMENT '上级ID，一级菜单为0',
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
-  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单URL',
-  `authority` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)',
-  `type` tinyint(0) NULL DEFAULT NULL COMMENT '类型   0：菜单   1：按钮   2：接口',
-  `open_style` tinyint(0) NULL DEFAULT NULL COMMENT '打开方式   0：内部   1：外部',
-  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
-  `sort` int(0) NULL DEFAULT NULL COMMENT '排序',
-  `db_status` tinyint DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint(0) NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+CREATE TABLE `sys_menu` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `pid` bigint DEFAULT NULL COMMENT '上级ID，一级菜单为0',
+  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '菜单名称',
+  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '菜单URL',
+  `authority` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)',
+  `type` tinyint DEFAULT NULL COMMENT '类型   0：菜单   1：按钮   2：接口',
+  `open_style` tinyint DEFAULT NULL COMMENT '打开方式   0：内部   1：外部',
+  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '菜单图标',
+  `sort` int DEFAULT NULL COMMENT '排序',
+  `db_status` tinyint DEFAULT '1' COMMENT '数据状态标识 0：已删除，1：正常',
+  `mark` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
+  `creator` bigint DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_pid`(`pid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 111 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
+  KEY `idx_pid` (`pid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='菜单管理';
 
 -- ----------------------------
 -- Table structure for sys_org

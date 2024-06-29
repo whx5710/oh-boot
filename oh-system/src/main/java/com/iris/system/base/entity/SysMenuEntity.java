@@ -41,6 +41,11 @@ public class SysMenuEntity extends BaseEntity {
 	 * 菜单图标
 	 */
 	private String icon;
+
+	/**
+	 * 备注
+	 */
+	private String mark;
 	/**
 	 * 排序
 	 */
@@ -108,6 +113,14 @@ public class SysMenuEntity extends BaseEntity {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public String getMark() {
+		return mark;
+	}
+
+	public void setMark(String mark) {
+		this.mark = mark;
 	}
 
 	@Override

@@ -51,6 +51,9 @@ public class SysMenuVO extends TreeNode<SysMenuVO> {
     @Schema(description = "上级菜单名称")
     private String parentName;
 
+    @Schema(description = "备注")
+    private String mark;
+
     public String getName() {
         return name;
     }
@@ -121,5 +124,13 @@ public class SysMenuVO extends TreeNode<SysMenuVO> {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 }
