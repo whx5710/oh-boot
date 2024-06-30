@@ -367,7 +367,7 @@ CREATE TABLE `sys_log_operate`  (
 -- ----------------------------
 CREATE TABLE `sys_menu` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `pid` bigint DEFAULT NULL COMMENT '上级ID，一级菜单为0',
+  `parent_id` bigint DEFAULT NULL COMMENT '上级ID，一级菜单为0',
   `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '菜单名称',
   `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '菜单URL',
   `authority` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)',
@@ -390,7 +390,7 @@ CREATE TABLE `sys_menu` (
 -- ----------------------------
 CREATE TABLE `sys_org`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `pid` bigint(0) NULL DEFAULT NULL COMMENT '上级ID',
+  `parent_id` bigint(0) NULL DEFAULT NULL COMMENT '上级ID',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '机构名称',
   `note` varchar(800) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `sort` int(0) NULL DEFAULT NULL COMMENT '排序',

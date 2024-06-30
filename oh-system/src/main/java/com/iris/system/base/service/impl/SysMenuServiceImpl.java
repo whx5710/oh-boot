@@ -51,7 +51,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
         // 上级菜单不能为自己
-        if (entity.getId().equals(entity.getPid())) {
+        if (entity.getId().equals(entity.getParentId())) {
             throw new ServerException("上级菜单不能为自己");
         }
 
@@ -114,7 +114,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
             sysMenuNativeVO.setName(sysMenuEntity.getName());
             sysMenuNativeVO.setType(sysMenuEntity.getType());
             sysMenuNativeVO.setOpenStyle(sysMenuEntity.getOpenStyle());
-            sysMenuNativeVO.setPid(sysMenuEntity.getPid());
+            sysMenuNativeVO.setParentId(sysMenuEntity.getParentId());
 
             SysMenuMetaVO sysMenuMetaVO = new SysMenuMetaVO();
             sysMenuMetaVO.setRank(sysMenuEntity.getSort());
@@ -131,7 +131,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 
     @Override
     public Long getSubMenuCount(Long pid) {
-        return count(new LambdaQueryWrapper<SysMenuEntity>().eq(SysMenuEntity::getPid, pid));
+        return count(new LambdaQueryWrapper<SysMenuEntity>().eq(SysMenuEntity::getParentId, pid));
     }
 
     @Override

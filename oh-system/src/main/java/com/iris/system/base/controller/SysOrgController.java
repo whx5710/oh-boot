@@ -37,7 +37,6 @@ public class SysOrgController {
     @PreAuthorize("hasAuthority('sys:org:list')")
     public Result<List<SysOrgVO>> list() {
         List<SysOrgVO> list = sysOrgService.getList();
-
         return Result.ok(list);
     }
 
@@ -49,8 +48,8 @@ public class SysOrgController {
         SysOrgVO vo = SysOrgConvert.INSTANCE.convert(entity);
 
         // 获取上级机构名称
-        if (!Constant.ROOT.equals(entity.getPid())) {
-            SysOrgEntity parentEntity = sysOrgService.getById(entity.getPid());
+        if (!Constant.ROOT.equals(entity.getParentId())) {
+            SysOrgEntity parentEntity = sysOrgService.getById(entity.getParentId());
             vo.setParentName(parentEntity.getName());
         }
 

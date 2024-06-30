@@ -61,13 +61,13 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 		SysOrgEntity entity = SysOrgConvert.INSTANCE.convert(vo);
 
 		// 上级机构不能为自身
-		if(entity.getId().equals(entity.getPid())){
+		if(entity.getId().equals(entity.getParentId())){
 			throw new ServerException("上级机构不能为自身");
 		}
 
 		// 上级机构不能为下级
 		List<Long> subOrgList = getSubOrgIdList(entity.getId());
-		if(subOrgList.contains(entity.getPid())){
+		if(subOrgList.contains(entity.getParentId())){
 			throw new ServerException("上级机构不能为下级");
 		}
 
@@ -110,7 +110,7 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 
 	private void getTree(Long id, List<SysOrgEntity> orgList, List<Long> subIdList) {
 		for(SysOrgEntity org : orgList){
-			if (org.getPid().equals(id)){
+			if (org.getParentId().equals(id)){
 				getTree(org.getId(), orgList, subIdList);
 
 				subIdList.add(org.getId());

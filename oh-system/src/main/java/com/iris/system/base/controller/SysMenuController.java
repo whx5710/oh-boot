@@ -82,8 +82,8 @@ public class SysMenuController {
         SysMenuVO vo = SysMenuConvert.INSTANCE.convert(entity);
 
         // 获取上级菜单名称
-        if (!Constant.ROOT.equals(entity.getPid())) {
-            SysMenuEntity parentEntity = sysMenuService.getById(entity.getPid());
+        if (!Constant.ROOT.equals(entity.getParentId())) {
+            SysMenuEntity parentEntity = sysMenuService.getById(entity.getParentId());
             vo.setParentName(parentEntity.getName());
         }
 

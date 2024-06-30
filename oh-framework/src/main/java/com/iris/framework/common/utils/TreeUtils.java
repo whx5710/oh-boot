@@ -19,11 +19,11 @@ public class TreeUtils {
      */
     public static <T extends TreeNode<T>> List<T> build(List<T> treeNodes, Long pid) {
         // pid不能为空
-        AssertUtils.isNull(pid, "pid[上级ID]");
+        AssertUtils.isNull(pid, "parentId[上级ID]");
 
         List<T> treeList = new ArrayList<>();
         for (T treeNode : treeNodes) {
-            if (pid.equals(treeNode.getPid())) {
+            if (pid.equals(treeNode.getParentId())) {
                 treeList.add(findChildren(treeNodes, treeNode));
             }
         }
@@ -36,7 +36,7 @@ public class TreeUtils {
      */
     private static <T extends TreeNode<T>> T findChildren(List<T> treeNodes, T rootNode) {
         for (T treeNode : treeNodes) {
-            if (rootNode.getId().equals(treeNode.getPid())) {
+            if (rootNode.getId().equals(treeNode.getParentId())) {
                 rootNode.getChildren().add(findChildren(treeNodes, treeNode));
             }
         }
@@ -56,7 +56,7 @@ public class TreeUtils {
         }
 
         for (T node : nodeMap.values()) {
-            T parent = nodeMap.get(node.getPid());
+            T parent = nodeMap.get(node.getParentId());
             if (parent != null && !(node.getId().equals(parent.getId()))) {
                 parent.getChildren().add(node);
                 continue;

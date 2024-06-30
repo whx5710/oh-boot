@@ -16,7 +16,7 @@ public class SysMenuEntity extends BaseEntity {
 	/**
 	 * 上级ID，一级菜单为0
 	 */
-	private Long pid;
+	private Long parentId;
 	/**
 	 * 菜单名称
 	 */
@@ -51,14 +51,13 @@ public class SysMenuEntity extends BaseEntity {
 	 */
 	private Integer sort;
 
-	public Long getPid() {
-		return pid;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setPid(Long pid) {
-		this.pid = pid;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
-
 	public String getName() {
 		return name;
 	}
@@ -127,11 +126,11 @@ public class SysMenuEntity extends BaseEntity {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof SysMenuEntity that)) return false;
-		return Objects.equals(getPid(), that.getPid()) && Objects.equals(getName(), that.getName()) && Objects.equals(getUrl(), that.getUrl()) && Objects.equals(getAuthority(), that.getAuthority()) && Objects.equals(getType(), that.getType()) && Objects.equals(getOpenStyle(), that.getOpenStyle()) && Objects.equals(getIcon(), that.getIcon()) && Objects.equals(getSort(), that.getSort());
+		return Objects.equals(getParentId(), that.getParentId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getUrl(), that.getUrl()) && Objects.equals(getAuthority(), that.getAuthority()) && Objects.equals(getType(), that.getType()) && Objects.equals(getOpenStyle(), that.getOpenStyle()) && Objects.equals(getIcon(), that.getIcon()) && Objects.equals(getSort(), that.getSort());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getPid(), getName(), getUrl(), getAuthority(), getType(), getOpenStyle(), getIcon(), getSort());
+		return Objects.hash(getParentId(), getName(), getUrl(), getAuthority(), getType(), getOpenStyle(), getIcon(), getSort());
 	}
 }

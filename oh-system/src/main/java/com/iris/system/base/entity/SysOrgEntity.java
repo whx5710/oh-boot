@@ -17,7 +17,7 @@ public class SysOrgEntity extends BaseEntity {
 	/**
 	 * 上级ID
 	 */
-	private Long pid;
+	private Long parentId;
 	/**
 	 * 机构名称
 	 */
@@ -35,12 +35,12 @@ public class SysOrgEntity extends BaseEntity {
 	// 备注
 	private String note;
 
-	public Long getPid() {
-		return pid;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setPid(Long pid) {
-		this.pid = pid;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getName() {
@@ -79,11 +79,11 @@ public class SysOrgEntity extends BaseEntity {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof SysOrgEntity that)) return false;
-		return Objects.equals(getPid(), that.getPid()) && Objects.equals(getName(), that.getName()) && Objects.equals(getSort(), that.getSort()) && Objects.equals(getParentName(), that.getParentName());
+		return Objects.equals(getParentId(), that.getParentId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getSort(), that.getSort()) && Objects.equals(getParentName(), that.getParentName());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getPid(), getName(), getSort(), getParentName());
+		return Objects.hash(getParentId(), getName(), getSort(), getParentName());
 	}
 }

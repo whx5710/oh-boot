@@ -119,277 +119,277 @@ INSERT INTO `sys_dict_type` VALUES (15, 'sms_platform', '平台类型', 0, NULL,
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(1, 0, '系统管理', 'sys', '', 0, 0, 'icon-Report', 1, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2024-06-29 11:26:07');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(2, 1, '系统设置', 'sys/set', '', 0, 0, 'icon-setting', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:26:19');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(3, 2, '菜单管理', 'sys/menu/index', NULL, 0, 0, 'icon-menu', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(4, 3, '查看', '', 'sys:menu:list', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(5, 3, '新增', '', 'sys:menu:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(6, 3, '修改', '', 'sys:menu:update,sys:menu:info', 1, 0, '', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(7, 3, '删除', '', 'sys:menu:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(8, 2, '数据字典', 'sys/dict/type', '', 0, 0, 'icon-insertrowabove', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(9, 8, '查询', '', 'sys:dict:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(10, 8, '新增', '', 'sys:dict:save', 1, 0, '', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(11, 8, '修改', '', 'sys:dict:update,sys:dict:info', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(12, 8, '删除', '', 'sys:dict:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(13, 1, '权限管理', 'sys/authority', '', 0, 0, 'icon-safetycertificate', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:26:56');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(14, 13, '岗位管理', 'sys/post/index', '', 0, 0, 'icon-solution', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(15, 14, '查询', '', 'sys:post:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(16, 14, '新增', '', 'sys:post:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(17, 14, '修改', '', 'sys:post:update,sys:post:info', 1, 0, '', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(18, 14, '删除', '', 'sys:post:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(19, 13, '机构管理', 'sys/org/index', '', 0, 0, 'icon-cluster', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(20, 19, '查询', '', 'sys:org:list', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(21, 19, '新增', '', 'sys:org:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(22, 19, '修改', '', 'sys:org:update,sys:org:info', 1, 0, '', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(23, 19, '删除', '', 'sys:org:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(24, 13, '角色管理', 'sys/role/index', '', 0, 0, 'icon-team', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(25, 24, '查询', '', 'sys:role:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(26, 24, '新增', '', 'sys:role:save,sys:role:menu,sys:org:list', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(27, 24, '修改', '', 'sys:role:update,sys:role:info,sys:role:menu,sys:org:list,sys:user:page', 1, 0, '', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(28, 24, '删除', '', 'sys:role:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(29, 13, '用户管理', 'sys/user/index', '', 0, 0, 'icon-user', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(30, 29, '查询', '', 'sys:user:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(31, 29, '新增', '', 'sys:user:save,sys:role:list', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(32, 29, '修改', '', 'sys:user:update,sys:user:info,sys:role:list', 1, 0, '', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(33, 29, '删除', '', 'sys:user:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(34, 1, '应用管理', 'sys/app', '', 0, 0, 'icon-appstore', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:27:30');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(35, 2, '附件管理', 'sys/attachment/index', NULL, 0, 0, 'icon-folder-fill', 3, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(36, 35, '查看', '', 'sys:attachment:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(37, 35, '上传', '', 'sys:attachment:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(38, 35, '删除', '', 'sys:attachment:delete', 1, 0, '', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(39, 1, '日志管理', 'sys/log', '', 0, 0, 'icon-filedone', 4, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:28:36');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(40, 39, '登录日志', 'sys/log/login', 'sys:log:login', 0, 0, 'icon-solution', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(41, 29, '导入', '', 'sys:user:import', 1, 0, '', 5, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(42, 29, '导出', '', 'sys:user:export', 1, 0, '', 6, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(43, 2, '参数管理', 'sys/params/index', 'sys:params:all', 0, 0, 'icon-filedone', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(44, 2, '接口文档', 'doc', '', 0, 1, 'icon-file-text-fill', 10, 1, 'http://localhost:8080/doc.html', 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:45:34');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(45, 0, '在线开发', 'online', '', 0, 0, 'icon-cloud', 2, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:28:49');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(46, 45, 'Online表单开发', 'online/table/index', 'online:table:all', 0, 0, 'icon-table', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(47, 39, '操作日志', 'sys/log/operate', 'sys:operate:all', 0, 0, 'icon-file-text', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(48, 69, '踢出', '', 'monitor:user:user', 1, 0, '', 1, 1, NULL, 10000, '2023-09-25 21:16:17', 10000, '2023-09-25 21:16:17');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(49, 34, '流程管理', 'sys/flow', '', 0, 0, 'icon-switchuser', 1, 1, NULL, 10000, '2023-12-23 16:02:38', 10000, '2024-06-29 11:27:43');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(50, 49, '流程设计', 'workflow/index', 'flow:saveOrUpdate', 0, 0, 'icon-expand', 0, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-07-16 11:54:26');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(51, 49, '自定义流程', 'workflow/index-list', 'flow:page,flow:delete', 0, 0, 'icon-menu', 0, 1, NULL, 10000, '2023-12-18 04:48:26', 10000, '2023-12-18 04:48:26');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(59, 2, '定时任务', 'quartz/schedule/index', NULL, 0, 0, 'icon-reloadtime', 0, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(60, 59, '查看', '', 'schedule:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(61, 59, '新增', '', 'schedule:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(62, 59, '修改', '', 'schedule:update,schedule:info', 1, 0, '', 2, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(63, 59, '删除', '', 'schedule:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(64, 59, '立即运行', '', 'schedule:run', 1, 0, '', 2, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(65, 59, '日志', '', 'schedule:log', 1, 0, '', 4, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(66, 34, '系统监控', 'sys/monitor', '', 0, 0, 'icon-Report', 10, 1, NULL, 10000, '2023-06-12 13:46:12', 10000, '2024-06-29 11:28:20');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(67, 66, '服务监控', 'monitor/server/index', 'monitor:server:all', 0, 0, 'icon-sever', 0, 1, NULL, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(68, 66, '缓存监控', 'monitor/cache/index', 'monitor:cache:all', 0, 0, 'icon-fund-fill', 2, 1, NULL, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(69, 66, '用户监控', 'monitor/user/index', 'monitor:user:all', 0, 0, 'icon-user', 3, 1, NULL, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(70, 34, '消息管理', 'sys/msg', '', 0, 0, 'icon-message', 2, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2024-06-29 11:27:52');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(71, 70, '短信日志', 'message/sms/log/index', 'sms:log', 0, 0, 'icon-detail', 1, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(72, 70, '短信平台', 'message/sms/platform/index', NULL, 0, 0, 'icon-whatsapp', 0, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(73, 72, '查看', '', 'sms:platform:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(74, 72, '新增', '', 'sms:platform:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(75, 72, '修改', '', 'sms:platform:update,sms:platform:info', 1, 0, '', 2, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(76, 72, '删除', '', 'sms:platform:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(77, 34, '代码生成器', '{{apiUrl}}/sysApi/oh-generator/index.html', '', 0, 1, 'icon-rocket', 2, 1, NULL, 10000, '2023-06-12 13:47:50', 10000, '2023-06-24 21:35:28');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(80, 84, '查看', '', 'sys:app:page,sys:function:page,sys:authority:page', 1, 0, '', 0, 1, NULL, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:05:51');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(81, 84, '新增', '', 'sys:app:save,sys:function:save', 1, 0, '', 1, 1, NULL, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:04');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(82, 84, '修改', '', 'sys:app:update,sys:app:info,sys:function:update,sys:function:info', 1, 0, '', 2, 1, NULL, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:24');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(83, 84, '删除', '', 'sys:app:delete,sys:function:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:34');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(84, 34, '接口管理', 'sys/app/index', '', 0, 0, 'icon-drag', 5, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2024-04-21 20:03:08');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(85, 2, '版本信息', 'sys/info/index', '', 0, 0, 'icon-menu', 11, 1, NULL, 10000, '2023-08-13 10:35:40', 10000, '2023-09-16 16:02:27');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(86, 85, '查看', '', 'system:info:page', 1, 0, '', 0, 1, NULL, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(87, 85, '新增', '', 'system:info:save', 1, 0, '', 1, 1, NULL, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(88, 85, '修改', '', 'system:info:update,system:info:info', 1, 0, '', 2, 1, NULL, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(89, 85, '删除', '', 'system:info:delete', 1, 0, '', 3, 1, NULL, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(100, 0, '协同办公', 'team', '', 0, 0, 'icon-insertrowleft', 4, 1, NULL, 10000, '2022-11-27 17:21:33', 10000, '2024-06-29 11:28:58');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(101, 100, '项目信息表', 'team/project/index', NULL, 0, 0, 'icon-menu', 1, 1, NULL, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:44:38');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(102, 101, '查看', '', 'team:project:page', 1, 0, '', 0, 1, NULL, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(103, 101, '新增', '', 'team:project:save', 1, 0, '', 1, 1, NULL, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(104, 101, '修改', '', 'team:project:update,team:project:info', 1, 0, '', 2, 1, NULL, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(105, 101, '删除', '', 'team:project:delete', 1, 0, '', 3, 1, NULL, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(106, 100, '任务表', 'team/task/index', NULL, 0, 0, 'icon-menu', 2, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:44:30');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(107, 106, '查看', '', 'team:task:page', 1, 0, '', 0, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(108, 106, '新增', '', 'team:task:save', 1, 0, '', 1, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(109, 106, '修改', '', 'team:task:update,oneHill:task:info', 1, 0, '', 2, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO sys_menu
-(id, pid, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
+(id, parent_id, name, url, authority, `type`, open_style, icon, sort, db_status, mark, creator, create_time, updater, update_time)
 VALUES(110, 106, '删除', '', 'team:task:delete', 1, 0, '', 3, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 
 -- ----------------------------
