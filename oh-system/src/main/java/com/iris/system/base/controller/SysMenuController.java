@@ -2,7 +2,7 @@ package com.iris.system.base.controller;
 
 import com.iris.system.base.enums.MenuTypeEnum;
 import com.iris.system.base.vo.SysMenuNativeVO;
-import com.iris.system.base.vo.SysMenuVO;
+import com.iris.system.base.vo.SysMenuTreeVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,9 +40,9 @@ public class SysMenuController {
 
     @GetMapping("nav")
     @Operation(summary = "菜单导航")
-    public Result<List<SysMenuVO>> nav() {
+    public Result<List<SysMenuTreeVO>> nav() {
         UserDetail user = SecurityUser.getUser();
-        List<SysMenuVO> list = sysMenuService.getUserMenuList(user, MenuTypeEnum.MENU.getValue());
+        List<SysMenuTreeVO> list = sysMenuService.getUserMenuList(user, MenuTypeEnum.MENU.getValue());
 
         return Result.ok(list);
     }
@@ -68,18 +68,27 @@ public class SysMenuController {
     @Operation(summary = "菜单列表")
     @Parameter(name = "type", description = "菜单类型 0：菜单 1：按钮  2：接口  null：全部")
     @PreAuthorize("hasAuthority('sys:menu:list')")
-    public Result<List<SysMenuVO>> list(Integer type) {
-        List<SysMenuVO> list = sysMenuService.getMenuList(type);
+    public Result<List<SysMenuTreeVO>> list(Integer type) {
+        List<SysMenuTreeVO> list = sysMenuService.getMenuList(type);
+        return Result.ok(list);
+    }
 
+
+    @GetMapping("listTree")
+    @Operation(summary = "菜单列表-树形")
+    @Parameter(name = "type", description = "菜单类型 0：菜单 1：按钮  2：接口  null：全部")
+    @PreAuthorize("hasAuthority('sys:menu:list')")
+    public Result<List<SysMenuTreeVO>> listTree(Integer type) {
+        List<SysMenuTreeVO> list = sysMenuService.getMenuTreeList(type);
         return Result.ok(list);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:menu:info')")
-    public Result<SysMenuVO> get(@PathVariable("id") Long id) {
+    public Result<SysMenuTreeVO> get(@PathVariable("id") Long id) {
         SysMenuEntity entity = sysMenuService.getById(id);
-        SysMenuVO vo = SysMenuConvert.INSTANCE.convert(entity);
+        SysMenuTreeVO vo = SysMenuConvert.INSTANCE.convert(entity);
 
         // 获取上级菜单名称
         if (!Constant.ROOT.equals(entity.getParentId())) {
@@ -94,7 +103,7 @@ public class SysMenuController {
     @Operation(summary = "保存")
     @OperateLog(type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:menu:save')")
-    public Result<String> save(@RequestBody @Valid SysMenuVO vo) {
+    public Result<String> save(@RequestBody @Valid SysMenuTreeVO vo) {
         sysMenuService.save(vo);
 
         return Result.ok();
@@ -104,7 +113,7 @@ public class SysMenuController {
     @Operation(summary = "修改")
     @OperateLog(type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
-    public Result<String> update(@RequestBody @Valid SysMenuVO vo) {
+    public Result<String> update(@RequestBody @Valid SysMenuTreeVO vo) {
         sysMenuService.update(vo);
 
         return Result.ok();

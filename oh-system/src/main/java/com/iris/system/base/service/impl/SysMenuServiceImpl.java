@@ -6,7 +6,7 @@ import com.iris.system.base.dao.SysMenuDao;
 import com.iris.system.base.enums.SuperAdminEnum;
 import com.iris.system.base.vo.SysMenuMetaVO;
 import com.iris.system.base.vo.SysMenuNativeVO;
-import com.iris.system.base.vo.SysMenuVO;
+import com.iris.system.base.vo.SysMenuTreeVO;
 import com.iris.system.base.convert.SysMenuConvert;
 import com.iris.system.base.service.SysRoleMenuService;
 import com.iris.framework.common.constant.Constant;
@@ -38,7 +38,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(SysMenuVO vo) {
+    public void save(SysMenuTreeVO vo) {
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
         // 保存菜单
@@ -47,7 +47,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(SysMenuVO vo) {
+    public void update(SysMenuTreeVO vo) {
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
         // 上级菜单不能为自己
@@ -70,14 +70,18 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
     }
 
     @Override
-    public List<SysMenuVO> getMenuList(Integer type) {
+    public List<SysMenuTreeVO> getMenuList(Integer type) {
         List<SysMenuEntity> menuList = baseMapper.getMenuList(type);
-
-        return TreeUtils.build(SysMenuConvert.INSTANCE.convertList(menuList), Constant.ROOT);
+        return SysMenuConvert.INSTANCE.convertList(menuList);
     }
 
     @Override
-    public List<SysMenuVO> getUserMenuList(UserDetail user, Integer type) {
+    public List<SysMenuTreeVO> getMenuTreeList(Integer type) {
+        return TreeUtils.build(getMenuList(type), Constant.ROOT);
+    }
+
+    @Override
+    public List<SysMenuTreeVO> getUserMenuList(UserDetail user, Integer type) {
         List<SysMenuEntity> menuList;
 
         // 系统管理员，拥有最高权限

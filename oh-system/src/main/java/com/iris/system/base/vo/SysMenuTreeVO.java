@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * 
  */
 @Schema(description = "菜单")
-public class SysMenuVO extends TreeNode<SysMenuVO> {
+public class SysMenuTreeVO extends TreeNode<SysMenuTreeVO> {
 
     @Schema(description = "菜单名称")
     @NotBlank(message = "菜单名称不能为空")

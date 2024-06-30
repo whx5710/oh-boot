@@ -1,7 +1,7 @@
 package com.iris.system.base.service;
 
 import com.iris.system.base.vo.SysMenuNativeVO;
-import com.iris.system.base.vo.SysMenuVO;
+import com.iris.system.base.vo.SysMenuTreeVO;
 import com.iris.system.base.entity.SysMenuEntity;
 import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.security.user.UserDetail;
@@ -18,9 +18,9 @@ import java.util.Set;
  */
 public interface SysMenuService extends BaseService<SysMenuEntity> {
 
-	void save(SysMenuVO vo);
+	void save(SysMenuTreeVO vo);
 
-	void update(SysMenuVO vo);
+	void update(SysMenuTreeVO vo);
 
 	void delete(Long id);
 
@@ -29,7 +29,15 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
 	 *
 	 * @param type 菜单类型
 	 */
-	List<SysMenuVO> getMenuList(Integer type);
+	List<SysMenuTreeVO> getMenuList(Integer type);
+
+
+	/**
+	 * 菜单列表
+	 *
+	 * @param type 菜单类型
+	 */
+	List<SysMenuTreeVO> getMenuTreeList(Integer type);
 
 	/**
 	 * 用户菜单列表
@@ -37,7 +45,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
 	 * @param user  用户
 	 * @param type 菜单类型
 	 */
-	List<SysMenuVO> getUserMenuList(UserDetail user, Integer type);
+	List<SysMenuTreeVO> getUserMenuList(UserDetail user, Integer type);
 
 
 	/**

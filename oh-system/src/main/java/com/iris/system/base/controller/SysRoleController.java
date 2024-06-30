@@ -3,11 +3,10 @@ package com.iris.system.base.controller;
 import com.iris.system.base.query.SysRoleQuery;
 import com.iris.system.base.query.SysRoleUserQuery;
 import com.iris.system.base.service.*;
-import com.iris.system.base.vo.SysMenuVO;
+import com.iris.system.base.vo.SysMenuTreeVO;
 import com.iris.system.base.vo.SysRoleDataScopeVO;
 import com.iris.system.base.vo.SysRoleVO;
 import com.iris.system.base.vo.SysUserVO;
-import com.iris.system.base.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -132,9 +131,9 @@ public class SysRoleController {
     @GetMapping("menu")
     @Operation(summary = "角色菜单")
     @PreAuthorize("hasAuthority('sys:role:menu')")
-    public Result<List<SysMenuVO>> menu() {
+    public Result<List<SysMenuTreeVO>> menu() {
         UserDetail user = SecurityUser.getUser();
-        List<SysMenuVO> list = sysMenuService.getUserMenuList(user, null);
+        List<SysMenuTreeVO> list = sysMenuService.getUserMenuList(user, null);
 
         return Result.ok(list);
     }
