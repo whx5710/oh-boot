@@ -382,7 +382,7 @@ CREATE TABLE `sys_menu` (
   `updater` bigint DEFAULT NULL COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_pid` (`pid`) USING BTREE
+  KEY `idx_pid` (`parent_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='菜单管理';
 
 -- ----------------------------
