@@ -4,12 +4,12 @@
 <mapper namespace="com.iris.system.base.dao.SysOrgDao">
 
 	<select id="getList" resultType="com.iris.system.base.entity.SysOrgEntity">
-		select t1.*, (select t2.name from sys_org t2 where t2.id = t1.pid) parentName from sys_org t1 where t1.db_status = 1
+		select t1.*, (select t2.name from sys_org t2 where t2.id = t1.parent_id) parentName from sys_org t1 where t1.db_status = 1
 			order by t1.sort asc
 	</select>
 
 	<select id="getIdAndPidList" resultType="com.iris.system.base.entity.SysOrgEntity">
-		select t1.id, t1.pid from sys_org t1 where t1.db_status = 1
+		select t1.id, t1.parent_id from sys_org t1 where t1.db_status = 1
 	</select>
 
 </mapper>
