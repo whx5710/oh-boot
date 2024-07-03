@@ -400,7 +400,7 @@ CREATE TABLE `sys_org`  (
   `updater` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_pid`(`pid`) USING BTREE
+  INDEX `idx_pid`(`parent_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '机构管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
