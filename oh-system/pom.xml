@@ -8,6 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>oh-system</artifactId>
     <description>系统基础功能</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 协同任务 -->
@@ -56,5 +57,18 @@
             <artifactId>oshi-core</artifactId>
         </dependency>
     </dependencies>
+
+    <!-- 打包时需要配置 -->
+    <build>
+        <!-- 打jar包命名-${revision} -->
+        <finalName>${project.artifactId}-${revision}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>
