@@ -10,7 +10,9 @@ public enum ErrorCode {
     UNAUTHORIZED(401, "还未授权，不能访问"),
     FORBIDDEN(403, "没有权限，禁止访问"),
     NOT_FOUND(404, "未找到访问资源"),
-    INTERNAL_SERVER_ERROR(500, "服务器异常，请稍后再试");
+    INTERNAL_SERVER_ERROR(500, "服务器异常，请稍后再试"),
+    MISSING_PARAMETER_ERROR(500, "请求参数异常，请检查");
+
 
     private final int code;
     private final String msg;

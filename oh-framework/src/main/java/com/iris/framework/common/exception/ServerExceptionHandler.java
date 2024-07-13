@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -61,10 +62,20 @@ public class ServerExceptionHandler {
         return Result.error(ErrorCode.NOT_FOUND);
     }
 
+    /**
+     * 请求参数错误
+     * @param ex e
+     * @return 500
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result<String> handleMissingException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        return Result.error(ErrorCode.MISSING_PARAMETER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception ex) {
         log.error(ex.getMessage(), ex);
         return Result.error(ErrorCode.INTERNAL_SERVER_ERROR);
     }
-
 }

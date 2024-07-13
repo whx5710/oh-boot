@@ -78,6 +78,9 @@ public class SysUserVO implements Serializable, TransPojo {
     @Schema(description = "超级管理员   0：否   1：是")
     private Integer superAdmin;
 
+    @Schema(description = "用户密钥，用于第三方登录")
+    private String userKey;
+
     @Schema(description = "机构名称")
     private String orgName;
 
@@ -218,5 +221,13 @@ public class SysUserVO implements Serializable, TransPojo {
 
     public void setPwdModifyTime(LocalDateTime pwdModifyTime) {
         this.pwdModifyTime = pwdModifyTime;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 }

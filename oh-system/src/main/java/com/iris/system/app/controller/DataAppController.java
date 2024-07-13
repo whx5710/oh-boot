@@ -145,5 +145,4 @@ public class DataAppController {
         dataMsgService.deleteByDate(date);
         return Result.ok();
     }
-
 }

@@ -43,7 +43,19 @@ public class SysAuthController {
     @Operation(summary = "账号密码登录")
     public Result<SysTokenVO> login(@RequestBody SysAccountLoginVO login) {
         SysTokenVO token = sysAuthService.loginByAccount(login);
+        return Result.ok(token);
+    }
 
+//    @PostMapping("/loginByKey")
+    @Operation(summary = "账号密码登录(不验证验证码，验证用户密钥)")
+    @RequestMapping(value = "/loginByKey", method = {RequestMethod.GET,RequestMethod.POST})
+    public Result<SysTokenVO> loginByKey(@RequestParam String userName, @RequestParam String password,
+                                         @RequestParam String userKey) {
+        SysAccountLoginVO login = new SysAccountLoginVO();
+        login.setUsername(userName);
+        login.setPassword(password);
+        login.setUserKey(userKey);
+        SysTokenVO token = sysAuthService.loginByUserKey(login);
         return Result.ok(token);
     }
 

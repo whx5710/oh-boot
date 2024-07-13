@@ -28,6 +28,9 @@ public class SysAccountLoginVO implements Serializable {
     @Schema(description = "验证码")
     private String captcha;
 
+    @Schema(description = "用户密钥，用于第三方系统登录")
+    private String userKey;
+
     public String getUsername() {
         return username;
     }
@@ -58,5 +61,13 @@ public class SysAccountLoginVO implements Serializable {
 
     public void setCaptcha(String captcha) {
         this.captcha = captcha;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 }

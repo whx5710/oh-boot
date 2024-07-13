@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.config.properties.SecurityProperties;
+import com.iris.framework.common.utils.AssertUtils;
 import com.iris.system.base.enums.LoginOperationEnum;
 import com.iris.system.base.vo.SysAccountLoginVO;
 import com.iris.system.base.vo.SysMobileLoginVO;
@@ -50,10 +51,10 @@ public class SysAuthServiceImpl implements SysAuthService {
     private final SecurityProperties securityProperties;
     /**
      * 刷新令牌过期时间，单位：秒
-     * 3天
+     * 1天
      */
     @Value("${oh.security.access-token-expire:259200}")
-    public int refreshTokenExpire = 60 * 60 * 24 * 3;
+    public int refreshTokenExpire = 60 * 60 * 24;
 
     public SysAuthServiceImpl(SysCaptchaService sysCaptchaService, TokenStoreCache tokenStoreCache,
                               AuthenticationManager authenticationManager, SysLogLoginService sysLogLoginService,
@@ -72,7 +73,7 @@ public class SysAuthServiceImpl implements SysAuthService {
     /**
      * 用户名、密码登录
      * @param login 登录信息
-     * @return
+     * @return token信息
      */
     @Override
     public SysTokenVO loginByAccount(SysAccountLoginVO login) {
@@ -91,63 +92,20 @@ public class SysAuthServiceImpl implements SysAuthService {
             }
             throw new ServerException(msg);
         }
+        // 验证账号生成token
+        return createToken(login, false);
+    }
 
-        Authentication authentication;
-        try {
-            // 用户认证
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
-        } catch (BadCredentialsException e) {
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
-                msg = "用户名或密码错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-            }else{
-                msg = "用户名或密码错误";
-            }
-            throw new ServerException(msg);
-        }
-
-        // 用户信息
-        UserDetail user = (UserDetail) authentication.getPrincipal();
-
-        // 判断错误次数，超出则锁定账号
-        boolean authLockFlag = securityProperties.getAuthCount() > 0;
-        String authCountKey = RedisKeys.getAuthCountKey(login.getUsername());
-        if(authLockFlag && redisCache.hasKey(authCountKey)){
-            // 错误次数
-            int authCount = (int) redisCache.get(authCountKey);
-            if(authCount >= securityProperties.getAuthCount()){
-                // 锁定时间（秒）
-                Long lockTime = redisCache.getExpire(authCountKey);
-                long time = 1;
-                if(lockTime > 3600){
-                    time = lockTime/3600;
-                    msg = "账号已被锁定，请" + time + "小时后再试！";
-                }else{
-                    time = lockTime/60;
-                    msg = "账号已被锁定，请" + (time==0?1:time) + "分钟后再试！";
-                }
-                throw new ServerException(msg);
-            }else{
-                // 限制次数内登录成功，清除错误计数
-                redisCache.delete(authCountKey);
-            }
-        }
-
-        // 登录时间和token刷新时间
-        long date = System.currentTimeMillis();
-        user.setLoginTime(date);
-        user.setRefreshTokenExpire(DateUtil.offsetSecond(new Date(date), refreshTokenExpire).getTime());
-        // 生成 accessToken
-        String accessToken = TokenUtils.generator();
-
-        String refreshToken = TokenUtils.generator();
-
-        // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, user);
-
-        return new SysTokenVO(accessToken, refreshToken);
+    /**
+     * 第三方用户登录（验证码不校验，密钥必填）
+     * @param login 登录信息，用户密钥必填
+     * @return token
+     */
+    @Override
+    public SysTokenVO loginByUserKey(SysAccountLoginVO login) {
+        String userKey = login.getUserKey();
+        AssertUtils.isBlank(userKey, "用户密钥");
+        return createToken(login, true);
     }
 
     @Override
@@ -220,5 +178,76 @@ public class SysAuthServiceImpl implements SysAuthService {
             redisCache.set(authCountKey, authCount, securityProperties.getLockTime());
         }
         return authCount;
+    }
+
+    /**
+     * 验证账号生成token信息
+     * @param login login 账号参数
+     * @param checkKey 是否检查用户密钥
+     * @return token
+     */
+    private SysTokenVO createToken(SysAccountLoginVO login, boolean checkKey){
+        String msg;
+        Authentication authentication;
+        try {
+            // 用户认证
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
+        } catch (BadCredentialsException e) {
+            // 登录失败计数
+            int authCount =loginCount(login.getUsername());
+            if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
+                msg = "用户名或密码错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+            }else{
+                msg = "用户名或密码错误";
+            }
+            throw new ServerException(msg);
+        }
+        // 用户信息
+        UserDetail user = (UserDetail) authentication.getPrincipal();
+        // 判断用户密钥
+        if (checkKey && !login.getUserKey().equals(user.getUserKey())) {
+            // 登录失败计数
+            int authCount =loginCount(login.getUsername());
+            if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
+                msg = "用户密钥错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+            }else{
+                msg = "用户密钥错误";
+            }
+            throw new ServerException(msg);
+        }
+        // 判断错误次数，超出则锁定账号
+        boolean authLockFlag = securityProperties.getAuthCount() > 0;
+        String authCountKey = RedisKeys.getAuthCountKey(login.getUsername());
+        if(authLockFlag && redisCache.hasKey(authCountKey)){
+            // 错误次数
+            int authCount = (int) redisCache.get(authCountKey);
+            if(authCount >= securityProperties.getAuthCount()){
+                // 锁定时间（秒）
+                Long lockTime = redisCache.getExpire(authCountKey);
+                long time = 1;
+                if(lockTime > 3600){
+                    time = lockTime/3600;
+                    msg = "账号已被锁定，请" + time + "小时后再试！";
+                }else{
+                    time = lockTime/60;
+                    msg = "账号已被锁定，请" + (time==0?1:time) + "分钟后再试！";
+                }
+                throw new ServerException(msg);
+            }else{
+                // 限制次数内登录成功，清除错误计数
+                redisCache.delete(authCountKey);
+            }
+        }
+        // 登录时间和token刷新时间
+        long date = System.currentTimeMillis();
+        user.setLoginTime(date);
+        user.setRefreshTokenExpire(DateUtil.offsetSecond(new Date(date), refreshTokenExpire).getTime());
+        // 生成 accessToken
+        String accessToken = TokenUtils.generator();
+        String refreshToken = TokenUtils.generator();
+        // 保存用户信息到缓存
+        tokenStoreCache.saveUser(accessToken, user);
+        return new SysTokenVO(accessToken, refreshToken);
     }
 }

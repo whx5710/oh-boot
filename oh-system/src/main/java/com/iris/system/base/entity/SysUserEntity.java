@@ -61,6 +61,11 @@ public class SysUserEntity extends BaseEntity {
      * 修改吗密码时间
      */
     private LocalDateTime pwdModifyTime;
+
+    /**
+     * 用户密钥，用于第三方系统登录
+     */
+    private String userKey;
     /**
      * 机构名称
      */
@@ -161,6 +166,14 @@ public class SysUserEntity extends BaseEntity {
 
     public void setPwdModifyTime(LocalDateTime pwdModifyTime) {
         this.pwdModifyTime = pwdModifyTime;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     @Override

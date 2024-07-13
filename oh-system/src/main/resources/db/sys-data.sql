@@ -118,7 +118,7 @@ INSERT INTO `sys_dict_type` VALUES (15, 'sms_platform', '平台类型', 0, NULL,
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, 0, '系统管理', 'sys', '', 0, 0, 'ep:lollipop', 1, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2024-06-29 11:26:07');
+INSERT INTO `sys_menu` VALUES (1, 0, '系统管理', 'sys', '', 0, 0, 'icon-Report', 1, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2024-06-29 11:26:07');
 INSERT INTO `sys_menu` VALUES (2, 1, '系统设置', 'sys/set', '', 0, 0, 'icon-setting', 1, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2024-06-29 11:26:19');
 INSERT INTO `sys_menu` VALUES (3, 2, '菜单管理', 'sys/menu/index', '', 0, 0, 'icon-menu', 0, 1, '', 10000, '2023-06-04 21:03:59', 10000, '2024-06-30 16:52:44');
 INSERT INTO `sys_menu` VALUES (4, 3, '查看', '', 'sys:menu:list', 1, 0, '', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
@@ -209,6 +209,7 @@ INSERT INTO `sys_menu` VALUES (107, 106, '查看', '', 'team:task:page', 1, 0, '
 INSERT INTO `sys_menu` VALUES (108, 106, '新增', '', 'team:task:save', 1, 0, '', 1, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO `sys_menu` VALUES (109, 106, '修改', '', 'team:task:update,oneHill:task:info', 1, 0, '', 2, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 INSERT INTO `sys_menu` VALUES (110, 106, '删除', '', 'team:task:delete', 1, 0, '', 3, 1, NULL, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
+INSERT INTO `sys_menu` VALUES (111, 49, '流程绘制', 'workflow/draw-index', '', 0, 0, 'icon-formatpainter', 3, 1, '', 10000, '2024-07-06 15:29:51', NULL, NULL);
 
 -- ----------------------------
 -- Records of sys_org
@@ -238,8 +239,8 @@ INSERT INTO `sys_role` VALUES (1, '业务员', '', 3, 0, 1, 10000, '2023-07-17 2
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15');
-INSERT INTO `sys_user` VALUES (10001, 'whx', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '王小费', 'http://localhost:8080/upload/20230717/1671258609873_77092.jpg', 0, 'whx5710@qq.com', '15088885710', 1, 0, 1, 1, 10000, '2023-07-17 21:15:47', 10001, '2023-07-17 21:24:54', '2023-06-24 21:14:15');
+INSERT INTO `sys_user` VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', NULL);
+INSERT INTO `sys_user` VALUES (10001, 'whx', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '王小费', 'http://localhost:8080/upload/20230717/1671258609873_77092.jpg', 0, 'whx5710@qq.com', '15088885710', 1, 0, 1, 1, 10000, '2023-07-17 21:15:47', 10001, '2023-07-17 21:24:54', '2023-06-24 21:14:15', NULL);
 
 -- ----------------------------
 -- Records of sys_user_role

@@ -20,6 +20,13 @@ public interface SysAuthService {
     SysTokenVO loginByAccount(SysAccountLoginVO login);
 
     /**
+     * 第三方用户登录（验证码不校验，密钥必填）
+     * @param login 登录信息，用户密钥必填
+     * @return token信息
+     */
+    SysTokenVO loginByUserKey(SysAccountLoginVO login);
+
+    /**
      * 手机短信登录
      *
      * @param login 登录信息

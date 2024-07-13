@@ -34,6 +34,8 @@ public class UserDetail implements UserDetails {
     private Long loginTime;
     // token刷新时间
     private Long refreshTokenExpire;
+    // 用户密钥
+    private String userKey;
 
     public Long getId() {
         return id;
@@ -169,6 +171,14 @@ public class UserDetail implements UserDetails {
 
     public void setRefreshTokenExpire(Long refreshTokenExpire) {
         this.refreshTokenExpire = refreshTokenExpire;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     /**
