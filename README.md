@@ -7,6 +7,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis-Plus，Kafka等框�
 - 支持多数据源，可通过前端参数或后端配置不同的数据源，不同业务数据分开储存。
 - 前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。
 - 支持代码生成功能、定时任务、文件存储、短信对接等。
+- 保姆级注释，确保每行代码都能看懂，开发无忧
 - 工程代码：https://gitee.com/whx233/oh-boot
 - - 独立系统管理 https://gitee.com/whx233/oh-sys
 - - 前端工程    https://gitee.com/whx233/oh-admin (暂未开源)
