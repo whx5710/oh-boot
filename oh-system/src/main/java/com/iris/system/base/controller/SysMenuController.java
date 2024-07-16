@@ -1,7 +1,6 @@
 package com.iris.system.base.controller;
 
 import com.iris.system.base.enums.MenuTypeEnum;
-import com.iris.system.base.vo.SysMenuNativeVO;
 import com.iris.system.base.vo.SysMenuTreeVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,14 +46,6 @@ public class SysMenuController {
         return Result.ok(list);
     }
 
-    @GetMapping("navPlus")
-    @Operation(summary = "菜单导航plus")
-    public Result<List<SysMenuNativeVO>> navPlus() {
-        UserDetail user = SecurityUser.getUser();
-        List<SysMenuNativeVO> list = sysMenuService.getUserNativeMenuList(user, MenuTypeEnum.MENU.getValue());
-        return Result.ok(list);
-    }
-
     @GetMapping("authority")
     @Operation(summary = "用户权限标识")
     public Result<Set<String>> authority() {
@@ -62,15 +53,6 @@ public class SysMenuController {
         Set<String> set = sysMenuService.getUserAuthority(user);
 
         return Result.ok(set);
-    }
-
-    @GetMapping("list")
-    @Operation(summary = "菜单列表")
-    @Parameter(name = "type", description = "菜单类型 0：菜单 1：按钮  2：接口  null：全部")
-    @PreAuthorize("hasAuthority('sys:menu:list')")
-    public Result<List<SysMenuTreeVO>> list(Integer type) {
-        List<SysMenuTreeVO> list = sysMenuService.getMenuList(type);
-        return Result.ok(list);
     }
 
 
