@@ -12,6 +12,8 @@ import com.iris.framework.common.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -30,6 +32,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @RestController
 @RequestMapping("/openApi")
+@Tag(name = "公共接口入口")
 public class OpenApiController extends BaseController {
     /**
      * 启动Kafka命令
@@ -64,6 +67,7 @@ public class OpenApiController extends BaseController {
      * @param request 请求
      * @return 返回
      */
+    @Operation(summary = "公共接口")
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         MsgEntity msgEntity = this.basicCheck(request);

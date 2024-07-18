@@ -77,6 +77,7 @@ public class SysAuthServiceImpl implements SysAuthService {
      */
     @Override
     public SysTokenVO loginByAccount(SysAccountLoginVO login) {
+        AssertUtils.isBlank(login.getUsername(), "用户名");
         String msg = "";
         // 验证码效验
         boolean flag = sysCaptchaService.validate(login.getKey(), login.getCaptcha());
