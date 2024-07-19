@@ -1,10 +1,15 @@
 package com.iris.system.base.controller;
 
+import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.common.utils.AssertUtils;
+import com.iris.framework.common.utils.IrisTools;
 import com.iris.system.base.vo.SysAccountLoginVO;
 import com.iris.system.base.vo.SysCaptchaVO;
 import com.iris.system.base.vo.SysMobileLoginVO;
 import com.iris.system.base.vo.SysTokenVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import com.iris.framework.common.utils.Result;
@@ -46,13 +51,29 @@ public class SysAuthController {
         return Result.ok(token);
     }
 
-//    @PostMapping("/loginByKey")
-    @Operation(summary = "账号密码登录(不验证验证码，验证用户密钥)")
-    @RequestMapping(value = "/loginByKey", method = {RequestMethod.GET,RequestMethod.POST})
+    /**
+     * 通过用户名、密码和密钥登录
+     * 为了安全，防止直接打开链接，只支持post
+     * @param userName 用户名
+     * @param password base64编码的密码
+     * @param userKey  用户密钥
+     * @return token
+     */
+//    @RequestMapping(value = "/loginByKey", method = {RequestMethod.GET,RequestMethod.POST})
+    @PostMapping("/loginByKey")
+    @Operation(summary = "账号密码登录(无验证码，适用于外部对接)")
+    @Parameters({@Parameter(name="userName", description = "用户名"), @Parameter(name="password", description = "base64编码的密码"),
+            @Parameter(name="userKey", description = "用户密钥")})
     public Result<SysTokenVO> loginByKey(@RequestParam String userName, @RequestParam String password,
                                          @RequestParam String userKey) {
+        AssertUtils.isBlank(password, "密码不能为空！");
         SysAccountLoginVO login = new SysAccountLoginVO();
         login.setUsername(userName);
+        try {
+            password = IrisTools.base64Decode(password);
+        }catch (IllegalArgumentException e){
+            throw new ServerException("请检查密码参数是否合法！");
+        }
         login.setPassword(password);
         login.setUserKey(userKey);
         SysTokenVO token = sysAuthService.loginByUserKey(login);
