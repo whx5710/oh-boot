@@ -1,6 +1,5 @@
 package com.iris.system.base.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.base.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +13,7 @@ import java.util.List;
  *
  */
 @Mapper
-public interface SysUserRoleDao extends BaseDao<SysUserRoleEntity> {
+public interface SysUserRoleDao {
 
     /**
      * 角色ID列表
@@ -23,4 +22,10 @@ public interface SysUserRoleDao extends BaseDao<SysUserRoleEntity> {
      * @return  返回角色ID列表
      */
     List<Long> getRoleIdList(@Param("userId") Long userId);
+
+    int saveBatch(@Param("list") List<SysUserRoleEntity> params);
+
+    boolean deleteByUserIdList(@Param("list") List<Long> userIdList,@Param("param")SysUserRoleEntity param);
+
+    boolean deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param")SysUserRoleEntity param);
 }

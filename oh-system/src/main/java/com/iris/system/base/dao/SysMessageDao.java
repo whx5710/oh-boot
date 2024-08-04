@@ -2,9 +2,12 @@ package com.iris.system.base.dao;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.base.entity.SysMessageEntity;
+import com.iris.system.base.query.SysMessageQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 系统消息
@@ -14,6 +17,16 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 @DS(Constant.SYS_DB)
-public interface SysMessageDao extends BaseDao<SysMessageEntity> {
-	
+public interface SysMessageDao {
+
+    List<SysMessageEntity> getList(SysMessageQuery query);
+
+    int save(SysMessageEntity param);
+
+    boolean updateById(SysMessageEntity param);
+
+    List<SysMessageEntity> getUnSendMsg(@Param("userId")Long userId, @Param("state")String state);
+
+    SysMessageEntity getById(@Param("id")Long id);
+
 }

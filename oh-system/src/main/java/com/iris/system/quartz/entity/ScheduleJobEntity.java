@@ -1,7 +1,5 @@
 package com.iris.system.quartz.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 
@@ -11,13 +9,11 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("schedule_job")
 public class ScheduleJobEntity extends BaseEntity{
 
 	/**
 	 * id
 	 */
-	@TableId
 	private Long id;
 
 	/**

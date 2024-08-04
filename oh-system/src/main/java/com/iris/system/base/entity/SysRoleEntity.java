@@ -1,8 +1,5 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 import com.iris.system.base.enums.DataScopeEnum;
 
@@ -14,7 +11,6 @@ import java.util.Objects;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@TableName("sys_role")
 public class SysRoleEntity extends BaseEntity {
 	/**
 	 * 角色名称
@@ -31,7 +27,6 @@ public class SysRoleEntity extends BaseEntity {
 	/**
 	 * 机构ID
 	 */
-	@TableField(fill = FieldFill.INSERT)
 	private Long orgId;
 
 	public String getName() {

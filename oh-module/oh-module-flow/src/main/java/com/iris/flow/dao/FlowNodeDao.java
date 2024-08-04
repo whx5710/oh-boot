@@ -1,8 +1,11 @@
 package com.iris.flow.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.flow.entity.FlowNodeEntity;
+import com.iris.flow.query.FlowNodeQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 环节定义表
@@ -11,6 +14,13 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2024-01-31
 */
 @Mapper
-public interface FlowNodeDao extends BaseDao<FlowNodeEntity> {
-	
+public interface FlowNodeDao {
+
+    List<FlowNodeEntity> getList(FlowNodeQuery query);
+
+    int save(FlowNodeEntity param);
+
+    boolean updateById(FlowNodeEntity param);
+
+    FlowNodeEntity getById(@Param("id")Long id);
 }

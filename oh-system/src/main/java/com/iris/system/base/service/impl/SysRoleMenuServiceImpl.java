@@ -1,10 +1,8 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysRoleMenuDao;
 import com.iris.system.base.service.SysRoleMenuService;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysRoleMenuEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +19,19 @@ import java.util.stream.Collectors;
  * 
  */
 @Service
-public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysRoleMenuEntity> implements SysRoleMenuService {
+public class SysRoleMenuServiceImpl implements SysRoleMenuService {
+
+	private final SysRoleMenuDao sysRoleMenuDao;
+
+	public SysRoleMenuServiceImpl(SysRoleMenuDao sysRoleMenuDao){
+		this.sysRoleMenuDao = sysRoleMenuDao;
+	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void saveOrUpdate(Long roleId, List<Long> menuIdList) {
 		// 数据库菜单ID列表
-		List<Long> dbMenuIdList = getMenuIdList(roleId);
+		List<Long> dbMenuIdList = sysRoleMenuDao.getMenuIdList(roleId);
 
 		// 需要新增的菜单ID
 		Collection<Long> insertMenuIdList = CollUtil.subtract(menuIdList, dbMenuIdList);
@@ -40,32 +44,33 @@ public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysR
 			}).collect(Collectors.toList());
 
 			// 批量新增
-			saveBatch(menuList);
+			sysRoleMenuDao.saveBatch(menuList);
 		}
 
 		// 需要删除的菜单ID
 		Collection<Long> deleteMenuIdList = CollUtil.subtract(dbMenuIdList, menuIdList);
 		if (CollUtil.isNotEmpty(deleteMenuIdList)){
-			LambdaQueryWrapper<SysRoleMenuEntity> queryWrapper = new LambdaQueryWrapper<>();
-			remove(queryWrapper.eq(SysRoleMenuEntity::getRoleId, roleId).in(SysRoleMenuEntity::getMenuId, deleteMenuIdList));
+			SysRoleMenuEntity param = new SysRoleMenuEntity();
+			param.setRoleId(roleId);
+			sysRoleMenuDao.deleteMenuIdList((List<Long>) deleteMenuIdList, param);
 		}
 	}
 
 	@Override
 	public List<Long> getMenuIdList(Long roleId){
-		return baseMapper.getMenuIdList(roleId);
+		return sysRoleMenuDao.getMenuIdList(roleId);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteByRoleIdList(List<Long> roleIdList) {
-		remove(new LambdaQueryWrapper<SysRoleMenuEntity>().in(SysRoleMenuEntity::getRoleId, roleIdList));
+		sysRoleMenuDao.deleteByRoleIdList(roleIdList, new SysRoleMenuEntity());
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteByMenuId(Long menuId) {
-		remove(new LambdaQueryWrapper<SysRoleMenuEntity>().eq(SysRoleMenuEntity::getMenuId, menuId));
+		sysRoleMenuDao.deleteByMenuId(menuId, new SysRoleMenuEntity());
 	}
 
 }

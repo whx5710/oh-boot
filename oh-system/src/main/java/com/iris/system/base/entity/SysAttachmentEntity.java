@@ -1,6 +1,5 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.Objects;
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("sys_attachment")
 public class SysAttachmentEntity extends BaseEntity {
     /**
      * 附件名称

@@ -1,13 +1,11 @@
 package com.iris.system.app.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.entity.api.DataAppDTO;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.app.convert.DataAppConvert;
 import com.iris.system.app.dao.DataAppDao;
 import com.iris.system.app.entity.DataAppEntity;
@@ -27,54 +25,56 @@ import java.util.List;
  * @since 1.0.0 2023-07-29
  */
 @Service
-public class DataAppServiceImpl extends BaseServiceImpl<DataAppDao, DataAppEntity> implements DataAppService {
+public class DataAppServiceImpl implements DataAppService {
+
+    private final DataAppDao dataAppDao;
+
+    public DataAppServiceImpl(DataAppDao dataAppDao){
+        this.dataAppDao = dataAppDao;
+    }
 
     @Override
     public PageResult<DataAppDTO> page(DataAppQuery query) {
-        IPage<DataAppEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(DataAppConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<DataAppEntity> getWrapper(DataAppQuery query){
-        LambdaQueryWrapper<DataAppEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataAppEntity::getDbStatus, 1);
-        if(!ObjectUtils.isEmpty(query.getKeyWord())){
-            wrapper.and(w -> w.like(DataAppEntity::getClientId, query.getKeyWord())
-                    .or().like(DataAppEntity::getName, query.getKeyWord()));
-        }
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<DataAppEntity> list = dataAppDao.getList(query);
+        PageInfo<DataAppEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(DataAppConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public void save(DataAppDTO vo) {
         DataAppEntity entity = DataAppConvert.INSTANCE.convert(vo);
         AssertUtils.isBlank(entity.getClientId(), "客户端ID");
-        LambdaQueryWrapper<DataAppEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataAppEntity::getClientId, entity.getClientId());
-        List<DataAppEntity> list = this.baseMapper.selectList(wrapper);
+        DataAppQuery params = new DataAppQuery();
+        params.setClientId(vo.getClientId());
+        List<DataAppEntity> list = dataAppDao.getList(params);
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("客户端ID已存在");
         }
-        baseMapper.insert(entity);
+        dataAppDao.insertDataApp(entity);
     }
 
     @Override
     public void update(DataAppDTO vo) {
         DataAppEntity entity = DataAppConvert.INSTANCE.convert(vo);
 
-        updateById(entity);
+        dataAppDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            DataAppEntity params = new DataAppEntity();
+            params.setId(id);
+            params.setDbStatus(0);
+            dataAppDao.updateById(params);
+        });
     }
 
     @Override
     public List<DataAppDTO> listAuthority(DataFunctionAuthorityQuery params) {
-        return baseMapper.listAuthority(params);
+        return dataAppDao.listAuthority(params);
     }
 
     /**
@@ -85,9 +85,15 @@ public class DataAppServiceImpl extends BaseServiceImpl<DataAppDao, DataAppEntit
     @Override
     public DataAppDTO findByClientId(String clientId) {
         AssertUtils.isBlank(clientId,"客户端ID");
-        LambdaQueryWrapper<DataAppEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataAppEntity::getDbStatus, 1).eq(DataAppEntity::getClientId, clientId);
-        DataAppEntity dataAppEntity = this.baseMapper.selectOne(wrapper);
-        return DataAppConvert.INSTANCE.convert(dataAppEntity);
+        DataAppQuery params = new DataAppQuery();
+        params.setClientId(clientId);
+        List<DataAppEntity> list = dataAppDao.getList(params);
+        DataAppEntity app = list.getFirst();
+        return DataAppConvert.INSTANCE.convert(app);
+    }
+
+    @Override
+    public DataAppEntity getById(Long id) {
+        return dataAppDao.getById(id);
     }
 }

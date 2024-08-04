@@ -4,7 +4,8 @@ import com.iris.framework.common.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.utils.DateUtils;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 /**
 * 版本信息
@@ -29,7 +30,7 @@ public class SysVersionInfoVO extends BaseEntity {
 
 	@Schema(description = "发布时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date releaseTime;
+	private LocalDateTime releaseTime;
 
 	// 是否当前版本
 	private Boolean isCurrVersion;
@@ -50,11 +51,11 @@ public class SysVersionInfoVO extends BaseEntity {
 		this.content = content;
 	}
 
-	public Date getReleaseTime() {
+	public LocalDateTime getReleaseTime() {
 		return releaseTime;
 	}
 
-	public void setReleaseTime(Date releaseTime) {
+	public void setReleaseTime(LocalDateTime releaseTime) {
 		this.releaseTime = releaseTime;
 	}
 

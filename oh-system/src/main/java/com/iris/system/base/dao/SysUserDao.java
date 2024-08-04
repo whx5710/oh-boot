@@ -1,13 +1,12 @@
 package com.iris.system.base.dao;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iris.system.base.entity.SysUserEntity;
-import com.iris.framework.datasource.dao.BaseDao;
+import com.iris.system.base.query.SysRoleUserQuery;
+import com.iris.system.base.query.SysUserQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统用户
@@ -16,19 +15,21 @@ import java.util.Map;
  *
  */
 @Mapper
-public interface SysUserDao extends BaseDao<SysUserEntity> {
+public interface SysUserDao {
 
-	List<SysUserEntity> getList(Map<String, Object> params);
+	List<SysUserEntity> getList(@Param("params") SysUserQuery params);
 
 	SysUserEntity getById(@Param("id") Long id);
 
-	List<SysUserEntity> getRoleUserList(Map<String, Object> params);
+	List<SysUserEntity> getRoleUserList(SysRoleUserQuery params);
 
-	default SysUserEntity getByUsername(String username){
-		return this.selectOne(new QueryWrapper<SysUserEntity>().eq("username", username));
-	}
+	SysUserEntity getByUsername(String username);
 
-	default SysUserEntity getByMobile(String mobile){
-		return this.selectOne(new QueryWrapper<SysUserEntity>().eq("mobile", mobile));
-	}
+	SysUserEntity getByMobile(String mobile);
+	// 保存用户
+	int insertUser(SysUserEntity sysUserEntity);
+
+	boolean updateById(SysUserEntity sysUserEntity);
+
+	int countByOrgId(@Param("orgId")long orgId);
 }

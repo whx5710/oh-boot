@@ -1,11 +1,9 @@
 package com.iris.system.base.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.base.query.SysRoleUserQuery;
 import com.iris.system.base.query.SysUserQuery;
 import com.iris.system.base.vo.SysUserVO;
-import com.iris.system.base.entity.SysUserEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public interface SysUserService extends BaseService<SysUserEntity> {
+public interface SysUserService {
 
     PageResult<SysUserVO> page(SysUserQuery query);
 

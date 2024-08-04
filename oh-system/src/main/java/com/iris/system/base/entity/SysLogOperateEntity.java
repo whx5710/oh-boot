@@ -1,10 +1,5 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.time.LocalDateTime;
 
 /**
@@ -13,12 +8,10 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@TableName("sys_log_operate")
 public class SysLogOperateEntity {
     /**
      * id
      */
-    @TableId
     private Long id;
 
     /**
@@ -94,7 +87,6 @@ public class SysLogOperateEntity {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     public Long getId() {

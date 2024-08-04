@@ -1,10 +1,8 @@
 package com.iris.system.app.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.app.convert.DataFunctionConvert;
 import com.iris.system.app.dao.DataFunctionDao;
 import com.iris.system.app.entity.DataFunctionEntity;
@@ -13,7 +11,6 @@ import com.iris.system.app.service.DataFunctionService;
 import com.iris.system.app.vo.DataFunctionVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -24,54 +21,62 @@ import java.util.List;
  * @since 1.0.0 2023-07-30
  */
 @Service
-public class DataFunctionServiceImpl extends BaseServiceImpl<DataFunctionDao, DataFunctionEntity> implements DataFunctionService {
+public class DataFunctionServiceImpl implements DataFunctionService {
+
+    private final DataFunctionDao dataFunctionDao;
+
+    public DataFunctionServiceImpl(DataFunctionDao dataFunctionDao){
+        this.dataFunctionDao = dataFunctionDao;
+    }
 
     @Override
     public PageResult<DataFunctionVO> page(DataFunctionQuery query) {
-        IPage<DataFunctionEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<DataFunctionEntity> list = dataFunctionDao.getList(query);
+        PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public PageResult<DataFunctionVO> pageByClientId(DataFunctionQuery query) {
-        IPage<DataFunctionEntity> page =  this.baseMapper.pageByClientId(getPage(query), query.getClientId());
-        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<DataFunctionEntity> list = dataFunctionDao.pageByClientId(query.getClientId());
+        PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+    }
+
+    @Override
+    public DataFunctionEntity getById(Long id) {
+        return dataFunctionDao.getById(id);
     }
 
     @Override
     public List<DataFunctionVO> list(DataFunctionQuery query) {
-        return DataFunctionConvert.INSTANCE.convertList(baseMapper.selectList(getWrapper(query)));
-    }
-
-    private LambdaQueryWrapper<DataFunctionEntity> getWrapper(DataFunctionQuery query){
-        LambdaQueryWrapper<DataFunctionEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataFunctionEntity::getDbStatus, 1);
-        if(!ObjectUtils.isEmpty(query.getKeyWord())){
-            wrapper.and(w -> w.like(DataFunctionEntity::getName, query.getKeyWord())
-                    .or().like(DataFunctionEntity::getFuncCode, query.getKeyWord()));
-        }
-        wrapper.orderByAsc(DataFunctionEntity::getFuncCode);
-        return wrapper;
+        return DataFunctionConvert.INSTANCE.convertList(dataFunctionDao.getList(query));
     }
 
     @Override
     public void save(DataFunctionVO vo) {
         DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
+        dataFunctionDao.insertFunc(entity);
     }
 
     @Override
     public void update(DataFunctionVO vo) {
         DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
-
-        updateById(entity);
+        dataFunctionDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        // removeByIds(idList);
+        idList.forEach(id -> {
+            DataFunctionEntity param = new DataFunctionEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            dataFunctionDao.updateById(param);
+        });
     }
 
 }

@@ -32,8 +32,10 @@
         <java.version>21</java.version>
         <!-- mysql jdbc 连接驱动 -->
         <mysql.jdbc.version>8.3.0</mysql.jdbc.version>
-        <!-- mybatis-plus 版本 -->
-        <mybatisplus.version>3.5.5</mybatisplus.version>
+        <!-- mybatis 版本 -->
+        <mybatis.version>3.0.3</mybatis.version>
+        <!--分页插件-->
+        <pagehelper.version>2.1.0</pagehelper.version>
         <!-- 动态数据源 -->
         <dynamic.datasource.version>4.3.0</dynamic.datasource.version>
         <!-- nacos配置中心 -->
@@ -47,8 +49,6 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <!-- excel 工具 -->
         <easyexcel.version>3.3.4</easyexcel.version>
-        <!-- 数据字典翻译 -->
-        <easytrans.version>3.0.0</easytrans.version>
         <!-- svg 图片转换 -->
         <svg.trans.version>1.17</svg.trans.version>
         <!-- camunda 工作流相关 -->
@@ -63,11 +63,19 @@
                 <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.jdbc.version}</version>
             </dependency>
-            <!-- mybatis plus -->
+            <!-- mybatis -->
+            <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
             <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-                <version>${mybatisplus.version}</version>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+            <!-- 分页插件 https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
             </dependency>
             <!-- 多数据源 https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot3-starter -->
             <dependency>
@@ -118,18 +126,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
-            </dependency>
-            <!-- 字典转义 -->
-            <dependency>
-                <groupId>com.fhs-opensource</groupId>
-                <artifactId>easy-trans-spring-boot-starter</artifactId>
-                <version>${easytrans.version}</version>
-            </dependency>
-            <!-- 字典转义 -->
-            <dependency>
-                <groupId>com.fhs-opensource</groupId>
-                <artifactId>easy-trans-mybatis-plus-extend</artifactId>
-                <version>${easytrans.version}</version>
             </dependency>
             <!-- 通用SVG代码转换器 -->
             <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-transcoder -->

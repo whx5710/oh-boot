@@ -1,6 +1,5 @@
 package com.iris.system.app.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 /**
@@ -9,8 +8,6 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-07-29
  */
-
-@TableName("data_app")
 public class DataAppEntity extends BaseEntity {
 
 	/**

@@ -1,7 +1,6 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysMenuDao;
 import com.iris.system.base.enums.SuperAdminEnum;
 import com.iris.system.base.vo.SysMenuTreeVO;
@@ -9,7 +8,6 @@ import com.iris.system.base.convert.SysMenuConvert;
 import com.iris.system.base.service.SysRoleMenuService;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.framework.common.utils.TreeUtils;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.system.base.entity.SysMenuEntity;
@@ -26,11 +24,13 @@ import java.util.*;
  *
  */
 @Service
-public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntity> implements SysMenuService {
+public class SysMenuServiceImpl implements SysMenuService {
     private final SysRoleMenuService sysRoleMenuService;
+    private final SysMenuDao sysMenuDao;
 
-    public SysMenuServiceImpl(SysRoleMenuService sysRoleMenuService) {
+    public SysMenuServiceImpl(SysRoleMenuService sysRoleMenuService, SysMenuDao sysMenuDao) {
         this.sysRoleMenuService = sysRoleMenuService;
+        this.sysMenuDao = sysMenuDao;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
         // 保存菜单
-        baseMapper.insert(entity);
+        sysMenuDao.save(entity);
     }
 
     @Override
@@ -53,22 +53,24 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
         }
 
         // 更新菜单
-        updateById(entity);
+        sysMenuDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         // 删除菜单
-        removeById(id);
-
+        SysMenuEntity param = new SysMenuEntity();
+        param.setId(id);
+        param.setDbStatus(0);
+        sysMenuDao.updateById(param);
         // 删除角色菜单关系
         sysRoleMenuService.deleteByMenuId(id);
     }
 
     @Override
     public List<SysMenuTreeVO> getMenuList(Integer type) {
-        List<SysMenuEntity> menuList = baseMapper.getMenuList(type);
+        List<SysMenuEntity> menuList = sysMenuDao.getMenuList(type);
         return SysMenuConvert.INSTANCE.convertList(menuList);
     }
 
@@ -83,9 +85,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 
         // 系统管理员，拥有最高权限
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
-            menuList = baseMapper.getMenuList(type);
+            menuList = sysMenuDao.getMenuList(type);
         } else {
-            menuList = baseMapper.getUserMenuList(user.getId(), type);
+            menuList = sysMenuDao.getUserMenuList(user.getId(), type);
         }
 
         return TreeUtils.build(SysMenuConvert.INSTANCE.convertList(menuList));
@@ -93,7 +95,10 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 
     @Override
     public Long getSubMenuCount(Long pid) {
-        return count(new LambdaQueryWrapper<SysMenuEntity>().eq(SysMenuEntity::getParentId, pid));
+        SysMenuEntity param = new SysMenuEntity();
+        param.setParentId(pid);
+        List<SysMenuEntity> list = sysMenuDao.getList(param);
+        return (long) list.size();
     }
 
     @Override
@@ -101,9 +106,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
         // 系统管理员，拥有最高权限
         List<String> authorityList;
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
-            authorityList = baseMapper.getAuthorityList();
+            authorityList = sysMenuDao.getAuthorityList();
         } else {
-            authorityList = baseMapper.getUserAuthorityList(user.getId());
+            authorityList = sysMenuDao.getUserAuthorityList(user.getId());
         }
 
         // 用户权限列表
@@ -116,6 +121,11 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
         }
 
         return permsSet;
+    }
+
+    @Override
+    public SysMenuEntity getById(Long id) {
+        return sysMenuDao.getById(id);
     }
 
 }

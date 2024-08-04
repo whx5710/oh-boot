@@ -1,6 +1,5 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 /**
@@ -9,7 +8,6 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("sms_platform")
 public class SmsPlatformEntity extends BaseEntity {
     /**
      * 平台类型  0：阿里云   1：腾讯云   2：七牛云    3：华为云

@@ -1,13 +1,10 @@
 package com.iris.system.quartz.service.impl;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.quartz.convert.ScheduleJobLogConvert;
-import com.iris.system.quartz.dao.ScheduleJobLogDao;
+import com.iris.system.quartz.dao.ScheduleJobDao;
 import com.iris.system.quartz.entity.ScheduleJobLogEntity;
 import com.iris.system.quartz.query.ScheduleJobLogQuery;
 import com.iris.system.quartz.service.ScheduleJobLogService;
@@ -24,27 +21,35 @@ import java.util.List;
  * 
  */
 @Service
-public class ScheduleJobLogServiceImpl extends BaseServiceImpl<ScheduleJobLogDao, ScheduleJobLogEntity> implements ScheduleJobLogService {
+public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
+
+    private final ScheduleJobDao scheduleJobDao;
+
+    public ScheduleJobLogServiceImpl(ScheduleJobDao scheduleJobDao){
+        this.scheduleJobDao = scheduleJobDao;
+    }
     @Override
     public PageResult<ScheduleJobLogVO> page(ScheduleJobLogQuery query) {
-        IPage<ScheduleJobLogEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(ScheduleJobLogConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<ScheduleJobLogEntity> list = scheduleJobDao.getLogList(query);
+        PageInfo<ScheduleJobLogEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(ScheduleJobLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        scheduleJobDao.deleteLogByIds(idList);
     }
 
-    private LambdaQueryWrapper<ScheduleJobLogEntity> getWrapper(ScheduleJobLogQuery query){
-        LambdaQueryWrapper<ScheduleJobLogEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(StrUtil.isNotBlank(query.getJobName()), ScheduleJobLogEntity::getJobName, query.getJobName());
-        wrapper.like(StrUtil.isNotBlank(query.getJobGroup()), ScheduleJobLogEntity::getJobGroup, query.getJobGroup());
-        wrapper.eq(query.getJobId() != null, ScheduleJobLogEntity::getJobId, query.getJobId());
-        wrapper.orderByDesc(ScheduleJobLogEntity::getId);
-        return wrapper;
+    @Override
+    public int save(ScheduleJobLogEntity entity) {
+        return scheduleJobDao.insertJobLog(entity);
+    }
+
+    @Override
+    public ScheduleJobLogEntity getById(Long id) {
+        return scheduleJobDao.getLogById(id);
     }
 
 }

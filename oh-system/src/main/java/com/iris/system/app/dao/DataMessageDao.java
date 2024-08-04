@@ -2,9 +2,12 @@ package com.iris.system.app.dao;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.app.entity.DataMsgEntity;
+import com.iris.system.app.query.DataMsgQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 项目信息表
@@ -14,6 +17,13 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 @DS(Constant.SYS_DB)
-public interface DataMessageDao extends BaseDao<DataMsgEntity> {
+public interface DataMessageDao {
 
+    List<DataMsgEntity> getList(DataMsgQuery query);
+
+    int insertDataMsg(DataMsgEntity param);
+
+    boolean deleteByDate(@Param("date")String date);
+
+    boolean updateById(DataMsgEntity param);
 }

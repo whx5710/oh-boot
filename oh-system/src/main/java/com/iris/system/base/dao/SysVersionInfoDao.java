@@ -1,8 +1,11 @@
 package com.iris.system.base.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.base.entity.SysVersionInfoEntity;
+import com.iris.system.base.query.SysVersionInfoQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 版本信息
@@ -11,6 +14,15 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2023-09-16
 */
 @Mapper
-public interface SysVersionInfoDao extends BaseDao<SysVersionInfoEntity> {
-	
+public interface SysVersionInfoDao {
+
+    List<SysVersionInfoEntity> getList(SysVersionInfoQuery query);
+
+    int save(SysVersionInfoEntity param);
+
+    boolean updateById(SysVersionInfoEntity param);
+
+    boolean updateCurVersion(@Param("isCurrVersion")Boolean isCurrVersion);
+
+    SysVersionInfoEntity getById(@Param("id")Long id);
 }

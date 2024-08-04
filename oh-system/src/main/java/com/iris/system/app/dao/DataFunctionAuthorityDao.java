@@ -1,7 +1,5 @@
 package com.iris.system.app.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
-import com.iris.system.app.entity.DataFunctionAuthorityEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2023-07-29
 */
 @Mapper
-public interface DataFunctionAuthorityDao extends BaseDao<DataFunctionAuthorityEntity> {
+public interface DataFunctionAuthorityDao {
 	
 }

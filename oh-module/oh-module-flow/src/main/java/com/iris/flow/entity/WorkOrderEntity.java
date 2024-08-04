@@ -1,6 +1,5 @@
 package com.iris.flow.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.Date;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-02-23
  */
-@TableName("oh_work_order")
 public class WorkOrderEntity extends BaseEntity {
 
 	/**

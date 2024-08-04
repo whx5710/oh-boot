@@ -6,6 +6,13 @@
 #      linux:   sh startup.sh -m standalone 或 bash startup.sh -m standalone
 #      windows: startup.cmd -m standalone
 #    nacos关闭命令：sh shutdown.sh   或   shutdown.cmd
+# 4、如果使用异步接口（oh-module-api），请自行安装Kafka（换成其他MQ代码进行相应调整），启动并配置正确
+#    linux 启动命令
+#    nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
+#    nohup sh bin/kafka-server-start.sh config/server.properties &
+#    windows 启动命令
+#    bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+#    bin\windows\kafka-server-start.bat config\server.properties
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 ##################################################################################################
 spring:
@@ -26,16 +33,7 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
 
-#easy trans 数据翻译组件
-easy-trans:
-  is-enable-redis: false      # 启用redis缓存 如果不用redis请设置为false
-  dict-use-redis: true        # 字典缓存放到redis
-  is-enable-global: true      # 启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
-  is-enable-tile: true        # 启用平铺模式
-  multiple-data-sources: true # 启用多数据源
-  # db-type: mysql            # 反向翻译数据库类型 mysql
-
-mybatis-plus:
+mybatis:
   mapper-locations: classpath*:/mapper/**/*.xml
   typeAliasesPackage: com.iris.*.entity # 实体扫描，多个package用逗号或者分号分隔
   global-config:

@@ -78,7 +78,6 @@ public class SysDictDataController {
     @PreAuthorize("hasAuthority('sys:dict:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         sysDictDataService.delete(idList);
-
         return Result.ok();
     }
 

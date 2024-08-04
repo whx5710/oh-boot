@@ -1,6 +1,5 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 /**
@@ -9,7 +8,6 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@TableName("sys_dict_data")
 public class SysDictDataEntity extends BaseEntity {
     /**
      * 字典类型ID

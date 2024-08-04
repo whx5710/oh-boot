@@ -1,12 +1,10 @@
 package com.iris.system.app.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 /**
  * 传输数据
  */
-@TableName("data_message")
 public class DataMsgEntity extends BaseEntity {
 
     // 数据字符串

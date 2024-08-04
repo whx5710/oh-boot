@@ -1,9 +1,5 @@
 package com.iris.system.quartz.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,12 +11,10 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("schedule_job_log")
 public class ScheduleJobLogEntity {
 	/**
 	* id
 	*/
-	@TableId
 	private Long id;
 
 	/**
@@ -71,7 +65,6 @@ public class ScheduleJobLogEntity {
 	/**
 	* 创建时间
 	*/
-	@TableField(fill = FieldFill.INSERT)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createTime;

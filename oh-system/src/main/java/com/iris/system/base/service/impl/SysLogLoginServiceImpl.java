@@ -1,11 +1,7 @@
 package com.iris.system.base.service.impl;
 
-import cn.hutool.core.util.StrUtil;
-
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.fhs.trans.service.impl.TransService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.*;
 import com.iris.system.base.dao.SysLogLoginDao;
 import com.iris.system.base.query.SysLogLoginQuery;
@@ -13,7 +9,6 @@ import com.iris.system.base.vo.AnalysisVO;
 import com.iris.system.base.vo.SysLogLoginVO;
 import com.iris.system.base.service.SysLogLoginService;
 import jakarta.servlet.http.HttpServletRequest;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.convert.SysLogLoginConvert;
 import com.iris.system.base.entity.SysLogLoginEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,28 +24,21 @@ import java.util.List;
  *
  */
 @Service
-public class SysLogLoginServiceImpl extends BaseServiceImpl<SysLogLoginDao, SysLogLoginEntity> implements SysLogLoginService {
-    private final TransService transService;
+public class SysLogLoginServiceImpl implements SysLogLoginService {
+//    private final TransService transService;
+    private final SysLogLoginDao sysLogLoginDao;
 
-    public SysLogLoginServiceImpl(TransService transService) {
-        this.transService = transService;
+    public SysLogLoginServiceImpl(SysLogLoginDao sysLogLoginDao) {
+        //this.transService = transService;
+        this.sysLogLoginDao = sysLogLoginDao;
     }
 
     @Override
     public PageResult<SysLogLoginVO> page(SysLogLoginQuery query) {
-        IPage<SysLogLoginEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(SysLogLoginConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<SysLogLoginEntity> getWrapper(SysLogLoginQuery query) {
-        LambdaQueryWrapper<SysLogLoginEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(StrUtil.isNotBlank(query.getUsername()), SysLogLoginEntity::getUsername, query.getUsername());
-        wrapper.like(StrUtil.isNotBlank(query.getAddress()), SysLogLoginEntity::getAddress, query.getAddress());
-        wrapper.like(query.getStatus() != null, SysLogLoginEntity::getStatus, query.getStatus());
-        wrapper.orderByDesc(SysLogLoginEntity::getId);
-
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<SysLogLoginEntity> list = sysLogLoginDao.getList(query);
+        PageInfo<SysLogLoginEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SysLogLoginConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -68,15 +56,14 @@ public class SysLogLoginServiceImpl extends BaseServiceImpl<SysLogLoginDao, SysL
         entity.setIp(ip);
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
-
-        baseMapper.insert(entity);
+        sysLogLoginDao.save(entity);
     }
 
     @Override
     public void export() {
-        List<SysLogLoginEntity> list = list();
+        List<SysLogLoginEntity> list = sysLogLoginDao.getList(new SysLogLoginQuery());
         List<SysLogLoginVO> sysLogLoginVOS = SysLogLoginConvert.INSTANCE.convertList(list);
-        transService.transBatch(sysLogLoginVOS);
+//        transService.transBatch(sysLogLoginVOS);
         // 写到浏览器打开
         ExcelUtils.excelExport(SysLogLoginVO.class, "system_login_log_excel" + DateUtils.format(new Date()), null, sysLogLoginVOS);
     }
@@ -89,7 +76,7 @@ public class SysLogLoginServiceImpl extends BaseServiceImpl<SysLogLoginDao, SysL
      */
     @Override
     public List<AnalysisVO> latestDate(int day, int operation) {
-        return baseMapper.latestDateCount(day, operation);
+        return sysLogLoginDao.latestDateCount(day, operation);
     }
 
 }

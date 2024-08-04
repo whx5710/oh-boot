@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "版本信息查询")
 public class SysVersionInfoQuery extends Query {
 
+    // 是否当前版本
+    private Boolean isCurrVersion;
+
     String keyWord;
 
     public String getKeyWord() {
@@ -21,5 +24,13 @@ public class SysVersionInfoQuery extends Query {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Boolean getCurrVersion() {
+        return isCurrVersion;
+    }
+
+    public void setCurrVersion(Boolean currVersion) {
+        isCurrVersion = currVersion;
     }
 }

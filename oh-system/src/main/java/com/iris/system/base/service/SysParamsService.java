@@ -4,7 +4,6 @@ import com.iris.system.base.query.SysParamsQuery;
 import com.iris.system.base.vo.SysParamsVO;
 import com.iris.system.base.entity.SysParamsEntity;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface SysParamsService extends BaseService<SysParamsEntity> {
+public interface SysParamsService {
 
     PageResult<SysParamsVO> page(SysParamsQuery query);
 
@@ -81,4 +80,6 @@ public interface SysParamsService extends BaseService<SysParamsEntity> {
      * @return 集合
      */
     Map<String, String> getByKeys(List<String> keys);
+
+    SysParamsEntity getById(Long id);
 }

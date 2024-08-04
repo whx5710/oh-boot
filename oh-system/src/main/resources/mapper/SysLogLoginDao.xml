@@ -23,4 +23,19 @@
         group by date_format(a.create_time ,'%Y-%m-%d')) t2 on t1.dates = t2.analysisTime
         order by t1.dates
     </select>
+
+    <select id="getList" resultType="com.iris.system.base.entity.SysLogLoginEntity">
+        select * from sys_log_login
+        <where>
+            <if test="username != null and username != ''">and username like concat('%', #{username}, '%')</if>
+            <if test="address != null and address != ''">and address like concat('%', #{address}, '%')</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="save">
+        INSERT INTO sys_log_login (username, ip, address, user_agent, status, operation, create_time)
+        VALUES (#{username}, #{ip}, #{address}, #{userAgent}, #{status}, #{operation}, #{createTime})
+    </insert>
 </mapper>

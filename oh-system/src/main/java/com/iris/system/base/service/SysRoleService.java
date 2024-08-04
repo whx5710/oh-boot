@@ -1,11 +1,10 @@
 package com.iris.system.base.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
+import com.iris.system.base.entity.SysRoleEntity;
 import com.iris.system.base.query.SysRoleQuery;
 import com.iris.system.base.vo.SysRoleDataScopeVO;
 import com.iris.system.base.vo.SysRoleVO;
-import com.iris.system.base.entity.SysRoleEntity;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public interface SysRoleService extends BaseService<SysRoleEntity> {
+public interface SysRoleService {
 
 	PageResult<SysRoleVO> page(SysRoleQuery query);
 
@@ -28,4 +27,6 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
 	void dataScope(SysRoleDataScopeVO vo);
 
 	void delete(List<Long> idList);
+
+	SysRoleEntity getById(Long id);
 }

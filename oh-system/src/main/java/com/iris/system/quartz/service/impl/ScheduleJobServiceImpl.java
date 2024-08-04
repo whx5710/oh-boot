@@ -1,11 +1,8 @@
 package com.iris.system.quartz.service.impl;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.quartz.convert.ScheduleJobConvert;
 import com.iris.system.quartz.dao.ScheduleJobDao;
 import com.iris.system.quartz.entity.ScheduleJobEntity;
@@ -29,11 +26,14 @@ import java.util.List;
  *
  */
 @Service
-public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, ScheduleJobEntity> implements ScheduleJobService {
+public class ScheduleJobServiceImpl implements ScheduleJobService {
     private final Scheduler scheduler;
 
-    public ScheduleJobServiceImpl(Scheduler scheduler) {
+    private final ScheduleJobDao scheduleJobDao;
+
+    public ScheduleJobServiceImpl(Scheduler scheduler, ScheduleJobDao scheduleJobDao) {
         this.scheduler = scheduler;
+        this.scheduleJobDao = scheduleJobDao;
     }
 
     /**
@@ -42,7 +42,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
     @PostConstruct
     public void init() throws SchedulerException {
         scheduler.clear();
-        List<ScheduleJobEntity> scheduleJobList = baseMapper.selectList(null);
+        List<ScheduleJobEntity> scheduleJobList = scheduleJobDao.getList(null);
         for (ScheduleJobEntity scheduleJob : scheduleJobList) {
             ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
         }
@@ -50,18 +50,10 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 
     @Override
     public PageResult<ScheduleJobVO> page(ScheduleJobQuery query) {
-        IPage<ScheduleJobEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(ScheduleJobConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<ScheduleJobEntity> getWrapper(ScheduleJobQuery query) {
-        LambdaQueryWrapper<ScheduleJobEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(StrUtil.isNotBlank(query.getJobName()), ScheduleJobEntity::getJobName, query.getJobName());
-        wrapper.like(StrUtil.isNotBlank(query.getJobGroup()), ScheduleJobEntity::getJobGroup, query.getJobGroup());
-        wrapper.eq(query.getStatus() != null, ScheduleJobEntity::getStatus, query.getStatus());
-
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<ScheduleJobEntity> list = scheduleJobDao.getList(query);
+        PageInfo<ScheduleJobEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(ScheduleJobConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -69,7 +61,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
         ScheduleJobEntity entity = ScheduleJobConvert.INSTANCE.convert(vo);
 
         entity.setStatus(ScheduleStatusEnum.PAUSE.getValue());
-        if (baseMapper.insert(entity) > 0) {
+        if (scheduleJobDao.insertJob(entity) > 0) {
             ScheduleUtils.createScheduleJob(scheduler, entity);
         }
     }
@@ -79,8 +71,8 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
         ScheduleJobEntity entity = ScheduleJobConvert.INSTANCE.convert(vo);
 
         // 更新定时任务
-        if (updateById(entity)) {
-            ScheduleJobEntity scheduleJob = getById(entity.getId());
+        if (scheduleJobDao.updateById(entity)) {
+            ScheduleJobEntity scheduleJob = scheduleJobDao.getById(entity.getId());
             ScheduleUtils.updateSchedulerJob(scheduler, scheduleJob);
         }
     }
@@ -89,10 +81,12 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         for (Long id : idList) {
-            ScheduleJobEntity scheduleJob = getById(id);
-
+            ScheduleJobEntity scheduleJob = scheduleJobDao.getById(id);
             // 删除定时任务
-            if (removeById(id)) {
+            ScheduleJobEntity param = new ScheduleJobEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            if (scheduleJobDao.updateById(param)) {
                 ScheduleUtils.deleteScheduleJob(scheduler, scheduleJob);
             }
         }
@@ -100,7 +94,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 
     @Override
     public void run(ScheduleJobVO vo) {
-        ScheduleJobEntity scheduleJob = getById(vo.getId());
+        ScheduleJobEntity scheduleJob = scheduleJobDao.getById(vo.getId());
         if (scheduleJob == null) {
             return;
         }
@@ -110,20 +104,25 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 
     @Override
     public void changeStatus(ScheduleJobVO vo) {
-        ScheduleJobEntity scheduleJob = getById(vo.getId());
+        ScheduleJobEntity scheduleJob = scheduleJobDao.getById(vo.getId());
         if (scheduleJob == null) {
             return;
         }
 
         // 更新数据
         scheduleJob.setStatus(vo.getStatus());
-        updateById(scheduleJob);
+        scheduleJobDao.updateById(scheduleJob);
 
         if (ScheduleStatusEnum.PAUSE.getValue() == vo.getStatus()) {
             ScheduleUtils.pauseJob(scheduler, scheduleJob);
         } else if (ScheduleStatusEnum.NORMAL.getValue() == vo.getStatus()) {
             ScheduleUtils.resumeJob(scheduler, scheduleJob);
         }
+    }
+
+    @Override
+    public ScheduleJobEntity getById(Long id) {
+        return scheduleJobDao.getById(id);
     }
 
 }

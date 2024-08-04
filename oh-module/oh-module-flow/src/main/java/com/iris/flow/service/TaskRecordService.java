@@ -1,7 +1,6 @@
 package com.iris.flow.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 import com.iris.flow.entity.TaskRecordEntity;
 import com.iris.flow.query.TaskRecordQuery;
 import com.iris.flow.vo.TaskRecordVO;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-02-03
  */
-public interface TaskRecordService extends BaseService<TaskRecordEntity> {
+public interface TaskRecordService {
 
     PageResult<TaskRecordEntity> page(TaskRecordQuery query);
 
@@ -38,4 +37,6 @@ public interface TaskRecordService extends BaseService<TaskRecordEntity> {
      * @return
      */
     List<TaskRecordVO> saveTaskRecord(String proInsId, String taskId);
+
+    TaskRecordEntity getTaskRecordById(Long id);
 }

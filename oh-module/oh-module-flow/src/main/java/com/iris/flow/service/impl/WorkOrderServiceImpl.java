@@ -1,8 +1,8 @@
 package com.iris.flow.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.iris.flow.dao.TaskRecordDao;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
@@ -10,7 +10,6 @@ import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.flow.convert.WorkOrderConvert;
 import com.iris.flow.entity.WorkOrderEntity;
 import com.iris.flow.query.WorkOrderQuery;
@@ -18,7 +17,6 @@ import com.iris.flow.service.ProcessHandlerService;
 import com.iris.flow.service.TaskHandlerService;
 import com.iris.flow.vo.TaskRecordVO;
 import com.iris.flow.vo.WorkOrderVO;
-import com.iris.flow.dao.WorkOrderDao;
 import com.iris.flow.service.WorkOrderService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
@@ -35,37 +33,36 @@ import java.util.Map;
  * @since 1.0.0 2024-02-23
  */
 @Service
-public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrderEntity> implements WorkOrderService, JobService, InitializingBean {
+public class WorkOrderServiceImpl implements WorkOrderService, JobService, InitializingBean {
 
     private final String processKey = "Process_demo20231222";
     private final TaskHandlerService taskHandlerService;
 
     private final ProcessHandlerService processHandlerService;
 
+    private final TaskRecordDao taskRecordDao;
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService){
+
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService, TaskRecordDao taskRecordDao){
         this.taskHandlerService = taskHandlerService;
         this.processHandlerService = processHandlerService;
+        this.taskRecordDao = taskRecordDao;
     }
 
 
     @Override
     public PageResult<WorkOrderVO> page(WorkOrderQuery query) {
-        IPage<WorkOrderEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(WorkOrderConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<WorkOrderEntity> list = taskRecordDao.getOrderList(query);
+        PageInfo<WorkOrderEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(WorkOrderConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
-    private LambdaQueryWrapper<WorkOrderEntity> getWrapper(WorkOrderQuery query){
-        LambdaQueryWrapper<WorkOrderEntity> wrapper = Wrappers.lambdaQuery();
-
-        return wrapper;
-    }
 
     @Override
     public void save(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
-        baseMapper.insert(entity);
+        taskRecordDao.saveOrder(entity);
         vo.setId(entity.getId());
     }
 
@@ -73,13 +70,23 @@ public class WorkOrderServiceImpl extends BaseServiceImpl<WorkOrderDao, WorkOrde
     public void update(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
 
-        updateById(entity);
+        taskRecordDao.updateOrderById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            WorkOrderEntity param = new WorkOrderEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            taskRecordDao.updateOrderById(param);
+        });
+    }
+
+    @Override
+    public WorkOrderEntity getOrderById(Long id) {
+        return taskRecordDao.getOrderById(id);
     }
 
     /**

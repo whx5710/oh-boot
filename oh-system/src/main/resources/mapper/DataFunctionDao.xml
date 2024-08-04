@@ -2,6 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.iris.system.app.dao.DataFunctionDao">
+
+    <select id="getList" resultType="com.iris.system.app.entity.DataFunctionEntity">
+        select * from data_function where db_status = 1
+        <if test="keyWord != null and keyWord != ''">
+            and (name like concat('%', #{keyWord}, '%') or func_code like concat('%',#{keyWord}, '%'))
+        </if>
+    </select>
+
+    <update id="updateById">
+        UPDATE data_function
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="funcCode != null and funcCode != ''">func_code = #{funcCode},</if>
+            <if test="isAsync != null">is_async = #{isAsync},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertFunc">
+        INSERT INTO data_function ( name, func_code, is_async, remark, creator, create_time, db_status )
+        VALUES ( #{name}, #{funcCode}, #{isAsync}, #{remark}, #{creator}, #{createTime}, #{dbStatus} )
+    </insert>
+
+    <select id="getById" resultType="com.iris.system.app.entity.DataFunctionEntity">
+        select * from data_function where id = #{id}
+    </select>
+
     <select id="pageByClientId" resultType="com.iris.system.app.entity.DataFunctionEntity">
         SELECT
         *
@@ -10,5 +41,40 @@
         WHERE
         a.db_status = 1
         AND EXISTS ( SELECT 1 FROM data_function_authority b WHERE a.func_code = b.func_code AND b.db_status = 1 AND b.client_id = #{clientId})
+    </select>
+
+    <select id="getAuthorityList" resultType="com.iris.system.app.entity.DataFunctionAuthorityEntity">
+        select * from data_function_authority where db_status = 1
+        <if test="clientId != null and clientId != ''">and client_id = #{clientId}</if>
+    </select>
+
+    <insert id="insertFuncAuthority">
+        INSERT INTO data_function_authority ( client_id, func_code, remark, creator, create_time, db_status )
+        VALUES ( #{clientId}, #{funcCode}, #{remark}, #{creator}, #{createTime}, 1 )
+    </insert>
+
+    <update id="updateFuncAuthorityById">
+        UPDATE data_function_authority
+        <set>
+            <if test="clientId != null and clientId!= ''">client_id = #{clientId},</if>
+            <if test="funcCode != null and funcCode!= ''">func_code = #{funcCode},</if>
+            <if test="remark != null and remark!= ''">remark = #{remark},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateFuncAuthorityStatus">
+        UPDATE data_function_authority
+        set db_status = #{dbStatus},
+            update_time = sysdate()
+        where client_id = #{clientId}
+            and func_code = #{funcCode}
+    </update>
+
+    <select id="getFuncAuthorityById" resultType="com.iris.system.app.entity.DataFunctionAuthorityEntity">
+        select * from data_function_authority where id = #{id}
     </select>
 </mapper>

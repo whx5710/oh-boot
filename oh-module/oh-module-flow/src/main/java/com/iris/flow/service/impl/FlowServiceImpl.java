@@ -1,9 +1,8 @@
 package com.iris.flow.service.impl;
 
 import cn.hutool.core.util.EscapeUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.flow.convert.FlowConvert;
 import com.iris.flow.dao.FlowDao;
@@ -12,7 +11,6 @@ import com.iris.flow.query.FlowQuery;
 import com.iris.flow.service.FlowService;
 import com.iris.flow.vo.FlowVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,21 +23,20 @@ import java.util.List;
  * @since 1.0.0 2023-12-19
  */
 @Service
-public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implements FlowService {
+public class FlowServiceImpl implements FlowService {
+
+    private final FlowDao flowDao;
+
+    public FlowServiceImpl(FlowDao flowDao){
+        this.flowDao = flowDao;
+    }
 
     @Override
     public PageResult<FlowVO> page(FlowQuery query) {
-        IPage<FlowEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(FlowConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<FlowEntity> getWrapper(FlowQuery query){
-        LambdaQueryWrapper<FlowEntity> wrapper = Wrappers.lambdaQuery();
-        if(query.getName() != null && !query.getName().equals("")){
-            wrapper.like(FlowEntity::getName, query.getName()).or().like(FlowEntity::getKeyCode, query.getName());
-        }
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<FlowEntity> list = flowDao.getList(query);
+        PageInfo<FlowEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(FlowConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     /**
@@ -58,25 +55,29 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
             entity.setSvgStr(EscapeUtil.unescapeXml(entity.getSvgStr()));
         }
         if(flowEntity == null){
-            baseMapper.insert(entity);
+            flowDao.save(entity);
         }else{
             entity.setId(flowEntity.getId());
             entity.setDbStatus(1);
-            baseMapper.updateById(entity);
+            flowDao.updateById(entity);
         }
     }
 
     @Override
     public void update(FlowVO vo) {
         FlowEntity entity = FlowConvert.INSTANCE.convert(vo);
-
-        updateById(entity);
+        flowDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            FlowEntity flowEntity = new FlowEntity();
+            flowEntity.setId(id);
+            flowEntity.setDbStatus(0);
+            flowDao.updateById(flowEntity);
+        });
     }
 
     /**
@@ -87,13 +88,16 @@ public class FlowServiceImpl extends BaseServiceImpl<FlowDao, FlowEntity> implem
     @Override
     public FlowEntity getByKey(String key) {
         AssertUtils.isBlank(key, "流程key");
-        LambdaQueryWrapper<FlowEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(FlowEntity::getKeyCode, key);
-        List<FlowEntity> list = this.list(wrapper);
-        if(list == null || list.size() == 0){
+        List<FlowEntity> list = flowDao.getByKey(key);
+        if(list == null || list.isEmpty()){
             return null;
         }
-        return list.get(0);
+        return list.getFirst();
+    }
+
+    @Override
+    public FlowEntity getById(Long id) {
+        return flowDao.getById(id);
     }
 
 }

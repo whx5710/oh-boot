@@ -1,7 +1,6 @@
 package com.iris.flow.entity;
 
 import com.iris.framework.common.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
 
 /**
  * 环节定义表
@@ -9,7 +8,6 @@ import com.baomidou.mybatisplus.annotation.*;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-01-31
  */
-@TableName("bpmn_flow_node")
 public class FlowNodeEntity extends BaseEntity {
 
 	/**

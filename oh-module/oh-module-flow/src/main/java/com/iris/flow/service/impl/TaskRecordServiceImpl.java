@@ -1,16 +1,14 @@
 package com.iris.flow.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.iris.flow.dao.TaskRecordDao;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.flow.convert.TaskRecordConvert;
 import com.iris.flow.entity.TaskRecordEntity;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.flow.query.TaskRecordQuery;
-import com.iris.flow.dao.TaskRecordDao;
 import com.iris.flow.service.TaskRecordService;
 import com.iris.flow.vo.TaskRecordVO;
 import org.camunda.bpm.engine.HistoryService;
@@ -29,48 +27,51 @@ import java.util.List;
  * @since 1.0.0 2024-02-03
  */
 @Service
-public class TaskRecordServiceImpl extends BaseServiceImpl<TaskRecordDao, TaskRecordEntity> implements TaskRecordService {
+public class TaskRecordServiceImpl implements TaskRecordService {
 
     private final HistoryService historyService;
 
-    public TaskRecordServiceImpl(HistoryService historyService){
+    private final TaskRecordDao taskRecordDao;
+
+    public TaskRecordServiceImpl(HistoryService historyService, TaskRecordDao taskRecordDao){
         this.historyService = historyService;
+        this.taskRecordDao = taskRecordDao;
     }
 
     @Override
     public PageResult<TaskRecordEntity> page(TaskRecordQuery query) {
-        IPage<TaskRecordEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(page.getRecords(), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<TaskRecordEntity> getWrapper(TaskRecordQuery query){
-        LambdaQueryWrapper<TaskRecordEntity> wrapper = Wrappers.lambdaQuery();
-
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<TaskRecordEntity> list = taskRecordDao.getTaskList(new TaskRecordQuery());
+        PageInfo<TaskRecordEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @Override
     public boolean save(TaskRecordEntity vo) {
-        baseMapper.insert(vo);
+        taskRecordDao.saveTaskRecord(vo);
         return true;
     }
 
     @Override
     public void update(TaskRecordVO vo) {
-        updateById(TaskRecordConvert.INSTANCE.convert(vo));
+        taskRecordDao.updateTaskRecordById(TaskRecordConvert.INSTANCE.convert(vo));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            TaskRecordEntity param = new TaskRecordEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            taskRecordDao.updateTaskRecordById(param);
+        });
     }
 
     // 修改当前运行标志
     @Override
     public boolean updateRunMark(String procInstId) {
-        return this.baseMapper.updateRunMark(procInstId);
+        return taskRecordDao.updateRunMark(procInstId);
     }
 
 
@@ -81,21 +82,7 @@ public class TaskRecordServiceImpl extends BaseServiceImpl<TaskRecordDao, TaskRe
      */
     @Override
     public List<TaskRecordVO> taskList(TaskRecordQuery query) {
-        LambdaQueryWrapper<TaskRecordEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(TaskRecordEntity::getDbStatus, 1);
-        if(!ObjectUtils.isEmpty(query.getProcInstId())){
-            wrapper.eq(TaskRecordEntity::getProcInstId, query.getProcInstId());
-        }
-        if(query.getRunMark() != null){
-            wrapper.eq(TaskRecordEntity::getRunMark, query.getRunMark());
-        }
-        if(!ObjectUtils.isEmpty(query.getTaskId())){
-            wrapper.eq(TaskRecordEntity::getTaskId, query.getTaskId());
-        }
-        if(!ObjectUtils.isEmpty(query.getActInstId())){
-            wrapper.eq(TaskRecordEntity::getActInstId, query.getActInstId());
-        }
-        return TaskRecordConvert.INSTANCE.convertList(baseMapper.selectList(wrapper));
+        return TaskRecordConvert.INSTANCE.convertList(taskRecordDao.getTaskList(query));
     }
 
 
@@ -230,5 +217,10 @@ public class TaskRecordServiceImpl extends BaseServiceImpl<TaskRecordDao, TaskRe
         }
 
         return data;
+    }
+
+    @Override
+    public TaskRecordEntity getTaskRecordById(Long id) {
+        return taskRecordDao.getTaskRecordById(id);
     }
 }

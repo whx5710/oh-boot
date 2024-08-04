@@ -1,10 +1,8 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysRoleDataScopeDao;
 import com.iris.system.base.service.SysRoleDataScopeService;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysRoleDataScopeEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +18,12 @@ import java.util.stream.Collectors;
  *
  */
 @Service
-public class SysRoleDataScopeServiceImpl extends BaseServiceImpl<SysRoleDataScopeDao, SysRoleDataScopeEntity>
-        implements SysRoleDataScopeService {
+public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
+    private final SysRoleDataScopeDao sysRoleDataScopeDao;
+
+    public SysRoleDataScopeServiceImpl(SysRoleDataScopeDao sysRoleDataScopeDao){
+        this.sysRoleDataScopeDao = sysRoleDataScopeDao;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -40,27 +42,25 @@ public class SysRoleDataScopeServiceImpl extends BaseServiceImpl<SysRoleDataScop
             }).collect(Collectors.toList());
 
             // 批量新增
-            saveBatch(orgList);
+            sysRoleDataScopeDao.saveBatch(orgList);
         }
 
         // 需要删除的机构ID
         Collection<Long> deleteOrgIdList = CollUtil.subtract(dbOrgIdList, orgIdList);
         if (CollUtil.isNotEmpty(deleteOrgIdList)){
-            LambdaQueryWrapper<SysRoleDataScopeEntity> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SysRoleDataScopeEntity::getRoleId, roleId);
-            queryWrapper.in(SysRoleDataScopeEntity::getOrgId, deleteOrgIdList);
-
-            remove(queryWrapper);
+            SysRoleDataScopeEntity param = new SysRoleDataScopeEntity();
+            param.setRoleId(roleId);
+            sysRoleDataScopeDao.deleteOrgIdList((List<Long>) deleteOrgIdList, param);
         }
     }
 
     @Override
     public List<Long> getOrgIdList(Long roleId) {
-        return baseMapper.getOrgIdList(roleId);
+        return sysRoleDataScopeDao.getOrgIdList(roleId);
     }
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        remove(new LambdaQueryWrapper<SysRoleDataScopeEntity>().in(SysRoleDataScopeEntity::getRoleId, roleIdList));
+        sysRoleDataScopeDao.deleteByRoleIdList(roleIdList, new SysRoleDataScopeEntity());
     }
 }

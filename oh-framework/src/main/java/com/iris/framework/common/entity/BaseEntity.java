@@ -1,7 +1,5 @@
 package com.iris.framework.common.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +15,6 @@ public abstract class BaseEntity extends IDEntity{
     /**
      * 创建者
      */
-    @TableField(fill = FieldFill.INSERT)
     private Long  creator;
 
     /**
@@ -25,13 +22,11 @@ public abstract class BaseEntity extends IDEntity{
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新者
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long  updater;
 
     /**
@@ -39,13 +34,11 @@ public abstract class BaseEntity extends IDEntity{
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     /**
      * 数据状态标记，0删除1有效
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Integer dbStatus = 1;
 
     public Long getCreator() {

@@ -2,12 +2,7 @@ package com.iris.system.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.trans.vo.TransPojo;
-import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.DateUtils;
-import com.iris.system.base.entity.SysOrgEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +21,7 @@ import java.util.List;
  *
  */
 @Schema(description = "用户")
-public class SysUserVO implements Serializable, TransPojo {
+public class SysUserVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +57,6 @@ public class SysUserVO implements Serializable, TransPojo {
 
     @Schema(description = "机构ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "机构ID不能为空")
-    @Trans(type = TransType.SIMPLE, target = SysOrgEntity.class, fields = "name", ref = "orgName", dataSource = Constant.SYS_DB)
     private Long orgId;
 
     @Schema(description = "状态 0：停用    1：正常", requiredMode = Schema.RequiredMode.REQUIRED)

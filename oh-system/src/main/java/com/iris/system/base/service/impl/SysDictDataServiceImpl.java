@@ -1,14 +1,12 @@
 package com.iris.system.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.system.base.dao.SysDictDataDao;
 import com.iris.system.base.query.SysDictDataQuery;
 import com.iris.system.base.vo.SysDictDataVO;
 import com.iris.system.base.entity.SysDictDataEntity;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.convert.SysDictDataConvert;
 import com.iris.system.base.service.SysDictDataService;
 import org.springframework.stereotype.Service;
@@ -23,23 +21,18 @@ import java.util.List;
  *
  */
 @Service
-public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictDataDao, SysDictDataEntity> implements SysDictDataService {
-    public SysDictDataServiceImpl() {
+public class SysDictDataServiceImpl implements SysDictDataService {
+    private final SysDictDataDao sysDictDataDao;
+    public SysDictDataServiceImpl(SysDictDataDao sysDictDataDao) {
+        this.sysDictDataDao = sysDictDataDao;
     }
 
     @Override
     public PageResult<SysDictDataVO> page(SysDictDataQuery query) {
-        IPage<SysDictDataEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(SysDictDataConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private Wrapper<SysDictDataEntity> getWrapper(SysDictDataQuery query){
-        LambdaQueryWrapper<SysDictDataEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDictDataEntity::getDictTypeId, query.getDictTypeId());
-        wrapper.orderByAsc(SysDictDataEntity::getSort);
-
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<SysDictDataEntity> list = sysDictDataDao.getList(query);
+        PageInfo<SysDictDataEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SysDictDataConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -47,21 +40,30 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictDataDao, SysD
     public void save(SysDictDataVO vo) {
         SysDictDataEntity entity = SysDictDataConvert.INSTANCE.convert(vo);
 
-        baseMapper.insert(entity);
+        sysDictDataDao.save(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SysDictDataVO vo) {
         SysDictDataEntity entity = SysDictDataConvert.INSTANCE.convert(vo);
-
-        updateById(entity);
+        sysDictDataDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            SysDictDataEntity param = new SysDictDataEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            sysDictDataDao.updateById(param);
+        });
+    }
+
+    @Override
+    public SysDictDataEntity getById(Long id) {
+        return sysDictDataDao.getById(id);
     }
 
 }

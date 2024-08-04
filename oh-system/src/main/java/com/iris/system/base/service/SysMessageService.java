@@ -1,10 +1,9 @@
 package com.iris.system.base.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
+import com.iris.system.base.entity.SysMessageEntity;
 import com.iris.system.base.query.SysMessageQuery;
 import com.iris.system.base.vo.SysMessageVO;
-import com.iris.system.base.entity.SysMessageEntity;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-10-10
  */
-public interface SysMessageService extends BaseService<SysMessageEntity> {
+public interface SysMessageService{
 
     PageResult<SysMessageVO> page(SysMessageQuery query);
 
@@ -25,5 +24,10 @@ public interface SysMessageService extends BaseService<SysMessageEntity> {
     void delete(List<Long> idList);
 
     List<SysMessageVO> unSendMsg(Long userId);
+
     List<SysMessageVO> unReadMsg(Long userId);
+
+    SysMessageEntity getById(Long id);
+
+    boolean updateById(SysMessageEntity param);
 }

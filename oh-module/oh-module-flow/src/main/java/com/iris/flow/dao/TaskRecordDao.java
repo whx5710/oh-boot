@@ -1,9 +1,13 @@
 package com.iris.flow.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.flow.entity.TaskRecordEntity;
+import com.iris.flow.entity.WorkOrderEntity;
+import com.iris.flow.query.TaskRecordQuery;
+import com.iris.flow.query.WorkOrderQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 环节运行表
@@ -12,8 +16,25 @@ import org.apache.ibatis.annotations.Param;
 * @since 1.0.0 2024-02-03
 */
 @Mapper
-public interface TaskRecordDao extends BaseDao<TaskRecordEntity> {
+public interface TaskRecordDao {
 
     // 修改当前运行标志
     boolean updateRunMark(@Param("procInstId") String procInstId);
+
+    List<TaskRecordEntity> getTaskList(TaskRecordQuery query);
+
+    int saveTaskRecord(TaskRecordEntity param);
+
+    boolean updateTaskRecordById(TaskRecordEntity param);
+
+    TaskRecordEntity getTaskRecordById(@Param("id")Long id);
+
+
+    List<WorkOrderEntity> getOrderList(WorkOrderQuery query);
+
+    int saveOrder(WorkOrderEntity param);
+
+    boolean updateOrderById(WorkOrderEntity param);
+
+    WorkOrderEntity getOrderById(@Param("id")Long id);
 }

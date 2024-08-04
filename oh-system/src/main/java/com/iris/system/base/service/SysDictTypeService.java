@@ -1,11 +1,10 @@
 package com.iris.system.base.service;
 
+import com.iris.system.base.entity.SysDictTypeEntity;
 import com.iris.system.base.query.SysDictTypeQuery;
 import com.iris.system.base.vo.SysDictTypeVO;
 import com.iris.system.base.vo.SysDictVO;
-import com.iris.system.base.entity.SysDictTypeEntity;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public interface SysDictTypeService extends BaseService<SysDictTypeEntity> {
+public interface SysDictTypeService {
 
     PageResult<SysDictTypeVO> page(SysDictTypeQuery query);
 
@@ -39,5 +38,7 @@ public interface SysDictTypeService extends BaseService<SysDictTypeEntity> {
      * 刷新字典缓存
      */
     void refreshTransCache();
+
+    SysDictTypeEntity getById(Long id);
 
 }

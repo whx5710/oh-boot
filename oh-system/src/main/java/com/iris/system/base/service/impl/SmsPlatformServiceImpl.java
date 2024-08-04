@@ -1,12 +1,9 @@
 package com.iris.system.base.service.impl;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.cache.SmsPlatformCache;
 import com.iris.system.base.dao.SmsPlatformDao;
 import com.iris.system.base.query.SmsPlatformQuery;
@@ -27,25 +24,21 @@ import java.util.List;
  * 
  */
 @Service
-public class SmsPlatformServiceImpl extends BaseServiceImpl<SmsPlatformDao, SmsPlatformEntity> implements SmsPlatformService {
+public class SmsPlatformServiceImpl implements SmsPlatformService {
     private final SmsPlatformCache smsPlatformCache;
+    private final SmsPlatformDao smsPlatformDao;
 
-    public SmsPlatformServiceImpl(SmsPlatformCache smsPlatformCache) {
+    public SmsPlatformServiceImpl(SmsPlatformCache smsPlatformCache, SmsPlatformDao smsPlatformDao) {
         this.smsPlatformCache = smsPlatformCache;
+        this.smsPlatformDao = smsPlatformDao;
     }
 
     @Override
     public PageResult<SmsPlatformVO> page(SmsPlatformQuery query) {
-        IPage<SmsPlatformEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(SmsPlatformConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<SmsPlatformEntity> getWrapper(SmsPlatformQuery query){
-        LambdaQueryWrapper<SmsPlatformEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(query.getPlatform() != null, SmsPlatformEntity::getPlatform, query.getPlatform());
-        wrapper.like(StrUtil.isNotBlank(query.getSignName()), SmsPlatformEntity::getSignName, query.getSignName());
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<SmsPlatformEntity> list = smsPlatformDao.getList(query);
+        PageInfo<SmsPlatformEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SmsPlatformConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -55,8 +48,9 @@ public class SmsPlatformServiceImpl extends BaseServiceImpl<SmsPlatformDao, SmsP
 
         // 如果缓存没有，则从DB读取，然后保存到缓存里
         if(cacheList == null) {
-            List<SmsPlatformEntity> list = this.list(new LambdaQueryWrapper<SmsPlatformEntity>().in(SmsPlatformEntity::getStatus, Constant.ENABLE));
-
+            SmsPlatformQuery param = new SmsPlatformQuery();
+            param.setStatus(Constant.ENABLE);
+            List<SmsPlatformEntity> list = smsPlatformDao.getList(param);
             cacheList = SmsPlatformConvert.INSTANCE.convertList2(list);
             smsPlatformCache.save(cacheList);
         }
@@ -67,27 +61,32 @@ public class SmsPlatformServiceImpl extends BaseServiceImpl<SmsPlatformDao, SmsP
     @Override
     public void save(SmsPlatformVO vo) {
         SmsPlatformEntity entity = SmsPlatformConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
-
+        smsPlatformDao.insertPlatform(entity);
         smsPlatformCache.delete();
     }
 
     @Override
     public void update(SmsPlatformVO vo) {
         SmsPlatformEntity entity = SmsPlatformConvert.INSTANCE.convert(vo);
-
-        updateById(entity);
-
+        smsPlatformDao.updateById(entity);
         smsPlatformCache.delete();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
-
+        idList.forEach(id -> {
+            SmsPlatformEntity param = new SmsPlatformEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            smsPlatformDao.updateById(param);
+        });
         smsPlatformCache.delete();
+    }
+
+    @Override
+    public SmsPlatformEntity getById(Long id) {
+        return smsPlatformDao.getById(id);
     }
 
 }

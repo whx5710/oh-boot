@@ -1,6 +1,5 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 
@@ -10,7 +9,6 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-10-10
  */
-@TableName("sys_message")
 public class SysMessageEntity extends BaseEntity {
 	/**
 	* 标题

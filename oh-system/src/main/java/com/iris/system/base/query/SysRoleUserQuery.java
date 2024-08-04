@@ -2,8 +2,6 @@ package com.iris.system.base.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.Objects;
-
 /**
  * 分配角色查询
  *
@@ -23,16 +21,4 @@ public class SysRoleUserQuery extends SysUserQuery {
         this.roleId = roleId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysRoleUserQuery that)) return false;
-        if (!super.equals(o)) return false;
-        return Objects.equals(getRoleId(), that.getRoleId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getRoleId());
-    }
 }

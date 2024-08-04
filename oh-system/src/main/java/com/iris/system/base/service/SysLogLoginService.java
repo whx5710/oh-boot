@@ -3,12 +3,10 @@ package com.iris.system.base.service;
 import com.iris.system.base.query.SysLogLoginQuery;
 import com.iris.system.base.vo.AnalysisVO;
 import com.iris.system.base.vo.SysLogLoginVO;
-import com.iris.system.base.entity.SysLogLoginEntity;
 
 import java.util.List;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 
 /**
  * 登录日志
@@ -16,7 +14,7 @@ import com.iris.framework.datasource.service.BaseService;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public interface SysLogLoginService extends BaseService<SysLogLoginEntity> {
+public interface SysLogLoginService {
 
     /**
      * Page result.

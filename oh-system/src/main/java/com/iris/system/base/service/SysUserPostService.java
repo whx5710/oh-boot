@@ -1,8 +1,5 @@
 package com.iris.system.base.service;
 
-import com.iris.framework.datasource.service.BaseService;
-import com.iris.system.base.entity.SysUserPostEntity;
-
 import java.util.List;
 
 /**
@@ -11,7 +8,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface SysUserPostService extends BaseService<SysUserPostEntity> {
+public interface SysUserPostService {
 
     /**
      * 保存或修改

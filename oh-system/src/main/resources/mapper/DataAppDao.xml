@@ -26,4 +26,33 @@
         </if>
         order by a.id,c.func_code
     </select>
+    
+    <select id="getList">
+        select * from data_app where db_status = 1
+        <if test="keyWord != null and keyWord != ''">and (client_id like concat('%', #{keyWord}, '%') or name like concat('%', #{keyWord}, '%'))</if>
+        <if test="clientId != null and clientId != ''">and client_id = #{clientId}</if>
+    </select>
+
+    <insert id="insertDataApp">
+        INSERT INTO data_app ( name, client_id, secret_key, remark, creator, create_time, db_status )
+        VALUES ( #{name}, #{clientId}, #{secretKey}, #{remark}, #{creator}, #{createTime}, 1 )
+    </insert>
+
+    <update id="updateById">
+        UPDATE data_app
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="clientId != null and clientId != ''">client_id = #{clientId},</if>
+            <if test="secretKey != null and secretKey != ''">secret_key = #{secretKey},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updater != null and updater != ''">updater = #{updater},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" resultType="com.iris.system.app.entity.DataAppEntity">
+        select * from data_app where id = #{id}
+    </select>
 </mapper>

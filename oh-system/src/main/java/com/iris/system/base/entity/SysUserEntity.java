@@ -1,12 +1,9 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 import com.iris.system.base.enums.UserStatusEnum;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 用户
@@ -14,7 +11,6 @@ import java.util.Objects;
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("sys_user")
 public class SysUserEntity extends BaseEntity {
     /**
      * 用户名
@@ -69,7 +65,7 @@ public class SysUserEntity extends BaseEntity {
     /**
      * 机构名称
      */
-    @TableField(exist=false)
+//    @TableField(exist=false)
     private String orgName;
 
     public String getUsername() {
@@ -174,17 +170,5 @@ public class SysUserEntity extends BaseEntity {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysUserEntity that)) return false;
-        return Objects.equals(getUsername(), that.getUsername()) && Objects.equals(getPassword(), that.getPassword()) && Objects.equals(getRealName(), that.getRealName()) && Objects.equals(getAvatar(), that.getAvatar()) && Objects.equals(getGender(), that.getGender()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getMobile(), that.getMobile()) && Objects.equals(getOrgId(), that.getOrgId()) && Objects.equals(getSuperAdmin(), that.getSuperAdmin()) && Objects.equals(getStatus(), that.getStatus()) && Objects.equals(getOrgName(), that.getOrgName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUsername(), getPassword(), getRealName(), getAvatar(), getGender(), getEmail(), getMobile(), getOrgId(), getSuperAdmin(), getStatus(), getOrgName());
     }
 }

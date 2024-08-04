@@ -1,15 +1,8 @@
 package com.iris.framework.common.utils;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.trans.util.ReflectUtils;
-import com.fhs.core.trans.vo.TransPojo;
-import com.fhs.trans.service.impl.DictionaryTransService;
 import jakarta.servlet.http.HttpServletResponse;
 import com.iris.framework.common.excel.ExcelDataListener;
 import com.iris.framework.common.excel.ExcelFinishCallBack;
@@ -21,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The type Excel utils.
@@ -156,9 +147,9 @@ public class ExcelUtils {
      *
      * @param dataList 需要被反向解析的数据
      */
-    public static <T extends TransPojo> void parseDict(List<T> dataList) {
+    public static <T extends Object> void parseDict(List<T> dataList) {
         //没有数据就不需要初始化
-        if (CollectionUtil.isEmpty(dataList)) {
+        /*if (CollectionUtil.isEmpty(dataList)) {
             return;
         }
         Class<? extends TransPojo> clazz = dataList.getFirst().getClass();
@@ -167,7 +158,7 @@ public class ExcelUtils {
         //过滤出字典翻译
         fields = fields.stream().filter(field -> TransType.DICTIONARY.equals(field.getAnnotation(Trans.class).type())).collect(Collectors.toList());
         DictionaryTransService dictionaryTransService = SpringUtil.getBean(DictionaryTransService.class);
-        dictionaryTransService.unTransMore(dataList, fields);
+        dictionaryTransService.unTransMore(dataList, fields);*/
     }
 
 }

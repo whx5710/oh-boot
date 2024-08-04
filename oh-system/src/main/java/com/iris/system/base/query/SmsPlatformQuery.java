@@ -16,6 +16,12 @@ public class SmsPlatformQuery extends Query {
     @Schema(description = "短信签名")
     private String signName;
 
+    /**
+     * 状态  0：禁用   1：启用
+     */
+    @Schema(description = "状态  0：禁用   1：启用")
+    private Integer status;
+
     public Integer getPlatform() {
         return platform;
     }
@@ -30,5 +36,13 @@ public class SmsPlatformQuery extends Query {
 
     public void setSignName(String signName) {
         this.signName = signName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

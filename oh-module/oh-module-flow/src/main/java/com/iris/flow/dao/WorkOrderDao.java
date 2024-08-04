@@ -1,7 +1,5 @@
 package com.iris.flow.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
-import com.iris.flow.entity.WorkOrderEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2024-02-23
 */
 @Mapper
-public interface WorkOrderDao extends BaseDao<WorkOrderEntity> {
+public interface WorkOrderDao {
 	
 }

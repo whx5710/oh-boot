@@ -42,7 +42,7 @@ public class TaskRecordController {
     @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('workflow:record:info')")
     public Result<TaskRecordVO> get(@PathVariable("id") Long id){
-        TaskRecordEntity entity = taskRecordService.getById(id);
+        TaskRecordEntity entity = taskRecordService.getTaskRecordById(id);
 
         return Result.ok(TaskRecordConvert.INSTANCE.convert(entity));
     }

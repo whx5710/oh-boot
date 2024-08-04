@@ -1,14 +1,11 @@
 package com.iris.system.app.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.app.convert.DataFunctionAuthorityConvert;
-import com.iris.system.app.dao.DataFunctionAuthorityDao;
+import com.iris.system.app.dao.DataFunctionDao;
 import com.iris.system.app.entity.DataFunctionAuthorityEntity;
 import com.iris.system.app.query.DataFunctionAuthorityQuery;
 import com.iris.system.app.service.DataFunctionAuthorityService;
@@ -26,42 +23,44 @@ import java.util.List;
  * @since 1.0.0 2023-07-29
  */
 @Service
-public class DataFunctionAuthorityServiceImpl extends BaseServiceImpl<DataFunctionAuthorityDao, DataFunctionAuthorityEntity> implements DataFunctionAuthorityService {
+public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthorityService {
+
+    private final DataFunctionDao dataFunctionDao;
+
+    public DataFunctionAuthorityServiceImpl(DataFunctionDao dataFunctionDao){
+        this.dataFunctionDao = dataFunctionDao;
+    }
 
     @Override
     public PageResult<DataFunctionAuthorityVO> page(DataFunctionAuthorityQuery query) {
-        IPage<DataFunctionAuthorityEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(DataFunctionAuthorityConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<DataFunctionAuthorityEntity> getWrapper(DataFunctionAuthorityQuery query){
-        LambdaQueryWrapper<DataFunctionAuthorityEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataFunctionAuthorityEntity::getDbStatus,1);
-        if(!ObjectUtils.isEmpty(query.getClientId())){
-            wrapper.eq(DataFunctionAuthorityEntity::getClientId, query.getClientId());
-        }
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<DataFunctionAuthorityEntity> list = dataFunctionDao.getAuthorityList(query);
+        PageInfo<DataFunctionAuthorityEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(DataFunctionAuthorityConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public void save(DataFunctionAuthorityVO vo) {
         DataFunctionAuthorityEntity entity = DataFunctionAuthorityConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
+        dataFunctionDao.insertFuncAuthority(entity);
     }
 
     @Override
     public void update(DataFunctionAuthorityVO vo) {
         DataFunctionAuthorityEntity entity = DataFunctionAuthorityConvert.INSTANCE.convert(vo);
 
-        updateById(entity);
+        dataFunctionDao.updateFuncAuthorityById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            DataFunctionAuthorityEntity param = new DataFunctionAuthorityEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            dataFunctionDao.updateFuncAuthorityById(param);
+        });
     }
 
     /**
@@ -80,20 +79,22 @@ public class DataFunctionAuthorityServiceImpl extends BaseServiceImpl<DataFuncti
         }
         if(i == 0){ // 删除
             for(String funcCode: data.getFuncCodes()){
-                QueryWrapper<DataFunctionAuthorityEntity> wrappers = new QueryWrapper<>();
-                wrappers.lambda().eq(DataFunctionAuthorityEntity::getClientId, data.getClientId())
-                        .eq(DataFunctionAuthorityEntity::getFuncCode, funcCode);
-                remove(wrappers);
+                dataFunctionDao.updateFuncAuthorityStatus(data.getClientId(), funcCode, 0);
             }
         }else{
             for(String funcCode: data.getFuncCodes()){
                 DataFunctionAuthorityEntity dae = new DataFunctionAuthorityEntity();
                 dae.setFuncCode(funcCode);
                 dae.setClientId(data.getClientId());
-                this.baseMapper.insert(dae);
+                dataFunctionDao.insertFuncAuthority(dae);
             }
 
         }
+    }
+
+    @Override
+    public DataFunctionAuthorityEntity getById(Long id) {
+        return dataFunctionDao.getFuncAuthorityById(id);
     }
 
 }

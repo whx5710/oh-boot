@@ -1,11 +1,11 @@
 package com.iris.system.base.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.common.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 版本信息
@@ -13,7 +13,6 @@ import java.util.Date;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-09-16
  */
-@TableName("sys_version_info")
 public class SysVersionInfoEntity extends BaseEntity {
 
 	/**
@@ -34,9 +33,9 @@ public class SysVersionInfoEntity extends BaseEntity {
 	/**
 	* 发布时间
 	*/
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date releaseTime;
+	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	private LocalDateTime releaseTime;
 
 	// 是否当前版本
 	private Boolean isCurrVersion;
@@ -57,12 +56,20 @@ public class SysVersionInfoEntity extends BaseEntity {
 		this.content = content;
 	}
 
-	public Date getReleaseTime() {
+	public LocalDateTime getReleaseTime() {
 		return releaseTime;
 	}
 
-	public void setReleaseTime(Date releaseTime) {
+	public void setReleaseTime(LocalDateTime releaseTime) {
 		this.releaseTime = releaseTime;
+	}
+
+	public Boolean getCurrVersion() {
+		return isCurrVersion;
+	}
+
+	public void setCurrVersion(Boolean currVersion) {
+		isCurrVersion = currVersion;
 	}
 
 	public Boolean getIsCurrVersion() {

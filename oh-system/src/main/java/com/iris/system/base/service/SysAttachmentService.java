@@ -2,9 +2,7 @@ package com.iris.system.base.service;
 
 import com.iris.system.base.query.SysAttachmentQuery;
 import com.iris.system.base.vo.SysAttachmentVO;
-import com.iris.system.base.entity.SysAttachmentEntity;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 
@@ -14,7 +12,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface SysAttachmentService extends BaseService<SysAttachmentEntity> {
+public interface SysAttachmentService {
 
     PageResult<SysAttachmentVO> page(SysAttachmentQuery query);
 

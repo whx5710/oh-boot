@@ -1,9 +1,8 @@
 package com.iris.system.base.service.impl;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.dao.SysRoleDao;
 import com.iris.system.base.enums.DataScopeEnum;
 import com.iris.system.base.query.SysRoleQuery;
@@ -15,7 +14,6 @@ import com.iris.system.base.service.SysRoleService;
 import com.iris.system.base.service.SysRoleDataScopeService;
 import com.iris.system.base.service.SysUserRoleService;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysRoleEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,39 +28,35 @@ import java.util.List;
  *
  */
 @Service
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleService {
 	private final SysRoleMenuService sysRoleMenuService;
 	private final SysRoleDataScopeService sysRoleDataScopeService;
 	private final SysUserRoleService sysUserRoleService;
+	private final SysRoleDao sysRoleDao;
 
-	public SysRoleServiceImpl(SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService, SysUserRoleService sysUserRoleService) {
+	public SysRoleServiceImpl(SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService,
+							  SysUserRoleService sysUserRoleService, SysRoleDao sysRoleDao) {
 		this.sysRoleMenuService = sysRoleMenuService;
 		this.sysRoleDataScopeService = sysRoleDataScopeService;
 		this.sysUserRoleService = sysUserRoleService;
+		this.sysRoleDao = sysRoleDao;
 	}
 
 	@Override
 	public PageResult<SysRoleVO> page(SysRoleQuery query) {
-		IPage<SysRoleEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+		// 数据权限
+		query.setSqlFilter(getDataScopeFilter(null,null));
 
-		return new PageResult<>(SysRoleConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+		PageHelper.startPage(query.getPage(), query.getLimit());
+		List<SysRoleEntity> list = sysRoleDao.getList(query);
+		PageInfo<SysRoleEntity> pageInfo = new PageInfo<>(list);
+		return new PageResult<>(SysRoleConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
 	}
 
 	@Override
 	public List<SysRoleVO> getList(SysRoleQuery query) {
-		List<SysRoleEntity> entityList = baseMapper.selectList(getWrapper(query));
-
+		List<SysRoleEntity> entityList = sysRoleDao.getList(query);
 		return SysRoleConvert.INSTANCE.convertList(entityList);
-	}
-
-	private Wrapper<SysRoleEntity> getWrapper(SysRoleQuery query){
-		LambdaQueryWrapper<SysRoleEntity> wrapper = new LambdaQueryWrapper<>();
-		wrapper.like(StrUtil.isNotBlank(query.getName()), SysRoleEntity::getName, query.getName());
-
-		// 数据权限
-		dataScopeWrapper(wrapper);
-
-		return wrapper;
 	}
 
 	@Override
@@ -72,7 +66,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 
 		// 保存角色
 		entity.setDataScope(DataScopeEnum.SELF.getValue());
-		baseMapper.insert(entity);
+		sysRoleDao.insertRole(entity);
 
 		// 保存角色菜单关系
 		sysRoleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
@@ -84,7 +78,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 		SysRoleEntity entity = SysRoleConvert.INSTANCE.convert(vo);
 
 		// 更新角色
-		updateById(entity);
+		sysRoleDao.updateById(entity);
 
 		// 更新角色菜单关系
 		sysRoleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
@@ -93,10 +87,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void dataScope(SysRoleDataScopeVO vo) {
-		SysRoleEntity entity = getById(vo.getId());
+		SysRoleEntity entity = sysRoleDao.getById(vo.getId());
 		entity.setDataScope(vo.getDataScope());
 		// 更新角色
-		updateById(entity);
+		sysRoleDao.updateById(entity);
 
 		// 更新角色数据权限关系
 		if(vo.getDataScope().equals(DataScopeEnum.CUSTOM.getValue())){
@@ -110,7 +104,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
 		// 删除角色
-		removeByIds(idList);
+		// removeByIds(idList);
+		idList.forEach(id -> {
+			SysRoleEntity sysRole = new SysRoleEntity();
+			sysRole.setId(id);
+			sysRole.setDbStatus(0);
+			sysRoleDao.updateById(sysRole);
+		});
 
 		// 删除用户角色关系
 		sysUserRoleService.deleteByRoleIdList(idList);
@@ -120,6 +120,11 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 
 		// 删除角色数据权限关系
 		sysRoleDataScopeService.deleteByRoleIdList(idList);
+	}
+
+	@Override
+	public SysRoleEntity getById(Long id) {
+		return sysRoleDao.getById(id);
 	}
 
 }

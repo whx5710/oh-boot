@@ -1,9 +1,5 @@
 package com.iris.system.base.service;
 
-
-import com.iris.framework.datasource.service.BaseService;
-import com.iris.system.base.entity.SysRoleMenuEntity;
-
 import java.util.List;
 
 
@@ -13,7 +9,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface SysRoleMenuService extends BaseService<SysRoleMenuEntity> {
+public interface SysRoleMenuService {
 
 	/**
 	 * 根据角色ID，获取菜单ID列表

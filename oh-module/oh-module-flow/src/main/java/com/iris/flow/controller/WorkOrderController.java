@@ -45,7 +45,7 @@ public class WorkOrderController {
     @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('workflow:order:info')")
     public Result<WorkOrderVO> get(@PathVariable("id") Long id){
-        WorkOrderEntity entity = workOrderService.getById(id);
+        WorkOrderEntity entity = workOrderService.getOrderById(id);
 
         return Result.ok(WorkOrderConvert.INSTANCE.convert(entity));
     }

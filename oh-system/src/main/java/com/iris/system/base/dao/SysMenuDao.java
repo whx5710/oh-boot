@@ -1,7 +1,6 @@
 package com.iris.system.base.dao;
 
 import com.iris.system.base.entity.SysMenuEntity;
-import com.iris.framework.datasource.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,8 +13,9 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface SysMenuDao extends BaseDao<SysMenuEntity> {
+public interface SysMenuDao {
 
+	List<SysMenuEntity> getList(SysMenuEntity query);
 	/**
 	 * 查询所有菜单列表
 	 *
@@ -41,5 +41,11 @@ public interface SysMenuDao extends BaseDao<SysMenuEntity> {
 	 * 查询所有权限列表
 	 */
 	List<String> getAuthorityList();
+
+	int save(SysMenuEntity param);
+
+	boolean updateById(SysMenuEntity param);
+
+	SysMenuEntity getById(@Param("id")Long id);
 
 }

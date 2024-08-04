@@ -1,10 +1,8 @@
 package com.iris.system.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.dao.SmsLogDao;
 import com.iris.system.base.query.SmsLogQuery;
 import com.iris.system.base.vo.SmsLogVO;
@@ -13,6 +11,8 @@ import com.iris.system.base.entity.SmsLogEntity;
 import com.iris.system.base.service.SmsLogService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 短信日志
  *
@@ -20,24 +20,30 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class SmsLogServiceImpl extends BaseServiceImpl<SmsLogDao, SmsLogEntity> implements SmsLogService {
+public class SmsLogServiceImpl implements SmsLogService {
 
-    public SmsLogServiceImpl() {
+    private final SmsLogDao smsLogDao;
+
+    public SmsLogServiceImpl(SmsLogDao smsLogDao) {
+        this.smsLogDao = smsLogDao;
     }
 
     @Override
     public PageResult<SmsLogVO> page(SmsLogQuery query) {
-        IPage<SmsLogEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(SmsLogConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<SmsLogEntity> list = smsLogDao.getList(query);
+        PageInfo<SmsLogEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SmsLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
-    private LambdaQueryWrapper<SmsLogEntity> getWrapper(SmsLogQuery query){
-        LambdaQueryWrapper<SmsLogEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(query.getPlatform() != null, SmsLogEntity::getPlatform, query.getPlatform());
-        wrapper.like(query.getPlatformId() != null, SmsLogEntity::getPlatformId, query.getPlatformId());
-        wrapper.orderByDesc(SmsLogEntity::getId);
-        return wrapper;
+    @Override
+    public SmsLogEntity getById(Long id) {
+        return smsLogDao.getById(id);
+    }
+
+    @Override
+    public int save(SmsLogEntity entity) {
+        return smsLogDao.insertSmsLog(entity);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.iris.team.entity;
 
 import com.iris.framework.common.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
@@ -10,7 +9,6 @@ import java.util.Date;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@TableName("oh_task")
 public class OhTaskEntity extends BaseEntity {
 	/**
 	* 所属项目
@@ -68,19 +66,15 @@ public class OhTaskEntity extends BaseEntity {
 	private Integer dbStatus;
 
 	// 负责人ID
-	@TableField(exist=false)
 	private String directorUserId;
 
 	// 负责人
-	@TableField(exist=false)
 	private String directorUserName;
 
 	//协作人ID
-	@TableField(exist=false)
 	private String collaboratorUserId;
 
 	//协作人
-	@TableField(exist=false)
 	private String collaboratorUserName;
 
 	public Long getProjectId() {

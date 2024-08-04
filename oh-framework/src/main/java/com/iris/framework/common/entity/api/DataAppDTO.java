@@ -1,9 +1,5 @@
 package com.iris.framework.common.entity.api;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +16,6 @@ public class DataAppDTO {
 	/**
 	 * id
 	 */
-	@TableId
 	private Long id;
 	@Schema(description = "客户端名称")
 	private String name;
@@ -44,7 +39,6 @@ public class DataAppDTO {
 	/**
 	 * 创建者
 	 */
-	@TableField(fill = FieldFill.INSERT)
 	private Long  creator;
 
 	/**
@@ -52,13 +46,11 @@ public class DataAppDTO {
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
 
 	/**
 	 * 更新者
 	 */
-	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private Long  updater;
 
 	/**
@@ -66,14 +58,11 @@ public class DataAppDTO {
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private LocalDateTime updateTime;
 
 	/**
 	 * 删除标记
 	 */
-	@TableLogic
-	@TableField(fill = FieldFill.INSERT)
 	private Integer dbStatus;
 
 	public String getName() {

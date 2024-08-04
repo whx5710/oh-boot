@@ -1,6 +1,5 @@
 package com.iris.team.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.iris.framework.common.entity.BaseEntity;
 
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.Date;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@TableName("oh_project")
 public class OhProjectEntity extends BaseEntity {
 	/**
 	* 项目编码
@@ -31,13 +29,11 @@ public class OhProjectEntity extends BaseEntity {
 	/**
 	* 开始时间
 	*/
-	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private Date startTime;
 
 	/**
 	* 结束时间
 	*/
-	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private Date endTime;
 
 	/**

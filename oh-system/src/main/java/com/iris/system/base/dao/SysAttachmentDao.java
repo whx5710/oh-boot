@@ -1,8 +1,10 @@
 package com.iris.system.base.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.base.entity.SysAttachmentEntity;
+import com.iris.system.base.query.SysAttachmentQuery;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * 附件管理
@@ -11,6 +13,11 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  */
 @Mapper
-public interface SysAttachmentDao extends BaseDao<SysAttachmentEntity> {
+public interface SysAttachmentDao {
 
+    List<SysAttachmentEntity> getList(SysAttachmentQuery query);
+
+    boolean updateById(SysAttachmentEntity entity);
+
+    int insertAttach(SysAttachmentEntity entity);
 }

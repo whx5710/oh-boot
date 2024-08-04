@@ -1,14 +1,12 @@
 package com.iris.framework.datasource.dao;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
 /**
- * 基础Dao
+ * 基础Dao，集合公共接口
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface BaseDao<T> extends BaseMapper<T> {
+public interface BaseDao<T>{
 
 }

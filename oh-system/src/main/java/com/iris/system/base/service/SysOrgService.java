@@ -1,8 +1,7 @@
 package com.iris.system.base.service;
 
-import com.iris.system.base.vo.SysOrgVO;
 import com.iris.system.base.entity.SysOrgEntity;
-import com.iris.framework.datasource.service.BaseService;
+import com.iris.system.base.vo.SysOrgVO;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface SysOrgService extends BaseService<SysOrgEntity> {
+public interface SysOrgService {
 
 	List<SysOrgVO> getList();
 
@@ -27,4 +26,6 @@ public interface SysOrgService extends BaseService<SysOrgEntity> {
 	 * @param id   机构ID
 	 */
 	List<Long> getSubOrgIdList(Long id);
+
+	SysOrgEntity getById(Long id);
 }

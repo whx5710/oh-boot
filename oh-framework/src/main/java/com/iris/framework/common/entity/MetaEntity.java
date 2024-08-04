@@ -1,6 +1,5 @@
 package com.iris.framework.common.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -17,7 +16,6 @@ public class MetaEntity implements Serializable {
     /**
      * id
      */
-    @TableId
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

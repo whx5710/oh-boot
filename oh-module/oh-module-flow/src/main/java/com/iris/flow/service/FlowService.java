@@ -1,7 +1,6 @@
 package com.iris.flow.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 import com.iris.flow.entity.FlowEntity;
 import com.iris.flow.query.FlowQuery;
 import com.iris.flow.vo.FlowVO;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-12-19
  */
-public interface FlowService extends BaseService<FlowEntity> {
+public interface FlowService {
 
     PageResult<FlowVO> page(FlowQuery query);
 
@@ -25,4 +24,6 @@ public interface FlowService extends BaseService<FlowEntity> {
     void delete(List<Long> idList);
 
     FlowEntity getByKey(String key);
+
+    FlowEntity getById(Long id);
 }

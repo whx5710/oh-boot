@@ -1,9 +1,7 @@
 package com.iris.framework.common.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fhs.core.trans.vo.TransPojo;
 import com.iris.framework.common.utils.JsonUtils;
 
 import java.io.Serializable;
@@ -13,12 +11,11 @@ import java.io.Serializable;
  *
  * @author 王小费 whx5710@qq.com
  */
-public class IDEntity implements TransPojo, Serializable {
+public class IDEntity implements Serializable {
 
     /**
      * id
      */
-    @TableId
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

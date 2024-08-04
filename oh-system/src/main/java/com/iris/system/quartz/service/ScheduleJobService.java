@@ -1,7 +1,6 @@
 package com.iris.system.quartz.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.quartz.entity.ScheduleJobEntity;
 import com.iris.system.quartz.query.ScheduleJobQuery;
 import com.iris.system.quartz.vo.ScheduleJobVO;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public interface ScheduleJobService extends BaseService<ScheduleJobEntity> {
+public interface ScheduleJobService {
 
     PageResult<ScheduleJobVO> page(ScheduleJobQuery query);
 
@@ -27,4 +26,6 @@ public interface ScheduleJobService extends BaseService<ScheduleJobEntity> {
     void run(ScheduleJobVO vo);
 
     void changeStatus(ScheduleJobVO vo);
+
+    ScheduleJobEntity getById(Long id);
 }

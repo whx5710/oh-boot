@@ -1,10 +1,8 @@
 package com.iris.system.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.system.base.dao.SysMessageDao;
 import com.iris.system.base.query.SysMessageQuery;
@@ -25,37 +23,20 @@ import java.util.List;
  * @since 1.0.0 2023-10-10
  */
 @Service
-public class SysMessageServiceImpl extends BaseServiceImpl<SysMessageDao, SysMessageEntity> implements SysMessageService {
+public class SysMessageServiceImpl implements SysMessageService {
+
+    private final SysMessageDao sysMessageDao;
+
+    public SysMessageServiceImpl(SysMessageDao sysMessageDao){
+        this.sysMessageDao = sysMessageDao;
+    }
 
     @Override
     public PageResult<SysMessageVO> page(SysMessageQuery query) {
-        IPage<SysMessageEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(SysMessageConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<SysMessageEntity> getWrapper(SysMessageQuery query){
-        LambdaQueryWrapper<SysMessageEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SysMessageEntity::getDbStatus, 1);
-        if(!ObjectUtils.isEmpty(query.getTitle())){
-            wrapper.like(SysMessageEntity::getTitle, query.getTitle());
-        }
-        if(!ObjectUtils.isEmpty(query.getContent())){
-            wrapper.like(SysMessageEntity::getContent, query.getContent());
-        }
-        if(!ObjectUtils.isEmpty(query.getState())){
-            wrapper.eq(SysMessageEntity::getState, query.getState());
-        }
-        if(!ObjectUtils.isEmpty(query.getToId()) && query.getToId() > 0){
-            wrapper.eq(SysMessageEntity::getToId, query.getToId());
-        }
-        if(!ObjectUtils.isEmpty(query.getFromId()) && query.getFromId() > 0){
-            wrapper.eq(SysMessageEntity::getFromId, query.getFromId());
-        }
-        if(!ObjectUtils.isEmpty(query.getNoState())){
-            wrapper.ne(SysMessageEntity::getState, query.getNoState());
-        }
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<SysMessageEntity> list = sysMessageDao.getList(query);
+        PageInfo<SysMessageEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SysMessageConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -66,28 +47,30 @@ public class SysMessageServiceImpl extends BaseServiceImpl<SysMessageDao, SysMes
             entity.setFromName(SecurityUser.getUser().getRealName());
         }
         entity.setType("success");
-        baseMapper.insert(entity);
+        sysMessageDao.save(entity);
     }
 
     @Override
     public void update(SysMessageVO vo) {
         SysMessageEntity entity = SysMessageConvert.INSTANCE.convert(vo);
-
-        updateById(entity);
+        sysMessageDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            SysMessageEntity param = new SysMessageEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            sysMessageDao.updateById(param);
+        });
     }
 
     @Override
     public List<SysMessageVO> unSendMsg(Long userId) {
-        LambdaQueryWrapper<SysMessageEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SysMessageEntity::getToId, userId).eq(SysMessageEntity::getState, "0").orderByDesc(SysMessageEntity::getCreateTime);
-        wrapper.last(" limit 10");
-        return SysMessageConvert.INSTANCE.convertList(this.baseMapper.selectList(wrapper));
+        List<SysMessageEntity> list = sysMessageDao.getUnSendMsg(userId, "0");
+        return SysMessageConvert.INSTANCE.convertList(list.subList(0, 10));
     }
 
     /**
@@ -97,10 +80,19 @@ public class SysMessageServiceImpl extends BaseServiceImpl<SysMessageDao, SysMes
      */
     @Override
     public List<SysMessageVO> unReadMsg(Long userId) {
-        LambdaQueryWrapper<SysMessageEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SysMessageEntity::getToId, userId).eq(SysMessageEntity::getState, "1").orderByDesc(SysMessageEntity::getCreateTime);
-        wrapper.last(" limit 10");
-        return SysMessageConvert.INSTANCE.convertList(this.baseMapper.selectList(wrapper));
+        List<SysMessageEntity> list = sysMessageDao.getUnSendMsg(userId, "1");
+
+        return SysMessageConvert.INSTANCE.convertList(list.subList(0, 10));
+    }
+
+    @Override
+    public SysMessageEntity getById(Long id) {
+        return sysMessageDao.getById(id);
+    }
+
+    @Override
+    public boolean updateById(SysMessageEntity param) {
+        return sysMessageDao.updateById(param);
     }
 
 }

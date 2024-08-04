@@ -2,34 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.iris.system.base.dao.SysUserDao">
-
 	<select id="getList" resultType="com.iris.system.base.entity.SysUserEntity">
 		select t1.*, t2.name orgName
 		from sys_user t1 left join sys_org t2 on t1.org_id = t2.id
 		where t1.super_admin = 0 and t1.db_status = 1
-		<if test="username != null and username.trim() != ''">
-			and t1.username = #{username}
+		<if test="params.username != null and params.username.trim() != ''">
+			and t1.username = #{params.username}
 		</if>
-		<if test="userNames != null and userNames.size() > 0">
+		<if test="params.userNames != null and params.userNames.size() > 0">
 			and t1.username in
-			<foreach item="item" index="index" collection="userNames" open="(" separator="," close=")">
+			<foreach item="item" index="index" collection="params.userNames" open="(" separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
-		<if test="mobile != null and mobile.trim() != ''">
-			and t1.mobile = #{mobile}
+		<if test="params.mobile != null and params.mobile.trim() != ''">
+			and t1.mobile = #{params.mobile}
 		</if>
-		<if test="gender != null">
-			and t1.gender = #{gender}
+		<if test="params.gender != null">
+			and t1.gender = #{params.gender}
 		</if>
-		<if test="realName != null and realName.trim() != ''">
-			and t1.real_name like concat("%",#{realName},"%")
+		<if test="params.realName != null and params.realName.trim() != ''">
+			and t1.real_name like concat("%",#{params.realName},"%")
 		</if>
-		<if test="orgId != null and orgId != 0">
-			and t1.org_id = #{orgId}
+		<if test="params.orgId != null and params.orgId != 0">
+			and t1.org_id = #{params.orgId}
 		</if>
-		<if test="keyWord != null and keyWord.trim() != ''">
-			and (t2.name like concat("%",#{keyWord},"%") or t1.real_name like concat("%",#{keyWord},"%") )
+		<if test="params.keyWord != null and params.keyWord.trim() != ''">
+			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%") )
 		</if>
 	</select>
 
@@ -39,8 +38,9 @@
 	</select>
 
 	<select id="getRoleUserList" resultType="com.iris.system.base.entity.SysUserEntity">
-		select t1.* from sys_user t1 left join sys_user_role t2 on t1.id = t2.user_id
-			where t1.db_status = 1 and t2.db_status = 1 and t2.role_id = #{roleId}
+		select t1.*,t3.name as org_name from sys_user t1 left join sys_user_role t2 on t1.id = t2.user_id
+		left join sys_org t3 on t1.org_id = t3.id
+		where t1.db_status = 1 and t2.db_status = 1 and t2.role_id = #{roleId}
 		<if test="username != null and username.trim() != ''">
 			and t1.username = #{username}
 		</if>
@@ -52,4 +52,59 @@
 		</if>
 	</select>
 
+	<!--保存用户-->
+	<insert id="insertUser">
+		insert into sys_user (
+			username, password,
+			real_name, avatar,
+			gender, email,
+			mobile, org_id,
+			super_admin, status,
+			db_status, creator,
+			create_time, pwd_modify_time,
+			user_key
+		) values (
+			#{username}, #{password},
+			#{realName}, #{avatar},
+			#{gender}, #{email},
+			#{mobile}, #{orgId},
+			#{superAdmin}, #{status},
+			#{dbStatus}, #{creator},
+			#{createTime}, #{pwdModifyTime},
+			#{userKey})
+	</insert>
+
+	<select id="getByUsername" resultType="com.iris.system.base.entity.SysUserEntity">
+		select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.username = #{username}
+	</select>
+
+	<select id="getByMobile" resultType="com.iris.system.base.entity.SysUserEntity">
+		select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.mobile = #{mobile}
+	</select>
+
+	<update id="updateById" parameterType="com.iris.system.base.entity.SysUserEntity">
+		update sys_user
+		<set>
+			<if test="username != null and username != ''">username = #{username},</if>
+			<if test="password != null and password != ''">password = #{password},</if>
+			<if test="realName != null and realName != ''">real_name = #{realName},</if>
+			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+			<if test="gender != null">gender = #{gender},</if>
+			<if test="email != null and email != ''">email = #{email},</if>
+			<if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+			<if test="orgId != null">org_id = #{orgId},</if>
+			<if test="superAdmin != null">super_admin = #{superAdmin},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="dbStatus != null">db_status = #{dbStatus},</if>
+			<if test="updater != null">updater = #{updater},</if>
+			<if test="pwdModifyTime != null">pwd_modify_time = #{pwdModifyTime},</if>
+			<if test="userKey != null and userKey != ''">user_key = #{userKey},</if>
+			update_time = #{updateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="countByOrgId" resultType="Integer">
+		select count(1) from sys_user where db_status != 0 and org_id = #{orgId}
+	</select>
 </mapper>

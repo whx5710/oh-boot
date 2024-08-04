@@ -1,7 +1,7 @@
 package com.iris.system.base.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.system.base.entity.SysDictDataEntity;
+import com.iris.system.base.query.SysDictDataQuery;
 import com.iris.system.base.vo.SysDictVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,8 +16,16 @@ import java.util.List;
  *
  */
 @Mapper
-public interface SysDictDataDao extends BaseDao<SysDictDataEntity> {
+public interface SysDictDataDao {
 
     @Select("${sql}")
     List<SysDictVO.DictData> getListForSql(@Param("sql") String sql);
+
+    List<SysDictDataEntity> getList(SysDictDataQuery query);
+
+    boolean updateById(SysDictDataEntity param);
+
+    int save(SysDictDataEntity param);
+
+    SysDictDataEntity getById(@Param("id")Long id);
 }

@@ -1,16 +1,12 @@
 package com.iris.system.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iris.system.base.dao.SysOrgDao;
 import com.iris.system.base.dao.SysUserDao;
 import com.iris.system.base.vo.SysOrgVO;
 import com.iris.system.base.convert.SysOrgConvert;
-import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.framework.common.utils.TreeUtils;
 import com.iris.system.base.entity.SysOrgEntity;
-import com.iris.system.base.entity.SysUserEntity;
 import com.iris.system.base.service.SysOrgService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +23,13 @@ import java.util.Map;
  * 
  */
 @Service
-public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> implements SysOrgService {
+public class SysOrgServiceImpl implements SysOrgService {
 	private final SysUserDao sysUserDao;
+	private final SysOrgDao sysOrgDao;
 
-	public SysOrgServiceImpl(SysUserDao sysUserDao) {
+	public SysOrgServiceImpl(SysUserDao sysUserDao, SysOrgDao sysOrgDao) {
 		this.sysUserDao = sysUserDao;
+		this.sysOrgDao = sysOrgDao;
 	}
 
 	@Override
@@ -39,10 +37,10 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 		Map<String, Object> params = new HashMap<>();
 
 		// 数据权限
-		params.put(Constant.DATA_SCOPE, getDataScope("t1", "id"));
+		// params.put(Constant.DATA_SCOPE, getDataScope("t1", "id"));
 
 		// 机构列表
-		List<SysOrgEntity> entityList = baseMapper.getList(params);
+		List<SysOrgEntity> entityList = sysOrgDao.getList(params);
 
 		return TreeUtils.build(SysOrgConvert.INSTANCE.convertList(entityList));
 	}
@@ -51,8 +49,7 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 	@Transactional(rollbackFor = Exception.class)
 	public void save(SysOrgVO vo) {
 		SysOrgEntity entity = SysOrgConvert.INSTANCE.convert(vo);
-
-		baseMapper.insert(entity);
+		sysOrgDao.insertOrg(entity);
 	}
 
 	@Override
@@ -64,39 +61,41 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 		if(entity.getId().equals(entity.getParentId())){
 			throw new ServerException("上级机构不能为自身");
 		}
-
 		// 上级机构不能为下级
 		List<Long> subOrgList = getSubOrgIdList(entity.getId());
 		if(subOrgList.contains(entity.getParentId())){
 			throw new ServerException("上级机构不能为下级");
 		}
-
-		updateById(entity);
+		sysOrgDao.updateById(entity);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(Long id) {
 		// 判断是否有子机构
-		long orgCount = count(new QueryWrapper<SysOrgEntity>().eq("pid", id));
+		int orgCount = sysOrgDao.countByParentId(id);
 		if(orgCount > 0){
 			throw new ServerException("请先删除子机构");
 		}
 
 		// 判断机构下面是否有用户
-		long userCount = sysUserDao.selectCount(new QueryWrapper<SysUserEntity>().eq("org_id", id));
+		long userCount = sysUserDao.countByOrgId(id);
 		if(userCount > 0){
 			throw new ServerException("机构下面有用户，不能删除");
 		}
 
 		// 删除
-		removeById(id);
+		// removeById(id);
+		SysOrgEntity params = new SysOrgEntity();
+		params.setId(id);
+		params.setDbStatus(0);
+		sysOrgDao.updateById(params);
 	}
 
 	@Override
 	public List<Long> getSubOrgIdList(Long id) {
 		// 所有机构的id、pid列表
-		List<SysOrgEntity> orgList = baseMapper.getIdAndPidList();
+		List<SysOrgEntity> orgList = sysOrgDao.getIdAndPidList();
 
 		// 递归查询所有子机构ID列表
 		List<Long> subIdList = new ArrayList<>();
@@ -108,11 +107,15 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 		return subIdList;
 	}
 
+	@Override
+	public SysOrgEntity getById(Long id) {
+		return sysOrgDao.getById(id);
+	}
+
 	private void getTree(Long id, List<SysOrgEntity> orgList, List<Long> subIdList) {
 		for(SysOrgEntity org : orgList){
 			if (org.getParentId().equals(id)){
 				getTree(org.getId(), orgList, subIdList);
-
 				subIdList.add(org.getId());
 			}
 		}

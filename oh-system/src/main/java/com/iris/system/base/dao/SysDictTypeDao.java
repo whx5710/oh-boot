@@ -1,8 +1,11 @@
 package com.iris.system.base.dao;
 
 import com.iris.system.base.entity.SysDictTypeEntity;
-import com.iris.framework.datasource.dao.BaseDao;
+import com.iris.system.base.query.SysDictTypeQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 字典类型
@@ -11,6 +14,13 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  */
 @Mapper
-public interface SysDictTypeDao extends BaseDao<SysDictTypeEntity> {
+public interface SysDictTypeDao {
 
+    List<SysDictTypeEntity> getList(SysDictTypeQuery query);
+
+    int save(SysDictTypeEntity param);
+
+    boolean updateById(SysDictTypeEntity param);
+
+    SysDictTypeEntity getById(@Param("id")Long id);
 }

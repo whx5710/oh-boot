@@ -20,4 +20,12 @@ public interface SysRoleMenuDao extends BaseDao<SysRoleMenuEntity> {
 	 * 根据角色ID，获取菜单ID列表
 	 */
 	List<Long> getMenuIdList(@Param("roleId") Long roleId);
+
+	int saveBatch(@Param("list") List<SysRoleMenuEntity> menuList);
+
+	int deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param")SysRoleMenuEntity param);
+
+	int deleteByMenuId(@Param("menuId")Long menuId, @Param("param")SysRoleMenuEntity param);
+
+	int deleteMenuIdList(@Param("list") List<Long> menuIdList, @Param("param")SysRoleMenuEntity param);
 }

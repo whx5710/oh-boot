@@ -1,7 +1,6 @@
 package com.iris.system.app.service;
 
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 import com.iris.system.app.entity.DataFunctionAuthorityEntity;
 import com.iris.system.app.query.DataFunctionAuthorityQuery;
 import com.iris.system.app.vo.DataFunctionAuthorityVO;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-07-29
  */
-public interface DataFunctionAuthorityService extends BaseService<DataFunctionAuthorityEntity> {
+public interface DataFunctionAuthorityService {
 
     PageResult<DataFunctionAuthorityVO> page(DataFunctionAuthorityQuery query);
 
@@ -25,4 +24,6 @@ public interface DataFunctionAuthorityService extends BaseService<DataFunctionAu
     void delete(List<Long> idList);
 
     void make(DataFunctionAuthorityVO data);
+
+    DataFunctionAuthorityEntity getById(Long id);
 }

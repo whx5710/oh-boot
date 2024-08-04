@@ -2,7 +2,9 @@ package com.iris.system.base.dao;
 
 import com.iris.system.base.entity.SysOrgEntity;
 import com.iris.framework.datasource.dao.BaseDao;
+import com.iris.system.base.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +16,7 @@ import java.util.Map;
  *
  */
 @Mapper
-public interface SysOrgDao extends BaseDao<SysOrgEntity> {
+public interface SysOrgDao {
 
     List<SysOrgEntity> getList(Map<String, Object> params);
 
@@ -23,4 +25,12 @@ public interface SysOrgDao extends BaseDao<SysOrgEntity> {
      */
     List<SysOrgEntity> getIdAndPidList();
 
+    // 保存机构信息
+    int insertOrg(SysOrgEntity sysOrgEntity);
+
+    boolean updateById(SysOrgEntity sysOrgEntity);
+
+    int countByParentId(@Param("parentId") long parentId);
+
+    SysOrgEntity getById(Long id);
 }

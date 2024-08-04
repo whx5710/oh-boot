@@ -1,6 +1,5 @@
 package com.iris.system.base.service;
 
-import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.base.query.SysVersionInfoQuery;
 import com.iris.system.base.vo.SysVersionInfoVO;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-09-16
  */
-public interface SysVersionInfoService extends BaseService<SysVersionInfoEntity> {
+public interface SysVersionInfoService {
 
     PageResult<SysVersionInfoVO> page(SysVersionInfoQuery query);
 
@@ -26,4 +25,6 @@ public interface SysVersionInfoService extends BaseService<SysVersionInfoEntity>
 
     // 最新版本
     SysVersionInfoEntity latestVersion();
+
+    SysVersionInfoEntity getById(Long id);
 }

@@ -1,14 +1,12 @@
 package com.iris.flow.entity;
 
 import com.iris.framework.common.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
 /**
  * 自定义流程表
  *
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-12-19
  */
-@TableName("bpmn_flow")
 public class FlowEntity extends BaseEntity {
 	/**
 	* 流程code

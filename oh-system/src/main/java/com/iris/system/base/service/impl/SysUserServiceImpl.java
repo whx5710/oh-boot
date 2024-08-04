@@ -1,9 +1,8 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.fhs.trans.service.impl.TransService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.constant.CommonEnum;
@@ -20,10 +19,8 @@ import com.iris.system.base.service.SysParamsService;
 import com.iris.system.base.service.SysUserPostService;
 import com.iris.system.base.service.SysUserService;
 import com.iris.system.base.service.SysUserRoleService;
-import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.excel.ExcelFinishCallBack;
 import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysUserEntity;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,11 +38,12 @@ import java.util.*;
  * 
  */
 @Service
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
+public class SysUserServiceImpl  implements SysUserService {
     private final SysUserRoleService sysUserRoleService;
     private final SysUserPostService sysUserPostService;
-    private final TransService transService;
+    //private final TransService transService;
     private final RedisCache redisCache;
+    private final SysUserDao sysUserDao;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -53,26 +51,22 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     @Resource
     private SysParamsService sysParamsService;
     public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserPostService sysUserPostService,
-                              TransService transService, RedisCache redisCache) {
+                              RedisCache redisCache, SysUserDao sysUserDao) {
         this.sysUserRoleService = sysUserRoleService;
         this.sysUserPostService = sysUserPostService;
-        this.transService = transService;
+        //this.transService = transService;
         this.redisCache = redisCache;
+        this.sysUserDao = sysUserDao;
     }
 
     @Override
     public PageResult<SysUserVO> page(SysUserQuery query) {
-        // 查询参数
-        Map<String, Object> params = getParams(query);
-
         // 分页查询
-        IPage<SysUserEntity> page = getPage(query);
-        params.put(Constant.PAGE, page);
-
+        PageHelper.startPage(query.getPage(), query.getLimit());
         // 数据列表
-        List<SysUserEntity> list = baseMapper.getList(params);
-
-        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
+        List<SysUserEntity> list = sysUserDao.getList(query);
+        PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     /**
@@ -118,23 +112,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         redisCache.delete(RedisKeys.getAuthCountKey(userName));
     }
 
-    private Map<String, Object> getParams(SysUserQuery query) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("username", query.getUsername());
-        params.put("mobile", query.getMobile());
-        params.put("gender", query.getGender());
-        params.put("realName", query.getRealName());
-        params.put("orgId", query.getOrgId());
-        params.put("keyWord", query.getKeyWord());
-
-        params.put("userNames", query.getUserNames());// 用户名集合
-
-        // 数据权限
-        params.put(Constant.DATA_SCOPE, getDataScope("t1", null));
-
-        return params;
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void save(SysUserVO vo) {
@@ -147,13 +124,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
         // 判断用户名是否存在
-        SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
+        SysUserEntity user = sysUserDao.getByUsername(entity.getUsername());
         if (user != null) {
             throw new ServerException("用户名已经存在");
         }
 
         // 判断手机号是否存在
-        user = baseMapper.getByMobile(entity.getMobile());
+        user = sysUserDao.getByMobile(entity.getMobile());
         if (user != null) {
             throw new ServerException("手机号已经存在");
         }
@@ -161,7 +138,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             entity.setStatus(1);
         }
         // 保存用户
-        baseMapper.insert(entity);
+        sysUserDao.insertUser(entity);
 
         // 保存用户角色关系
         sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
@@ -171,6 +148,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(SysUserVO vo) {
         // 如果密码不为空，则进行加密处理
         if (StrUtil.isBlank(vo.getPassword())) {
@@ -183,19 +161,19 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
 
         // 判断用户名是否存在
-        SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
+        SysUserEntity user = sysUserDao.getByUsername(entity.getUsername());
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("用户名已经存在");
         }
 
         // 判断手机号是否存在
-        user = baseMapper.getByMobile(entity.getMobile());
+        user = sysUserDao.getByMobile(entity.getMobile());
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("手机号已经存在");
         }
 
         // 更新用户
-        updateById(entity);
+        sysUserDao.updateById(entity);
 
         // 更新用户角色关系
         sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
@@ -205,9 +183,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         // 删除用户
-        removeByIds(idList);
+//        removeByIds(idList);
+        idList.forEach(id -> {
+            SysUserEntity entity = new SysUserEntity();
+            entity.setId(id);
+            entity.setDbStatus(0);
+            sysUserDao.updateById(entity);
+        });
 
         // 删除用户角色关系
         sysUserRoleService.deleteByUserIdList(idList);
@@ -218,8 +203,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 
     @Override
     public SysUserVO getByMobile(String mobile) {
-        SysUserEntity user = baseMapper.getByMobile(mobile);
-
+        SysUserEntity user = sysUserDao.getByMobile(mobile);
         return SysUserConvert.INSTANCE.convert(user);
     }
 
@@ -236,7 +220,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             userId = user.getId();
         }
         // 重新查询，防止修改基本信息后，缓存未更新的情况
-        SysUserEntity entity = this.baseMapper.getById(userId);
+        SysUserEntity entity = sysUserDao.getById(userId);
         user = SysUserConvert.INSTANCE.convert(entity);
         // 用户角色列表
         List<Long> roleIdList = sysUserRoleService.getRoleIdList(userId);
@@ -253,27 +237,20 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         // 密码验证
         passwordStrength(newPassword);
         // 修改密码
-        SysUserEntity user = getById(id);
+        SysUserEntity user = sysUserDao.getById(id);
         newPassword = passwordEncoder.encode(newPassword);
         user.setPassword(newPassword);
 
-        updateById(user);
+        sysUserDao.updateById(user);
     }
 
     @Override
     public PageResult<SysUserVO> roleUserPage(SysRoleUserQuery query) {
-        // 查询参数
-        Map<String, Object> params = getParams(query);
-        params.put("roleId", query.getRoleId());
-
-        // 分页查询
-        IPage<SysUserEntity> page = getPage(query);
-        params.put(Constant.PAGE, page);
-
+        PageHelper.startPage(query.getPage(), query.getLimit());
         // 数据列表
-        List<SysUserEntity> list = baseMapper.getRoleUserList(params);
-
-        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
+        List<SysUserEntity> list = sysUserDao.getRoleUserList(query);
+        PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -292,10 +269,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             }
 
             private void saveUser(List<SysUserExcelVO> result) {
-                ExcelUtils.parseDict(result);
                 List<SysUserEntity> sysUserEntities = SysUserConvert.INSTANCE.convertListEntity(result);
                 sysUserEntities.forEach(user -> user.setPassword(password));
-                saveBatch(sysUserEntities);
+                sysUserEntities.forEach(sysUserDao::insertUser);
             }
         });
 
@@ -303,9 +279,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 
     @Override
     public void export() {
-        List<SysUserEntity> list = list(Wrappers.lambdaQuery(SysUserEntity.class).eq(SysUserEntity::getSuperAdmin, SuperAdminEnum.NO.getValue()));
+        List<SysUserEntity> list = sysUserDao.getList(new SysUserQuery()); // list(Wrappers.lambdaQuery(SysUserEntity.class).eq(SysUserEntity::getSuperAdmin, SuperAdminEnum.NO.getValue()));
         List<SysUserExcelVO> userExcelVOS = SysUserConvert.INSTANCE.convert2List(list);
-        transService.transBatch(userExcelVOS);
+        // transService.transBatch(userExcelVOS);
         // 写到浏览器打开
         ExcelUtils.excelExport(SysUserExcelVO.class, "system_user_excel" + DateUtils.format(new Date()), null, userExcelVOS);
     }

@@ -1,7 +1,6 @@
 package com.iris.flow.entity;
 
 import com.iris.framework.common.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
 
 import java.util.Date;
 
@@ -11,7 +10,6 @@ import java.util.Date;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-02-06
  */
-@TableName("bpmn_task_record")
 public class TaskRecordEntity extends BaseEntity {
 	/**
 	* 流程定义ID

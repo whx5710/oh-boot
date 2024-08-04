@@ -1,10 +1,8 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysUserRoleDao;
 import com.iris.system.base.service.SysUserRoleService;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysUserRoleEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,13 @@ import java.util.stream.Collectors;
  * 
  */
 @Service
-public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysUserRoleEntity> implements SysUserRoleService {
+public class SysUserRoleServiceImpl implements SysUserRoleService {
+
+    private final SysUserRoleDao sysUserRoleDao;
+
+    public SysUserRoleServiceImpl(SysUserRoleDao sysUserRoleDao){
+        this.sysUserRoleDao = sysUserRoleDao;
+    }
 
     @Override
     public void saveOrUpdate(Long userId, List<Long> roleIdList) {
@@ -40,14 +44,15 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
             }).collect(Collectors.toList());
 
             // 批量新增
-            saveBatch(roleList);
+            sysUserRoleDao.saveBatch(roleList);
         }
 
         // 需要删除的角色ID
         Collection<Long> deleteRoleIdList = CollUtil.subtract(dbRoleIdList, roleIdList);
         if (CollUtil.isNotEmpty(deleteRoleIdList)){
-            LambdaQueryWrapper<SysUserRoleEntity> queryWrapper = new LambdaQueryWrapper<>();
-            remove(queryWrapper.eq(SysUserRoleEntity::getUserId, userId).in(SysUserRoleEntity::getRoleId, deleteRoleIdList));
+            SysUserRoleEntity param = new SysUserRoleEntity();
+            param.setUserId(userId);
+            sysUserRoleDao.deleteByRoleIdList((List<Long>) deleteRoleIdList, param);
         }
     }
 
@@ -61,27 +66,28 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
         }).collect(Collectors.toList());
 
         // 批量新增
-        saveBatch(list);
+        sysUserRoleDao.saveBatch(list);
     }
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        remove(new LambdaQueryWrapper<SysUserRoleEntity>().in(SysUserRoleEntity::getRoleId, roleIdList));
+        sysUserRoleDao.deleteByRoleIdList(roleIdList, new SysUserRoleEntity());
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        remove(new LambdaQueryWrapper<SysUserRoleEntity>().in(SysUserRoleEntity::getUserId, userIdList));
+        sysUserRoleDao.deleteByUserIdList(userIdList, null);
     }
 
     @Override
     public void deleteByUserIdList(Long roleId, List<Long> userIdList) {
-        LambdaQueryWrapper<SysUserRoleEntity> queryWrapper = new LambdaQueryWrapper<>();
-        remove(queryWrapper.eq(SysUserRoleEntity::getRoleId, roleId).in(SysUserRoleEntity::getUserId, userIdList));
+        SysUserRoleEntity param = new SysUserRoleEntity();
+        param.setRoleId(roleId);
+        sysUserRoleDao.deleteByUserIdList(userIdList, param);
     }
 
     @Override
     public List<Long> getRoleIdList(Long userId) {
-        return baseMapper.getRoleIdList(userId);
+        return sysUserRoleDao.getRoleIdList(userId);
     }
 }

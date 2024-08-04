@@ -1,19 +1,11 @@
 package com.iris.framework.datasource.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.datasource.interceptor.DataScope;
-import com.iris.framework.common.query.Query;
 import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -22,40 +14,9 @@ import java.util.List;
  * 基础服务类，所有Service都要继承
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
-public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
-
-    /**
-     * 获取分页对象
-     *
-     * @param query 分页参数
-     */
-    protected IPage<T> getPage(Query query) {
-        Page<T> page = new Page<>(query.getPage(), query.getLimit());
-
-        // 排序
-        if (StringUtils.isNotBlank(query.getOrder())) {
-            if (query.isAsc()) {
-                return page.addOrder(OrderItem.asc(query.getOrder()));
-            } else {
-                return page.addOrder(OrderItem.desc(query.getOrder()));
-            }
-        }
-
-        return page;
-    }
-
-    /**
-     * MyBatis-Plus 数据权限
-     */
-    protected void dataScopeWrapper(LambdaQueryWrapper<T> queryWrapper) {
-        DataScope dataScope = getDataScope(null, null);
-        if (dataScope != null) {
-            queryWrapper.apply(dataScope.getSqlFilter());
-        }
-    }
-
+public class BaseServiceImpl implements BaseService {
     /**
      * 原生SQL 数据权限
      *
@@ -63,7 +24,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
      * @param orgIdAlias 机构ID别名，null：表示org_id
      * @return 返回数据权限
      */
-    protected DataScope getDataScope(String tableAlias, String orgIdAlias) {
+    protected String getDataScopeFilter(String tableAlias, String orgIdAlias) {
         UserDetail user = SecurityUser.getUser();
         // 如果是超级管理员，则不进行数据过滤
         if (user.getSuperAdmin().equals(Constant.SUPER_ADMIN)) {
@@ -76,7 +37,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
         }
 
         // 获取表的别名
-        if (StringUtils.isNotBlank(tableAlias)) {
+        if (StringUtils.hasText(tableAlias)) {
             tableAlias += ".";
         }
 
@@ -91,7 +52,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
         }
         // 数据过滤
         if (!dataScopeList.isEmpty()) {
-            if (StringUtils.isBlank(orgIdAlias)) {
+            if (!StringUtils.hasText(orgIdAlias)) {
                 orgIdAlias = "org_id";
             }
             sqlFilter.append(tableAlias).append(orgIdAlias);
@@ -106,6 +67,6 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
 
         sqlFilter.append(")");
 
-        return new DataScope(sqlFilter.toString());
+        return sqlFilter.toString();
     }
 }

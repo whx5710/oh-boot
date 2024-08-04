@@ -28,6 +28,9 @@ public class Query {
     @Schema(description = "是否升序")
     boolean asc;
 
+    @Schema(description = "过滤SQL")
+    private String sqlFilter;
+
     public Integer getPage() {
         return page;
     }
@@ -58,5 +61,13 @@ public class Query {
 
     public void setAsc(boolean asc) {
         this.asc = asc;
+    }
+
+    public String getSqlFilter() {
+        return sqlFilter;
+    }
+
+    public void setSqlFilter(String sqlFilter) {
+        this.sqlFilter = sqlFilter;
     }
 }

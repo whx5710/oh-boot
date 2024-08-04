@@ -3,7 +3,7 @@ package com.iris.system.base.query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.iris.framework.common.query.Query;
 
-import java.util.Objects;
+import java.util.List;
 
 /**
  * 参数管理查询
@@ -21,6 +21,9 @@ public class SysParamsQuery extends Query {
 
     @Schema(description = "参数值")
     private String paramValue;
+
+    @Schema(description = "ID集合")
+    List<Long> idList;
 
     public Integer getParamType() {
         return paramType;
@@ -46,15 +49,11 @@ public class SysParamsQuery extends Query {
         this.paramValue = paramValue;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysParamsQuery that)) return false;
-        return Objects.equals(getParamType(), that.getParamType()) && Objects.equals(getParamKey(), that.getParamKey()) && Objects.equals(getParamValue(), that.getParamValue());
+    public List<Long> getIdList() {
+        return idList;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getParamType(), getParamKey(), getParamValue());
+    public void setIdList(List<Long> idList) {
+        this.idList = idList;
     }
 }

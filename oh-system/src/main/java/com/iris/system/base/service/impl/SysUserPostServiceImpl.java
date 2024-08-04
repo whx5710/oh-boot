@@ -1,10 +1,8 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iris.system.base.dao.SysUserPostDao;
 import com.iris.system.base.service.SysUserPostService;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import com.iris.system.base.entity.SysUserPostEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,13 @@ import java.util.stream.Collectors;
  *
  */
 @Service
-public class SysUserPostServiceImpl extends BaseServiceImpl<SysUserPostDao, SysUserPostEntity> implements SysUserPostService {
+public class SysUserPostServiceImpl implements SysUserPostService {
+
+    private final SysUserPostDao sysUserPostDao;
+
+    public SysUserPostServiceImpl(SysUserPostDao sysUserPostDao){
+        this.sysUserPostDao = sysUserPostDao;
+    }
 
     @Override
     public void saveOrUpdate(Long userId, List<Long> postIdList) {
@@ -38,31 +42,31 @@ public class SysUserPostServiceImpl extends BaseServiceImpl<SysUserPostDao, SysU
                 entity.setPostId(postId);
                 return entity;
             }).collect(Collectors.toList());
-
             // 批量新增
-            saveBatch(postList);
+            sysUserPostDao.saveBatch(postList);
         }
 
         // 需要删除的岗位ID
         Collection<Long> deletePostIdList = CollUtil.subtract(dbPostIdList, postIdList);
         if (CollUtil.isNotEmpty(deletePostIdList)){
-            LambdaQueryWrapper<SysUserPostEntity> queryWrapper = new LambdaQueryWrapper<>();
-            remove(queryWrapper.eq(SysUserPostEntity::getUserId, userId).in(SysUserPostEntity::getPostId, deletePostIdList));
+            SysUserPostEntity param = new SysUserPostEntity();
+            param.setUserId(userId);
+            sysUserPostDao.deleteByPostIdList((List<Long>) deletePostIdList, param);
         }
     }
 
     @Override
     public void deleteByPostIdList(List<Long> postIdList) {
-        remove(new LambdaQueryWrapper<SysUserPostEntity>().in(SysUserPostEntity::getPostId, postIdList));
+        sysUserPostDao.deleteByPostIdList(postIdList, new SysUserPostEntity());
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        remove(new LambdaQueryWrapper<SysUserPostEntity>().in(SysUserPostEntity::getUserId, userIdList));
+        sysUserPostDao.deleteByUserIdList(userIdList, new SysUserPostEntity());
     }
 
     @Override
     public List<Long> getPostIdList(Long userId) {
-        return baseMapper.getPostIdList(userId);
+        return sysUserPostDao.getPostIdList(userId);
     }
 }

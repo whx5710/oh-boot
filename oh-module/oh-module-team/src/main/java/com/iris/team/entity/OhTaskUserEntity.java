@@ -1,6 +1,5 @@
 package com.iris.team.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.iris.framework.common.entity.BaseEntity;
 
 /**
@@ -9,7 +8,6 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@TableName("oh_task_user")
 public class OhTaskUserEntity extends BaseEntity {
 	/**
 	* 任务ID

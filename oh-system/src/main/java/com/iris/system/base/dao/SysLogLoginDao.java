@@ -3,7 +3,7 @@ package com.iris.system.base.dao;
 import java.util.List;
 
 import com.iris.system.base.entity.SysLogLoginEntity;
-import com.iris.framework.datasource.dao.BaseDao;
+import com.iris.system.base.query.SysLogLoginQuery;
 import com.iris.system.base.vo.AnalysisVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +15,7 @@ import org.apache.ibatis.annotations.Param;
  * 
  */
 @Mapper
-public interface SysLogLoginDao extends BaseDao<SysLogLoginEntity> {
+public interface SysLogLoginDao {
 
     /**
      * 统计最近几天相关操作情况
@@ -24,4 +24,8 @@ public interface SysLogLoginDao extends BaseDao<SysLogLoginEntity> {
      * @return 统计情况
      */
     List<AnalysisVO> latestDateCount(@Param("day")int day, @Param("operation")int operation);
+
+    List<SysLogLoginEntity> getList(SysLogLoginQuery query);
+
+    int save(SysLogLoginEntity param);
 }
