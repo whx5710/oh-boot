@@ -3,6 +3,7 @@ package com.iris.team.dao;
 import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.team.entity.OhTaskEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface OhTaskDao extends BaseDao<OhTaskEntity> {
     int save(OhTaskEntity param);
 
     boolean updateById(OhTaskEntity param);
+
+    OhTaskEntity getById(@Param("id")Long id);
 }

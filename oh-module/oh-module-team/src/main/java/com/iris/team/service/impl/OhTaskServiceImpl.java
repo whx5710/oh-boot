@@ -78,4 +78,9 @@ public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService 
         });
     }
 
+    @Override
+    public OhTaskEntity getById(Long id) {
+        return ohTaskDao.getById(id);
+    }
+
 }

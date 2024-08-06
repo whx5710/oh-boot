@@ -1,5 +1,6 @@
 package com.iris.team.service;
 
+import com.iris.team.entity.OhTaskEntity;
 import com.iris.team.vo.OhTaskVO;
 import com.iris.team.query.OhTaskQuery;
 import com.iris.framework.common.utils.PageResult;
@@ -21,4 +22,6 @@ public interface OhTaskService {
     void update(OhTaskVO vo);
 
     void delete(List<Long> idList);
+
+    OhTaskEntity getById(Long id);
 }

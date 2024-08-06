@@ -79,4 +79,8 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <select id="getById" resultType="com.iris.team.entity.OhTaskEntity">
+        select * from oh_task where id = #{id}
+    </select>
 </mapper>
