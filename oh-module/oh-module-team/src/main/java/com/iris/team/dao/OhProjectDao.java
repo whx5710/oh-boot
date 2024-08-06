@@ -1,8 +1,10 @@
 package com.iris.team.dao;
 
-import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.team.entity.OhProjectEntity;
+import com.iris.team.query.OhProjectQuery;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
 * 项目信息表
@@ -11,6 +13,10 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2022-11-25
 */
 @Mapper
-public interface OhProjectDao extends BaseDao<OhProjectEntity> {
+public interface OhProjectDao {
+    List<OhProjectEntity> getList(OhProjectQuery query);
 
+    int save(OhProjectEntity param);
+
+    boolean updateById(OhProjectEntity param);
 }

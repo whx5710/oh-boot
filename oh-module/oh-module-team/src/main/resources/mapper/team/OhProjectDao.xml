@@ -19,4 +19,40 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <insert id="save">
+        INSERT INTO oh_project (project_code, project_name, project_alias, start_time, end_time, director, director_name, status, db_status, creator, create_time)
+        VALUES (#{projectCode}, #{projectName}, #{projectAlias}, #{startTime}, #{endTime}, #{director}, #{directorName}, #{status}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>
+
+    <select id="getList" resultType="com.iris.team.entity.OhProjectEntity">
+        select * from oh_project where db_status = 1
+        <if test="status != null">and status = #{status}</if>
+        <if test="startTime != null">and start_time &gt;= #{startTime}</if>
+        <if test="endTime != null">and end_time &lt;= #{endTime}</if>
+        <if test="keyWord != null and keyWord != ''">
+            and (project_name like concat('%',#{keyWord}, '%') or project_code like concat('%',#{keyWord}, '%')
+            or project_alias like concat('%',#{keyWord}, '%') or director_name like concat('%',#{keyWord}, '%'))
+        </if>
+        keyWord
+    </select>
+
+    <update id="updateById">
+        UPDATE oh_project
+        <set>
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="projectAlias != null and projectAlias != ''">project_alias = #{projectAlias},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="director != null">director = #{director},</if>
+            <if test="directorName != null and directorName != ''">director_name = #{directorName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
 </mapper>

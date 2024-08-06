@@ -1,6 +1,11 @@
 package com.iris.flow.dao;
 
+import com.iris.flow.entity.WorkOrderEntity;
+import com.iris.flow.query.WorkOrderQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 工单表
@@ -10,5 +15,11 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface WorkOrderDao {
-	
+    List<WorkOrderEntity> getOrderList(WorkOrderQuery query);
+
+    int saveOrder(WorkOrderEntity param);
+
+    boolean updateOrderById(WorkOrderEntity param);
+
+    WorkOrderEntity getOrderById(@Param("id")Long id);
 }

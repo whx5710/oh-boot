@@ -2,7 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.flow.dao.TaskRecordDao;
+import com.iris.flow.dao.WorkOrderDao;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
@@ -40,20 +40,20 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
 
     private final ProcessHandlerService processHandlerService;
 
-    private final TaskRecordDao taskRecordDao;
+    private final WorkOrderDao workOrderDao;
 
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService, TaskRecordDao taskRecordDao){
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService, WorkOrderDao workOrderDao){
         this.taskHandlerService = taskHandlerService;
         this.processHandlerService = processHandlerService;
-        this.taskRecordDao = taskRecordDao;
+        this.workOrderDao = workOrderDao;
     }
 
 
     @Override
     public PageResult<WorkOrderVO> page(WorkOrderQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<WorkOrderEntity> list = taskRecordDao.getOrderList(query);
+        List<WorkOrderEntity> list = workOrderDao.getOrderList(query);
         PageInfo<WorkOrderEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(WorkOrderConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -62,7 +62,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
     @Override
     public void save(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
-        taskRecordDao.saveOrder(entity);
+        workOrderDao.saveOrder(entity);
         vo.setId(entity.getId());
     }
 
@@ -70,7 +70,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
     public void update(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
 
-        taskRecordDao.updateOrderById(entity);
+        workOrderDao.updateOrderById(entity);
     }
 
     @Override
@@ -80,13 +80,13 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
             WorkOrderEntity param = new WorkOrderEntity();
             param.setId(id);
             param.setDbStatus(0);
-            taskRecordDao.updateOrderById(param);
+            workOrderDao.updateOrderById(param);
         });
     }
 
     @Override
     public WorkOrderEntity getOrderById(Long id) {
-        return taskRecordDao.getOrderById(id);
+        return workOrderDao.getOrderById(id);
     }
 
     /**
@@ -120,8 +120,6 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
 
         // 模拟业务处理异常
 //        throw new ServerException("模拟异常！！！");
-
-
         return Result.ok(list);
     }
 

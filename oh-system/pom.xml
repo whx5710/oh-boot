@@ -12,11 +12,11 @@
 
     <dependencies>
         <!-- 协同任务 -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-team</artifactId>
             <version>1.0.0</version>
-        </dependency>-->
+        </dependency>
         <!-- 对外接口 -->
         <dependency>
             <groupId>com.iris</groupId>

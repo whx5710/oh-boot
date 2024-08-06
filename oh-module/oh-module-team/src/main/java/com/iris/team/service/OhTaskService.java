@@ -1,10 +1,8 @@
 package com.iris.team.service;
 
 import com.iris.team.vo.OhTaskVO;
-import com.iris.team.entity.OhTaskEntity;
 import com.iris.team.query.OhTaskQuery;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.BaseService;
 
 import java.util.List;
 
@@ -14,7 +12,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-public interface OhTaskService extends BaseService<OhTaskEntity> {
+public interface OhTaskService {
 
     PageResult<OhTaskVO> page(OhTaskQuery query);
 

@@ -1,9 +1,7 @@
 package com.iris.flow.dao;
 
 import com.iris.flow.entity.TaskRecordEntity;
-import com.iris.flow.entity.WorkOrderEntity;
 import com.iris.flow.query.TaskRecordQuery;
-import com.iris.flow.query.WorkOrderQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,12 +27,4 @@ public interface TaskRecordDao {
 
     TaskRecordEntity getTaskRecordById(@Param("id")Long id);
 
-
-    List<WorkOrderEntity> getOrderList(WorkOrderQuery query);
-
-    int saveOrder(WorkOrderEntity param);
-
-    boolean updateOrderById(WorkOrderEntity param);
-
-    WorkOrderEntity getOrderById(@Param("id")Long id);
 }
