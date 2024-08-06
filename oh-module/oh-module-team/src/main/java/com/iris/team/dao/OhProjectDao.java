@@ -3,6 +3,7 @@ package com.iris.team.dao;
 import com.iris.team.entity.OhProjectEntity;
 import com.iris.team.query.OhProjectQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface OhProjectDao {
     int save(OhProjectEntity param);
 
     boolean updateById(OhProjectEntity param);
+
+    OhProjectEntity getById(@Param("id")Long id);
 }

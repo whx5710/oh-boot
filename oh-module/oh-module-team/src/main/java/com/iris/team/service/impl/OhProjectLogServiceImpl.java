@@ -61,4 +61,9 @@ public class OhProjectLogServiceImpl implements OhProjectLogService {
         });
     }
 
+    @Override
+    public OhProjectLogEntity getById(Long id) {
+        return ohProjectLogDao.getById(id);
+    }
+
 }

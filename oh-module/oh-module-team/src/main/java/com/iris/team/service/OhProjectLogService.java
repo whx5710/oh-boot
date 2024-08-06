@@ -1,5 +1,6 @@
 package com.iris.team.service;
 
+import com.iris.team.entity.OhProjectLogEntity;
 import com.iris.team.vo.OhProjectLogVO;
 import com.iris.team.query.OhProjectLogQuery;
 import com.iris.framework.common.utils.PageResult;
@@ -21,4 +22,6 @@ public interface OhProjectLogService {
     void update(OhProjectLogVO vo);
 
     void delete(List<Long> idList);
+
+    OhProjectLogEntity getById(Long id);
 }

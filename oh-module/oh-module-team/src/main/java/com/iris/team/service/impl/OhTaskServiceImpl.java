@@ -1,8 +1,7 @@
 package com.iris.team.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.constant.Constant;
 import com.iris.team.convert.OhTaskConvert;
 import com.iris.team.dao.OhTaskDao;
@@ -14,7 +13,6 @@ import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,19 +25,22 @@ import java.util.Map;
  * @since 1.0.0 2022-11-25
  */
 @Service
-public class OhTaskServiceImpl extends BaseServiceImpl<OhTaskDao, OhTaskEntity> implements OhTaskService {
+public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService {
+
+    private final OhTaskDao ohTaskDao;
+
+    public OhTaskServiceImpl(OhTaskDao ohTaskDao){
+        this.ohTaskDao = ohTaskDao;
+    }
 
     @Override
     public PageResult<OhTaskVO> page(OhTaskQuery query) {
         // 查询参数
         Map<String, Object> params = getParams(query);
-
-        // 分页查询
-        IPage<OhTaskEntity> page = getPage(query);
-        params.put(Constant.PAGE, page);
-
-        List<OhTaskEntity> list = baseMapper.getList(params);
-        return new PageResult<>(OhTaskConvert.INSTANCE.convertList(list), page.getTotal());
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<OhTaskEntity> list = ohTaskDao.getList(params);
+        PageInfo<OhTaskEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(OhTaskConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     private Map<String, Object> getParams(OhTaskQuery query) {
@@ -49,48 +50,32 @@ public class OhTaskServiceImpl extends BaseServiceImpl<OhTaskDao, OhTaskEntity> 
         params.put("keyWord", query.getKeyWord());
         params.put("taskType", query.getTaskType());
         // 数据权限
-        params.put(Constant.DATA_SCOPE, getDataScope("t1", null));
+        params.put(Constant.DATA_SCOPE, getDataScopeFilter("t1", null));
         return params;
-    }
-    private LambdaQueryWrapper<OhTaskEntity> getWrapper(OhTaskQuery query){
-        LambdaQueryWrapper<OhTaskEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(OhTaskEntity::getDbStatus, 1);
-        if(!ObjectUtils.isEmpty(query.getTaskType())){ // 1任务2需求3设计4缺陷9其他
-            wrapper.in(OhTaskEntity::getTaskType, query.getTaskType());
-        }
-        if(!ObjectUtils.isEmpty(query.getStatus())){ // // 状态（1待办项2进行中3已完成）
-            wrapper.eq(OhTaskEntity::getStatus, query.getStatus());
-        }
-        if(!ObjectUtils.isEmpty(query.getProjectId())){ // 所属项目
-            wrapper.eq(OhTaskEntity::getProjectId, query.getProjectId());
-        }
-        if(!ObjectUtils.isEmpty(query.getKeyWord())){ // 搜索
-            wrapper.and(w -> w.like(OhTaskEntity::getTaskTitle, query.getKeyWord())
-                    .or().like(OhTaskEntity::getRemark, query.getKeyWord())
-                    .or().like(OhTaskEntity::getNote, query.getKeyWord())
-            );
-        }
-        return wrapper;
     }
 
     @Override
     public void save(OhTaskVO vo) {
         OhTaskEntity entity = OhTaskConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
+        ohTaskDao.save(entity);
     }
 
     @Override
     public void update(OhTaskVO vo) {
         OhTaskEntity entity = OhTaskConvert.INSTANCE.convert(vo);
 
-        updateById(entity);
+        ohTaskDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            OhTaskEntity param = new OhTaskEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            ohTaskDao.updateById(param);
+        });
     }
 
 }

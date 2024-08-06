@@ -17,4 +17,8 @@ import java.util.Map;
 public interface OhTaskDao extends BaseDao<OhTaskEntity> {
 
     List<OhTaskEntity> getList(Map<String, Object> params);
+
+    int save(OhTaskEntity param);
+
+    boolean updateById(OhTaskEntity param);
 }

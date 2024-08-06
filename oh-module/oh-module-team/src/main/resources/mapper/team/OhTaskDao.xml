@@ -54,4 +54,29 @@
         group by t1.id
         order by t1.create_time desc
     </select>
+
+    <insert id="save">
+        INSERT INTO oh_task (project_id, task_title, note, task_type, parent_id, has_child, start_time, end_time, status, remark, db_status, creator, create_time)
+        VALUES (#{projectId}, #{taskTitle}, #{note}, #{taskType}, #{parentId}, #{hasChild}, #{startTime}, #{endTime}, #{status}, #{remark}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>
+
+    <update id="updateById">
+        UPDATE oh_task
+        <set>
+            <if test="projectId != null and projectId != ''">project_id = #{projectId},</if>
+            <if test="taskTitle != null and taskTitle != ''">task_title = #{taskTitle},</if>
+            <if test="note != null and note != ''">note = #{note},</if>
+            <if test="taskType != null and taskType != ''">task_type = #{taskType},</if>
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+            <if test="hasChild != null and hasChild != ''">has_child = #{hasChild},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

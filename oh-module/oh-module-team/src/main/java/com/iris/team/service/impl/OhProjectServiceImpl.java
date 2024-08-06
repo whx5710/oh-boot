@@ -60,4 +60,9 @@ public class OhProjectServiceImpl implements OhProjectService {
         });
     }
 
+    @Override
+    public OhProjectEntity getById(Long id) {
+        return ohProjectDao.getById(id);
+    }
+
 }

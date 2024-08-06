@@ -16,35 +16,9 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <select id="getList" resultType="com.iris.team.entity.OhProjectLogEntity">
-        select * from oh_work_order where db_status = 1
+
+    <select id="getById" resultType="com.iris.team.entity.OhProjectLogEntity">
+        select * from oh_project_log where id #{id}
     </select>
-
-    <insert id="save">
-        INSERT INTO oh_work_order (order_code, order_source, report_time, incident_time, end_time, title, comment, address, geo_x, geo_y, category, note, db_status, creator,create_time)
-        VALUES (#{orderCode}, #{orderSource}, #{reportTime}, #{incidentTime}, #{endTime}, #{title}, #{comment}, #{address}, #{geoX}, #{geoY}, #{category}, #{note}, #{dbStatus}, #{creator},#{createTime})
-    </insert>
-
-    <update id="updateById">
-        UPDATE oh_work_order
-        <set>
-            <if test="orderCode != null and orderCode != ''">order_code = #{orderCode},</if>
-            <if test="orderSource != null and orderSource != ''">order_source = #{orderSource},</if>
-            <if test="reportTime != null and reportTime != ''">report_time = #{reportTime},</if>
-            <if test="incidentTime != null and incidentTime != ''">incident_time = #{incidentTime},</if>
-            <if test="endTime != null and endTime != ''">end_time = #{endTime},</if>
-            <if test="title != null and title != ''">title = #{title},</if>
-            <if test="comment != null and comment != ''">comment = #{comment},</if>
-            <if test="address != null and address != ''">address = #{address},</if>
-            <if test="geoX != null">geo_x = #{geoX},</if>
-            <if test="geoY != null">geo_y = #{geoY},</if>
-            <if test="category != null">category = #{category},</if>
-            <if test="note != null and note != ''">note = #{note},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null">updater = #{updater},</if>
-            update_time = #{updateTime}
-        </set>
-        WHERE id = #{id}
-    </update>
 
 </mapper>

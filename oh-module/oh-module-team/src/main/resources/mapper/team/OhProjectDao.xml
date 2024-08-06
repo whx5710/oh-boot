@@ -55,4 +55,8 @@
         id = #{id}
     </update>
 
+    <select id="getById" resultType="com.iris.team.entity.OhProjectEntity">
+        select * from oh_project where id = #{id}
+    </select>
+
 </mapper>

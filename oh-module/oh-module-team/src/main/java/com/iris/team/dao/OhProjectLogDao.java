@@ -4,6 +4,7 @@ import com.iris.framework.datasource.dao.BaseDao;
 import com.iris.team.entity.OhProjectLogEntity;
 import com.iris.team.query.OhProjectLogQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface OhProjectLogDao extends BaseDao<OhProjectLogEntity> {
     int save(OhProjectLogEntity param);
 
     boolean updateById(OhProjectLogEntity param);
+
+    OhProjectLogEntity getById(@Param("id")Long id);
 }
