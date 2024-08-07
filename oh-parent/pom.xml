@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>3.3.2</version>
         <relativePath/>
     </parent>
 
@@ -38,7 +38,7 @@
         <pagehelper.version>2.1.0</pagehelper.version>
         <!-- 动态数据源 -->
         <dynamic.datasource.version>4.3.0</dynamic.datasource.version>
-        <!-- nacos配置中心 -->
+        <!-- Nacos 配置中心 -->
         <nacos.version>0.3.0-RC</nacos.version>
         <!-- swagger（xiaoymin版本）生成在线文档 -->
         <knife4j.version>4.5.0</knife4j.version>
@@ -48,7 +48,7 @@
         <!-- bean 拷贝 -->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <!-- excel 工具 -->
-        <easyexcel.version>3.3.4</easyexcel.version>
+        <easyexcel.version>4.0.2</easyexcel.version>
         <!-- svg 图片转换 -->
         <svg.trans.version>1.17</svg.trans.version>
         <!-- camunda 工作流相关 -->
