@@ -61,7 +61,7 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
   main:
-    banner-mode: "OFF"  # 关闭 banner CONSOLE、LOG、OFF
+    banner-mode: "LOG"  # 关闭 banner CONSOLE、LOG、OFF
   data:
     redis:
       database: 0
