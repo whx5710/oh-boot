@@ -12,7 +12,7 @@
 
     <select id="getTaskList" resultType="com.iris.flow.entity.TaskRecordEntity">
         select * from bpmn_task_record where db_status = 1
-        <if test="procInstId != null and procInstId != ''">and pro_inst_id = #{procInstId}</if>
+        <if test="procInstId != null and procInstId != ''">and proc_inst_id = #{procInstId}</if>
         <if test="runMark != null">and run_mark = #{runMark}</if>
         <if test="taskId != null and taskId != ''">and task_id = #{taskId}</if>
         <if test="actInstId != null and actInstId != ''">and act_inst_id = #{actInstId}</if>

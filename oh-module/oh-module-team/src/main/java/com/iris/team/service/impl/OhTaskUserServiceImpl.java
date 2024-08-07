@@ -1,8 +1,7 @@
 package com.iris.team.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.iris.team.convert.OhTaskUserConvert;
 import com.iris.team.dao.OhTaskUserDao;
 import com.iris.team.entity.OhTaskUserEntity;
@@ -10,7 +9,6 @@ import com.iris.team.query.OhTaskUserQuery;
 import com.iris.team.service.OhTaskUserService;
 import com.iris.team.vo.OhTaskUserVO;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.datasource.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,39 +21,46 @@ import java.util.List;
  * @since 1.0.0 2022-11-25
  */
 @Service
-public class OhTaskUserServiceImpl extends BaseServiceImpl<OhTaskUserDao, OhTaskUserEntity> implements OhTaskUserService {
+public class OhTaskUserServiceImpl implements OhTaskUserService {
 
+    private final OhTaskUserDao ohTaskUserDao;
+    public OhTaskUserServiceImpl(OhTaskUserDao ohTaskUserDao){
+        this.ohTaskUserDao = ohTaskUserDao;
+    }
     @Override
     public PageResult<OhTaskUserVO> page(OhTaskUserQuery query) {
-        IPage<OhTaskUserEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
-        return new PageResult<>(OhTaskUserConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-    }
-
-    private LambdaQueryWrapper<OhTaskUserEntity> getWrapper(OhTaskUserQuery query){
-        LambdaQueryWrapper<OhTaskUserEntity> wrapper = Wrappers.lambdaQuery();
-
-        return wrapper;
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<OhTaskUserEntity> list = ohTaskUserDao.getList(query);
+        PageInfo<OhTaskUserEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(OhTaskUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public void save(OhTaskUserVO vo) {
         OhTaskUserEntity entity = OhTaskUserConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
+        ohTaskUserDao.save(entity);
     }
 
     @Override
     public void update(OhTaskUserVO vo) {
         OhTaskUserEntity entity = OhTaskUserConvert.INSTANCE.convert(vo);
-
-        updateById(entity);
+        ohTaskUserDao.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            OhTaskUserEntity param = new OhTaskUserEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            ohTaskUserDao.updateById(param);
+        });
+    }
+
+    @Override
+    public OhTaskUserEntity getById(Long id) {
+        return ohTaskUserDao.getById(id);
     }
 
 }

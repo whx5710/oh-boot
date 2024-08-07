@@ -58,7 +58,8 @@ public class KafkaConsumer {
             }
         }catch (Exception e){
             log.error("处理业务发生错误！{}", e.getMessage());
-            dataMsg.setNote(e.getMessage());
+            String errorMsg = e.getMessage();
+            dataMsg.setNote(errorMsg.length()>500?errorMsg.substring(0,500):errorMsg);
             dataMsg.setState("3"); // 异常
         }finally {
 //            dataMsg.setJsonStr(JsonUtils.toJsonString(dataMsg.getData()));
