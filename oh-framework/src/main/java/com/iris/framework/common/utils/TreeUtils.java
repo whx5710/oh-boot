@@ -27,7 +27,6 @@ public class TreeUtils {
                 treeList.add(findChildren(treeNodes, treeNode));
             }
         }
-
         return treeList;
     }
 
@@ -64,7 +63,6 @@ public class TreeUtils {
 
             result.add(node);
         }
-
         return result;
     }
 

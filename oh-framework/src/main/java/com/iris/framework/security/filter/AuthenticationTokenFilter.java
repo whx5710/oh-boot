@@ -1,6 +1,6 @@
 package com.iris.framework.security.filter;
 
-//import com.iris.framework.common.utils.IpUtils;
+import com.iris.framework.common.utils.IrisTools;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.user.UserDetail;
-import com.iris.framework.security.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -30,39 +27,29 @@ import java.io.IOException;
 @Component
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
-//    private final Logger log = LoggerFactory.getLogger(AuthenticationTokenFilter.class);
-
     @Resource
     private TokenStoreCache tokenStoreCache;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String accessToken = TokenUtils.getAccessToken(request);
+        String accessToken = IrisTools.getAccessToken(request);
         // accessToken为空，表示未登录
         if (StringUtils.isBlank(accessToken)) {
             chain.doFilter(request, response);
-//            String ip = IpUtils.getIpAddr(request);
-//            log.warn("IP:" + ip + " 请求方法:" + request.getMethod() + " 请求路径:" + request.getRequestURI() + " 未登录");
             return;
         }
-
         // 获取登录用户信息
         UserDetail user = tokenStoreCache.getUser(accessToken);
         if (user == null) {
             chain.doFilter(request, response);
-//            String ip = IpUtils.getIpAddr(request);
-//            log.warn("IP:" + ip + " 请求方法:" + request.getMethod() + " 请求路径:" + request.getRequestURI() + " 未获取到用户信息");
             return;
         }
-
         // 用户存在
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-
         // 新建 SecurityContext
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
-
         chain.doFilter(request, response);
     }
 }

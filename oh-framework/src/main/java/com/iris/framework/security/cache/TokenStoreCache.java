@@ -55,7 +55,6 @@ public class TokenStoreCache {
     public List<String> getUserKeyList() {
         String pattern = RedisKeys.getAccessTokenKey("*");
         Set<String> sets = redisCache.keys(pattern);
-
         return ListUtil.toList(sets);
     }
 }

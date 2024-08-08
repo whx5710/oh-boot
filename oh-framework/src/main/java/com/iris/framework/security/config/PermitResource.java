@@ -56,11 +56,9 @@ public class PermitResource {
 
     private List<String> getPropertiesList(String key, Resource... resources) {
         List<String> list = new ArrayList<>();
-
         // 解析资源文件
         for (Resource resource : resources) {
             Properties properties = loadYamlProperties(resource);
-
             for (Map.Entry<Object, Object> entry : properties.entrySet()) {
                 String tmpKey = StringUtils.substringBefore(entry.getKey().toString(), "[");
                 if (tmpKey.equalsIgnoreCase(key)) {
@@ -75,7 +73,6 @@ public class PermitResource {
         YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
         factory.setResources(resources);
         factory.afterPropertiesSet();
-
         return factory.getObject();
     }
 }

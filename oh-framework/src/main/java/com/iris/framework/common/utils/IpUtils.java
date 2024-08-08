@@ -36,7 +36,6 @@ public class IpUtils {
         if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : getMultistageReverseProxyIp(ip);
     }
 
@@ -169,7 +168,7 @@ public class IpUtils {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException ignored) {
-
+            System.out.println("获取本地IP地址失败！" + ignored.getMessage());
         }
         return "127.0.0.1";
     }
@@ -183,7 +182,7 @@ public class IpUtils {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException ignored) {
-
+            System.out.println("获取主机名失败！" + ignored.getMessage());
         }
         return "未知";
     }

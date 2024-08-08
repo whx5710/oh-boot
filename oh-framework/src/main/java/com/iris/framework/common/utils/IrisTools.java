@@ -1,5 +1,11 @@
 package com.iris.framework.common.utils;
 
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
+import com.iris.framework.common.constant.Constant;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.util.ObjectUtils;
+
 import java.util.Base64;
 
 /**
@@ -30,4 +36,24 @@ public class IrisTools {
         return new String(decodeBytes);
     }
 
+    /**
+     * 生成随机字符串UUID
+     */
+    public static String generator() {
+        return UUID.fastUUID().toString(true);
+    }
+
+    /**
+     * 获取 AccessToken
+     */
+    public static String getAccessToken(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if (StrUtil.isBlank(accessToken)) {
+            accessToken = request.getParameter("access_token");
+        }
+        if(!ObjectUtils.isEmpty(accessToken) && accessToken.startsWith(Constant.TOKEN_PREFIX)){
+            accessToken = accessToken.substring(Constant.TOKEN_PREFIX.length());
+        }
+        return accessToken;
+    }
 }

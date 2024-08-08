@@ -18,6 +18,8 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -36,6 +38,8 @@ import java.util.HashMap;
 })
 @Component
 public class DataInnerInterceptor implements Interceptor {
+
+    private final Logger log = LoggerFactory.getLogger(DataInnerInterceptor.class);
 
     // 创建时间
     private final static String CREATE_TIME = "createTime";
@@ -69,20 +73,21 @@ public class DataInnerInterceptor implements Interceptor {
             Object params = args[1];
             // 查询过滤
             if (params != null) {
-                String sql = null;
+                // 数据过滤SQL
+                String sqlFilter = null;
                 if("java.util.HashMap".equals(params.getClass().getName())){
                     HashMap hashMap = (HashMap) params;
                     if(hashMap.containsKey(SQL_FILTER) && hashMap.get(SQL_FILTER) != null){
-                        sql = (String) hashMap.get(SQL_FILTER);
+                        sqlFilter = (String) hashMap.get(SQL_FILTER);
                     }
                 }else{
                     if((ReflectUtil.hasField(params.getClass(), SQL_FILTER) && ReflectUtil.getFieldValue(params, SQL_FILTER) != null)){
-                        sql = (String) ReflectUtil.getFieldValue(params, SQL_FILTER);
+                        sqlFilter = (String) ReflectUtil.getFieldValue(params, SQL_FILTER);
                     }
                 }
-                if(sql != null){
+                if(sqlFilter != null){
                     BoundSql boundSql = (BoundSql) args[5];
-                    ReflectUtil.setFieldValue(boundSql, "sql", getSelect(boundSql.getSql(), sql));
+                    ReflectUtil.setFieldValue(boundSql, "sql", getSelect(boundSql.getSql(), sqlFilter));
                 }
             }
         }
@@ -145,6 +150,12 @@ public class DataInnerInterceptor implements Interceptor {
         }
     }
 
+    /**
+     * 拼接SQL
+     * @param buildSql 原SQL
+     * @param sqlFilter 添加的过滤sql
+     * @return 拼接好的SQL
+     */
     private String getSelect(String buildSql, String sqlFilter){
         try {
             Select select = (Select) CCJSqlParserUtil.parse(buildSql);
@@ -160,6 +171,7 @@ public class DataInnerInterceptor implements Interceptor {
             // 需用双引号，比如 concat('%', ?)
             return select.toString().replaceAll("'", "");
         }catch (JSQLParserException e){
+            log.error("数据过滤SQL拼接失败，请检查!{}",e.getMessage());
             return buildSql;
         }
     }

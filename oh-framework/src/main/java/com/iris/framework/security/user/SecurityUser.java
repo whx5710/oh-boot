@@ -1,15 +1,18 @@
 package com.iris.framework.security.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * 用户
+ * 获取当前用户
  *
  * @author 王小费 whx5710@qq.com
  *
  */
 public class SecurityUser {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityUser.class);
     /**
      * 获取用户信息
      */
@@ -18,9 +21,9 @@ public class SecurityUser {
         try {
             user = (UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (Exception e){
+            log.error("获取用户失败！{}", e.getMessage());
             return new UserDetail();
         }
-
         return user;
     }
 

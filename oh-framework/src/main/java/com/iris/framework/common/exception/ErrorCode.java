@@ -14,7 +14,6 @@ public enum ErrorCode {
     MISSING_PARAMETER_ERROR(500, "缺少参数错误，请检查"),
     HTTP_MSG_NOT_READABLE(500, "消息不可读异常，请检查");
 
-
     private final int code;
     private final String msg;
 

@@ -39,6 +39,11 @@ public class HttpContextUtils {
     }
 
 
+    /**
+     * 获取参数
+     * @param request
+     * @return
+     */
     public static Map<String, String> getParameterMap(HttpServletRequest request) {
         Enumeration<String> parameters = request.getParameterNames();
 

@@ -25,7 +25,6 @@ public class XssConfiguration {
         bean.setFilter(new XssFilter(properties, pathMatcher));
         bean.setOrder(Integer.MAX_VALUE);
         bean.setName("xssFilter");
-
         return bean;
     }
 }
