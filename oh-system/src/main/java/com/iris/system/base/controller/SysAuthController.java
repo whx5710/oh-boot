@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import com.iris.framework.common.utils.Result;
-import com.iris.framework.security.utils.TokenUtils;
 import com.iris.system.base.service.SysAuthService;
 import com.iris.system.base.service.SysCaptchaService;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +39,6 @@ public class SysAuthController {
     @Operation(summary = "验证码")
     public Result<SysCaptchaVO> captcha() {
         SysCaptchaVO captchaVO = sysCaptchaService.generate();
-
         return Result.ok(captchaVO);
     }
 
@@ -53,7 +51,7 @@ public class SysAuthController {
 
     /**
      * 通过用户名、密码和密钥登录
-     * 为了安全，防止直接打开链接，只支持post
+     * 为了安全，请在服务端调用该接口，防止直接打开链接，只支持post
      * @param userName 用户名
      * @param password base64编码的密码
      * @param userKey  用户密钥
@@ -87,7 +85,6 @@ public class SysAuthController {
         if (!flag) {
             return Result.error("短信发送失败！");
         }
-
         return Result.ok();
     }
 
@@ -95,15 +92,13 @@ public class SysAuthController {
     @Operation(summary = "手机号登录")
     public Result<SysTokenVO> mobile(@RequestBody SysMobileLoginVO login) {
         SysTokenVO token = sysAuthService.loginByMobile(login);
-
         return Result.ok(token);
     }
 
     @PostMapping("logout")
     @Operation(summary = "退出")
     public Result<String> logout(HttpServletRequest request) {
-        sysAuthService.logout(TokenUtils.getAccessToken(request));
-
+        sysAuthService.logout(IrisTools.getAccessToken(request));
         return Result.ok();
     }
 }

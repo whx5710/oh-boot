@@ -6,6 +6,7 @@ import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.config.properties.SecurityProperties;
 import com.iris.framework.common.utils.AssertUtils;
+import com.iris.framework.common.utils.IrisTools;
 import com.iris.system.base.enums.LoginOperationEnum;
 import com.iris.system.base.vo.SysAccountLoginVO;
 import com.iris.system.base.vo.SysMobileLoginVO;
@@ -21,7 +22,6 @@ import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.mobile.MobileAuthenticationToken;
 import com.iris.framework.security.user.UserDetail;
-import com.iris.framework.security.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -124,9 +124,9 @@ public class SysAuthServiceImpl implements SysAuthService {
         UserDetail user = (UserDetail) authentication.getPrincipal();
 
         // 生成 accessToken
-        String accessToken = TokenUtils.generator();
+        String accessToken = IrisTools.generator();
 
-        String refreshToken = TokenUtils.generator();
+        String refreshToken = IrisTools.generator();
 
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, user);
@@ -183,6 +183,10 @@ public class SysAuthServiceImpl implements SysAuthService {
 
     /**
      * 验证账号生成token信息
+     * 1、判断账号是否锁定
+     * 2、验证账号密码(密钥)
+     * 3、生成token
+     * 4、缓存到redis
      * @param login login 账号参数
      * @param checkKey 是否检查用户密钥
      * @return token
@@ -190,33 +194,6 @@ public class SysAuthServiceImpl implements SysAuthService {
     private SysTokenVO createToken(SysAccountLoginVO login, boolean checkKey){
         String msg;
         Authentication authentication;
-        try {
-            // 用户认证
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
-        } catch (BadCredentialsException e) {
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
-                msg = "用户名或密码错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-            }else{
-                msg = "用户名或密码错误";
-            }
-            throw new ServerException(msg);
-        }
-        // 用户信息
-        UserDetail user = (UserDetail) authentication.getPrincipal();
-        // 判断用户密钥
-        if (checkKey && !login.getUserKey().equals(user.getUserKey())) {
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
-                msg = "用户密钥错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-            }else{
-                msg = "用户密钥错误";
-            }
-            throw new ServerException(msg);
-        }
         // 判断错误次数，超出则锁定账号
         boolean authLockFlag = securityProperties.getAuthCount() > 0;
         String authCountKey = RedisKeys.getAuthCountKey(login.getUsername());
@@ -235,20 +212,54 @@ public class SysAuthServiceImpl implements SysAuthService {
                     msg = "账号已被锁定，请" + (time==0?1:time) + "分钟后再试！";
                 }
                 throw new ServerException(msg);
-            }else{
-                // 限制次数内登录成功，清除错误计数
-                redisCache.delete(authCountKey);
             }
+        }
+        try {
+            // 用户认证
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
+        } catch (BadCredentialsException e) {
+            // 登录失败计数
+            int authCount =loginCount(login.getUsername());
+            if(authCount > 0 ){
+                if((securityProperties.getAuthCount() - authCount) > 0){
+                    msg = "用户名或密码错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+                }else{
+                    msg = "用户名或密码错误，账号即将锁定";
+                }
+            }else{
+                msg = "用户名或密码错误";
+            }
+            throw new ServerException(msg);
+        }
+        // 用户信息
+        UserDetail user = (UserDetail) authentication.getPrincipal();
+        // 判断用户密钥
+        if (checkKey && !login.getUserKey().equals(user.getUserKey())) {
+            // 登录失败计数
+            int authCount =loginCount(login.getUsername());
+            if(authCount > 0){
+                if((securityProperties.getAuthCount() - authCount) > 0){
+                    msg = "用户密钥错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+                }else{
+                    msg = "用户密钥错误，账号即将锁定";
+                }
+            }else{
+                msg = "用户密钥错误";
+            }
+            throw new ServerException(msg);
         }
         // 登录时间和token刷新时间
         long date = System.currentTimeMillis();
         user.setLoginTime(date);
         user.setRefreshTokenExpire(DateUtil.offsetSecond(new Date(date), refreshTokenExpire).getTime());
         // 生成 accessToken
-        String accessToken = TokenUtils.generator();
-        String refreshToken = TokenUtils.generator();
+        String accessToken = IrisTools.generator();
+        String refreshToken = IrisTools.generator();
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, user);
+        // 限制次数内登录成功，清除错误计数
+        redisCache.delete(authCountKey);
         return new SysTokenVO(accessToken, refreshToken);
     }
 }
