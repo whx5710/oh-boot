@@ -1,6 +1,6 @@
 ## 项目说明
 
-oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis-Plus，Kafka等框架开发的一套SpringBoot低代码开发平台，注释完整全面，支持多数据源。
+oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，注释完整全面，支持多数据源。
 - 采用组件模式，扩展不同的业务功能，可以很方便的实现各种业务需求，若想使用某个组件，按需引入即可。
 - 通用接口，可对接入客户端接口级别授权。加入Kafka，支持MQ异步接口，支持海量请求。
 - 支持每个数据库独立初始化表结构schema和数据库database（初始化后请屏蔽屏蔽）。
