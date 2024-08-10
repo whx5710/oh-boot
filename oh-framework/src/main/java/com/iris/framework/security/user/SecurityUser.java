@@ -21,7 +21,7 @@ public class SecurityUser {
         try {
             user = (UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (Exception e){
-            log.error("获取用户失败！{}", e.getMessage());
+            // log.error("未获取到用户信息！{}", e.getMessage());
             return new UserDetail();
         }
         return user;

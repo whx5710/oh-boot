@@ -104,7 +104,7 @@ public class DataInnerInterceptor implements Interceptor {
 
         Object[] args = invocation.getArgs();
         Object params = args[1];
-        if (user != null) {
+        if (user != null && user.getId() != null) {
             // 创建人ID
             if (ReflectUtil.hasField(params.getClass(), CREATOR) && ReflectUtil.getFieldValue(params, CREATOR) == null) {
                 ReflectUtil.setFieldValue(params, CREATOR, user.getId());
@@ -134,7 +134,7 @@ public class DataInnerInterceptor implements Interceptor {
 
         Object[] args = invocation.getArgs();
         Object params = args[1];
-        if (user != null) {
+        if (user != null && user.getId() != null) {
             // 创建人ID
             if (ReflectUtil.hasField(params.getClass(), UPDATER) && ReflectUtil.getFieldValue(params, UPDATER) == null) {
                 ReflectUtil.setFieldValue(params, UPDATER, user.getId());
