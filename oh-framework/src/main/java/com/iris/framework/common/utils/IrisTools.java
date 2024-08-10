@@ -47,9 +47,9 @@ public class IrisTools {
      * 获取 AccessToken
      */
     public static String getAccessToken(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
+        String accessToken = request.getHeader(Constant.AUTHORIZATION);
         if (StrUtil.isBlank(accessToken)) {
-            accessToken = request.getParameter("access_token");
+            accessToken = request.getParameter(Constant.ACCESS_TOKEN);
         }
         if(!ObjectUtils.isEmpty(accessToken) && accessToken.startsWith(Constant.TOKEN_PREFIX)){
             accessToken = accessToken.substring(Constant.TOKEN_PREFIX.length());

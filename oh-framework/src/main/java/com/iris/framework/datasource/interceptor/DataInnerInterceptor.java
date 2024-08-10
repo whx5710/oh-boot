@@ -70,26 +70,7 @@ public class DataInnerInterceptor implements Interceptor {
         }
         // 查询过滤
         if (ms.getSqlCommandType().equals(SqlCommandType.SELECT)) {
-            Object params = args[1];
-            // 查询过滤
-            if (params != null) {
-                // 数据过滤SQL
-                String sqlFilter = null;
-                if("java.util.HashMap".equals(params.getClass().getName())){
-                    HashMap hashMap = (HashMap) params;
-                    if(hashMap.containsKey(SQL_FILTER) && hashMap.get(SQL_FILTER) != null){
-                        sqlFilter = (String) hashMap.get(SQL_FILTER);
-                    }
-                }else{
-                    if((ReflectUtil.hasField(params.getClass(), SQL_FILTER) && ReflectUtil.getFieldValue(params, SQL_FILTER) != null)){
-                        sqlFilter = (String) ReflectUtil.getFieldValue(params, SQL_FILTER);
-                    }
-                }
-                if(sqlFilter != null){
-                    BoundSql boundSql = (BoundSql) args[5];
-                    ReflectUtil.setFieldValue(boundSql, "sql", getSelect(boundSql.getSql(), sqlFilter));
-                }
-            }
+            dataFilter(args);
         }
         return invocation.proceed();
     }
@@ -147,6 +128,33 @@ public class DataInnerInterceptor implements Interceptor {
         // 有效标识
         if (ReflectUtil.hasField(params.getClass(), DB_STATUS) && ReflectUtil.getFieldValue(params, DB_STATUS) == null) {
             ReflectUtil.setFieldValue(params, DB_STATUS, 1);
+        }
+    }
+
+    /**
+     * 查询数据过滤
+     * @param args
+     */
+    private void dataFilter(Object[] args){
+        Object params = args[1];
+        // 查询过滤
+        if (params != null) {
+            // 数据过滤SQL
+            String sqlFilter = null;
+            if("java.util.HashMap".equals(params.getClass().getName())){
+                HashMap hashMap = (HashMap) params;
+                if(hashMap.containsKey(SQL_FILTER) && hashMap.get(SQL_FILTER) != null){
+                    sqlFilter = (String) hashMap.get(SQL_FILTER);
+                }
+            }else{
+                if((ReflectUtil.hasField(params.getClass(), SQL_FILTER) && ReflectUtil.getFieldValue(params, SQL_FILTER) != null)){
+                    sqlFilter = (String) ReflectUtil.getFieldValue(params, SQL_FILTER);
+                }
+            }
+            if(sqlFilter != null){
+                BoundSql boundSql = (BoundSql) args[5];
+                ReflectUtil.setFieldValue(boundSql, "sql", getSelect(boundSql.getSql(), sqlFilter));
+            }
         }
     }
 

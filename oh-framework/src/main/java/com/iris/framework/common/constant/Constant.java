@@ -49,6 +49,16 @@ public interface Constant {
     String TOKEN_PREFIX = "Bearer ";
 
     /**
+     * 令牌key
+     */
+    String ACCESS_TOKEN = "access_token";
+
+    /**
+     * TOKEN HEADER KEY
+     */
+    String AUTHORIZATION = "Authorization";
+
+    /**
      * pgsql的driver
      */
     String PGSQL_DRIVER = "org.postgresql.Driver";
