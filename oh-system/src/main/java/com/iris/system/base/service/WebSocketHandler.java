@@ -1,7 +1,10 @@
 package com.iris.system.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ReflectUtil;
+import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.JsonUtils;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.system.base.vo.SysMessageVO;
 import com.iris.system.base.entity.SysMessageEntity;
 import jakarta.websocket.*;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -104,21 +108,30 @@ public class WebSocketHandler {
             log.error("断开连接异常！{}", e.getMessage());
         }
     }
+
     /**
      * 收到客户端消息后调用的方法
-     *
-     * @param message 消息
+     * @param message
+     * @param session
      */
     @OnMessage
-    public void onMessage(String message) {
+    public void onMessage(String message, Session session) {
         SysMessageVO sysMessageVO = JsonUtils.parseObject(message, SysMessageVO.class);
+        Principal principal = session.getUserPrincipal();
+        UserDetail user = (UserDetail) ReflectUtil.getFieldValue(principal, "principal");
+        if(sysMessageVO.getFromId() == null){
+            sysMessageVO.setFromId(user.getId());
+        }
+        if(sysMessageVO.getFromName() == null){
+            sysMessageVO.setFromName(user.getRealName());
+        }
         if(ObjectUtils.isEmpty(sysMessageVO.getType())){
             sysMessageVO.setType("success");
         }else if(sysMessageVO.getType().equals("heartBeat")){ // 心跳
-            log.debug("【websocket消息】收到客户端消息:{}", message);
+            log.debug("【websocket消息】收到客户【{}-{}】端消息:{}",user.getId(), user.getRealName(), message);
             return;
         }
-        log.info("【websocket消息】收到客户端消息:{}", message);
+        log.info("【websocket消息】收到客户端【{}-{}】消息:{}",user.getId(), user.getRealName(), message);
         sysMessageVO.setState("0");
         int i = 0; // 0未发生成功1发送成功-1发送异常
         if(!ObjectUtils.isEmpty(sysMessageVO.getToId())){
