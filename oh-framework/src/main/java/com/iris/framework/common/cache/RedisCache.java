@@ -37,6 +37,12 @@ public class RedisCache {
      */
     public final static long NOT_EXPIRE = -1L;
 
+    /**
+     *
+     * @param key key
+     * @param value 值
+     * @param expire 时长-秒
+     */
     public void set(String key, Object value, long expire) {
         redisTemplate.opsForValue().set(key, value);
         if (expire != NOT_EXPIRE) {

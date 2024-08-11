@@ -6,6 +6,8 @@ import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.config.properties.SecurityProperties;
 import com.iris.framework.common.utils.AssertUtils;
+import com.iris.framework.common.utils.HttpContextUtils;
+import com.iris.framework.common.utils.IpUtils;
 import com.iris.framework.common.utils.IrisTools;
 import com.iris.system.base.enums.LoginOperationEnum;
 import com.iris.system.base.vo.SysAccountLoginVO;
@@ -22,6 +24,7 @@ import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.mobile.MobileAuthenticationToken;
 import com.iris.framework.security.user.UserDetail;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -256,6 +259,10 @@ public class SysAuthServiceImpl implements SysAuthService {
         // 生成 accessToken
         String accessToken = IrisTools.generator();
         String refreshToken = IrisTools.generator();
+        // IP
+        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
+        String ip = IpUtils.getIpAddr(request);
+        user.setIp(ip);
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, user);
         // 限制次数内登录成功，清除错误计数

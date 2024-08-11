@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
  * 
  */
 public class UserDetail implements UserDetails {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -36,6 +39,8 @@ public class UserDetail implements UserDetails {
     private Long refreshTokenExpire;
     // 用户密钥
     private String userKey;
+    // 登录IP
+    private String ip;
 
     public Long getId() {
         return id;
@@ -131,6 +136,14 @@ public class UserDetail implements UserDetails {
 
     public void setLoginTime(Long loginTime) {
         this.loginTime = loginTime;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public List<Long> getDataScopeList() {

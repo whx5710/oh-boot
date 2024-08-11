@@ -56,6 +56,7 @@ public class UserOnlineController {
                 userOnlineVO.setEmail(user.getEmail());
                 userOnlineVO.setAccessToken(key.replace(RedisKeys.getAccessTokenKey(""), ""));
                 userOnlineVO.setLoginTime(DateUtil.format(new Date(user.getLoginTime()), "yyyy-MM-dd HH:mm:ss"));
+                userOnlineVO.setIp(user.getIp());
                 userOnlineList.add(userOnlineVO);
             }
 

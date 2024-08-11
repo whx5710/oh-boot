@@ -53,8 +53,8 @@ public class SysCaptchaServiceImpl implements SysCaptchaService {
         };
         String image = captcha.getImageBase64Data();
         captchaVO.setImage(image);
-        // 保存到缓存\
-        redisCache.set(redisKey, captcha.getCode(), 300);
+        // 保存到缓存 有效30秒
+        redisCache.set(redisKey, captcha.getCode(), 30);
         // 封装返回数据
         captchaVO.setKey(key);
         captchaVO.setEnabled(true);
@@ -67,14 +67,11 @@ public class SysCaptchaServiceImpl implements SysCaptchaService {
         if (!isCaptchaEnabled()) {
             return true;
         }
-
         if (StrUtil.isBlank(key) || StrUtil.isBlank(code)) {
             return false;
         }
-
         // 获取验证码
         String captcha = getCache(key);
-
         // 效验成功
         return code.equalsIgnoreCase(captcha);
     }
@@ -86,7 +83,6 @@ public class SysCaptchaServiceImpl implements SysCaptchaService {
         if (captcha != null) {
             redisCache.delete(key);
         }
-
         return captcha;
     }
 
