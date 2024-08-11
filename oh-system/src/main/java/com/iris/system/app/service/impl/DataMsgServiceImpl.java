@@ -10,7 +10,6 @@ import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.utils.ExceptionUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.system.app.convert.DataMsgConvert;
 import com.iris.system.app.dao.DataMessageDao;
 import com.iris.system.app.entity.DataMsgEntity;
 import com.iris.system.app.query.DataMsgQuery;
@@ -52,9 +51,9 @@ public class DataMsgServiceImpl implements DataMsgService {
     @Override
     public PageResult<DataMsgVO> page(DataMsgQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<DataMsgEntity> list = dataMessageDao.getList(query);
-        PageInfo<DataMsgEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(DataMsgConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        List<DataMsgVO> list = dataMessageDao.getList(query);
+        PageInfo<DataMsgVO> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**

@@ -4,6 +4,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
 import com.iris.system.app.entity.DataMsgEntity;
 import com.iris.system.app.query.DataMsgQuery;
+import com.iris.system.app.vo.DataMsgVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @DS(Constant.SYS_DB)
 public interface DataMessageDao {
 
-    List<DataMsgEntity> getList(DataMsgQuery query);
+    List<DataMsgVO> getList(DataMsgQuery query);
 
     int insertDataMsg(DataMsgEntity param);
 

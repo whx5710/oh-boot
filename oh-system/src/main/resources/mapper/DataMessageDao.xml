@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.iris.system.app.dao.DataMessageDao">
-    <select id="getList" resultType="com.iris.system.app.entity.DataMsgEntity">
+    <select id="getList" resultType="com.iris.system.app.vo.DataMsgVO">
         select a.*,b.name funcCodeName,c.name clientName from data_message a left join data_function b on a.func_code = b.func_code and b.db_status = 1
         left join data_app c on a.client_id = c.client_id and c.db_status = 1
         where a.db_status = 1
