@@ -41,7 +41,6 @@ import java.util.*;
 public class SysUserServiceImpl  implements SysUserService {
     private final SysUserRoleService sysUserRoleService;
     private final SysUserPostService sysUserPostService;
-    //private final TransService transService;
     private final RedisCache redisCache;
     private final SysUserDao sysUserDao;
 
@@ -54,7 +53,6 @@ public class SysUserServiceImpl  implements SysUserService {
                               RedisCache redisCache, SysUserDao sysUserDao) {
         this.sysUserRoleService = sysUserRoleService;
         this.sysUserPostService = sysUserPostService;
-        //this.transService = transService;
         this.redisCache = redisCache;
         this.sysUserDao = sysUserDao;
     }

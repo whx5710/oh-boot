@@ -1,7 +1,7 @@
 package com.iris.system.quartz.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.system.quartz.entity.ScheduleJobEntity;
 import com.iris.system.quartz.entity.ScheduleJobLogEntity;
 import com.iris.system.quartz.query.ScheduleJobLogQuery;
@@ -17,7 +17,7 @@ import java.util.List;
 * @author 王小费 whx5710@qq.com
 */
 @Mapper
-@DS(Constant.SYS_DB) // 初始化需缓存
+@Ds(Constant.SYS_DB) // 初始化需缓存
 public interface ScheduleJobDao {
 
     List<ScheduleJobLogEntity> getLogList(ScheduleJobLogQuery query);

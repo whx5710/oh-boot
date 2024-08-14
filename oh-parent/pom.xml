@@ -37,7 +37,9 @@
         <!--分页插件-->
         <pagehelper.version>2.1.0</pagehelper.version>
         <!-- 动态数据源 -->
-        <dynamic.datasource.version>4.3.0</dynamic.datasource.version>
+        <!--<dynamic.datasource.version>4.3.0</dynamic.datasource.version>-->
+        <!-- 面先切面 -->
+        <aspectj.version>1.9.22.1</aspectj.version>
         <!-- Nacos 配置中心 -->
         <nacos.version>0.3.0-RC</nacos.version>
         <!-- swagger（xiaoymin版本）生成在线文档 -->
@@ -77,12 +79,27 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
-            <!-- 多数据源 https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot3-starter -->
+            <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
             <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+                <!--<scope>runtime</scope>-->
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
+                <!--<scope>runtime</scope>-->
+            </dependency>
+
+            <!-- 多数据源 https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot3-starter -->
+            <!--<dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
                 <version>${dynamic.datasource.version}</version>
-            </dependency>
+            </dependency>-->
             <!-- nacos 配置中心 https://mvnrepository.com/artifact/com.alibaba.boot/nacos-config-spring-boot-starter -->
             <!--<dependency>
                 <groupId>com.alibaba.boot</groupId>

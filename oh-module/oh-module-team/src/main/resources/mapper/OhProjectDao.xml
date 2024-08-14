@@ -33,7 +33,6 @@
             and (project_name like concat('%',#{keyWord}, '%') or project_code like concat('%',#{keyWord}, '%')
             or project_alias like concat('%',#{keyWord}, '%') or director_name like concat('%',#{keyWord}, '%'))
         </if>
-        keyWord
     </select>
 
     <update id="updateById">

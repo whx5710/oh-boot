@@ -1,7 +1,7 @@
 package com.iris.system.app.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.system.app.entity.DataMsgEntity;
 import com.iris.system.app.query.DataMsgQuery;
 import com.iris.system.app.vo.DataMsgVO;
@@ -17,7 +17,7 @@ import java.util.List;
 * @since 1.0.0 2023-07-21
 */
 @Mapper
-@DS(Constant.SYS_DB)
+@Ds(Constant.SYS_DB)
 public interface DataMessageDao {
 
     List<DataMsgVO> getList(DataMsgQuery query);

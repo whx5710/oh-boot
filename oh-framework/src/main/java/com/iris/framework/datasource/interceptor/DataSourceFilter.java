@@ -1,8 +1,8 @@
-package com.iris.framework.datasource.config;
+package com.iris.framework.datasource.interceptor;
 
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.iris.framework.common.config.properties.SysDataSourceProperties;
+import com.iris.framework.datasource.config.SysDataSourceProperties;
 import com.iris.framework.common.constant.Constant;
+import com.iris.framework.datasource.utils.DynamicDataSourceHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,22 +49,22 @@ public class DataSourceFilter extends OncePerRequestFilter {
             if(!ObjectUtils.isEmpty(dataSourceCode)){
                 try {
                     log.debug("切换数据源!{}", dataSourceCode);
-                    DynamicDataSourceContextHolder.push(dataSourceCode);
+                    DynamicDataSourceHolder.setDynamicDataSourceKey(dataSourceCode);
                     filterChain.doFilter(request, response);
                 }finally {
                     // 清除数据源标识
                     log.debug("清除数据源!{}", dataSourceCode);
-                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceHolder.removeDynamicDataSourceKey();
                 }
             } else if (filterURI(request.getRequestURI())) {
                 try {
                     log.debug("使用系统数据源!{}", Constant.SYS_DB);
-                    DynamicDataSourceContextHolder.push(Constant.SYS_DB);
+                    DynamicDataSourceHolder.setDynamicDataSourceKey(Constant.SYS_DB);
                     filterChain.doFilter(request, response);
                 }finally {
                     // 清除数据源标识
                     log.debug("清除系统数据源!{}", Constant.SYS_DB);
-                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceHolder.removeDynamicDataSourceKey();
                 }
             } else {
                 filterChain.doFilter(request, response);

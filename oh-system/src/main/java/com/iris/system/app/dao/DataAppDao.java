@@ -1,8 +1,8 @@
 package com.iris.system.app.dao;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.entity.api.DataAppDTO;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.system.app.entity.DataAppEntity;
 import com.iris.system.app.query.DataAppQuery;
 import com.iris.system.app.query.DataFunctionAuthorityQuery;
@@ -18,7 +18,7 @@ import java.util.List;
 * @since 1.0.0 2023-07-29
 */
 @Mapper
-@DS(Constant.SYS_DB) // 初始化需缓存
+@Ds(Constant.SYS_DB) // 初始化需缓存
 public interface DataAppDao {
     List<DataAppDTO> listAuthority(@Param("params") DataFunctionAuthorityQuery params);
 

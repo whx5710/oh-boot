@@ -1,7 +1,7 @@
 package com.iris.system.quartz.config;
 
-import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.iris.framework.common.constant.Constant;
+import com.iris.framework.datasource.config.auto.DynamicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,14 +47,14 @@ public class ScheduleConfig {
         if (Constant.PGSQL_DRIVER.equals(driver)) {
             prop.put("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.PostgreSQLDelegate");
         }
-        return getSchedulerFactoryBean((DynamicRoutingDataSource) dataSource, prop);
+        return getSchedulerFactoryBean((DynamicDataSource) dataSource, prop);
     }
 
-    private static SchedulerFactoryBean getSchedulerFactoryBean(DynamicRoutingDataSource dataSource, Properties prop) {
+    private static SchedulerFactoryBean getSchedulerFactoryBean(DynamicDataSource dataSource, Properties prop) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
         // 切换数据源，使用系统内置数据源
-        factory.setDataSource(dataSource.getDataSource(Constant.SYS_DB));
+        factory.setDataSource((DataSource) dataSource.getDefineTargetDataSources().get(Constant.SYS_DB));
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);

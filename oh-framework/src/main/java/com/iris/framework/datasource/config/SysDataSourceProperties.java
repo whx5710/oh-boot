@@ -1,13 +1,17 @@
-package com.iris.framework.common.config.properties;
+package com.iris.framework.datasource.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "oh.sys-data-source")
+@ConfigurationProperties(prefix = SysDataSourceProperties.PREFIX)
 public class SysDataSourceProperties {
 
+    public static final String PREFIX = "spring.datasource.sys-data-source";
     private Boolean enable = false;
+
+    // 默认数据源
+    private String primary;
 
     // uri请求前缀
     private String [] prefixUris;
@@ -34,5 +38,13 @@ public class SysDataSourceProperties {
 
     public void setPrefixUris(String[] prefixUris) {
         this.prefixUris = prefixUris;
+    }
+
+    public String getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(String primary) {
+        this.primary = primary;
     }
 }
