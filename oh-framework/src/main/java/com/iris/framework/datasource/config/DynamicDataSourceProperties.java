@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 数据库连接配置相关
+ * @author 王小费 whx5710@qq.com
+ */
 @Component
 @ConfigurationProperties(prefix = DynamicDataSourceProperties.PREFIX, ignoreInvalidFields=true)
 public class DynamicDataSourceProperties {

@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+/**
+ * 数据源切换
+ * @author 王小费 whx5710@qq.com
+ */
 @Aspect
 @Component
 public class DsAspect {

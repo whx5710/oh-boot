@@ -3,6 +3,10 @@ package com.iris.framework.datasource.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * 系统数据库连接相关配置
+ * @author 王小费 whx5710@qq.com
+ */
 @Component
 @ConfigurationProperties(prefix = SysDataSourceProperties.PREFIX)
 public class SysDataSourceProperties {

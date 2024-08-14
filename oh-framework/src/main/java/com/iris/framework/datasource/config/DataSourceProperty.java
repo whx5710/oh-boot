@@ -4,7 +4,8 @@ package com.iris.framework.datasource.config;
 import javax.sql.DataSource;
 
 /**
- *
+ * 数据库连接属性
+ * @author 王小费 whx5710@qq.com
  */
 public class DataSourceProperty {
     /**

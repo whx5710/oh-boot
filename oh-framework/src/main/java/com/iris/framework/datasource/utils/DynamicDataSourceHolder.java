@@ -6,6 +6,7 @@ import com.iris.framework.common.constant.Constant;
  * 数据源切换处理
  * DynamicDataSourceHolder类主要是设置当前线程的数据源名称
  * 移除数据源名称，以及获取当前数据源的名称，便于动态切换
+ * @author 王小费 whx5710@qq.com
  */
 public class DynamicDataSourceHolder {
 
