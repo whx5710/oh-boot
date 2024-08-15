@@ -31,12 +31,6 @@ oh:
       - /swagger-ui/**
       - /doc.html
       - /upload/**
-  sys-data-source:
-    enable: true # 系统数据源是否开启，默认不开启
-    prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
-      - /sys/
-      - /sms/
-      - /schedule/
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
@@ -61,7 +55,7 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
   main:
-    banner-mode: "OFF"  # 关闭 banner CONSOLE、LOG、OFF
+    banner-mode: "LOG"  # 关闭 banner CONSOLE、LOG、OFF
   data:
     redis:
       database: 0
@@ -86,33 +80,36 @@ spring:
       prepStmtCacheSqlLimit: 500    # 缓存的已准备SQL语句的最大长度，默认值是256
       cachePrepStmts: true          # 缓存开关，如果这里设置为false，上面两个参数都不生效
       useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
+    sys-data-source:
+      enable: true # 系统数据源(sysDb)是否开启，默认不开启
+      primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
+      prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
+        - /sys/
+        - /sms/
+        - /schedule/
     dynamic:
-      #  dynamic主从设置
-      primary: masterDb #设置默认的数据源或者数据源组,默认值即为master
-      strict: false     #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
-      datasource:
-        sysDb:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: root
-          password: 123456@hA
-          type: com.zaxxer.hikari.HikariDataSource
-          init:
-            schema: classpath*:db/sys-schema.sql      # 自动运行的建表脚本
-            data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
-            continue-on-error: true                   # 错误是否继续 默认 true
-            separator: ;                              # 分隔符 默认 ;
-        masterDb:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-          username: root
-          password: 123456@hA
-          type: com.zaxxer.hikari.HikariDataSource
-          init:
-            schema: classpath*:db/project-schema.sql    # 自动运行的建表脚本
-            data: classpath*:db/project-data.sql        # 自动运行的数据脚本
-            continue-on-error: true                     # 错误是否继续 默认 true
-            separator: ;                                # 分隔符 默认 ;
+      sysDb:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        type: com.zaxxer.hikari.HikariDataSource
+        init:
+          schema: classpath*:db/sys-schema.sql      # 自动运行的建表脚本
+          data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
+          continue-on-error: true                   # 错误是否继续 默认 true
+          separator: ;                              # 分隔符 默认 ;
+      masterDb:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        type: com.zaxxer.hikari.HikariDataSource
+        init:
+          schema: classpath*:db/project-schema.sql    # 自动运行的建表脚本
+          data: classpath*:db/project-data.sql        # 自动运行的数据脚本
+          continue-on-error: true                     # 错误是否继续 默认 true
+          separator: ;                                # 分隔符 默认 ;
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze

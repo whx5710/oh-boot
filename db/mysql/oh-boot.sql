@@ -1,1048 +1,1826 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : AnolisOS
+ Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80036 (8.0.36)
- Source Host           : 192.168.122.129:3306
+ Source Server Version : 80029
+ Source Host           : localhost:3306
  Source Schema         : oh-boot
 
  Target Server Type    : MySQL
- Target Server Version : 80036 (8.0.36)
+ Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 21/04/2024 20:39:11
+ Date: 14/08/2024 21:26:55
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for QRTZ_BLOB_TRIGGERS
+-- Table structure for act_ge_bytearray
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_BLOB_TRIGGERS`;
-CREATE TABLE `QRTZ_BLOB_TRIGGERS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  `blob_data` blob NULL COMMENT '存放持久化Trigger对象',
-  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
-  CONSTRAINT `QRTZ_BLOB_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `QRTZ_TRIGGERS` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'Blob类型的触发器表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_ge_bytearray`;
+CREATE TABLE `act_ge_bytearray`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BYTES_` longblob NULL,
+  `GENERATED_` tinyint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TYPE_` int NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_FK_BYTEARR_DEPL`(`DEPLOYMENT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_BYTEARRAY_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_BYTEARRAY_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_BYTEARRAY_NAME`(`NAME_`) USING BTREE,
+  CONSTRAINT `ACT_FK_BYTEARR_DEPL` FOREIGN KEY (`DEPLOYMENT_ID_`) REFERENCES `act_re_deployment` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_BLOB_TRIGGERS
--- ----------------------------
-
--- ----------------------------
--- Table structure for QRTZ_CALENDARS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_CALENDARS`;
-CREATE TABLE `QRTZ_CALENDARS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `calendar_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '日历名称',
-  `calendar` blob NOT NULL COMMENT '存放持久化calendar对象',
-  PRIMARY KEY (`sched_name`, `calendar_name`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '日历信息表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of QRTZ_CALENDARS
+-- Records of act_ge_bytearray
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for QRTZ_CRON_TRIGGERS
+-- Table structure for act_ge_property
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_CRON_TRIGGERS`;
-CREATE TABLE `QRTZ_CRON_TRIGGERS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  `cron_expression` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'cron表达式',
-  `time_zone_id` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '时区',
-  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
-  CONSTRAINT `QRTZ_CRON_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `QRTZ_TRIGGERS` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'Cron类型的触发器表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_ge_property`;
+CREATE TABLE `act_ge_property`  (
+  `NAME_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VALUE_` varchar(300) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  PRIMARY KEY (`NAME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_CRON_TRIGGERS
+-- Records of act_ge_property
 -- ----------------------------
-INSERT INTO `QRTZ_CRON_TRIGGERS` VALUES ('OhScheduler', 'TASK_NAME_1', 'system', '0 * * * * ? *', 'Asia/Shanghai');
+INSERT INTO `act_ge_property` VALUES ('camunda.installation.id', '15a22d93-881b-407a-b08d-ecf955fcc52f', 1);
+INSERT INTO `act_ge_property` VALUES ('camunda.telemetry.enabled', 'null', 1);
+INSERT INTO `act_ge_property` VALUES ('deployment.lock', '0', 1);
+INSERT INTO `act_ge_property` VALUES ('history.cleanup.job.lock', '0', 1);
+INSERT INTO `act_ge_property` VALUES ('historyLevel', '3', 1);
+INSERT INTO `act_ge_property` VALUES ('installationId.lock', '0', 1);
+INSERT INTO `act_ge_property` VALUES ('next.dbid', '1', 1);
+INSERT INTO `act_ge_property` VALUES ('schema.history', 'create(fox)', 1);
+INSERT INTO `act_ge_property` VALUES ('schema.version', 'fox', 1);
+INSERT INTO `act_ge_property` VALUES ('startup.lock', '0', 1);
+INSERT INTO `act_ge_property` VALUES ('telemetry.lock', '0', 1);
 
 -- ----------------------------
--- Table structure for QRTZ_FIRED_TRIGGERS
+-- Table structure for act_ge_schema_log
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_FIRED_TRIGGERS`;
-CREATE TABLE `QRTZ_FIRED_TRIGGERS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `entry_id` varchar(95) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度器实例id',
-  `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  `instance_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度器实例名',
-  `fired_time` bigint NOT NULL COMMENT '触发的时间',
-  `sched_time` bigint NOT NULL COMMENT '定时器制定的时间',
-  `priority` int NOT NULL COMMENT '优先级',
-  `state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '状态',
-  `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
-  `job_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务组名',
-  `is_nonconcurrent` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '是否并发',
-  `requests_recovery` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '是否接受恢复执行',
-  PRIMARY KEY (`sched_name`, `entry_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '已触发的触发器表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_ge_schema_log`;
+CREATE TABLE `act_ge_schema_log`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TIMESTAMP_` datetime NULL DEFAULT NULL,
+  `VERSION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_FIRED_TRIGGERS
+-- Records of act_ge_schema_log
 -- ----------------------------
+INSERT INTO `act_ge_schema_log` VALUES ('0', '2024-08-14 21:24:50', '7.20.0');
 
 -- ----------------------------
--- Table structure for QRTZ_JOB_DETAILS
+-- Table structure for act_hi_actinst
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_JOB_DETAILS`;
-CREATE TABLE `QRTZ_JOB_DETAILS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务名称',
-  `job_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务组名',
-  `description` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '相关介绍',
-  `job_class_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '执行任务类名称',
-  `is_durable` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '是否持久化',
-  `is_nonconcurrent` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '是否并发',
-  `is_update_data` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '是否更新数据',
-  `requests_recovery` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '是否接受恢复执行',
-  `job_data` blob NULL COMMENT '存放持久化job对象',
-  PRIMARY KEY (`sched_name`, `job_name`, `job_group`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务详细信息表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_hi_actinst`;
+CREATE TABLE `act_hi_actinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PARENT_ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CALL_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CALL_CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `ASSIGNEE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `START_TIME_` datetime NOT NULL,
+  `END_TIME_` datetime NULL DEFAULT NULL,
+  `DURATION_` bigint NULL DEFAULT NULL,
+  `ACT_INST_STATE_` int NULL DEFAULT NULL,
+  `SEQUENCE_COUNTER_` bigint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACTINST_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_START_END`(`START_TIME_`, `END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_END`(`END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_PROCINST`(`PROC_INST_ID_`, `ACT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_COMP`(`EXECUTION_ID_`, `ACT_ID_`, `END_TIME_`, `ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_STATS`(`PROC_DEF_ID_`, `PROC_INST_ID_`, `ACT_ID_`, `END_TIME_`, `ACT_INST_STATE_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_AI_PDEFID_END_TIME`(`PROC_DEF_ID_`, `END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ACT_INST_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_JOB_DETAILS
--- ----------------------------
-INSERT INTO `QRTZ_JOB_DETAILS` VALUES ('OhScheduler', 'TASK_NAME_1', 'system', NULL, 'com.iris.system.quartz.utils.ScheduleDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000D4A4F425F504152414D5F4B45597372002F636F6D2E697269732E73797374656D2E71756172747A2E656E746974792E5363686564756C654A6F62456E74697479EE67EABA20AD646202000A4C00086265616E4E616D657400124C6A6176612F6C616E672F537472696E673B4C000A636F6E63757272656E747400134C6A6176612F6C616E672F496E74656765723B4C000E63726F6E45787072657373696F6E71007E00094C000269647400104C6A6176612F6C616E672F4C6F6E673B4C00086A6F6247726F757071007E00094C00076A6F624E616D6571007E00094C00066D6574686F6471007E00094C0006706172616D7371007E00094C000672656D61726B71007E00094C000673746174757371007E000A7872002B636F6D2E697269732E6672616D65776F726B2E636F6D6D6F6E2E656E746974792E42617365456E74697479095796360B5019EA0200054C000A63726561746554696D657400194C6A6176612F74696D652F4C6F63616C4461746554696D653B4C000763726561746F7271007E000B4C0008646253746174757371007E000A4C000A75706461746554696D6571007E000D4C00077570646174657271007E000B78720029636F6D2E697269732E6672616D65776F726B2E636F6D6D6F6E2E656E746974792E4944456E7469747989227716E1C3C0F90200014C0002696471007E000B7870707372000D6A6176612E74696D652E536572955D84BA1B2248B20C00007870770A05000007E7060C1526DF787372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000002710737200116A6176612E6C616E672E496E746567657212E2A0A4F781873802000149000576616C75657871007E0013000000017371007E0010770A05000007E7060C1526DF787371007E00120000000000002710740008746573745461736B7371007E00150000000074000D30202A202A202A202A203F202A7371007E0012000000000000000174000673797374656D74000CE6B58BE8AF95E4BBBBE58AA174000372756E74000331323374000071007E001A7800);
-
--- ----------------------------
--- Table structure for QRTZ_LOCKS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_LOCKS`;
-CREATE TABLE `QRTZ_LOCKS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `lock_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '悲观锁名称',
-  PRIMARY KEY (`sched_name`, `lock_name`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '存储的悲观锁信息表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of QRTZ_LOCKS
--- ----------------------------
-INSERT INTO `QRTZ_LOCKS` VALUES ('OhScheduler', 'STATE_ACCESS');
-INSERT INTO `QRTZ_LOCKS` VALUES ('OhScheduler', 'TRIGGER_ACCESS');
-
--- ----------------------------
--- Table structure for QRTZ_PAUSED_TRIGGER_GRPS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_PAUSED_TRIGGER_GRPS`;
-CREATE TABLE `QRTZ_PAUSED_TRIGGER_GRPS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  PRIMARY KEY (`sched_name`, `trigger_group`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '暂停的触发器表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of QRTZ_PAUSED_TRIGGER_GRPS
+-- Records of act_hi_actinst
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for QRTZ_SCHEDULER_STATE
+-- Table structure for act_hi_attachment
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_SCHEDULER_STATE`;
-CREATE TABLE `QRTZ_SCHEDULER_STATE`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `instance_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '实例名称',
-  `last_checkin_time` bigint NOT NULL COMMENT '上次检查时间',
-  `checkin_interval` bigint NOT NULL COMMENT '检查间隔时间',
-  PRIMARY KEY (`sched_name`, `instance_name`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '调度器状态表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_hi_attachment`;
+CREATE TABLE `act_hi_attachment`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `URL_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CONTENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ATTACHMENT_CONTENT`(`CONTENT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ATTACHMENT_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ATTACHMENT_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ATTACHMENT_TASK`(`TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_ATTACHMENT_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_SCHEDULER_STATE
--- ----------------------------
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('OhScheduler', 'DESKTOP-9Q85NQ91713703122571', 1713703148713, 15000);
-
--- ----------------------------
--- Table structure for QRTZ_SIMPLE_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_SIMPLE_TRIGGERS`;
-CREATE TABLE `QRTZ_SIMPLE_TRIGGERS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  `repeat_count` bigint NOT NULL COMMENT '重复的次数统计',
-  `repeat_interval` bigint NOT NULL COMMENT '重复的间隔时间',
-  `times_triggered` bigint NOT NULL COMMENT '已经触发的次数',
-  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
-  CONSTRAINT `QRTZ_SIMPLE_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `QRTZ_TRIGGERS` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '简单触发器的信息表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of QRTZ_SIMPLE_TRIGGERS
+-- Records of act_hi_attachment
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for QRTZ_SIMPROP_TRIGGERS
+-- Table structure for act_hi_batch
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_SIMPROP_TRIGGERS`;
-CREATE TABLE `QRTZ_SIMPROP_TRIGGERS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  `str_prop_1` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'String类型的trigger的第一个参数',
-  `str_prop_2` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'String类型的trigger的第二个参数',
-  `str_prop_3` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'String类型的trigger的第三个参数',
-  `int_prop_1` int NULL DEFAULT NULL COMMENT 'int类型的trigger的第一个参数',
-  `int_prop_2` int NULL DEFAULT NULL COMMENT 'int类型的trigger的第二个参数',
-  `long_prop_1` bigint NULL DEFAULT NULL COMMENT 'long类型的trigger的第一个参数',
-  `long_prop_2` bigint NULL DEFAULT NULL COMMENT 'long类型的trigger的第二个参数',
-  `dec_prop_1` decimal(13, 4) NULL DEFAULT NULL COMMENT 'decimal类型的trigger的第一个参数',
-  `dec_prop_2` decimal(13, 4) NULL DEFAULT NULL COMMENT 'decimal类型的trigger的第二个参数',
-  `bool_prop_1` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'Boolean类型的trigger的第一个参数',
-  `bool_prop_2` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'Boolean类型的trigger的第二个参数',
-  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
-  CONSTRAINT `QRTZ_SIMPROP_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `QRTZ_TRIGGERS` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '同步机制的行锁表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_hi_batch`;
+CREATE TABLE `act_hi_batch`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TOTAL_JOBS_` int NULL DEFAULT NULL,
+  `JOBS_PER_SEED_` int NULL DEFAULT NULL,
+  `INVOCATIONS_PER_JOB_` int NULL DEFAULT NULL,
+  `SEED_JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `MONITOR_JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BATCH_JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `START_TIME_` datetime NOT NULL,
+  `END_TIME_` datetime NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  `EXEC_START_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_HI_BAT_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_SIMPROP_TRIGGERS
+-- Records of act_hi_batch
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for QRTZ_TRIGGERS
+-- Table structure for act_hi_caseactinst
 -- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_TRIGGERS`;
-CREATE TABLE `QRTZ_TRIGGERS`  (
-  `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
-  `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '触发器的名字',
-  `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '触发器所属组的名字',
-  `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_job_details表job_name的外键',
-  `job_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_job_details表job_group的外键',
-  `description` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '相关介绍',
-  `next_fire_time` bigint NULL DEFAULT NULL COMMENT '上一次触发时间（毫秒）',
-  `prev_fire_time` bigint NULL DEFAULT NULL COMMENT '下一次触发时间（默认为-1表示不触发）',
-  `priority` int NULL DEFAULT NULL COMMENT '优先级',
-  `trigger_state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '触发器状态',
-  `trigger_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '触发器的类型',
-  `start_time` bigint NOT NULL COMMENT '开始时间',
-  `end_time` bigint NULL DEFAULT NULL COMMENT '结束时间',
-  `calendar_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日程表名称',
-  `misfire_instr` smallint NULL DEFAULT NULL COMMENT '补偿执行的策略',
-  `job_data` blob NULL COMMENT '存放持久化job对象',
-  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
-  INDEX `sched_name`(`sched_name` ASC, `job_name` ASC, `job_group` ASC) USING BTREE,
-  CONSTRAINT `QRTZ_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `job_name`, `job_group`) REFERENCES `QRTZ_JOB_DETAILS` (`sched_name`, `job_name`, `job_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '触发器详细信息表' ROW_FORMAT = DYNAMIC;
+DROP TABLE IF EXISTS `act_hi_caseactinst`;
+CREATE TABLE `act_hi_caseactinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PARENT_ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `CASE_ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CALL_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CALL_CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_ACT_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_ACT_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NOT NULL,
+  `END_TIME_` datetime NULL DEFAULT NULL,
+  `DURATION_` bigint NULL DEFAULT NULL,
+  `STATE_` int NULL DEFAULT NULL,
+  `REQUIRED_` tinyint(1) NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_A_I_CREATE`(`CREATE_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_A_I_END`(`END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_A_I_COMP`(`CASE_ACT_ID_`, `END_TIME_`, `ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_A_I_CASEINST`(`CASE_INST_ID_`, `CASE_ACT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_A_I_TENANT_ID`(`TENANT_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of QRTZ_TRIGGERS
+-- Records of act_hi_caseactinst
 -- ----------------------------
-INSERT INTO `QRTZ_TRIGGERS` VALUES ('OhScheduler', 'TASK_NAME_1', 'system', 'TASK_NAME_1', 'system', NULL, 1713703140000, -1, 5, 'PAUSED', 'CRON', 1713703122000, 0, NULL, 2, '');
 
 -- ----------------------------
--- Table structure for data_app
+-- Table structure for act_hi_caseinst
 -- ----------------------------
-DROP TABLE IF EXISTS `data_app`;
-CREATE TABLE `data_app`  (
+DROP TABLE IF EXISTS `act_hi_caseinst`;
+CREATE TABLE `act_hi_caseinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `BUSINESS_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `CREATE_TIME_` datetime NOT NULL,
+  `CLOSE_TIME_` datetime NULL DEFAULT NULL,
+  `DURATION_` bigint NULL DEFAULT NULL,
+  `STATE_` int NULL DEFAULT NULL,
+  `CREATE_USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_CASE_INSTANCE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_PROCESS_INSTANCE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  UNIQUE INDEX `CASE_INST_ID_`(`CASE_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_I_CLOSE`(`CLOSE_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_I_BUSKEY`(`BUSINESS_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CAS_I_TENANT_ID`(`TENANT_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_caseinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_comment`;
+CREATE TABLE `act_hi_comment`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TIME_` datetime NOT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACTION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `MESSAGE_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `FULL_MSG_` longblob NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_COMMENT_TASK`(`TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_COMMENT_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_COMMENT_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_COMMENT_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_comment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_dec_in
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_dec_in`;
+CREATE TABLE `act_hi_dec_in`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DEC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `CLAUSE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CLAUSE_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VAR_TYPE_` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DOUBLE_` double NULL DEFAULT NULL,
+  `LONG_` bigint NULL DEFAULT NULL,
+  `TEXT_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TEXT2_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_IN_INST`(`DEC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_IN_CLAUSE`(`DEC_INST_ID_`, `CLAUSE_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_IN_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_IN_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_dec_in
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_dec_out
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_dec_out`;
+CREATE TABLE `act_hi_dec_out`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DEC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `CLAUSE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CLAUSE_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RULE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RULE_ORDER_` int NULL DEFAULT NULL,
+  `VAR_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VAR_TYPE_` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DOUBLE_` double NULL DEFAULT NULL,
+  `LONG_` bigint NULL DEFAULT NULL,
+  `TEXT_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TEXT2_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_OUT_INST`(`DEC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_OUT_RULE`(`RULE_ORDER_`, `CLAUSE_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_OUT_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_OUT_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_dec_out
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_decinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_decinst`;
+CREATE TABLE `act_hi_decinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DEC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DEC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DEC_DEF_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EVAL_TIME_` datetime NOT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  `COLLECT_VALUE_` double NULL DEFAULT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_DEC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEC_REQ_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEC_REQ_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_ID`(`DEC_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_KEY`(`DEC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_PI`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_CI`(`CASE_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_ACT`(`ACT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_ACT_INST`(`ACT_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_TIME`(`EVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_ROOT_ID`(`ROOT_DEC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_REQ_ID`(`DEC_REQ_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_REQ_KEY`(`DEC_REQ_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DEC_INST_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_decinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_detail`;
+CREATE TABLE `act_hi_detail`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VAR_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VAR_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `TIME_` datetime NOT NULL,
+  `BYTEARRAY_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DOUBLE_` double NULL DEFAULT NULL,
+  `LONG_` bigint NULL DEFAULT NULL,
+  `TEXT_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TEXT2_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SEQUENCE_COUNTER_` bigint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `OPERATION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  `INITIAL_` tinyint(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_PROC_INST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_ACT_INST`(`ACT_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_CASE_INST`(`CASE_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_CASE_EXEC`(`CASE_EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_TIME`(`TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_NAME`(`NAME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_TASK_ID`(`TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_BYTEAR`(`BYTEARRAY_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_TASK_BYTEAR`(`BYTEARRAY_ID_`, `TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_DETAIL_VAR_INST_ID`(`VAR_INST_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_detail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_ext_task_log
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_ext_task_log`;
+CREATE TABLE `act_hi_ext_task_log`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TIMESTAMP_` timestamp NOT NULL,
+  `EXT_TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `RETRIES_` int NULL DEFAULT NULL,
+  `TOPIC_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `WORKER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PRIORITY_` bigint NOT NULL DEFAULT 0,
+  `ERROR_MSG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ERROR_DETAILS_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `STATE_` int NULL DEFAULT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_HI_EXT_TASK_LOG_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_HI_EXT_TASK_LOG_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_HI_EXT_TASK_LOG_PROCDEF`(`PROC_DEF_ID_`) USING BTREE,
+  INDEX `ACT_HI_EXT_TASK_LOG_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_HI_EXT_TASK_LOG_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_EXTTASKLOG_ERRORDET`(`ERROR_DETAILS_ID_`) USING BTREE,
+  INDEX `ACT_HI_EXT_TASK_LOG_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_ext_task_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_identitylink
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_identitylink`;
+CREATE TABLE `act_hi_identitylink`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TIMESTAMP_` timestamp NOT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `GROUP_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `OPERATION_TYPE_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ASSIGNER_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LNK_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LNK_USER`(`USER_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LNK_GROUP`(`GROUP_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LNK_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LNK_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LINK_TASK`(`TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LINK_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_IDENT_LNK_TIMESTAMP`(`TIMESTAMP_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_identitylink
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_incident
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_incident`;
+CREATE TABLE `act_hi_incident`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` timestamp NOT NULL,
+  `END_TIME_` timestamp NULL DEFAULT NULL,
+  `INCIDENT_MSG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `INCIDENT_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `ACTIVITY_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `FAILED_ACTIVITY_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CAUSE_INCIDENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_CAUSE_INCIDENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HISTORY_CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `INCIDENT_STATE_` int NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ANNOTATION_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_CREATE_TIME`(`CREATE_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_INCIDENT_END_TIME`(`END_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_incident
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_job_log`;
+CREATE TABLE `act_hi_job_log`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TIMESTAMP_` datetime NOT NULL,
+  `JOB_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `JOB_DUEDATE_` datetime NULL DEFAULT NULL,
+  `JOB_RETRIES_` int NULL DEFAULT NULL,
+  `JOB_PRIORITY_` bigint NOT NULL DEFAULT 0,
+  `JOB_EXCEPTION_MSG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_EXCEPTION_STACK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_STATE_` int NULL DEFAULT NULL,
+  `JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_DEF_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_DEF_CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `FAILED_ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROCESS_INSTANCE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROCESS_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROCESS_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SEQUENCE_COUNTER_` bigint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HOSTNAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_PROCINST`(`PROCESS_INSTANCE_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_PROCDEF`(`PROCESS_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_JOB_DEF_ID`(`JOB_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_PROC_DEF_KEY`(`PROCESS_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_EX_STACK`(`JOB_EXCEPTION_STACK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_JOB_LOG_JOB_CONF`(`JOB_DEF_CONFIGURATION_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_job_log
+-- ----------------------------
+INSERT INTO `act_hi_job_log` VALUES ('32f6b752829040928de1357f806b5d2e', '2024-08-14 21:25:00', '6dbd0ced0c284fa2bfff613ab965779c', '2024-08-18 19:00:00', 3, 0, NULL, NULL, 0, NULL, 'history-cleanup', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '192.168.10.159$OH工作流', NULL);
+INSERT INTO `act_hi_job_log` VALUES ('38948aec5bcc43f99f60892523086840', '2024-08-14 21:25:00', 'bb9c41d4f6cc46398668c02bedf94024', '2024-08-18 19:00:00', 3, 0, NULL, NULL, 0, NULL, 'history-cleanup', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '192.168.10.159$OH工作流', NULL);
+INSERT INTO `act_hi_job_log` VALUES ('8d23acd7289d4ff1974be416d464e95c', '2024-08-14 21:25:00', 'c20d29dab9824afcb62ffbb436e0c5b7', '2024-08-18 19:00:00', 3, 0, NULL, NULL, 0, NULL, 'history-cleanup', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '192.168.10.159$OH工作流', NULL);
+INSERT INTO `act_hi_job_log` VALUES ('91889ea368ce43b49e3ab0019bda85ea', '2024-08-14 21:25:00', 'e9c353479fdf4614a2fc6407b03e9de9', '2024-08-18 19:00:00', 3, 0, NULL, NULL, 0, NULL, 'history-cleanup', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '192.168.10.159$OH工作流', NULL);
+
+-- ----------------------------
+-- Table structure for act_hi_op_log
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_op_log`;
+CREATE TABLE `act_hi_op_log`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BATCH_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TIMESTAMP_` timestamp NOT NULL,
+  `OPERATION_TYPE_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `OPERATION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ENTITY_TYPE_` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROPERTY_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ORG_VALUE_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NEW_VALUE_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  `CATEGORY_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXTERNAL_TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ANNOTATION_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_PROCDEF`(`PROC_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_TASK`(`TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_TIMESTAMP`(`TIMESTAMP_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_USER_ID`(`USER_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_OP_TYPE`(`OPERATION_TYPE_`) USING BTREE,
+  INDEX `ACT_IDX_HI_OP_LOG_ENTITY_TYPE`(`ENTITY_TYPE_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_op_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_procinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_procinst`;
+CREATE TABLE `act_hi_procinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `BUSINESS_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `START_TIME_` datetime NOT NULL,
+  `END_TIME_` datetime NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  `DURATION_` bigint NULL DEFAULT NULL,
+  `START_USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `START_ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `END_ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_PROCESS_INSTANCE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_CASE_INSTANCE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DELETE_REASON_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `STATE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  UNIQUE INDEX `PROC_INST_ID_`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_INST_END`(`END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_I_BUSKEY`(`BUSINESS_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_INST_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_INST_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_INST_PROC_TIME`(`START_TIME_`, `END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PI_PDEFID_END_TIME`(`PROC_DEF_ID_`, `END_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_INST_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PRO_INST_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_procinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_taskinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_taskinst`;
+CREATE TABLE `act_hi_taskinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TASK_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PARENT_TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `OWNER_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `START_TIME_` datetime NOT NULL,
+  `END_TIME_` datetime NULL DEFAULT NULL,
+  `DURATION_` bigint NULL DEFAULT NULL,
+  `DELETE_REASON_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PRIORITY_` int NULL DEFAULT NULL,
+  `DUE_DATE_` datetime NULL DEFAULT NULL,
+  `FOLLOW_UP_DATE_` datetime NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASKINST_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASK_INST_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASK_INST_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASKINST_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASKINSTID_PROCINST`(`ID_`, `PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASK_INST_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASK_INST_START`(`START_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_TASK_INST_END`(`END_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_taskinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_varinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_varinst`;
+CREATE TABLE `act_hi_varinst`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VAR_TYPE_` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DOUBLE_` double NULL DEFAULT NULL,
+  `LONG_` bigint NULL DEFAULT NULL,
+  `TEXT_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TEXT2_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `STATE_` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VARINST_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PROCVAR_PROC_INST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_PROCVAR_NAME_TYPE`(`NAME_`, `VAR_TYPE_`) USING BTREE,
+  INDEX `ACT_IDX_HI_CASEVAR_CASE_INST`(`CASE_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VAR_INST_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VAR_INST_PROC_DEF_KEY`(`PROC_DEF_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VARINST_BYTEAR`(`BYTEARRAY_ID_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VARINST_RM_TIME`(`REMOVAL_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VAR_PI_NAME_TYPE`(`PROC_INST_ID_`, `NAME_`, `VAR_TYPE_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VARINST_NAME`(`NAME_`) USING BTREE,
+  INDEX `ACT_IDX_HI_VARINST_ACT_INST_ID`(`ACT_INST_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_hi_varinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_group
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_group`;
+CREATE TABLE `act_id_group`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_id_group
+-- ----------------------------
+INSERT INTO `act_id_group` VALUES ('camunda-admin', 1, 'camunda BPM Administrators', 'SYSTEM');
+
+-- ----------------------------
+-- Table structure for act_id_info
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_info`;
+CREATE TABLE `act_id_info`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `USER_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TYPE_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VALUE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PASSWORD_` longblob NULL,
+  `PARENT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_id_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_membership
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_membership`;
+CREATE TABLE `act_id_membership`  (
+  `USER_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `GROUP_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`USER_ID_`, `GROUP_ID_`) USING BTREE,
+  INDEX `ACT_FK_MEMB_GROUP`(`GROUP_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_MEMB_GROUP` FOREIGN KEY (`GROUP_ID_`) REFERENCES `act_id_group` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_MEMB_USER` FOREIGN KEY (`USER_ID_`) REFERENCES `act_id_user` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_id_membership
+-- ----------------------------
+INSERT INTO `act_id_membership` VALUES ('admin', 'camunda-admin');
+
+-- ----------------------------
+-- Table structure for act_id_tenant
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_tenant`;
+CREATE TABLE `act_id_tenant`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_id_tenant
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_tenant_member
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_tenant_member`;
+CREATE TABLE `act_id_tenant_member`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `USER_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `GROUP_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  UNIQUE INDEX `ACT_UNIQ_TENANT_MEMB_USER`(`TENANT_ID_`, `USER_ID_`) USING BTREE,
+  UNIQUE INDEX `ACT_UNIQ_TENANT_MEMB_GROUP`(`TENANT_ID_`, `GROUP_ID_`) USING BTREE,
+  INDEX `ACT_FK_TENANT_MEMB_USER`(`USER_ID_`) USING BTREE,
+  INDEX `ACT_FK_TENANT_MEMB_GROUP`(`GROUP_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_TENANT_MEMB` FOREIGN KEY (`TENANT_ID_`) REFERENCES `act_id_tenant` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TENANT_MEMB_GROUP` FOREIGN KEY (`GROUP_ID_`) REFERENCES `act_id_group` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TENANT_MEMB_USER` FOREIGN KEY (`USER_ID_`) REFERENCES `act_id_user` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_id_tenant_member
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_user
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_user`;
+CREATE TABLE `act_id_user`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `FIRST_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `LAST_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EMAIL_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PWD_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SALT_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `LOCK_EXP_TIME_` datetime NULL DEFAULT NULL,
+  `ATTEMPTS_` int NULL DEFAULT NULL,
+  `PICTURE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_id_user
+-- ----------------------------
+INSERT INTO `act_id_user` VALUES ('admin', 1, 'Admin', 'Admin', 'admin@localhost', '{SHA-512}RvpiVQOTeYCo6PcKjVfiBipI3F+KnLy3gvH5/GXoW/wNt/AmkPDKTbNOkyRK8XOrUwbJgZkxbiHw6rfQk1AWyg==', 'kYhCt2MnPOXf724CQuxKtw==', NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for act_re_camformdef
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_camformdef`;
+CREATE TABLE `act_re_camformdef`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VERSION_` int NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_re_camformdef
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_case_def
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_case_def`;
+CREATE TABLE `act_re_case_def`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `CATEGORY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VERSION_` int NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DGRM_RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HISTORY_TTL_` int NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_CASE_DEF_TENANT_ID`(`TENANT_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_re_case_def
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_decision_def
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_decision_def`;
+CREATE TABLE `act_re_decision_def`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `CATEGORY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VERSION_` int NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DGRM_RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEC_REQ_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEC_REQ_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HISTORY_TTL_` int NULL DEFAULT NULL,
+  `VERSION_TAG_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_DEC_DEF_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_DEC_DEF_REQ_ID`(`DEC_REQ_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_DEC_REQ` FOREIGN KEY (`DEC_REQ_ID_`) REFERENCES `act_re_decision_req_def` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_re_decision_def
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_decision_req_def
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_decision_req_def`;
+CREATE TABLE `act_re_decision_req_def`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `CATEGORY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VERSION_` int NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DGRM_RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_DEC_REQ_DEF_TENANT_ID`(`TENANT_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_re_decision_req_def
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_deployment
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_deployment`;
+CREATE TABLE `act_re_deployment`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEPLOY_TIME_` datetime NULL DEFAULT NULL,
+  `SOURCE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_DEPLOYMENT_NAME`(`NAME_`) USING BTREE,
+  INDEX `ACT_IDX_DEPLOYMENT_TENANT_ID`(`TENANT_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_re_deployment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_procdef
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_procdef`;
+CREATE TABLE `act_re_procdef`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `CATEGORY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `VERSION_` int NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DGRM_RESOURCE_NAME_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HAS_START_FORM_KEY_` tinyint NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VERSION_TAG_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HISTORY_TTL_` int NULL DEFAULT NULL,
+  `STARTABLE_` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_PROCDEF_DEPLOYMENT_ID`(`DEPLOYMENT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_PROCDEF_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_PROCDEF_VER_TAG`(`VERSION_TAG_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_re_procdef
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_authorization
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_authorization`;
+CREATE TABLE `act_ru_authorization`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NOT NULL,
+  `TYPE_` int NOT NULL,
+  `GROUP_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RESOURCE_TYPE_` int NOT NULL,
+  `RESOURCE_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PERMS_` int NULL DEFAULT NULL,
+  `REMOVAL_TIME_` datetime NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  UNIQUE INDEX `ACT_UNIQ_AUTH_USER`(`USER_ID_`, `TYPE_`, `RESOURCE_TYPE_`, `RESOURCE_ID_`) USING BTREE,
+  UNIQUE INDEX `ACT_UNIQ_AUTH_GROUP`(`GROUP_ID_`, `TYPE_`, `RESOURCE_TYPE_`, `RESOURCE_ID_`) USING BTREE,
+  INDEX `ACT_IDX_AUTH_GROUP_ID`(`GROUP_ID_`) USING BTREE,
+  INDEX `ACT_IDX_AUTH_RESOURCE_ID`(`RESOURCE_ID_`) USING BTREE,
+  INDEX `ACT_IDX_AUTH_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_AUTH_RM_TIME`(`REMOVAL_TIME_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_authorization
+-- ----------------------------
+INSERT INTO `act_ru_authorization` VALUES ('1c379f2d2def425a9384998b7eafd684', 1, 1, 'camunda-admin', NULL, 2, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('1fa61496903043568cb350021d5a8cd1', 1, 1, 'camunda-admin', NULL, 6, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('22cd93bce68d4e92ae20e18e54e4468f', 1, 1, 'camunda-admin', NULL, 4, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('3086a04d21f94f5d82183a4e16e71cd4', 1, 1, 'camunda-admin', NULL, 10, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('3868b34fea5948bbae128cc2e1b9c5a0', 1, 1, 'camunda-admin', NULL, 1, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('504edd30c3124e1297f5acab1f17cc62', 1, 1, 'camunda-admin', NULL, 15, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('5868199a3d5640a8978b14ac9dc91c8b', 1, 1, 'camunda-admin', NULL, 14, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('63cb846fcba442548f1361d276ddc276', 1, 1, 'camunda-admin', NULL, 11, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('7272e8d225dc40288b04a682596c7def', 1, 1, 'camunda-admin', NULL, 18, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('72a3adf9aa7442919204066db4978d9c', 1, 1, 'camunda-admin', NULL, 19, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('7526bff4719342c4b7135e91ec60ac05', 1, 1, 'camunda-admin', NULL, 9, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('763e7413de8c41e6a29c1e38940cd903', 1, 1, 'camunda-admin', NULL, 7, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('7f949a6e1fcc4d14a2e068fe656bdc2e', 1, 1, 'camunda-admin', NULL, 0, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('8d86cd2656b34e728acf6542f4093ac7', 1, 1, 'camunda-admin', NULL, 13, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('95740e4aa3a64b41a4816688184c1db3', 1, 1, 'camunda-admin', NULL, 5, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('a6cf36edcc0046b3b7961355f68c85b9', 1, 1, 'camunda-admin', NULL, 17, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('bcb34352b749476f91d6655dce85b321', 1, 1, 'camunda-admin', NULL, 16, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('d732a114b0804f6da5d46015bf39aef5', 1, 1, 'camunda-admin', NULL, 12, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('e38a1be2bf354da7a4a295c2351c57d0', 1, 1, 'camunda-admin', NULL, 20, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('e59c83834c494647b01a1a7455610eee', 1, 1, 'camunda-admin', NULL, 21, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('f3b6a1eaa05f4903b99a548919b5ebae', 1, 1, 'camunda-admin', NULL, 3, '*', 2147483647, NULL, NULL);
+INSERT INTO `act_ru_authorization` VALUES ('fb232ec778d449b19e3d85bd6f6f5fa2', 1, 1, 'camunda-admin', NULL, 8, '*', 2147483647, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for act_ru_batch
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_batch`;
+CREATE TABLE `act_ru_batch`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NOT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TOTAL_JOBS_` int NULL DEFAULT NULL,
+  `JOBS_CREATED_` int NULL DEFAULT NULL,
+  `JOBS_PER_SEED_` int NULL DEFAULT NULL,
+  `INVOCATIONS_PER_JOB_` int NULL DEFAULT NULL,
+  `SEED_JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BATCH_JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `MONITOR_JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NULL DEFAULT NULL,
+  `CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `START_TIME_` datetime NULL DEFAULT NULL,
+  `EXEC_START_TIME_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_BATCH_SEED_JOB_DEF`(`SEED_JOB_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_BATCH_MONITOR_JOB_DEF`(`MONITOR_JOB_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_BATCH_JOB_DEF`(`BATCH_JOB_DEF_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_BATCH_JOB_DEF` FOREIGN KEY (`BATCH_JOB_DEF_ID_`) REFERENCES `act_ru_jobdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_BATCH_MONITOR_JOB_DEF` FOREIGN KEY (`MONITOR_JOB_DEF_ID_`) REFERENCES `act_ru_jobdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_BATCH_SEED_JOB_DEF` FOREIGN KEY (`SEED_JOB_DEF_ID_`) REFERENCES `act_ru_jobdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_batch
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_case_execution
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_case_execution`;
+CREATE TABLE `act_ru_case_execution`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_CASE_EXEC_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_EXEC_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BUSINESS_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PARENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PREV_STATE_` int NULL DEFAULT NULL,
+  `CURRENT_STATE_` int NULL DEFAULT NULL,
+  `REQUIRED_` tinyint(1) NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_CASE_EXEC_BUSKEY`(`BUSINESS_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_CASE_EXE_CASE_INST`(`CASE_INST_ID_`) USING BTREE,
+  INDEX `ACT_FK_CASE_EXE_PARENT`(`PARENT_ID_`) USING BTREE,
+  INDEX `ACT_FK_CASE_EXE_CASE_DEF`(`CASE_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_CASE_EXEC_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_CASE_EXE_CASE_DEF` FOREIGN KEY (`CASE_DEF_ID_`) REFERENCES `act_re_case_def` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_CASE_EXE_CASE_INST` FOREIGN KEY (`CASE_INST_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ACT_FK_CASE_EXE_PARENT` FOREIGN KEY (`PARENT_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_case_execution
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_case_sentry_part
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_case_sentry_part`;
+CREATE TABLE `act_ru_case_sentry_part`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXEC_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SENTRY_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SOURCE_CASE_EXEC_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `STANDARD_EVENT_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SOURCE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VARIABLE_EVENT_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VARIABLE_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SATISFIED_` tinyint(1) NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_FK_CASE_SENTRY_CASE_INST`(`CASE_INST_ID_`) USING BTREE,
+  INDEX `ACT_FK_CASE_SENTRY_CASE_EXEC`(`CASE_EXEC_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_CASE_SENTRY_CASE_EXEC` FOREIGN KEY (`CASE_EXEC_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_CASE_SENTRY_CASE_INST` FOREIGN KEY (`CASE_INST_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_case_sentry_part
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_event_subscr
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_event_subscr`;
+CREATE TABLE `act_ru_event_subscr`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `EVENT_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `EVENT_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACTIVITY_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATED_` datetime NOT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_EVENT_SUBSCR_CONFIG_`(`CONFIGURATION_`) USING BTREE,
+  INDEX `ACT_IDX_EVENT_SUBSCR_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_FK_EVENT_EXEC`(`EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_IDX_EVENT_SUBSCR_EVT_NAME`(`EVENT_NAME_`) USING BTREE,
+  CONSTRAINT `ACT_FK_EVENT_EXEC` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_event_subscr
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_execution
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_execution`;
+CREATE TABLE `act_ru_execution`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BUSINESS_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PARENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_EXEC_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUPER_CASE_EXEC_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `IS_ACTIVE_` tinyint NULL DEFAULT NULL,
+  `IS_CONCURRENT_` tinyint NULL DEFAULT NULL,
+  `IS_SCOPE_` tinyint NULL DEFAULT NULL,
+  `IS_EVENT_SCOPE_` tinyint NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NULL DEFAULT NULL,
+  `CACHED_ENT_STATE_` int NULL DEFAULT NULL,
+  `SEQUENCE_COUNTER_` bigint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_EXEC_ROOT_PI`(`ROOT_PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_EXEC_BUSKEY`(`BUSINESS_KEY_`) USING BTREE,
+  INDEX `ACT_IDX_EXEC_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_FK_EXE_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_FK_EXE_PARENT`(`PARENT_ID_`) USING BTREE,
+  INDEX `ACT_FK_EXE_SUPER`(`SUPER_EXEC_`) USING BTREE,
+  INDEX `ACT_FK_EXE_PROCDEF`(`PROC_DEF_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_EXE_PARENT` FOREIGN KEY (`PARENT_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_EXE_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_EXE_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ACT_FK_EXE_SUPER` FOREIGN KEY (`SUPER_EXEC_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_execution
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_ext_task
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_ext_task`;
+CREATE TABLE `act_ru_ext_task`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NOT NULL,
+  `WORKER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TOPIC_NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RETRIES_` int NULL DEFAULT NULL,
+  `ERROR_MSG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ERROR_DETAILS_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `LOCK_EXP_TIME_` datetime NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PRIORITY_` bigint NOT NULL DEFAULT 0,
+  `LAST_FAILURE_LOG_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_EXT_TASK_TOPIC`(`TOPIC_NAME_`) USING BTREE,
+  INDEX `ACT_IDX_EXT_TASK_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_EXT_TASK_PRIORITY`(`PRIORITY_`) USING BTREE,
+  INDEX `ACT_IDX_EXT_TASK_ERR_DETAILS`(`ERROR_DETAILS_ID_`) USING BTREE,
+  INDEX `ACT_IDX_EXT_TASK_EXEC`(`EXECUTION_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_EXT_TASK_ERROR_DETAILS` FOREIGN KEY (`ERROR_DETAILS_ID_`) REFERENCES `act_ge_bytearray` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_EXT_TASK_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_ext_task
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_filter
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_filter`;
+CREATE TABLE `act_ru_filter`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NOT NULL,
+  `RESOURCE_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `OWNER_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `QUERY_` longtext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PROPERTIES_` longtext CHARACTER SET utf8 COLLATE utf8_bin NULL,
+  PRIMARY KEY (`ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_filter
+-- ----------------------------
+INSERT INTO `act_ru_filter` VALUES ('b2d1f90be00248b7a200873e420db519', 1, 'Task', '所有任务', NULL, '{}', '{}');
+
+-- ----------------------------
+-- Table structure for act_ru_identitylink
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_identitylink`;
+CREATE TABLE `act_ru_identitylink`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `GROUP_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `USER_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_IDENT_LNK_USER`(`USER_ID_`) USING BTREE,
+  INDEX `ACT_IDX_IDENT_LNK_GROUP`(`GROUP_ID_`) USING BTREE,
+  INDEX `ACT_IDX_ATHRZ_PROCEDEF`(`PROC_DEF_ID_`) USING BTREE,
+  INDEX `ACT_FK_TSKASS_TASK`(`TASK_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_ATHRZ_PROCEDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TSKASS_TASK` FOREIGN KEY (`TASK_ID_`) REFERENCES `act_ru_task` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_identitylink
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_incident
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_incident`;
+CREATE TABLE `act_ru_incident`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NOT NULL,
+  `INCIDENT_TIMESTAMP_` datetime NOT NULL,
+  `INCIDENT_MSG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `INCIDENT_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACTIVITY_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `FAILED_ACTIVITY_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CAUSE_INCIDENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ROOT_CAUSE_INCIDENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ANNOTATION_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_CONFIGURATION`(`CONFIGURATION_`) USING BTREE,
+  INDEX `ACT_IDX_INC_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_JOB_DEF`(`JOB_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_CAUSEINCID`(`CAUSE_INCIDENT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_EXID`(`EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_PROCDEFID`(`PROC_DEF_ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_PROCINSTID`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_IDX_INC_ROOTCAUSEINCID`(`ROOT_CAUSE_INCIDENT_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_INC_CAUSE` FOREIGN KEY (`CAUSE_INCIDENT_ID_`) REFERENCES `act_ru_incident` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ACT_FK_INC_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_INC_JOB_DEF` FOREIGN KEY (`JOB_DEF_ID_`) REFERENCES `act_ru_jobdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_INC_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_INC_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_INC_RCAUSE` FOREIGN KEY (`ROOT_CAUSE_INCIDENT_ID_`) REFERENCES `act_ru_incident` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_incident
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_job
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_job`;
+CREATE TABLE `act_ru_job`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `LOCK_EXP_TIME_` datetime NULL DEFAULT NULL,
+  `LOCK_OWNER_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXCLUSIVE_` tinyint(1) NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROCESS_INSTANCE_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROCESS_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROCESS_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `RETRIES_` int NULL DEFAULT NULL,
+  `EXCEPTION_STACK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `EXCEPTION_MSG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `FAILED_ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DUEDATE_` datetime NULL DEFAULT NULL,
+  `REPEAT_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `REPEAT_OFFSET_` bigint NULL DEFAULT 0,
+  `HANDLER_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `HANDLER_CFG_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NOT NULL DEFAULT 1,
+  `JOB_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PRIORITY_` bigint NOT NULL DEFAULT 0,
+  `SEQUENCE_COUNTER_` bigint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `LAST_FAILURE_LOG_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOB_EXECUTION_ID`(`EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOB_HANDLER`(`HANDLER_TYPE_`(100), `HANDLER_CFG_`(155)) USING BTREE,
+  INDEX `ACT_IDX_JOB_PROCINST`(`PROCESS_INSTANCE_ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOB_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOB_JOB_DEF_ID`(`JOB_DEF_ID_`) USING BTREE,
+  INDEX `ACT_FK_JOB_EXCEPTION`(`EXCEPTION_STACK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOB_HANDLER_TYPE`(`HANDLER_TYPE_`) USING BTREE,
+  CONSTRAINT `ACT_FK_JOB_EXCEPTION` FOREIGN KEY (`EXCEPTION_STACK_ID_`) REFERENCES `act_ge_bytearray` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_job
+-- ----------------------------
+INSERT INTO `act_ru_job` VALUES ('6dbd0ced0c284fa2bfff613ab965779c', 1, 'ever-living', NULL, NULL, 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, '2024-08-18 19:00:00', NULL, 0, 'history-cleanup', '{\"countEmptyRuns\":0,\"immediatelyDue\":false,\"minuteFrom\":30,\"minuteTo\":44}', NULL, 1, NULL, 0, 1, NULL, '2024-08-14 21:25:00', NULL);
+INSERT INTO `act_ru_job` VALUES ('bb9c41d4f6cc46398668c02bedf94024', 1, 'ever-living', NULL, NULL, 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, '2024-08-18 19:00:00', NULL, 0, 'history-cleanup', '{\"countEmptyRuns\":0,\"immediatelyDue\":false,\"minuteFrom\":0,\"minuteTo\":14}', NULL, 1, NULL, 0, 1, NULL, '2024-08-14 21:25:00', NULL);
+INSERT INTO `act_ru_job` VALUES ('c20d29dab9824afcb62ffbb436e0c5b7', 1, 'ever-living', NULL, NULL, 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, '2024-08-18 19:00:00', NULL, 0, 'history-cleanup', '{\"countEmptyRuns\":0,\"immediatelyDue\":false,\"minuteFrom\":15,\"minuteTo\":29}', NULL, 1, NULL, 0, 1, NULL, '2024-08-14 21:25:00', NULL);
+INSERT INTO `act_ru_job` VALUES ('e9c353479fdf4614a2fc6407b03e9de9', 1, 'ever-living', NULL, NULL, 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, '2024-08-18 19:00:00', NULL, 0, 'history-cleanup', '{\"countEmptyRuns\":0,\"immediatelyDue\":false,\"minuteFrom\":45,\"minuteTo\":59}', NULL, 1, NULL, 0, 1, NULL, '2024-08-14 21:25:00', NULL);
+
+-- ----------------------------
+-- Table structure for act_ru_jobdef
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_jobdef`;
+CREATE TABLE `act_ru_jobdef`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ACT_ID_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `JOB_TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `JOB_CONFIGURATION_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NULL DEFAULT NULL,
+  `JOB_PRIORITY_` bigint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DEPLOYMENT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOBDEF_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_JOBDEF_PROC_DEF_ID`(`PROC_DEF_ID_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_jobdef
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_meter_log
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_meter_log`;
+CREATE TABLE `act_ru_meter_log`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `NAME_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REPORTER_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VALUE_` bigint NULL DEFAULT NULL,
+  `TIMESTAMP_` datetime NULL DEFAULT NULL,
+  `MILLISECONDS_` bigint NULL DEFAULT 0,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_METER_LOG_MS`(`MILLISECONDS_`) USING BTREE,
+  INDEX `ACT_IDX_METER_LOG_NAME_MS`(`NAME_`, `MILLISECONDS_`) USING BTREE,
+  INDEX `ACT_IDX_METER_LOG_REPORT`(`NAME_`, `REPORTER_`, `MILLISECONDS_`) USING BTREE,
+  INDEX `ACT_IDX_METER_LOG_TIME`(`TIMESTAMP_`) USING BTREE,
+  INDEX `ACT_IDX_METER_LOG`(`NAME_`, `TIMESTAMP_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_meter_log
+-- ----------------------------
+INSERT INTO `act_ru_meter_log` VALUES ('11380bad0d3e4d30a6c39b9e4572a345', 'job-acquired-success', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('2d9887f525304ab78dcd2d3c4d2676d1', 'executed-decision-instances', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('5e81c5b8740a41f68cb2203a7f62e6f6', 'activity-instance-start', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('5ea2709b84934f1dacdc4536f488c3ad', 'root-process-instance-start', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('99ff5abb9a2b466dbfaae9a97d5070d4', 'job-successful', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('a2b97bf6340944c3b14ed509aec16f9d', 'executed-decision-elements', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('ae4b927c33894832827a1d8211449600', 'job-execution-rejected', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('b6b0673bebbb41c3a38bbe5f0057c493', 'job-acquired-failure', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('c30bc9d4b52a48228980fc70640537dd', 'activity-instance-end', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('c658cb6d76654464a4943fb4ddb93c49', 'job-acquisition-attempt', '192.168.10.159$OH工作流', 5, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('dcf9f1f1f76d4d7ca7e80e5dffe9f088', 'job-locked-exclusive', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+INSERT INTO `act_ru_meter_log` VALUES ('f7d7bd85788141ddb7213571301547b2', 'job-failed', '192.168.10.159$OH工作流', 0, '2024-08-14 21:26:43', 1723642003392);
+
+-- ----------------------------
+-- Table structure for act_ru_task
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_task`;
+CREATE TABLE `act_ru_task`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PARENT_TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_DEF_KEY_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `OWNER_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DELEGATION_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PRIORITY_` int NULL DEFAULT NULL,
+  `CREATE_TIME_` datetime NULL DEFAULT NULL,
+  `LAST_UPDATED_` datetime NULL DEFAULT NULL,
+  `DUE_DATE_` datetime NULL DEFAULT NULL,
+  `FOLLOW_UP_DATE_` datetime NULL DEFAULT NULL,
+  `SUSPENSION_STATE_` int NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_TASK_CREATE`(`CREATE_TIME_`) USING BTREE,
+  INDEX `ACT_IDX_TASK_LAST_UPDATED`(`LAST_UPDATED_`) USING BTREE,
+  INDEX `ACT_IDX_TASK_ASSIGNEE`(`ASSIGNEE_`) USING BTREE,
+  INDEX `ACT_IDX_TASK_OWNER`(`OWNER_`) USING BTREE,
+  INDEX `ACT_IDX_TASK_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_FK_TASK_EXE`(`EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_FK_TASK_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_FK_TASK_PROCDEF`(`PROC_DEF_ID_`) USING BTREE,
+  INDEX `ACT_FK_TASK_CASE_EXE`(`CASE_EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_FK_TASK_CASE_DEF`(`CASE_DEF_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_TASK_CASE_DEF` FOREIGN KEY (`CASE_DEF_ID_`) REFERENCES `act_re_case_def` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TASK_CASE_EXE` FOREIGN KEY (`CASE_EXECUTION_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TASK_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TASK_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_TASK_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_task
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_task_meter_log
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_task_meter_log`;
+CREATE TABLE `act_ru_task_meter_log`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `ASSIGNEE_HASH_` bigint NULL DEFAULT NULL,
+  `TIMESTAMP_` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  INDEX `ACT_IDX_TASK_METER_LOG_TIME`(`TIMESTAMP_`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_task_meter_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_variable`;
+CREATE TABLE `act_ru_variable`  (
+  `ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `REV_` int NULL DEFAULT NULL,
+  `TYPE_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `NAME_` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_EXECUTION_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `CASE_INST_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TASK_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BATCH_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `DOUBLE_` double NULL DEFAULT NULL,
+  `LONG_` bigint NULL DEFAULT NULL,
+  `TEXT_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `TEXT2_` varchar(4000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `VAR_SCOPE_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `SEQUENCE_COUNTER_` bigint NULL DEFAULT NULL,
+  `IS_CONCURRENT_LOCAL_` tinyint NULL DEFAULT NULL,
+  `TENANT_ID_` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`) USING BTREE,
+  UNIQUE INDEX `ACT_UNIQ_VARIABLE`(`VAR_SCOPE_`, `NAME_`) USING BTREE,
+  INDEX `ACT_IDX_VARIABLE_TASK_ID`(`TASK_ID_`) USING BTREE,
+  INDEX `ACT_IDX_VARIABLE_TENANT_ID`(`TENANT_ID_`) USING BTREE,
+  INDEX `ACT_IDX_VARIABLE_TASK_NAME_TYPE`(`TASK_ID_`, `NAME_`, `TYPE_`) USING BTREE,
+  INDEX `ACT_FK_VAR_EXE`(`EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_FK_VAR_PROCINST`(`PROC_INST_ID_`) USING BTREE,
+  INDEX `ACT_FK_VAR_BYTEARRAY`(`BYTEARRAY_ID_`) USING BTREE,
+  INDEX `ACT_IDX_BATCH_ID`(`BATCH_ID_`) USING BTREE,
+  INDEX `ACT_FK_VAR_CASE_EXE`(`CASE_EXECUTION_ID_`) USING BTREE,
+  INDEX `ACT_FK_VAR_CASE_INST`(`CASE_INST_ID_`) USING BTREE,
+  CONSTRAINT `ACT_FK_VAR_BATCH` FOREIGN KEY (`BATCH_ID_`) REFERENCES `act_ru_batch` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_VAR_BYTEARRAY` FOREIGN KEY (`BYTEARRAY_ID_`) REFERENCES `act_ge_bytearray` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_VAR_CASE_EXE` FOREIGN KEY (`CASE_EXECUTION_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_VAR_CASE_INST` FOREIGN KEY (`CASE_INST_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_VAR_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `ACT_FK_VAR_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of act_ru_variable
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for bpmn_flow
+-- ----------------------------
+DROP TABLE IF EXISTS `bpmn_flow`;
+CREATE TABLE `bpmn_flow`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端名称',
-  `client_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端ID',
-  `secret_key` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密钥',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL,
-  `updater` bigint NULL DEFAULT NULL,
-  `update_time` datetime NULL DEFAULT NULL,
+  `key_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '流程code',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程名称',
+  `xml` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'bpmn的xml字符串',
+  `svg_str` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'svg图片字符串',
+  `version_tag` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签',
+  `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '说明',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `idx_01`(`client_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端' ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `idx_01`(`key_code`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '自定义流程表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of data_app
+-- Records of bpmn_flow
 -- ----------------------------
-INSERT INTO `data_app` VALUES (1, '饿了吧集团', 'C0001', 'c28a8120682d4b4fa50325ed34748e0e', '饿了吧接口对接配置', 10000, '2023-07-29 13:04:34', 10000, '2023-07-29 13:04:34', 1);
-INSERT INTO `data_app` VALUES (2, '阿狸芭比公司', 'C0002', '0682d4b4fa50325ed347', '', 10000, '2023-07-29 13:05:28', 10000, '2023-07-29 13:05:28', 1);
-INSERT INTO `data_app` VALUES (3, '支付包', 'C003', '8a8120682d4b4fa50325ed', '', 10000, '2023-08-12 19:53:17', 10000, '2023-08-12 19:53:17', 1);
+INSERT INTO `bpmn_flow` VALUES (1, 'Process_demo20231222', '流程例子', '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:camunda=\"http://camunda.org/schema/1.0/bpmn\" id=\"Definitions_0h3vrm2\" targetNamespace=\"http://bpmn.io/schema/bpmn\" exporter=\"bpmn-js (https://demo.bpmn.io)\" exporterVersion=\"15.1.3\">\n  <bpmn:process id=\"Process_demo20231222\" name=\"流程例子\" isExecutable=\"true\" camunda:versionTag=\"demo\">\n    <bpmn:startEvent id=\"StartEvent_kaishi\" name=\"开始\">\n      <bpmn:extensionElements>\n        <camunda:formData />\n      </bpmn:extensionElements>\n      <bpmn:outgoing>Flow_15u340k</bpmn:outgoing>\n    </bpmn:startEvent>\n    <bpmn:sequenceFlow id=\"Flow_15u340k\" sourceRef=\"StartEvent_kaishi\" targetRef=\"Activity_shenqingjine\" />\n    <bpmn:userTask id=\"Activity_shenqingjine\" name=\"申请金额\">\n      <bpmn:extensionElements>\n        <camunda:formData />\n      </bpmn:extensionElements>\n      <bpmn:incoming>Flow_15u340k</bpmn:incoming>\n      <bpmn:outgoing>Flow_0n95qae</bpmn:outgoing>\n    </bpmn:userTask>\n    <bpmn:exclusiveGateway id=\"Gateway_1175j6c\" default=\"Flow_1sxpx33\">\n      <bpmn:incoming>Flow_0n95qae</bpmn:incoming>\n      <bpmn:outgoing>Flow_1bpt2xh</bpmn:outgoing>\n      <bpmn:outgoing>Flow_1sxpx33</bpmn:outgoing>\n    </bpmn:exclusiveGateway>\n    <bpmn:sequenceFlow id=\"Flow_0n95qae\" sourceRef=\"Activity_shenqingjine\" targetRef=\"Gateway_1175j6c\" />\n    <bpmn:sequenceFlow id=\"Flow_1bpt2xh\" name=\"金额大于100\" sourceRef=\"Gateway_1175j6c\" targetRef=\"Activity_caiwushenpi\">\n      <bpmn:conditionExpression xsi:type=\"bpmn:tFormalExpression\">${money > 100}</bpmn:conditionExpression>\n    </bpmn:sequenceFlow>\n    <bpmn:sequenceFlow id=\"Flow_104f95a\" sourceRef=\"Activity_caiwushenpi\" targetRef=\"Activity_wanchengshenpi\" />\n    <bpmn:endEvent id=\"Event_jieshu\" name=\"结束\">\n      <bpmn:incoming>Flow_07lrcry</bpmn:incoming>\n    </bpmn:endEvent>\n    <bpmn:sequenceFlow id=\"Flow_07lrcry\" sourceRef=\"Activity_wanchengshenpi\" targetRef=\"Event_jieshu\" />\n    <bpmn:sequenceFlow id=\"Flow_1sxpx33\" name=\"金额小于或等于100\" sourceRef=\"Gateway_1175j6c\" targetRef=\"Activity_wanchengshenpi\" />\n    <bpmn:userTask id=\"Activity_caiwushenpi\" name=\"财务审批\" camunda:assignee=\"王小费\">\n      <bpmn:extensionElements>\n        <camunda:formData />\n      </bpmn:extensionElements>\n      <bpmn:incoming>Flow_1bpt2xh</bpmn:incoming>\n      <bpmn:outgoing>Flow_104f95a</bpmn:outgoing>\n    </bpmn:userTask>\n    <bpmn:userTask id=\"Activity_wanchengshenpi\" name=\"审批完成\">\n      <bpmn:extensionElements>\n        <camunda:formData />\n      </bpmn:extensionElements>\n      <bpmn:incoming>Flow_104f95a</bpmn:incoming>\n      <bpmn:incoming>Flow_1sxpx33</bpmn:incoming>\n      <bpmn:outgoing>Flow_07lrcry</bpmn:outgoing>\n    </bpmn:userTask>\n  </bpmn:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"Process_demo20231222_di\" bpmnElement=\"Process_demo20231222\">\n      <bpmndi:BPMNEdge id=\"Flow_1sxpx33_di\" bpmnElement=\"Flow_1sxpx33\">\n        <di:waypoint x=\"440\" y=\"125\" />\n        <di:waypoint x=\"440\" y=\"220\" />\n        <di:waypoint x=\"750\" y=\"220\" />\n        <di:waypoint x=\"750\" y=\"140\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"554\" y=\"202\" width=\"83\" height=\"27\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_07lrcry_di\" bpmnElement=\"Flow_07lrcry\">\n        <di:waypoint x=\"800\" y=\"100\" />\n        <di:waypoint x=\"872\" y=\"100\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_104f95a_di\" bpmnElement=\"Flow_104f95a\">\n        <di:waypoint x=\"630\" y=\"100\" />\n        <di:waypoint x=\"700\" y=\"100\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1bpt2xh_di\" bpmnElement=\"Flow_1bpt2xh\">\n        <di:waypoint x=\"465\" y=\"100\" />\n        <di:waypoint x=\"530\" y=\"100\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"467\" y=\"82\" width=\"62\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0n95qae_di\" bpmnElement=\"Flow_0n95qae\">\n        <di:waypoint x=\"350\" y=\"100\" />\n        <di:waypoint x=\"415\" y=\"100\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_15u340k_di\" bpmnElement=\"Flow_15u340k\">\n        <di:waypoint x=\"192\" y=\"100\" />\n        <di:waypoint x=\"250\" y=\"100\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"StartEvent_kaishi_di\" bpmnElement=\"StartEvent_kaishi\">\n        <dc:Bounds x=\"156\" y=\"82\" width=\"36\" height=\"36\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"163\" y=\"125\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_shenqingjine_di\" bpmnElement=\"Activity_shenqingjine\">\n        <dc:Bounds x=\"250\" y=\"60\" width=\"100\" height=\"80\" />\n        <bpmndi:BPMNLabel />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_1175j6c_di\" bpmnElement=\"Gateway_1175j6c\" isMarkerVisible=\"true\">\n        <dc:Bounds x=\"415\" y=\"75\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_jieshu_di\" bpmnElement=\"Event_jieshu\">\n        <dc:Bounds x=\"872\" y=\"82\" width=\"36\" height=\"36\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"879\" y=\"125\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_caiwushenpi_di\" bpmnElement=\"Activity_caiwushenpi\">\n        <dc:Bounds x=\"530\" y=\"60\" width=\"100\" height=\"80\" />\n        <bpmndi:BPMNLabel />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_wanchengshenpi_di\" bpmnElement=\"Activity_wanchengshenpi\">\n        <dc:Bounds x=\"700\" y=\"60\" width=\"100\" height=\"80\" />\n        <bpmndi:BPMNLabel />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>\n', '<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- created with bpmn-js / http://bpmn.io -->\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"764\" height=\"181\" viewBox=\"150 54 764 181\" version=\"1.1\"><defs><marker id=\"sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\" viewBox=\"0 0 20 20\" refX=\"11\" refY=\"10\" markerWidth=\"10\" markerHeight=\"10\" orient=\"auto\"><path d=\"M 1 5 L 11 10 L 1 15 Z\" style=\"fill: black; stroke-width: 1px; stroke-linecap: round; stroke-dasharray: 10000, 1; stroke: black;\"/></marker><marker id=\"conditional-default-flow-marker-white-black-52u4oo3f2hzaevrbkxd9lssq1\" viewBox=\"0 0 20 20\" refX=\"0\" refY=\"10\" markerWidth=\"10\" markerHeight=\"10\" orient=\"auto\"><path d=\"M 6 4 L 10 16\" style=\"fill: black; stroke-width: 1px; stroke-linecap: round; stroke-dasharray: 10000, 1; stroke: black;\"/></marker></defs><g class=\"djs-group\"><g class=\"djs-element djs-connection\" data-element-id=\"Flow_1sxpx33\" style=\"display: block;\"><g class=\"djs-visual\"><path d=\"m  440,125L440,220 L750,220 L750,140 \" style=\"fill: none; stroke-width: 2px; stroke: black; stroke-linejoin: round; marker-end: url(\'#sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\'); marker-start: url(\'#conditional-default-flow-marker-white-black-52u4oo3f2hzaevrbkxd9lssq1\');\"/></g><polyline points=\"440,125 440,220 750,220 750,140 \" class=\"djs-hit djs-hit-stroke\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"434\" y=\"119\" width=\"322\" height=\"107\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-connection\" data-element-id=\"Flow_07lrcry\" style=\"display: block;\"><g class=\"djs-visual\"><path d=\"m  800,100L872,100 \" style=\"fill: none; stroke-width: 2px; stroke: black; stroke-linejoin: round; marker-end: url(\'#sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\');\"/></g><polyline points=\"800,100 872,100 \" class=\"djs-hit djs-hit-stroke\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"794\" y=\"94\" width=\"84\" height=\"12\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-connection\" data-element-id=\"Flow_104f95a\" style=\"display: block;\"><g class=\"djs-visual\"><path d=\"m  630,100L700,100 \" style=\"fill: none; stroke-width: 2px; stroke: black; stroke-linejoin: round; marker-end: url(\'#sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\');\"/></g><polyline points=\"630,100 700,100 \" class=\"djs-hit djs-hit-stroke\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"624\" y=\"94\" width=\"82\" height=\"12\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-connection\" data-element-id=\"Flow_1bpt2xh\" style=\"display: block;\"><g class=\"djs-visual\"><path d=\"m  465,100L530,100 \" style=\"fill: none; stroke-width: 2px; stroke: black; stroke-linejoin: round; marker-end: url(\'#sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\');\"/></g><polyline points=\"465,100 530,100 \" class=\"djs-hit djs-hit-stroke\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"459\" y=\"94\" width=\"77\" height=\"12\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-connection\" data-element-id=\"Flow_0n95qae\" style=\"display: block;\"><g class=\"djs-visual\"><path d=\"m  350,100L415,100 \" style=\"fill: none; stroke-width: 2px; stroke: black; stroke-linejoin: round; marker-end: url(\'#sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\');\"/></g><polyline points=\"350,100 415,100 \" class=\"djs-hit djs-hit-stroke\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"344\" y=\"94\" width=\"77\" height=\"12\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-connection\" data-element-id=\"Flow_15u340k\" style=\"display: block;\"><g class=\"djs-visual\"><path d=\"m  192,100L250,100 \" style=\"fill: none; stroke-width: 2px; stroke: black; stroke-linejoin: round; marker-end: url(\'#sequenceflow-end-white-black-52u4oo3f2hzaevrbkxd9lssq1\');\"/></g><polyline points=\"192,100 250,100 \" class=\"djs-hit djs-hit-stroke\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"186\" y=\"94\" width=\"70\" height=\"12\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"StartEvent_kaishi\" style=\"display: block;\" transform=\"matrix(1 0 0 1 156 82)\"><g class=\"djs-visual\"><circle cx=\"18\" cy=\"18\" r=\"18\" style=\"stroke: black; stroke-width: 2px; fill: white; fill-opacity: 0.95;\"/></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"36\" height=\"36\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"48\" height=\"48\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"StartEvent_1s3b1oq_label\" style=\"display: block;\" transform=\"matrix(1 0 0 1 163 125)\"><g class=\"djs-visual\"><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;\"><tspan x=\"0\" y=\"9.899999999999999\">开始</tspan></text></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"23\" height=\"14\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"35\" height=\"26\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Activity_shenqingjine\" style=\"display: block;\" transform=\"matrix(1 0 0 1 250 60)\"><g class=\"djs-visual\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"stroke: black; stroke-width: 2px; fill: white; fill-opacity: 0.95;\"/><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: black;\"><tspan x=\"26\" y=\"43.599999999999994\">申请金额</tspan></text><path d=\"m 15,12 c 0.909,-0.845 1.594,-2.049 1.594,-3.385 0,-2.554 -1.805,-4.62199999 -4.357,-4.62199999 -2.55199998,0 -4.28799998,2.06799999 -4.28799998,4.62199999 0,1.348 0.974,2.562 1.89599998,3.405 -0.52899998,0.187 -5.669,2.097 -5.794,4.7560005 v 6.718 h 17 v -6.718 c 0,-2.2980005 -5.5279996,-4.5950005 -6.0509996,-4.7760005 zm -8,6 l 0,5.5 m 11,0 l 0,-5\" style=\"fill: white; stroke-width: 0.5px; stroke: black;\"/><path d=\"m 15,12 m 2.162,1.009 c 0,2.4470005 -2.158,4.4310005 -4.821,4.4310005 -2.66499998,0 -4.822,-1.981 -4.822,-4.4310005 \" style=\"fill: white; stroke-width: 0.5px; stroke: black;\"/><path d=\"m 15,12 m -6.9,-3.80 c 0,0 2.25099998,-2.358 4.27399998,-1.177 2.024,1.181 4.221,1.537 4.124,0.965 -0.098,-0.57 -0.117,-3.79099999 -4.191,-4.13599999 -3.57499998,0.001 -4.20799998,3.36699999 -4.20699998,4.34799999 z\" style=\"fill: black; stroke-width: 0.5px; stroke: black;\"/></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"112\" height=\"92\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Gateway_1175j6c\" style=\"display: block;\" transform=\"matrix(1 0 0 1 415 75)\"><g class=\"djs-visual\"><polygon points=\"25,0 50,25 25,50 0,25\" style=\"stroke: black; stroke-width: 2px; fill: white; fill-opacity: 0.95;\"/><path d=\"m 16,15 7.42857142857143,9.714285714285715 -7.42857142857143,9.714285714285715 3.428571428571429,0 5.714285714285715,-7.464228571428572 5.714285714285715,7.464228571428572 3.428571428571429,0 -7.42857142857143,-9.714285714285715 7.42857142857143,-9.714285714285715 -3.428571428571429,0 -5.714285714285715,7.464228571428572 -5.714285714285715,-7.464228571428572 -3.428571428571429,0 z\" style=\"fill: black; stroke-width: 1px; stroke: black;\"/></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"50\" height=\"50\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"62\" height=\"62\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Event_jieshu\" style=\"display: block;\" transform=\"matrix(1 0 0 1 872 82)\"><g class=\"djs-visual\"><circle cx=\"18\" cy=\"18\" r=\"18\" style=\"stroke: black; stroke-width: 4px; fill: white; fill-opacity: 0.95;\"/></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"36\" height=\"36\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"48\" height=\"48\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Event_04q0avn_label\" style=\"display: block;\" transform=\"matrix(1 0 0 1 879 125)\"><g class=\"djs-visual\"><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;\"><tspan x=\"0\" y=\"9.899999999999999\">结束</tspan></text></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"23\" height=\"14\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"35\" height=\"26\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Activity_caiwushenpi\" style=\"display: block;\" transform=\"matrix(1 0 0 1 530 60)\"><g class=\"djs-visual\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"stroke: black; stroke-width: 2px; fill: white; fill-opacity: 0.95;\"/><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: black;\"><tspan x=\"26\" y=\"43.599999999999994\">财务审批</tspan></text><path d=\"m 15,12 c 0.909,-0.845 1.594,-2.049 1.594,-3.385 0,-2.554 -1.805,-4.62199999 -4.357,-4.62199999 -2.55199998,0 -4.28799998,2.06799999 -4.28799998,4.62199999 0,1.348 0.974,2.562 1.89599998,3.405 -0.52899998,0.187 -5.669,2.097 -5.794,4.7560005 v 6.718 h 17 v -6.718 c 0,-2.2980005 -5.5279996,-4.5950005 -6.0509996,-4.7760005 zm -8,6 l 0,5.5 m 11,0 l 0,-5\" style=\"fill: white; stroke-width: 0.5px; stroke: black;\"/><path d=\"m 15,12 m 2.162,1.009 c 0,2.4470005 -2.158,4.4310005 -4.821,4.4310005 -2.66499998,0 -4.822,-1.981 -4.822,-4.4310005 \" style=\"fill: white; stroke-width: 0.5px; stroke: black;\"/><path d=\"m 15,12 m -6.9,-3.80 c 0,0 2.25099998,-2.358 4.27399998,-1.177 2.024,1.181 4.221,1.537 4.124,0.965 -0.098,-0.57 -0.117,-3.79099999 -4.191,-4.13599999 -3.57499998,0.001 -4.20799998,3.36699999 -4.20699998,4.34799999 z\" style=\"fill: black; stroke-width: 0.5px; stroke: black;\"/></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"112\" height=\"92\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Activity_wanchengshenpi\" style=\"display: block;\" transform=\"matrix(1 0 0 1 700 60)\"><g class=\"djs-visual\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"80\" rx=\"10\" ry=\"10\" style=\"stroke: black; stroke-width: 2px; fill: white; fill-opacity: 0.95;\"/><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: black;\"><tspan x=\"26\" y=\"43.599999999999994\">审批完成</tspan></text><path d=\"m 15,12 c 0.909,-0.845 1.594,-2.049 1.594,-3.385 0,-2.554 -1.805,-4.62199999 -4.357,-4.62199999 -2.55199998,0 -4.28799998,2.06799999 -4.28799998,4.62199999 0,1.348 0.974,2.562 1.89599998,3.405 -0.52899998,0.187 -5.669,2.097 -5.794,4.7560005 v 6.718 h 17 v -6.718 c 0,-2.2980005 -5.5279996,-4.5950005 -6.0509996,-4.7760005 zm -8,6 l 0,5.5 m 11,0 l 0,-5\" style=\"fill: white; stroke-width: 0.5px; stroke: black;\"/><path d=\"m 15,12 m 2.162,1.009 c 0,2.4470005 -2.158,4.4310005 -4.821,4.4310005 -2.66499998,0 -4.822,-1.981 -4.822,-4.4310005 \" style=\"fill: white; stroke-width: 0.5px; stroke: black;\"/><path d=\"m 15,12 m -6.9,-3.80 c 0,0 2.25099998,-2.358 4.27399998,-1.177 2.024,1.181 4.221,1.537 4.124,0.965 -0.098,-0.57 -0.117,-3.79099999 -4.191,-4.13599999 -3.57499998,0.001 -4.20799998,3.36699999 -4.20699998,4.34799999 z\" style=\"fill: black; stroke-width: 0.5px; stroke: black;\"/></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"100\" height=\"80\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"112\" height=\"92\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Flow_1bpt2xh_label\" style=\"display: block;\" transform=\"matrix(1 0 0 1 467 82)\"><g class=\"djs-visual\"><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;\"><tspan x=\"0\" y=\"9.899999999999999\">金额大于100</tspan></text></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"63\" height=\"14\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"75\" height=\"26\" class=\"djs-outline\" style=\"fill: none;\"/></g></g><g class=\"djs-group\"><g class=\"djs-element djs-shape\" data-element-id=\"Flow_1sxpx33_label\" style=\"display: block;\" transform=\"matrix(1 0 0 1 554 202)\"><g class=\"djs-visual\"><text lineHeight=\"1.2\" class=\"djs-label\" style=\"font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;\"><tspan x=\"0\" y=\"9.899999999999999\">金额小于或等于1</tspan><tspan x=\"35.44140625\" y=\"23.099999999999998\">00</tspan></text></g><rect class=\"djs-hit djs-hit-all\" x=\"0\" y=\"0\" width=\"84\" height=\"27\" style=\"fill: none; stroke-opacity: 0; stroke: white; stroke-width: 15px;\"/><rect x=\"-6\" y=\"-6\" width=\"96\" height=\"39\" class=\"djs-outline\" style=\"fill: none;\"/></g></g></svg>', 'demo', '第一个例子', 1, 10000, '2023-12-19 22:27:38', 10000, '2024-02-28 20:50:54');
 
 -- ----------------------------
--- Table structure for data_function
+-- Table structure for bpmn_flow_node
 -- ----------------------------
-DROP TABLE IF EXISTS `data_function`;
-CREATE TABLE `data_function`  (
+DROP TABLE IF EXISTS `bpmn_flow_node`;
+CREATE TABLE `bpmn_flow_node`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能名称',
-  `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功能号',
-  `is_async` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否异步0否1是',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL,
-  `updater` bigint NULL DEFAULT NULL,
-  `update_time` datetime NULL DEFAULT NULL,
+  `proc_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
+  `act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '环节ID',
+  `node_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节名称',
+  `note` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `index2`(`func_code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能列表' ROW_FORMAT = DYNAMIC;
+  INDEX `idx_01`(`proc_def_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节定义表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of data_function
+-- Records of bpmn_flow_node
 -- ----------------------------
-INSERT INTO `data_function` VALUES (1, '用户信息上传', 'F1001', 1, '用户信息同步', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:13', 1);
-INSERT INTO `data_function` VALUES (2, '账单查询', 'F1002', 0, '查询账单信息', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:18', 1);
-INSERT INTO `data_function` VALUES (3, '新增工单', 'F1003', 1, '', 10000, '2024-02-28 21:50:47', NULL, NULL, 1);
 
 -- ----------------------------
--- Table structure for data_function_authority
+-- Table structure for bpmn_task_record
 -- ----------------------------
-DROP TABLE IF EXISTS `data_function_authority`;
-CREATE TABLE `data_function_authority`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `client_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端ID',
-  `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功能号',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL,
-  `updater` bigint NULL DEFAULT NULL,
-  `update_time` datetime NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `bpmn_task_record`;
+CREATE TABLE `bpmn_task_record`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `proc_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
+  `proc_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节实例ID',
+  `act_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节实例ID',
+  `task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务ID',
+  `task_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节key',
+  `task_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节名称',
+  `from_act_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来自于环节实例ID',
+  `from_task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来自于任务key',
+  `from_task_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来自于环节ID',
+  `from_task_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来自于环节名称',
+  `run_mark` int NULL DEFAULT 0 COMMENT '当前标识，默认0，1标识当前环节',
+  `assignee` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '受理人ID',
+  `assignee_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '受理人',
+  `start_time` datetime NULL DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
+  `duration` bigint NULL DEFAULT NULL COMMENT '时长',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `index2`(`client_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端接口授权' ROW_FORMAT = DYNAMIC;
+  INDEX `bpmn_task_record_proc_inst_id_IDX`(`proc_inst_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节运行记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of data_function_authority
+-- Records of bpmn_task_record
 -- ----------------------------
-INSERT INTO `data_function_authority` VALUES (1, 'C0001', 'F1001', NULL, 10000, '2023-08-13 14:36:19', 10000, '2023-08-13 14:36:19', 1);
-INSERT INTO `data_function_authority` VALUES (2, 'C0001', 'F1002', NULL, 10000, '2023-08-13 14:36:19', 10000, '2023-08-13 14:36:19', 1);
-INSERT INTO `data_function_authority` VALUES (3, 'C0002', 'F1001', NULL, 10000, '2023-08-13 14:36:29', 10000, '2023-08-13 14:36:29', 1);
-INSERT INTO `data_function_authority` VALUES (4, 'C0001', 'F1003', NULL, 10000, '2024-02-28 21:51:00', NULL, NULL, 1);
 
 -- ----------------------------
--- Table structure for data_message
+-- Table structure for oh_project
 -- ----------------------------
-DROP TABLE IF EXISTS `data_message`;
-CREATE TABLE `data_message`  (
+DROP TABLE IF EXISTS `oh_project`;
+CREATE TABLE `oh_project`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `project_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目编码',
+  `project_name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目名称',
+  `project_alias` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '别名',
+  `start_time` date NULL DEFAULT NULL COMMENT '开始时间',
+  `end_time` date NULL DEFAULT NULL COMMENT '结束时间',
+  `director` bigint NULL DEFAULT NULL COMMENT '负责人ID',
+  `director_name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '负责人姓名',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态（1开始2暂停3关闭）',
+  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of oh_project
+-- ----------------------------
+INSERT INTO `oh_project` VALUES (2, 'P1001', '垫脚石计划', '垫脚石', '2022-12-01', NULL, 10001, '王小费', 1, 1, NULL, '2022-12-04 14:09:33', NULL, '2022-12-04 14:09:37');
+
+-- ----------------------------
+-- Table structure for oh_project_log
+-- ----------------------------
+DROP TABLE IF EXISTS `oh_project_log`;
+CREATE TABLE `oh_project_log`  (
   `id` bigint NOT NULL,
-  `client_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端ID',
-  `func_code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
-  `topic` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '主题',
-  `json_str` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
-  `state` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态0未处理1处理2未找到对应的服务类3业务处理失败',
-  `result_msg` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '响应消息',
-  `note` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `creator` bigint NULL DEFAULT NULL,
-  `create_time` datetime(3) NULL DEFAULT NULL,
-  `updater` bigint NULL DEFAULT NULL,
-  `update_time` datetime NULL DEFAULT NULL,
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_01`(`topic` ASC, `client_id` ASC, `func_code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '接口参数数据' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of data_message
--- ----------------------------
-
--- ----------------------------
--- Table structure for online_table_column
--- ----------------------------
-DROP TABLE IF EXISTS `online_table_column`;
-CREATE TABLE `online_table_column`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段名称',
-  `comments` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段描述',
-  `length` int NOT NULL COMMENT '字段长度',
-  `point_length` int NOT NULL COMMENT '小数点',
-  `default_value` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认值',
-  `column_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段类型',
-  `column_pk` tinyint NULL DEFAULT NULL COMMENT '字段主键 0：否  1：是',
-  `column_null` tinyint NULL DEFAULT NULL COMMENT '字段为空 0：否  1：是',
-  `form_item` tinyint NULL DEFAULT NULL COMMENT '表单项 0：否  1：是',
-  `form_required` tinyint NULL DEFAULT NULL COMMENT '表单必填 0：否  1：是',
-  `form_input` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表单控件',
-  `form_default` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表单控件默认值',
-  `form_dict` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表单字典',
-  `grid_item` tinyint NULL DEFAULT NULL COMMENT '列表项 0：否  1：是',
-  `grid_sort` tinyint NULL DEFAULT NULL COMMENT '列表排序 0：否  1：是',
-  `query_item` tinyint NULL DEFAULT NULL COMMENT '查询项 0：否  1：是',
-  `query_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询方式',
-  `query_input` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询控件',
-  `sort` int NULL DEFAULT NULL COMMENT '排序',
-  `table_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'Online表单字段' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of online_table_column
--- ----------------------------
-
--- ----------------------------
--- Table structure for schedule_job
--- ----------------------------
-DROP TABLE IF EXISTS `schedule_job`;
-CREATE TABLE `schedule_job`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `job_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组',
-  `bean_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'spring bean名称',
-  `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行方法',
-  `params` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数',
-  `cron_expression` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
-  `status` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '状态  0：暂停  1：正常',
-  `concurrent` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '是否并发  0：禁止  1：允许',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `project_id` int NULL DEFAULT NULL COMMENT '项目ID',
+  `task_id` bigint NULL DEFAULT NULL COMMENT '任务ID',
+  `operation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作类型',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目、任务操作日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of schedule_job
--- ----------------------------
-INSERT INTO `schedule_job` VALUES (1, '测试任务', 'system', 'testTask', 'run', '123', '0 * * * * ? *', 0, 0, '', 1, 10000, '2023-06-12 21:38:32', 10000, '2023-06-12 21:38:32');
-
--- ----------------------------
--- Table structure for schedule_job_log
--- ----------------------------
-DROP TABLE IF EXISTS `schedule_job_log`;
-CREATE TABLE `schedule_job_log`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `job_id` bigint NOT NULL COMMENT '任务id',
-  `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
-  `job_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务组名',
-  `bean_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'spring bean名称',
-  `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行方法',
-  `params` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数',
-  `status` tinyint UNSIGNED NOT NULL COMMENT '任务状态    0：失败    1：成功',
-  `error` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异常信息',
-  `times` bigint NOT NULL COMMENT '耗时(单位：毫秒)',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_job_id`(`job_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务日志' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of schedule_job_log
+-- Records of oh_project_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sms_log
+-- Table structure for oh_task
 -- ----------------------------
-DROP TABLE IF EXISTS `sms_log`;
-CREATE TABLE `sms_log`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `platform_id` bigint NULL DEFAULT NULL COMMENT '平台ID',
-  `platform` tinyint NULL DEFAULT NULL COMMENT '平台类型',
-  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '手机号',
-  `params` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数',
-  `status` tinyint NULL DEFAULT NULL COMMENT '状态  0：失败   1：成功',
-  `error` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异常信息',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '短信日志' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sms_log
--- ----------------------------
-
--- ----------------------------
--- Table structure for sms_platform
--- ----------------------------
-DROP TABLE IF EXISTS `sms_platform`;
-CREATE TABLE `sms_platform`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `platform` tinyint NULL DEFAULT NULL COMMENT '平台类型  0：阿里云   1：腾讯云   2：七牛云   3：华为云',
-  `sign_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信签名',
-  `template_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信模板',
-  `app_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信应用ID，如：腾讯云等',
-  `sender_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '腾讯云国际短信、华为云等需要',
-  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '接入地址，如：华为云',
-  `access_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'AccessKey',
-  `secret_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SecretKey',
-  `status` tinyint NULL DEFAULT NULL COMMENT '状态  0：禁用   1：启用',
+DROP TABLE IF EXISTS `oh_task`;
+CREATE TABLE `oh_task`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `project_id` int NOT NULL COMMENT '所属项目',
+  `task_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务标题',
+  `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务描述',
+  `task_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1任务2需求3设计4缺陷9其他',
+  `parent_id` bigint NOT NULL DEFAULT 0 COMMENT '父级任务ID',
+  `has_child` tinyint(1) NULL DEFAULT NULL COMMENT '是否有子任务',
+  `start_time` datetime NULL DEFAULT NULL COMMENT '计划开始时间',
+  `end_time` datetime NULL DEFAULT NULL COMMENT '计划结束时间',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '状态（1待办项2进行中3已完成）',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '短信平台' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of sms_platform
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_attachment
--- ----------------------------
-DROP TABLE IF EXISTS `sys_attachment`;
-CREATE TABLE `sys_attachment`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件名称',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件地址',
-  `size` bigint NULL DEFAULT NULL COMMENT '附件大小',
-  `platform` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储平台',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '附件管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_attachment
+-- Records of oh_task
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sys_dict_data
+-- Table structure for oh_task_user
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_dict_data`;
-CREATE TABLE `sys_dict_data`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `dict_type_id` bigint NOT NULL COMMENT '字典类型ID',
-  `dict_label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典标签',
-  `dict_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字典值',
-  `label_class` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签样式',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `sort` int NULL DEFAULT NULL COMMENT '排序',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_dict_data
--- ----------------------------
-INSERT INTO `sys_dict_data` VALUES (1, 1, '停用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (2, 1, '正常', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (3, 2, '男', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (4, 2, '女', '1', 'success', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (5, 2, '未知', '2', 'warning', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (6, 3, '正常', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (7, 3, '停用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (8, 4, '全部数据', '0', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (9, 4, '本机构及子机构数据', '1', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (10, 4, '本机构数据', '2', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (11, 4, '本人数据', '3', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (12, 4, '自定义数据', '4', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (13, 5, '禁用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (14, 5, '启用', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (15, 6, '失败', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (16, 6, '成功', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (17, 7, '登录成功', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (18, 7, '退出成功', '1', 'warning', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (19, 7, '验证码错误', '2', 'danger', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (20, 7, '账号密码错误', '3', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (21, 8, '否', '0', 'primary', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (22, 8, '是', '1', 'danger', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (23, 9, '是', '1', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (24, 9, '否', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (25, 10, '其它', '0', 'info', '', 10, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (26, 10, '查询', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (27, 10, '新增', '2', 'success', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (28, 10, '修改', '3', 'warning', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (29, 10, '删除', '4', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (30, 10, '导出', '5', 'info', '', 4, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (31, 10, '导入', '6', 'info', '', 5, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_data` VALUES (32, 12, '开始', '1', NULL, '', 1, 1, 10000, '2022-11-27 19:23:01', 10000, '2022-11-27 19:23:01');
-INSERT INTO `sys_dict_data` VALUES (33, 12, '暂停', '2', NULL, '', 2, 1, 10000, '2022-11-27 19:23:16', 10000, '2022-11-27 19:23:16');
-INSERT INTO `sys_dict_data` VALUES (34, 12, '关闭', '3', NULL, '', 3, 1, 10000, '2022-11-27 19:23:29', 10000, '2022-11-27 19:23:29');
-INSERT INTO `sys_dict_data` VALUES (35, 13, '默认', 'default', '', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_dict_data` VALUES (36, 13, '系统', 'system', '', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_dict_data` VALUES (37, 14, '暂停', '0', 'danger', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_dict_data` VALUES (38, 14, '正常', '1', 'primary', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_dict_data` VALUES (39, 15, '阿里云', '0', '', '', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_dict_data` VALUES (40, 15, '腾讯云', '1', '', '', 1, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_dict_data` VALUES (41, 15, '七牛云', '2', '', '', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_dict_data` VALUES (42, 15, '华为云', '3', '', '', 3, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-
--- ----------------------------
--- Table structure for sys_dict_type
--- ----------------------------
-DROP TABLE IF EXISTS `sys_dict_type`;
-CREATE TABLE `sys_dict_type`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `dict_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典类型',
-  `dict_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典名称',
-  `dict_source` tinyint NULL DEFAULT 0 COMMENT '来源  0：字典数据  1：动态SQL',
-  `dict_sql` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '动态SQL',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `sort` int NULL DEFAULT NULL COMMENT '排序',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_dict_type
--- ----------------------------
-INSERT INTO `sys_dict_type` VALUES (1, 'post_status', '状态', 0, NULL, '岗位管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (2, 'user_gender', '性别', 0, NULL, '用户管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (3, 'user_status', '状态', 0, NULL, '用户管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (4, 'role_data_scope', '数据范围', 0, NULL, '角色管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (5, 'enable_disable', '状态', 0, NULL, '功能状态：启用 | 禁用 ', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (6, 'success_fail', '状态', 0, NULL, '操作状态：成功 | 失败', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (7, 'login_operation', '操作信息', 0, NULL, '登录管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (8, 'params_type', '系统参数', 0, NULL, '参数管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (9, 'user_super_admin', '用户是否是超管', 0, NULL, '用户是否是超管', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (10, 'log_operate_type', '操作类型', 0, NULL, '操作日志', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_dict_type` VALUES (12, 'project_status', '状态', 0, '', '项目状态', 12, 1, 10000, '2022-11-27 19:19:50', 10000, '2022-11-27 19:19:50');
-INSERT INTO `sys_dict_type` VALUES (13, 'schedule_group', '任务组名', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_dict_type` VALUES (14, 'schedule_status', '状态', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_dict_type` VALUES (15, 'sms_platform', '平台类型', 0, NULL, '短信管理', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-
--- ----------------------------
--- Table structure for sys_log_login
--- ----------------------------
-DROP TABLE IF EXISTS `sys_log_login`;
-CREATE TABLE `sys_log_login`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
-  `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录IP',
-  `address` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录地点',
-  `user_agent` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'User Agent',
-  `status` tinyint NULL DEFAULT NULL COMMENT '登录状态  0：失败   1：成功',
-  `operation` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_log_login
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_log_operate
--- ----------------------------
-DROP TABLE IF EXISTS `sys_log_operate`;
-CREATE TABLE `sys_log_operate`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `module` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模块名',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作名',
-  `req_uri` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求URI',
-  `req_method` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方法',
-  `req_params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '请求参数',
-  `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作IP',
-  `address` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录地点',
-  `user_agent` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'User Agent',
-  `operate_type` tinyint NULL DEFAULT NULL COMMENT '操作类型',
-  `duration` int NOT NULL COMMENT '执行时长',
-  `status` tinyint NULL DEFAULT NULL COMMENT '操作状态  0：失败   1：成功',
-  `user_id` bigint NULL DEFAULT NULL COMMENT '用户ID',
-  `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人',
-  `result_msg` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回消息',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_log_operate
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_menu`;
-CREATE TABLE `sys_menu`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `pid` bigint NULL DEFAULT NULL COMMENT '上级ID，一级菜单为0',
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
-  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单URL',
-  `authority` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)',
-  `type` tinyint NULL DEFAULT NULL COMMENT '类型   0：菜单   1：按钮   2：接口',
-  `open_style` tinyint NULL DEFAULT NULL COMMENT '打开方式   0：内部   1：外部',
-  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
-  `sort` int NULL DEFAULT NULL COMMENT '排序',
+DROP TABLE IF EXISTS `oh_task_user`;
+CREATE TABLE `oh_task_user`  (
+  `id` bigint NOT NULL,
+  `task_id` bigint NOT NULL COMMENT '任务ID',
+  `user_id` bigint NOT NULL COMMENT '人员ID',
+  `nick_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `person_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '人员类型1负责人2协作人',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_pid`(`pid` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 111 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `idx_01`(`task_id`, `user_id`) USING BTREE,
+  INDEX `idx_02`(`task_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务人员表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of sys_menu
+-- Records of oh_task_user
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, 0, '系统管理', '', '', 0, 0, 'icon-Report', 1, 1, 10000, '2023-09-24 20:13:47', 10000, '2023-09-24 20:13:47');
-INSERT INTO `sys_menu` VALUES (2, 1, '系统设置', '', '', 0, 0, 'icon-setting', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-09-24 20:15:58');
-INSERT INTO `sys_menu` VALUES (3, 2, '菜单管理', 'sys/menu/index', NULL, 0, 0, 'icon-menu', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (4, 3, '查看', '', 'sys:menu:list', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (5, 3, '新增', '', 'sys:menu:save', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (6, 3, '修改', '', 'sys:menu:update,sys:menu:info', 1, 0, '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (7, 3, '删除', '', 'sys:menu:delete', 1, 0, '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (8, 2, '数据字典', 'sys/dict/type', '', 0, 0, 'icon-insertrowabove', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (9, 8, '查询', '', 'sys:dict:page', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (10, 8, '新增', '', 'sys:dict:save', 1, 0, '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (11, 8, '修改', '', 'sys:dict:update,sys:dict:info', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (12, 8, '删除', '', 'sys:dict:delete', 1, 0, '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (13, 1, '权限管理', '', '', 0, 0, 'icon-safetycertificate', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-09-24 20:16:08');
-INSERT INTO `sys_menu` VALUES (14, 13, '岗位管理', 'sys/post/index', '', 0, 0, 'icon-solution', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (15, 14, '查询', '', 'sys:post:page', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (16, 14, '新增', '', 'sys:post:save', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (17, 14, '修改', '', 'sys:post:update,sys:post:info', 1, 0, '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (18, 14, '删除', '', 'sys:post:delete', 1, 0, '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (19, 13, '机构管理', 'sys/org/index', '', 0, 0, 'icon-cluster', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (20, 19, '查询', '', 'sys:org:list', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (21, 19, '新增', '', 'sys:org:save', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (22, 19, '修改', '', 'sys:org:update,sys:org:info', 1, 0, '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (23, 19, '删除', '', 'sys:org:delete', 1, 0, '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (24, 13, '角色管理', 'sys/role/index', '', 0, 0, 'icon-team', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (25, 24, '查询', '', 'sys:role:page', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (26, 24, '新增', '', 'sys:role:save,sys:role:menu,sys:org:list', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (27, 24, '修改', '', 'sys:role:update,sys:role:info,sys:role:menu,sys:org:list,sys:user:page', 1, 0, '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (28, 24, '删除', '', 'sys:role:delete', 1, 0, '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (29, 13, '用户管理', 'sys/user/index', '', 0, 0, 'icon-user', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (30, 29, '查询', '', 'sys:user:page', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (31, 29, '新增', '', 'sys:user:save,sys:role:list', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (32, 29, '修改', '', 'sys:user:update,sys:user:info,sys:role:list', 1, 0, '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (33, 29, '删除', '', 'sys:user:delete', 1, 0, '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (34, 1, '应用管理', '', '', 0, 0, 'icon-appstore', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-09-24 20:16:16');
-INSERT INTO `sys_menu` VALUES (35, 2, '附件管理', 'sys/attachment/index', NULL, 0, 0, 'icon-folder-fill', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (36, 35, '查看', '', 'sys:attachment:page', 1, 0, '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (37, 35, '上传', '', 'sys:attachment:save', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (38, 35, '删除', '', 'sys:attachment:delete', 1, 0, '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (39, 1, '日志管理', '', '', 0, 0, 'icon-filedone', 4, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-09-24 20:16:24');
-INSERT INTO `sys_menu` VALUES (40, 39, '登录日志', 'sys/log/login', 'sys:log:login', 0, 0, 'icon-solution', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (41, 29, '导入', '', 'sys:user:import', 1, 0, '', 5, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (42, 29, '导出', '', 'sys:user:export', 1, 0, '', 6, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (43, 2, '参数管理', 'sys/params/index', 'sys:params:all', 0, 0, 'icon-filedone', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (44, 2, '接口文档', '{{apiUrl}}/doc.html', NULL, 0, 1, 'icon-file-text-fill', 10, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (45, 0, '在线开发', '', '', 0, 0, 'icon-cloud', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (46, 45, 'Online表单开发', 'online/table/index', 'online:table:all', 0, 0, 'icon-table', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (47, 39, '操作日志', 'sys/log/operate', 'sys:operate:all', 0, 0, 'icon-file-text', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_menu` VALUES (48, 69, '踢出', '', 'monitor:user:user', 1, 0, '', 1, 1, 10000, '2023-09-25 21:16:17', 10000, '2023-09-25 21:16:17');
-INSERT INTO `sys_menu` VALUES (49, 34, '流程管理', '', '', 0, 0, 'icon-switchuser', 1, 1, 10000, '2023-12-23 16:02:38', NULL, NULL);
-INSERT INTO `sys_menu` VALUES (50, 49, '流程设计', 'workflow/index', 'flow:saveOrUpdate', 0, 0, 'icon-expand', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-07-16 11:54:26');
-INSERT INTO `sys_menu` VALUES (51, 49, '自定义流程', 'workflow/index-list', 'flow:page,flow:delete', 0, 0, 'icon-menu', 0, 1, 10000, '2023-12-18 04:48:26', 10000, '2023-12-18 04:48:26');
-INSERT INTO `sys_menu` VALUES (59, 2, '定时任务', 'quartz/schedule/index', NULL, 0, 0, 'icon-reloadtime', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (60, 59, '查看', '', 'schedule:page', 1, 0, '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (61, 59, '新增', '', 'schedule:save', 1, 0, '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (62, 59, '修改', '', 'schedule:update,schedule:info', 1, 0, '', 2, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (63, 59, '删除', '', 'schedule:delete', 1, 0, '', 3, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (64, 59, '立即运行', '', 'schedule:run', 1, 0, '', 2, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (65, 59, '日志', '', 'schedule:log', 1, 0, '', 4, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO `sys_menu` VALUES (66, 34, '系统监控', '', '', 0, 0, 'icon-Report', 10, 1, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
-INSERT INTO `sys_menu` VALUES (67, 66, '服务监控', 'monitor/server/index', 'monitor:server:all', 0, 0, 'icon-sever', 0, 1, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
-INSERT INTO `sys_menu` VALUES (68, 66, '缓存监控', 'monitor/cache/index', 'monitor:cache:all', 0, 0, 'icon-fund-fill', 2, 1, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
-INSERT INTO `sys_menu` VALUES (69, 66, '用户监控', 'monitor/user/index', 'monitor:user:all', 0, 0, 'icon-user', 3, 1, 10000, '2023-06-12 13:46:12', 10000, '2023-06-12 13:46:12');
-INSERT INTO `sys_menu` VALUES (70, 34, '消息管理', '', '', 0, 0, 'icon-message', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (71, 70, '短信日志', 'message/sms/log/index', 'sms:log', 0, 0, 'icon-detail', 1, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (72, 70, '短信平台', 'message/sms/platform/index', NULL, 0, 0, 'icon-whatsapp', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (73, 72, '查看', '', 'sms:platform:page', 1, 0, '', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (74, 72, '新增', '', 'sms:platform:save', 1, 0, '', 1, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (75, 72, '修改', '', 'sms:platform:update,sms:platform:info', 1, 0, '', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (76, 72, '删除', '', 'sms:platform:delete', 1, 0, '', 3, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO `sys_menu` VALUES (77, 34, '代码生成器', '{{apiUrl}}/sysApi/oh-generator/index.html', '', 0, 1, 'icon-rocket', 2, 1, 10000, '2023-06-12 13:47:50', 10000, '2023-06-24 21:35:28');
-INSERT INTO `sys_menu` VALUES (80, 84, '查看', '', 'sys:app:page,sys:function:page,sys:authority:page', 1, 0, '', 0, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:05:51');
-INSERT INTO `sys_menu` VALUES (81, 84, '新增', '', 'sys:app:save,sys:function:save', 1, 0, '', 1, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:04');
-INSERT INTO `sys_menu` VALUES (82, 84, '修改', '', 'sys:app:update,sys:app:info,sys:function:update,sys:function:info', 1, 0, '', 2, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:24');
-INSERT INTO `sys_menu` VALUES (83, 84, '删除', '', 'sys:app:delete,sys:function:delete', 1, 0, '', 3, 1, 10000, '2023-07-29 12:35:41', 10000, '2024-04-21 20:06:34');
-INSERT INTO `sys_menu` VALUES (84, 34, '接口管理', 'sys/app/index', '', 0, 0, 'icon-drag', 5, 1, 10000, '2023-06-12 13:47:41', 10000, '2024-04-21 20:03:08');
-INSERT INTO `sys_menu` VALUES (85, 2, '版本信息', 'sys/info/index', '', 0, 0, 'icon-menu', 11, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-09-16 16:02:27');
-INSERT INTO `sys_menu` VALUES (86, 85, '查看', '', 'system:info:page', 1, 0, '', 0, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
-INSERT INTO `sys_menu` VALUES (87, 85, '新增', '', 'system:info:save', 1, 0, '', 1, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
-INSERT INTO `sys_menu` VALUES (88, 85, '修改', '', 'system:info:update,system:info:info', 1, 0, '', 2, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
-INSERT INTO `sys_menu` VALUES (89, 85, '删除', '', 'system:info:delete', 1, 0, '', 3, 1, 10000, '2023-08-13 10:35:40', 10000, '2023-08-13 10:35:40');
-INSERT INTO `sys_menu` VALUES (100, 0, '协同办公', '', '', 0, 0, 'icon-insertrowleft', 4, 1, 10000, '2022-11-27 17:21:33', 10000, '2022-11-27 17:21:54');
-INSERT INTO `sys_menu` VALUES (101, 100, '项目信息表', 'team/project/index', NULL, 0, 0, 'icon-menu', 1, 1, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:44:38');
-INSERT INTO `sys_menu` VALUES (102, 101, '查看', '', 'team:project:page', 1, 0, '', 0, 1, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
-INSERT INTO `sys_menu` VALUES (103, 101, '新增', '', 'team:project:save', 1, 0, '', 1, 1, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
-INSERT INTO `sys_menu` VALUES (104, 101, '修改', '', 'team:project:update,team:project:info', 1, 0, '', 2, 1, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
-INSERT INTO `sys_menu` VALUES (105, 101, '删除', '', 'team:project:delete', 1, 0, '', 3, 1, 10000, '2022-11-27 17:27:49', 10000, '2022-11-27 17:27:49');
-INSERT INTO `sys_menu` VALUES (106, 100, '任务表', 'team/task/index', NULL, 0, 0, 'icon-menu', 2, 1, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:44:30');
-INSERT INTO `sys_menu` VALUES (107, 106, '查看', '', 'team:task:page', 1, 0, '', 0, 1, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
-INSERT INTO `sys_menu` VALUES (108, 106, '新增', '', 'team:task:save', 1, 0, '', 1, 1, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
-INSERT INTO `sys_menu` VALUES (109, 106, '修改', '', 'team:task:update,oneHill:task:info', 1, 0, '', 2, 1, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
-INSERT INTO `sys_menu` VALUES (110, 106, '删除', '', 'team:task:delete', 1, 0, '', 3, 1, 10000, '2022-11-27 17:40:53', 10000, '2022-11-27 17:40:53');
 
 -- ----------------------------
--- Table structure for sys_message
+-- Table structure for oh_work_order
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_message`;
-CREATE TABLE `sys_message`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `oh_work_order`;
+CREATE TABLE `oh_work_order`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `order_code` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '工单编码',
+  `order_source` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '工单来源',
+  `report_time` datetime NULL DEFAULT NULL COMMENT '上报时间',
+  `incident_time` datetime NULL DEFAULT NULL COMMENT '事发时间',
+  `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `content` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '内容',
-  `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'success' COMMENT '消息类别success普通消息warning警告error错误',
-  `state` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '状态1未读2已读',
-  `from_id` bigint NULL DEFAULT NULL COMMENT '发送用户ID',
-  `from_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发送人',
-  `to_id` bigint NOT NULL COMMENT '接收用户ID',
-  `to_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收人',
+  `comment` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '内容',
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '位置',
+  `geo_x` decimal(12, 9) NULL DEFAULT NULL COMMENT '经度',
+  `geo_y` decimal(12, 9) NULL DEFAULT NULL COMMENT '纬度',
+  `category` int NULL DEFAULT NULL COMMENT '类别',
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_01`(`from_id` ASC) USING BTREE,
-  INDEX `idx_02`(`to_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统消息' ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `idx_order_code`(`order_code`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '工单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of sys_message
+-- Records of oh_work_order
 -- ----------------------------
-
--- ----------------------------
--- Table structure for sys_org
--- ----------------------------
-DROP TABLE IF EXISTS `sys_org`;
-CREATE TABLE `sys_org`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `pid` bigint NULL DEFAULT NULL COMMENT '上级ID',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '机构名称',
-  `note` varchar(800) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `sort` int NULL DEFAULT NULL COMMENT '排序',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_pid`(`pid` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '机构管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_org
--- ----------------------------
-INSERT INTO `sys_org` VALUES (1, 0, '长沙总部', '公司总部', 1, 1, 10000, '2022-12-03 15:48:18', 10000, '2023-06-27 22:35:57');
-INSERT INTO `sys_org` VALUES (2, 1, '研发部', NULL, 1, 1, 10000, '2022-12-03 15:48:39', 10000, '2022-12-03 15:48:39');
-INSERT INTO `sys_org` VALUES (3, 1, '销售部', NULL, 2, 1, 10000, '2022-12-03 15:48:57', 10000, '2022-12-03 15:48:57');
-INSERT INTO `sys_org` VALUES (4, 1, '设计部', NULL, 3, 1, 10000, '2022-12-08 21:22:48', 10000, '2022-12-08 21:22:48');
-INSERT INTO `sys_org` VALUES (5, 0, '合作伙伴', '重要的外部合作公司重要的外部合作公司重要的外部合作公司重要的外部合作公司重要的外部合作公司重要的外部合作公司重要的外部合作公司', 2, 1, 10000, '2022-12-08 21:31:18', 10000, '2022-12-08 22:06:30');
-INSERT INTO `sys_org` VALUES (6, 5, '阿里哒', '总部在杭州的大公司。', 1, 1, 10000, '2022-12-08 21:31:48', 10000, '2023-06-27 22:52:48');
-INSERT INTO `sys_org` VALUES (7, 5, '长沙银行', NULL, 2, 1, 10000, '2022-12-08 21:32:25', 10000, '2022-12-08 21:32:25');
-INSERT INTO `sys_org` VALUES (8, 1, '财务部', '', 4, 1, 10000, '2022-12-08 22:29:10', 10000, '2022-12-08 22:29:10');
-
--- ----------------------------
--- Table structure for sys_params
--- ----------------------------
-DROP TABLE IF EXISTS `sys_params`;
-CREATE TABLE `sys_params`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `param_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名称',
-  `param_type` tinyint NOT NULL COMMENT '系统参数   0：否   1：是',
-  `param_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数键',
-  `param_value` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数值',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `sys_params_key`(`param_key` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '参数管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_params
--- ----------------------------
-INSERT INTO `sys_params` VALUES (1, '用户登录-验证码开关', 1, 'LOGIN_CAPTCHA', 'true', '是否开启验证码（true：开启，false：关闭）', 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO `sys_params` VALUES (2, '验证码类型', 1, 'CAPTCHA_TYPE', '4', '1-png图形干扰、2-gif类型、3-png圆圈干扰、4-png短线干扰', 1, 10000, '2023-09-09 16:25:06', 10000, '2023-09-09 16:25:06');
-INSERT INTO `sys_params` VALUES (3, '验证码长度', 1, 'CAPTCHA_LENGTH', '4', '验证码长度，默认5个', 1, 10000, '2023-10-04 12:15:07', 10000, '2023-10-04 12:15:07');
-INSERT INTO `sys_params` VALUES (4, 'websocket连接', 1, 'WS_URL', '/dev/socket', 'websocket连接反向代理名称', 1, 10000, '2023-10-06 15:07:55', 10000, '2023-10-06 15:07:55');
-
--- ----------------------------
--- Table structure for sys_post
--- ----------------------------
-DROP TABLE IF EXISTS `sys_post`;
-CREATE TABLE `sys_post`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `post_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位编码',
-  `post_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '岗位名称',
-  `sort` int NULL DEFAULT NULL COMMENT '排序',
-  `status` tinyint NULL DEFAULT NULL COMMENT '状态  0：停用   1：正常',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `sys_post_post_code_IDX`(`post_code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_post
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_role
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role`;
-CREATE TABLE `sys_role`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '角色名称',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `data_scope` tinyint NULL DEFAULT NULL COMMENT '数据范围  0：全部数据  1：本机构及子机构数据  2：本机构数据  3：本人数据  4：自定义数据',
-  `org_id` bigint NULL DEFAULT NULL COMMENT '机构ID',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_org_id`(`org_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_role
--- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '业务员', '', 3, 0, 1, 10000, '2023-07-17 21:16:27', 10000, '2023-07-17 21:16:27');
-
--- ----------------------------
--- Table structure for sys_role_data_scope
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_data_scope`;
-CREATE TABLE `sys_role_data_scope`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `role_id` bigint NULL DEFAULT NULL COMMENT '角色ID',
-  `org_id` bigint NULL DEFAULT NULL COMMENT '机构ID',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_role_id`(`role_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色数据权限' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_role_data_scope
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_menu`;
-CREATE TABLE `sys_role_menu`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `role_id` bigint NULL DEFAULT NULL COMMENT '角色ID',
-  `menu_id` bigint NULL DEFAULT NULL COMMENT '菜单ID',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_role_id`(`role_id` ASC) USING BTREE,
-  INDEX `idx_menu_id`(`menu_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_role_menu
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_user
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user`;
-CREATE TABLE `sys_user`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像',
-  `gender` tinyint NULL DEFAULT NULL COMMENT '性别   0：男   1：女   2：未知',
-  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `org_id` bigint NULL DEFAULT NULL COMMENT '机构ID',
-  `super_admin` tinyint NULL DEFAULT NULL COMMENT '超级管理员   0：否   1：是',
-  `status` tinyint NULL DEFAULT NULL COMMENT '状态  0：停用   1：正常',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10002 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_user
--- ----------------------------
-INSERT INTO `sys_user` VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15');
-INSERT INTO `sys_user` VALUES (10001, 'whx', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '王小费', 'http://localhost:8080/upload/20230717/1671258609873_77092.jpg', 0, 'whx5710@qq.com', '15088885710', 1, 0, 1, 1, 10000, '2023-07-17 21:15:47', 10001, '2023-07-17 21:24:54');
-
--- ----------------------------
--- Table structure for sys_user_post
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user_post`;
-CREATE TABLE `sys_user_post`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `user_id` bigint NULL DEFAULT NULL COMMENT '用户ID',
-  `post_id` bigint NULL DEFAULT NULL COMMENT '岗位ID',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
-  INDEX `idx_post_id`(`post_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户岗位关系' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_user_post
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_user_role
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user_role`;
-CREATE TABLE `sys_user_role`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `role_id` bigint NULL DEFAULT NULL COMMENT '角色ID',
-  `user_id` bigint NULL DEFAULT NULL COMMENT '用户ID',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_role_id`(`role_id` ASC) USING BTREE,
-  INDEX `idx_user_id`(`user_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户角色关系' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_user_role
--- ----------------------------
-INSERT INTO `sys_user_role` VALUES (1, 1, 10001, 1, 10000, '2023-07-17 21:16:57', 10000, '2023-07-17 21:16:57');
-
--- ----------------------------
--- Table structure for sys_version_info
--- ----------------------------
-DROP TABLE IF EXISTS `sys_version_info`;
-CREATE TABLE `sys_version_info`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `version_num` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本号',
-  `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发布内容',
-  `release_time` datetime NOT NULL COMMENT '发布时间',
-  `is_curr_version` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否当前版本',
-  `cover_picture` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面图片',
-  `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_01`(`is_curr_version` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '版本信息' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_version_info
--- ----------------------------
-INSERT INTO `sys_version_info` VALUES (1, '1.0.0', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis-Plus，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 1, '', 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
 
 SET FOREIGN_KEY_CHECKS = 1;
