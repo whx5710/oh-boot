@@ -23,7 +23,7 @@
 			<if test="parentId != null">parent_id = #{parentId},</if>
 			<if test="name != null and name != ''">name = #{name},</if>
 			<if test="note != null and note != ''">note = #{note},</if>
-			<if test="sort != null and sort != 0">sort = #{sort},</if>
+			<if test="sort != null">sort = #{sort},</if>
 			<if test="dbStatus != null">db_status = #{dbStatus},</if>
 			<if test="updater != null and updater != 0">updater = #{updater},</if>
 			update_time = #{updateTime}

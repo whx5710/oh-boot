@@ -45,10 +45,10 @@
 			<if test="name != null and name != ''">name = #{name},</if>
 			<if test="url != null and url != ''">url = #{url},</if>
 			<if test="authority != null and authority != ''">authority = #{authority},</if>
-			<if test="type != null and type != ''">type = #{type},</if>
-			<if test="openStyle != null and openStyle != ''">open_style = #{openStyle},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="openStyle != null">open_style = #{openStyle},</if>
 			<if test="icon != null and icon != ''">icon = #{icon},</if>
-			<if test="sort != null and sort != ''">sort = #{sort},</if>
+			<if test="sort != null">sort = #{sort},</if>
 			<if test="dbStatus != null">db_status = #{dbStatus},</if>
 			<if test="mark != null and mark != ''">mark = #{mark},</if>
 			<if test="updater != null and updater != ''">updater = #{updater},</if>

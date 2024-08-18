@@ -6,20 +6,27 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
+import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.utils.ExceptionUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
+import com.iris.framework.datasource.config.auto.DynamicDataSource;
 import com.iris.system.app.dao.DataMessageDao;
 import com.iris.system.app.entity.DataMsgEntity;
 import com.iris.system.app.query.DataMsgQuery;
 import com.iris.system.app.service.DataMsgService;
 import com.iris.system.app.vo.DataMsgVO;
 import jakarta.annotation.PostConstruct;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -37,10 +44,13 @@ public class DataMsgServiceImpl implements DataMsgService {
 
     private final RedisCache redisCache;
     private final DataMessageDao dataMessageDao;
+    private final DynamicDataSource dynamicDataSource;
 
-    public DataMsgServiceImpl(RedisCache redisCache, DataMessageDao dataMessageDao){
+    public DataMsgServiceImpl(RedisCache redisCache, DataMessageDao dataMessageDao,
+                              DynamicDataSource dynamicDataSource){
         this.redisCache = redisCache;
         this.dataMessageDao = dataMessageDao;
+        this.dynamicDataSource = dynamicDataSource;
     }
 
     /**
@@ -84,16 +94,28 @@ public class DataMsgServiceImpl implements DataMsgService {
     public void saveMsgLog() {
         try {
             String key = RedisKeys.getDataMsgKey();
-            // 每次插入100条
-            int count = 100;
+            // 每次插入800条
+            int count = 800;
+            List<DataMsgEntity> list = new ArrayList<>();
             for (int i = 0; i < count; i++) {
                 MsgEntity msgEntity = (MsgEntity) redisCache.rightPop(key);
                 if (msgEntity == null) {
-                    return;
+                    break;
                 }
                 DataMsgEntity entity = BeanUtil.copyProperties(msgEntity, DataMsgEntity.class);
                 entity.setJsonStr(JsonUtils.toJsonString(msgEntity.getData()));
-                dataMessageDao.insertDataMsg(entity);
+                entity.setCreateTime(LocalDateTime.now());
+                // dataMessageDao.insertDataMsg(entity);
+                list.add(entity);
+            }
+            if(!list.isEmpty()){
+                SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(Constant.SYS_DB);
+                SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
+                DataMessageDao messageDao = sqlSession.getMapper(DataMessageDao.class);
+                list.forEach(messageDao::insertDataMsg);
+                sqlSession.commit();
+                sqlSession.clearCache();
+                sqlSession.close();// 用完关闭
             }
         } catch (Exception e) {
             log.error("保存消息日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
@@ -107,7 +129,7 @@ public class DataMsgServiceImpl implements DataMsgService {
     public void saveLogJob() {
         ScheduledExecutorService scheduledService = ThreadUtil.createScheduledExecutor(1);
         // 每隔30秒，执行一次
-        scheduledService.scheduleWithFixedDelay(this::saveMsgLog, 1, 30, TimeUnit.SECONDS);
+        scheduledService.scheduleWithFixedDelay(this::saveMsgLog, 1, 20, TimeUnit.SECONDS);
 
     }
 

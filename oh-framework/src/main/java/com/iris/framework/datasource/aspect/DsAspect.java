@@ -18,19 +18,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class DsAspect {
     private final static Logger log = LoggerFactory.getLogger(DsAspect.class);
-    //环绕通知-方法
-    @Around("@annotation(ds)")
+
+    //环绕通知-类和方法
+    @Around("@within(ds),@annotation(ds)")
     public Object around(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable{
-        return dynamicDataSource(joinPoint, ds);
-    }
-
-    //环绕通知-类
-    @Around("@within(ds)")
-    public Object aroundClass(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable{
-        return dynamicDataSource(joinPoint, ds);
-    }
-
-    private Object dynamicDataSource(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable {
         String key = ds.value();
         log.debug("切换数据源[{}]", key);
         DynamicDataSourceHolder.setDynamicDataSourceKey(key);
@@ -38,6 +29,7 @@ public class DsAspect {
             return joinPoint.proceed();
         } finally {
             DynamicDataSourceHolder.removeDynamicDataSourceKey();
+            log.debug("清除数据源[{}]", key);
         }
     }
 }

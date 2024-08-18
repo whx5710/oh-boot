@@ -1,8 +1,13 @@
 package com.iris.framework.datasource.config.auto;
 
 import com.iris.framework.datasource.utils.DynamicDataSourceHolder;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
+import javax.sql.DataSource;
 import java.util.Map;
 
 /**
@@ -10,6 +15,9 @@ import java.util.Map;
  * @author 王小费 whx5710@qq.com
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
+
+    @Value("${mybatis.mapper-locations:noPath}")
+    String locationPattern;
 
     public DynamicDataSource(){
 
@@ -32,5 +40,28 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     public void setDefineTargetDataSources(Map<Object, Object> defineTargetDataSources) {
         this.defineTargetDataSources = defineTargetDataSources;
+    }
+
+    /**
+     * 获取数据源
+     * @param key key
+     * @return
+     */
+    public DataSource getDs(String key){
+        return (DataSource) this.defineTargetDataSources.get(key);
+    }
+
+    /**
+     * 获取SqlSessionFactory
+     * @param key key
+     * @return
+     * @throws Exception
+     */
+    public SqlSessionFactory getSqlSessionFactory(String key) throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(getDs(key));
+        // 对应mybatis的xml路径
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(locationPattern));
+        return sqlSessionFactoryBean.getObject();
     }
 }

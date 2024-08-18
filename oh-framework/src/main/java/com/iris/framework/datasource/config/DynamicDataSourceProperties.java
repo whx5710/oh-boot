@@ -1,6 +1,5 @@
 package com.iris.framework.datasource.config;
 
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class DynamicDataSourceProperties {
      @NestedConfigurationProperty
     SysDataSourceProperties sysDataSource = new SysDataSourceProperties();
     /**
-     * 每一个数据源
+     * druid每一个数据源属性
      */
     private Map<String, DataSourceProperty> dynamic = new LinkedHashMap<>();
 

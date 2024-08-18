@@ -34,6 +34,26 @@ public class DataSourceProperty {
      */
     private String publicKey;
 
+    /**
+     * 连接池建立时创建的初始化连接数
+     */
+    private String initialSize;
+    /**
+     * 最小空闲连接数
+     */
+    private String minIdle;
+
+    /**
+     * 最大连接数
+     */
+    private String maxActive;
+    // wall,stat
+    private String filters;
+
+    private String connectionProperties;
+
+    private String poolPreparedStatements;
+
     public Class<? extends DataSource> getType() {
         return type;
     }
@@ -80,5 +100,53 @@ public class DataSourceProperty {
 
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
+    }
+
+    public String getInitialSize() {
+        return initialSize;
+    }
+
+    public void setInitialSize(String initialSize) {
+        this.initialSize = initialSize;
+    }
+
+    public String getMinIdle() {
+        return minIdle;
+    }
+
+    public void setMinIdle(String minIdle) {
+        this.minIdle = minIdle;
+    }
+
+    public String getMaxActive() {
+        return maxActive;
+    }
+
+    public void setMaxActive(String maxActive) {
+        this.maxActive = maxActive;
+    }
+
+    public String getFilters() {
+        return filters;
+    }
+
+    public void setFilters(String filters) {
+        this.filters = filters;
+    }
+
+    public String getConnectionProperties() {
+        return connectionProperties;
+    }
+
+    public void setConnectionProperties(String connectionProperties) {
+        this.connectionProperties = connectionProperties;
+    }
+
+    public String getPoolPreparedStatements() {
+        return poolPreparedStatements;
+    }
+
+    public void setPoolPreparedStatements(String poolPreparedStatements) {
+        this.poolPreparedStatements = poolPreparedStatements;
     }
 }

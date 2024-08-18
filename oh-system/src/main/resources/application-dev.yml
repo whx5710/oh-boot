@@ -31,6 +31,7 @@ oh:
       - /swagger-ui/**
       - /doc.html
       - /upload/**
+      - /druid/**
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
@@ -55,7 +56,7 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
   main:
-    banner-mode: "LOG"  # 关闭 banner CONSOLE、LOG、OFF
+    banner-mode: "OFF"  # 关闭 banner CONSOLE、LOG、OFF
   data:
     redis:
       database: 0
@@ -67,19 +68,16 @@ spring:
       ssl:
         enabled: false
   datasource:
-    hikari:
-      connection-timeout: 30000     # 等待连接池分配链接的最大时长（毫秒），超过这个时长还没有可用的连接则发生 SQLException，默认：30 秒
-      minimum-idle: 2               # 最小空闲连接数
-      maximum-pool-size: 20         # 最大连接数
-      auto-commit: true             # 自动提交
-      idle-timeout: 600000          # 连接超时的最大时长（毫秒），超时则被释放（retired），默认：10 分钟
-      max-lifetime: 1800000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟
-      connection-test-query: SELECT 1
-      pool-name: OhHikariCP
-      prepStmtCacheSize: 300        # 【mysql】在每个连接中缓存的语句的数量。默认值为保守值25。建议将其设置为250-500之间
-      prepStmtCacheSqlLimit: 500    # 缓存的已准备SQL语句的最大长度，默认值是256
-      cachePrepStmts: true          # 缓存开关，如果这里设置为false，上面两个参数都不生效
-      useServerPrepStmts: true      # 较新版本的 MySQL 支持服务器端准备好的语句
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin # 正式环境需配置复杂密码
+      web-stat-filter: # Druid Web统计过滤器配置
+        enabled: true # 启用Web统计过滤器
+        session-stat-enable: true # 启用会话统计功能
+        session-stat-max-count: 1000 # 最大会话统计数量
     sys-data-source:
       enable: true # 系统数据源(sysDb)是否开启，默认不开启
       primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
@@ -93,23 +91,21 @@ spring:
         url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
         password: 123456
-        type: com.zaxxer.hikari.HikariDataSource
-        init:
-          schema: classpath*:db/sys-schema.sql      # 自动运行的建表脚本
-          data: classpath*:db/sys-data.sql          # 自动运行的数据脚本
-          continue-on-error: true                   # 错误是否继续 默认 true
-          separator: ;                              # 分隔符 默认 ;
+        initialSize: 10
+        minIdle: 10
+        maxActive: 100
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
       masterDb:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
         password: 123456
-        type: com.zaxxer.hikari.HikariDataSource
-        init:
-          schema: classpath*:db/project-schema.sql    # 自动运行的建表脚本
-          data: classpath*:db/project-data.sql        # 自动运行的数据脚本
-          continue-on-error: true                     # 错误是否继续 默认 true
-          separator: ;                                # 分隔符 默认 ;
+        initialSize: 10
+        minIdle: 10
+        maxActive: 120
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze

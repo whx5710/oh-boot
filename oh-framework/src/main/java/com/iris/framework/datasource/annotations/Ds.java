@@ -1,5 +1,7 @@
 package com.iris.framework.datasource.annotations;
 
+import com.iris.framework.common.constant.Constant;
+
 import java.lang.annotation.*;
 
 
@@ -12,5 +14,5 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 public @interface Ds {
-    String value();
+    String value() default Constant.MASTER_DB;
 }

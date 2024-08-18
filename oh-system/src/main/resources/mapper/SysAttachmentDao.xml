@@ -15,7 +15,7 @@
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="url != null and url != ''">url = #{url},</if>
             <if test="size != null">size = #{size},</if>
-            <if test="platform != null platform url != ''">platform = #{platform},</if>
+            <if test="platform != null platform != ''">platform = #{platform},</if>
             <if test="dbStatus != null">db_status = #{dbStatus},</if>
             <if test="updater != null">updater = #{updater},</if>
             update_time = #{updateTime}
