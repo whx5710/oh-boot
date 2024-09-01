@@ -37,13 +37,14 @@ public class DynamicDataSourceConfig {
     public DynamicDataSource dynamicDataSource() throws Exception {
         Map<String, DataSourceProperty> map = dynamicDataSourceProperties.getDynamic();
         Map<Object, Object> dataSourceMap = new HashMap<>(map.size());
-        log.debug("初始化动态数据源，数据源{}个", map.size());
+        log.debug("初始化动态数据源，数据源总共{}个", map.size());
         DataSource masterDataSource = null;
         for(Map.Entry<String,DataSourceProperty> item: map.entrySet()){
             DataSourceProperty dataSourceProperty = item.getValue();
             String key = item.getKey();
             // druid,也可以换成其他连接池
             Map<String, String> properties = getDsMap(key, dataSourceProperty);
+            log.debug("初始化{}数据源", key);
             DataSource druidDs = DruidDataSourceFactory.createDataSource(properties);
             dataSourceMap.put(key, druidDs);
             if(key.equals(Constant.MASTER_DB)){
