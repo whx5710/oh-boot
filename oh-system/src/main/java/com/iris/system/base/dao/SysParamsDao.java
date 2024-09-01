@@ -1,7 +1,5 @@
 package com.iris.system.base.dao;
 
-import com.iris.framework.common.constant.Constant;
-import com.iris.framework.datasource.annotations.Ds;
 import com.iris.system.base.entity.SysParamsEntity;
 import com.iris.system.base.query.SysParamsQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +14,6 @@ import java.util.List;
  * 
  */
 @Mapper
-@Ds(Constant.SYS_DB) // 初始化需缓存
 public interface SysParamsDao {
 
     default boolean isExist(String paramKey) {

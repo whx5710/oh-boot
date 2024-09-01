@@ -72,7 +72,7 @@ spring:
         session-stat-enable: true # 启用会话统计功能
         session-stat-max-count: 1000 # 最大会话统计数量
     sys-data-source:
-      enable: true # 系统数据源(sysDb)是否开启，默认不开启
+      enable: false # 系统数据源(sysDb)是否开启;通过前端请求判断是否请求系统数据源，默认不开启
       primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
       prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
         - /sys/

@@ -1,7 +1,5 @@
 package com.iris.system.base.dao;
 
-import com.iris.framework.common.constant.Constant;
-import com.iris.framework.datasource.annotations.Ds;
 import com.iris.system.base.entity.SysMessageEntity;
 import com.iris.system.base.query.SysMessageQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +14,6 @@ import java.util.List;
 * @since 1.0.0 2023-10-10
 */
 @Mapper
-@Ds(Constant.SYS_DB)
 public interface SysMessageDao {
 
     List<SysMessageEntity> getList(SysMessageQuery query);
