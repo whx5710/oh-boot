@@ -11,7 +11,7 @@ server:
     session:
       cookie:
         http-only: true
-oh:
+iris:
   xss:
     enabled: true
     exclude-urls:
@@ -35,28 +35,20 @@ oh:
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
-  project:
-    name: Oh Boot              # 名称
-    appName: oh-boot           # 应用名称
-    version: 1.0.0-SNAPSHOT    # 版本
-    description: 欢迎使用OH-Boot，让开发更简单！ - 王小费【whx5710@qq.com】
-
-storage:
-  enabled: true
-  config:
-    type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
-    domain: http://localhost:8080
-  local:
-    path: /home/whx/图片/upload
-
+  # 文件存储相关
+  storage:
+    enabled: true
+    config:
+      type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
+      domain: http://localhost:8080
+    local:
+      path: /data/图片/upload
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
     multipart:
       max-file-size: 1024MB
       max-request-size: 1024MB
-  main:
-    banner-mode: "OFF"  # 关闭 banner CONSOLE、LOG、OFF
   data:
     redis:
       database: 0
@@ -160,11 +152,9 @@ camunda.bpm:
     # 批量清理运行时间窗口：设置在每天20：00-22：00
     # historyCleanupBatchWindowStartTime: "20:00"
     # historyCleanupBatchWindowEndTime: "22:00"
-
     # 批量清理运行时间窗口：设置在周日19：00-23：00
     sundayHistoryCleanupBatchWindowStartTime: "19:00"
     sundayHistoryCleanupBatchWindowEndTime: "23:00"
-
     historyCleanupDegreeOfParallelism: 4 # 用于历史清理的并行作业数
     historyCleanupBatchSize: 100 # 单次批量处理实例数
   admin-user:
@@ -180,7 +170,6 @@ camunda.bpm:
       allowed-origins: "*"
   filter:
     create: 所有任务
-
 # 日志信息
 logging:
   # 字符集设置
@@ -206,4 +195,3 @@ logging:
       file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz # 滚动日志文件名的模式
       max-history: 10                                     # 要保留的存档日志文件的最大数量
       max-file-size: 100MB                                # 最大文件大小，默认10MB
-

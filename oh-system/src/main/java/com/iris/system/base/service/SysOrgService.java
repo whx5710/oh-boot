@@ -1,6 +1,8 @@
 package com.iris.system.base.service;
 
+import com.iris.framework.common.utils.PageResult;
 import com.iris.system.base.entity.SysOrgEntity;
+import com.iris.system.base.query.SysOrgQuery;
 import com.iris.system.base.vo.SysOrgVO;
 
 import java.util.List;
@@ -13,7 +15,9 @@ import java.util.List;
  */
 public interface SysOrgService {
 
-	List<SysOrgVO> getList();
+	List<SysOrgVO> getList(SysOrgQuery query);
+
+	PageResult<SysOrgVO> page(SysOrgQuery query);
 
 	void save(SysOrgVO vo);
 

@@ -1,5 +1,7 @@
 package com.iris.system.base.controller;
 
+import com.iris.framework.common.utils.PageResult;
+import com.iris.system.base.query.SysOrgQuery;
 import com.iris.system.base.vo.SysOrgVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,7 @@ import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.system.base.convert.SysOrgConvert;
 import com.iris.system.base.entity.SysOrgEntity;
 import com.iris.system.base.service.SysOrgService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +36,19 @@ public class SysOrgController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "列表")
+    @Operation(summary = "树形列表")
     @PreAuthorize("hasAuthority('sys:org:list')")
-    public Result<List<SysOrgVO>> list() {
-        List<SysOrgVO> list = sysOrgService.getList();
+    public Result<List<SysOrgVO>> list(@ParameterObject SysOrgQuery query) {
+        List<SysOrgVO> list = sysOrgService.getList(query);
         return Result.ok(list);
+    }
+
+    @GetMapping("/page")
+    @Operation(summary = "分页")
+    @PreAuthorize("hasAuthority('sys:org:list')")
+    public Result<PageResult<SysOrgVO>> page(@ParameterObject @Valid SysOrgQuery query) {
+        PageResult<SysOrgVO> page = sysOrgService.page(query);
+        return Result.ok(page);
     }
 
     @GetMapping("{id}")

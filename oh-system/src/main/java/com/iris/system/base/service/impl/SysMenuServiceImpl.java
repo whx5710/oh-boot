@@ -1,8 +1,14 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.iris.framework.common.utils.PageResult;
+import com.iris.framework.common.utils.Result;
+import com.iris.system.base.convert.SysUserConvert;
 import com.iris.system.base.dao.SysMenuDao;
 import com.iris.system.base.enums.SuperAdminEnum;
+import com.iris.system.base.query.SysMenuQuery;
 import com.iris.system.base.vo.SysMenuTreeVO;
 import com.iris.system.base.convert.SysMenuConvert;
 import com.iris.system.base.service.SysRoleMenuService;
@@ -12,6 +18,7 @@ import com.iris.framework.common.utils.TreeUtils;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.system.base.entity.SysMenuEntity;
 import com.iris.system.base.service.SysMenuService;
+import com.iris.system.base.vo.SysMenuVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,15 +75,24 @@ public class SysMenuServiceImpl implements SysMenuService {
         sysRoleMenuService.deleteByMenuId(id);
     }
 
+    /**
+     * 菜单类别-分页
+     * @param query 菜单
+     * @return r
+     */
     @Override
-    public List<SysMenuTreeVO> getMenuList(Integer type) {
-        List<SysMenuEntity> menuList = sysMenuDao.getMenuList(type);
-        return SysMenuConvert.INSTANCE.convertList(menuList);
+    public PageResult<SysMenuVO> page(SysMenuQuery query) {
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<SysMenuEntity> list = sysMenuDao.getMenuList(query);
+        PageInfo<SysMenuEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(SysMenuConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
-    public List<SysMenuTreeVO> getMenuTreeList(Integer type) {
-        return TreeUtils.build(getMenuList(type), Constant.ROOT);
+    public List<SysMenuTreeVO> getMenuTreeList(SysMenuQuery query) {
+        List<SysMenuEntity> menuList = sysMenuDao.getMenuList(query);
+        return TreeUtils.build(SysMenuConvert.INSTANCE.convertTreeList(menuList),
+                query.getParentId()==null?Constant.ROOT:query.getParentId());
     }
 
     @Override
@@ -85,12 +101,13 @@ public class SysMenuServiceImpl implements SysMenuService {
 
         // 系统管理员，拥有最高权限
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
-            menuList = sysMenuDao.getMenuList(type);
+            SysMenuQuery query = new SysMenuQuery();
+            query.setType(type);
+            menuList = sysMenuDao.getMenuList(query);
         } else {
             menuList = sysMenuDao.getUserMenuList(user.getId(), type);
         }
-
-        return TreeUtils.build(SysMenuConvert.INSTANCE.convertList(menuList));
+        return TreeUtils.build(SysMenuConvert.INSTANCE.convertTreeList(menuList));
     }
 
     @Override

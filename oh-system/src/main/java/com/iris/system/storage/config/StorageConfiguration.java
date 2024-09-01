@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(StorageProperties.class)
-@ConditionalOnProperty(prefix = "storage", value = "enabled")
+@ConditionalOnProperty(prefix = "iris.storage", value = "enabled")
 public class StorageConfiguration {
 
     @Bean

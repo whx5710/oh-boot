@@ -1,6 +1,5 @@
 package com.iris.api.controller;
 
-import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,6 +8,7 @@ import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
+import com.iris.framework.common.utils.IrisTools;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
@@ -48,13 +48,11 @@ public class OpenApiController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(OpenApiController.class);
 
     // 1直接保存 2使用MQ异步保存
-    @Value("${oh.open-api.type:1}")
+    @Value("${iris.open-api.type:1}")
     private int apiType;
 
     @Resource
     KafkaTemplate<String, String> kafkaTemplate;
-
-    Snowflake snowflake = IdUtil.getSnowflake(1, 1);
 
 
     /**
@@ -82,7 +80,7 @@ public class OpenApiController extends BaseController {
             if (!isAsync || apiType == 1) { // 直接业务处理
                 return jobService.handle(msgEntity);
             }else{
-                msgEntity.setId(snowflake.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
+                msgEntity.setId(IrisTools.snowFlakeId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
                     CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(Constant.TOPIC_SUBMIT, JsonUtils.toJsonString(msgEntity));
                     //执行成功回调

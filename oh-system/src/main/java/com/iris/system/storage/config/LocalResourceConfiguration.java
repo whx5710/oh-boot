@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 
  */
 @Configuration
-@ConditionalOnProperty(prefix = "storage", value = "enabled")
+@ConditionalOnProperty(prefix = "iris.storage", value = "enabled")
 public class LocalResourceConfiguration implements WebMvcConfigurer {
     @Resource
     private StorageProperties properties;

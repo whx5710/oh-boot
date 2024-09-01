@@ -2,6 +2,7 @@ package com.iris.system.base.convert;
 
 import com.iris.system.base.vo.SysMenuTreeVO;
 import com.iris.system.base.entity.SysMenuEntity;
+import com.iris.system.base.vo.SysMenuVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,6 +17,8 @@ public interface SysMenuConvert {
 
     SysMenuTreeVO convert(SysMenuEntity entity);
 
-    List<SysMenuTreeVO> convertList(List<SysMenuEntity> list);
+    List<SysMenuTreeVO> convertTreeList(List<SysMenuEntity> list);
+
+    List<SysMenuVO> convertList(List<SysMenuEntity> list);
 
 }

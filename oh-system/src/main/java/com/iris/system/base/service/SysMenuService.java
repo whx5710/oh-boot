@@ -1,8 +1,12 @@
 package com.iris.system.base.service;
 
+import com.iris.framework.common.utils.PageResult;
+import com.iris.framework.common.utils.Result;
 import com.iris.system.base.entity.SysMenuEntity;
+import com.iris.system.base.query.SysMenuQuery;
 import com.iris.system.base.vo.SysMenuTreeVO;
 import com.iris.framework.security.user.UserDetail;
+import com.iris.system.base.vo.SysMenuVO;
 
 import java.util.List;
 import java.util.Set;
@@ -25,17 +29,17 @@ public interface SysMenuService {
 	/**
 	 * 菜单列表
 	 *
-	 * @param type 菜单类型
+	 * @param query 菜单
 	 */
-	List<SysMenuTreeVO> getMenuList(Integer type);
+	PageResult<SysMenuVO> page(SysMenuQuery query);
 
 
 	/**
 	 * 菜单列表
 	 *
-	 * @param type 菜单类型
+	 * @param query 菜单类型
 	 */
-	List<SysMenuTreeVO> getMenuTreeList(Integer type);
+	List<SysMenuTreeVO> getMenuTreeList(SysMenuQuery query);
 
 	/**
 	 * 用户菜单列表

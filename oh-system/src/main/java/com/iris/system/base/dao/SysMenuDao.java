@@ -1,6 +1,7 @@
 package com.iris.system.base.dao;
 
 import com.iris.system.base.entity.SysMenuEntity;
+import com.iris.system.base.query.SysMenuQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,9 +20,9 @@ public interface SysMenuDao {
 	/**
 	 * 查询所有菜单列表
 	 *
-	 * @param type 菜单类型
+	 * @param query params
 	 */
-	List<SysMenuEntity> getMenuList(@Param("type") Integer type);
+	List<SysMenuEntity> getMenuList(@Param("query") SysMenuQuery query);
 
 	/**
 	 * 查询用户菜单列表

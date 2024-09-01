@@ -15,6 +15,7 @@ import java.util.Date;
  * 
  */
 public abstract class StorageService {
+
     public StorageProperties properties;
 
     /**

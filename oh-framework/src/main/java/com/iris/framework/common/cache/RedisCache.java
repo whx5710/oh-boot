@@ -1,7 +1,6 @@
 package com.iris.framework.common.cache;
 
-import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Value;
+import com.iris.framework.common.config.properties.SecurityProperties;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -20,18 +19,15 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class RedisCache {
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
 
-    /**
-     * 默认过期时长为12小时，单位：秒
-     */
-    @Value("${oh.security.access-token-expire:43200}")
-    public long accessTokenExpire = 60 * 60 * 12L;
-    /**
-     * 过期时长为6小时，单位：秒
-     */
-    public final static long HOUR_SIX_EXPIRE = 60 * 60 * 6L;
+    private final SecurityProperties securityProperties;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public RedisCache(SecurityProperties securityProperties, RedisTemplate<String, Object> redisTemplate){
+        this.securityProperties = securityProperties;
+        this.redisTemplate = redisTemplate;
+    }
+
     /**
      * 不设置过期时长
      */
@@ -51,7 +47,7 @@ public class RedisCache {
     }
 
     public void set(String key, Object value) {
-        set(key, value, accessTokenExpire);
+        set(key, value, securityProperties.getAccessTokenExpire());
     }
 
     public Object get(String key, long expire) {
@@ -116,7 +112,7 @@ public class RedisCache {
     }
 
     public void hMSet(String key, Map<String, Object> map) {
-        hMSet(key, map, accessTokenExpire);
+        hMSet(key, map, securityProperties.getAccessTokenExpire());
     }
 
     public void hMSet(String key, Map<String, Object> map, long expire) {
@@ -128,7 +124,7 @@ public class RedisCache {
     }
 
     public void hSet(String key, String field, Object value) {
-        hSet(key, field, value, accessTokenExpire);
+        hSet(key, field, value, securityProperties.getAccessTokenExpire());
     }
 
     public void hSet(String key, String field, Object value, long expire) {
@@ -161,7 +157,7 @@ public class RedisCache {
     }
 
     public void leftPush(String key, Object value) {
-        leftPush(key, value, accessTokenExpire);
+        leftPush(key, value, securityProperties.getAccessTokenExpire());
     }
 
     public void leftPush(String key, Object value, long expire) {

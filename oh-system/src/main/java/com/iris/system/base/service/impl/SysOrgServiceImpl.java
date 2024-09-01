@@ -1,7 +1,11 @@
 package com.iris.system.base.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.iris.framework.common.utils.PageResult;
 import com.iris.system.base.dao.SysOrgDao;
 import com.iris.system.base.dao.SysUserDao;
+import com.iris.system.base.query.SysOrgQuery;
 import com.iris.system.base.vo.SysOrgVO;
 import com.iris.system.base.convert.SysOrgConvert;
 import com.iris.framework.common.exception.ServerException;
@@ -12,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 机构管理
@@ -33,16 +35,29 @@ public class SysOrgServiceImpl implements SysOrgService {
 	}
 
 	@Override
-	public List<SysOrgVO> getList() {
-		Map<String, Object> params = new HashMap<>();
+	public List<SysOrgVO> getList(SysOrgQuery query) {
 
 		// 数据权限
 		// params.put(Constant.DATA_SCOPE, getDataScope("t1", "id"));
 
 		// 机构列表
-		List<SysOrgEntity> entityList = sysOrgDao.getList(params);
+		List<SysOrgEntity> entityList = sysOrgDao.getList(query);
 
 		return TreeUtils.build(SysOrgConvert.INSTANCE.convertList(entityList));
+	}
+
+	/**
+	 * 机构分页列表
+	 * @param query 参数
+	 * @return e
+	 */
+	@Override
+	public PageResult<SysOrgVO> page(SysOrgQuery query) {
+		PageHelper.startPage(query.getPage(), query.getLimit());
+		// 机构列表
+		List<SysOrgEntity> list = sysOrgDao.getList(query);
+		PageInfo<SysOrgEntity> pageInfo = new PageInfo<>(list);
+		return new PageResult<>(SysOrgConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
 	}
 
 	@Override

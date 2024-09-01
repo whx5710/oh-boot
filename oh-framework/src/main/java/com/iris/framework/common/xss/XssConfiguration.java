@@ -16,7 +16,7 @@ import org.springframework.util.PathMatcher;
  */
 @Configuration
 @EnableConfigurationProperties(XssProperties.class)
-@ConditionalOnProperty(prefix = "oh.xss", value = "enabled")
+@ConditionalOnProperty(prefix = "iris.xss", value = "enabled")
 public class XssConfiguration {
 
     @Bean

@@ -37,7 +37,7 @@ public class KafkaConsumer {
      * 默认不监听，可通过调用方法开启监听
      * @param message 消息
      */
-    @KafkaListener(id = Constant.OPEN_API, topics = Constant.TOPIC_SUBMIT, autoStartup = "${oh.open-api.auto-start-up:false}", groupId = "open-api-group-id")
+    @KafkaListener(id = Constant.OPEN_API, topics = Constant.TOPIC_SUBMIT, autoStartup = "${iris.open-api.auto-start-up:false}", groupId = "open-api-group-id")
     public void openApiJobConsume(String message, Acknowledgment ack) {
         MsgEntity dataMsg = JsonUtils.parseObject(message, MsgEntity.class);
         dataMsg.setTopic(Constant.TOPIC_SUBMIT);

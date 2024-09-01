@@ -2,8 +2,6 @@ package com.iris.system.base.entity;
 
 import com.iris.framework.common.entity.BaseEntity;
 
-import java.util.Objects;
-
 /**
  * 菜单管理
  *
@@ -19,6 +17,10 @@ public class SysMenuEntity extends BaseEntity {
 	 * 菜单名称
 	 */
 	private String name;
+	/**
+	 * 上级名称
+	 */
+	private String parentName;
 	/**
 	 * 菜单URL
 	 */
@@ -62,6 +64,14 @@ public class SysMenuEntity extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 	public String getUrl() {
@@ -120,15 +130,4 @@ public class SysMenuEntity extends BaseEntity {
 		this.mark = mark;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysMenuEntity that)) return false;
-		return Objects.equals(getParentId(), that.getParentId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getUrl(), that.getUrl()) && Objects.equals(getAuthority(), that.getAuthority()) && Objects.equals(getType(), that.getType()) && Objects.equals(getOpenStyle(), that.getOpenStyle()) && Objects.equals(getIcon(), that.getIcon()) && Objects.equals(getSort(), that.getSort());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getParentId(), getName(), getUrl(), getAuthority(), getType(), getOpenStyle(), getIcon(), getSort());
-	}
 }

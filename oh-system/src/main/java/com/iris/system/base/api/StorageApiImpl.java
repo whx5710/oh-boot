@@ -14,6 +14,7 @@ import java.io.InputStream;
  */
 @Component
 public class StorageApiImpl implements StorageApi {
+
     private final StorageService storageService;
 
     public StorageApiImpl(StorageService storageService) {

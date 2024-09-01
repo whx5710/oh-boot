@@ -1,9 +1,11 @@
 package com.iris.system.base.controller;
 
+import com.iris.framework.common.utils.PageResult;
 import com.iris.system.base.enums.MenuTypeEnum;
+import com.iris.system.base.query.SysMenuQuery;
 import com.iris.system.base.vo.SysMenuTreeVO;
+import com.iris.system.base.vo.SysMenuVO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import com.iris.framework.common.constant.Constant;
@@ -15,6 +17,7 @@ import com.iris.framework.security.user.UserDetail;
 import com.iris.system.base.convert.SysMenuConvert;
 import com.iris.system.base.entity.SysMenuEntity;
 import com.iris.system.base.service.SysMenuService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,11 +61,17 @@ public class SysMenuController {
 
     @GetMapping("listTree")
     @Operation(summary = "菜单列表-树形")
-    @Parameter(name = "type", description = "菜单类型 0：菜单 1：按钮  2：接口  null：全部")
     @PreAuthorize("hasAuthority('sys:menu:list')")
-    public Result<List<SysMenuTreeVO>> listTree(Integer type) {
-        List<SysMenuTreeVO> list = sysMenuService.getMenuTreeList(type);
+    public Result<List<SysMenuTreeVO>> listTree(@ParameterObject SysMenuQuery query) {
+        List<SysMenuTreeVO> list = sysMenuService.getMenuTreeList(query);
         return Result.ok(list);
+    }
+
+    @GetMapping("page")
+    @Operation(summary = "菜单列表")
+    @PreAuthorize("hasAuthority('sys:menu:list')")
+    public Result<PageResult<SysMenuVO>> page(@ParameterObject SysMenuQuery query) {
+        return Result.ok(sysMenuService.page(query));
     }
 
     @GetMapping("{id}")

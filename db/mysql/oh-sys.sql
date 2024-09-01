@@ -728,7 +728,7 @@ INSERT INTO `sys_menu` VALUES (48, 69, '踢出', '', 'monitor:user:user', 1, 0, 
 INSERT INTO `sys_menu` VALUES (49, 34, '流程管理', 'sys/flow', '', 0, 0, 'icon-switchuser', 1, 1, NULL, 10000, '2023-12-23 16:02:38', 10000, '2024-06-29 11:27:43');
 INSERT INTO `sys_menu` VALUES (50, 49, '流程设计', 'workflow/index', 'flow:saveOrUpdate', 0, 0, 'icon-expand', 0, 1, NULL, 10000, '2023-06-12 13:47:41', 10000, '2023-07-16 11:54:26');
 INSERT INTO `sys_menu` VALUES (51, 49, '自定义流程', 'workflow/index-list', 'flow:page,flow:delete', 0, 0, 'icon-menu', 0, 1, NULL, 10000, '2023-12-18 04:48:26', 10000, '2023-12-18 04:48:26');
-INSERT INTO `sys_menu` VALUES (52, 66, '数据库监控', 'http://localhost:8080/druid/login.html', '', 0, 1, 'icon-Console-SQL', 1, 1, '', 10000, '2024-08-18 13:40:48', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (52, 66, '数据库监控', 'http://localhost:8080/druid/login.html', '', 0, 0, 'icon-Console-SQL', 1, 1, '', 10000, '2024-08-18 13:40:48', NULL, NULL);
 INSERT INTO `sys_menu` VALUES (59, 2, '定时任务', 'quartz/schedule/index', NULL, 0, 0, 'icon-reloadtime', 0, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO `sys_menu` VALUES (60, 59, '查看', '', 'schedule:page', 1, 0, '', 0, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO `sys_menu` VALUES (61, 59, '新增', '', 'schedule:save', 1, 0, '', 1, 1, NULL, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');

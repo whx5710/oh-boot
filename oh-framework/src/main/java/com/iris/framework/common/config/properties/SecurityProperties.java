@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@ConfigurationProperties(prefix = "oh.security")
+@ConfigurationProperties(prefix = "iris.security")
 public class SecurityProperties {
 
     /**

@@ -56,7 +56,7 @@ public class SysAuthServiceImpl implements SysAuthService {
      * 刷新令牌过期时间，单位：秒
      * 1天
      */
-    @Value("${oh.security.access-token-expire:259200}")
+    @Value("${iris.security.access-token-expire:259200}")
     public int refreshTokenExpire = 60 * 60 * 24;
 
     public SysAuthServiceImpl(SysCaptchaService sysCaptchaService, TokenStoreCache tokenStoreCache,

@@ -11,7 +11,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-@ConfigurationProperties(prefix = "oh.xss")
+@ConfigurationProperties(prefix = "iris.xss")
 public class XssProperties {
     /**
      * 是否开启 XSS

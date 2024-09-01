@@ -1,6 +1,8 @@
 package com.iris.framework.common.utils;
 
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.iris.framework.common.constant.Constant;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +17,9 @@ import java.util.Base64;
  *
  */
 public class IrisTools {
+
+    // 参数1为终端ID，参数2为数据中心ID
+    static Snowflake snowflake = IdUtil.getSnowflake(1, 1);
 
     /**
      * Base64 编码
@@ -41,6 +46,14 @@ public class IrisTools {
      */
     public static String generator() {
         return UUID.fastUUID().toString(true);
+    }
+
+    /**
+     * 生成雪花算法ID
+     * @return
+     */
+    public static long snowFlakeId() {
+        return snowflake.nextId();
     }
 
     /**
