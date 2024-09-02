@@ -50,11 +50,18 @@ public class ScheduleConfig {
         return getSchedulerFactoryBean((DynamicDataSource) dataSource, prop);
     }
 
+    /**
+     * 数据源
+     * 根据实际情况使用数据源
+     * @param dataSource
+     * @param prop
+     * @return
+     */
     private static SchedulerFactoryBean getSchedulerFactoryBean(DynamicDataSource dataSource, Properties prop) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
-        // 切换数据源，使用系统内置数据源
-        factory.setDataSource((DataSource) dataSource.getDefineTargetDataSources().get(Constant.SYS_DB));
+        // 切换数据源，使用系统内置数据源；根据实际情况使用数据源
+        factory.setDataSource((DataSource) dataSource.getDynamicDataSources().get(Constant.SYS_DB));
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);

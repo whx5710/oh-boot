@@ -19,27 +19,28 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     @Value("${mybatis.mapper-locations:noPath}")
     String locationPattern;
 
+    private Map<Object, Object> dynamicDataSources;
+
     public DynamicDataSource(){
 
     }
 
-    public DynamicDataSource(Map<Object, Object> defineTargetDataSources){
-        this.defineTargetDataSources = defineTargetDataSources;
+    public DynamicDataSource(Map<Object, Object> dynamicDataSources){
+        this.dynamicDataSources = dynamicDataSources;
     }
 
-    private Map<Object, Object> defineTargetDataSources;
 
     @Override
     protected Object determineCurrentLookupKey() {
         return DynamicDataSourceHolder.getDynamicDataSourceKey();
     }
 
-    public Map<Object, Object> getDefineTargetDataSources() {
-        return defineTargetDataSources;
+    public Map<Object, Object> getDynamicDataSources() {
+        return dynamicDataSources;
     }
 
-    public void setDefineTargetDataSources(Map<Object, Object> defineTargetDataSources) {
-        this.defineTargetDataSources = defineTargetDataSources;
+    public void setDynamicDataSources(Map<Object, Object> defineTargetDataSources) {
+        this.dynamicDataSources = defineTargetDataSources;
     }
 
     /**
@@ -48,7 +49,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * @return
      */
     public DataSource getDs(String key){
-        return (DataSource) this.defineTargetDataSources.get(key);
+        return (DataSource) this.dynamicDataSources.get(key);
     }
 
     /**

@@ -38,7 +38,7 @@
         <pagehelper.version>2.1.0</pagehelper.version>
         <!-- 连接池 -->
         <druid.version>1.2.23</druid.version>
-        <!-- 面先切面 -->
+        <!-- 面向切面 -->
         <aspectj.version>1.9.22.1</aspectj.version>
         <!-- Nacos 配置中心 -->
         <nacos.version>0.3.0-RC</nacos.version>
