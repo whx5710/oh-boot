@@ -51,8 +51,6 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <!-- excel 工具 -->
         <easyexcel.version>4.0.2</easyexcel.version>
-        <!-- svg 图片转换 -->
-        <svg.trans.version>1.17</svg.trans.version>
         <!-- camunda 工作流相关 -->
         <camunda.version>7.20.0</camunda.version>
     </properties>
@@ -142,19 +140,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
-            </dependency>
-            <!-- 通用SVG代码转换器 -->
-            <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-transcoder -->
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-transcoder</artifactId>
-                <version>${svg.trans.version}</version>
-            </dependency>
-            <!-- svg图片转换 https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-codec</artifactId>
-                <version>${svg.trans.version}</version>
             </dependency>
             <!-- 工作流 https://mvnrepository.com/artifact/org.camunda.bpm.springboot/camunda-bpm-spring-boot-starter -->
             <dependency>

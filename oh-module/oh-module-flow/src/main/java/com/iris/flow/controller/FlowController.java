@@ -1,30 +1,24 @@
 package com.iris.flow.controller;
 
-import com.iris.framework.common.exception.ServerException;
 import com.iris.flow.convert.FlowConvert;
 import com.iris.flow.entity.FlowEntity;
 import com.iris.flow.query.FlowQuery;
 import com.iris.flow.service.FlowService;
 import com.iris.flow.service.ProcessHandlerService;
-import com.iris.flow.utils.BpmnUtils;
 import com.iris.flow.vo.FlowVO;
 import com.iris.flow.vo.ProcessVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.Result;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.batik.transcoder.TranscoderException;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,22 +83,6 @@ public class FlowController {
         flowService.delete(idList);
 
         return Result.ok();
-    }
-
-    /**
-     * 根据流程code，将svg图片转成png图片
-     * @param keyCode
-     * @param response
-     */
-    @GetMapping("/svg2png/{keyCode}")
-    public void svg2png(@PathVariable("keyCode") String keyCode, HttpServletResponse response){
-        FlowEntity flowEntity = flowService.getByKey(keyCode);
-        try {
-            response.setContentType(MediaType.IMAGE_PNG_VALUE);
-            BpmnUtils.convertToPng(flowEntity.getSvgStr(), response.getOutputStream());
-        } catch (TranscoderException | IOException e) {
-            throw new ServerException(e.getMessage());
-        }
     }
 
     @GetMapping("/listProcessByKey/{processCode}")
