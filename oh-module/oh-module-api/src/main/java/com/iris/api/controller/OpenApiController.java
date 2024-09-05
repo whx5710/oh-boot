@@ -104,7 +104,7 @@ public class OpenApiController extends BaseController {
         }
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
+    /*public static void main(String[] args) throws JsonProcessingException {
         String url = "http://localhost:8080/openApi/submit";
         Map<String,String> head = new HashMap<>();
         head.put(Constant.CLIENT_ID,"C0001");
@@ -127,5 +127,5 @@ public class OpenApiController extends BaseController {
             System.out.println(str);
         }
         System.out.println("结束");
-    }
+    }*/
 }
