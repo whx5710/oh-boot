@@ -25,14 +25,14 @@ public class SystemDataSourceInterceptor {
     private final Logger log = LoggerFactory.getLogger(SystemDataSourceInterceptor.class);
 
     // 匹配系统管理相关包名
-    @Before("execution(* com.iris.system..dao.*Dao.*(..))")
+    @Before("execution(* com.iris.system..mapper.*Mapper.*(..))")
     public void dynamicSetDataSource(JoinPoint joinPoint) throws Exception {
         Object target = joinPoint.getTarget();
         Class<?> clazz = target.getClass();
         if(Proxy.isProxyClass(target.getClass())) {
             Type[] types = AopUtils.getTargetClass(target).getGenericInterfaces();
             String className = types[0].getTypeName();
-            if(!className.contains(".dao.")){
+            if(!className.contains(".mapper.")){
                 log.error("数据源切面拦截解析包路径错误，解析得到类名：{}", className);
                 return;
             }

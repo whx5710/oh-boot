@@ -3,7 +3,7 @@ package com.iris.team.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.team.convert.OhProjectLogConvert;
-import com.iris.team.dao.OhProjectLogDao;
+import com.iris.team.mapper.OhProjectLogMapper;
 import com.iris.team.entity.OhProjectLogEntity;
 import com.iris.team.query.OhProjectLogQuery;
 import com.iris.team.service.OhProjectLogService;
@@ -23,16 +23,16 @@ import java.util.List;
 @Service
 public class OhProjectLogServiceImpl implements OhProjectLogService {
 
-    private final OhProjectLogDao ohProjectLogDao;
+    private final OhProjectLogMapper ohProjectLogMapper;
 
-    public OhProjectLogServiceImpl(OhProjectLogDao ohProjectLogDao){
-        this.ohProjectLogDao = ohProjectLogDao;
+    public OhProjectLogServiceImpl(OhProjectLogMapper ohProjectLogMapper){
+        this.ohProjectLogMapper = ohProjectLogMapper;
     }
 
     @Override
     public PageResult<OhProjectLogVO> page(OhProjectLogQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<OhProjectLogEntity> list = ohProjectLogDao.getList(query);
+        List<OhProjectLogEntity> list = ohProjectLogMapper.getList(query);
         PageInfo<OhProjectLogEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(OhProjectLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,14 +40,14 @@ public class OhProjectLogServiceImpl implements OhProjectLogService {
     @Override
     public void save(OhProjectLogVO vo) {
         OhProjectLogEntity entity = OhProjectLogConvert.INSTANCE.convert(vo);
-        ohProjectLogDao.save(entity);
+        ohProjectLogMapper.save(entity);
     }
 
     @Override
     public void update(OhProjectLogVO vo) {
         OhProjectLogEntity entity = OhProjectLogConvert.INSTANCE.convert(vo);
 
-        ohProjectLogDao.updateById(entity);
+        ohProjectLogMapper.updateById(entity);
     }
 
     @Override
@@ -57,13 +57,13 @@ public class OhProjectLogServiceImpl implements OhProjectLogService {
             OhProjectLogEntity param = new OhProjectLogEntity();
             param.setId(id);
             param.setDbStatus(0);
-            ohProjectLogDao.updateById(param);
+            ohProjectLogMapper.updateById(param);
         });
     }
 
     @Override
     public OhProjectLogEntity getById(Long id) {
-        return ohProjectLogDao.getById(id);
+        return ohProjectLogMapper.getById(id);
     }
 
 }

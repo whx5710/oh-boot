@@ -7,7 +7,7 @@ import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.app.convert.DataAppConvert;
-import com.iris.system.app.dao.DataAppDao;
+import com.iris.system.app.mapper.DataAppMapper;
 import com.iris.system.app.entity.DataAppEntity;
 import com.iris.system.app.query.DataAppQuery;
 import com.iris.system.app.query.DataFunctionAuthorityQuery;
@@ -27,16 +27,16 @@ import java.util.List;
 @Service
 public class DataAppServiceImpl implements DataAppService {
 
-    private final DataAppDao dataAppDao;
+    private final DataAppMapper dataAppMapper;
 
-    public DataAppServiceImpl(DataAppDao dataAppDao){
-        this.dataAppDao = dataAppDao;
+    public DataAppServiceImpl(DataAppMapper dataAppMapper){
+        this.dataAppMapper = dataAppMapper;
     }
 
     @Override
     public PageResult<DataAppDTO> page(DataAppQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<DataAppEntity> list = dataAppDao.getList(query);
+        List<DataAppEntity> list = dataAppMapper.getList(query);
         PageInfo<DataAppEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(DataAppConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -47,18 +47,18 @@ public class DataAppServiceImpl implements DataAppService {
         AssertUtils.isBlank(entity.getClientId(), "客户端ID");
         DataAppQuery params = new DataAppQuery();
         params.setClientId(vo.getClientId());
-        List<DataAppEntity> list = dataAppDao.getList(params);
+        List<DataAppEntity> list = dataAppMapper.getList(params);
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("客户端ID已存在");
         }
-        dataAppDao.insertDataApp(entity);
+        dataAppMapper.insertDataApp(entity);
     }
 
     @Override
     public void update(DataAppDTO vo) {
         DataAppEntity entity = DataAppConvert.INSTANCE.convert(vo);
 
-        dataAppDao.updateById(entity);
+        dataAppMapper.updateById(entity);
     }
 
     @Override
@@ -68,13 +68,13 @@ public class DataAppServiceImpl implements DataAppService {
             DataAppEntity params = new DataAppEntity();
             params.setId(id);
             params.setDbStatus(0);
-            dataAppDao.updateById(params);
+            dataAppMapper.updateById(params);
         });
     }
 
     @Override
     public List<DataAppDTO> listAuthority(DataFunctionAuthorityQuery params) {
-        return dataAppDao.listAuthority(params);
+        return dataAppMapper.listAuthority(params);
     }
 
     /**
@@ -87,13 +87,13 @@ public class DataAppServiceImpl implements DataAppService {
         AssertUtils.isBlank(clientId,"客户端ID");
         DataAppQuery params = new DataAppQuery();
         params.setClientId(clientId);
-        List<DataAppEntity> list = dataAppDao.getList(params);
+        List<DataAppEntity> list = dataAppMapper.getList(params);
         DataAppEntity app = list.getFirst();
         return DataAppConvert.INSTANCE.convert(app);
     }
 
     @Override
     public DataAppEntity getById(Long id) {
-        return dataAppDao.getById(id);
+        return dataAppMapper.getById(id);
     }
 }

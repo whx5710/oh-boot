@@ -1,7 +1,7 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.iris.system.base.dao.SysUserRoleDao;
+import com.iris.system.base.mapper.SysUserRoleMapper;
 import com.iris.system.base.service.SysUserRoleService;
 import com.iris.system.base.entity.SysUserRoleEntity;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserRoleServiceImpl implements SysUserRoleService {
 
-    private final SysUserRoleDao sysUserRoleDao;
+    private final SysUserRoleMapper sysUserRoleMapper;
 
-    public SysUserRoleServiceImpl(SysUserRoleDao sysUserRoleDao){
-        this.sysUserRoleDao = sysUserRoleDao;
+    public SysUserRoleServiceImpl(SysUserRoleMapper sysUserRoleMapper){
+        this.sysUserRoleMapper = sysUserRoleMapper;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
             }).collect(Collectors.toList());
 
             // 批量新增
-            sysUserRoleDao.saveBatch(roleList);
+            sysUserRoleMapper.saveBatch(roleList);
         }
 
         // 需要删除的角色ID
@@ -52,7 +52,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         if (CollUtil.isNotEmpty(deleteRoleIdList)){
             SysUserRoleEntity param = new SysUserRoleEntity();
             param.setUserId(userId);
-            sysUserRoleDao.deleteByRoleIdList((List<Long>) deleteRoleIdList, param);
+            sysUserRoleMapper.deleteByRoleIdList((List<Long>) deleteRoleIdList, param);
         }
     }
 
@@ -66,28 +66,28 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         }).collect(Collectors.toList());
 
         // 批量新增
-        sysUserRoleDao.saveBatch(list);
+        sysUserRoleMapper.saveBatch(list);
     }
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        sysUserRoleDao.deleteByRoleIdList(roleIdList, new SysUserRoleEntity());
+        sysUserRoleMapper.deleteByRoleIdList(roleIdList, new SysUserRoleEntity());
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        sysUserRoleDao.deleteByUserIdList(userIdList, null);
+        sysUserRoleMapper.deleteByUserIdList(userIdList, null);
     }
 
     @Override
     public void deleteByUserIdList(Long roleId, List<Long> userIdList) {
         SysUserRoleEntity param = new SysUserRoleEntity();
         param.setRoleId(roleId);
-        sysUserRoleDao.deleteByUserIdList(userIdList, param);
+        sysUserRoleMapper.deleteByUserIdList(userIdList, param);
     }
 
     @Override
     public List<Long> getRoleIdList(Long userId) {
-        return sysUserRoleDao.getRoleIdList(userId);
+        return sysUserRoleMapper.getRoleIdList(userId);
     }
 }

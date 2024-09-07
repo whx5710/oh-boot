@@ -2,7 +2,7 @@ package com.iris.system.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.system.base.dao.SysDictDataDao;
+import com.iris.system.base.mapper.SysDictDataMapper;
 import com.iris.system.base.query.SysDictDataQuery;
 import com.iris.system.base.vo.SysDictDataVO;
 import com.iris.system.base.entity.SysDictDataEntity;
@@ -22,15 +22,15 @@ import java.util.List;
  */
 @Service
 public class SysDictDataServiceImpl implements SysDictDataService {
-    private final SysDictDataDao sysDictDataDao;
-    public SysDictDataServiceImpl(SysDictDataDao sysDictDataDao) {
-        this.sysDictDataDao = sysDictDataDao;
+    private final SysDictDataMapper sysDictDataMapper;
+    public SysDictDataServiceImpl(SysDictDataMapper sysDictDataMapper) {
+        this.sysDictDataMapper = sysDictDataMapper;
     }
 
     @Override
     public PageResult<SysDictDataVO> page(SysDictDataQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysDictDataEntity> list = sysDictDataDao.getList(query);
+        List<SysDictDataEntity> list = sysDictDataMapper.getList(query);
         PageInfo<SysDictDataEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysDictDataConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,14 +40,14 @@ public class SysDictDataServiceImpl implements SysDictDataService {
     public void save(SysDictDataVO vo) {
         SysDictDataEntity entity = SysDictDataConvert.INSTANCE.convert(vo);
 
-        sysDictDataDao.save(entity);
+        sysDictDataMapper.save(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SysDictDataVO vo) {
         SysDictDataEntity entity = SysDictDataConvert.INSTANCE.convert(vo);
-        sysDictDataDao.updateById(entity);
+        sysDictDataMapper.updateById(entity);
     }
 
     @Override
@@ -57,13 +57,13 @@ public class SysDictDataServiceImpl implements SysDictDataService {
             SysDictDataEntity param = new SysDictDataEntity();
             param.setId(id);
             param.setDbStatus(0);
-            sysDictDataDao.updateById(param);
+            sysDictDataMapper.updateById(param);
         });
     }
 
     @Override
     public SysDictDataEntity getById(Long id) {
-        return sysDictDataDao.getById(id);
+        return sysDictDataMapper.getById(id);
     }
 
 }

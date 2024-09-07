@@ -12,7 +12,7 @@ import com.iris.framework.common.utils.ExceptionUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.datasource.config.auto.DynamicDataSource;
-import com.iris.system.app.dao.DataMessageDao;
+import com.iris.system.app.mapper.DataMessageMapper;
 import com.iris.system.app.entity.DataMsgEntity;
 import com.iris.system.app.query.DataMsgQuery;
 import com.iris.system.app.service.DataMsgService;
@@ -43,13 +43,13 @@ public class DataMsgServiceImpl implements DataMsgService {
     private final Logger log = LoggerFactory.getLogger(DataMsgServiceImpl.class);
 
     private final RedisCache redisCache;
-    private final DataMessageDao dataMessageDao;
+    private final DataMessageMapper dataMessageMapper;
     private final DynamicDataSource dynamicDataSource;
 
-    public DataMsgServiceImpl(RedisCache redisCache, DataMessageDao dataMessageDao,
+    public DataMsgServiceImpl(RedisCache redisCache, DataMessageMapper dataMessageMapper,
                               DynamicDataSource dynamicDataSource){
         this.redisCache = redisCache;
-        this.dataMessageDao = dataMessageDao;
+        this.dataMessageMapper = dataMessageMapper;
         this.dynamicDataSource = dynamicDataSource;
     }
 
@@ -61,7 +61,7 @@ public class DataMsgServiceImpl implements DataMsgService {
     @Override
     public PageResult<DataMsgVO> page(DataMsgQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<DataMsgVO> list = dataMessageDao.getList(query);
+        List<DataMsgVO> list = dataMessageMapper.getList(query);
         PageInfo<DataMsgVO> pageInfo = new PageInfo<>(list);
         return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());
     }
@@ -76,7 +76,7 @@ public class DataMsgServiceImpl implements DataMsgService {
             DataMsgEntity param = new DataMsgEntity();
             param.setId(id);
             param.setDbStatus(0);
-            dataMessageDao.updateById(param);
+            dataMessageMapper.updateById(param);
         });
     }
 
@@ -86,7 +86,7 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @Override
     public void deleteByDate(String date) {
-        dataMessageDao.deleteByDate(date);
+        dataMessageMapper.deleteByDate(date);
     }
 
     // 保存报文
@@ -105,14 +105,14 @@ public class DataMsgServiceImpl implements DataMsgService {
                 DataMsgEntity entity = BeanUtil.copyProperties(msgEntity, DataMsgEntity.class);
                 entity.setJsonStr(JsonUtils.toJsonString(msgEntity.getData()));
                 entity.setCreateTime(LocalDateTime.now());
-                // dataMessageDao.insertDataMsg(entity);
+                // dataMessageMapper.insertDataMsg(entity);
                 list.add(entity);
             }
             if(!list.isEmpty()){
                 SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(Constant.SYS_DB);
                 SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
-                DataMessageDao messageDao = sqlSession.getMapper(DataMessageDao.class);
-                list.forEach(messageDao::insertDataMsg);
+                DataMessageMapper messageMapper = sqlSession.getMapper(DataMessageMapper.class);
+                list.forEach(messageMapper::insertDataMsg);
                 sqlSession.commit();
                 sqlSession.clearCache();
                 sqlSession.close();// 用完关闭

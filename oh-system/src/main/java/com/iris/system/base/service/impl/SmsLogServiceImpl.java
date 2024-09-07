@@ -3,7 +3,7 @@ package com.iris.system.base.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.system.base.dao.SmsLogDao;
+import com.iris.system.base.mapper.SmsLogMapper;
 import com.iris.system.base.query.SmsLogQuery;
 import com.iris.system.base.vo.SmsLogVO;
 import com.iris.system.base.convert.SmsLogConvert;
@@ -22,28 +22,28 @@ import java.util.List;
 @Service
 public class SmsLogServiceImpl implements SmsLogService {
 
-    private final SmsLogDao smsLogDao;
+    private final SmsLogMapper smsLogMapper;
 
-    public SmsLogServiceImpl(SmsLogDao smsLogDao) {
-        this.smsLogDao = smsLogDao;
+    public SmsLogServiceImpl(SmsLogMapper smsLogMapper) {
+        this.smsLogMapper = smsLogMapper;
     }
 
     @Override
     public PageResult<SmsLogVO> page(SmsLogQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SmsLogEntity> list = smsLogDao.getList(query);
+        List<SmsLogEntity> list = smsLogMapper.getList(query);
         PageInfo<SmsLogEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SmsLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public SmsLogEntity getById(Long id) {
-        return smsLogDao.getById(id);
+        return smsLogMapper.getById(id);
     }
 
     @Override
     public int save(SmsLogEntity entity) {
-        return smsLogDao.insertSmsLog(entity);
+        return smsLogMapper.insertSmsLog(entity);
     }
 
 }

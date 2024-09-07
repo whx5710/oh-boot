@@ -6,7 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.system.base.cache.SysParamsCache;
-import com.iris.system.base.dao.SysParamsDao;
+import com.iris.system.base.mapper.SysParamsMapper;
 import com.iris.system.base.query.SysParamsQuery;
 import com.iris.system.base.vo.SysParamsVO;
 import com.iris.system.base.convert.SysParamsConvert;
@@ -34,17 +34,17 @@ public class SysParamsServiceImpl implements SysParamsService {
 
     private final SysParamsCache sysParamsCache;
 
-    private final SysParamsDao sysParamsDao;
+    private final SysParamsMapper sysParamsMapper;
 
-    public SysParamsServiceImpl(SysParamsCache sysParamsCache, SysParamsDao sysParamsDao){
+    public SysParamsServiceImpl(SysParamsCache sysParamsCache, SysParamsMapper sysParamsMapper){
         this.sysParamsCache = sysParamsCache;
-        this.sysParamsDao = sysParamsDao;
+        this.sysParamsMapper = sysParamsMapper;
     }
 
     @PostConstruct
     public void init() {
         // 查询列表
-        List<SysParamsEntity> list = sysParamsDao.getList(null);
+        List<SysParamsEntity> list = sysParamsMapper.getList(null);
 
         // 保存到缓存
         sysParamsCache.saveList(list);
@@ -53,7 +53,7 @@ public class SysParamsServiceImpl implements SysParamsService {
     @Override
     public PageResult<SysParamsVO> page(SysParamsQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysParamsEntity> list = sysParamsDao.getList(query);
+        List<SysParamsEntity> list = sysParamsMapper.getList(query);
         PageInfo<SysParamsEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysParamsConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -63,14 +63,14 @@ public class SysParamsServiceImpl implements SysParamsService {
         AssertUtils.isBlank(vo.getParamKey(), "参数paramKey");
         vo.setParamKey(vo.getParamKey().toUpperCase());
         // 判断 参数键 是否存在
-        boolean exist = sysParamsDao.isExist(vo.getParamKey());
+        boolean exist = sysParamsMapper.isExist(vo.getParamKey());
         if (exist) {
             throw new ServerException("参数键已存在");
         }
 
         SysParamsEntity entity = SysParamsConvert.INSTANCE.convert(vo);
 
-        sysParamsDao.save(entity);
+        sysParamsMapper.save(entity);
 
         // 保存到缓存
         sysParamsCache.save(entity.getParamKey(), entity.getParamValue());
@@ -78,12 +78,12 @@ public class SysParamsServiceImpl implements SysParamsService {
 
     @Override
     public void update(SysParamsVO vo) {
-        SysParamsEntity entity = sysParamsDao.getById(vo.getId());
+        SysParamsEntity entity = sysParamsMapper.getById(vo.getId());
 
         // 如果 参数键 修改过
         if (!StrUtil.equalsIgnoreCase(entity.getParamKey(), vo.getParamKey())) {
             // 判断 新参数键 是否存在
-            boolean exist = sysParamsDao.isExist(vo.getParamKey());
+            boolean exist = sysParamsMapper.isExist(vo.getParamKey());
             if (exist) {
                 throw new ServerException("参数键已存在");
             }
@@ -93,7 +93,7 @@ public class SysParamsServiceImpl implements SysParamsService {
         }
 
         // 修改数据
-        sysParamsDao.updateById(SysParamsConvert.INSTANCE.convert(vo));
+        sysParamsMapper.updateById(SysParamsConvert.INSTANCE.convert(vo));
 
         // 保存到缓存
         sysParamsCache.save(vo.getParamKey(), vo.getParamValue());
@@ -105,14 +105,14 @@ public class SysParamsServiceImpl implements SysParamsService {
         // 查询列表
         SysParamsQuery query = new SysParamsQuery();
         query.setIdList(idList);
-        List<SysParamsEntity> list = sysParamsDao.getList(query);
+        List<SysParamsEntity> list = sysParamsMapper.getList(query);
 
         // 删除数据
         idList.forEach(id -> {
             SysParamsEntity param = new SysParamsEntity();
             param.setDbStatus(0);
             param.setId(id);
-            sysParamsDao.updateById(param);
+            sysParamsMapper.updateById(param);
         });
 
         // 删除缓存
@@ -186,7 +186,7 @@ public class SysParamsServiceImpl implements SysParamsService {
     public SysParamsEntity getByKey(String key) {
         SysParamsQuery query = new SysParamsQuery();
         query.setParamKey(key);
-        List<SysParamsEntity> list = sysParamsDao.getList(query);
+        List<SysParamsEntity> list = sysParamsMapper.getList(query);
         if(!list.isEmpty()){
             return list.getFirst();
         }
@@ -212,7 +212,7 @@ public class SysParamsServiceImpl implements SysParamsService {
 
     @Override
     public SysParamsEntity getById(Long id) {
-        return sysParamsDao.getById(id);
+        return sysParamsMapper.getById(id);
     }
 
 }

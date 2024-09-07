@@ -1,7 +1,7 @@
 package com.iris.system.security.service;
 
 import com.iris.system.base.service.SysUserDetailsService;
-import com.iris.system.base.dao.SysUserDao;
+import com.iris.system.base.mapper.SysUserMapper;
 import com.iris.system.base.entity.SysUserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,16 +17,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final SysUserDetailsService sysUserDetailsService;
-    private final SysUserDao sysUserDao;
+    private final SysUserMapper sysUserMapper;
 
-    public UserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, SysUserDao sysUserDao) {
+    public UserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, SysUserMapper sysUserMapper) {
         this.sysUserDetailsService = sysUserDetailsService;
-        this.sysUserDao = sysUserDao;
+        this.sysUserMapper = sysUserMapper;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUserEntity userEntity = sysUserDao.getByUsername(username);
+        SysUserEntity userEntity = sysUserMapper.getByUsername(username);
         if (userEntity == null) {
             throw new UsernameNotFoundException("用户名或密码错误");
         }

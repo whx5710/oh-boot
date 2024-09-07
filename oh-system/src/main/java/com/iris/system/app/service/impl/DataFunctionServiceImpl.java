@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.app.convert.DataFunctionConvert;
-import com.iris.system.app.dao.DataFunctionDao;
+import com.iris.system.app.mapper.DataFunctionMapper;
 import com.iris.system.app.entity.DataFunctionEntity;
 import com.iris.system.app.query.DataFunctionQuery;
 import com.iris.system.app.service.DataFunctionService;
@@ -23,16 +23,16 @@ import java.util.List;
 @Service
 public class DataFunctionServiceImpl implements DataFunctionService {
 
-    private final DataFunctionDao dataFunctionDao;
+    private final DataFunctionMapper dataFunctionMapper;
 
-    public DataFunctionServiceImpl(DataFunctionDao dataFunctionDao){
-        this.dataFunctionDao = dataFunctionDao;
+    public DataFunctionServiceImpl(DataFunctionMapper dataFunctionMapper){
+        this.dataFunctionMapper = dataFunctionMapper;
     }
 
     @Override
     public PageResult<DataFunctionVO> page(DataFunctionQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<DataFunctionEntity> list = dataFunctionDao.getList(query);
+        List<DataFunctionEntity> list = dataFunctionMapper.getList(query);
         PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,31 +40,31 @@ public class DataFunctionServiceImpl implements DataFunctionService {
     @Override
     public PageResult<DataFunctionVO> pageByClientId(DataFunctionQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<DataFunctionEntity> list = dataFunctionDao.pageByClientId(query.getClientId());
+        List<DataFunctionEntity> list = dataFunctionMapper.pageByClientId(query.getClientId());
         PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public DataFunctionEntity getById(Long id) {
-        return dataFunctionDao.getById(id);
+        return dataFunctionMapper.getById(id);
     }
 
     @Override
     public List<DataFunctionVO> list(DataFunctionQuery query) {
-        return DataFunctionConvert.INSTANCE.convertList(dataFunctionDao.getList(query));
+        return DataFunctionConvert.INSTANCE.convertList(dataFunctionMapper.getList(query));
     }
 
     @Override
     public void save(DataFunctionVO vo) {
         DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
-        dataFunctionDao.insertFunc(entity);
+        dataFunctionMapper.insertFunc(entity);
     }
 
     @Override
     public void update(DataFunctionVO vo) {
         DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
-        dataFunctionDao.updateById(entity);
+        dataFunctionMapper.updateById(entity);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class DataFunctionServiceImpl implements DataFunctionService {
             DataFunctionEntity param = new DataFunctionEntity();
             param.setId(id);
             param.setDbStatus(0);
-            dataFunctionDao.updateById(param);
+            dataFunctionMapper.updateById(param);
         });
     }
 

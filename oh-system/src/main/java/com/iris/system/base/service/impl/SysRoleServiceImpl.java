@@ -3,7 +3,7 @@ package com.iris.system.base.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.datasource.service.impl.BaseServiceImpl;
-import com.iris.system.base.dao.SysRoleDao;
+import com.iris.system.base.mapper.SysRoleMapper;
 import com.iris.system.base.enums.DataScopeEnum;
 import com.iris.system.base.query.SysRoleQuery;
 import com.iris.system.base.vo.SysRoleDataScopeVO;
@@ -32,14 +32,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	private final SysRoleMenuService sysRoleMenuService;
 	private final SysRoleDataScopeService sysRoleDataScopeService;
 	private final SysUserRoleService sysUserRoleService;
-	private final SysRoleDao sysRoleDao;
+	private final SysRoleMapper sysRoleMapper;
 
 	public SysRoleServiceImpl(SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService,
-							  SysUserRoleService sysUserRoleService, SysRoleDao sysRoleDao) {
+							  SysUserRoleService sysUserRoleService, SysRoleMapper sysRoleMapper) {
 		this.sysRoleMenuService = sysRoleMenuService;
 		this.sysRoleDataScopeService = sysRoleDataScopeService;
 		this.sysUserRoleService = sysUserRoleService;
-		this.sysRoleDao = sysRoleDao;
+		this.sysRoleMapper = sysRoleMapper;
 	}
 
 	@Override
@@ -48,14 +48,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 		query.setSqlFilter(getDataScopeFilter(null,null));
 
 		PageHelper.startPage(query.getPage(), query.getLimit());
-		List<SysRoleEntity> list = sysRoleDao.getList(query);
+		List<SysRoleEntity> list = sysRoleMapper.getList(query);
 		PageInfo<SysRoleEntity> pageInfo = new PageInfo<>(list);
 		return new PageResult<>(SysRoleConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
 	}
 
 	@Override
 	public List<SysRoleVO> getList(SysRoleQuery query) {
-		List<SysRoleEntity> entityList = sysRoleDao.getList(query);
+		List<SysRoleEntity> entityList = sysRoleMapper.getList(query);
 		return SysRoleConvert.INSTANCE.convertList(entityList);
 	}
 
@@ -66,7 +66,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 
 		// 保存角色
 		entity.setDataScope(DataScopeEnum.SELF.getValue());
-		sysRoleDao.insertRole(entity);
+		sysRoleMapper.insertRole(entity);
 
 		// 保存角色菜单关系
 		sysRoleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
@@ -78,7 +78,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 		SysRoleEntity entity = SysRoleConvert.INSTANCE.convert(vo);
 
 		// 更新角色
-		sysRoleDao.updateById(entity);
+		sysRoleMapper.updateById(entity);
 
 		// 更新角色菜单关系
 		sysRoleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
@@ -87,10 +87,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void dataScope(SysRoleDataScopeVO vo) {
-		SysRoleEntity entity = sysRoleDao.getById(vo.getId());
+		SysRoleEntity entity = sysRoleMapper.getById(vo.getId());
 		entity.setDataScope(vo.getDataScope());
 		// 更新角色
-		sysRoleDao.updateById(entity);
+		sysRoleMapper.updateById(entity);
 
 		// 更新角色数据权限关系
 		if(vo.getDataScope().equals(DataScopeEnum.CUSTOM.getValue())){
@@ -109,7 +109,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 			SysRoleEntity sysRole = new SysRoleEntity();
 			sysRole.setId(id);
 			sysRole.setDbStatus(0);
-			sysRoleDao.updateById(sysRole);
+			sysRoleMapper.updateById(sysRole);
 		});
 
 		// 删除用户角色关系
@@ -124,7 +124,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 
 	@Override
 	public SysRoleEntity getById(Long id) {
-		return sysRoleDao.getById(id);
+		return sysRoleMapper.getById(id);
 	}
 
 }

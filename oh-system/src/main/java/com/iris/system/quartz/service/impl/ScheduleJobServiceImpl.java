@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.quartz.convert.ScheduleJobConvert;
-import com.iris.system.quartz.dao.ScheduleJobDao;
+import com.iris.system.quartz.mapper.ScheduleJobMapper;
 import com.iris.system.quartz.entity.ScheduleJobEntity;
 import com.iris.system.quartz.enums.ScheduleStatusEnum;
 import com.iris.system.quartz.query.ScheduleJobQuery;
@@ -29,11 +29,11 @@ import java.util.List;
 public class ScheduleJobServiceImpl implements ScheduleJobService {
     private final Scheduler scheduler;
 
-    private final ScheduleJobDao scheduleJobDao;
+    private final ScheduleJobMapper scheduleJobMapper;
 
-    public ScheduleJobServiceImpl(Scheduler scheduler, ScheduleJobDao scheduleJobDao) {
+    public ScheduleJobServiceImpl(Scheduler scheduler, ScheduleJobMapper scheduleJobMapper) {
         this.scheduler = scheduler;
-        this.scheduleJobDao = scheduleJobDao;
+        this.scheduleJobMapper = scheduleJobMapper;
     }
 
     /**
@@ -42,7 +42,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @PostConstruct
     public void init() throws SchedulerException {
         scheduler.clear();
-        List<ScheduleJobEntity> scheduleJobList = scheduleJobDao.getList(null);
+        List<ScheduleJobEntity> scheduleJobList = scheduleJobMapper.getList(null);
         for (ScheduleJobEntity scheduleJob : scheduleJobList) {
             ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
         }
@@ -51,7 +51,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     public PageResult<ScheduleJobVO> page(ScheduleJobQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<ScheduleJobEntity> list = scheduleJobDao.getList(query);
+        List<ScheduleJobEntity> list = scheduleJobMapper.getList(query);
         PageInfo<ScheduleJobEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(ScheduleJobConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -61,7 +61,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         ScheduleJobEntity entity = ScheduleJobConvert.INSTANCE.convert(vo);
 
         entity.setStatus(ScheduleStatusEnum.PAUSE.getValue());
-        if (scheduleJobDao.insertJob(entity) > 0) {
+        if (scheduleJobMapper.insertJob(entity) > 0) {
             ScheduleUtils.createScheduleJob(scheduler, entity);
         }
     }
@@ -71,8 +71,8 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         ScheduleJobEntity entity = ScheduleJobConvert.INSTANCE.convert(vo);
 
         // 更新定时任务
-        if (scheduleJobDao.updateById(entity)) {
-            ScheduleJobEntity scheduleJob = scheduleJobDao.getById(entity.getId());
+        if (scheduleJobMapper.updateById(entity)) {
+            ScheduleJobEntity scheduleJob = scheduleJobMapper.getById(entity.getId());
             ScheduleUtils.updateSchedulerJob(scheduler, scheduleJob);
         }
     }
@@ -81,12 +81,12 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         for (Long id : idList) {
-            ScheduleJobEntity scheduleJob = scheduleJobDao.getById(id);
+            ScheduleJobEntity scheduleJob = scheduleJobMapper.getById(id);
             // 删除定时任务
             ScheduleJobEntity param = new ScheduleJobEntity();
             param.setId(id);
             param.setDbStatus(0);
-            if (scheduleJobDao.updateById(param)) {
+            if (scheduleJobMapper.updateById(param)) {
                 ScheduleUtils.deleteScheduleJob(scheduler, scheduleJob);
             }
         }
@@ -94,7 +94,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public void run(ScheduleJobVO vo) {
-        ScheduleJobEntity scheduleJob = scheduleJobDao.getById(vo.getId());
+        ScheduleJobEntity scheduleJob = scheduleJobMapper.getById(vo.getId());
         if (scheduleJob == null) {
             return;
         }
@@ -104,14 +104,14 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public void changeStatus(ScheduleJobVO vo) {
-        ScheduleJobEntity scheduleJob = scheduleJobDao.getById(vo.getId());
+        ScheduleJobEntity scheduleJob = scheduleJobMapper.getById(vo.getId());
         if (scheduleJob == null) {
             return;
         }
 
         // 更新数据
         scheduleJob.setStatus(vo.getStatus());
-        scheduleJobDao.updateById(scheduleJob);
+        scheduleJobMapper.updateById(scheduleJob);
 
         if (ScheduleStatusEnum.PAUSE.getValue() == vo.getStatus()) {
             ScheduleUtils.pauseJob(scheduler, scheduleJob);
@@ -122,7 +122,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public ScheduleJobEntity getById(Long id) {
-        return scheduleJobDao.getById(id);
+        return scheduleJobMapper.getById(id);
     }
 
 }

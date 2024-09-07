@@ -2,8 +2,8 @@ package com.iris.system.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.system.base.dao.SysDictDataDao;
-import com.iris.system.base.dao.SysDictTypeDao;
+import com.iris.system.base.mapper.SysDictDataMapper;
+import com.iris.system.base.mapper.SysDictTypeMapper;
 import com.iris.system.base.enums.DictSourceEnum;
 import com.iris.system.base.query.SysDictDataQuery;
 import com.iris.system.base.query.SysDictTypeQuery;
@@ -31,21 +31,21 @@ import java.util.List;
  */
 @Service
 public class SysDictTypeServiceImpl implements SysDictTypeService {
-    private final SysDictDataDao sysDictDataDao;
-    private final SysDictTypeDao sysDictTypeDao;
+    private final SysDictDataMapper sysDictDataMapper;
+    private final SysDictTypeMapper sysDictTypeMapper;
 
     private final Logger log = LoggerFactory.getLogger(SysDictTypeServiceImpl.class);
 
-    public SysDictTypeServiceImpl(SysDictDataDao sysDictDataDao,
-                                  SysDictTypeDao sysDictTypeDao) {
-        this.sysDictDataDao = sysDictDataDao;
-        this.sysDictTypeDao = sysDictTypeDao;
+    public SysDictTypeServiceImpl(SysDictDataMapper sysDictDataMapper,
+                                  SysDictTypeMapper sysDictTypeMapper) {
+        this.sysDictDataMapper = sysDictDataMapper;
+        this.sysDictTypeMapper = sysDictTypeMapper;
     }
 
     @Override
     public PageResult<SysDictTypeVO> page(SysDictTypeQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysDictTypeEntity> list = sysDictTypeDao.getList(query);
+        List<SysDictTypeEntity> list = sysDictTypeMapper.getList(query);
         PageInfo<SysDictTypeEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysDictTypeConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -54,14 +54,14 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
     public void save(SysDictTypeVO vo) {
         SysDictTypeEntity entity = SysDictTypeConvert.INSTANCE.convert(vo);
 
-        sysDictTypeDao.save(entity);
+        sysDictTypeMapper.save(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SysDictTypeVO vo) {
         SysDictTypeEntity entity = SysDictTypeConvert.INSTANCE.convert(vo);
-        sysDictTypeDao.updateById(entity);
+        sysDictTypeMapper.updateById(entity);
     }
 
     @Override
@@ -71,15 +71,15 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
             SysDictTypeEntity param = new SysDictTypeEntity();
             param.setId(id);
             param.setDbStatus(0);
-            sysDictTypeDao.updateById(param);
+            sysDictTypeMapper.updateById(param);
         });
     }
 
     @Override
     public List<SysDictVO.DictData> getDictSql(Long id) {
-        SysDictTypeEntity entity = sysDictTypeDao.getById(id);
+        SysDictTypeEntity entity = sysDictTypeMapper.getById(id);
         try {
-            return sysDictDataDao.getListForSql(entity.getDictSql());
+            return sysDictDataMapper.getListForSql(entity.getDictSql());
         } catch (Exception e) {
             throw new ServerException("动态SQL执行失败，请检查SQL是否正确！");
         }
@@ -88,11 +88,11 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
     @Override
     public List<SysDictVO> getDictList() {
         // 全部字典类型列表
-        List<SysDictTypeEntity> typeList = sysDictTypeDao.getList(new SysDictTypeQuery());
+        List<SysDictTypeEntity> typeList = sysDictTypeMapper.getList(new SysDictTypeQuery());
 
         // 全部字典数据列表
         SysDictDataQuery query = new SysDictDataQuery();
-        List<SysDictDataEntity> dataList = sysDictDataDao.getList(query);
+        List<SysDictDataEntity> dataList = sysDictDataMapper.getList(query);
 
         // 全部字典列表
         List<SysDictVO> dictList = new ArrayList<>(typeList.size());
@@ -111,7 +111,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
                 // 增加动态列表
                 String sql = type.getDictSql();
                 try {
-                    dict.setDataList(sysDictDataDao.getListForSql(sql));
+                    dict.setDataList(sysDictDataMapper.getListForSql(sql));
                 } catch (Exception e) {
                     log.error("增加动态字典异常: type={}", type, e);
                 }
@@ -130,6 +130,6 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
 
     @Override
     public SysDictTypeEntity getById(Long id) {
-        return sysDictTypeDao.getById(id);
+        return sysDictTypeMapper.getById(id);
     }
 }

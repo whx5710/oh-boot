@@ -1,7 +1,7 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.iris.system.base.dao.SysUserPostDao;
+import com.iris.system.base.mapper.SysUserPostMapper;
 import com.iris.system.base.service.SysUserPostService;
 import com.iris.system.base.entity.SysUserPostEntity;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserPostServiceImpl implements SysUserPostService {
 
-    private final SysUserPostDao sysUserPostDao;
+    private final SysUserPostMapper sysUserPostMapper;
 
-    public SysUserPostServiceImpl(SysUserPostDao sysUserPostDao){
-        this.sysUserPostDao = sysUserPostDao;
+    public SysUserPostServiceImpl(SysUserPostMapper sysUserPostMapper){
+        this.sysUserPostMapper = sysUserPostMapper;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SysUserPostServiceImpl implements SysUserPostService {
                 return entity;
             }).collect(Collectors.toList());
             // 批量新增
-            sysUserPostDao.saveBatch(postList);
+            sysUserPostMapper.saveBatch(postList);
         }
 
         // 需要删除的岗位ID
@@ -51,22 +51,22 @@ public class SysUserPostServiceImpl implements SysUserPostService {
         if (CollUtil.isNotEmpty(deletePostIdList)){
             SysUserPostEntity param = new SysUserPostEntity();
             param.setUserId(userId);
-            sysUserPostDao.deleteByPostIdList((List<Long>) deletePostIdList, param);
+            sysUserPostMapper.deleteByPostIdList((List<Long>) deletePostIdList, param);
         }
     }
 
     @Override
     public void deleteByPostIdList(List<Long> postIdList) {
-        sysUserPostDao.deleteByPostIdList(postIdList, new SysUserPostEntity());
+        sysUserPostMapper.deleteByPostIdList(postIdList, new SysUserPostEntity());
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        sysUserPostDao.deleteByUserIdList(userIdList, new SysUserPostEntity());
+        sysUserPostMapper.deleteByUserIdList(userIdList, new SysUserPostEntity());
     }
 
     @Override
     public List<Long> getPostIdList(Long userId) {
-        return sysUserPostDao.getPostIdList(userId);
+        return sysUserPostMapper.getPostIdList(userId);
     }
 }

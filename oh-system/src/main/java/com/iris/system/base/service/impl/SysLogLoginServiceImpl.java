@@ -3,7 +3,7 @@ package com.iris.system.base.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.*;
-import com.iris.system.base.dao.SysLogLoginDao;
+import com.iris.system.base.mapper.SysLogLoginMapper;
 import com.iris.system.base.query.SysLogLoginQuery;
 import com.iris.system.base.vo.AnalysisVO;
 import com.iris.system.base.vo.SysLogLoginVO;
@@ -26,17 +26,17 @@ import java.util.List;
 @Service
 public class SysLogLoginServiceImpl implements SysLogLoginService {
 //    private final TransService transService;
-    private final SysLogLoginDao sysLogLoginDao;
+    private final SysLogLoginMapper sysLogLoginMapper;
 
-    public SysLogLoginServiceImpl(SysLogLoginDao sysLogLoginDao) {
+    public SysLogLoginServiceImpl(SysLogLoginMapper sysLogLoginMapper) {
         //this.transService = transService;
-        this.sysLogLoginDao = sysLogLoginDao;
+        this.sysLogLoginMapper = sysLogLoginMapper;
     }
 
     @Override
     public PageResult<SysLogLoginVO> page(SysLogLoginQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysLogLoginEntity> list = sysLogLoginDao.getList(query);
+        List<SysLogLoginEntity> list = sysLogLoginMapper.getList(query);
         PageInfo<SysLogLoginEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysLogLoginConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -56,12 +56,12 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
         entity.setIp(ip);
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
-        sysLogLoginDao.save(entity);
+        sysLogLoginMapper.save(entity);
     }
 
     @Override
     public void export() {
-        List<SysLogLoginEntity> list = sysLogLoginDao.getList(new SysLogLoginQuery());
+        List<SysLogLoginEntity> list = sysLogLoginMapper.getList(new SysLogLoginQuery());
         List<SysLogLoginVO> sysLogLoginVOS = SysLogLoginConvert.INSTANCE.convertList(list);
 //        transService.transBatch(sysLogLoginVOS);
         // 写到浏览器打开
@@ -76,7 +76,7 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
      */
     @Override
     public List<AnalysisVO> latestDate(int day, int operation) {
-        return sysLogLoginDao.latestDateCount(day, operation);
+        return sysLogLoginMapper.latestDateCount(day, operation);
     }
 
 }

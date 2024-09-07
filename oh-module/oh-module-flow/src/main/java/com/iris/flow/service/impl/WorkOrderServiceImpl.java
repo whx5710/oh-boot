@@ -2,7 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.flow.dao.WorkOrderDao;
+import com.iris.flow.mapper.WorkOrderMapper;
 import com.iris.framework.common.entity.MetaEntity;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.service.JobService;
@@ -40,20 +40,20 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
 
     private final ProcessHandlerService processHandlerService;
 
-    private final WorkOrderDao workOrderDao;
+    private final WorkOrderMapper workOrderMapper;
 
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService, WorkOrderDao workOrderDao){
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService, WorkOrderMapper workOrderMapper){
         this.taskHandlerService = taskHandlerService;
         this.processHandlerService = processHandlerService;
-        this.workOrderDao = workOrderDao;
+        this.workOrderMapper = workOrderMapper;
     }
 
 
     @Override
     public PageResult<WorkOrderVO> page(WorkOrderQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<WorkOrderEntity> list = workOrderDao.getOrderList(query);
+        List<WorkOrderEntity> list = workOrderMapper.getOrderList(query);
         PageInfo<WorkOrderEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(WorkOrderConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -62,7 +62,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
     @Override
     public void save(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
-        workOrderDao.saveOrder(entity);
+        workOrderMapper.saveOrder(entity);
         vo.setId(entity.getId());
     }
 
@@ -70,7 +70,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
     public void update(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
 
-        workOrderDao.updateOrderById(entity);
+        workOrderMapper.updateOrderById(entity);
     }
 
     @Override
@@ -80,13 +80,13 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
             WorkOrderEntity param = new WorkOrderEntity();
             param.setId(id);
             param.setDbStatus(0);
-            workOrderDao.updateOrderById(param);
+            workOrderMapper.updateOrderById(param);
         });
     }
 
     @Override
     public WorkOrderEntity getOrderById(Long id) {
-        return workOrderDao.getOrderById(id);
+        return workOrderMapper.getOrderById(id);
     }
 
     /**

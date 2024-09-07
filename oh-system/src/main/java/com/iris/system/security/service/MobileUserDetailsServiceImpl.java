@@ -2,7 +2,7 @@ package com.iris.system.security.service;
 
 import com.iris.system.base.service.SysUserDetailsService;
 import com.iris.framework.security.mobile.MobileUserDetailsService;
-import com.iris.system.base.dao.SysUserDao;
+import com.iris.system.base.mapper.SysUserMapper;
 import com.iris.system.base.entity.SysUserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,17 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class MobileUserDetailsServiceImpl implements MobileUserDetailsService {
     private final SysUserDetailsService sysUserDetailsService;
-    private final SysUserDao sysUserDao;
+    private final SysUserMapper sysUserMapper;
 
-    public MobileUserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, SysUserDao sysUserDao) {
+    public MobileUserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, SysUserMapper sysUserMapper) {
         this.sysUserDetailsService = sysUserDetailsService;
-        this.sysUserDao = sysUserDao;
+        this.sysUserMapper = sysUserMapper;
     }
 
 
     @Override
     public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
-        SysUserEntity userEntity = sysUserDao.getByMobile(mobile);
+        SysUserEntity userEntity = sysUserMapper.getByMobile(mobile);
         if (userEntity == null) {
             throw new UsernameNotFoundException("手机号或验证码错误");
         }

@@ -1,7 +1,7 @@
 package com.iris.system.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.iris.system.base.dao.SysRoleDataScopeDao;
+import com.iris.system.base.mapper.SysRoleDataScopeMapper;
 import com.iris.system.base.service.SysRoleDataScopeService;
 import com.iris.system.base.entity.SysRoleDataScopeEntity;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
-    private final SysRoleDataScopeDao sysRoleDataScopeDao;
+    private final SysRoleDataScopeMapper sysRoleDataScopeMapper;
 
-    public SysRoleDataScopeServiceImpl(SysRoleDataScopeDao sysRoleDataScopeDao){
-        this.sysRoleDataScopeDao = sysRoleDataScopeDao;
+    public SysRoleDataScopeServiceImpl(SysRoleDataScopeMapper sysRoleDataScopeMapper){
+        this.sysRoleDataScopeMapper = sysRoleDataScopeMapper;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
             }).collect(Collectors.toList());
 
             // 批量新增
-            sysRoleDataScopeDao.saveBatch(orgList);
+            sysRoleDataScopeMapper.saveBatch(orgList);
         }
 
         // 需要删除的机构ID
@@ -50,17 +50,17 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
         if (CollUtil.isNotEmpty(deleteOrgIdList)){
             SysRoleDataScopeEntity param = new SysRoleDataScopeEntity();
             param.setRoleId(roleId);
-            sysRoleDataScopeDao.deleteOrgIdList((List<Long>) deleteOrgIdList, param);
+            sysRoleDataScopeMapper.deleteOrgIdList((List<Long>) deleteOrgIdList, param);
         }
     }
 
     @Override
     public List<Long> getOrgIdList(Long roleId) {
-        return sysRoleDataScopeDao.getOrgIdList(roleId);
+        return sysRoleDataScopeMapper.getOrgIdList(roleId);
     }
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        sysRoleDataScopeDao.deleteByRoleIdList(roleIdList, new SysRoleDataScopeEntity());
+        sysRoleDataScopeMapper.deleteByRoleIdList(roleIdList, new SysRoleDataScopeEntity());
     }
 }

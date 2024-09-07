@@ -2,7 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.flow.dao.TaskRecordDao;
+import com.iris.flow.mapper.TaskRecordMapper;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.flow.convert.TaskRecordConvert;
@@ -31,30 +31,30 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     private final HistoryService historyService;
 
-    private final TaskRecordDao taskRecordDao;
+    private final TaskRecordMapper taskRecordMapper;
 
-    public TaskRecordServiceImpl(HistoryService historyService, TaskRecordDao taskRecordDao){
+    public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper){
         this.historyService = historyService;
-        this.taskRecordDao = taskRecordDao;
+        this.taskRecordMapper = taskRecordMapper;
     }
 
     @Override
     public PageResult<TaskRecordEntity> page(TaskRecordQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<TaskRecordEntity> list = taskRecordDao.getTaskList(new TaskRecordQuery());
+        List<TaskRecordEntity> list = taskRecordMapper.getTaskList(new TaskRecordQuery());
         PageInfo<TaskRecordEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @Override
     public boolean save(TaskRecordEntity vo) {
-        taskRecordDao.saveTaskRecord(vo);
+        taskRecordMapper.saveTaskRecord(vo);
         return true;
     }
 
     @Override
     public void update(TaskRecordVO vo) {
-        taskRecordDao.updateTaskRecordById(TaskRecordConvert.INSTANCE.convert(vo));
+        taskRecordMapper.updateTaskRecordById(TaskRecordConvert.INSTANCE.convert(vo));
     }
 
     @Override
@@ -64,14 +64,14 @@ public class TaskRecordServiceImpl implements TaskRecordService {
             TaskRecordEntity param = new TaskRecordEntity();
             param.setId(id);
             param.setDbStatus(0);
-            taskRecordDao.updateTaskRecordById(param);
+            taskRecordMapper.updateTaskRecordById(param);
         });
     }
 
     // 修改当前运行标志
     @Override
     public boolean updateRunMark(String procInstId) {
-        return taskRecordDao.updateRunMark(procInstId);
+        return taskRecordMapper.updateRunMark(procInstId);
     }
 
 
@@ -82,7 +82,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      */
     @Override
     public List<TaskRecordVO> taskList(TaskRecordQuery query) {
-        return TaskRecordConvert.INSTANCE.convertList(taskRecordDao.getTaskList(query));
+        return TaskRecordConvert.INSTANCE.convertList(taskRecordMapper.getTaskList(query));
     }
 
 
@@ -221,6 +221,6 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Override
     public TaskRecordEntity getTaskRecordById(Long id) {
-        return taskRecordDao.getTaskRecordById(id);
+        return taskRecordMapper.getTaskRecordById(id);
     }
 }

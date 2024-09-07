@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
-import com.iris.system.base.dao.SysPostDao;
+import com.iris.system.base.mapper.SysPostMapper;
 import com.iris.system.base.query.SysPostQuery;
 import com.iris.system.base.vo.SysPostVO;
 import com.iris.system.base.convert.SysPostConvert;
@@ -28,17 +28,17 @@ import java.util.Objects;
 @Service
 public class SysPostServiceImpl implements SysPostService {
     private final SysUserPostService sysUserPostService;
-    private final SysPostDao sysPostDao;
+    private final SysPostMapper sysPostMapper;
 
-    public SysPostServiceImpl(SysUserPostService sysUserPostService, SysPostDao sysPostDao) {
+    public SysPostServiceImpl(SysUserPostService sysUserPostService, SysPostMapper sysPostMapper) {
         this.sysUserPostService = sysUserPostService;
-        this.sysPostDao = sysPostDao;
+        this.sysPostMapper = sysPostMapper;
     }
 
     @Override
     public PageResult<SysPostVO> page(SysPostQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysPostEntity> entityList = sysPostDao.getList(query);
+        List<SysPostEntity> entityList = sysPostMapper.getList(query);
         PageInfo<SysPostEntity> pageInfo = new PageInfo<>(entityList);
         return new PageResult<>(SysPostConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -48,7 +48,7 @@ public class SysPostServiceImpl implements SysPostService {
         SysPostQuery query = new SysPostQuery();
         //正常岗位列表
         query.setStatus(1);
-        List<SysPostEntity> entityList = sysPostDao.getList(query);
+        List<SysPostEntity> entityList = sysPostMapper.getList(query);
 
         return SysPostConvert.INSTANCE.convertList(entityList);
     }
@@ -59,11 +59,11 @@ public class SysPostServiceImpl implements SysPostService {
         AssertUtils.isBlank(entity.getPostCode(), "岗位编码");
         SysPostQuery params = new SysPostQuery();
         params.setPostCode(entity.getPostCode());
-        List<SysPostEntity> list = sysPostDao.getList(params);
+        List<SysPostEntity> list = sysPostMapper.getList(params);
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("岗位编码已存在");
         }
-        sysPostDao.insertPost(entity);
+        sysPostMapper.insertPost(entity);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SysPostServiceImpl implements SysPostService {
         if(postCode != null && !postCode.isEmpty()){
             SysPostQuery params = new SysPostQuery();
             params.setPostCode(postCode);
-            List<SysPostEntity> list = sysPostDao.getList(params);
+            List<SysPostEntity> list = sysPostMapper.getList(params);
             if(!ObjectUtils.isEmpty(list)){
                 for(SysPostEntity item : list){
                     if(!Objects.equals(item.getId(), entity.getId())){
@@ -82,7 +82,7 @@ public class SysPostServiceImpl implements SysPostService {
                 }
             }
         }
-        sysPostDao.updateById(entity);
+        sysPostMapper.updateById(entity);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SysPostServiceImpl implements SysPostService {
             SysPostEntity p = new SysPostEntity();
             p.setId(id);
             p.setDbStatus(0);
-            sysPostDao.updateById(p);
+            sysPostMapper.updateById(p);
         });
         // 删除岗位用户关系
         sysUserPostService.deleteByPostIdList(idList);
@@ -101,7 +101,7 @@ public class SysPostServiceImpl implements SysPostService {
 
     @Override
     public SysPostEntity getById(Long id) {
-        return sysPostDao.getById(id);
+        return sysPostMapper.getById(id);
     }
 
 }

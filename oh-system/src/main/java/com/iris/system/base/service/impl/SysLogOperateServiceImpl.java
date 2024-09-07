@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.system.base.dao.SysLogOperateDao;
+import com.iris.system.base.mapper.SysLogOperateMapper;
 import com.iris.system.base.query.SysLogOperateQuery;
 import com.iris.system.base.vo.SysLogOperateVO;
 import com.iris.system.base.service.SysLogOperateService;
@@ -36,17 +36,17 @@ public class SysLogOperateServiceImpl implements SysLogOperateService {
     private final static Logger log = LoggerFactory.getLogger(SysLogOperateServiceImpl.class);
 
     private final RedisCache redisCache;
-    private final SysLogOperateDao sysLogOperateDao;
+    private final SysLogOperateMapper sysLogOperateMapper;
 
-    public SysLogOperateServiceImpl(RedisCache redisCache,SysLogOperateDao sysLogOperateDao) {
+    public SysLogOperateServiceImpl(RedisCache redisCache, SysLogOperateMapper sysLogOperateMapper) {
         this.redisCache = redisCache;
-        this.sysLogOperateDao = sysLogOperateDao;
+        this.sysLogOperateMapper = sysLogOperateMapper;
     }
 
     @Override
     public PageResult<SysLogOperateVO> page(SysLogOperateQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysLogOperateEntity> list = sysLogOperateDao.getList(query);
+        List<SysLogOperateEntity> list = sysLogOperateMapper.getList(query);
         PageInfo<SysLogOperateEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysLogOperateConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -71,7 +71,7 @@ public class SysLogOperateServiceImpl implements SysLogOperateService {
                     }
 
                     SysLogOperateEntity entity = BeanUtil.copyProperties(log, SysLogOperateEntity.class);
-                    sysLogOperateDao.save(entity);
+                    sysLogOperateMapper.save(entity);
                 }
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));

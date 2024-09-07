@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.team.convert.OhProjectConvert;
-import com.iris.team.dao.OhProjectDao;
+import com.iris.team.mapper.OhProjectMapper;
 import com.iris.team.entity.OhProjectEntity;
 import com.iris.team.query.OhProjectQuery;
 import com.iris.team.service.OhProjectService;
@@ -23,16 +23,16 @@ import java.util.List;
 @Service
 public class OhProjectServiceImpl implements OhProjectService {
 
-    private final OhProjectDao ohProjectDao;
+    private final OhProjectMapper ohProjectMapper;
 
-    public OhProjectServiceImpl(OhProjectDao ohProjectDao){
-        this.ohProjectDao = ohProjectDao;
+    public OhProjectServiceImpl(OhProjectMapper ohProjectMapper){
+        this.ohProjectMapper = ohProjectMapper;
     }
 
     @Override
     public PageResult<OhProjectVO> page(OhProjectQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<OhProjectEntity> list = ohProjectDao.getList(query);
+        List<OhProjectEntity> list = ohProjectMapper.getList(query);
         PageInfo<OhProjectEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(OhProjectConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,13 +40,13 @@ public class OhProjectServiceImpl implements OhProjectService {
     @Override
     public void save(OhProjectVO vo) {
         OhProjectEntity entity = OhProjectConvert.INSTANCE.convert(vo);
-        ohProjectDao.save(entity);
+        ohProjectMapper.save(entity);
     }
 
     @Override
     public void update(OhProjectVO vo) {
         OhProjectEntity entity = OhProjectConvert.INSTANCE.convert(vo);
-        ohProjectDao.updateById(entity);
+        ohProjectMapper.updateById(entity);
     }
 
     @Override
@@ -56,13 +56,13 @@ public class OhProjectServiceImpl implements OhProjectService {
             OhProjectEntity param = new OhProjectEntity();
             param.setId(id);
             param.setDbStatus(0);
-            ohProjectDao.updateById(param);
+            ohProjectMapper.updateById(param);
         });
     }
 
     @Override
     public OhProjectEntity getById(Long id) {
-        return ohProjectDao.getById(id);
+        return ohProjectMapper.getById(id);
     }
 
 }

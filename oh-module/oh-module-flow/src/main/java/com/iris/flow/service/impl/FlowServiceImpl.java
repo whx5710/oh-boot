@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.flow.convert.FlowConvert;
-import com.iris.flow.dao.FlowDao;
+import com.iris.flow.mapper.FlowMapper;
 import com.iris.flow.entity.FlowEntity;
 import com.iris.flow.query.FlowQuery;
 import com.iris.flow.service.FlowService;
@@ -25,16 +25,16 @@ import java.util.List;
 @Service
 public class FlowServiceImpl implements FlowService {
 
-    private final FlowDao flowDao;
+    private final FlowMapper flowMapper;
 
-    public FlowServiceImpl(FlowDao flowDao){
-        this.flowDao = flowDao;
+    public FlowServiceImpl(FlowMapper flowMapper){
+        this.flowMapper = flowMapper;
     }
 
     @Override
     public PageResult<FlowVO> page(FlowQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<FlowEntity> list = flowDao.getList(query);
+        List<FlowEntity> list = flowMapper.getList(query);
         PageInfo<FlowEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(FlowConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -55,18 +55,18 @@ public class FlowServiceImpl implements FlowService {
             entity.setSvgStr(EscapeUtil.unescapeXml(entity.getSvgStr()));
         }
         if(flowEntity == null){
-            flowDao.save(entity);
+            flowMapper.save(entity);
         }else{
             entity.setId(flowEntity.getId());
             entity.setDbStatus(1);
-            flowDao.updateById(entity);
+            flowMapper.updateById(entity);
         }
     }
 
     @Override
     public void update(FlowVO vo) {
         FlowEntity entity = FlowConvert.INSTANCE.convert(vo);
-        flowDao.updateById(entity);
+        flowMapper.updateById(entity);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class FlowServiceImpl implements FlowService {
             FlowEntity flowEntity = new FlowEntity();
             flowEntity.setId(id);
             flowEntity.setDbStatus(0);
-            flowDao.updateById(flowEntity);
+            flowMapper.updateById(flowEntity);
         });
     }
 
@@ -88,7 +88,7 @@ public class FlowServiceImpl implements FlowService {
     @Override
     public FlowEntity getByKey(String key) {
         AssertUtils.isBlank(key, "流程key");
-        List<FlowEntity> list = flowDao.getByKey(key);
+        List<FlowEntity> list = flowMapper.getByKey(key);
         if(list == null || list.isEmpty()){
             return null;
         }
@@ -97,7 +97,7 @@ public class FlowServiceImpl implements FlowService {
 
     @Override
     public FlowEntity getById(Long id) {
-        return flowDao.getById(id);
+        return flowMapper.getById(id);
     }
 
 }

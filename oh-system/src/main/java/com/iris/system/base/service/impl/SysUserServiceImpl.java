@@ -8,7 +8,7 @@ import com.iris.framework.common.cache.RedisKeys;
 import com.iris.framework.common.constant.CommonEnum;
 import com.iris.framework.common.utils.*;
 import com.iris.framework.security.user.SecurityUser;
-import com.iris.system.base.dao.SysUserDao;
+import com.iris.system.base.mapper.SysUserMapper;
 import com.iris.system.base.enums.SuperAdminEnum;
 import com.iris.system.base.query.SysRoleUserQuery;
 import com.iris.system.base.query.SysUserQuery;
@@ -42,7 +42,7 @@ public class SysUserServiceImpl  implements SysUserService {
     private final SysUserRoleService sysUserRoleService;
     private final SysUserPostService sysUserPostService;
     private final RedisCache redisCache;
-    private final SysUserDao sysUserDao;
+    private final SysUserMapper sysUserMapper;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -50,11 +50,11 @@ public class SysUserServiceImpl  implements SysUserService {
     @Resource
     private SysParamsService sysParamsService;
     public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserPostService sysUserPostService,
-                              RedisCache redisCache, SysUserDao sysUserDao) {
+                              RedisCache redisCache, SysUserMapper sysUserMapper) {
         this.sysUserRoleService = sysUserRoleService;
         this.sysUserPostService = sysUserPostService;
         this.redisCache = redisCache;
-        this.sysUserDao = sysUserDao;
+        this.sysUserMapper = sysUserMapper;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SysUserServiceImpl  implements SysUserService {
         // 分页查询
         PageHelper.startPage(query.getPage(), query.getLimit());
         // 数据列表
-        List<SysUserEntity> list = sysUserDao.getList(query);
+        List<SysUserEntity> list = sysUserMapper.getList(query);
         PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -122,13 +122,13 @@ public class SysUserServiceImpl  implements SysUserService {
         entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
         // 判断用户名是否存在
-        SysUserEntity user = sysUserDao.getByUsername(entity.getUsername());
+        SysUserEntity user = sysUserMapper.getByUsername(entity.getUsername());
         if (user != null) {
             throw new ServerException("用户名已经存在");
         }
 
         // 判断手机号是否存在
-        user = sysUserDao.getByMobile(entity.getMobile());
+        user = sysUserMapper.getByMobile(entity.getMobile());
         if (user != null) {
             throw new ServerException("手机号已经存在");
         }
@@ -136,7 +136,7 @@ public class SysUserServiceImpl  implements SysUserService {
             entity.setStatus(1);
         }
         // 保存用户
-        sysUserDao.insertUser(entity);
+        sysUserMapper.insertUser(entity);
 
         // 保存用户角色关系
         sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
@@ -159,19 +159,19 @@ public class SysUserServiceImpl  implements SysUserService {
         SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
 
         // 判断用户名是否存在
-        SysUserEntity user = sysUserDao.getByUsername(entity.getUsername());
+        SysUserEntity user = sysUserMapper.getByUsername(entity.getUsername());
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("用户名已经存在");
         }
 
         // 判断手机号是否存在
-        user = sysUserDao.getByMobile(entity.getMobile());
+        user = sysUserMapper.getByMobile(entity.getMobile());
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("手机号已经存在");
         }
 
         // 更新用户
-        sysUserDao.updateById(entity);
+        sysUserMapper.updateById(entity);
 
         // 更新用户角色关系
         sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
@@ -189,7 +189,7 @@ public class SysUserServiceImpl  implements SysUserService {
             SysUserEntity entity = new SysUserEntity();
             entity.setId(id);
             entity.setDbStatus(0);
-            sysUserDao.updateById(entity);
+            sysUserMapper.updateById(entity);
         });
 
         // 删除用户角色关系
@@ -201,7 +201,7 @@ public class SysUserServiceImpl  implements SysUserService {
 
     @Override
     public SysUserVO getByMobile(String mobile) {
-        SysUserEntity user = sysUserDao.getByMobile(mobile);
+        SysUserEntity user = sysUserMapper.getByMobile(mobile);
         return SysUserConvert.INSTANCE.convert(user);
     }
 
@@ -218,7 +218,7 @@ public class SysUserServiceImpl  implements SysUserService {
             userId = user.getId();
         }
         // 重新查询，防止修改基本信息后，缓存未更新的情况
-        SysUserEntity entity = sysUserDao.getById(userId);
+        SysUserEntity entity = sysUserMapper.getById(userId);
         user = SysUserConvert.INSTANCE.convert(entity);
         // 用户角色列表
         List<Long> roleIdList = sysUserRoleService.getRoleIdList(userId);
@@ -235,18 +235,18 @@ public class SysUserServiceImpl  implements SysUserService {
         // 密码验证
         passwordStrength(newPassword);
         // 修改密码
-        SysUserEntity user = sysUserDao.getById(id);
+        SysUserEntity user = sysUserMapper.getById(id);
         newPassword = passwordEncoder.encode(newPassword);
         user.setPassword(newPassword);
 
-        sysUserDao.updateById(user);
+        sysUserMapper.updateById(user);
     }
 
     @Override
     public PageResult<SysUserVO> roleUserPage(SysRoleUserQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
         // 数据列表
-        List<SysUserEntity> list = sysUserDao.getRoleUserList(query);
+        List<SysUserEntity> list = sysUserMapper.getRoleUserList(query);
         PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -269,7 +269,7 @@ public class SysUserServiceImpl  implements SysUserService {
             private void saveUser(List<SysUserExcelVO> result) {
                 List<SysUserEntity> sysUserEntities = SysUserConvert.INSTANCE.convertListEntity(result);
                 sysUserEntities.forEach(user -> user.setPassword(password));
-                sysUserEntities.forEach(sysUserDao::insertUser);
+                sysUserEntities.forEach(sysUserMapper::insertUser);
             }
         });
 
@@ -277,7 +277,7 @@ public class SysUserServiceImpl  implements SysUserService {
 
     @Override
     public void export() {
-        List<SysUserEntity> list = sysUserDao.getList(new SysUserQuery()); // list(Wrappers.lambdaQuery(SysUserEntity.class).eq(SysUserEntity::getSuperAdmin, SuperAdminEnum.NO.getValue()));
+        List<SysUserEntity> list = sysUserMapper.getList(new SysUserQuery()); // list(Wrappers.lambdaQuery(SysUserEntity.class).eq(SysUserEntity::getSuperAdmin, SuperAdminEnum.NO.getValue()));
         List<SysUserExcelVO> userExcelVOS = SysUserConvert.INSTANCE.convert2List(list);
         // transService.transBatch(userExcelVOS);
         // 写到浏览器打开

@@ -3,8 +3,8 @@ package com.iris.system.base.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.system.base.dao.SysOrgDao;
-import com.iris.system.base.dao.SysUserDao;
+import com.iris.system.base.mapper.SysOrgMapper;
+import com.iris.system.base.mapper.SysUserMapper;
 import com.iris.system.base.query.SysOrgQuery;
 import com.iris.system.base.vo.SysOrgVO;
 import com.iris.system.base.convert.SysOrgConvert;
@@ -26,12 +26,12 @@ import java.util.List;
  */
 @Service
 public class SysOrgServiceImpl implements SysOrgService {
-	private final SysUserDao sysUserDao;
-	private final SysOrgDao sysOrgDao;
+	private final SysUserMapper sysUserMapper;
+	private final SysOrgMapper sysOrgMapper;
 
-	public SysOrgServiceImpl(SysUserDao sysUserDao, SysOrgDao sysOrgDao) {
-		this.sysUserDao = sysUserDao;
-		this.sysOrgDao = sysOrgDao;
+	public SysOrgServiceImpl(SysUserMapper sysUserMapper, SysOrgMapper sysOrgMapper) {
+		this.sysUserMapper = sysUserMapper;
+		this.sysOrgMapper = sysOrgMapper;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class SysOrgServiceImpl implements SysOrgService {
 		// params.put(Constant.DATA_SCOPE, getDataScope("t1", "id"));
 
 		// 机构列表
-		List<SysOrgEntity> entityList = sysOrgDao.getList(query);
+		List<SysOrgEntity> entityList = sysOrgMapper.getList(query);
 
 		return TreeUtils.build(SysOrgConvert.INSTANCE.convertList(entityList));
 	}
@@ -55,7 +55,7 @@ public class SysOrgServiceImpl implements SysOrgService {
 	public PageResult<SysOrgVO> page(SysOrgQuery query) {
 		PageHelper.startPage(query.getPage(), query.getLimit());
 		// 机构列表
-		List<SysOrgEntity> list = sysOrgDao.getList(query);
+		List<SysOrgEntity> list = sysOrgMapper.getList(query);
 		PageInfo<SysOrgEntity> pageInfo = new PageInfo<>(list);
 		return new PageResult<>(SysOrgConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
 	}
@@ -64,7 +64,7 @@ public class SysOrgServiceImpl implements SysOrgService {
 	@Transactional(rollbackFor = Exception.class)
 	public void save(SysOrgVO vo) {
 		SysOrgEntity entity = SysOrgConvert.INSTANCE.convert(vo);
-		sysOrgDao.insertOrg(entity);
+		sysOrgMapper.insertOrg(entity);
 	}
 
 	@Override
@@ -81,20 +81,20 @@ public class SysOrgServiceImpl implements SysOrgService {
 		if(subOrgList.contains(entity.getParentId())){
 			throw new ServerException("上级机构不能为下级");
 		}
-		sysOrgDao.updateById(entity);
+		sysOrgMapper.updateById(entity);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(Long id) {
 		// 判断是否有子机构
-		int orgCount = sysOrgDao.countByParentId(id);
+		int orgCount = sysOrgMapper.countByParentId(id);
 		if(orgCount > 0){
 			throw new ServerException("请先删除子机构");
 		}
 
 		// 判断机构下面是否有用户
-		long userCount = sysUserDao.countByOrgId(id);
+		long userCount = sysUserMapper.countByOrgId(id);
 		if(userCount > 0){
 			throw new ServerException("机构下面有用户，不能删除");
 		}
@@ -104,13 +104,13 @@ public class SysOrgServiceImpl implements SysOrgService {
 		SysOrgEntity params = new SysOrgEntity();
 		params.setId(id);
 		params.setDbStatus(0);
-		sysOrgDao.updateById(params);
+		sysOrgMapper.updateById(params);
 	}
 
 	@Override
 	public List<Long> getSubOrgIdList(Long id) {
 		// 所有机构的id、pid列表
-		List<SysOrgEntity> orgList = sysOrgDao.getIdAndPidList();
+		List<SysOrgEntity> orgList = sysOrgMapper.getIdAndPidList();
 
 		// 递归查询所有子机构ID列表
 		List<Long> subIdList = new ArrayList<>();
@@ -124,7 +124,7 @@ public class SysOrgServiceImpl implements SysOrgService {
 
 	@Override
 	public SysOrgEntity getById(Long id) {
-		return sysOrgDao.getById(id);
+		return sysOrgMapper.getById(id);
 	}
 
 	private void getTree(Long id, List<SysOrgEntity> orgList, List<Long> subIdList) {

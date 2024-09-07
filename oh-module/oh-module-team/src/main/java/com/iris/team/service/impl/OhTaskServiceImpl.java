@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.constant.Constant;
 import com.iris.team.convert.OhTaskConvert;
-import com.iris.team.dao.OhTaskDao;
+import com.iris.team.mapper.OhTaskMapper;
 import com.iris.team.entity.OhTaskEntity;
 import com.iris.team.query.OhTaskQuery;
 import com.iris.team.service.OhTaskService;
@@ -27,10 +27,10 @@ import java.util.Map;
 @Service
 public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService {
 
-    private final OhTaskDao ohTaskDao;
+    private final OhTaskMapper ohTaskMapper;
 
-    public OhTaskServiceImpl(OhTaskDao ohTaskDao){
-        this.ohTaskDao = ohTaskDao;
+    public OhTaskServiceImpl(OhTaskMapper ohTaskMapper){
+        this.ohTaskMapper = ohTaskMapper;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService 
         // 查询参数
         Map<String, Object> params = getParams(query);
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<OhTaskEntity> list = ohTaskDao.getList(params);
+        List<OhTaskEntity> list = ohTaskMapper.getList(params);
         PageInfo<OhTaskEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(OhTaskConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -57,14 +57,14 @@ public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService 
     @Override
     public void save(OhTaskVO vo) {
         OhTaskEntity entity = OhTaskConvert.INSTANCE.convert(vo);
-        ohTaskDao.save(entity);
+        ohTaskMapper.save(entity);
     }
 
     @Override
     public void update(OhTaskVO vo) {
         OhTaskEntity entity = OhTaskConvert.INSTANCE.convert(vo);
 
-        ohTaskDao.updateById(entity);
+        ohTaskMapper.updateById(entity);
     }
 
     @Override
@@ -74,13 +74,13 @@ public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService 
             OhTaskEntity param = new OhTaskEntity();
             param.setId(id);
             param.setDbStatus(0);
-            ohTaskDao.updateById(param);
+            ohTaskMapper.updateById(param);
         });
     }
 
     @Override
     public OhTaskEntity getById(Long id) {
-        return ohTaskDao.getById(id);
+        return ohTaskMapper.getById(id);
     }
 
 }

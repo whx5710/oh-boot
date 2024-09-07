@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.app.convert.DataFunctionAuthorityConvert;
-import com.iris.system.app.dao.DataFunctionDao;
+import com.iris.system.app.mapper.DataFunctionMapper;
 import com.iris.system.app.entity.DataFunctionAuthorityEntity;
 import com.iris.system.app.query.DataFunctionAuthorityQuery;
 import com.iris.system.app.service.DataFunctionAuthorityService;
@@ -25,16 +25,16 @@ import java.util.List;
 @Service
 public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthorityService {
 
-    private final DataFunctionDao dataFunctionDao;
+    private final DataFunctionMapper dataFunctionMapper;
 
-    public DataFunctionAuthorityServiceImpl(DataFunctionDao dataFunctionDao){
-        this.dataFunctionDao = dataFunctionDao;
+    public DataFunctionAuthorityServiceImpl(DataFunctionMapper dataFunctionMapper){
+        this.dataFunctionMapper = dataFunctionMapper;
     }
 
     @Override
     public PageResult<DataFunctionAuthorityVO> page(DataFunctionAuthorityQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<DataFunctionAuthorityEntity> list = dataFunctionDao.getAuthorityList(query);
+        List<DataFunctionAuthorityEntity> list = dataFunctionMapper.getAuthorityList(query);
         PageInfo<DataFunctionAuthorityEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(DataFunctionAuthorityConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -42,14 +42,14 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
     @Override
     public void save(DataFunctionAuthorityVO vo) {
         DataFunctionAuthorityEntity entity = DataFunctionAuthorityConvert.INSTANCE.convert(vo);
-        dataFunctionDao.insertFuncAuthority(entity);
+        dataFunctionMapper.insertFuncAuthority(entity);
     }
 
     @Override
     public void update(DataFunctionAuthorityVO vo) {
         DataFunctionAuthorityEntity entity = DataFunctionAuthorityConvert.INSTANCE.convert(vo);
 
-        dataFunctionDao.updateFuncAuthorityById(entity);
+        dataFunctionMapper.updateFuncAuthorityById(entity);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
             DataFunctionAuthorityEntity param = new DataFunctionAuthorityEntity();
             param.setId(id);
             param.setDbStatus(0);
-            dataFunctionDao.updateFuncAuthorityById(param);
+            dataFunctionMapper.updateFuncAuthorityById(param);
         });
     }
 
@@ -79,14 +79,14 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
         }
         if(i == 0){ // 删除
             for(String funcCode: data.getFuncCodes()){
-                dataFunctionDao.updateFuncAuthorityStatus(data.getClientId(), funcCode, 0);
+                dataFunctionMapper.updateFuncAuthorityStatus(data.getClientId(), funcCode, 0);
             }
         }else{
             for(String funcCode: data.getFuncCodes()){
                 DataFunctionAuthorityEntity dae = new DataFunctionAuthorityEntity();
                 dae.setFuncCode(funcCode);
                 dae.setClientId(data.getClientId());
-                dataFunctionDao.insertFuncAuthority(dae);
+                dataFunctionMapper.insertFuncAuthority(dae);
             }
 
         }
@@ -94,7 +94,7 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
 
     @Override
     public DataFunctionAuthorityEntity getById(Long id) {
-        return dataFunctionDao.getFuncAuthorityById(id);
+        return dataFunctionMapper.getFuncAuthorityById(id);
     }
 
 }

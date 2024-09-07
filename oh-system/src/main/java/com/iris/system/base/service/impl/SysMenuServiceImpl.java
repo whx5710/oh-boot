@@ -4,9 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.common.utils.Result;
-import com.iris.system.base.convert.SysUserConvert;
-import com.iris.system.base.dao.SysMenuDao;
+import com.iris.system.base.mapper.SysMenuMapper;
 import com.iris.system.base.enums.SuperAdminEnum;
 import com.iris.system.base.query.SysMenuQuery;
 import com.iris.system.base.vo.SysMenuTreeVO;
@@ -33,11 +31,11 @@ import java.util.*;
 @Service
 public class SysMenuServiceImpl implements SysMenuService {
     private final SysRoleMenuService sysRoleMenuService;
-    private final SysMenuDao sysMenuDao;
+    private final SysMenuMapper sysMenuMapper;
 
-    public SysMenuServiceImpl(SysRoleMenuService sysRoleMenuService, SysMenuDao sysMenuDao) {
+    public SysMenuServiceImpl(SysRoleMenuService sysRoleMenuService, SysMenuMapper sysMenuMapper) {
         this.sysRoleMenuService = sysRoleMenuService;
-        this.sysMenuDao = sysMenuDao;
+        this.sysMenuMapper = sysMenuMapper;
     }
 
     @Override
@@ -46,7 +44,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
         // 保存菜单
-        sysMenuDao.save(entity);
+        sysMenuMapper.save(entity);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
 
         // 更新菜单
-        sysMenuDao.updateById(entity);
+        sysMenuMapper.updateById(entity);
     }
 
     @Override
@@ -70,7 +68,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         SysMenuEntity param = new SysMenuEntity();
         param.setId(id);
         param.setDbStatus(0);
-        sysMenuDao.updateById(param);
+        sysMenuMapper.updateById(param);
         // 删除角色菜单关系
         sysRoleMenuService.deleteByMenuId(id);
     }
@@ -83,14 +81,14 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     public PageResult<SysMenuVO> page(SysMenuQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysMenuEntity> list = sysMenuDao.getMenuList(query);
+        List<SysMenuEntity> list = sysMenuMapper.getMenuList(query);
         PageInfo<SysMenuEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysMenuConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public List<SysMenuTreeVO> getMenuTreeList(SysMenuQuery query) {
-        List<SysMenuEntity> menuList = sysMenuDao.getMenuList(query);
+        List<SysMenuEntity> menuList = sysMenuMapper.getMenuList(query);
         return TreeUtils.build(SysMenuConvert.INSTANCE.convertTreeList(menuList),
                 query.getParentId()==null?Constant.ROOT:query.getParentId());
     }
@@ -103,9 +101,9 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
             SysMenuQuery query = new SysMenuQuery();
             query.setType(type);
-            menuList = sysMenuDao.getMenuList(query);
+            menuList = sysMenuMapper.getMenuList(query);
         } else {
-            menuList = sysMenuDao.getUserMenuList(user.getId(), type);
+            menuList = sysMenuMapper.getUserMenuList(user.getId(), type);
         }
         return TreeUtils.build(SysMenuConvert.INSTANCE.convertTreeList(menuList));
     }
@@ -114,7 +112,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     public Long getSubMenuCount(Long pid) {
         SysMenuEntity param = new SysMenuEntity();
         param.setParentId(pid);
-        List<SysMenuEntity> list = sysMenuDao.getList(param);
+        List<SysMenuEntity> list = sysMenuMapper.getList(param);
         return (long) list.size();
     }
 
@@ -123,9 +121,9 @@ public class SysMenuServiceImpl implements SysMenuService {
         // 系统管理员，拥有最高权限
         List<String> authorityList;
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
-            authorityList = sysMenuDao.getAuthorityList();
+            authorityList = sysMenuMapper.getAuthorityList();
         } else {
-            authorityList = sysMenuDao.getUserAuthorityList(user.getId());
+            authorityList = sysMenuMapper.getUserAuthorityList(user.getId());
         }
 
         // 用户权限列表
@@ -142,7 +140,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Override
     public SysMenuEntity getById(Long id) {
-        return sysMenuDao.getById(id);
+        return sysMenuMapper.getById(id);
     }
 
 }

@@ -3,7 +3,7 @@ package com.iris.flow.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.flow.convert.FlowNodeConvert;
-import com.iris.flow.dao.FlowNodeDao;
+import com.iris.flow.mapper.FlowNodeMapper;
 import com.iris.flow.entity.FlowNodeEntity;
 import com.iris.flow.query.FlowNodeQuery;
 import com.iris.flow.service.FlowNodeService;
@@ -23,16 +23,16 @@ import java.util.List;
 @Service
 public class FlowNodeServiceImpl implements FlowNodeService {
 
-    private final FlowNodeDao flowNodeDao;
+    private final FlowNodeMapper flowNodeMapper;
 
-    public FlowNodeServiceImpl(FlowNodeDao flowNodeDao){
-        this.flowNodeDao = flowNodeDao;
+    public FlowNodeServiceImpl(FlowNodeMapper flowNodeMapper){
+        this.flowNodeMapper = flowNodeMapper;
     }
 
     @Override
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<FlowNodeEntity> list = flowNodeDao.getList(query);
+        List<FlowNodeEntity> list = flowNodeMapper.getList(query);
         PageInfo<FlowNodeEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,13 +40,13 @@ public class FlowNodeServiceImpl implements FlowNodeService {
     @Override
     public void save(FlowNodeVO vo) {
         FlowNodeEntity entity = FlowNodeConvert.INSTANCE.convert(vo);
-        flowNodeDao.save(entity);
+        flowNodeMapper.save(entity);
     }
 
     @Override
     public void update(FlowNodeVO vo) {
         FlowNodeEntity entity = FlowNodeConvert.INSTANCE.convert(vo);
-        flowNodeDao.updateById(entity);
+        flowNodeMapper.updateById(entity);
     }
 
     @Override
@@ -56,13 +56,13 @@ public class FlowNodeServiceImpl implements FlowNodeService {
             FlowNodeEntity param = new FlowNodeEntity();
             param.setId(id);
             param.setDbStatus(0);
-            flowNodeDao.updateById(param);
+            flowNodeMapper.updateById(param);
         });
     }
 
     @Override
     public FlowNodeEntity getById(Long id) {
-        return flowNodeDao.getById(id);
+        return flowNodeMapper.getById(id);
     }
 
 }

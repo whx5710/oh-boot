@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.quartz.convert.ScheduleJobLogConvert;
-import com.iris.system.quartz.dao.ScheduleJobDao;
+import com.iris.system.quartz.mapper.ScheduleJobMapper;
 import com.iris.system.quartz.entity.ScheduleJobLogEntity;
 import com.iris.system.quartz.query.ScheduleJobLogQuery;
 import com.iris.system.quartz.service.ScheduleJobLogService;
@@ -23,15 +23,15 @@ import java.util.List;
 @Service
 public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
 
-    private final ScheduleJobDao scheduleJobDao;
+    private final ScheduleJobMapper scheduleJobMapper;
 
-    public ScheduleJobLogServiceImpl(ScheduleJobDao scheduleJobDao){
-        this.scheduleJobDao = scheduleJobDao;
+    public ScheduleJobLogServiceImpl(ScheduleJobMapper scheduleJobMapper){
+        this.scheduleJobMapper = scheduleJobMapper;
     }
     @Override
     public PageResult<ScheduleJobLogVO> page(ScheduleJobLogQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<ScheduleJobLogEntity> list = scheduleJobDao.getLogList(query);
+        List<ScheduleJobLogEntity> list = scheduleJobMapper.getLogList(query);
         PageInfo<ScheduleJobLogEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(ScheduleJobLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -39,17 +39,17 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        scheduleJobDao.deleteLogByIds(idList);
+        scheduleJobMapper.deleteLogByIds(idList);
     }
 
     @Override
     public int save(ScheduleJobLogEntity entity) {
-        return scheduleJobDao.insertJobLog(entity);
+        return scheduleJobMapper.insertJobLog(entity);
     }
 
     @Override
     public ScheduleJobLogEntity getById(Long id) {
-        return scheduleJobDao.getLogById(id);
+        return scheduleJobMapper.getLogById(id);
     }
 
 }

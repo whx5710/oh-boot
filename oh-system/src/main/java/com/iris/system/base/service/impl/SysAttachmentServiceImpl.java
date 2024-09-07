@@ -2,7 +2,7 @@ package com.iris.system.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.system.base.dao.SysAttachmentDao;
+import com.iris.system.base.mapper.SysAttachmentMapper;
 import com.iris.system.base.query.SysAttachmentQuery;
 import com.iris.system.base.vo.SysAttachmentVO;
 import com.iris.system.base.entity.SysAttachmentEntity;
@@ -23,15 +23,15 @@ import java.util.List;
 @Service
 public class SysAttachmentServiceImpl implements SysAttachmentService {
 
-    private final SysAttachmentDao sysAttachmentDao;
-    public SysAttachmentServiceImpl(SysAttachmentDao sysAttachmentDao) {
-        this.sysAttachmentDao = sysAttachmentDao;
+    private final SysAttachmentMapper sysAttachmentMapper;
+    public SysAttachmentServiceImpl(SysAttachmentMapper sysAttachmentMapper) {
+        this.sysAttachmentMapper = sysAttachmentMapper;
     }
 
     @Override
     public PageResult<SysAttachmentVO> page(SysAttachmentQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysAttachmentEntity> list = sysAttachmentDao.getList(query);
+        List<SysAttachmentEntity> list = sysAttachmentMapper.getList(query);
         PageInfo<SysAttachmentEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysAttachmentConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,13 +40,13 @@ public class SysAttachmentServiceImpl implements SysAttachmentService {
     public void save(SysAttachmentVO vo) {
         SysAttachmentEntity entity = SysAttachmentConvert.INSTANCE.convert(vo);
 
-        sysAttachmentDao.insertAttach(entity);
+        sysAttachmentMapper.insertAttach(entity);
     }
 
     @Override
     public void update(SysAttachmentVO vo) {
         SysAttachmentEntity entity = SysAttachmentConvert.INSTANCE.convert(vo);
-        sysAttachmentDao.updateById(entity);
+        sysAttachmentMapper.updateById(entity);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SysAttachmentServiceImpl implements SysAttachmentService {
             SysAttachmentEntity param = new SysAttachmentEntity();
             param.setId(id);
             param.setDbStatus(0);
-            sysAttachmentDao.updateById(param);
+            sysAttachmentMapper.updateById(param);
         });
     }
 

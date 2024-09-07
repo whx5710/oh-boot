@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.system.base.cache.SmsPlatformCache;
-import com.iris.system.base.dao.SmsPlatformDao;
+import com.iris.system.base.mapper.SmsPlatformMapper;
 import com.iris.system.base.query.SmsPlatformQuery;
 import com.iris.system.base.vo.SmsPlatformVO;
 import com.iris.system.sms.config.SmsConfig;
@@ -26,17 +26,17 @@ import java.util.List;
 @Service
 public class SmsPlatformServiceImpl implements SmsPlatformService {
     private final SmsPlatformCache smsPlatformCache;
-    private final SmsPlatformDao smsPlatformDao;
+    private final SmsPlatformMapper smsPlatformMapper;
 
-    public SmsPlatformServiceImpl(SmsPlatformCache smsPlatformCache, SmsPlatformDao smsPlatformDao) {
+    public SmsPlatformServiceImpl(SmsPlatformCache smsPlatformCache, SmsPlatformMapper smsPlatformMapper) {
         this.smsPlatformCache = smsPlatformCache;
-        this.smsPlatformDao = smsPlatformDao;
+        this.smsPlatformMapper = smsPlatformMapper;
     }
 
     @Override
     public PageResult<SmsPlatformVO> page(SmsPlatformQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SmsPlatformEntity> list = smsPlatformDao.getList(query);
+        List<SmsPlatformEntity> list = smsPlatformMapper.getList(query);
         PageInfo<SmsPlatformEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SmsPlatformConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -50,7 +50,7 @@ public class SmsPlatformServiceImpl implements SmsPlatformService {
         if(cacheList == null) {
             SmsPlatformQuery param = new SmsPlatformQuery();
             param.setStatus(Constant.ENABLE);
-            List<SmsPlatformEntity> list = smsPlatformDao.getList(param);
+            List<SmsPlatformEntity> list = smsPlatformMapper.getList(param);
             cacheList = SmsPlatformConvert.INSTANCE.convertList2(list);
             smsPlatformCache.save(cacheList);
         }
@@ -61,14 +61,14 @@ public class SmsPlatformServiceImpl implements SmsPlatformService {
     @Override
     public void save(SmsPlatformVO vo) {
         SmsPlatformEntity entity = SmsPlatformConvert.INSTANCE.convert(vo);
-        smsPlatformDao.insertPlatform(entity);
+        smsPlatformMapper.insertPlatform(entity);
         smsPlatformCache.delete();
     }
 
     @Override
     public void update(SmsPlatformVO vo) {
         SmsPlatformEntity entity = SmsPlatformConvert.INSTANCE.convert(vo);
-        smsPlatformDao.updateById(entity);
+        smsPlatformMapper.updateById(entity);
         smsPlatformCache.delete();
     }
 
@@ -79,14 +79,14 @@ public class SmsPlatformServiceImpl implements SmsPlatformService {
             SmsPlatformEntity param = new SmsPlatformEntity();
             param.setId(id);
             param.setDbStatus(0);
-            smsPlatformDao.updateById(param);
+            smsPlatformMapper.updateById(param);
         });
         smsPlatformCache.delete();
     }
 
     @Override
     public SmsPlatformEntity getById(Long id) {
-        return smsPlatformDao.getById(id);
+        return smsPlatformMapper.getById(id);
     }
 
 }

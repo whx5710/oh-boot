@@ -3,7 +3,7 @@ package com.iris.system.base.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.common.utils.PageResult;
-import com.iris.system.base.dao.SysVersionInfoDao;
+import com.iris.system.base.mapper.SysVersionInfoMapper;
 import com.iris.system.base.query.SysVersionInfoQuery;
 import com.iris.system.base.vo.SysVersionInfoVO;
 import com.iris.system.base.convert.SysVersionInfoConvert;
@@ -23,16 +23,16 @@ import java.util.List;
 @Service
 public class SysVersionInfoServiceImpl implements SysVersionInfoService {
 
-    private final SysVersionInfoDao sysVersionInfoDao;
+    private final SysVersionInfoMapper sysVersionInfoMapper;
 
-    public SysVersionInfoServiceImpl(SysVersionInfoDao sysVersionInfoDao){
-        this.sysVersionInfoDao = sysVersionInfoDao;
+    public SysVersionInfoServiceImpl(SysVersionInfoMapper sysVersionInfoMapper){
+        this.sysVersionInfoMapper = sysVersionInfoMapper;
     }
 
     @Override
     public PageResult<SysVersionInfoVO> page(SysVersionInfoQuery query) {
         PageHelper.startPage(query.getPage(), query.getLimit());
-        List<SysVersionInfoEntity> list = sysVersionInfoDao.getList(query);
+        List<SysVersionInfoEntity> list = sysVersionInfoMapper.getList(query);
         PageInfo<SysVersionInfoEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysVersionInfoConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
@@ -40,17 +40,17 @@ public class SysVersionInfoServiceImpl implements SysVersionInfoService {
     @Override
     public void save(SysVersionInfoVO vo) {
         // 修改当前版本标记
-        sysVersionInfoDao.updateCurVersion(false);
+        sysVersionInfoMapper.updateCurVersion(false);
 
         SysVersionInfoEntity entity = SysVersionInfoConvert.INSTANCE.convert(vo);
         entity.setIsCurrVersion(true);
-        sysVersionInfoDao.save(entity);
+        sysVersionInfoMapper.save(entity);
     }
 
     @Override
     public void update(SysVersionInfoVO vo) {
         SysVersionInfoEntity entity = SysVersionInfoConvert.INSTANCE.convert(vo);
-        sysVersionInfoDao.updateById(entity);
+        sysVersionInfoMapper.updateById(entity);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SysVersionInfoServiceImpl implements SysVersionInfoService {
             SysVersionInfoEntity param = new SysVersionInfoEntity();
             param.setId(id);
             param.setDbStatus(0);
-            sysVersionInfoDao.updateById(param);
+            sysVersionInfoMapper.updateById(param);
         });
     }
 
@@ -72,13 +72,13 @@ public class SysVersionInfoServiceImpl implements SysVersionInfoService {
     public SysVersionInfoEntity latestVersion() {
         SysVersionInfoQuery query = new SysVersionInfoQuery();
         query.setCurrVersion(true);
-        List<SysVersionInfoEntity> list = sysVersionInfoDao.getList(query);
+        List<SysVersionInfoEntity> list = sysVersionInfoMapper.getList(query);
         return list.getFirst();
     }
 
     @Override
     public SysVersionInfoEntity getById(Long id) {
-        return sysVersionInfoDao.getById(id);
+        return sysVersionInfoMapper.getById(id);
     }
 
 }
