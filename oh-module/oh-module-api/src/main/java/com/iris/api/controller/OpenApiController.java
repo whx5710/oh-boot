@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iris.api.common.BaseController;
+import com.iris.api.mq.MQProducerService;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.exception.ServerException;
@@ -14,18 +15,14 @@ import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.KafkaException;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 /***
  * 公共接口入口
@@ -51,9 +48,11 @@ public class OpenApiController extends BaseController {
     @Value("${iris.open-api.type:1}")
     private int apiType;
 
-    @Resource
-    KafkaTemplate<String, String> kafkaTemplate;
+    private final MQProducerService mqProducerService;
 
+    public OpenApiController(MQProducerService mqProducerService){
+        this.mqProducerService = mqProducerService;
+    }
 
     /**
      * 公共接口
@@ -65,7 +64,7 @@ public class OpenApiController extends BaseController {
      * @param request 请求
      * @return 返回
      */
-    @Operation(summary = "公共接口")
+    /*@Operation(summary = "公共接口")
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         MsgEntity msgEntity = this.basicCheck(request);
@@ -102,9 +101,40 @@ public class OpenApiController extends BaseController {
         }else{
             throw new ServerException("未获取到相关服务，功能号【" + msgEntity.getFuncCode() + "】无效！ ");
         }
+    }*/
+
+    @Operation(summary = "公共接口")
+    @PostMapping("/submit")
+    public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
+        MsgEntity msgEntity = this.basicCheck(request);
+        msgEntity.setData(params);
+        Boolean isAsync = msgEntity.getAsync(); // 接口是否支持异步
+
+        Optional<JobService> optional = ServiceFactory.getService(msgEntity.getFuncCode());
+        if(optional.isPresent()){
+            JobService jobService = optional.get();
+            // 校验参数
+            jobService.check(params);
+            if (!isAsync || apiType == 1) { // 直接业务处理
+                return jobService.handle(msgEntity);
+            }else{
+                msgEntity.setId(IrisTools.snowFlakeId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
+                try {
+                    SendResult sendResult = mqProducerService.sendMsg(msgEntity, "asyncSend");
+                    log.info("返回信息 {}", JsonUtils.toJsonString(sendResult));
+                }catch (Exception e){
+                    log.error("消息发送异常（{}），切换直接调用业务接口。", e.getMessage());
+                    apiType = 1; // 1直接保存 2使用MQ异步保存
+                    return jobService.handle(msgEntity);
+                }
+                return Result.ok("发送成功！");
+            }
+        }else{
+            throw new ServerException("未获取到相关服务，功能号【" + msgEntity.getFuncCode() + "】无效！ ");
+        }
     }
 
-    /*public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) throws JsonProcessingException {
         String url = "http://localhost:8080/openApi/submit";
         Map<String,String> head = new HashMap<>();
         head.put(Constant.CLIENT_ID,"C0001");
@@ -112,11 +142,11 @@ public class OpenApiController extends BaseController {
         head.put(Constant.FUNC_CODE,"F1003");
         Map<String, Object> data = new HashMap<>();
         data.put("name","王小费");
-        data.put("sex","name");
+        data.put("sex","男");
 
         System.out.println("开始请求");
 
-        for(int i = 0; i< 19999; i++){
+        for(int i = 0; i< 999; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", new Date());
             data.put("reportTime", new Date());
@@ -127,5 +157,5 @@ public class OpenApiController extends BaseController {
             System.out.println(str);
         }
         System.out.println("结束");
-    }*/
+    }
 }
