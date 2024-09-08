@@ -62,6 +62,7 @@ public class DynamicDataSourceConfig {
                     master = Constant.SYS_DB;
                     dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(Constant.SYS_DB));
                 }else{
+                    // 优先系统配置的主数据源，其次是 masterDb，再次是 sysDb
                     log.error("请配置连接主库！primary > masterDb > sysDb");
                 }
             }else {
@@ -73,13 +74,22 @@ public class DynamicDataSourceConfig {
             if(dataSourceMap.containsKey(primary)){
                 dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(primary));
             }else{
-                log.error("未找到对应的主数据源[{}]，请检查", master);
+                log.error("未找到对应的主数据源 [{}]，请检查", master);
+                if(dataSourceMap.containsKey(Constant.SYS_DB)){
+                    dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(Constant.SYS_DB));
+                    log.warn("未找到配置的主数据源 [{}]，已切换到 [{}] 数据源", master, Constant.SYS_DB);
+                    master = Constant.SYS_DB;
+                }
             }
         }
         dynamicDataSource.setTargetDataSources(dataSourceMap);
         // 将数据源信息备份在 DataSources 中
         dynamicDataSource.setDynamicDataSources(dataSourceMap);
-        log.debug("动态数据源初始完成，主数据源 [{}]", master);
+        if(dataSourceMap.containsKey(master)){
+            log.debug("动态数据源初始完成，主数据源 [{}]", master);
+        }else{
+            log.error("动态数据源初始完成，无主数据源，请检查");
+        }
         return dynamicDataSource;
     }
 

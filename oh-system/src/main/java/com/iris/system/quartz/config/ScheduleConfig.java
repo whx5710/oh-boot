@@ -8,13 +8,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.sql.DataSource;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
  * 定时任务配置
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
 @Configuration
 public class ScheduleConfig {
@@ -61,7 +63,13 @@ public class ScheduleConfig {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
         // 切换数据源，使用系统内置数据源；根据实际情况使用数据源
-        factory.setDataSource((DataSource) dataSource.getDynamicDataSources().get(Constant.SYS_DB));
+        Map<Object, Object> map = dataSource.getDynamicDataSources();
+        if(map.containsKey(Constant.SYS_DB)){
+            factory.setDataSource((DataSource) map.get(Constant.SYS_DB));
+        }else{
+            // 如果为空，取主数据源
+            factory.setDataSource(Objects.requireNonNull(dataSource.getResolvedDefaultDataSource()));
+        }
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);
