@@ -65,11 +65,14 @@ public class SysLogOperateServiceImpl implements SysLogOperateService {
                 // 每次插入10条
                 int count = 10;
                 for (int i = 0; i < count; i++) {
-                    OperateLogDTO log = (OperateLogDTO) redisCache.rightPop(key);
+                    Object object = redisCache.rightPop(key);
+                    if(object == null){
+                        return;
+                    }
+                    OperateLogDTO log = (OperateLogDTO) object;
                     if (log == null) {
                         return;
                     }
-
                     SysLogOperateEntity entity = BeanUtil.copyProperties(log, SysLogOperateEntity.class);
                     sysLogOperateMapper.save(entity);
                 }
