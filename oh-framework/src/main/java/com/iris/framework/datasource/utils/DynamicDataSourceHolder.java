@@ -1,6 +1,8 @@
 package com.iris.framework.datasource.utils;
 
 import com.iris.framework.common.constant.Constant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 数据源切换处理
@@ -9,8 +11,8 @@ import com.iris.framework.common.constant.Constant;
  * @author 王小费 whx5710@qq.com
  */
 public class DynamicDataSourceHolder {
+    private final static Logger log = LoggerFactory.getLogger(DynamicDataSourceHolder.class);
 
-    // private final static Logger log = LoggerFactory.getLogger(DynamicDataSourceHolder.class);
     /**
      * 保存动态数据源名称
      */
@@ -27,7 +29,11 @@ public class DynamicDataSourceHolder {
      */
     public static String getDynamicDataSourceKey(){
         String key = DYNAMIC_DATASOURCE_KEY.get();
-        return key == null ? Constant.MASTER_DB : key;
+        if(key == null){
+            key = Constant.MASTER_DB;
+            log.warn("[线程]未获取到数据源，切换到[{}]", key);
+        }
+        return key;
     }
     /**
      * 移除当前数据源

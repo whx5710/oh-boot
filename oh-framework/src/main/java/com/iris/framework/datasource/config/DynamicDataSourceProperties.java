@@ -16,7 +16,7 @@ import java.util.Map;
 public class DynamicDataSourceProperties {
 
     public static final String PREFIX = "spring.datasource";
-     @NestedConfigurationProperty
+    @NestedConfigurationProperty
     SysDataSourceProperties sysDataSource = new SysDataSourceProperties();
     /**
      * druid每一个数据源属性
