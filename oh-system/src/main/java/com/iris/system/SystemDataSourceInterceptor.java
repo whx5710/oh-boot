@@ -2,9 +2,9 @@ package com.iris.system;
 
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.datasource.utils.DynamicDataSourceHolder;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
@@ -24,21 +24,34 @@ import java.lang.reflect.Type;
 public class SystemDataSourceInterceptor {
     private final Logger log = LoggerFactory.getLogger(SystemDataSourceInterceptor.class);
 
-    // 匹配系统管理相关包名
-    @Before("execution(* com.iris.system..mapper.*Mapper.*(..))")
-    public void dynamicSetDataSource(JoinPoint joinPoint) throws Exception {
+    /**
+     * 匹配系统管理相关包名，使用环绕，切换后需切换回来
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around("execution(* com.iris.system..mapper.*Mapper.*(..))")
+    public Object dynamicSetDataSource(ProceedingJoinPoint joinPoint) throws Throwable {
         Object target = joinPoint.getTarget();
-        Class<?> clazz = target.getClass();
         if(Proxy.isProxyClass(target.getClass())) {
             Type[] types = AopUtils.getTargetClass(target).getGenericInterfaces();
             String className = types[0].getTypeName();
-            if(!className.contains(".mapper.")){
+            if(className.contains(".mapper.")){
+                // 根据yml中的配置使用数据源
+                log.debug("{} 使用[{}]数据源", className, Constant.SYS_DB);
+                DynamicDataSourceHolder.setDynamicDataSourceKey(Constant.SYS_DB);
+                try {
+                    return joinPoint.proceed();
+                } finally {
+                    DynamicDataSourceHolder.removeDynamicDataSourceKey();
+                    log.debug("清除数据源[{}]", Constant.SYS_DB);
+                }
+            }else{
                 log.error("数据源切面拦截解析包路径错误，解析得到类名：{}", className);
-                return;
+                return joinPoint.proceed();
             }
-            // 根据yml中的配置使用数据源
-            log.debug("{} 使用[{}]数据源", className, Constant.SYS_DB);
-            DynamicDataSourceHolder.setDynamicDataSourceKey(Constant.SYS_DB);
+        }else{
+            return joinPoint.proceed();
         }
     }
 
