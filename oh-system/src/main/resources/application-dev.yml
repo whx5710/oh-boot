@@ -100,6 +100,10 @@ spring:
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
 rocketmq:
   name-server: 127.0.0.1:9876 # 服务地址，多个用逗号分开
+  enhance:
+    autoListener: false # 是否启动时监听
+    enabledIsolation: true # 启动隔离，用于激活配置类EnvironmentIsolationConfig,启动后会自动在topic上拼接激活的配置文件，达到自动隔离的效果
+    environment: ${spring.profiles.active} # 隔离环境名称，拼接到topic后,如 topic_dev
   producer:
     group: oh_group # 必须指定group
     send-message-timeout: 3000 # 消息发送超时时长，默认3s

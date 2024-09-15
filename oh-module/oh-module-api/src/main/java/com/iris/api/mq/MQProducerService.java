@@ -1,6 +1,6 @@
 package com.iris.api.mq;
 
-import com.iris.framework.common.constant.Constant;
+import com.iris.api.config.properties.RocketEnhanceProperties;
 import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.utils.JsonUtils;
 import org.apache.rocketmq.client.producer.SendCallback;
@@ -24,11 +24,14 @@ public class MQProducerService {
     // 建议正常规模项目统一用一个TOPIC
     // 直接注入使用，用于发送消息到broker服务器
     private final RocketMQTemplate rocketMQTemplate;
+    
+    private final RocketEnhanceProperties rocketEnhanceProperties;
 
     String tag = "asyncSend";
 
-    public MQProducerService(RocketMQTemplate rocketMQTemplate) {
+    public MQProducerService(RocketMQTemplate rocketMQTemplate, RocketEnhanceProperties rocketEnhanceProperties) {
         this.rocketMQTemplate = rocketMQTemplate;
+        this.rocketEnhanceProperties = rocketEnhanceProperties;
     }
 
     /**
@@ -38,7 +41,7 @@ public class MQProducerService {
         if(ObjectUtils.isEmpty(tag)){
             tag = this.tag;
         }
-        rocketMQTemplate.convertAndSend(Constant.TOPIC_SUBMIT + ":" + tag, data);
+        rocketMQTemplate.convertAndSend(rocketEnhanceProperties.defaultTopic() + ":" + tag, data);
 //        rocketMQTemplate.send(topic + ":tag1", MessageBuilder.withPayload(data).build()); // 等价于上面一行
     }
 
@@ -58,7 +61,7 @@ public class MQProducerService {
         if(ObjectUtils.isEmpty(tag)){
             tag = this.tag;
         }
-        SendResult sendResult = rocketMQTemplate.syncSend(Constant.TOPIC_SUBMIT + ":" + tag, MessageBuilder.withPayload(data).build());
+        SendResult sendResult = rocketMQTemplate.syncSend(rocketEnhanceProperties.defaultTopic() + ":" + tag, MessageBuilder.withPayload(data).build());
         log.info("【sendMsg】sendResult={}", JsonUtils.toJsonString(sendResult));
         return sendResult;
     }
@@ -68,7 +71,7 @@ public class MQProducerService {
      * （适合对响应时间敏感的业务场景）
      */
     public void sendAsyncMsg(String msgBody) {
-        rocketMQTemplate.asyncSend(Constant.TOPIC_SUBMIT, MessageBuilder.withPayload(msgBody).build(), new SendCallback() {
+        rocketMQTemplate.asyncSend(rocketEnhanceProperties.defaultTopic(), MessageBuilder.withPayload(msgBody).build(), new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
                 // 处理消息发送成功逻辑
@@ -85,20 +88,20 @@ public class MQProducerService {
      * 在start版本中 延时消息一共分为18个等级分别为：1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
      */
     public void sendDelayMsg(String msgBody, int delayLevel) {
-        rocketMQTemplate.syncSend(Constant.TOPIC_SUBMIT, MessageBuilder.withPayload(msgBody).build(), messageTimeOut, delayLevel);
+        rocketMQTemplate.syncSend(rocketEnhanceProperties.defaultTopic(), MessageBuilder.withPayload(msgBody).build(), messageTimeOut, delayLevel);
     }
 
     /**
      * 发送单向消息（只负责发送消息，不等待应答，不关心发送结果，如日志）
      */
     public void sendOneWayMsg(String msgBody) {
-        rocketMQTemplate.sendOneWay(Constant.TOPIC_SUBMIT, MessageBuilder.withPayload(msgBody).build());
+        rocketMQTemplate.sendOneWay(rocketEnhanceProperties.defaultTopic(), MessageBuilder.withPayload(msgBody).build());
     }
 
     /**
      * 发送带tag的消息，直接在topic后面加上":tag"
      */
     public SendResult sendTagMsg(String msgBody, String tag) {
-        return rocketMQTemplate.syncSend(Constant.TOPIC_SUBMIT + ":" + tag, MessageBuilder.withPayload(msgBody).build());
+        return rocketMQTemplate.syncSend(rocketEnhanceProperties.defaultTopic() + ":" + tag, MessageBuilder.withPayload(msgBody).build());
     }
 }
