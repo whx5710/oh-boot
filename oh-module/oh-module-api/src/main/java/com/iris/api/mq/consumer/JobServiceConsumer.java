@@ -24,12 +24,7 @@ import java.util.Optional;
  * start mqbroker.cmd -n 127.0.0.1:9876 autoCreateTopicEnable=true
  */
 @Service
-@RocketMQMessageListener(
-        topic = Constant.TOPIC_SUBMIT,
-        selectorExpression = "asyncSend", // selectorExpression的意思指的就是tag，默认为“*”，不设置会监听所有消息
-        consumerGroup = "oh_group",
-        consumeThreadMax = 5 // //默认是64个线程并发消息，配置 consumeThreadMax 参数指定并发消费线程数，避免太大导致资源不够
-)
+@RocketMQMessageListener(topic = Constant.TOPIC_SUBMIT, selectorExpression = "asyncSend", consumerGroup = "oh_group")
 public class JobServiceConsumer implements RocketMQListener<MsgEntity> {
     private final Logger log = LoggerFactory.getLogger(JobServiceConsumer.class);
     private final RedisCache redisCache;
