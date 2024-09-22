@@ -4,7 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iris.api.common.BaseController;
-import com.iris.api.mq.MQProducerService;
+//import com.iris.api.mq.MQProducerService;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.entity.api.MsgEntity;
 import com.iris.framework.common.exception.ServerException;
@@ -16,13 +16,17 @@ import com.iris.framework.common.utils.ServiceFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.rocketmq.client.producer.SendResult;
+//import org.apache.rocketmq.client.producer.SendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /***
  * 公共接口入口
@@ -48,14 +52,19 @@ public class OpenApiController extends BaseController {
     @Value("${iris.open-api.type:1}")
     private int apiType;
 
-    private final MQProducerService mqProducerService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public OpenApiController(MQProducerService mqProducerService){
-        this.mqProducerService = mqProducerService;
+    public OpenApiController(KafkaTemplate<String, String> kafkaTemplate){
+        this.kafkaTemplate = kafkaTemplate;
     }
 
+    /*private final MQProducerService mqProducerService;
+    public OpenApiController(MQProducerService mqProducerService){
+        this.mqProducerService = mqProducerService;
+    }*/
+
     /**
-     * 公共接口
+     * 公共接口(Kafka)
      * 1、支持同步、异步调用
      * 2、直接调用，表中无日志记录，异步调用会记录消费数据以及业务是否处理成功（异常需抛出来才能记录）
      * 3、如果Kafka没有启动，会直接调用，不进行异步处理
@@ -64,7 +73,7 @@ public class OpenApiController extends BaseController {
      * @param request 请求
      * @return 返回
      */
-    /*@Operation(summary = "公共接口")
+    @Operation(summary = "公共接口")
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         MsgEntity msgEntity = this.basicCheck(request);
@@ -101,9 +110,16 @@ public class OpenApiController extends BaseController {
         }else{
             throw new ServerException("未获取到相关服务，功能号【" + msgEntity.getFuncCode() + "】无效！ ");
         }
-    }*/
+    }
 
-    @Operation(summary = "公共接口")
+    /**
+     * 公共接口(rocketmq)
+     * 1、支持同步、异步调用
+     * 2、直接调用，表中无日志记录，异步调用会记录消费数据以及业务是否处理成功（异常需抛出来才能记录）
+     * 3、提供消费失败的查询功能（/sys/app/errLogPage接口），方便排查
+     *
+     */
+    /*@Operation(summary = "公共接口")
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         MsgEntity msgEntity = this.basicCheck(request);
@@ -132,7 +148,7 @@ public class OpenApiController extends BaseController {
         }else{
             throw new ServerException("未获取到相关服务，功能号【" + msgEntity.getFuncCode() + "】无效！ ");
         }
-    }
+    }*/
 
     public static void main(String[] args) throws JsonProcessingException {
         String url = "http://localhost:8080/openApi/submit";
