@@ -2,7 +2,7 @@
 
 oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
 - 采用组件模式，扩展不同的业务功能，可以很方便的实现各种业务需求，若想使用某个组件，按需引入即可。
-- 通用接口，可对接入客户端接口级别授权。加入Kafka，支持MQ异步接口，支持海量请求。
+- 通用接口，可对接入客户端接口级别授权。加入Kafka/RocketMq，支持MQ异步接口，支持海量请求。
 - 通过Druid连接池支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源。
 - 支持定时任务（分布式可使用xxl-job）、文件存储、短信对接等。
 - 前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。
@@ -31,10 +31,10 @@ oh-module    业务模块
 参考系统管理工程 https://gitee.com/whx233/oh-sys
 
 ## 快速开始
-环境：JDK17+、MySQL8+、Redis、Kafka
+环境：JDK17+、MySQL8+、Redis、Kafka(RocketMq)
 - 1、克隆项目 `git clone https://gitee.com/whx233/oh-boot.git`
 - 2、创建数据库，分别创建 oh-sys 和 oh-boot数据库（可合并成一个库），并分别执行db\mysql目录下的SQL脚本
-- 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka（如果需要）、文件存储路径等
+- 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka/RocketMq（如果需要）、文件存储路径等
 - 4、启动服务 `com.iris.ServerApplication`
 - 5、API文档地址：http://localhost:8080/doc.html 数据库监控地址：http://localhost:8080/druid/login.html
 
