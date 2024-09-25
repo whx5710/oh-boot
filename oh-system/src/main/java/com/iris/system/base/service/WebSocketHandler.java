@@ -2,6 +2,7 @@ package com.iris.system.base.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ReflectUtil;
+import com.iris.framework.common.utils.ExceptionUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.system.base.vo.SysMessageVO;
@@ -91,6 +92,7 @@ public class WebSocketHandler {
             log.info("【websocket消息】有新的连接，总数为:{}", webSockets.size());
         } catch (Exception e) {
             log.error("websocket打开连接异常！{}", e.getMessage());
+            log.error(ExceptionUtils.getExceptionMessage(e));
         }
     }
 

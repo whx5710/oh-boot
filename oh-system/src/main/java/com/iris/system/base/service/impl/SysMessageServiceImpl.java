@@ -70,7 +70,10 @@ public class SysMessageServiceImpl implements SysMessageService {
     @Override
     public List<SysMessageVO> unSendMsg(Long userId) {
         List<SysMessageEntity> list = sysMessageMapper.getUnSendMsg(userId, "0");
-        return SysMessageConvert.INSTANCE.convertList(list.subList(0, 10));
+        if(list.size() > 10){
+            return SysMessageConvert.INSTANCE.convertList(list.subList(0, 10));
+        }
+        return SysMessageConvert.INSTANCE.convertList(list);
     }
 
     /**
@@ -81,8 +84,10 @@ public class SysMessageServiceImpl implements SysMessageService {
     @Override
     public List<SysMessageVO> unReadMsg(Long userId) {
         List<SysMessageEntity> list = sysMessageMapper.getUnSendMsg(userId, "1");
-
-        return SysMessageConvert.INSTANCE.convertList(list.subList(0, 10));
+        if(list.size() > 10){
+            return SysMessageConvert.INSTANCE.convertList(list.subList(0, 10));
+        }
+        return SysMessageConvert.INSTANCE.convertList(list);
     }
 
     @Override
