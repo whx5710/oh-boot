@@ -174,4 +174,15 @@
             <appender-ref ref="ERROR_FILE" />
         </root>
     </springProfile>
+
+    <!-- 测试环境：打印到控制台并输出到文件 -->
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_PROD"/>
+            <appender-ref ref="ASYNC_INFO_FILE"/>
+            <appender-ref ref="DEBUG_FILE" />
+            <appender-ref ref="WARN_FILE" />
+            <appender-ref ref="ERROR_FILE" />
+        </root>
+    </springProfile>
 </configuration>

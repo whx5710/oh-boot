@@ -74,9 +74,9 @@ spring:
       enable: false # 系统数据源(sysDb)是否开启;通过前端请求判断是否请求系统数据源，默认不开启
       primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
       prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
-        - /sys/
-        - /sms/
-        - /schedule/
+    #        - /sys/
+    #        - /sms/
+    #        - /schedule/
     dynamic:
       sysDb:
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -114,10 +114,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringDeserializer
       value-serializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      # 0：producer 不等待 broker 的 ack
-      # 1：producer 等待 broker 的 ack，partition 的 leader 落盘成功后返回 ack，如果在 follower 同步成功之前 leader 故障，那么将会丢失数据
-      # -1（all）：producer 等待 broker 的 ack，partition 的 leader 和 follower （ISRL里的follower，不是全部的follower）全部落盘成功后才 返回 ack
-      acks: 1
+      acks: 1 # 0：producer 不等待 broker 的 ack  1：producer 等待 broker 的 ack，partition 的 leader 落盘成功后返回 ack，如果在 follower 同步成功之前 leader 故障，那么将会丢失数据 -1（all）：producer 等待 broker 的 ack，partition 的 leader 和 follower （ISRL里的follower，不是全部的follower）全部落盘成功后才 返回 ack
       batch-size: 4096
       buffer-memory: 40960000
       client-id: dc-device-flow-analyze-producer
@@ -129,14 +126,27 @@ spring:
         spring.json.add.type.headers: false
         max.request.size: 126951500
         max.block.ms: 30000 # 最大阻塞时间默认60000ms
+#rocketmq:
+#  name-server: 127.0.0.1:9876 # 服务地址，多个用逗号分开
+#  enhance:
+#    autoListener: false # 是否启动时监听
+#    enabledIsolation: true # 启动隔离，用于激活配置类EnvironmentIsolationConfig,启动后会自动在topic上拼接激活的配置文件，达到自动隔离的效果
+#    environment: ${spring.profiles.active} # 隔离环境名称，拼接到topic后,如 topic_dev
+#  producer:
+#    group: oh_group # 必须指定group
+#    send-message-timeout: 3000 # 消息发送超时时长，默认3s
+#    retry-times-when-send-failed: 3 # 同步发送消息失败重试次数，默认2
+#    retry-times-when-send-async-failed: 3 # 异步发送消息失败重试次数，默认2
+#    retryNextServer: false # 是否在内部发送失败时重试另一个broker，默认false
+#    maxMessageSize: 4096 # 消息最大长度，默认1024 * 1024 * 4(默认4M)
+#    compressMessageBodyThreshold: 4096 # 压缩消息阈值，默认4k(1024 * 4)
 # 接口文档
 knife4j:
   enable: true  # 开启增强配置
-  # 是否生产环境，生产环境屏蔽，开发环境需显示接口文档
-  production: true
+  production: true # 是否开启生产环境保护策略,默认false
   setting:
-    custom-code: 500
-    enable-footer-custom: false
+    enable-footer-custom: true # 是否开启自定义Footer
+    footer-custom-content: 2024一起来写代码吧-[王小费](https://gitee.com/whx233)
 # 工作流配置 https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/
 camunda.bpm:
   #enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.
@@ -159,7 +169,7 @@ camunda.bpm:
     historyCleanupBatchSize: 100 # 单次批量处理实例数
   admin-user:
     id: admin
-    password: dB254U9de4c5f4P7Ab
+    password: daB254U9de4c5f4P7Ab
   # 定时任务
   job-execution:
     enabled: true # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
@@ -170,6 +180,7 @@ camunda.bpm:
       allowed-origins: "*"
   filter:
     create: 所有任务
+
 # 日志信息
 logging:
   # 字符集设置
@@ -179,19 +190,4 @@ logging:
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
     com.iris: INFO
     # root: DEBUG
-    org.springframework.web: debug # web相关的日志级别
-  pattern:
-    # 在控制台输出的日志格式
-    # 无颜色 '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'
-    # 有颜色 '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
-    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'
-  file:
-    # 日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
-    # path: logs
-    name: logs/${spring.application.name}.out.log
-  logback:
-    rollingpolicy:
-      clean-history-on-start: false                       # 是否在启动时清除存档日志文件
-      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz # 滚动日志文件名的模式
-      max-history: 10                                     # 要保留的存档日志文件的最大数量
-      max-file-size: 100MB                                # 最大文件大小，默认10MB
+    org.springframework.web: INFO # web相关的日志级别
