@@ -54,6 +54,9 @@ public class DataSourceProperty {
 
     private String poolPreparedStatements;
 
+    // 检查连接
+    private Boolean checkConnection = false;
+
     public Class<? extends DataSource> getType() {
         return type;
     }
@@ -148,5 +151,13 @@ public class DataSourceProperty {
 
     public void setPoolPreparedStatements(String poolPreparedStatements) {
         this.poolPreparedStatements = poolPreparedStatements;
+    }
+
+    public Boolean getCheckConnection() {
+        return checkConnection;
+    }
+
+    public void setCheckConnection(Boolean checkConnection) {
+        this.checkConnection = checkConnection;
     }
 }

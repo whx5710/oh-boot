@@ -88,6 +88,7 @@ spring:
         maxActive: 100
         filters: wall,stat
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        checkConnection: true # 初始化时是否检查连接，默认false
       masterDb:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
@@ -98,6 +99,7 @@ spring:
         maxActive: 120
         filters: wall,stat
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
+        checkConnection: false # 初始化时是否检查连接，默认false
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze

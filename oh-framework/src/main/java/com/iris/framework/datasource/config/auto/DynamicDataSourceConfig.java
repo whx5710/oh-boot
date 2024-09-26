@@ -2,6 +2,7 @@ package com.iris.framework.datasource.config.auto;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.iris.framework.common.constant.Constant;
+import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.datasource.config.DataSourceProperty;
 import com.iris.framework.datasource.config.DynamicDataSourceProperties;
 import org.slf4j.Logger;
@@ -10,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +49,10 @@ public class DynamicDataSourceConfig {
             Map<String, String> properties = getDsMap(key, dataSourceProperty);
             log.debug("初始化 {} 数据源", key);
             DataSource druidDs = DruidDataSourceFactory.createDataSource(properties);
+            // 校验数据库连接是否正常
+            if(dataSourceProperty.getCheckConnection()){
+                checkDs(druidDs, key);
+            }
             dataSourceMap.put(key, druidDs);
             if(key.equals(Constant.MASTER_DB)){
                 masterDataSource = druidDs;
@@ -113,5 +120,25 @@ public class DynamicDataSourceConfig {
         properties.put(DruidDataSourceFactory.PROP_CONNECTIONPROPERTIES, dataSourceProperty.getConnectionProperties());
         properties.put(DruidDataSourceFactory.PROP_NAME, name); // 名称
         return properties;
+    }
+
+    /**
+     * 校验数据连接
+     * @param dataSource ds
+     */
+    private void checkDs(DataSource dataSource, String key) throws SQLException {
+        Connection connection = null;
+        try{
+            log.debug("验证数据源[{}]连接是否正常", key);
+            connection = dataSource.getConnection();
+            log.debug("数据源 {} 连接正常", key);
+        }catch (Exception e){
+            log.error("初始化数据源[{}]连接失败！ {}", key, e.getMessage());
+            throw new ServerException("初始化数据源[" + key + "]连接失败，请检查！");
+        }finally {
+            if(connection != null){
+                connection.close();
+            }
+        }
     }
 }
