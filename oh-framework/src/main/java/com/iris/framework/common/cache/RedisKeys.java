@@ -22,6 +22,15 @@ public class RedisKeys {
         return "sys:access:" + accessToken;
     }
 
+    /**
+     * 刷新token key
+     * @param refreshToken
+     * @return
+     */
+    public static String getAccessRefreshTokenKey(String refreshToken) {
+        return "sys:accessRefresh:" + refreshToken;
+    }
+
     public static String getLogKey() {
         return "sys:log";
     }

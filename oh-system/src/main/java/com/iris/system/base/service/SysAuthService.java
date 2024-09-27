@@ -3,6 +3,7 @@ package com.iris.system.base.service;
 import com.iris.system.base.vo.SysAccountLoginVO;
 import com.iris.system.base.vo.SysMobileLoginVO;
 import com.iris.system.base.vo.SysTokenVO;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 权限认证服务
@@ -32,6 +33,8 @@ public interface SysAuthService {
      * @param login 登录信息
      */
     SysTokenVO loginByMobile(SysMobileLoginVO login);
+
+    SysTokenVO refreshToken(String refreshToken, HttpServletRequest request);
 
     /**
      * 发送手机验证码

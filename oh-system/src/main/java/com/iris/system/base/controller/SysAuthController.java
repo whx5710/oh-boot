@@ -95,6 +95,13 @@ public class SysAuthController {
         return Result.ok(token);
     }
 
+    @PostMapping("refreshToken")
+    @Operation(summary = "刷新token")
+    public Result<SysTokenVO> refreshToken(@RequestParam String refreshToken, HttpServletRequest request) {
+        AssertUtils.isBlank(refreshToken, "刷新token");
+        return Result.ok(sysAuthService.refreshToken(refreshToken, request));
+    }
+
     @PostMapping("logout")
     @Operation(summary = "退出")
     public Result<String> logout(HttpServletRequest request) {

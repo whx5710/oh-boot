@@ -1,6 +1,7 @@
 package com.iris.framework.security.cache;
 
 import cn.hutool.core.collection.ListUtil;
+import com.iris.framework.common.config.properties.SecurityProperties;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
@@ -19,8 +20,11 @@ import java.util.Set;
 public class TokenStoreCache {
     private final RedisCache redisCache;
 
-    public TokenStoreCache(RedisCache redisCache) {
+    private final SecurityProperties securityProperties;
+
+    public TokenStoreCache(RedisCache redisCache, SecurityProperties securityProperties) {
         this.redisCache = redisCache;
+        this.securityProperties = securityProperties;
     }
 
     /**
@@ -28,9 +32,12 @@ public class TokenStoreCache {
      * @param accessToken
      * @param user
      */
-    public void saveUser(String accessToken, UserDetail user) {
+    public void saveUser(String accessToken, String refreshToken, UserDetail user) {
         String key = RedisKeys.getAccessTokenKey(accessToken);
         redisCache.set(key, user);
+        // 刷新token
+        String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
+        redisCache.set(refreshKey, user, securityProperties.getRefreshTokenExpire());
     }
 
     /**

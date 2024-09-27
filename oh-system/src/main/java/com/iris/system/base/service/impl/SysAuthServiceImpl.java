@@ -1,6 +1,5 @@
 package com.iris.system.base.service.impl;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.iris.framework.common.cache.RedisCache;
 import com.iris.framework.common.cache.RedisKeys;
@@ -25,14 +24,11 @@ import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.mobile.MobileAuthenticationToken;
 import com.iris.framework.security.user.UserDetail;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * 权限认证服务
@@ -52,12 +48,6 @@ public class SysAuthServiceImpl implements SysAuthService {
     private final RedisCache redisCache;
 
     private final SecurityProperties securityProperties;
-    /**
-     * 刷新令牌过期时间，单位：秒
-     * 1天
-     */
-    @Value("${iris.security.access-token-expire:259200}")
-    public int refreshTokenExpire = 60 * 60 * 24;
 
     public SysAuthServiceImpl(SysCaptchaService sysCaptchaService, TokenStoreCache tokenStoreCache,
                               AuthenticationManager authenticationManager, SysLogLoginService sysLogLoginService,
@@ -132,9 +122,38 @@ public class SysAuthServiceImpl implements SysAuthService {
         String refreshToken = IrisTools.generator();
 
         // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, user);
+        tokenStoreCache.saveUser(accessToken, refreshToken, user);
 
         return new SysTokenVO(accessToken, refreshToken);
+    }
+
+    /**
+     * 刷新token
+     * @param refreshToken
+     * @param request
+     * @return
+     */
+    @Override
+    public SysTokenVO refreshToken(String refreshToken, HttpServletRequest request) {
+        String key = RedisKeys.getAccessRefreshTokenKey(refreshToken);
+        if(redisCache.hasKey(key)){
+            UserDetail userDetail = (UserDetail) redisCache.get(key);
+            String ip = IpUtils.getIpAddr(request);
+            // 删除老的刷新token
+            redisCache.delete(key);
+            if(userDetail.getIp().equals(ip)){
+                // 生成 accessToken
+                String accessToken = IrisTools.generator();
+                refreshToken = IrisTools.generator();
+                // 保存用户信息到缓存
+                tokenStoreCache.saveUser(accessToken, refreshToken, userDetail);
+                return new SysTokenVO(accessToken, refreshToken);
+            }else{
+                throw new ServerException("【IP】请求非法，刷新token失败");
+            }
+        }else{
+            throw new ServerException("刷新token过期，请重新登录");
+        }
     }
 
     @Override
@@ -255,7 +274,7 @@ public class SysAuthServiceImpl implements SysAuthService {
         // 登录时间和token刷新时间
         long date = System.currentTimeMillis();
         user.setLoginTime(date);
-        user.setRefreshTokenExpire(DateUtil.offsetSecond(new Date(date), refreshTokenExpire).getTime());
+        user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
         // 生成 accessToken
         String accessToken = IrisTools.generator();
         String refreshToken = IrisTools.generator();
@@ -264,7 +283,7 @@ public class SysAuthServiceImpl implements SysAuthService {
         String ip = IpUtils.getIpAddr(request);
         user.setIp(ip);
         // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, user);
+        tokenStoreCache.saveUser(accessToken, refreshToken, user);
         // 限制次数内登录成功，清除错误计数
         redisCache.delete(authCountKey);
         return new SysTokenVO(accessToken, refreshToken);
