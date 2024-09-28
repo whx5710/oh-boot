@@ -104,8 +104,8 @@ public class SysAuthController {
 
     @PostMapping("logout")
     @Operation(summary = "退出")
-    public Result<String> logout(HttpServletRequest request) {
-        sysAuthService.logout(IrisTools.getAccessToken(request));
+    public Result<String> logout(HttpServletRequest request, @RequestParam(required = false) String refreshToken) {
+        sysAuthService.logout(IrisTools.getAccessToken(request), refreshToken);
         return Result.ok();
     }
 }

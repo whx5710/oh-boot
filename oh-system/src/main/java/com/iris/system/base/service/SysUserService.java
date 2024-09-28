@@ -1,6 +1,7 @@
 package com.iris.system.base.service;
 
 import com.iris.framework.common.utils.PageResult;
+import com.iris.system.base.entity.SysUserEntity;
 import com.iris.system.base.query.SysRoleUserQuery;
 import com.iris.system.base.query.SysUserQuery;
 import com.iris.system.base.vo.SysUserVO;
@@ -33,6 +34,8 @@ public interface SysUserService {
     SysUserVO getByMobile(String mobile);
 
     SysUserVO info(Long userId);
+
+    SysUserEntity getUser(Long userId);
 
     /**
      * 修改密码

@@ -8,16 +8,14 @@ import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.HttpContextUtils;
 import com.iris.framework.common.utils.IpUtils;
 import com.iris.framework.common.utils.IrisTools;
+import com.iris.system.base.entity.SysUserEntity;
 import com.iris.system.base.enums.LoginOperationEnum;
+import com.iris.system.base.service.*;
 import com.iris.system.base.vo.SysAccountLoginVO;
 import com.iris.system.base.vo.SysMobileLoginVO;
 import com.iris.system.base.vo.SysTokenVO;
 import com.iris.system.base.vo.SysUserVO;
 import com.iris.system.sms.service.SmsApi;
-import com.iris.system.base.service.SysAuthService;
-import com.iris.system.base.service.SysCaptchaService;
-import com.iris.system.base.service.SysLogLoginService;
-import com.iris.system.base.service.SysUserService;
 import com.iris.framework.common.constant.Constant;
 import com.iris.framework.common.exception.ServerException;
 import com.iris.framework.security.cache.TokenStoreCache;
@@ -43,6 +41,7 @@ public class SysAuthServiceImpl implements SysAuthService {
     private final AuthenticationManager authenticationManager;
     private final SysLogLoginService sysLogLoginService;
     private final SysUserService sysUserService;
+    private final SysUserDetailsService sysUserDetailsService;
     private final SmsApi smsApi;
 
     private final RedisCache redisCache;
@@ -52,12 +51,13 @@ public class SysAuthServiceImpl implements SysAuthService {
     public SysAuthServiceImpl(SysCaptchaService sysCaptchaService, TokenStoreCache tokenStoreCache,
                               AuthenticationManager authenticationManager, SysLogLoginService sysLogLoginService,
                               SysUserService sysUserService, SmsApi smsApi, RedisCache redisCache,
-                              SecurityProperties securityProperties) {
+                              SecurityProperties securityProperties, SysUserDetailsService sysUserDetailsService) {
         this.sysCaptchaService = sysCaptchaService;
         this.tokenStoreCache = tokenStoreCache;
         this.authenticationManager = authenticationManager;
         this.sysLogLoginService = sysLogLoginService;
         this.sysUserService = sysUserService;
+        this.sysUserDetailsService = sysUserDetailsService;
         this.smsApi = smsApi;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
@@ -142,11 +142,17 @@ public class SysAuthServiceImpl implements SysAuthService {
             // 删除老的刷新token
             redisCache.delete(key);
             if(userDetail.getIp().equals(ip)){
+                // 重新查询用户信息
+                SysUserEntity sysUserEntity = sysUserService.getUser(userDetail.getId());
+                UserDetail userDetailDb = (UserDetail) sysUserDetailsService.getUserDetails(sysUserEntity);
+                userDetailDb.setLoginTime(userDetail.getLoginTime());
+                userDetailDb.setIp(ip);
+                userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
                 // 生成 accessToken
                 String accessToken = IrisTools.generator();
                 refreshToken = IrisTools.generator();
                 // 保存用户信息到缓存
-                tokenStoreCache.saveUser(accessToken, refreshToken, userDetail);
+                tokenStoreCache.saveUser(accessToken, refreshToken, userDetailDb);
                 return new SysTokenVO(accessToken, refreshToken);
             }else{
                 throw new ServerException("【IP】请求非法，刷新token失败");
@@ -171,13 +177,18 @@ public class SysAuthServiceImpl implements SysAuthService {
     }
 
     @Override
-    public void logout(String accessToken) {
+    public void logout(String accessToken, String refreshToken) {
         // 用户信息
         UserDetail user = tokenStoreCache.getUser(accessToken);
 
         // 删除用户信息
         tokenStoreCache.deleteUser(accessToken);
-
+        // 删除刷新token
+        if(refreshToken != null && !refreshToken.isEmpty()){
+            if(redisCache.hasKey(RedisKeys.getAccessRefreshTokenKey(refreshToken))){
+                redisCache.delete(RedisKeys.getAccessRefreshTokenKey(refreshToken));
+            }
+        }
         // 保存登录日志
         sysLogLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue());
     }

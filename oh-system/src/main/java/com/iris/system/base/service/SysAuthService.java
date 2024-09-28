@@ -34,6 +34,12 @@ public interface SysAuthService {
      */
     SysTokenVO loginByMobile(SysMobileLoginVO login);
 
+    /**
+     * 刷新token
+     * @param refreshToken
+     * @param request
+     * @return
+     */
     SysTokenVO refreshToken(String refreshToken, HttpServletRequest request);
 
     /**
@@ -48,5 +54,5 @@ public interface SysAuthService {
      *
      * @param accessToken accessToken
      */
-    void logout(String accessToken);
+    void logout(String accessToken, String refreshToken);
 }

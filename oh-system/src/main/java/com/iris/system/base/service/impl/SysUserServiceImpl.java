@@ -230,6 +230,17 @@ public class SysUserServiceImpl  implements SysUserService {
         return user;
     }
 
+    /**
+     * 根据用户ID获取用户
+     * @param userId
+     * @return
+     */
+    @Override
+    public SysUserEntity getUser(Long userId) {
+        AssertUtils.isNull(userId, "用户ID");
+        return sysUserMapper.getById(userId);
+    }
+
     @Override
     public void updatePassword(Long id, String newPassword) {
         // 密码验证
