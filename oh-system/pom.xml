@@ -8,26 +8,30 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>oh-system</artifactId>
     <description>系统基础功能</description>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
+    <properties>
+        <module.version>1.0.1</module.version>
+    </properties>
     <dependencies>
         <!-- 协同任务 -->
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-team</artifactId>
-            <version>1.0.0</version>
+            <version>${module.version}</version>
         </dependency>
         <!-- 对外接口 -->
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-api</artifactId>
-            <version>1.0.0</version>
+            <version>${module.version}</version>
         </dependency>
         <!-- 工作流 -->
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-module-flow</artifactId>
-            <version>1.0.0</version>
+            <version>${module.version}</version>
         </dependency>
 
         <!-- 系统框架 -->
