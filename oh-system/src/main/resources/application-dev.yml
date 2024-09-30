@@ -8,9 +8,7 @@ server:
   port: 8080
   servlet:
     context-path: /
-    session:
-      cookie:
-        http-only: true
+    session.cookie.http-only: true
 iris:
   xss:
     enabled: true
@@ -41,8 +39,7 @@ iris:
     config:
       type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
       domain: http://localhost:8080
-    local:
-      path: /data/图片/upload
+    local.path: /data/图片/upload
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
@@ -57,8 +54,7 @@ spring:
       #password:
       timeout: 10s  # 连接超时时间
       # 是否开启 SSL
-      ssl:
-        enabled: false
+      ssl.enabled: false
   datasource:
     druid:
       stat-view-servlet:
@@ -70,13 +66,7 @@ spring:
         enabled: true # 启用Web统计过滤器
         session-stat-enable: true # 启用会话统计功能
         session-stat-max-count: 1000 # 最大会话统计数量
-    sys-data-source:
-      enable: false # 系统数据源(sysDb)是否开启;通过前端请求判断是否请求系统数据源，默认不开启
-      primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
-      prefix-uris: # 通过请求的uri前缀切换到系统内部数据源，此处如果有过滤路径，则必须配置 sysDb 数据源
-#        - /sys/
-#        - /sms/
-#        - /schedule/
+    sysDataSource.primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
     dynamic:
       sysDb:
         driver-class-name: com.mysql.cj.jdbc.Driver

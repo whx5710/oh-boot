@@ -1,7 +1,7 @@
 /**
  * MIT License
 
-	Copyright (c) 2023 王小费 whx5710@qq.com
+	Copyright (c) 2024 王小费 whx5710@qq.com
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -50,6 +50,7 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 		this.serverProperties = serverProperties;
 	}
 
+	// 启动系统
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 	}
