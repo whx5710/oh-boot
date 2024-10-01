@@ -33,7 +33,6 @@
             <artifactId>oh-module-flow</artifactId>
             <version>${module.version}</version>
         </dependency>
-
         <!-- 系统框架 -->
         <dependency>
             <groupId>com.iris</groupId>
