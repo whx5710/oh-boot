@@ -10,10 +10,15 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>oh-parent</artifactId>
+    <artifactId>oh-boot</artifactId>
     <groupId>com.iris</groupId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>oh-system</module>
+        <module>oh-module</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
