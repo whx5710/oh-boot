@@ -20,7 +20,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 框架版本信息 -->
-        <framework.version>1.0.0.20240905</framework.version>
+        <framework.version>1.0.1.20241004</framework.version>
         <!-- 系统版本 -->
         <revision>1.0.2</revision>
         <!-- 跳过测试打包 -->

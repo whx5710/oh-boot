@@ -6,14 +6,15 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>oh-framework</artifactId>
+    <groupId>com.iris.framework</groupId>
+    <artifactId>iris-core</artifactId>
     <description>系统core框架</description>
     <version>${iris.framework.version}</version>
     <packaging>jar</packaging>
 
     <properties>
         <!-- 框架版本 -->
-        <iris.framework.version>1.0.0.20240905</iris.framework.version>
+        <iris.framework.version>1.0.1.20241004</iris.framework.version>
         <!-- mysql jdbc 连接驱动 -->
         <mysql.jdbc.version>8.3.0</mysql.jdbc.version>
         <!-- mybatis 版本 -->

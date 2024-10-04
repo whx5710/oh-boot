@@ -15,9 +15,9 @@
     <dependencies>
         <!-- 系统框架 -->
         <dependency>
-            <groupId>com.iris</groupId>
-            <artifactId>oh-framework</artifactId>
-            <version>${framework.version}</version>
+            <groupId>com.iris.framework</groupId>
+            <artifactId>iris-core</artifactId>
+            <version>1.0.1.20241004</version>
         </dependency>
     </dependencies>
 

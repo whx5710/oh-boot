@@ -18,7 +18,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、
 
 ```
 oh-parent    父级结构，依赖版本管理
-oh-framework 系统框架
+iris-core    系统框架
 oh-system    系统启动入口、基础功能管理【根据实际情况可独立部署】
 oh-module    业务模块
     - oh-module-api    对外服务接口
@@ -26,8 +26,8 @@ oh-module    业务模块
     - oh-module-team   协同管理【业务功能，未开发】
     - ...              扩展其他业务模块
 ```
-通过`oh-parent` 和 `oh-framework`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程，
-只需将`oh-parent`、`oh-framework` 和 `oh-system`组装成一个独立工程即可，也可以根据业务需求和服务器资源划分成不同的后端服务工程。
+通过`oh-parent` 和 `iris-core`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程，
+只需将`oh-parent`、`iris-core` 和 `oh-system`组装成一个独立工程即可，也可以根据业务需求和服务器资源划分成不同的后端服务工程。
 参考系统管理工程 https://gitee.com/whx233/oh-sys
 
 ## 快速开始
