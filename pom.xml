@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>oh-system</module>
+        <module>oh-sys</module>
         <module>oh-module</module>
     </modules>
 

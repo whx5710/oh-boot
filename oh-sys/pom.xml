@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.iris</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>oh-sys</artifactId>
+    <description>系统基础功能</description>
+    <version>${revision}</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <module.version>1.0.1</module.version>
+    </properties>
+    <dependencies>
+        <!-- 协同任务 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-team</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+        <!-- 对外接口 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-api</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+        <!-- 工作流 -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-module-flow</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+        <!-- 系统框架 -->
+        <dependency>
+            <groupId>com.iris.framework</groupId>
+            <artifactId>iris-core</artifactId>
+            <version>1.0.1.20241004</version>
+        </dependency>
+        <!-- 定时任务 -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+        <!-- hutool验证码 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-captcha</artifactId>
+        </dependency>
+        <!-- 系统属性 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-system</artifactId>
+        </dependency>
+        <!-- 系统监测 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 打包时需要配置 -->
+    <build>
+        <!-- 打jar包命名-${revision} -->
+        <finalName>${project.artifactId}-${revision}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- 设置启动入口main -->
+                <configuration>
+                    <mainClass>com.iris.ServerApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
