@@ -1,6 +1,6 @@
 package com.iris.framework.common.utils;
 
-import com.iris.framework.common.exception.ErrorCode;
+import com.iris.framework.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**

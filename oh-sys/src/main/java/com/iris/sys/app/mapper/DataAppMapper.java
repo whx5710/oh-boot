@@ -1,6 +1,6 @@
 package com.iris.sys.app.mapper;
 
-import com.iris.framework.common.entity.api.DataAppDTO;
+import com.iris.framework.entity.api.DataAppDTO;
 import com.iris.sys.app.entity.DataAppEntity;
 import com.iris.sys.app.query.DataAppQuery;
 import com.iris.sys.app.query.DataFunctionAuthorityQuery;

@@ -1,11 +1,11 @@
 package com.iris.api.common;
 
-import com.iris.framework.common.cache.RedisCache;
-import com.iris.framework.common.cache.RedisKeys;
+import com.iris.framework.cache.RedisCache;
+import com.iris.framework.cache.RedisKeys;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.entity.api.DataAppDTO;
-import com.iris.framework.common.entity.api.MsgEntity;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.entity.api.DataAppDTO;
+import com.iris.framework.entity.api.MsgEntity;
+import com.iris.framework.exception.ServerException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 

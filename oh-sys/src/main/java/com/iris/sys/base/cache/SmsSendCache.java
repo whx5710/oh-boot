@@ -1,6 +1,6 @@
 package com.iris.sys.base.cache;
 
-import com.iris.framework.common.cache.RedisCache;
+import com.iris.framework.cache.RedisCache;
 import org.springframework.stereotype.Service;
 
 /**

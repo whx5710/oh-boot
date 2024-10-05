@@ -1,6 +1,6 @@
 package com.iris.sys.quartz.utils;
 
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.sys.quartz.entity.ScheduleJobEntity;
 import com.iris.sys.quartz.enums.ScheduleConcurrentEnum;
 import com.iris.sys.quartz.enums.ScheduleStatusEnum;

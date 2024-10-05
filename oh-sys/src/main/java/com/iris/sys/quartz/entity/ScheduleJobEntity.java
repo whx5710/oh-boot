@@ -1,6 +1,6 @@
 package com.iris.sys.quartz.entity;
 
-import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.entity.BaseEntity;
 
 
 /**

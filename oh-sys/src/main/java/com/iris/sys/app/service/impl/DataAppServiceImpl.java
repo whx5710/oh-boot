@@ -2,8 +2,8 @@ package com.iris.sys.app.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.common.entity.api.DataAppDTO;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.entity.api.DataAppDTO;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.sys.app.convert.DataAppConvert;

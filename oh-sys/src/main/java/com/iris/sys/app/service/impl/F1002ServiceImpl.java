@@ -1,7 +1,7 @@
 package com.iris.sys.app.service.impl;
 
-import com.iris.framework.common.entity.MetaEntity;
-import com.iris.framework.common.service.JobService;
+import com.iris.framework.entity.MetaEntity;
+import com.iris.framework.service.JobService;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.common.utils.ServiceFactory;

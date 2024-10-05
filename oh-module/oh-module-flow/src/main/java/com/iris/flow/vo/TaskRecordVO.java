@@ -1,6 +1,6 @@
 package com.iris.flow.vo;
 
-import com.iris.framework.common.entity.IDEntity;
+import com.iris.framework.entity.IDEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.utils.DateUtils;

@@ -11,7 +11,7 @@ import com.iris.sys.base.vo.SysMenuTreeVO;
 import com.iris.sys.base.convert.SysMenuConvert;
 import com.iris.sys.base.service.SysRoleMenuService;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.TreeUtils;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.entity.SysMenuEntity;

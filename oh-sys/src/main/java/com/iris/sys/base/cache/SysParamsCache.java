@@ -1,7 +1,7 @@
 package com.iris.sys.base.cache;
 
 import cn.hutool.core.collection.CollUtil;
-import com.iris.framework.common.cache.RedisCache;
+import com.iris.framework.cache.RedisCache;
 import com.iris.sys.base.entity.SysParamsEntity;
 import org.springframework.stereotype.Service;
 

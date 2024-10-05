@@ -1,6 +1,6 @@
 package com.iris.sys.base.entity;
 
-import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.entity.BaseEntity;
 
 import java.util.Objects;
 

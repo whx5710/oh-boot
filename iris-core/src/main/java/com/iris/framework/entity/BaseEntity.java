@@ -1,4 +1,4 @@
-package com.iris.framework.common.entity;
+package com.iris.framework.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.common.utils.DateUtils;

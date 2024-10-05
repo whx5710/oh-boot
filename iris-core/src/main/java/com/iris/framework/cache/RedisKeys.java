@@ -1,4 +1,4 @@
-package com.iris.framework.common.cache;
+package com.iris.framework.cache;
 
 /**
  * Redis Key管理

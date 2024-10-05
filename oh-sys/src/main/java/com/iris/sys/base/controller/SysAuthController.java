@@ -1,6 +1,6 @@
 package com.iris.sys.base.controller;
 
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.IrisTools;
 import com.iris.sys.base.vo.SysAccountLoginVO;

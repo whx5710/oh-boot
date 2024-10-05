@@ -12,7 +12,7 @@ import com.iris.sys.base.vo.SysParamsVO;
 import com.iris.sys.base.convert.SysParamsConvert;
 import com.iris.sys.base.service.SysParamsService;
 import jakarta.annotation.PostConstruct;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.sys.base.entity.SysParamsEntity;
 import org.springframework.stereotype.Service;

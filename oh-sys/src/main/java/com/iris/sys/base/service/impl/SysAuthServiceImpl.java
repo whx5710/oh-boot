@@ -1,8 +1,8 @@
 package com.iris.sys.base.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
-import com.iris.framework.common.cache.RedisCache;
-import com.iris.framework.common.cache.RedisKeys;
+import com.iris.framework.cache.RedisCache;
+import com.iris.framework.cache.RedisKeys;
 import com.iris.framework.common.config.properties.SecurityProperties;
 import com.iris.framework.common.utils.AssertUtils;
 import com.iris.framework.common.utils.HttpContextUtils;
@@ -17,7 +17,7 @@ import com.iris.sys.base.vo.SysTokenVO;
 import com.iris.sys.base.vo.SysUserVO;
 import com.iris.sys.sms.service.SmsApi;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.mobile.MobileAuthenticationToken;
 import com.iris.framework.security.user.UserDetail;

@@ -3,7 +3,7 @@ package com.iris.framework.common.utils;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 
 /**
  * 校验工具类

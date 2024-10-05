@@ -1,4 +1,4 @@
-package com.iris.framework.common.exception;
+package com.iris.framework.exception;
 
 /**
  * 错误编码

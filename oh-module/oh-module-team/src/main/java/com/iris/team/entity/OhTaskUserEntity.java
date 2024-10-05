@@ -1,6 +1,6 @@
 package com.iris.team.entity;
 
-import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.entity.BaseEntity;
 
 /**
  * 任务人员表

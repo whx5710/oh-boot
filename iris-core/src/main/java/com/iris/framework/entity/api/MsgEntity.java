@@ -1,6 +1,6 @@
-package com.iris.framework.common.entity.api;
+package com.iris.framework.entity.api;
 
-import com.iris.framework.common.entity.MetaEntity;
+import com.iris.framework.entity.MetaEntity;
 
 /**
  * 消息
@@ -8,7 +8,7 @@ import com.iris.framework.common.entity.MetaEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-02-29
  */
-public class MsgEntity extends MetaEntity{
+public class MsgEntity extends MetaEntity {
 
     private Boolean isAsync;
 

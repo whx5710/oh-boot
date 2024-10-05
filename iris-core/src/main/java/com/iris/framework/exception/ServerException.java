@@ -1,4 +1,4 @@
-package com.iris.framework.common.exception;
+package com.iris.framework.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

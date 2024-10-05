@@ -3,7 +3,7 @@ package com.iris.sys.sms.service.impl;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.CharsetUtil;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.sys.sms.config.SmsConfig;
 import com.iris.sys.sms.service.SmsStrategy;

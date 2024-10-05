@@ -1,8 +1,8 @@
 package com.iris.sys.app.utils;
 
-import com.iris.framework.common.cache.RedisCache;
-import com.iris.framework.common.cache.RedisKeys;
-import com.iris.framework.common.entity.api.DataAppDTO;
+import com.iris.framework.cache.RedisCache;
+import com.iris.framework.cache.RedisKeys;
+import com.iris.framework.entity.api.DataAppDTO;
 import com.iris.sys.app.service.DataAppService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;

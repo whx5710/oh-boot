@@ -1,4 +1,4 @@
-package com.iris.framework.common.entity.api;
+package com.iris.framework.entity.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;

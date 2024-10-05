@@ -2,7 +2,7 @@ package com.iris.framework.datasource.config.auto;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.datasource.config.DataSourceProperty;
 import com.iris.framework.datasource.config.DynamicDataSourceProperties;
 import org.slf4j.Logger;

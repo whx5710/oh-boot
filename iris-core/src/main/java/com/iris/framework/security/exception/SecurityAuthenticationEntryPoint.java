@@ -4,7 +4,7 @@ import com.iris.framework.common.utils.IpUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.iris.framework.common.exception.ErrorCode;
+import com.iris.framework.exception.ErrorCode;
 import com.iris.framework.common.utils.HttpContextUtils;
 import com.iris.framework.common.utils.Result;
 import org.slf4j.Logger;

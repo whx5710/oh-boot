@@ -3,8 +3,8 @@ package com.iris.framework.security.cache;
 import cn.hutool.core.collection.ListUtil;
 import com.iris.framework.common.config.properties.SecurityProperties;
 import com.iris.framework.security.user.UserDetail;
-import com.iris.framework.common.cache.RedisCache;
-import com.iris.framework.common.cache.RedisKeys;
+import com.iris.framework.cache.RedisCache;
+import com.iris.framework.cache.RedisKeys;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

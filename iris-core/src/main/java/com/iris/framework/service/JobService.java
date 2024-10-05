@@ -1,6 +1,6 @@
-package com.iris.framework.common.service;
+package com.iris.framework.service;
 
-import com.iris.framework.common.entity.MetaEntity;
+import com.iris.framework.entity.MetaEntity;
 import com.iris.framework.common.utils.Result;
 
 import java.util.Map;

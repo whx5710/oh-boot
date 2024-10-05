@@ -2,7 +2,7 @@ package com.iris.sys.sms;
 
 import cn.hutool.core.map.MapUtil;
 import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.ExceptionUtils;
 import com.iris.framework.common.utils.JsonUtils;
 import com.iris.sys.sms.config.SmsConfig;

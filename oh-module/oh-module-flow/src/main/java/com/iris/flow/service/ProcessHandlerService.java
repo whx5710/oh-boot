@@ -13,7 +13,7 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.xml.instance.DomElement;
 import org.springframework.stereotype.Service;
 
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import org.springframework.util.ObjectUtils;
 
 import java.io.*;

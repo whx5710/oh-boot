@@ -1,7 +1,7 @@
 package com.iris.framework.common.utils;
 
-import com.iris.framework.common.exception.ServerException;
-import com.iris.framework.common.service.JobService;
+import com.iris.framework.exception.ServerException;
+import com.iris.framework.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

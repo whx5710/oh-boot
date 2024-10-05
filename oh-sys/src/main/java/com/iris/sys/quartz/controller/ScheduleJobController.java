@@ -2,7 +2,7 @@ package com.iris.sys.quartz.controller;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.framework.common.utils.Result;
 import com.iris.framework.operatelog.annotations.OperateLog;

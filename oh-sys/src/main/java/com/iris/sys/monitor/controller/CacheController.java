@@ -1,6 +1,6 @@
 package com.iris.sys.monitor.controller;
 
-import com.iris.framework.common.cache.RedisCache;
+import com.iris.framework.cache.RedisCache;
 import com.iris.framework.common.utils.Result;
 import com.iris.sys.monitor.vo.Cache;
 import io.swagger.v3.oas.annotations.Operation;

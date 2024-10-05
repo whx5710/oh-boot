@@ -1,4 +1,4 @@
-package com.iris.framework.common.cache;
+package com.iris.framework.cache;
 
 import com.iris.framework.common.config.properties.SecurityProperties;
 import org.springframework.data.redis.core.HashOperations;

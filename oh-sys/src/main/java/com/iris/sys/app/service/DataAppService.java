@@ -1,6 +1,6 @@
 package com.iris.sys.app.service;
 
-import com.iris.framework.common.entity.api.DataAppDTO;
+import com.iris.framework.entity.api.DataAppDTO;
 import com.iris.framework.common.utils.PageResult;
 import com.iris.sys.app.entity.DataAppEntity;
 import com.iris.sys.app.query.DataAppQuery;

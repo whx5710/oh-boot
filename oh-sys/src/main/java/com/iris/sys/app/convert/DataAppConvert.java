@@ -1,6 +1,6 @@
 package com.iris.sys.app.convert;
 
-import com.iris.framework.common.entity.api.DataAppDTO;
+import com.iris.framework.entity.api.DataAppDTO;
 import com.iris.sys.app.entity.DataAppEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

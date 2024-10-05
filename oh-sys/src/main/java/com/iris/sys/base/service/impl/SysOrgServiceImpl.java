@@ -8,7 +8,7 @@ import com.iris.sys.base.mapper.SysUserMapper;
 import com.iris.sys.base.query.SysOrgQuery;
 import com.iris.sys.base.vo.SysOrgVO;
 import com.iris.sys.base.convert.SysOrgConvert;
-import com.iris.framework.common.exception.ServerException;
+import com.iris.framework.exception.ServerException;
 import com.iris.framework.common.utils.TreeUtils;
 import com.iris.sys.base.entity.SysOrgEntity;
 import com.iris.sys.base.service.SysOrgService;
