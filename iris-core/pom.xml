@@ -9,12 +9,12 @@
     <groupId>com.iris.framework</groupId>
     <artifactId>iris-core</artifactId>
     <description>系统core框架</description>
-    <version>${iris.framework.version}</version>
+    <version>${iris.core.version}</version>
     <packaging>jar</packaging>
 
     <properties>
         <!-- 框架版本 -->
-        <iris.framework.version>1.0.1.20241004</iris.framework.version>
+        <iris.core.version>1.0.1.20241004</iris.core.version>
         <!-- mysql jdbc 连接驱动 -->
         <mysql.jdbc.version>8.3.0</mysql.jdbc.version>
         <!-- mybatis 版本 -->

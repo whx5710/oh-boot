@@ -7,8 +7,10 @@
         <groupId>com.iris</groupId>
         <version>1.0.1</version>
     </parent>
+    <version>1.0.1</version>
     <modelVersion>4.0.0</modelVersion>
     <description>协同工作</description>
+    <groupId>com.iris.team</groupId>
     <artifactId>oh-module-team</artifactId>
     <packaging>jar</packaging>
 
@@ -17,7 +19,6 @@
         <dependency>
             <groupId>com.iris.framework</groupId>
             <artifactId>iris-core</artifactId>
-            <version>1.0.1.20241004</version>
         </dependency>
     </dependencies>
 

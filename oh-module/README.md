@@ -11,7 +11,7 @@ oh-boot 是采用组件模式，扩展不同的业务功能，可以很方便的
 
 
 ## 引入
-如果需要使用对应的组件，如：`oh-module-flow`，则需要在`oh-boot/oh-server/pom.xml`里面引入，如下所示：
+如果需要使用对应的组件，如：`oh-module-flow`，则需要在`oh-boot/oh-sys/pom.xml`里面引入，如下所示：
 
 ```xml
 

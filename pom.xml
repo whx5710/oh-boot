@@ -25,7 +25,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 框架版本信息 -->
-        <framework.version>1.0.1.20241004</framework.version>
+        <iris.core.version>1.0.1.20241004</iris.core.version>
         <!-- 系统版本 -->
         <revision>1.0.2</revision>
         <!-- 跳过测试打包 -->
@@ -47,6 +47,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 系统框架 -->
+            <dependency>
+                <groupId>com.iris.framework</groupId>
+                <artifactId>iris-core</artifactId>
+                <version>${iris.core.version}</version>
+            </dependency>
             <!-- hutool工具,module中按需引入 -->
             <dependency>
                 <groupId>cn.hutool</groupId>

@@ -7,7 +7,9 @@
         <groupId>com.iris</groupId>
         <version>1.0.1</version>
     </parent>
+    <version>1.0.1</version>
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.iris.flow</groupId>
     <artifactId>oh-module-flow</artifactId>
     <description>工作流</description>
     <packaging>jar</packaging>
@@ -17,7 +19,6 @@
         <dependency>
             <groupId>com.iris.framework</groupId>
             <artifactId>iris-core</artifactId>
-            <version>1.0.1.20241004</version>
         </dependency>
         <!-- 工作流程 -->
         <dependency>

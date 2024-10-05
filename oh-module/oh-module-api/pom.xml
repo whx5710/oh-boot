@@ -4,7 +4,9 @@
 		<groupId>com.iris</groupId>
 		<version>1.0.1</version>
 	</parent>
+	<version>1.0.1</version>
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.iris.api</groupId>
 	<artifactId>oh-module-api</artifactId>
 	<description>接口集合工程</description>
 	<packaging>jar</packaging>
@@ -14,7 +16,6 @@
 		<dependency>
 			<groupId>com.iris.framework</groupId>
 			<artifactId>iris-core</artifactId>
-			<version>1.0.1.20241004</version>
 		</dependency>
 
 		<!-- Kafka https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
