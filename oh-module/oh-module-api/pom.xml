@@ -12,12 +12,6 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<!-- 系统框架 -->
-		<dependency>
-			<groupId>com.iris.framework</groupId>
-			<artifactId>iris-core</artifactId>
-		</dependency>
-
 		<!-- Kafka https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>

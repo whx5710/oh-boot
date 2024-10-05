@@ -14,12 +14,4 @@
     <artifactId>oh-module-team</artifactId>
     <packaging>jar</packaging>
 
-    <dependencies>
-        <!-- 系统框架 -->
-        <dependency>
-            <groupId>com.iris.framework</groupId>
-            <artifactId>iris-core</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

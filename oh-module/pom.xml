@@ -20,7 +20,11 @@
     </modules>
 
 	<dependencies>
-		<!-- ========================= 公共依赖 ========================= -->
+		<!-- 系统框架 -->
+		<dependency>
+			<groupId>com.iris.framework</groupId>
+			<artifactId>iris-core</artifactId>
+		</dependency>
 		<!-- bean映射 -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
