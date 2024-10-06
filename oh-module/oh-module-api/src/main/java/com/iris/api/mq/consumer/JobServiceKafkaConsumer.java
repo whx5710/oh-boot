@@ -1,6 +1,8 @@
 package com.iris.api.mq.consumer;
 
 import com.iris.framework.common.constant.Constant;
+import com.iris.framework.common.utils.JsonUtils;
+import com.iris.framework.entity.api.MsgEntity;
 import com.iris.framework.service.JobServiceConsumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -27,7 +29,8 @@ public class JobServiceKafkaConsumer {
      */
     @KafkaListener(id = Constant.OPEN_API, topics = Constant.TOPIC_SUBMIT, autoStartup = "${oh.open-api.auto-start-up:false}", groupId = "open-api-group-id")
     public void openApiJobConsume(String message, Acknowledgment ack) {
-        jobServiceConsumer.jobConsume(message, Constant.TOPIC_SUBMIT);
+        MsgEntity dataMsg = JsonUtils.parseObject(message, MsgEntity.class);
+        jobServiceConsumer.jobConsume(dataMsg, false);
     }
 
 }

@@ -29,17 +29,39 @@ public class JobServiceConsumer {
         this.redisCache = redisCache;
     }
 
-    public void jobConsume(String message, String topic) {
+    /**
+     * 调用JobService，执行参数验证、业务处置
+     * @param message json参数
+     * @param check 是否校验参数，未通过校验直接抛出异常
+     */
+    public void jobConsume(String message, Boolean check) {
         MsgEntity dataMsg = JsonUtils.parseObject(message, MsgEntity.class);
-        dataMsg.setTopic(topic==null?Constant.TOPIC_SUBMIT:topic);
+        this.jobConsume(dataMsg, check);
+    }
+
+    /**
+     * 调用JobService，执行参数验证、业务处置
+     * @param dataMsg 参数对象
+     * @param check 是否校验参数，未通过校验直接抛出异常
+     */
+    public void jobConsume(MsgEntity dataMsg, Boolean check) {
+        if(dataMsg == null){
+            log.warn("消息对象为空");
+            return;
+        }
+        if(dataMsg.getTopic() == null){
+            dataMsg.setTopic(Constant.TOPIC_SUBMIT);
+        }
         Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFuncCode());
         try {
             if(optional.isPresent()){
-                /**
-                 * 参数校验在 OpenApiController 中已进行校验过，因此此处可以不需要再调用，可直接进行业务处理，
-                 * 在业务处理过程中，发生异常，可直接抛出异常，状态会记录在消息表中
-                 */
-                Result<?> result = optional.get().handle(dataMsg);
+                JobService jobService = optional.get();
+                // 在业务处理过程中，发生异常，可直接抛出异常，状态会记录在消息表中
+                if(check){
+                    jobService.check(dataMsg.getData());
+                }
+                // 执行业务
+                Result<?> result = jobService.handle(dataMsg);
                 dataMsg.setResultMsg(JsonUtils.toJsonString(result));
                 dataMsg.setState("1");
             }else{
@@ -53,7 +75,7 @@ public class JobServiceConsumer {
             dataMsg.setState("3"); // 异常
         }finally {
             if(dataMsg.getResultMsg() != null){
-                redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, 604800); // 缓存7天 60*60*24*7
+                redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, 604800); // 请求参数缓存7天 60*60*24*7
             }
         }
     }
