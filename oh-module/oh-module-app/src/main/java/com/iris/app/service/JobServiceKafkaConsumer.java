@@ -31,6 +31,7 @@ public class JobServiceKafkaConsumer {
     public void openApiJobConsume(String message, Acknowledgment ack) {
         MsgEntity dataMsg = JsonUtils.parseObject(message, MsgEntity.class);
         jobServiceConsumer.jobConsume(dataMsg, false);
+        ack.acknowledge();
     }
 
 }

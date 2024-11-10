@@ -9,7 +9,7 @@
     <artifactId>oh-framework</artifactId>
     <description>系统core框架</description>
     <!-- 框架版本 -->
-    <version>2.0.1.20241109</version>
+    <version>2.0.2.20241110</version>
 
     <properties>
         <java.version>21</java.version>
@@ -40,10 +40,10 @@
             <optional>true</optional>
         </dependency>
         <!-- 校验 -->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>-->
+        </dependency>
         <!-- mybatis -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>

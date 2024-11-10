@@ -9,7 +9,7 @@
     <artifactId>oh-core</artifactId>
     <description>系统core框架</description>
     <!-- 框架版本 -->
-    <version>2.0.1.20241109</version>
+    <version>2.0.2.20241110</version>
 
     <properties>
         <java.version>21</java.version>
@@ -22,11 +22,6 @@
     </properties>
 
     <dependencies>
-        <!-- spring boot web请求 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

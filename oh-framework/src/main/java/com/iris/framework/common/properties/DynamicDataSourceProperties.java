@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,7 +17,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = DynamicDataSourceProperties.PREFIX, ignoreInvalidFields=true)
 public class DynamicDataSourceProperties {
 
-    public static final String PREFIX = "iris.datasource";
+    public static final String PREFIX = "spring.datasource";
+
     @NestedConfigurationProperty
     SysDataSourceProperties sysDataSource = new SysDataSourceProperties();
     /**
@@ -25,8 +27,13 @@ public class DynamicDataSourceProperties {
     private Map<String, DataSourceProperty> dynamic = new LinkedHashMap<>();
 
     /**
+     * 连接池类型，如果不设置自动查找 Druid > HikariCp
+     */
+    private Class<? extends DataSource> type;
+
+    /**
      * 系统数据源基础配置
-     * @return
+     * @return sys ds
      */
     public SysDataSourceProperties getSysDataSource() {
         return sysDataSource;
@@ -42,5 +49,13 @@ public class DynamicDataSourceProperties {
 
     public void setDynamic(Map<String, DataSourceProperty> dynamic) {
         this.dynamic = dynamic;
+    }
+
+    public Class<? extends DataSource> getType() {
+        return type;
+    }
+
+    public void setType(Class<? extends DataSource> type) {
+        this.type = type;
     }
 }

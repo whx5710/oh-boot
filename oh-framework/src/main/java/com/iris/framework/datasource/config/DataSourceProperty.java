@@ -1,17 +1,10 @@
 package com.iris.framework.datasource.config;
 
-
-import javax.sql.DataSource;
-
 /**
  * 数据库连接属性
  * @author 王小费 whx5710@qq.com
  */
 public class DataSourceProperty {
-    /**
-     * 连接池类型，如果不设置自动查找 Druid > HikariCp
-     */
-    private Class<? extends DataSource> type;
     /**
      * JDBC driver
      */
@@ -56,14 +49,6 @@ public class DataSourceProperty {
 
     // 检查连接
     private Boolean checkConnection = false;
-
-    public Class<? extends DataSource> getType() {
-        return type;
-    }
-
-    public void setType(Class<? extends DataSource> type) {
-        this.type = type;
-    }
 
     public String getDriverClassName() {
         return driverClassName;

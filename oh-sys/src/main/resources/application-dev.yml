@@ -10,33 +10,6 @@ server:
     context-path: /
     session.cookie.http-only: true
 iris:
-  datasource:
-    sys-data-source:
-      primary: masterDb # 主数据源或者数据源组,默认 masterDb
-      sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
-    dynamic:
-      sysDb: # 系统管理数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
-        password: 123456
-        initialSize: 10
-        minIdle: 10
-        maxActive: 100
-        filters: wall,stat
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-        checkConnection: true # 初始化时是否检查连接，默认false
-      masterDb: # 主数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
-        password: 123456
-        initialSize: 10
-        minIdle: 10
-        maxActive: 120
-        filters: wall,stat
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
-        checkConnection: false # 初始化时是否检查连接，默认false
   security:
     access-token-expire: 43200      # 过期时间，12小时过期
     refresh-token-expire: 604800    # 7天过期
@@ -85,6 +58,32 @@ spring:
       ssl.enabled: false
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    sys-data-source:
+      primary: masterDb # 主数据源或者数据源组,默认 masterDb
+      sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
+    dynamic:
+      sysDb: # 系统管理数据源
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        initialSize: 10
+        minIdle: 10
+        maxActive: 100
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        checkConnection: true # 初始化时是否检查连接，默认false
+      masterDb: # 主数据源
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        initialSize: 10
+        minIdle: 10
+        maxActive: 120
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
+        checkConnection: false # 初始化时是否检查连接，默认false
     druid:
       stat-view-servlet:
         enabled: true

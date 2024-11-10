@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = SysDataSourceProperties.PREFIX)
 public class SysDataSourceProperties {
 
-    public static final String PREFIX = "iris.datasource.sys-data-source";
+    public static final String PREFIX = "spring.datasource.sys-data-source";
     private Boolean enable = false;
 
     // 主数据源或者数据源组,默认 masterDb
