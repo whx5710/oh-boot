@@ -1,6 +1,9 @@
 package com.iris.sys.base.controller;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.constant.Constant;
+import com.iris.core.utils.PageResult;
+import com.iris.framework.security.user.SecurityUser;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.enums.MenuTypeEnum;
 import com.iris.sys.base.query.SysMenuQuery;
 import com.iris.sys.base.vo.SysMenuTreeVO;
@@ -8,12 +11,9 @@ import com.iris.sys.base.vo.SysMenuVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.utils.Result;
+import com.iris.core.utils.Result;
 import com.iris.framework.operatelog.annotations.OperateLog;
 import com.iris.framework.operatelog.enums.OperateTypeEnum;
-import com.iris.framework.security.user.SecurityUser;
-import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.convert.SysMenuConvert;
 import com.iris.sys.base.entity.SysMenuEntity;
 import com.iris.sys.base.service.SysMenuService;

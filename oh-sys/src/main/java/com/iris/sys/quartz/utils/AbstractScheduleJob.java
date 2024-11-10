@@ -1,7 +1,7 @@
 package com.iris.sys.quartz.utils;
 
 import cn.hutool.extra.spring.SpringUtil;
-import com.iris.framework.common.utils.ExceptionUtils;
+import com.iris.core.utils.ExceptionUtils;
 import com.iris.sys.quartz.entity.ScheduleJobEntity;
 import com.iris.sys.quartz.entity.ScheduleJobLogEntity;
 import com.iris.sys.quartz.enums.ScheduleStatusEnum;

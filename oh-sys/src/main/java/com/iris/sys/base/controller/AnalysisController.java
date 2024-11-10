@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.iris.framework.common.utils.Result;
+import com.iris.core.utils.Result;
 import com.iris.sys.base.service.SysLogLoginService;
 
 import io.swagger.v3.oas.annotations.Operation;

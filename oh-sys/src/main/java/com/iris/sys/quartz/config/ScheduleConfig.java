@@ -1,6 +1,7 @@
 package com.iris.sys.quartz.config;
 
-import com.iris.framework.common.constant.Constant;
+import com.iris.core.constant.Constant;
+import com.iris.framework.common.properties.SysDataSourceProperties;
 import com.iris.framework.datasource.config.auto.DynamicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,6 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.sql.DataSource;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -22,6 +22,12 @@ import java.util.Properties;
 public class ScheduleConfig {
     @Value("spring.datasource.driver-class-name")
     private String driver;
+
+    private final SysDataSourceProperties sysDataSourceProperties;
+
+    public ScheduleConfig(SysDataSourceProperties sysDataSourceProperties){
+        this.sysDataSourceProperties = sysDataSourceProperties;
+    }
 
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
@@ -59,17 +65,13 @@ public class ScheduleConfig {
      * @param prop
      * @return
      */
-    private static SchedulerFactoryBean getSchedulerFactoryBean(DynamicDataSource dataSource, Properties prop) {
+    private SchedulerFactoryBean getSchedulerFactoryBean(DynamicDataSource dataSource, Properties prop) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
         // 切换数据源，使用系统内置数据源；根据实际情况使用数据源
         Map<Object, Object> map = dataSource.getDynamicDataSources();
-        if(map.containsKey(Constant.SYS_DB)){
-            factory.setDataSource((DataSource) map.get(Constant.SYS_DB));
-        }else{
-            // 如果为空，取主数据源
-            factory.setDataSource(Objects.requireNonNull(dataSource.getResolvedDefaultDataSource()));
-        }
+        // 使用系统管理库
+        factory.setDataSource((DataSource) map.get(sysDataSourceProperties.getSysDefault()));
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);

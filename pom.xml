@@ -1,117 +1,205 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
-        <relativePath/>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.iris</groupId>
+	<artifactId>oh-boot</artifactId>
+	<version>3.0.0</version>
+	<name>oh-boot</name>
+	<description>
+		基于SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台
+	</description>
+	<packaging>pom</packaging>
+	<url>https://gitee.com/whx233</url>
+	<!-- 开发者信息 -->
+	<developers>
+		<developer>
+			<name>王小费</name>
+			<email>whx5710@qq.com</email>
+			<timezone>8</timezone>
+		</developer>
+	</developers>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>oh-boot</artifactId>
-    <groupId>com.iris</groupId>
-    <version>1.0.0</version>
-    <description>
-        基于SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台
-    </description>
-    <packaging>pom</packaging>
+	<modules>
+		<module>oh-sys</module>
+		<module>oh-module</module>
 
-    <modules>
-        <module>oh-sys</module>
-        <module>oh-module</module>
-    </modules>
+		<module>oh-core</module>
+		<module>oh-common</module>
+		<module>oh-framework</module>
+	</modules>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- 框架版本信息 -->
-        <iris.core.version>1.0.1.20241004</iris.core.version>
-        <!-- 系统版本 -->
-        <revision>1.0.2</revision>
-        <!-- 跳过测试打包 -->
-        <skipTests>true</skipTests>
-        <!-- 字符集 -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- jdk 版本 -->
-        <java.version>21</java.version>
-        <!-- hutool 工具包 -->
-        <hutool.version>5.8.25</hutool.version>
-        <!-- 系统资源监控 -->
-        <oshi.version>6.4.0</oshi.version>
-        <!-- bean 拷贝 -->
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <!-- camunda 工作流相关 -->
-        <camunda.version>7.20.0</camunda.version>
-    </properties>
+	<properties>
+		<java.version>21</java.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<!-- 字符集 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!--springboot版本-->
+		<spring-boot-dependencies.version>3.3.4</spring-boot-dependencies.version>
+		<!-- mybatis 版本 -->
+		<mybatis.version>3.0.3</mybatis.version>
+		<!--分页插件-->
+		<pagehelper.version>2.1.0</pagehelper.version>
+		<druid.version>1.2.23</druid.version>
+		<!-- 框架版本信息 -->
+		<iris.framework.version>2.0.1.20241109</iris.framework.version>
+		<iris.common.version>2.0.1.20241109</iris.common.version>
+		<!-- hutool 工具包 -->
+		<hutool.version>5.8.25</hutool.version>
+		<!-- 系统资源监控 -->
+		<oshi.version>6.4.0</oshi.version>
+		<!-- bean 拷贝 -->
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<!-- camunda 工作流相关 -->
+		<camunda.version>7.20.0</camunda.version>
+		<!-- swagger（xiaoymin版本）生成在线文档 -->
+		<knife4j.version>4.5.0</knife4j.version>
+	</properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- 系统框架 -->
-            <dependency>
-                <groupId>com.iris.framework</groupId>
-                <artifactId>iris-core</artifactId>
-                <version>${iris.core.version}</version>
-            </dependency>
-            <!-- hutool工具,module中按需引入 -->
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-bom</artifactId>
-                <version>${hutool.version}</version>
-                <type>pom</type>
-                <!-- 注意这里是import -->
-                <scope>import</scope>
-            </dependency>
-            <!--系统监控-->
-            <dependency>
-                <groupId>com.github.oshi</groupId>
-                <artifactId>oshi-core</artifactId>
-                <version>${oshi.version}</version>
-            </dependency>
-            <!--bean映射-->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-processor</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
-            <!-- 工作流 https://mvnrepository.com/artifact/org.camunda.bpm.springboot/camunda-bpm-spring-boot-starter -->
-            <dependency>
-                <groupId>org.camunda.bpm.springboot</groupId>
-                <artifactId>camunda-bpm-spring-boot-starter</artifactId>
-                <version>${camunda.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<!-- start ================================= spring boot 相关 ================================= -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- end   ================================= spring boot 相关 ================================= -->
 
-    <repositories>
-        <repository>
-            <id>public</id>
-            <name>阿里云公共仓库</name>
-            <url>https://maven.aliyun.com/repository/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>public</id>
-            <name>阿里云公共仓库</name>
-            <url>https://maven.aliyun.com/repository/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+			<!-- start ================================= 项目相关 ================================= -->
+			<!-- 系统框架 -->
+			<dependency>
+				<groupId>com.iris</groupId>
+				<artifactId>oh-framework</artifactId>
+				<version>${iris.framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iris</groupId>
+				<artifactId>oh-common</artifactId>
+				<version>${iris.common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iris</groupId>
+				<artifactId>oh-core</artifactId>
+				<version>${iris.framework.version}</version>
+			</dependency>
+			<!-- end   ================================= 项目相关 ================================= -->
+
+			<!-- start ================================= 其他 ================================= -->
+			<!-- hutool工具,module中按需引入 -->
+			<dependency>
+				<groupId>cn.hutool</groupId>
+				<artifactId>hutool-bom</artifactId>
+				<version>${hutool.version}</version>
+				<type>pom</type>
+				<!-- 注意这里是import -->
+				<scope>import</scope>
+			</dependency>
+			<!--系统监控-->
+			<dependency>
+				<groupId>com.github.oshi</groupId>
+				<artifactId>oshi-core</artifactId>
+				<version>${oshi.version}</version>
+			</dependency>
+			<!--bean映射-->
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct-processor</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
+			<!-- 工作流 -->
+			<dependency>
+				<groupId>org.camunda.bpm.springboot</groupId>
+				<artifactId>camunda-bpm-spring-boot-starter</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<!-- 连接池 -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid-spring-boot-3-starter</artifactId>
+				<version>${druid.version}</version>
+			</dependency>
+			<!-- mybatis -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<!-- 分页插件 -->
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>${pagehelper.version}</version>
+			</dependency>
+			<!-- 接口文档 -->
+			<dependency>
+				<groupId>com.github.xiaoymin</groupId>
+				<artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+				<version>${knife4j.version}</version>
+			</dependency>
+			<!-- end   ================================= 其他 ================================= -->
+
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- spring boot web请求 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>6.3.3</version>
+		</dependency>
+		<!--bean映射-->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>public</id>
+			<name>阿里云公共仓库</name>
+			<url>https://maven.aliyun.com/repository/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<name>阿里云公共仓库</name>
+			<url>https://maven.aliyun.com/repository/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>

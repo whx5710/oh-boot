@@ -1,7 +1,7 @@
 package com.iris.sys.base.controller;
 
-import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.common.utils.Result;
+import com.iris.core.utils.PageResult;
+import com.iris.core.utils.Result;
 import com.iris.sys.base.query.SysMessageQuery;
 import com.iris.sys.base.vo.SysMessageVO;
 import com.iris.sys.base.convert.SysMessageConvert;

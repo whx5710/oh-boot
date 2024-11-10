@@ -13,7 +13,7 @@ import com.iris.sys.base.service.SysRoleMenuService;
 import com.iris.sys.base.service.SysRoleService;
 import com.iris.sys.base.service.SysRoleDataScopeService;
 import com.iris.sys.base.service.SysUserRoleService;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SysRoleEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

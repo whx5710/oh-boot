@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.iris</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>3.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>oh-common</artifactId>
+    <description>系统core框架</description>
+    <!-- 框架版本 -->
+    <version>2.0.1.20241109</version>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <!-- excel 工具 -->
+        <easyexcel.version>4.0.3</easyexcel.version>
+    </properties>
+
+    <dependencies>
+        <!-- excel操作 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>${easyexcel.version}</version>
+        </dependency>
+        <!-- iris core -->
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-core</artifactId>
+        </dependency>
+    </dependencies>
+</project>

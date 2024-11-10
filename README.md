@@ -17,17 +17,17 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、
 - 官网地址：
 
 ```
-iris-core    系统框架
+oh-common    公共框架，按需引入
+oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类
+oh-framework 系统框架，包括数据库、基础实体类、鉴权
 oh-sys       系统启动入口、基础功能管理【根据实际情况可独立部署】
 oh-module    业务模块
-    - oh-module-api    对外服务接口
+    - oh-module-app    对外服务接口
     - oh-module-flow   工作流程管理
     - oh-module-team   协同管理【业务功能，未开发】
     - ...              扩展其他业务模块
 ```
-通过`iris-core`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程，
-只需将`iris-core` 和 `oh-sys`组装成一个独立工程即可，也可以根据业务需求和服务器资源划分成不同的后端服务工程。
-参考系统管理工程 https://gitee.com/whx233/oh-sys
+通过`oh-core`、`oh-common`(按需)、`oh-framework`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程，
 
 ## 快速开始
 环境：JDK17+、MySQL8+、Redis、Kafka(RocketMq)

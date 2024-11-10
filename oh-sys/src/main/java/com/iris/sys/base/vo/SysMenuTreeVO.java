@@ -1,12 +1,12 @@
 package com.iris.sys.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.iris.core.utils.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import com.iris.framework.common.utils.DateUtils;
-import com.iris.framework.common.utils.TreeNode;
-import org.hibernate.validator.constraints.Range;
+import com.iris.core.utils.DateUtils;
 
 import java.time.LocalDateTime;
 
@@ -27,11 +27,13 @@ public class SysMenuTreeVO extends TreeNode<SysMenuTreeVO> {
     private String url;
 
     @Schema(description = "类型  0：菜单   1：按钮   2：接口")
-    @Range(min = 0, max = 2, message = "类型不正确")
+    @Min(value = 0, message = "类型不正确")
+    @Max(value = 2, message = "类型不正确")
     private Integer type;
 
     @Schema(description = "打开方式   0：内部   1：外部")
-    @Range(min = 0, max = 1, message = "打开方式不正确")
+    @Min(value = 0, message = "打开方式不正确")
+    @Max(value = 1, message = "打开方式不正确")
     private Integer openStyle;
 
     @Schema(description = "菜单图标")

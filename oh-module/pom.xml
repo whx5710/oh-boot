@@ -1,39 +1,34 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<groupId>com.iris</groupId>
-		<artifactId>oh-boot</artifactId>
-		<version>1.0.0</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>oh-module</artifactId>
-	<description>系统模块集合</description>
-	<version>1.0.1</version>
-	<packaging>pom</packaging>
-
-	<modules>
-		<!-- api接口 -->
-		<module>oh-module-api</module>
-		<!-- 工作流 -->
-		<module>oh-module-flow</module>
-		<!-- 协同任务 -->
-		<module>oh-module-team</module>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.iris</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>3.0.0</version>
+    </parent>
+    <groupId>com.iris.module</groupId>
+    <artifactId>oh-module</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <modules>
+        <!-- 工作流 -->
+        <module>oh-module-flow</module>
+        <!-- 协同任务 -->
+        <module>oh-module-team</module>
+        <module>oh-module-app</module>
     </modules>
-
-	<dependencies>
-		<!-- 系统框架 -->
-		<dependency>
-			<groupId>com.iris.framework</groupId>
-			<artifactId>iris-core</artifactId>
-		</dependency>
-		<!-- bean映射 -->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-		</dependency>
-		<!-- bean映射 -->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <!-- 接口文档 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
 </project>

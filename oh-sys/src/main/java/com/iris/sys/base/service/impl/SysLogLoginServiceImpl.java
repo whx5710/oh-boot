@@ -2,7 +2,11 @@ package com.iris.sys.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.common.utils.*;
+import com.iris.common.utils.ExcelUtils;
+import com.iris.core.utils.DateUtils;
+import com.iris.core.utils.HttpContextUtils;
+import com.iris.core.utils.IpUtils;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.mapper.SysLogLoginMapper;
 import com.iris.sys.base.query.SysLogLoginQuery;
 import com.iris.sys.base.vo.AnalysisVO;
@@ -25,11 +29,9 @@ import java.util.List;
  */
 @Service
 public class SysLogLoginServiceImpl implements SysLogLoginService {
-//    private final TransService transService;
     private final SysLogLoginMapper sysLogLoginMapper;
 
     public SysLogLoginServiceImpl(SysLogLoginMapper sysLogLoginMapper) {
-        //this.transService = transService;
         this.sysLogLoginMapper = sysLogLoginMapper;
     }
 
@@ -46,8 +48,8 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         assert request != null;
         String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
-        String ip = IpUtils.getIpAddr(request);
-        String address = AddressUtils.getAddressByIP(ip);
+        String ip = IpUtils.getIpAddress(request);
+        String address = "未知"; // AddressUtils.getAddressByIP(ip);
 
         SysLogLoginEntity entity = new SysLogLoginEntity();
         entity.setUsername(username);

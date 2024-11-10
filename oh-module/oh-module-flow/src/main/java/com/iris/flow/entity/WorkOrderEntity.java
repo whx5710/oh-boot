@@ -1,6 +1,7 @@
 package com.iris.flow.entity;
 
 import com.iris.framework.entity.BaseEntity;
+
 import java.math.BigDecimal;
 import java.util.Date;
 

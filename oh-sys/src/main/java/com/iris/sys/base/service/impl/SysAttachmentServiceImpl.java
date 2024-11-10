@@ -6,7 +6,7 @@ import com.iris.sys.base.mapper.SysAttachmentMapper;
 import com.iris.sys.base.query.SysAttachmentQuery;
 import com.iris.sys.base.vo.SysAttachmentVO;
 import com.iris.sys.base.entity.SysAttachmentEntity;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SysAttachmentConvert;
 import com.iris.sys.base.service.SysAttachmentService;
 import org.springframework.stereotype.Service;

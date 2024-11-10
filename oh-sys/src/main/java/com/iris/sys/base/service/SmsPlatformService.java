@@ -1,6 +1,6 @@
 package com.iris.sys.base.service;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SmsPlatformEntity;
 import com.iris.sys.base.query.SmsPlatformQuery;
 import com.iris.sys.base.vo.SmsPlatformVO;

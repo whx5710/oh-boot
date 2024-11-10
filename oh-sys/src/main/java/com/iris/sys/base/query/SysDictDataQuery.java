@@ -2,7 +2,7 @@ package com.iris.sys.base.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import com.iris.framework.common.query.Query;
+import com.iris.framework.query.Query;
 
 import java.util.Objects;
 

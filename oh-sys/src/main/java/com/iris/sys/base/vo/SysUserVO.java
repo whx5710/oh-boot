@@ -2,12 +2,9 @@ package com.iris.sys.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Range;
+import jakarta.validation.constraints.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -44,7 +41,8 @@ public class SysUserVO implements Serializable {
     private String avatar;
 
     @Schema(description = "性别 0：男   1：女   2：未知", requiredMode = Schema.RequiredMode.REQUIRED)
-    @Range(min = 0, max = 2, message = "性别不正确")
+    @Min(value = 0, message = "性别不正确")
+    @Max(value = 2, message = "性别不正确")
     private Integer gender;
 
     @Schema(description = "邮箱")
@@ -60,7 +58,8 @@ public class SysUserVO implements Serializable {
     private Long orgId;
 
     @Schema(description = "状态 0：停用    1：正常", requiredMode = Schema.RequiredMode.REQUIRED)
-    @Range(min = 0, max = 1, message = "用户状态不正确")
+    @Min(value = 0, message = "用户状态不正确")
+    @Max(value = 1, message = "用户状态不正确")
     private Integer status;
 
     @Schema(description = "角色ID列表")

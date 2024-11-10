@@ -1,10 +1,10 @@
-//package com.iris.storage.service;
+package com.iris.sys.storage.service;//package com.iris.storage.service;
 //
 //import io.minio.BucketExistsArgs;
 //import io.minio.MakeBucketArgs;
 //import io.minio.MinioClient;
 //import io.minio.PutObjectArgs;
-//import com.iris.framework.common.exception.ServerException;
+//import com.iris.core.common.exception.ServerException;
 //import com.iris.storage.properties.StorageProperties;
 //import org.springframework.http.MediaType;
 //import org.springframework.http.MediaTypeFactory;

@@ -2,7 +2,7 @@ package com.iris.sys.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.mapper.SysVersionInfoMapper;
 import com.iris.sys.base.query.SysVersionInfoQuery;
 import com.iris.sys.base.vo.SysVersionInfoVO;

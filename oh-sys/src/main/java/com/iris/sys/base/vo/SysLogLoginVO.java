@@ -3,9 +3,9 @@ package com.iris.sys.base.vo;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.iris.common.excel.DateConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.iris.framework.common.excel.DateConverter;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -43,7 +43,6 @@ public class SysLogLoginVO implements Serializable {
     private String userAgent;
 
     @ExcelIgnore
-    // @Trans(type = TransType.DICTIONARY, key = "success_fail", ref = "statusLabel", dataSource = Constant.SYS_DB)
     @Schema(description = "登录状态  0：失败   1：成功")
     private Integer status;
 
@@ -51,7 +50,6 @@ public class SysLogLoginVO implements Serializable {
     private String statusLabel;
 
     @ExcelIgnore
-//    @Trans(type = TransType.DICTIONARY, key = "login_operation", ref = "operationLabel", dataSource = Constant.SYS_DB)
     @Schema(description = "操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误")
     private Integer operation;
 

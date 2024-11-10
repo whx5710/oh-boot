@@ -2,11 +2,11 @@ package com.iris.sys.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.entity.IDEntity;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -34,11 +34,13 @@ public class SysMenuVO extends IDEntity implements Serializable {
     private String url;
 
     @Schema(description = "类型  0：菜单   1：按钮   2：接口")
-    @Range(min = 0, max = 2, message = "类型不正确")
+    @Min(value = 0, message = "类型不正确")
+    @Max(value = 2, message = "类型不正确")
     private Integer type;
 
     @Schema(description = "打开方式   0：内部   1：外部")
-    @Range(min = 0, max = 1, message = "打开方式不正确")
+    @Min(value = 0, message = "打开方式不正确")
+    @Max(value = 1, message = "打开方式不正确")
     private Integer openStyle;
 
     @Schema(description = "菜单图标")
@@ -85,19 +87,21 @@ public class SysMenuVO extends IDEntity implements Serializable {
         this.url = url;
     }
 
-    public @Range(min = 0, max = 2, message = "类型不正确") Integer getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(@Range(min = 0, max = 2, message = "类型不正确") Integer type) {
+    // @Range(min = 0, max = 2, message = "类型不正确")
+    public void setType(@Min(value = 0, message = "类型不正确") @Max(value = 2, message = "类型不正确") Integer type) {
         this.type = type;
     }
 
-    public @Range(min = 0, max = 1, message = "打开方式不正确") Integer getOpenStyle() {
+    public Integer getOpenStyle() {
         return openStyle;
     }
 
-    public void setOpenStyle(@Range(min = 0, max = 1, message = "打开方式不正确") Integer openStyle) {
+    // @Range(min = 0, max = 1, message = "打开方式不正确")
+    public void setOpenStyle(@Min(value = 0, message = "打开方式不正确") @Max(value = 1, message = "打开方式不正确") Integer openStyle) {
         this.openStyle = openStyle;
     }
 

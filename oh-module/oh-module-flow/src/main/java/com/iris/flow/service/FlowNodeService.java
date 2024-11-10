@@ -1,9 +1,9 @@
 package com.iris.flow.service;
 
 import com.iris.flow.entity.FlowNodeEntity;
-import com.iris.framework.common.utils.PageResult;
 import com.iris.flow.query.FlowNodeQuery;
 import com.iris.flow.vo.FlowNodeVO;
+import com.iris.core.utils.PageResult;
 
 import java.util.List;
 

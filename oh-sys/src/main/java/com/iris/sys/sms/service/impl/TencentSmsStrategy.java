@@ -8,8 +8,8 @@ package com.iris.sys.sms.service.impl;//package com.iris.message.sms;
 //import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 //import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 //import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-//import com.iris.framework.common.constant.Constant;
-//import com.iris.framework.common.exception.ServerException;
+//import com.iris.core.common.constant.Constant;
+//import com.iris.core.common.exception.ServerException;
 //import com.iris.message.sms.config.SmsConfig;
 //
 //import java.util.Map;

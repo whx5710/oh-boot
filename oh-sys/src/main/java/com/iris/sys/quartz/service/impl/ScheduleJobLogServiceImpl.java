@@ -2,7 +2,7 @@ package com.iris.sys.quartz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.quartz.convert.ScheduleJobLogConvert;
 import com.iris.sys.quartz.mapper.ScheduleJobMapper;
 import com.iris.sys.quartz.entity.ScheduleJobLogEntity;

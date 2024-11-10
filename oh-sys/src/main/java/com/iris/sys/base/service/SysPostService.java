@@ -3,7 +3,7 @@ package com.iris.sys.base.service;
 import com.iris.sys.base.entity.SysPostEntity;
 import com.iris.sys.base.query.SysPostQuery;
 import com.iris.sys.base.vo.SysPostVO;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 
 import java.util.List;
 

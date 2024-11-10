@@ -2,7 +2,7 @@ package com.iris.sys.base.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.framework.entity.BaseEntity;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;

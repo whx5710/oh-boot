@@ -1,8 +1,8 @@
 package com.iris.sys.base.controller;
 
-import com.iris.framework.exception.ServerException;
-import com.iris.framework.common.utils.AssertUtils;
-import com.iris.framework.common.utils.IrisTools;
+import com.iris.core.exception.ServerException;
+import com.iris.core.utils.AssertUtils;
+import com.iris.core.utils.IrisTools;
 import com.iris.sys.base.vo.SysAccountLoginVO;
 import com.iris.sys.base.vo.SysCaptchaVO;
 import com.iris.sys.base.vo.SysMobileLoginVO;
@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import com.iris.framework.common.utils.Result;
+import com.iris.core.utils.Result;
 import com.iris.sys.base.service.SysAuthService;
 import com.iris.sys.base.service.SysCaptchaService;
 import org.springframework.web.bind.annotation.*;

@@ -6,7 +6,7 @@ import com.iris.sys.base.mapper.SysDictDataMapper;
 import com.iris.sys.base.query.SysDictDataQuery;
 import com.iris.sys.base.vo.SysDictDataVO;
 import com.iris.sys.base.entity.SysDictDataEntity;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SysDictDataConvert;
 import com.iris.sys.base.service.SysDictDataService;
 import org.springframework.stereotype.Service;

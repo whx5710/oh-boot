@@ -1,6 +1,6 @@
 package com.iris.sys.base.cache;
 
-import com.iris.framework.cache.RedisCache;
+import com.iris.core.cache.RedisCache;
 import com.iris.sys.sms.config.SmsConfig;
 import org.springframework.stereotype.Service;
 

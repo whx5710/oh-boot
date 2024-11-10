@@ -2,14 +2,14 @@ package com.iris.sys.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.exception.ServerException;
-import com.iris.framework.common.utils.AssertUtils;
+import com.iris.core.exception.ServerException;
+import com.iris.core.utils.AssertUtils;
 import com.iris.sys.base.mapper.SysPostMapper;
 import com.iris.sys.base.query.SysPostQuery;
 import com.iris.sys.base.vo.SysPostVO;
 import com.iris.sys.base.convert.SysPostConvert;
 import com.iris.sys.base.service.SysUserPostService;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SysPostEntity;
 import com.iris.sys.base.service.SysPostService;
 import org.springframework.stereotype.Service;

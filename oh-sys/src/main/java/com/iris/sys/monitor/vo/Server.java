@@ -1,7 +1,7 @@
 package com.iris.sys.monitor.vo;
 
-import com.iris.sys.monitor.utils.ArityUtil;
 import com.iris.sys.monitor.model.*;
+import com.iris.sys.monitor.utils.ArityUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;

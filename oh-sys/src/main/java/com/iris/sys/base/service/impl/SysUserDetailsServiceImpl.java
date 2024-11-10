@@ -1,12 +1,12 @@
 package com.iris.sys.base.service.impl;
 
+import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.mapper.SysRoleMapper;
 import com.iris.sys.base.mapper.SysRoleDataScopeMapper;
 import com.iris.sys.base.enums.DataScopeEnum;
 import com.iris.sys.base.enums.UserStatusEnum;
 import com.iris.sys.base.convert.SysUserConvert;
 import com.iris.sys.base.service.SysUserDetailsService;
-import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.entity.SysUserEntity;
 import com.iris.sys.base.service.SysMenuService;
 import com.iris.sys.base.service.SysOrgService;

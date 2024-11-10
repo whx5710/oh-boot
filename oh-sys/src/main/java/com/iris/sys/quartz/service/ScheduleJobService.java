@@ -1,6 +1,6 @@
 package com.iris.sys.quartz.service;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.quartz.entity.ScheduleJobEntity;
 import com.iris.sys.quartz.query.ScheduleJobQuery;
 import com.iris.sys.quartz.vo.ScheduleJobVO;

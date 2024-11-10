@@ -1,14 +1,14 @@
 package com.iris.sys.base.controller;
 
+import com.iris.framework.operatelog.annotations.OperateLog;
+import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.query.SysAttachmentQuery;
 import com.iris.sys.base.vo.SysAttachmentVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.common.utils.Result;
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.enums.OperateTypeEnum;
+import com.iris.core.utils.PageResult;
+import com.iris.core.utils.Result;
 import com.iris.sys.base.service.SysAttachmentService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -3,7 +3,7 @@ package com.iris.sys.sms.service.impl;
 //import com.qiniu.http.Response;
 //import com.qiniu.sms.SmsManager;
 //import com.qiniu.util.Auth;
-//import com.iris.framework.common.exception.ServerException;
+//import com.iris.core.common.exception.ServerException;
 //import com.iris.message.sms.config.SmsConfig;
 //
 //import java.util.Map;

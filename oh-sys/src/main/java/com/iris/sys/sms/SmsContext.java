@@ -1,6 +1,6 @@
 package com.iris.sys.sms;
 
-import com.iris.framework.exception.ServerException;
+import com.iris.core.exception.ServerException;
 import com.iris.sys.sms.config.SmsConfig;
 import com.iris.sys.base.enums.SmsPlatformEnum;
 import com.iris.sys.sms.service.impl.HuaweiSmsStrategy;

@@ -1,6 +1,6 @@
 package com.iris.sys.base.service;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SysOrgEntity;
 import com.iris.sys.base.query.SysOrgQuery;
 import com.iris.sys.base.vo.SysOrgVO;

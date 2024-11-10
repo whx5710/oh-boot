@@ -1,7 +1,7 @@
 package com.iris.sys.base.controller;
 
-import com.iris.framework.common.utils.DateUtils;
-import com.iris.framework.common.utils.Result;
+import com.iris.core.utils.DateUtils;
+import com.iris.core.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;

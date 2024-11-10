@@ -1,6 +1,6 @@
 package com.iris.sys.base.query;
 
-import com.iris.framework.common.query.Query;
+import com.iris.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 

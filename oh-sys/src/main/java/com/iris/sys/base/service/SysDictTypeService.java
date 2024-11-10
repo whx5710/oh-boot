@@ -4,7 +4,7 @@ import com.iris.sys.base.entity.SysDictTypeEntity;
 import com.iris.sys.base.query.SysDictTypeQuery;
 import com.iris.sys.base.vo.SysDictTypeVO;
 import com.iris.sys.base.vo.SysDictVO;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 
 import java.util.List;
 

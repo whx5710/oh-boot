@@ -2,16 +2,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>oh-module</artifactId>
-        <groupId>com.iris</groupId>
-        <version>1.0.1</version>
-    </parent>
-    <version>1.0.1</version>
     <modelVersion>4.0.0</modelVersion>
-    <description>协同工作</description>
+    <parent>
+        <groupId>com.iris.module</groupId>
+        <artifactId>oh-module</artifactId>
+        <version>1.0.0</version>
+    </parent>
     <groupId>com.iris.team</groupId>
     <artifactId>oh-module-team</artifactId>
     <packaging>jar</packaging>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <!-- 分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-framework</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

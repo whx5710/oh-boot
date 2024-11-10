@@ -1,6 +1,6 @@
 package com.iris.sys.security.event;
 
-import com.iris.framework.common.constant.Constant;
+import com.iris.core.constant.Constant;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.enums.LoginOperationEnum;
 import com.iris.sys.base.service.SysLogLoginService;

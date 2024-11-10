@@ -6,7 +6,7 @@ import com.iris.sys.base.vo.SysLogLoginVO;
 
 import java.util.List;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 
 /**
  * 登录日志

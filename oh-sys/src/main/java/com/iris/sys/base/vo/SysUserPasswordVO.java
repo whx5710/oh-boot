@@ -2,7 +2,7 @@ package com.iris.sys.base.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,8 +22,8 @@ public class SysUserPasswordVO implements Serializable {
     @NotBlank(message = "原密码不能为空")
     private String password;
 
-    @Schema(description = "新密码，密码长度为 4-20 位", requiredMode = Schema.RequiredMode.REQUIRED)
-    @Length(min = 6, max = 30, message = "新密码长度为 6-30 位")
+    @Schema(description = "新密码，密码长度为 6-30 位", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Size(min = 6, max = 30, message = "新密码长度为 6-30 位")
     private String newPassword;
 
     public String getPassword() {

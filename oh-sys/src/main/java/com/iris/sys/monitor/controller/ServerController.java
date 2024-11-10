@@ -1,6 +1,6 @@
 package com.iris.sys.monitor.controller;
 
-import com.iris.framework.common.utils.Result;
+import com.iris.core.utils.Result;
 import com.iris.sys.monitor.model.*;
 import com.iris.sys.monitor.vo.Server;
 import io.swagger.v3.oas.annotations.Operation;

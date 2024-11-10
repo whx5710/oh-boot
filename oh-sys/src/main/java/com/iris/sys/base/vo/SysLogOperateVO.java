@@ -2,7 +2,7 @@ package com.iris.sys.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.iris.sys.storage.service;
 
-import com.iris.framework.exception.ServerException;
+import com.iris.core.exception.ServerException;
 import com.iris.sys.storage.properties.StorageProperties;
 import org.springframework.util.FileCopyUtils;
 

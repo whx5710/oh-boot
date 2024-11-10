@@ -3,7 +3,7 @@ package com.iris.sys.base.service;
 import com.iris.sys.base.entity.SysDictDataEntity;
 import com.iris.sys.base.query.SysDictDataQuery;
 import com.iris.sys.base.vo.SysDictDataVO;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 
 import java.util.List;
 

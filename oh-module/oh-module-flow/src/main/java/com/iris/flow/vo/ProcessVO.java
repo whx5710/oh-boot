@@ -1,7 +1,7 @@
 package com.iris.flow.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

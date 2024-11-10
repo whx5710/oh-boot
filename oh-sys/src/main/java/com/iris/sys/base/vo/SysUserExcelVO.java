@@ -2,7 +2,7 @@ package com.iris.sys.base.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.iris.framework.common.excel.LocalDateTimeConverter;
+import com.iris.common.excel.LocalDateTimeConverter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -31,7 +31,6 @@ public class SysUserExcelVO implements Serializable {
     private String realName;
 
     @ExcelIgnore
-    // @Trans(type = TransType.DICTIONARY, key = "user_gender", ref = "genderLabel", dataSource = Constant.SYS_DB)
     private Integer gender;
 
     @ExcelProperty(value = "性别")
@@ -47,14 +46,12 @@ public class SysUserExcelVO implements Serializable {
     private Long orgId;
 
     @ExcelIgnore
-    // @Trans(type = TransType.DICTIONARY, key = "user_status", ref = "statusLabel", dataSource = Constant.SYS_DB)
     private Integer status;
 
     @ExcelProperty(value = "状态")
     private String statusLabel;
 
     @ExcelIgnore
-    // @Trans(type = TransType.DICTIONARY, key = "user_super_admin", ref = "superAdminLabel", dataSource = Constant.SYS_DB)
     private Integer superAdmin;
 
     @ExcelProperty(value = "超级管理员")

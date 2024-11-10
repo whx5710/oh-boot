@@ -53,6 +53,10 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 	// 启动系统
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
+		/*SpringApplication app = new SpringApplication(ServerApplication.class);
+		app.setLazyInitialization(true); // 启用懒加载
+		app.run(args);*/
+
 	}
 
 	@Override

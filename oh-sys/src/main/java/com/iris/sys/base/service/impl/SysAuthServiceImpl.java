@@ -1,13 +1,17 @@
 package com.iris.sys.base.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
-import com.iris.framework.cache.RedisCache;
-import com.iris.framework.cache.RedisKeys;
-import com.iris.framework.common.config.properties.SecurityProperties;
-import com.iris.framework.common.utils.AssertUtils;
-import com.iris.framework.common.utils.HttpContextUtils;
-import com.iris.framework.common.utils.IpUtils;
-import com.iris.framework.common.utils.IrisTools;
+import com.iris.core.cache.RedisCache;
+import com.iris.core.cache.RedisKeys;
+import com.iris.core.constant.Constant;
+import com.iris.core.utils.AssertUtils;
+import com.iris.core.utils.HttpContextUtils;
+import com.iris.core.utils.IpUtils;
+import com.iris.core.utils.IrisTools;
+import com.iris.framework.common.properties.SecurityProperties;
+import com.iris.framework.security.cache.TokenStoreCache;
+import com.iris.framework.security.mobile.MobileAuthenticationToken;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.entity.SysUserEntity;
 import com.iris.sys.base.enums.LoginOperationEnum;
 import com.iris.sys.base.service.*;
@@ -16,11 +20,7 @@ import com.iris.sys.base.vo.SysMobileLoginVO;
 import com.iris.sys.base.vo.SysTokenVO;
 import com.iris.sys.base.vo.SysUserVO;
 import com.iris.sys.sms.service.SmsApi;
-import com.iris.framework.common.constant.Constant;
-import com.iris.framework.exception.ServerException;
-import com.iris.framework.security.cache.TokenStoreCache;
-import com.iris.framework.security.mobile.MobileAuthenticationToken;
-import com.iris.framework.security.user.UserDetail;
+import com.iris.core.exception.ServerException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -138,7 +138,7 @@ public class SysAuthServiceImpl implements SysAuthService {
         String key = RedisKeys.getAccessRefreshTokenKey(refreshToken);
         if(redisCache.hasKey(key)){
             UserDetail userDetail = (UserDetail) redisCache.get(key);
-            String ip = IpUtils.getIpAddr(request);
+            String ip = IpUtils.getIpAddress(request);
             // 删除老的刷新token
             redisCache.delete(key);
             if(userDetail.getIp().equals(ip)){
@@ -291,7 +291,7 @@ public class SysAuthServiceImpl implements SysAuthService {
         String refreshToken = IrisTools.generator();
         // IP
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
-        String ip = IpUtils.getIpAddr(request);
+        String ip = IpUtils.getIpAddress(request);
         user.setIp(ip);
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, refreshToken, user);

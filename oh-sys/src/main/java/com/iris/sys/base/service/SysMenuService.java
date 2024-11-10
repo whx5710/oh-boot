@@ -1,10 +1,10 @@
 package com.iris.sys.base.service;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.entity.SysMenuEntity;
 import com.iris.sys.base.query.SysMenuQuery;
 import com.iris.sys.base.vo.SysMenuTreeVO;
-import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.vo.SysMenuVO;
 
 import java.util.List;

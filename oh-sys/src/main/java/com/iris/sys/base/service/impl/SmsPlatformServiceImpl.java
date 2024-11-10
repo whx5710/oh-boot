@@ -2,8 +2,8 @@ package com.iris.sys.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.common.constant.Constant;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.constant.Constant;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.cache.SmsPlatformCache;
 import com.iris.sys.base.mapper.SmsPlatformMapper;
 import com.iris.sys.base.query.SmsPlatformQuery;

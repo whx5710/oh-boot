@@ -5,9 +5,9 @@ package com.iris.sys.sms.service.impl;
 //import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 //import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 //import com.aliyun.teaopenapi.models.Config;
-//import com.iris.framework.common.constant.Constant;
-//import com.iris.framework.common.exception.ServerException;
-//import com.iris.framework.common.utils.JsonUtils;
+//import com.iris.core.common.constant.Constant;
+//import com.iris.core.common.exception.ServerException;
+//import com.iris.core.utils.JsonUtils;
 //import com.iris.message.sms.config.SmsConfig;
 //
 //import java.util.Map;

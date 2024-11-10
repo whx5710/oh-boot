@@ -10,10 +10,33 @@ server:
     context-path: /
     session.cookie.http-only: true
 iris:
-  xss:
-    enabled: true
-    exclude-urls:
-      - /oh-generator/**
+  datasource:
+    sys-data-source:
+      primary: masterDb # 主数据源或者数据源组,默认 masterDb
+      sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
+    dynamic:
+      sysDb: # 系统管理数据源
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        initialSize: 10
+        minIdle: 10
+        maxActive: 100
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        checkConnection: true # 初始化时是否检查连接，默认false
+      masterDb: # 主数据源
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        initialSize: 10
+        minIdle: 10
+        maxActive: 120
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
+        checkConnection: false # 初始化时是否检查连接，默认false
   security:
     access-token-expire: 43200      # 过期时间，12小时过期
     refresh-token-expire: 604800    # 7天过期
@@ -33,6 +56,11 @@ iris:
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
+    cache-time: 604800 # 缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
+  xss:
+    enabled: true
+    exclude-urls:
+      - /oh-generator/**
   # 文件存储相关
   storage:
     enabled: true
@@ -66,28 +94,6 @@ spring:
         enabled: true # 启用Web统计过滤器
         session-stat-enable: true # 启用会话统计功能
         session-stat-max-count: 1000 # 最大会话统计数量
-    sysDataSource.primary: masterDb #设置默认的数据源或者数据源组,默认值即为masterDb
-    dynamic:
-      sysDb:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
-        password: 123456
-        initialSize: 10
-        minIdle: 10
-        maxActive: 100
-        filters: wall,stat
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-      masterDb:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
-        password: 123456
-        initialSize: 10
-        minIdle: 10
-        maxActive: 120
-        filters: wall,stat
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: dc-device-flow-analyze

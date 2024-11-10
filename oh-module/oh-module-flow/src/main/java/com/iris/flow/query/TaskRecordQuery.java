@@ -1,7 +1,7 @@
 package com.iris.flow.query;
 
+import com.iris.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.iris.framework.common.query.Query;
 
 /**
 * 环节运行表查询

@@ -3,7 +3,7 @@ package com.iris.sys.base.vo;
 import com.iris.framework.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 
 import java.time.LocalDateTime;
 

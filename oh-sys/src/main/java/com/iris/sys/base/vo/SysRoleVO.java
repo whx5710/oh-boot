@@ -3,7 +3,7 @@ package com.iris.sys.base.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;

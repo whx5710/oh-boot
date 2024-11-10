@@ -2,7 +2,7 @@ package com.iris.sys.base.service;
 
 import com.iris.sys.base.query.SysLogOperateQuery;
 import com.iris.sys.base.vo.SysLogOperateVO;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 
 /**
  * 操作日志

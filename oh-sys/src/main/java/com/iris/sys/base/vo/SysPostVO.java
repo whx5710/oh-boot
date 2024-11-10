@@ -2,10 +2,10 @@ package com.iris.sys.base.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import com.iris.framework.common.utils.DateUtils;
-import org.hibernate.validator.constraints.Range;
+import com.iris.core.utils.DateUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,7 +38,8 @@ public class SysPostVO implements Serializable {
     private Integer sort;
 
     @Schema(description = "状态  0：停用   1：正常", requiredMode = Schema.RequiredMode.REQUIRED)
-    @Range(min = 0, max = 1, message = "状态不正确")
+    @Min(value = 0, message = "状态不正确")
+    @Max(value = 1, message = "状态不正确")
     private Integer status;
 
     @Schema(description = "创建时间")

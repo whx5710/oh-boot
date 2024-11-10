@@ -3,17 +3,17 @@ package com.iris.sys.base.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.constant.Constant;
+import com.iris.core.utils.PageResult;
+import com.iris.core.utils.TreeUtils;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.mapper.SysMenuMapper;
 import com.iris.sys.base.enums.SuperAdminEnum;
 import com.iris.sys.base.query.SysMenuQuery;
 import com.iris.sys.base.vo.SysMenuTreeVO;
 import com.iris.sys.base.convert.SysMenuConvert;
 import com.iris.sys.base.service.SysRoleMenuService;
-import com.iris.framework.common.constant.Constant;
-import com.iris.framework.exception.ServerException;
-import com.iris.framework.common.utils.TreeUtils;
-import com.iris.framework.security.user.UserDetail;
+import com.iris.core.exception.ServerException;
 import com.iris.sys.base.entity.SysMenuEntity;
 import com.iris.sys.base.service.SysMenuService;
 import com.iris.sys.base.vo.SysMenuVO;
@@ -90,7 +90,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<SysMenuTreeVO> getMenuTreeList(SysMenuQuery query) {
         List<SysMenuEntity> menuList = sysMenuMapper.getMenuList(query);
         return TreeUtils.build(SysMenuConvert.INSTANCE.convertTreeList(menuList),
-                query.getParentId()==null?Constant.ROOT:query.getParentId());
+                query.getParentId()==null? Constant.ROOT:query.getParentId());
     }
 
     @Override

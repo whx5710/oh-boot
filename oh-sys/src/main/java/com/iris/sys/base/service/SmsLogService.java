@@ -1,6 +1,6 @@
 package com.iris.sys.base.service;
 
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SmsLogEntity;
 import com.iris.sys.base.query.SmsLogQuery;
 import com.iris.sys.base.vo.SmsLogVO;

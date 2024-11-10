@@ -2,7 +2,7 @@ package com.iris.sys.base.service;
 
 import com.iris.sys.base.query.SysAttachmentQuery;
 import com.iris.sys.base.vo.SysAttachmentVO;
-import com.iris.framework.common.utils.PageResult;
+import com.iris.core.utils.PageResult;
 
 import java.util.List;
 
