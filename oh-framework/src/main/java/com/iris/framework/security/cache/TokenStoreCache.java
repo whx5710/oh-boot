@@ -34,7 +34,7 @@ public class TokenStoreCache {
      */
     public void saveUser(String accessToken, String refreshToken, UserDetail user) {
         String key = RedisKeys.getAccessTokenKey(accessToken);
-        redisCache.set(key, user);
+        redisCache.set(key, user, securityProperties.getAccessTokenExpire());
         // 刷新token
         String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
         redisCache.set(refreshKey, user, securityProperties.getRefreshTokenExpire());

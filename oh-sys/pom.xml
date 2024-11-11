@@ -80,7 +80,6 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <!--<version>${pagehelper.version}</version>-->
         </dependency>
         <!-- start ================================= spring boot 相关 ================================= -->
         <!-- websocket -->
