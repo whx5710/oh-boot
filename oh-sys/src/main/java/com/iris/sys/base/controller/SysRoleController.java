@@ -1,5 +1,7 @@
 package com.iris.sys.base.controller;
 
+import com.iris.common.operatelog.annotations.OperateLog;
+import com.iris.common.operatelog.enums.OperateTypeEnum;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.query.SysRoleQuery;
@@ -14,8 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.convert.SysRoleConvert;
 import com.iris.sys.base.entity.SysRoleEntity;
 import org.springdoc.core.annotations.ParameterObject;

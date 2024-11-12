@@ -1,5 +1,7 @@
 package com.iris.sys.base.controller;
 
+import com.iris.common.operatelog.annotations.OperateLog;
+import com.iris.common.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.query.SysLogLoginQuery;
 import com.iris.sys.base.vo.SysLogLoginVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,8 +10,6 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.service.SysLogLoginService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;

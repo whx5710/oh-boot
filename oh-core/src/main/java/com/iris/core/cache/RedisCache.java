@@ -145,6 +145,11 @@ public class RedisCache {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
+    /**
+     *
+     * @param key
+     * @param expire 时长-秒
+     */
     public void expire(String key, long expire) {
         redisTemplate.expire(key, expire, TimeUnit.SECONDS);
     }
@@ -157,9 +162,14 @@ public class RedisCache {
         leftPush(key, value, NOT_EXPIRE);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     * @param expire 时长-秒
+     */
     public void leftPush(String key, Object value, long expire) {
         redisTemplate.opsForList().leftPush(key, value);
-
         if (expire != NOT_EXPIRE) {
             expire(key, expire);
         }

@@ -1,6 +1,6 @@
 package com.iris.app.dto;
 
-import com.iris.framework.entity.IDEntity;
+import com.iris.core.entity.IDEntity;
 
 public class DataMsgDto extends IDEntity {
 

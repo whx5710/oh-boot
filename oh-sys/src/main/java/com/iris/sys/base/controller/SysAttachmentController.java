@@ -1,7 +1,7 @@
 package com.iris.sys.base.controller;
 
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.enums.OperateTypeEnum;
+import com.iris.common.operatelog.annotations.OperateLog;
+import com.iris.common.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.query.SysAttachmentQuery;
 import com.iris.sys.base.vo.SysAttachmentVO;
 import io.swagger.v3.oas.annotations.Operation;

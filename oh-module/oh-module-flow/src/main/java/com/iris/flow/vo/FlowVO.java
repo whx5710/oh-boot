@@ -1,8 +1,8 @@
 package com.iris.flow.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.iris.core.entity.IDEntity;
 import com.iris.core.utils.DateUtils;
-import com.iris.framework.entity.IDEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;

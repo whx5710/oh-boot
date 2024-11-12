@@ -1,4 +1,4 @@
-package com.iris.framework.operatelog.enums;
+package com.iris.common.operatelog.enums;
 
 /**
  * 操作类型

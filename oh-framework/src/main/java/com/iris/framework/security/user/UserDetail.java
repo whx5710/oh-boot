@@ -1,6 +1,7 @@
 package com.iris.framework.security.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iris.core.entity.BaseUserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,19 +18,13 @@ import java.util.stream.Collectors;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public class UserDetail implements UserDetails {
+public class UserDetail extends BaseUserEntity implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private Long id;
-    private String username;
     private String password;
-    private String realName;
     private String avatar;
     private Integer gender;
-    private String email;
-    private String mobile;
     private Long orgId;
     private Integer status;
     private Integer superAdmin;
@@ -42,36 +37,12 @@ public class UserDetail implements UserDetails {
     // 登录IP
     private String ip;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
     }
 
     public String getAvatar() {
@@ -88,22 +59,6 @@ public class UserDetail implements UserDetails {
 
     public void setGender(Integer gender) {
         this.gender = gender;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public Long getOrgId() {

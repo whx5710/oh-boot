@@ -40,5 +40,19 @@
             <artifactId>hutool-core</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <!-- AOP 相关 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+            <!--<scope>runtime</scope>-->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+            <!--<scope>runtime</scope>-->
+        </dependency>
     </dependencies>
 </project>

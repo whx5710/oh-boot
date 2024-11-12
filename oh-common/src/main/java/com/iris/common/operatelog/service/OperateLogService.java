@@ -1,8 +1,8 @@
-package com.iris.framework.operatelog.service;
+package com.iris.common.operatelog.service;
 
+import com.iris.common.operatelog.dto.OperateLogDTO;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
-import com.iris.framework.operatelog.dto.OperateLogDTO;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class OperateLogService {
     @Async
     public void saveLog(OperateLogDTO log) {
         String key = RedisKeys.getLogKey();
-        // 保存到Redis队列
-        redisCache.leftPush(key, log, RedisCache.NOT_EXPIRE);
+        // 保存到Redis队列,存7天
+        redisCache.leftPush(key, log, 604800); // 60*60*24*7
     }
 }

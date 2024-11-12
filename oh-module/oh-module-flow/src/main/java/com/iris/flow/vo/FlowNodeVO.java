@@ -1,6 +1,6 @@
 package com.iris.flow.vo;
 
-import com.iris.framework.entity.IDEntity;
+import com.iris.core.entity.IDEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 

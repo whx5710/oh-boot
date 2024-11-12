@@ -15,10 +15,6 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <!-- 面向切面 -->
-        <aspectj.version>1.9.22.1</aspectj.version>
-        <!-- swagger（xiaoymin版本）生成在线文档 -->
-        <knife4j.version>4.5.0</knife4j.version>
         <!-- hutool 工具包 -->
         <hutool.version>5.8.25</hutool.version>
     </properties>
@@ -59,31 +55,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-3-starter</artifactId>
         </dependency>
-        <!-- AOP 相关 -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectj.version}</version>
-            <!--<scope>runtime</scope>-->
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectj.version}</version>
-            <!--<scope>runtime</scope>-->
-        </dependency>
         <!-- hutool 相关包引入 xxs 关键字过滤 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
             <version>${hutool.version}</version>
-        </dependency>
-        <!-- 接口文档 -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 </project>

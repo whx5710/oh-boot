@@ -13,7 +13,7 @@ import jakarta.annotation.PostConstruct;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.utils.PageResult;
-import com.iris.framework.operatelog.dto.OperateLogDTO;
+import com.iris.common.operatelog.dto.OperateLogDTO;
 import com.iris.sys.base.convert.SysLogOperateConvert;
 import com.iris.sys.base.entity.SysLogOperateEntity;
 import org.slf4j.Logger;

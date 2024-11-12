@@ -1,4 +1,4 @@
-package com.iris.framework.operatelog.dto;
+package com.iris.common.operatelog.dto;
 
 
 /**

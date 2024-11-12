@@ -1,5 +1,7 @@
 package com.iris.sys.base.controller;
 
+import com.iris.common.operatelog.annotations.OperateLog;
+import com.iris.common.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.query.SysDictDataQuery;
 import com.iris.sys.base.vo.SysDictDataVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,8 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.base.convert.SysDictDataConvert;
 import com.iris.sys.base.entity.SysDictDataEntity;
 import com.iris.sys.base.service.SysDictDataService;

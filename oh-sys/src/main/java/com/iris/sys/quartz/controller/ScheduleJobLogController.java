@@ -2,8 +2,8 @@ package com.iris.sys.quartz.controller;
 
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.enums.OperateTypeEnum;
+import com.iris.common.operatelog.annotations.OperateLog;
+import com.iris.common.operatelog.enums.OperateTypeEnum;
 import com.iris.sys.quartz.convert.ScheduleJobLogConvert;
 import com.iris.sys.quartz.entity.ScheduleJobLogEntity;
 import com.iris.sys.quartz.query.ScheduleJobLogQuery;

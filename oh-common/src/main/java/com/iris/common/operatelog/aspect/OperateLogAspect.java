@@ -1,14 +1,16 @@
-package com.iris.framework.operatelog.aspect;
+package com.iris.common.operatelog.aspect;
 
+import com.iris.common.operatelog.annotations.OperateLog;
+import com.iris.common.operatelog.dto.OperateLogDTO;
+import com.iris.common.operatelog.service.OperateLogService;
+import com.iris.core.cache.RedisCache;
+import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.Constant;
+import com.iris.core.entity.BaseUserEntity;
 import com.iris.core.utils.HttpContextUtils;
 import com.iris.core.utils.IpUtils;
+import com.iris.core.utils.IrisTools;
 import com.iris.core.utils.JsonUtils;
-import com.iris.framework.operatelog.annotations.OperateLog;
-import com.iris.framework.operatelog.dto.OperateLogDTO;
-import com.iris.framework.operatelog.service.OperateLogService;
-import com.iris.framework.security.user.SecurityUser;
-import com.iris.framework.security.user.UserDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,8 +45,11 @@ import java.util.stream.IntStream;
 public class OperateLogAspect {
     private final OperateLogService operateLogService;
 
-    public OperateLogAspect(OperateLogService operateLogService) {
+    private final RedisCache redisCache;
+
+    public OperateLogAspect(OperateLogService operateLogService, RedisCache redisCache) {
         this.operateLogService = operateLogService;
+        this.redisCache = redisCache;
     }
 
     @Around("@annotation(operateLog)")
@@ -67,18 +72,19 @@ public class OperateLogAspect {
     }
 
 
+    /**
+     * 保存日志
+     * @param joinPoint
+     * @param operateLog
+     * @param startTime
+     * @param status
+     */
     private void saveLog(ProceedingJoinPoint joinPoint, OperateLog operateLog, LocalDateTime startTime, Integer status) {
         OperateLogDTO log = new OperateLogDTO();
 
         // 执行时长
         long duration = startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli() - LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         log.setDuration((int) duration);
-        // 用户信息
-        UserDetail user = SecurityUser.getUser();
-        if (user != null) {
-            log.setUserId(user.getId());
-            log.setRealName(user.getRealName());
-        }
         // 操作类型
         log.setOperateType(operateLog.type()[0].getValue());
         // 设置module值
@@ -105,6 +111,17 @@ public class OperateLogAspect {
         // 请求相关
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         if (request != null) {
+            // 用户信息
+            String accessToken = IrisTools.getAccessToken(request);
+            String key = RedisKeys.getAccessTokenKey(accessToken);
+            Object object = redisCache.get(key);
+            if(object != null){
+                BaseUserEntity userEntity = JsonUtils.convertValue(object, BaseUserEntity.class);
+                log.setUserId(userEntity.getId());
+                log.setRealName(userEntity.getRealName());
+            }
+
+            // 请求端信息
             log.setIp(IpUtils.getIpAddress(request));
             //log.setAddress(AddressUtils.getAddressByIP(log.getIp()));
             log.setAddress("未知");
@@ -120,6 +137,11 @@ public class OperateLogAspect {
         operateLogService.saveLog(log);
     }
 
+    /**
+     *
+     * @param joinPoint
+     * @return
+     */
     private String obtainMethodArgs(ProceedingJoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String[] argNames = methodSignature.getParameterNames();
