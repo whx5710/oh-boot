@@ -28,6 +28,7 @@ public class ServerExceptionHandler extends IrisExceptionHandler {
      */
     @ExceptionHandler(AccessDeniedException.class)
     public Result<String> handleAccessDeniedException(Exception ex) {
+        log.error("没有权限，禁止访问！{}",ex.getMessage());
         return Result.error(ErrorCode.FORBIDDEN);
     }
 

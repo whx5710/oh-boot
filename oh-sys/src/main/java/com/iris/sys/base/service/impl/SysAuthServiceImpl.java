@@ -11,6 +11,7 @@ import com.iris.core.utils.IrisTools;
 import com.iris.framework.common.properties.SecurityProperties;
 import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.mobile.MobileAuthenticationToken;
+import com.iris.framework.security.user.RefreshTokenInfo;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.entity.SysUserEntity;
 import com.iris.sys.base.enums.LoginOperationEnum;
@@ -135,17 +136,17 @@ public class SysAuthServiceImpl implements SysAuthService {
      */
     @Override
     public SysTokenVO refreshToken(String refreshToken, HttpServletRequest request) {
-        String key = RedisKeys.getAccessRefreshTokenKey(refreshToken);
-        if(redisCache.hasKey(key)){
-            UserDetail userDetail = (UserDetail) redisCache.get(key);
+        String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
+        if(redisCache.hasKey(refreshKey)){
+            RefreshTokenInfo userDetail = (RefreshTokenInfo) redisCache.get(refreshKey);
             String ip = IpUtils.getIpAddress(request);
             // 删除老的刷新token
-            redisCache.delete(key);
+            redisCache.delete(refreshKey);
             if(userDetail.getIp().equals(ip)){
                 // 重新查询用户信息
                 SysUserEntity sysUserEntity = sysUserService.getUser(userDetail.getId());
                 UserDetail userDetailDb = (UserDetail) sysUserDetailsService.getUserDetails(sysUserEntity);
-                userDetailDb.setLoginTime(userDetail.getLoginTime());
+                userDetailDb.setLoginTime(System.currentTimeMillis());
                 userDetailDb.setIp(ip);
                 userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
                 // 生成 accessToken

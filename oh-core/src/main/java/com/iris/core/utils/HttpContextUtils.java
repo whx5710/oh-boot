@@ -19,6 +19,10 @@ import java.util.Map;
  */
 public class HttpContextUtils {
 
+    /**
+     * 获取请求
+     * @return
+     */
     public static HttpServletRequest getHttpServletRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
@@ -28,12 +32,15 @@ public class HttpContextUtils {
     }
 
 
+    /**
+     * 获取响应
+     * @return
+     */
     public static HttpServletResponse getHttpServletResponse() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             return null;
         }
-
         return ((ServletRequestAttributes) requestAttributes).getResponse();
     }
 

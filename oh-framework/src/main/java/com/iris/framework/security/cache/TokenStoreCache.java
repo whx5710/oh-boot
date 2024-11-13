@@ -2,7 +2,9 @@ package com.iris.framework.security.cache;
 
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
+import com.iris.framework.common.convert.RefreshTokenConvert;
 import com.iris.framework.common.properties.SecurityProperties;
+import com.iris.framework.security.user.RefreshTokenInfo;
 import com.iris.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;
 
@@ -33,11 +35,16 @@ public class TokenStoreCache {
      * @param user
      */
     public void saveUser(String accessToken, String refreshToken, UserDetail user) {
+        // token用户信息
         String key = RedisKeys.getAccessTokenKey(accessToken);
+        user.setPassword("");
         redisCache.set(key, user, securityProperties.getAccessTokenExpire());
         // 刷新token
+        RefreshTokenInfo refreshTokenInfo = RefreshTokenConvert.INSTANCE.convert(user);
+        refreshTokenInfo.setRefreshToken(refreshToken); // 刷新token
+        refreshTokenInfo.setAccessToken(accessToken); // token
         String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
-        redisCache.set(refreshKey, user, securityProperties.getRefreshTokenExpire());
+        redisCache.set(refreshKey, refreshTokenInfo, securityProperties.getRefreshTokenExpire());
     }
 
     /**
