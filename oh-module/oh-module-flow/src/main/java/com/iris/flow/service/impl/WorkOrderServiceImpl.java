@@ -2,6 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iris.core.cache.RedisCache;
 import com.iris.core.utils.JsonUtils;
 import com.iris.flow.convert.WorkOrderConvert;
 import com.iris.flow.entity.WorkOrderEntity;
@@ -42,11 +43,15 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
 
     private final WorkOrderMapper workOrderMapper;
 
+    private final RedisCache redisCache;
 
-    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService, WorkOrderMapper workOrderMapper){
+
+    public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,
+                                WorkOrderMapper workOrderMapper, RedisCache redisCache){
         this.taskHandlerService = taskHandlerService;
         this.processHandlerService = processHandlerService;
         this.workOrderMapper = workOrderMapper;
+        this.redisCache = redisCache;
     }
 
 
@@ -62,6 +67,9 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
     @Override
     public void save(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
+        if(entity.getOrderCode() == null || entity.getOrderCode().isEmpty()){
+            entity.setOrderCode(redisCache.getDayIncrementCode("","oh:order", 5));
+        }
         workOrderMapper.saveOrder(entity);
         vo.setId(entity.getId());
     }

@@ -1,6 +1,5 @@
 package com.iris.app.controller;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iris.core.constant.Constant;
@@ -15,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,9 +99,9 @@ public class OpenApiController {
         for(int i = 0; i< 1000; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", LocalDateTime.now());
-            data.put("reportTime", LocalDateTime.now());
-            data.put("incidentTime", LocalDateTime.now());
-            data.put("orderCode", IdUtil.simpleUUID());
+            data.put("reportTime", LocalDateTime.now(ZoneId.of("+8")));
+            data.put("incidentTime", LocalDateTime.now(ZoneId.systemDefault()));
+            //data.put("orderCode", IdUtil.simpleUUID());
             data.put("note", "备注信息" + System.currentTimeMillis());
             String str = HttpUtil.createPost(url).addHeaders(head).body(JsonUtils.toJsonString(data)).execute().body();
             System.out.println(str);

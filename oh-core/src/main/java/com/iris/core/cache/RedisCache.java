@@ -1,13 +1,14 @@
 package com.iris.core.cache;
 
+import com.iris.core.utils.DateUtils;
+import com.iris.core.utils.IrisTools;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -178,4 +179,66 @@ public class RedisCache {
     public Object rightPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
     }
+
+
+    /**
+     * redis key的层级不能超过3层（）
+     * 根据前缀+日期+每天的自增编号例如（WF2021041411200001）
+     *
+     * @param prefix 前缀
+     * @param key redis键
+     * @param length 长度
+     * @return 格式化的编码
+     */
+    public String getDayIncrementCode(String prefix, String key, int length) {
+        String code = "";
+        String formatDay = DateUtils.format(LocalDateTime.now(), "yyyyMMdd");
+        Long dayEndTime = getAppointDateTimeMills();
+        //当天失效
+        long liveTime = (dayEndTime - System.currentTimeMillis()) / 1000;
+        Long increment = getIncrement(key, liveTime);
+        String sequence = IrisTools.getSequence(increment, length);
+        if (prefix != null) {
+            code = code + prefix;
+        }
+        code = code + formatDay + sequence;
+
+        return code;
+    }
+
+    /**
+     * 获取redis原子自增数据
+     *
+     * @param key
+     * @param liveTime
+     * @return
+     */
+    public Long getIncrement(String key, long liveTime) {
+        RedisAtomicLong counter = null;
+        counter = new RedisAtomicLong(key, redisTemplate.getConnectionFactory());
+        Long increment = counter.incrementAndGet();
+        //初始设置过期时间
+        boolean result = (null == increment || increment.longValue() == 0) && liveTime > 0;
+        if (result) {
+            counter.set(1);
+            counter.expire(liveTime, TimeUnit.SECONDS);
+            increment = 1L;
+        }
+        return increment;
+    }
+
+    /**
+     * 获取指定时间毫秒值
+     *
+     * @return
+     */
+    private static Long getAppointDateTimeMills() {
+        Calendar ca = Calendar.getInstance();
+        //失效的时间
+        ca.set(Calendar.HOUR_OF_DAY, 23);
+        ca.set(Calendar.MINUTE, 59);
+        ca.set(Calendar.SECOND, 59);
+        return ca.getTimeInMillis();
+    }
+
 }

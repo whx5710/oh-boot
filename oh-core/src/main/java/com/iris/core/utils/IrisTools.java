@@ -68,4 +68,27 @@ public class IrisTools {
         }
         return accessToken;
     }
+
+    /**
+     * 补全自增的数据
+     *
+     * @param seq
+     * @param length
+     * @return
+     */
+    public static String getSequence(long seq, int length) {
+        String str = String.valueOf(seq);
+        int len = str.length();
+        // 取决于业务规模
+        if (len >= length) {
+            return str;
+        }
+        int rest = length - len;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rest; i++) {
+            sb.append('0');
+        }
+        sb.append(str);
+        return sb.toString();
+    }
 }
