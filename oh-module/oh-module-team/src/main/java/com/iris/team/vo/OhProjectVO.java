@@ -6,7 +6,7 @@ import com.iris.framework.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
 * 项目信息表
@@ -29,11 +29,11 @@ public class OhProjectVO extends BaseEntity implements Serializable {
 
 	@Schema(description = "开始时间")
 	@JsonFormat(pattern = DateUtils.DATE_PATTERN)
-	private Date startTime;
+	private LocalDateTime startTime;
 
 	@Schema(description = "结束时间")
 	@JsonFormat(pattern = DateUtils.DATE_PATTERN)
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	@Schema(description = "负责人ID")
 	private Long director;
@@ -73,19 +73,19 @@ public class OhProjectVO extends BaseEntity implements Serializable {
 		this.projectAlias = projectAlias;
 	}
 
-	public Date getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

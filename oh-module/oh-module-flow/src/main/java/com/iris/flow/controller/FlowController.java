@@ -1,5 +1,6 @@
 package com.iris.flow.controller;
 
+import com.iris.core.utils.DateUtils;
 import com.iris.core.utils.Result;
 import com.iris.flow.convert.FlowConvert;
 import com.iris.flow.entity.FlowEntity;
@@ -19,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,7 +96,8 @@ public class FlowController {
             String id = processDefinition.getDeploymentId();
             Deployment deployment = processHandlerService.getDeployment(id);
             processVO.setDeploymentId(id);
-            processVO.setCreateTime(deployment.getDeploymentTime());
+            Date date = deployment.getDeploymentTime();
+            processVO.setCreateTime(DateUtils.dateToLocalDate(date));
             processVO.setProcessKey(processDefinition.getKey());
             processVO.setVersion(processDefinition.getVersion());
             processVO.setVersionTag(processDefinition.getVersionTag());

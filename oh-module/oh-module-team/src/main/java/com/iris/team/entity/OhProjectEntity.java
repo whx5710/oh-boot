@@ -2,7 +2,7 @@ package com.iris.team.entity;
 
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 项目信息表
@@ -29,12 +29,12 @@ public class OhProjectEntity extends BaseEntity {
 	/**
 	* 开始时间
 	*/
-	private Date startTime;
+	private LocalDateTime startTime;
 
 	/**
 	* 结束时间
 	*/
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	/**
 	* 负责人ID
@@ -75,19 +75,19 @@ public class OhProjectEntity extends BaseEntity {
 		this.projectAlias = projectAlias;
 	}
 
-	public Date getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

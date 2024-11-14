@@ -1,9 +1,12 @@
 package com.iris.flow.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.iris.core.utils.DateUtils;
 import com.iris.framework.entity.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 工单表
@@ -26,17 +29,21 @@ public class WorkOrderEntity extends BaseEntity {
 	/**
 	* 上报时间
 	*/
-	private Date reportTime;
+	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	private LocalDateTime reportTime;
 
 	/**
 	* 事发时间
 	*/
-	private Date incidentTime;
+	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	private LocalDateTime incidentTime;
 
 	/**
 	* 结束时间
 	*/
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	/**
 	* 标题
@@ -89,27 +96,27 @@ public class WorkOrderEntity extends BaseEntity {
 		this.orderSource = orderSource;
 	}
 
-	public Date getReportTime() {
+	public LocalDateTime getReportTime() {
 		return reportTime;
 	}
 
-	public void setReportTime(Date reportTime) {
+	public void setReportTime(LocalDateTime reportTime) {
 		this.reportTime = reportTime;
 	}
 
-	public Date getIncidentTime() {
+	public LocalDateTime getIncidentTime() {
 		return incidentTime;
 	}
 
-	public void setIncidentTime(Date incidentTime) {
+	public void setIncidentTime(LocalDateTime incidentTime) {
 		this.incidentTime = incidentTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

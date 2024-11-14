@@ -6,7 +6,7 @@ import com.iris.framework.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
 * 任务表
@@ -38,11 +38,11 @@ public class OhTaskVO extends BaseEntity implements Serializable {
 
 	@Schema(description = "计划开始时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date startTime;
+	private LocalDateTime startTime;
 
 	@Schema(description = "计划结束时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	@Schema(description = "状态（1待办项2进行中3已完成）")
 	private String status;
@@ -98,19 +98,19 @@ public class OhTaskVO extends BaseEntity implements Serializable {
 		this.hasChild = hasChild;
 	}
 
-	public Date getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iris.core.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 流程信息
@@ -28,7 +28,7 @@ public class ProcessVO {
 
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    Date createTime;
+    LocalDateTime createTime;
 
     public String getId() {
         return id;
@@ -86,11 +86,11 @@ public class ProcessVO {
         this.version = version;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 }

@@ -5,7 +5,7 @@ import com.iris.core.entity.IDEntity;
 import com.iris.core.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
 * 环节运行记录表
@@ -57,11 +57,11 @@ public class TaskRecordVO extends IDEntity {
 
 	@Schema(description = "开始时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date startTime;
+	private LocalDateTime startTime;
 
 	@Schema(description = "结束时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	@Schema(description = "时长")
 	private Long duration;
@@ -170,19 +170,19 @@ public class TaskRecordVO extends IDEntity {
 		this.assigneeName = assigneeName;
 	}
 
-	public Date getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

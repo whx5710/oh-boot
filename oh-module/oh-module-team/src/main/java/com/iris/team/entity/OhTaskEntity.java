@@ -2,7 +2,8 @@ package com.iris.team.entity;
 
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 /**
  * 任务表
@@ -44,12 +45,12 @@ public class OhTaskEntity extends BaseEntity {
 	/**
 	* 计划开始时间
 	*/
-	private Date startTime;
+	private LocalDateTime startTime;
 
 	/**
 	* 计划结束时间
 	*/
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	/**
 	* 状态（1待办项2进行中3已完成）
@@ -126,19 +127,19 @@ public class OhTaskEntity extends BaseEntity {
 		this.hasChild = hasChild;
 	}
 
-	public Date getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

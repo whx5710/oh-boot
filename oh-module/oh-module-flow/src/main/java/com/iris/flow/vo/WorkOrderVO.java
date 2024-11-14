@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
 * 工单表
@@ -28,15 +28,15 @@ public class WorkOrderVO implements Serializable {
 
 	@Schema(description = "上报时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date reportTime;
+	private LocalDateTime reportTime;
 
 	@Schema(description = "事发时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date incidentTime;
+	private LocalDateTime incidentTime;
 
 	@Schema(description = "结束时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	@Schema(description = "标题")
 	private String title;
@@ -83,27 +83,27 @@ public class WorkOrderVO implements Serializable {
 		this.orderSource = orderSource;
 	}
 
-	public Date getReportTime() {
+	public LocalDateTime getReportTime() {
 		return reportTime;
 	}
 
-	public void setReportTime(Date reportTime) {
+	public void setReportTime(LocalDateTime reportTime) {
 		this.reportTime = reportTime;
 	}
 
-	public Date getIncidentTime() {
+	public LocalDateTime getIncidentTime() {
 		return incidentTime;
 	}
 
-	public void setIncidentTime(Date incidentTime) {
+	public void setIncidentTime(LocalDateTime incidentTime) {
 		this.incidentTime = incidentTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

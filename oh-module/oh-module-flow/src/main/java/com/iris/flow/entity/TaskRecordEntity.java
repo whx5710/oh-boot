@@ -2,7 +2,7 @@ package com.iris.flow.entity;
 
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 环节运行记录表
@@ -79,12 +79,12 @@ public class TaskRecordEntity extends BaseEntity {
 	/**
 	* 开始时间
 	*/
-	private Date startTime;
+	private LocalDateTime startTime;
 
 	/**
 	* 结束时间
 	*/
-	private Date endTime;
+	private LocalDateTime endTime;
 
 	/**
 	* 时长
@@ -195,19 +195,19 @@ public class TaskRecordEntity extends BaseEntity {
 		this.assigneeName = assigneeName;
 	}
 
-	public Date getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 

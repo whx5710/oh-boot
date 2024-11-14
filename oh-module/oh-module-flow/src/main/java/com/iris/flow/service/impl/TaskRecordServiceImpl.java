@@ -2,6 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iris.core.utils.DateUtils;
 import com.iris.flow.convert.TaskRecordConvert;
 import com.iris.flow.entity.TaskRecordEntity;
 import com.iris.flow.mapper.TaskRecordMapper;
@@ -117,8 +118,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 taskRecord.setRunMark((his.getEndTime()!=null && his.getDeleteReason()!= null && his.getDeleteReason().equalsIgnoreCase("completed"))?0:1);
                 taskRecord.setAssignee(his.getAssignee());
                 taskRecord.setAssigneeName(SecurityUser.getUser().getRealName());
-                taskRecord.setStartTime(his.getStartTime());
-                taskRecord.setEndTime(his.getEndTime());
+                taskRecord.setStartTime(DateUtils.dateToLocalDate(his.getStartTime()));
+                taskRecord.setEndTime(DateUtils.dateToLocalDate(his.getEndTime()));
                 taskRecord.setDuration(his.getDurationInMillis());
 
                 taskRecord.setFromActInstId("");
@@ -148,7 +149,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                             List<TaskRecordVO> voList = taskList(query);
                             if(!ObjectUtils.isEmpty(voList)){
                                 for (TaskRecordVO vo : voList){
-                                    vo.setEndTime(hisParent.getEndTime());
+                                    vo.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
                                     vo.setAssignee(hisParent.getAssignee());
                                     vo.setAssigneeName("");
                                     vo.setDuration(hisParent.getDurationInMillis());
@@ -183,8 +184,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     taskRecord.setFromTaskName(hisParent.getName());
 
                     // 开始时间用上一任务的结束时间
-                    taskRecord.setStartTime(hisParent.getEndTime());
-                    taskRecord.setEndTime(hisParent.getEndTime());
+                    taskRecord.setStartTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
+                    taskRecord.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
 
                     taskRecord.setProcDefId(hisParent.getProcessDefinitionId());
 
@@ -198,7 +199,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     List<TaskRecordVO> voList = taskList(query);
                     if(!ObjectUtils.isEmpty(voList)){
                         for (TaskRecordVO vo : voList){
-                            vo.setEndTime(hisParent.getEndTime());
+                            vo.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
                             vo.setAssignee(hisParent.getAssignee());
                             vo.setAssigneeName("");
                             vo.setDuration(hisParent.getDurationInMillis());

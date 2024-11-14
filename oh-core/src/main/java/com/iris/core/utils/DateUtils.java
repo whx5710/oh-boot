@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -108,5 +109,17 @@ public class DateUtils {
     public static LocalDateTime parseLocalDateTime(String date) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
         return LocalDateTime.parse(date, df);
+    }
+
+    /**
+     * date类型转 LocalDateTime 类型
+     * @param date
+     * @return
+     */
+    public static LocalDateTime dateToLocalDate(Date date){
+        if(date == null){
+            return null;
+        }
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }
