@@ -1,7 +1,7 @@
 package com.iris.team.query;
 
+import com.iris.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.iris.framework.common.query.Query;
 
 /**
 * 项目、任务操作日志查询

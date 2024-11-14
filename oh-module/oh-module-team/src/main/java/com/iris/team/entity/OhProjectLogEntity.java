@@ -1,7 +1,6 @@
 package com.iris.team.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.entity.BaseEntity;
 
 /**
  * 项目、任务操作日志
@@ -9,7 +8,6 @@ import com.iris.framework.common.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@TableName("oh_project_log")
 public class OhProjectLogEntity extends BaseEntity {
 	/**
 	* 项目ID

@@ -1,11 +1,14 @@
 package com.iris.framework.security.cache;
 
-import cn.hutool.core.collection.ListUtil;
+import com.iris.core.cache.RedisCache;
+import com.iris.core.cache.RedisKeys;
+import com.iris.framework.common.convert.RefreshTokenConvert;
+import com.iris.framework.common.properties.SecurityProperties;
+import com.iris.framework.security.user.RefreshTokenInfo;
 import com.iris.framework.security.user.UserDetail;
-import com.iris.framework.common.cache.RedisCache;
-import com.iris.framework.common.cache.RedisKeys;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,8 +22,11 @@ import java.util.Set;
 public class TokenStoreCache {
     private final RedisCache redisCache;
 
-    public TokenStoreCache(RedisCache redisCache) {
+    private final SecurityProperties securityProperties;
+
+    public TokenStoreCache(RedisCache redisCache, SecurityProperties securityProperties) {
         this.redisCache = redisCache;
+        this.securityProperties = securityProperties;
     }
 
     /**
@@ -28,9 +34,17 @@ public class TokenStoreCache {
      * @param accessToken
      * @param user
      */
-    public void saveUser(String accessToken, UserDetail user) {
+    public void saveUser(String accessToken, String refreshToken, UserDetail user) {
+        // token用户信息
         String key = RedisKeys.getAccessTokenKey(accessToken);
-        redisCache.set(key, user);
+        user.setPassword("");
+        redisCache.set(key, user, securityProperties.getAccessTokenExpire());
+        // 刷新token
+        RefreshTokenInfo refreshTokenInfo = RefreshTokenConvert.INSTANCE.convert(user);
+        refreshTokenInfo.setRefreshToken(refreshToken); // 刷新token
+        refreshTokenInfo.setAccessToken(accessToken); // token
+        String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
+        redisCache.set(refreshKey, refreshTokenInfo, securityProperties.getRefreshTokenExpire());
     }
 
     /**
@@ -52,10 +66,17 @@ public class TokenStoreCache {
         redisCache.delete(key);
     }
 
+    /**
+     * 获取所有用户token的key
+     * @return list
+     */
     public List<String> getUserKeyList() {
         String pattern = RedisKeys.getAccessTokenKey("*");
         Set<String> sets = redisCache.keys(pattern);
-
-        return ListUtil.toList(sets);
+        List<String> list = new ArrayList<>();
+        if(sets != null){
+            list.addAll(sets);
+        }
+        return list;
     }
 }

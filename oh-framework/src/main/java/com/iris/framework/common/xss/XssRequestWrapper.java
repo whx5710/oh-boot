@@ -1,7 +1,6 @@
 package com.iris.framework.common.xss;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +30,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public ServletInputStream getInputStream() throws IOException {
         // 如果是json数据，则不处理
-        if (!StrUtil.startWithIgnoreCase(this.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
+        if (!this.getContentType().toLowerCase().startsWith(MediaType.APPLICATION_JSON_VALUE)) {
             return super.getInputStream();
         }
 
@@ -40,7 +39,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         content = filterXss(content);
 
         // 返回新的 ServletInputStream
-        final ByteArrayInputStream bis = new ByteArrayInputStream(StrUtil.bytes(content, StandardCharsets.UTF_8));
+        final ByteArrayInputStream bis = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {
@@ -104,7 +103,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     }
 
     private String filterXss(String content) {
-        if (StrUtil.isBlank(content)) {
+        if (content == null || content.isEmpty()) {
             return content;
         }
         // 如果有尖括号 < 或 > json字符串会被截断

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iris.sys.base.mapper.SmsLogMapper">
+    <select id="getList" resultType="com.iris.sys.base.entity.SmsLogEntity">
+        select * from sms_log
+        <where>
+            <if test="platform != null and platform != ''">and platform = #{platform}</if>
+            <if test="platformId != null and platformId != ''">and platform_id like concat('%',#{platformId}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getById" resultType="com.iris.sys.base.entity.SmsLogEntity">
+        select * from sms_log where id = #{id}
+    </select>
+
+    <insert id="insertSmsLog">
+        INSERT INTO sms_log (platform_id, platform, mobile, params, status, error, create_time)
+        VALUES (#{platformId}, #{platform}, #{mobile}, #{params}, #{status}, #{error}, #{createTime})
+    </insert>
+</mapper>

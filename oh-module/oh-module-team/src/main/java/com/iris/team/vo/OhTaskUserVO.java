@@ -1,6 +1,6 @@
 package com.iris.team.vo;
 
-import com.iris.framework.common.entity.BaseEntity;
+import com.iris.framework.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;

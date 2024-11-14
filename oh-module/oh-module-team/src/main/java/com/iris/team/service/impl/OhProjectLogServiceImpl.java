@@ -1,16 +1,14 @@
 package com.iris.team.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.iris.core.utils.PageResult;
 import com.iris.team.convert.OhProjectLogConvert;
-import com.iris.team.dao.OhProjectLogDao;
 import com.iris.team.entity.OhProjectLogEntity;
+import com.iris.team.mapper.OhProjectLogMapper;
 import com.iris.team.query.OhProjectLogQuery;
 import com.iris.team.service.OhProjectLogService;
 import com.iris.team.vo.OhProjectLogVO;
-import com.iris.framework.common.utils.PageResult;
-import com.iris.framework.mybatis.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,38 +21,49 @@ import java.util.List;
  * @since 1.0.0 2022-11-25
  */
 @Service
-public class OhProjectLogServiceImpl extends BaseServiceImpl<OhProjectLogDao, OhProjectLogEntity> implements OhProjectLogService {
-    @Override
-    public PageResult<OhProjectLogVO> page(OhProjectLogQuery query) {
-        IPage<OhProjectLogEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+public class OhProjectLogServiceImpl implements OhProjectLogService {
 
-        return new PageResult<>(OhProjectLogConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
+    private final OhProjectLogMapper ohProjectLogMapper;
+
+    public OhProjectLogServiceImpl(OhProjectLogMapper ohProjectLogMapper){
+        this.ohProjectLogMapper = ohProjectLogMapper;
     }
 
-    private LambdaQueryWrapper<OhProjectLogEntity> getWrapper(OhProjectLogQuery query){
-        LambdaQueryWrapper<OhProjectLogEntity> wrapper = Wrappers.lambdaQuery();
-
-        return wrapper;
+    @Override
+    public PageResult<OhProjectLogVO> page(OhProjectLogQuery query) {
+        PageHelper.startPage(query.getPage(), query.getLimit());
+        List<OhProjectLogEntity> list = ohProjectLogMapper.getList(query);
+        PageInfo<OhProjectLogEntity> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(OhProjectLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
     public void save(OhProjectLogVO vo) {
         OhProjectLogEntity entity = OhProjectLogConvert.INSTANCE.convert(vo);
-
-        baseMapper.insert(entity);
+        ohProjectLogMapper.save(entity);
     }
 
     @Override
     public void update(OhProjectLogVO vo) {
         OhProjectLogEntity entity = OhProjectLogConvert.INSTANCE.convert(vo);
 
-        updateById(entity);
+        ohProjectLogMapper.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
-        removeByIds(idList);
+        idList.forEach(id -> {
+            OhProjectLogEntity param = new OhProjectLogEntity();
+            param.setId(id);
+            param.setDbStatus(0);
+            ohProjectLogMapper.updateById(param);
+        });
+    }
+
+    @Override
+    public OhProjectLogEntity getById(Long id) {
+        return ohProjectLogMapper.getById(id);
     }
 
 }

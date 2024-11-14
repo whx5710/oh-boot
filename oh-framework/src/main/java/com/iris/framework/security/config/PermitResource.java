@@ -1,6 +1,9 @@
 package com.iris.framework.security.config;
 
-import org.apache.commons.lang3.StringUtils;
+import com.iris.core.exception.ServerException;
+import com.iris.framework.common.properties.SecurityProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * 允许访问的资源
@@ -21,6 +25,14 @@ import java.util.Properties;
  */
 @Component
 public class PermitResource {
+
+    private final Logger log = LoggerFactory.getLogger(PermitResource.class);
+
+    private final SecurityProperties securityProperties;
+    public PermitResource(SecurityProperties securityProperties){
+        this.securityProperties = securityProperties;
+    }
+
     /**
      * 指定被 spring security 忽略的URL
      */
@@ -30,21 +42,32 @@ public class PermitResource {
         try {
             resources = resolver.getResources("classpath*:auth.yml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("【auth.yml】读取忽略鉴权的配置失败！{}" ,e.getMessage());
+            throw new ServerException("【auth.yml】读取忽略鉴权的配置失败！" + e.getMessage());
         }
-        String key = "auth.ignore_urls";
-        return getPropertiesList(key, resources);
+        String key = "auth.ignore-urls";
+        List<String> list = getPropertiesList(key, resources);
+        list.addAll(securityProperties.getIgnoreUrls());
+        // 去重
+        list = list.stream().distinct().collect(Collectors.toList());
+        log.info("忽略鉴权的URL总计：{}个 ---> {}", list.size(), list);
+        return list;
     }
 
+    /**
+     * 忽略鉴权列表
+     * @param key key
+     * @param resources 源文件
+     * @return
+     */
     private List<String> getPropertiesList(String key, Resource... resources) {
         List<String> list = new ArrayList<>();
-
         // 解析资源文件
         for (Resource resource : resources) {
             Properties properties = loadYamlProperties(resource);
-
             for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-                String tmpKey = StringUtils.substringBefore(entry.getKey().toString(), "[");
+                String str = entry.getKey().toString();
+                String tmpKey = str.substring(0, str.indexOf("["));
                 if (tmpKey.equalsIgnoreCase(key)) {
                     list.add(entry.getValue().toString());
                 }
@@ -57,7 +80,6 @@ public class PermitResource {
         YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
         factory.setResources(resources);
         factory.afterPropertiesSet();
-
         return factory.getObject();
     }
 }

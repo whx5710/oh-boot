@@ -1,6 +1,6 @@
 package com.iris.framework.common.xss;
 
-import com.iris.framework.common.config.properties.XssProperties;
+import com.iris.framework.common.properties.XssProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

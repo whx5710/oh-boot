@@ -1,6 +1,6 @@
 package com.iris.framework.common.xss;
 
-import com.iris.framework.common.config.properties.XssProperties;
+import com.iris.framework.common.properties.XssProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -16,7 +16,7 @@ import org.springframework.util.PathMatcher;
  */
 @Configuration
 @EnableConfigurationProperties(XssProperties.class)
-@ConditionalOnProperty(prefix = "oh.xss", value = "enabled")
+@ConditionalOnProperty(prefix = "iris.xss", value = "enabled")
 public class XssConfiguration {
 
     @Bean
@@ -25,7 +25,6 @@ public class XssConfiguration {
         bean.setFilter(new XssFilter(properties, pathMatcher));
         bean.setOrder(Integer.MAX_VALUE);
         bean.setName("xssFilter");
-
         return bean;
     }
 }

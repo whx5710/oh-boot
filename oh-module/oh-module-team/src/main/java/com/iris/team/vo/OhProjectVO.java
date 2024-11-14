@@ -1,9 +1,9 @@
 package com.iris.team.vo;
 
-import com.iris.framework.common.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iris.framework.common.utils.DateUtils;
+import com.iris.core.utils.DateUtils;
+import com.iris.framework.entity.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -45,9 +45,9 @@ public class OhProjectVO extends BaseEntity implements Serializable {
 	private Integer status;
 
 	/**
-	 * 删除标识  0：正常   1：已删除
+	 * 数据状态标识  1：正常   0：已删除
 	 */
-	private Integer deleted;
+	private Integer dbStatus;
 
 	public String getProjectCode() {
 		return projectCode;
@@ -113,11 +113,13 @@ public class OhProjectVO extends BaseEntity implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getDeleted() {
-		return deleted;
+	@Override
+	public Integer getDbStatus() {
+		return dbStatus;
 	}
 
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	@Override
+	public void setDbStatus(Integer dbStatus) {
+		this.dbStatus = dbStatus;
 	}
 }

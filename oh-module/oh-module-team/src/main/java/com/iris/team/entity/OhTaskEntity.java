@@ -1,7 +1,7 @@
 package com.iris.team.entity;
 
-import com.iris.framework.common.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
+import com.iris.framework.entity.BaseEntity;
+
 import java.util.Date;
 
 /**
@@ -10,7 +10,6 @@ import java.util.Date;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2022-11-25
  */
-@TableName("oh_task")
 public class OhTaskEntity extends BaseEntity {
 	/**
 	* 所属项目
@@ -63,24 +62,20 @@ public class OhTaskEntity extends BaseEntity {
 	private String remark;
 
 	/**
-	* 删除标识  0：正常   1：已删除
+	* 数据状态标识  1：正常   0：已删除
 	*/
-	private Integer deleted;
+	private Integer dbStatus;
 
 	// 负责人ID
-	@TableField(exist=false)
 	private String directorUserId;
 
 	// 负责人
-	@TableField(exist=false)
 	private String directorUserName;
 
 	//协作人ID
-	@TableField(exist=false)
 	private String collaboratorUserId;
 
 	//协作人
-	@TableField(exist=false)
 	private String collaboratorUserName;
 
 	public Long getProjectId() {
@@ -163,12 +158,14 @@ public class OhTaskEntity extends BaseEntity {
 		this.remark = remark;
 	}
 
-	public Integer getDeleted() {
-		return deleted;
+	@Override
+	public Integer getDbStatus() {
+		return dbStatus;
 	}
 
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	@Override
+	public void setDbStatus(Integer dbStatus) {
+		this.dbStatus = dbStatus;
 	}
 
 	public String getDirectorUserId() {

@@ -1,12 +1,12 @@
 package com.iris.framework.security.exception;
 
-import cn.hutool.json.JSONUtil;
-import com.iris.framework.common.utils.IpUtils;
+import com.iris.core.exception.ErrorCode;
+import com.iris.core.utils.HttpContextUtils;
+import com.iris.core.utils.IpUtils;
+import com.iris.core.utils.JsonUtils;
+import com.iris.core.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.iris.framework.common.exception.ErrorCode;
-import com.iris.framework.common.utils.HttpContextUtils;
-import com.iris.framework.common.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+
     private final Logger log = LoggerFactory.getLogger(SecurityAuthenticationEntryPoint.class);
 
     @Override
@@ -31,9 +32,10 @@ public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoin
         if(HttpContextUtils.getOrigin() != null){
             response.setHeader("Access-Control-Allow-Origin", HttpContextUtils.getOrigin());
         }
+        // authException.printStackTrace();
         Result<Object> result = Result.error(ErrorCode.UNAUTHORIZED);
-        String ip = IpUtils.getIpAddr(request);
-        log.warn("IP:" + ip + " 请求方法:" + request.getMethod() + " 请求路径:" + request.getRequestURI() + " " + result.getMsg());
-        response.getWriter().print(JSONUtil.toJsonStr(result));
+        String ip = IpUtils.getIpAddress(request);
+        log.warn("IP:{} 请求方法:{} 请求路径:{} {}", ip, request.getMethod(), request.getRequestURI(), result.getMsg());
+        response.getWriter().print(JsonUtils.toJsonString(result));
     }
 }
