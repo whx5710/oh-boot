@@ -24,6 +24,6 @@ public class CustomUuidGenerator implements IdGenerator {
     public String getNextId() {
         //自己有需要可以在这里返回自定义生成的ID,生成的是不带-的字符串，类似于：b17f24ff026d40949c85a24f4f375d42
         //return IdUtil.simpleUUID();
-        return redisCache.getDayIncrementCode("F", "oh.flow.index", 10);
+        return redisCache.getDayIncrementCode("", "oh.flow.index", 10);
     }
 }
