@@ -1,6 +1,6 @@
 package com.iris.flow.config;
 
-import com.iris.core.cache.RedisCache;
+import com.iris.core.utils.IrisTools;
 import org.camunda.bpm.engine.impl.cfg.IdGenerator;
 import org.springframework.stereotype.Component;
 
@@ -14,16 +14,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomUuidGenerator implements IdGenerator {
 
-    private final RedisCache redisCache;
+    /*private final RedisCache redisCache;
 
     public CustomUuidGenerator(RedisCache redisCache) {
         this.redisCache = redisCache;
-    }
+    }*/
 
     @Override
     public String getNextId() {
         //自己有需要可以在这里返回自定义生成的ID,生成的是不带-的字符串，类似于：b17f24ff026d40949c85a24f4f375d42
         //return IdUtil.simpleUUID();
-        return redisCache.getDayIncrementCode("", "oh.flow.index", 10);
+
+        // 日期格式的ID
+        // return redisCache.getDayIncrementCode("", "oh.flow.index", 10);
+
+        // 雪花算法ID
+        return String.valueOf(IrisTools.snowFlakeId());
     }
 }
