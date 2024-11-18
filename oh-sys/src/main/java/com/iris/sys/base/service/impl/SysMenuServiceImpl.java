@@ -18,7 +18,6 @@ import com.iris.sys.base.entity.SysMenuEntity;
 import com.iris.sys.base.service.SysMenuService;
 import com.iris.sys.base.vo.SysMenuVO;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -39,7 +38,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void save(SysMenuTreeVO vo) {
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
@@ -48,7 +46,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(SysMenuTreeVO vo) {
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
 
@@ -62,7 +59,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         // 删除菜单
         SysMenuEntity param = new SysMenuEntity();

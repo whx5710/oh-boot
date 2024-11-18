@@ -10,7 +10,6 @@ import com.iris.sys.quartz.query.ScheduleJobLogQuery;
 import com.iris.sys.quartz.service.ScheduleJobLogService;
 import com.iris.sys.quartz.vo.ScheduleJobLogVO;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,7 +36,6 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         scheduleJobMapper.deleteLogByIds(idList);
     }

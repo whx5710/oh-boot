@@ -10,7 +10,6 @@ import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SysDictDataConvert;
 import com.iris.sys.base.service.SysDictDataService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,7 +35,6 @@ public class SysDictDataServiceImpl implements SysDictDataService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void save(SysDictDataVO vo) {
         SysDictDataEntity entity = SysDictDataConvert.INSTANCE.convert(vo);
 
@@ -44,14 +42,12 @@ public class SysDictDataServiceImpl implements SysDictDataService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(SysDictDataVO vo) {
         SysDictDataEntity entity = SysDictDataConvert.INSTANCE.convert(vo);
         sysDictDataMapper.updateById(entity);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         idList.forEach(id -> {
             SysDictDataEntity param = new SysDictDataEntity();

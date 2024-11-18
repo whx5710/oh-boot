@@ -16,7 +16,6 @@ import com.iris.sys.base.service.SysUserRoleService;
 import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SysRoleEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -60,7 +59,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void save(SysRoleVO vo) {
 		SysRoleEntity entity = SysRoleConvert.INSTANCE.convert(vo);
 
@@ -73,7 +71,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void update(SysRoleVO vo) {
 		SysRoleEntity entity = SysRoleConvert.INSTANCE.convert(vo);
 
@@ -85,7 +82,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void dataScope(SysRoleDataScopeVO vo) {
 		SysRoleEntity entity = sysRoleMapper.getById(vo.getId());
 		entity.setDataScope(vo.getDataScope());
@@ -101,7 +97,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
 		// 删除角色
 		// removeByIds(idList);

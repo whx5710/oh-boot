@@ -5,7 +5,6 @@ import com.iris.sys.base.mapper.SysRoleDataScopeMapper;
 import com.iris.sys.base.service.SysRoleDataScopeService;
 import com.iris.sys.base.entity.SysRoleDataScopeEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +25,6 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void saveOrUpdate(Long roleId, List<Long> orgIdList) {
         // 数据库机构ID列表
         List<Long> dbOrgIdList = getOrgIdList(roleId);

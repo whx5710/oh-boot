@@ -15,7 +15,6 @@ import jakarta.annotation.PostConstruct;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -78,7 +77,6 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         for (Long id : idList) {
             ScheduleJobEntity scheduleJob = scheduleJobMapper.getById(id);

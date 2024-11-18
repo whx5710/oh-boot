@@ -13,7 +13,6 @@ import com.iris.sys.base.convert.SmsPlatformConvert;
 import com.iris.sys.base.entity.SmsPlatformEntity;
 import com.iris.sys.base.service.SmsPlatformService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -73,7 +72,6 @@ public class SmsPlatformServiceImpl implements SmsPlatformService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         idList.forEach(id -> {
             SmsPlatformEntity param = new SmsPlatformEntity();

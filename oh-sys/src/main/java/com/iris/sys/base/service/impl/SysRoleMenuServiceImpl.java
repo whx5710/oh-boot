@@ -5,7 +5,6 @@ import com.iris.sys.base.mapper.SysRoleMenuMapper;
 import com.iris.sys.base.service.SysRoleMenuService;
 import com.iris.sys.base.entity.SysRoleMenuEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +27,6 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void saveOrUpdate(Long roleId, List<Long> menuIdList) {
 		// 数据库菜单ID列表
 		List<Long> dbMenuIdList = sysRoleMenuMapper.getMenuIdList(roleId);
@@ -62,13 +60,11 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void deleteByRoleIdList(List<Long> roleIdList) {
 		sysRoleMenuMapper.deleteByRoleIdList(roleIdList, new SysRoleMenuEntity());
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void deleteByMenuId(Long menuId) {
 		sysRoleMenuMapper.deleteByMenuId(menuId, new SysRoleMenuEntity());
 	}

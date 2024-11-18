@@ -13,7 +13,6 @@ import com.iris.core.exception.ServerException;
 import com.iris.sys.base.entity.SysOrgEntity;
 import com.iris.sys.base.service.SysOrgService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +60,12 @@ public class SysOrgServiceImpl implements SysOrgService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void save(SysOrgVO vo) {
 		SysOrgEntity entity = SysOrgConvert.INSTANCE.convert(vo);
 		sysOrgMapper.insertOrg(entity);
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void update(SysOrgVO vo) {
 		SysOrgEntity entity = SysOrgConvert.INSTANCE.convert(vo);
 
@@ -85,7 +82,6 @@ public class SysOrgServiceImpl implements SysOrgService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void delete(Long id) {
 		// 判断是否有子机构
 		int orgCount = sysOrgMapper.countByParentId(id);

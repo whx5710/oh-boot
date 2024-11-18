@@ -28,7 +28,6 @@ import com.iris.sys.base.entity.SysUserEntity;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -114,7 +113,6 @@ public class SysUserServiceImpl  implements SysUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void save(SysUserVO vo) {
         // 密码验证
         passwordStrength(vo.getPassword());
@@ -149,7 +147,6 @@ public class SysUserServiceImpl  implements SysUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(SysUserVO vo) {
         // 如果密码不为空，则进行加密处理
         if (StrUtil.isBlank(vo.getPassword())) {
@@ -184,7 +181,6 @@ public class SysUserServiceImpl  implements SysUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         // 删除用户
 //        removeByIds(idList);
@@ -266,7 +262,6 @@ public class SysUserServiceImpl  implements SysUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void importByExcel(MultipartFile file, String password) {
 
         ExcelUtils.readAnalysis(file, SysUserExcelVO.class, new ExcelFinishCallBack<SysUserExcelVO>() {

@@ -16,7 +16,6 @@ import com.iris.core.exception.ServerException;
 import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SysParamsEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
@@ -100,7 +99,6 @@ public class SysParamsServiceImpl implements SysParamsService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         // 查询列表
         SysParamsQuery query = new SysParamsQuery();

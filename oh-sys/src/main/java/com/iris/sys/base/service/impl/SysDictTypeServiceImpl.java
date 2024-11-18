@@ -18,7 +18,6 @@ import com.iris.sys.base.service.SysDictTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,6 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
         return new PageResult<>(SysDictTypeConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
     }
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void save(SysDictTypeVO vo) {
         SysDictTypeEntity entity = SysDictTypeConvert.INSTANCE.convert(vo);
 
@@ -58,14 +56,12 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(SysDictTypeVO vo) {
         SysDictTypeEntity entity = SysDictTypeConvert.INSTANCE.convert(vo);
         sysDictTypeMapper.updateById(entity);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         idList.forEach(id -> {
             SysDictTypeEntity param = new SysDictTypeEntity();

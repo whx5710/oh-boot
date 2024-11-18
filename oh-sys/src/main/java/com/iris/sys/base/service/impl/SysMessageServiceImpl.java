@@ -11,7 +11,6 @@ import com.iris.sys.base.convert.SysMessageConvert;
 import com.iris.sys.base.entity.SysMessageEntity;
 import com.iris.sys.base.service.SysMessageService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -57,7 +56,6 @@ public class SysMessageServiceImpl implements SysMessageService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         idList.forEach(id -> {
             SysMessageEntity param = new SysMessageEntity();

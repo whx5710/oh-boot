@@ -10,7 +10,6 @@ import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SysAttachmentConvert;
 import com.iris.sys.base.service.SysAttachmentService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,7 +49,6 @@ public class SysAttachmentServiceImpl implements SysAttachmentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         idList.forEach(id -> {
             SysAttachmentEntity param = new SysAttachmentEntity();

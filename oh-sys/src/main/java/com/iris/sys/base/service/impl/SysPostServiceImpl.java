@@ -13,7 +13,6 @@ import com.iris.core.utils.PageResult;
 import com.iris.sys.base.entity.SysPostEntity;
 import com.iris.sys.base.service.SysPostService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -86,7 +85,6 @@ public class SysPostServiceImpl implements SysPostService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         // 删除岗位
         idList.forEach(id -> {

@@ -10,7 +10,6 @@ import com.iris.sys.base.convert.SysVersionInfoConvert;
 import com.iris.sys.base.entity.SysVersionInfoEntity;
 import com.iris.sys.base.service.SysVersionInfoService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -54,7 +53,6 @@ public class SysVersionInfoServiceImpl implements SysVersionInfoService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(List<Long> idList) {
         idList.forEach(id -> {
             SysVersionInfoEntity param = new SysVersionInfoEntity();
