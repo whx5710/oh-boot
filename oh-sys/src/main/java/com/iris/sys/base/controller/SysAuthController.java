@@ -57,8 +57,8 @@ public class SysAuthController {
      * @param userKey  用户密钥
      * @return token
      */
-//    @RequestMapping(value = "/loginByKey", method = {RequestMethod.GET,RequestMethod.POST})
-    @PostMapping("/loginByKey")
+//    @PostMapping("/loginByKey")
+    @RequestMapping(value = "/loginByKey", method = {RequestMethod.GET,RequestMethod.POST})
     @Operation(summary = "账号密码登录(无验证码，适用于外部对接)")
     @Parameters({@Parameter(name="userName", description = "用户名"), @Parameter(name="password", description = "base64编码的密码"),
             @Parameter(name="userKey", description = "用户密钥")})
