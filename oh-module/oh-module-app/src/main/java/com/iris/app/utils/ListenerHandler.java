@@ -1,5 +1,6 @@
 package com.iris.app.utils;
 
+import com.iris.core.exception.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
@@ -36,10 +37,13 @@ public class ListenerHandler {
 
     /**
      * 暂停监听
-     * @param listenerId 监听ID
+     * @param listenerId 监听ID，对应KafkaListener注解中的id属性值
      */
     public void stop(String listenerId){
         MessageListenerContainer messageListenerContainer = this.registry.getListenerContainer(listenerId);
+        if(messageListenerContainer == null){
+            throw new ServerException("未找到该监听服务[" + listenerId + "]");
+        }
         messageListenerContainer.pause();
         if(messageListenerContainer.isRunning()){
             messageListenerContainer.stop();
@@ -50,10 +54,13 @@ public class ListenerHandler {
 
     /**
      * 启动监听
-     * @param listenerId
+     * @param listenerId 监听ID，对应KafkaListener注解中的id属性值
      */
     public void start(String listenerId){
         MessageListenerContainer messageListenerContainer = this.registry.getListenerContainer(listenerId);
+        if(messageListenerContainer == null){
+            throw new ServerException("未找到该监听服务[" + listenerId + "]");
+        }
         // 判断监听容器是否启动，未启动则将其启动
         if(!messageListenerContainer.isRunning()){
             messageListenerContainer.start();

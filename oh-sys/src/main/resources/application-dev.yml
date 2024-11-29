@@ -96,7 +96,7 @@ spring:
         session-stat-max-count: 1000 # 最大会话统计数量
   kafka:
     bootstrap-servers: 127.0.0.1:9092
-    client-id: dc-device-flow-analyze
+    client-id: open-api-flow
     listener:
       ack-mode: MANUAL_IMMEDIATE
       concurrency: 1  # 多任务
@@ -113,7 +113,7 @@ spring:
       acks: 1 # 0：producer 不等待 broker 的 ack  1：producer 等待 broker 的 ack，partition 的 leader 落盘成功后返回 ack，如果在 follower 同步成功之前 leader 故障，那么将会丢失数据 -1（all）：producer 等待 broker 的 ack，partition 的 leader 和 follower （ISRL里的follower，不是全部的follower）全部落盘成功后才 返回 ack
       batch-size: 4096
       buffer-memory: 40960000
-      client-id: dc-device-flow-analyze-producer
+      client-id: open-api-flow-producer
       compression-type: zstd # 压缩算法
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
