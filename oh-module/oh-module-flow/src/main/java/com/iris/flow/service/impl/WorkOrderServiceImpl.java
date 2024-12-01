@@ -77,7 +77,6 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
     @Override
     public void update(WorkOrderVO vo) {
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
-
         workOrderMapper.updateOrderById(entity);
     }
 
@@ -137,6 +136,6 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        ServiceFactory.register("F1003", this); // 保存工单，启动流程业务
+        ServiceFactory.register("F1003", this, "工单保存服务"); // 保存工单，启动流程业务
     }
 }

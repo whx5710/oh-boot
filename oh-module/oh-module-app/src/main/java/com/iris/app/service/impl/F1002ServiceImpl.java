@@ -32,7 +32,7 @@ public class F1002ServiceImpl implements JobService, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        ServiceFactory.register("F1002", this);
+        ServiceFactory.register("F1002", this, "测试 - 业务一");
     }
 
 }

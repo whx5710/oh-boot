@@ -6,8 +6,7 @@ import com.iris.framework.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,6 +18,8 @@ public class ServiceFactory {
     private final static Logger log = LoggerFactory.getLogger(ServiceFactory.class);
     // 保存服务类
     private static final Map<String, JobService> serviceMap = new ConcurrentHashMap<String, JobService>();
+    // 描述
+    private static final Map<String, String> serviceNote = new HashMap<>();
 
     /**
      * 根据指令，获取消息处理服务
@@ -40,10 +41,41 @@ public class ServiceFactory {
      * @param jobService 消息服务
      */
     public static void register(String funcCode , JobService jobService) {
-        AssertUtils.isBlank(funcCode, "注册的服务不能为空");
+        register(funcCode, jobService, null);
+    }
+
+    /**
+     * 注册消息处理服务
+     * @param funcCode 指令
+     * @param jobService 消息服务
+     * @param note 描述
+     */
+    public static void register(String funcCode , JobService jobService, String note) {
+        AssertUtils.isBlank(funcCode, "注册的服务编码不能为空");
         if(serviceMap.containsKey(funcCode)){
-            log.warn("服务编号【{}: {}】已存在，已注册 {}，请检查！", funcCode, serviceMap.get(funcCode).getClass().getName(), jobService.getClass().getName());
+            log.warn("服务编号【{} {}: {}】已存在，已注册 {}，请检查！", funcCode, serviceNote.get(funcCode), serviceMap.get(funcCode).getClass().getName(), jobService.getClass().getName());
+        }else{
+            serviceMap.put(funcCode, jobService);
+            note = note==null?"":note;
+            serviceNote.put(funcCode, note);
+            log.debug("注册服务:编码【{}】 {}", funcCode, note);
         }
-        serviceMap.put(funcCode, jobService);
+    }
+
+    /**
+     * 获取服务名
+     * @return map
+     */
+    public static Map<String, String> getServiceNames(){
+        return serviceNote;
+    }
+
+    /**
+     * 获取服务描述
+     * @param funcCode 服务ID
+     * @return 描述
+     */
+    public String getServiceNote(String funcCode){
+        return serviceNote.get(funcCode);
     }
 }
