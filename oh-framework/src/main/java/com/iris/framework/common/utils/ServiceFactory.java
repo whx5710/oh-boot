@@ -6,7 +6,8 @@ import com.iris.framework.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,7 +20,7 @@ public class ServiceFactory {
     // 保存服务类
     private static final Map<String, JobService> serviceMap = new ConcurrentHashMap<String, JobService>();
     // 描述
-    private static final Map<String, String> serviceNote = new HashMap<>();
+    private static final Map<String, String> serviceNote = new ConcurrentHashMap<>();
 
     /**
      * 根据指令，获取消息处理服务
@@ -75,7 +76,7 @@ public class ServiceFactory {
      * @param funcCode 服务ID
      * @return 描述
      */
-    public String getServiceNote(String funcCode){
+    public static String getServiceNote(String funcCode){
         return serviceNote.get(funcCode);
     }
 }

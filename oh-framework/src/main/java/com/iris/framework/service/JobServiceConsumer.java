@@ -56,7 +56,8 @@ public class JobServiceConsumer {
         if(dataMsg.getTopic() == null){
             dataMsg.setTopic(Constant.TOPIC_SUBMIT);
         }
-        Optional<JobService> optional = ServiceFactory.getService(dataMsg.getFuncCode());
+        String funcCode = dataMsg.getFuncCode();
+        Optional<JobService> optional = ServiceFactory.getService(funcCode);
         try {
             if(optional.isPresent()){
                 JobService jobService = optional.get();
@@ -69,12 +70,12 @@ public class JobServiceConsumer {
                 dataMsg.setResultMsg(JsonUtils.toJsonString(result));
                 dataMsg.setState("1");
             }else{
-                log.error("未找到对应服务，处理失败！{}", dataMsg.getFuncCode());
+                log.error("未找到对应服务，处理失败！{}", funcCode);
                 dataMsg.setState("2"); // 未找到对应的服务类，处理失败
-                dataMsg.setNote("未找到对应的服务类，处理失败!");
+                dataMsg.setNote("未找到对应的服务类，处理失败!" + funcCode);
             }
         }catch (Exception e){
-            log.error("处理业务发生错误！{}", e.getMessage());
+            log.error("处理业务发生错误！{} {}: {}", funcCode, ServiceFactory.getServiceNote(funcCode), e.getMessage());
             dataMsg.setNote(e.getMessage());
             dataMsg.setState("3"); // 异常
         }finally {
