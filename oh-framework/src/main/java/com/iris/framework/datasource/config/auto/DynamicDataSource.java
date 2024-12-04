@@ -3,6 +3,8 @@ package com.iris.framework.datasource.config.auto;
 import com.iris.framework.datasource.utils.DynamicDataSourceHolder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -16,10 +18,14 @@ import java.util.Map;
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Value("${mybatis.mapper-locations:noPath}")
     String locationPattern;
 
     private Map<Object, Object> dynamicDataSources;
+
+    private String primaryDb;
 
     public DynamicDataSource(){
 
@@ -29,6 +35,13 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         this.dynamicDataSources = dynamicDataSources;
     }
 
+    public String getPrimaryDb() {
+        return primaryDb;
+    }
+
+    public void setPrimaryDb(String primaryDb) {
+        this.primaryDb = primaryDb;
+    }
 
     @Override
     protected Object determineCurrentLookupKey() {
@@ -60,9 +73,22 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     public SqlSessionFactory getSqlSessionFactory(String key) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        if(key == null || key.equals("")){
+            key = primaryDb;
+        }
+        log.debug("SqlSessionFactory使用{}数据源", key);
         sqlSessionFactoryBean.setDataSource(getDs(key));
         // 对应mybatis的xml路径
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(locationPattern));
         return sqlSessionFactoryBean.getObject();
+    }
+
+    /**
+     * 获取SqlSessionFactory
+     * @return
+     * @throws Exception
+     */
+    public SqlSessionFactory getSqlSessionFactory() throws Exception {
+        return getSqlSessionFactory(null);
     }
 }

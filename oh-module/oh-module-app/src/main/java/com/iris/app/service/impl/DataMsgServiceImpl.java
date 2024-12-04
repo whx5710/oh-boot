@@ -129,8 +129,9 @@ public class DataMsgServiceImpl implements DataMsgService {
                 list.add(entity);
             }
             if(!list.isEmpty()){
-                // dynamicDataSource.getSqlSessionFactory(sysDataSourceProperties.getSysDefault());
-                SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(sysDataSourceProperties.getPrimary());
+                // dynamicDataSource.getSqlSessionFactory(sysDataSourceProperties.getSysDefault()); // 系统数据源
+                // SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(sysDataSourceProperties.getPrimary()); // 主数据源
+                SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(); // 默认主数据源
                 sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
                 DataMessageMapper messageMapper = sqlSession.getMapper(DataMessageMapper.class);
                 list.forEach(messageMapper::insertDataMsg);

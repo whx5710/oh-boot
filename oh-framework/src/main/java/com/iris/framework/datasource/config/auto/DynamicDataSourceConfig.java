@@ -98,6 +98,7 @@ public class DynamicDataSourceConfig {
             if(!dataSourceMap.containsKey(sysDefaultDb)){
                 log.warn("无系统数据源 [{}]", sysDefaultDb);
             }
+            dynamicDataSource.setPrimaryDb(master);
         }else{
             log.error("动态数据源初始完成，无主数据源，请检查");
         }
