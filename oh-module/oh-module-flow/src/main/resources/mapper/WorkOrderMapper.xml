@@ -5,8 +5,8 @@
     <select id="getOrderList" resultType="com.iris.flow.entity.WorkOrderEntity">
         select * from oh_work_order where db_status = 1
     </select>
-
-    <insert id="saveOrder">
+    <!-- 保存工单，回写ID -->
+    <insert id="saveOrder" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO oh_work_order (order_code, order_source, report_time, incident_time, end_time, title, comment, address, geo_x, geo_y, category, note, db_status, creator, create_time)
         VALUES (#{orderCode}, #{orderSource}, #{reportTime}, #{incidentTime}, #{endTime}, #{title}, #{comment}, #{address}, #{geoX}, #{geoY}, #{category}, #{note}, #{dbStatus}, #{creator}, #{createTime})
     </insert>

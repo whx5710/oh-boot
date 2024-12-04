@@ -1,7 +1,6 @@
 package com.iris.framework.security.filter;
 
 import com.iris.core.utils.IrisTools;
-import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +25,11 @@ import java.io.IOException;
 @Component
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Resource
-    private TokenStoreCache tokenStoreCache;
+    private final TokenStoreCache tokenStoreCache;
+
+    public AuthenticationTokenFilter(TokenStoreCache tokenStoreCache){
+        this.tokenStoreCache = tokenStoreCache;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
