@@ -104,7 +104,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 .orderByHistoricActivityInstanceStartTime().asc()
                 .orderByHistoricTaskInstanceEndTime().asc().list();
         List<TaskRecordVO> data = new ArrayList<>();
-        if(!ObjectUtils.isEmpty(list)){
+        if(!ObjectUtils.isEmpty(list)){ // 未完成的
             for(HistoricTaskInstance his: list){
                 TaskRecordEntity taskRecord = new TaskRecordEntity();
                 taskRecord.setProcDefId(his.getProcessDefinitionId());
@@ -115,17 +115,12 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 taskRecord.setTaskName(his.getName());
 
                 // 当前标识，默认0，1标识当前环节
-                taskRecord.setRunMark((his.getEndTime()!=null && his.getDeleteReason()!= null && his.getDeleteReason().equalsIgnoreCase("completed"))?0:1);
+                taskRecord.setRunMark(getRunMark(his));
                 taskRecord.setAssignee(his.getAssignee());
                 taskRecord.setAssigneeName(SecurityUser.getUser().getRealName());
                 taskRecord.setStartTime(DateUtils.dateToLocalDate(his.getStartTime()));
                 taskRecord.setEndTime(DateUtils.dateToLocalDate(his.getEndTime()));
                 taskRecord.setDuration(his.getDurationInMillis());
-
-                taskRecord.setFromActInstId("");
-                taskRecord.setFromTaskDefId("");
-                taskRecord.setFromTaskId("");
-                taskRecord.setFromTaskName("");
 
                 if(!ObjectUtils.isEmpty(taskId) && !taskId.equals(his.getId())){
                     // 处理上一任务，更新相关信息
@@ -138,25 +133,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                             taskRecord.setFromTaskDefId(hisParent.getTaskDefinitionKey());
                             taskRecord.setFromTaskId(hisParent.getId());
                             taskRecord.setFromTaskName(hisParent.getName());
-
                             /************ 更新上一任务 *** start *********/
-                            TaskRecordQuery query = new TaskRecordQuery();
-                            query.setProcInstId(proInsId);
-                            query.setRunMark(1);
-                            if(!ObjectUtils.isEmpty(taskId)){
-                                query.setTaskId(taskId);
-                            }
-                            List<TaskRecordVO> voList = taskList(query);
-                            if(!ObjectUtils.isEmpty(voList)){
-                                for (TaskRecordVO vo : voList){
-                                    vo.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
-                                    vo.setAssignee(hisParent.getAssignee());
-                                    vo.setAssigneeName("");
-                                    vo.setDuration(hisParent.getDurationInMillis());
-                                    vo.setRunMark(0);
-                                    update(vo);
-                                }
-                            }
+                            updatePreTask(proInsId, taskId, hisParent);
                             /********** 更新上一任务 *** end *********/
                             data.add(TaskRecordConvert.INSTANCE.convert(taskRecord));
                             save(taskRecord);
@@ -171,6 +149,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 }
             }
         }else{
+            // 已完成
             TaskRecordEntity taskRecord = new TaskRecordEntity();
             // 处理上一任务，更新相关信息
             List<HistoricTaskInstance> parentList = historyService.createHistoricTaskInstanceQuery()
@@ -189,26 +168,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
                     taskRecord.setProcDefId(hisParent.getProcessDefinitionId());
                     taskRecord.setProcInstId(proInsId);
-                    taskRecord.setRunMark((hisParent.getEndTime()!=null && hisParent.getDeleteReason()!= null && hisParent.getDeleteReason().equalsIgnoreCase("completed"))?0:1);
-
+                    taskRecord.setRunMark(getRunMark(hisParent));
                     /************ 更新上一任务 *** start *********/
-                    TaskRecordQuery query = new TaskRecordQuery();
-                    query.setProcInstId(proInsId);
-                    query.setRunMark(1);
-                    if(!ObjectUtils.isEmpty(taskId)){
-                        query.setTaskId(taskId);
-                    }
-                    List<TaskRecordVO> voList = taskList(query);
-                    if(!ObjectUtils.isEmpty(voList)){
-                        for (TaskRecordVO vo : voList){
-                            vo.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
-                            vo.setAssignee(hisParent.getAssignee());
-                            vo.setAssigneeName("");
-                            vo.setDuration(hisParent.getDurationInMillis());
-                            vo.setRunMark(0);
-                            update(vo);
-                        }
-                    }
+                    updatePreTask(proInsId, taskId, hisParent);
                     /********** 更新上一任务 *** end *********/
                     data.add(TaskRecordConvert.INSTANCE.convert(taskRecord));
                     save(taskRecord);
@@ -218,12 +180,48 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 save(taskRecord);
             }
         }
-
         return data;
     }
 
     @Override
     public TaskRecordEntity getTaskRecordById(Long id) {
         return taskRecordMapper.getTaskRecordById(id);
+    }
+
+
+    /**
+     * 更新上一环节
+     * @param proInsId
+     * @param taskId
+     * @param hisParent
+     */
+    private void updatePreTask(String proInsId, String taskId, HistoricTaskInstance hisParent){
+        TaskRecordQuery query = new TaskRecordQuery();
+        query.setProcInstId(proInsId);
+        query.setRunMark(1);
+        if(!ObjectUtils.isEmpty(taskId)){
+            query.setTaskId(taskId);
+        }
+        List<TaskRecordVO> voList = taskList(query);
+        if(!ObjectUtils.isEmpty(voList)){
+            for (TaskRecordVO vo : voList){
+                vo.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
+                vo.setAssignee(hisParent.getAssignee());
+                vo.setAssigneeName("");
+                vo.setDuration(hisParent.getDurationInMillis());
+                vo.setRunMark(0);
+                update(vo);
+            }
+        }
+    }
+
+    /**
+     * 获取是否运行状态
+     * @param his
+     * @return
+     */
+    private Integer getRunMark(HistoricTaskInstance his){
+        return (his.getEndTime()!=null && his.getDeleteReason()!= null
+                && his.getDeleteReason().equalsIgnoreCase("completed"))?0:1;
     }
 }
