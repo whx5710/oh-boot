@@ -188,6 +188,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     taskRecord.setEndTime(DateUtils.dateToLocalDate(hisParent.getEndTime()));
 
                     taskRecord.setProcDefId(hisParent.getProcessDefinitionId());
+                    taskRecord.setProcInstId(proInsId);
+                    taskRecord.setRunMark((hisParent.getEndTime()!=null && hisParent.getDeleteReason()!= null && hisParent.getDeleteReason().equalsIgnoreCase("completed"))?0:1);
 
                     /************ 更新上一任务 *** start *********/
                     TaskRecordQuery query = new TaskRecordQuery();
