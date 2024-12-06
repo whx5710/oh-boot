@@ -2,7 +2,10 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iris.core.cache.RedisCache;
+import com.iris.core.entity.BaseUserEntity;
 import com.iris.core.utils.DateUtils;
+import com.iris.core.utils.JsonUtils;
 import com.iris.flow.convert.TaskRecordConvert;
 import com.iris.flow.entity.TaskRecordEntity;
 import com.iris.flow.mapper.TaskRecordMapper;
@@ -11,7 +14,6 @@ import com.iris.flow.service.TaskRecordService;
 import com.iris.flow.vo.TaskRecordVO;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.PageResult;
-import com.iris.framework.security.user.SecurityUser;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.springframework.stereotype.Service;
@@ -34,9 +36,15 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     private final TaskRecordMapper taskRecordMapper;
 
-    public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper){
+    private final RedisCache redisCache;
+
+    private String userCacheKey = "system:user:";
+
+    public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper,
+                                 RedisCache redisCache){
         this.historyService = historyService;
         this.taskRecordMapper = taskRecordMapper;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -116,8 +124,17 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
                 // 当前标识，默认0，1标识当前环节
                 taskRecord.setRunMark(getRunMark(his));
+                // 签收人
                 taskRecord.setAssignee(his.getAssignee());
-                taskRecord.setAssigneeName(SecurityUser.getUser().getRealName());
+                if(his.getAssignee() != null){
+                    String key = userCacheKey + his.getAssignee();
+                    if(redisCache.hasKey(key)){
+                        BaseUserEntity baseUser = JsonUtils.convertValue(redisCache.get(key), BaseUserEntity.class);
+                        taskRecord.setAssigneeName(baseUser.getRealName());
+                    }else{
+                        taskRecord.setAssigneeName(his.getAssignee());
+                    }
+                }
                 taskRecord.setStartTime(DateUtils.dateToLocalDate(his.getStartTime()));
                 taskRecord.setEndTime(DateUtils.dateToLocalDate(his.getEndTime()));
                 taskRecord.setDuration(his.getDurationInMillis());
@@ -188,6 +205,18 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         return taskRecordMapper.getTaskRecordById(id);
     }
 
+    /**
+     * 获取正在运行的记录
+     * @param proInstId
+     * @return
+     */
+    @Override
+    public List<TaskRecordVO> getRunRecord(String proInstId){
+        TaskRecordQuery query = new TaskRecordQuery();
+        query.setRunMark(1);
+        query.setProcInstId(proInstId);
+        return taskList(query);
+    }
 
     /**
      * 更新上一环节

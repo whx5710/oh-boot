@@ -39,4 +39,11 @@ public interface TaskRecordService {
     List<TaskRecordVO> saveTaskRecord(String proInsId, String taskId);
 
     TaskRecordEntity getTaskRecordById(Long id);
+
+    /**
+     * 获取正在运行的环节记录
+     * @param proInstId
+     * @return
+     */
+    List<TaskRecordVO> getRunRecord(String proInstId);
 }

@@ -1,7 +1,6 @@
 package com.iris.flow.service;
 
 import com.iris.core.utils.AssertUtils;
-import com.iris.flow.query.TaskRecordQuery;
 import com.iris.flow.vo.TaskRecordVO;
 import com.iris.flow.vo.TaskVO;
 import com.iris.core.exception.ServerException;
@@ -20,6 +19,7 @@ import org.camunda.bpm.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
@@ -85,6 +85,7 @@ public class TaskHandlerService {
      * @param params 参数
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public List<TaskRecordVO> startByProcessKey(String processKey, String businessKey, Map<String,Object> params){
         AssertUtils.isBlank(processKey, "流程定义编码");
         ProcessInstanceWithVariablesImpl processInstance;
@@ -106,10 +107,7 @@ public class TaskHandlerService {
                     taskRecordService.saveTaskRecord(processInstance.getProcessInstanceId(), his.getId());
                 }
             }
-            TaskRecordQuery query = new TaskRecordQuery();
-            query.setRunMark(1);
-            query.setProcInstId(processInstance.getProcessInstanceId());
-            return taskRecordService.taskList(query);
+            return taskRecordService.getRunRecord(processInstance.getProcessInstanceId());
         }catch (NotFoundException e1){
             throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败，请确认是否部署！", e1.getMessage());
         }catch (NullValueException e2){
@@ -122,6 +120,7 @@ public class TaskHandlerService {
      * 完成任务前，先保存前后任务信息
      * @param taskVO
      */
+    @Transactional(rollbackFor = Exception.class)
     public List<TaskRecordVO> completeTask(TaskVO taskVO){
         AssertUtils.isBlank(taskVO.getTaskId(), "【参数异常】任务ID");
         AssertUtils.isBlank(taskVO.getProInstId(), "【参数异常】流程实例ID");
@@ -136,14 +135,13 @@ public class TaskHandlerService {
             // 保存环节
             taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
         }catch (NullValueException e1){
+            log.error("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】 {}", e1.getMessage());
             throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
         }catch (ProcessEngineException e2){
-            throw new ServerException("完成环节发生异常，请联系管理员！", e2.getMessage());
+            log.error("完成环节发生异常，请联系管理员！{}", e2.getMessage());
+            throw new ServerException("完成环节发生异常，请联系管理员！");
         }
-        TaskRecordQuery query = new TaskRecordQuery();
-        query.setRunMark(1);
-        query.setProcInstId(taskVO.getProInstId());
-        return taskRecordService.taskList(query);
+        return taskRecordService.getRunRecord(taskVO.getProInstId());
     }
 
     /**
@@ -166,7 +164,8 @@ public class TaskHandlerService {
         List<HistoricTaskInstance> taskInstanceList = new ArrayList<>();
         if(!ObjectUtils.isEmpty(list)){
             for(Task task: list){
-                taskInstanceList.add(historyService.createHistoricTaskInstanceQuery().processInstanceId(proInsId).taskId(task.getId()).singleResult());
+                taskInstanceList.add(historyService.createHistoricTaskInstanceQuery().processInstanceId(proInsId)
+                        .taskId(task.getId()).singleResult());
             }
         }
         return taskInstanceList;
@@ -192,13 +191,10 @@ public class TaskHandlerService {
         System.out.println(hisProIns.getProcessDefinitionName()+" "+hisProIns.getProcessDefinitionKey());
         //===================已完成节点
         List<HistoricActivityInstance> finished = historyService.createHistoricActivityInstanceQuery()
-                .processInstanceId(proInsId)
-                .finished()
+                .processInstanceId(proInsId).finished()
                 .orderByHistoricActivityInstanceStartTime()
-                .asc()
-                .orderByHistoricActivityInstanceEndTime()
-                .asc()
-                .list();
+                .asc().orderByHistoricActivityInstanceEndTime()
+                .asc().list();
         Set<String> highPoint = new HashSet<>();
         finished.forEach(t -> highPoint.add(t.getActivityId()));
 
