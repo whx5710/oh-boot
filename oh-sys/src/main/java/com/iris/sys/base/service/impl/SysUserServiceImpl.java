@@ -8,6 +8,7 @@ import com.iris.common.utils.ExcelUtils;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.CommonEnum;
+import com.iris.core.entity.BaseUserEntity;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.DateUtils;
 import com.iris.core.utils.PageResult;
@@ -25,6 +26,7 @@ import com.iris.sys.base.service.SysUserService;
 import com.iris.sys.base.service.SysUserRoleService;
 import com.iris.core.exception.ServerException;
 import com.iris.sys.base.entity.SysUserEntity;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,9 @@ public class SysUserServiceImpl  implements SysUserService {
 
     @Resource
     private SysParamsService sysParamsService;
+
+    private String userCacheKey = "system:user:";
+
     public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserPostService sysUserPostService,
                               RedisCache redisCache, SysUserMapper sysUserMapper) {
         this.sysUserRoleService = sysUserRoleService;
@@ -305,5 +310,21 @@ public class SysUserServiceImpl  implements SysUserService {
         if(!AssertUtils.passwordStrength(grade, password)){
             throw new ServerException("密码: " + CommonEnum.getName(grade));
         }
+    }
+
+    // 缓存用户信息
+    @PostConstruct
+    public void init() {
+        // 查询列表
+        List<SysUserEntity> list = sysUserMapper.getList(new SysUserQuery());
+        list.forEach(item -> {
+            BaseUserEntity baseUser = SysUserConvert.INSTANCE.convertSimpleVO(item);
+            String key = userCacheKey + baseUser.getId();
+            if(redisCache.hasKey(key)){
+                redisCache.delete(key);
+            }
+            // 缓存数据
+            redisCache.set(key, baseUser);
+        });
     }
 }

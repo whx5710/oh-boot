@@ -1,5 +1,6 @@
 package com.iris.sys.base.convert;
 
+import com.iris.core.entity.BaseUserEntity;
 import com.iris.framework.security.user.UserDetail;
 import com.iris.sys.base.vo.SysUserExcelVO;
 import com.iris.sys.base.vo.SysUserVO;
@@ -27,5 +28,7 @@ public interface SysUserConvert {
     List<SysUserExcelVO> convert2List(List<SysUserEntity> list);
 
     List<SysUserEntity> convertListEntity(List<SysUserExcelVO> list);
+
+    BaseUserEntity convertSimpleVO(SysUserEntity entity);
 
 }

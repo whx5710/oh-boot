@@ -1,32 +1,21 @@
 package com.iris.core.entity;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 /**
  * 用户基类
  *
  * @author 王小费 whx5710@qq.com
  */
-public class BaseUserEntity implements Serializable {
+public class BaseUserEntity extends IDEntity {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private Long id;
     private String username;
     private String realName;
     private Integer gender;
     private String email;
     private String mobile;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;

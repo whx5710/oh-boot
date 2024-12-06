@@ -216,10 +216,9 @@ public class RedisCache {
     public Long getIncrement(String key, long liveTime) {
         RedisAtomicLong counter = null;
         counter = new RedisAtomicLong(key, redisTemplate.getConnectionFactory());
-        // Long increment =  counter.incrementAndGet(); // 加1后的值
-        Long increment =  counter.getAndIncrement(); // 加1前的值
+        Long increment =  counter.incrementAndGet(); // 加1后的值
         //初始设置过期时间
-        boolean result = (null == increment || increment.longValue() == 0) && liveTime > 0;
+        boolean result = (null == increment || increment.longValue() == 1) && liveTime > 0;
         if (result) {
             counter.set(1);
             counter.expire(liveTime, TimeUnit.SECONDS);
