@@ -323,6 +323,7 @@ CREATE TABLE `oh_work_order`  (
   `geo_x` decimal(12, 9) NULL DEFAULT NULL COMMENT '经度',
   `geo_y` decimal(12, 9) NULL DEFAULT NULL COMMENT '纬度',
   `category` int NULL DEFAULT NULL COMMENT '类别',
+  `extend_json` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'json扩展字段',
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
 * 工单表
@@ -58,6 +59,8 @@ public class WorkOrderVO implements Serializable {
 
 	@Schema(description = "备注")
 	private String note;
+
+	private Map<String, Object> extendJsonMap;
 
 	public Long getId() {
 		return id;
@@ -161,5 +164,13 @@ public class WorkOrderVO implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public Map<String, Object> getExtendJsonMap() {
+		return extendJsonMap;
+	}
+
+	public void setExtendJsonMap(Map<String, Object> extendJsonMap) {
+		this.extendJsonMap = extendJsonMap;
 	}
 }

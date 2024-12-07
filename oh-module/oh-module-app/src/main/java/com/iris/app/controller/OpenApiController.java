@@ -96,13 +96,16 @@ public class OpenApiController {
 
         System.out.println("开始请求");
 
-        for(int i = 0; i< 1000; i++){
+        for(int i = 0; i< 10; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", LocalDateTime.now());
             data.put("reportTime", LocalDateTime.now(ZoneId.of("+8")));
             data.put("incidentTime", LocalDateTime.now(ZoneId.systemDefault()));
             //data.put("orderCode", IdUtil.simpleUUID());
             data.put("note", "备注信息" + System.currentTimeMillis());
+            Map<String,String> map = new HashMap<>();
+            map.put("key1","扩展参数");
+            data.put("extendJsonMap", map);
             String str = HttpUtil.createPost(url).addHeaders(head).body(JsonUtils.toJsonString(data)).execute().body();
             System.out.println(str);
         }

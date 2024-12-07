@@ -3,6 +3,7 @@ package com.iris.flow.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.core.cache.RedisCache;
+import com.iris.core.utils.IrisTools;
 import com.iris.core.utils.JsonUtils;
 import com.iris.flow.convert.WorkOrderConvert;
 import com.iris.flow.entity.WorkOrderEntity;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +71,9 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
         WorkOrderEntity entity = WorkOrderConvert.INSTANCE.convert(vo);
         if(entity.getOrderCode() == null || entity.getOrderCode().isEmpty()){
             entity.setOrderCode(redisCache.getDayIncrementCode("","oh:order", 5));
+        }
+        if(vo.getExtendJsonMap() != null){
+            entity.setExtendJson(JsonUtils.toJsonString(vo.getExtendJsonMap()));
         }
         workOrderMapper.saveOrder(entity);
         vo.setId(entity.getId());
@@ -117,14 +122,23 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
      * @return map
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result<List<TaskRecordVO>> handle(MetaEntity data) throws ServerException {
 //        JsonUtils.parseObject()
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
-        this.save(workOrderVO);
-
+        if(workOrderVO.getId() == null || workOrderVO.getId() == 0L){
+            workOrderVO.setId(IrisTools.snowFlakeId());
+        }
         // 启动流程
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
-
+        if(list != null && !list.isEmpty()){
+            List<String> flowInfo = new ArrayList<>(list.size());
+            list.forEach(item ->{
+                flowInfo.add(item.getProcInstId());
+            });
+            workOrderVO.getExtendJsonMap().put("procInstIds", flowInfo);
+        }
+        this.save(workOrderVO);
         // 模拟业务处理异常
 //        throw new ServerException("模拟异常！！！");
         return Result.ok(list);

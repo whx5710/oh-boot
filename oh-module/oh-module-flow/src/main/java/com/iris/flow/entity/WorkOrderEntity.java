@@ -76,6 +76,11 @@ public class WorkOrderEntity extends BaseEntity {
 	private Integer category;
 
 	/**
+	 * json扩展字段
+	 */
+	private String extendJson;
+
+	/**
 	* 备注
 	*/
 	private String note;
@@ -174,5 +179,13 @@ public class WorkOrderEntity extends BaseEntity {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getExtendJson() {
+		return extendJson;
+	}
+
+	public void setExtendJson(String extendJson) {
+		this.extendJson = extendJson;
 	}
 }

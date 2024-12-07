@@ -2,6 +2,7 @@ package com.iris.flow.convert;
 
 import com.iris.flow.entity.WorkOrderEntity;
 import com.iris.flow.vo.WorkOrderVO;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,6 +15,7 @@ import java.util.List;
 * @since 1.0.0 2024-02-23
 */
 @Mapper
+@DecoratedWith(WorkOrderExtendConvert.class)
 public interface WorkOrderConvert {
     WorkOrderConvert INSTANCE = Mappers.getMapper(WorkOrderConvert.class);
 
