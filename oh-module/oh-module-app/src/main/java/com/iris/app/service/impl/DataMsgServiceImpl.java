@@ -2,14 +2,11 @@ package com.iris.app.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.Constant;
 import com.iris.core.utils.*;
 import com.iris.framework.common.properties.OpenApiProperties;
-import com.iris.framework.common.properties.SysDataSourceProperties;
 import com.iris.framework.common.utils.ServiceFactory;
 import com.iris.framework.datasource.config.auto.DynamicDataSource;
 import com.iris.framework.entity.api.DataAppDTO;
@@ -58,17 +55,14 @@ public class DataMsgServiceImpl implements DataMsgService {
     private final DynamicDataSource dynamicDataSource;
     private final OpenApiProperties openApiProperties;
 
-    private final SysDataSourceProperties sysDataSourceProperties;
     private final KafkaTemplate<String, String> kafkaTemplate;
     public DataMsgServiceImpl(RedisCache redisCache, DataMessageMapper dataMessageMapper,
                               DynamicDataSource dynamicDataSource, OpenApiProperties openApiProperties,
-                              SysDataSourceProperties sysDataSourceProperties,
                               KafkaTemplate<String, String> kafkaTemplate){
         this.redisCache = redisCache;
         this.dataMessageMapper = dataMessageMapper;
         this.dynamicDataSource = dynamicDataSource;
         this.openApiProperties = openApiProperties;
-        this.sysDataSourceProperties = sysDataSourceProperties;
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -79,10 +73,8 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @Override
     public PageResult<DataMsgVO> page(DataMsgQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<DataMsgVO> list = dataMessageMapper.getList(query);
-        PageInfo<DataMsgVO> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());
+        return new PageResult<>(list, query.getTotal());
     }
 
     /**

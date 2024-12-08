@@ -3,6 +3,7 @@ package com.iris.app.mapper;
 import com.iris.app.entity.DataMsgEntity;
 import com.iris.app.query.DataMsgQuery;
 import com.iris.app.vo.DataMsgVO;
+import com.iris.framework.datasource.annotations.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Mapper
 public interface DataMessageMapper {
 
+    @Page // 分页注解
     List<DataMsgVO> getList(DataMsgQuery query);
 
     int insertDataMsg(DataMsgEntity param);
