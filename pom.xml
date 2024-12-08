@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.iris</groupId>
@@ -43,7 +43,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!--springboot版本-->
-		<spring-boot-dependencies.version>3.3.4</spring-boot-dependencies.version>
+		<spring-boot-dependencies.version>3.4.0</spring-boot-dependencies.version>
+		<!-- spring security -->
+		<spring.security>6.4.1</spring.security>
 		<!-- mybatis 版本 -->
 		<mybatis.version>3.0.3</mybatis.version>
 		<!--分页插件-->
@@ -166,7 +168,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>6.3.3</version>
+			<version>${spring.security}</version>
 		</dependency>
 		<!--bean映射-->
 		<dependency>
