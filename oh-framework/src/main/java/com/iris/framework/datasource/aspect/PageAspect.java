@@ -20,10 +20,8 @@ import org.springframework.util.ObjectUtils;
  * 2024年12月08日 10:34
  **/
 @Configuration
-//标注当前类是Aop切面类
-@Aspect
-//开启Aop增强
-@EnableAspectJAutoProxy
+@Aspect //标注当前类是Aop切面类
+@EnableAspectJAutoProxy //开启Aop增强
 public class PageAspect {
 
     private final static Logger log = LoggerFactory.getLogger(PageAspect.class);
@@ -36,7 +34,7 @@ public class PageAspect {
     }
 
     /**
-     * 环绕增强
+     * 环绕增强，进行分页查询，并将数据总数赋值给total
      */
     @Around("annotation()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -62,10 +60,7 @@ public class PageAspect {
             result = proceedingJoinPoint.proceed(args);
             if(pageFilter != null){
                 //获取并封装分页后的参数
-                pageFilter.setPage(page.getPageNum());
-                pageFilter.setLimit(page.getPageSize());
                 pageFilter.setTotal(page.getTotal());
-                //log.debug("封装分页");
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);

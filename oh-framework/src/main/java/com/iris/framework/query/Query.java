@@ -1,21 +1,18 @@
 package com.iris.framework.query;
 
 /**
- * 查询公共参数
+ * 查询参数
  *
  * @author 王小费 whx5710@qq.com
  * 
  */
 public class Query extends PageFilter<Query>{
 
-    //@Schema(description = "排序字段")
-    String order;
+    String order; // 排序字段
 
-    //@Schema(description = "是否升序")
-    boolean asc;
+    boolean asc; // 是否升序
 
-    //@Schema(description = "过滤SQL")
-    private String sqlFilter;
+    private String sqlFilter; // 过滤SQL
 
     public String getOrder() {
         return order;
