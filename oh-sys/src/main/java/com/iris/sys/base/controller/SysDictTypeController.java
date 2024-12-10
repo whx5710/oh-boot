@@ -1,8 +1,11 @@
 package com.iris.sys.base.controller;
 
-import com.iris.sys.base.query.SysDictTypeQuery;
-import com.iris.sys.base.vo.SysDictTypeVO;
-import com.iris.sys.base.vo.SysDictVO;
+import com.iris.support.convert.SysDictTypeConvert;
+import com.iris.support.entity.SysDictTypeEntity;
+import com.iris.support.query.SysDictTypeQuery;
+import com.iris.support.service.SysDictTypeService;
+import com.iris.support.vo.SysDictTypeVO;
+import com.iris.support.vo.SysDictVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -10,9 +13,6 @@ import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
 import com.iris.common.operatelog.annotations.OperateLog;
 import com.iris.common.operatelog.enums.OperateTypeEnum;
-import com.iris.sys.base.convert.SysDictTypeConvert;
-import com.iris.sys.base.entity.SysDictTypeEntity;
-import com.iris.sys.base.service.SysDictTypeService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

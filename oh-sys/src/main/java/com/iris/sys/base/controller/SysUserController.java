@@ -2,10 +2,10 @@ package com.iris.sys.base.controller;
 
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
-import com.iris.sys.base.query.SysUserQuery;
-import com.iris.sys.base.vo.SysUserPasswordVO;
-import com.iris.sys.base.vo.SysUserVO;
-import com.iris.sys.base.service.SysUserService;
+import com.iris.support.query.SysUserQuery;
+import com.iris.support.service.SysUserService;
+import com.iris.support.vo.SysUserPasswordVO;
+import com.iris.support.vo.SysUserVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -1,9 +1,9 @@
 package com.iris.sys.security.service;
 
 import com.iris.framework.security.mobile.MobileUserDetailsService;
+import com.iris.support.entity.SysUserEntity;
+import com.iris.support.mapper.SysUserMapper;
 import com.iris.sys.base.service.SysUserDetailsService;
-import com.iris.sys.base.mapper.SysUserMapper;
-import com.iris.sys.base.entity.SysUserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

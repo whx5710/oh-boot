@@ -29,7 +29,7 @@
 	<modules>
 		<module>oh-sys</module>
 		<module>oh-module</module>
-
+		<module>oh-support</module>
 		<module>oh-core</module>
 		<module>oh-common</module>
 		<module>oh-framework</module>

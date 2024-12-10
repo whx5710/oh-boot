@@ -2,10 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.core.cache.RedisCache;
-import com.iris.core.entity.BaseUserEntity;
 import com.iris.core.utils.DateUtils;
-import com.iris.core.utils.JsonUtils;
 import com.iris.flow.convert.TaskRecordConvert;
 import com.iris.flow.entity.TaskRecordEntity;
 import com.iris.flow.mapper.TaskRecordMapper;
@@ -14,6 +11,8 @@ import com.iris.flow.service.TaskRecordService;
 import com.iris.flow.vo.TaskRecordVO;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.PageResult;
+import com.iris.support.entity.SysUserEntity;
+import com.iris.support.service.SysUserService;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.springframework.stereotype.Service;
@@ -36,15 +35,15 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     private final TaskRecordMapper taskRecordMapper;
 
-    private final RedisCache redisCache;
 
-    private String userCacheKey = "system:user:";
+    private final SysUserService sysUserService;
+
 
     public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper,
-                                 RedisCache redisCache){
+                                 SysUserService sysUserService){
         this.historyService = historyService;
         this.taskRecordMapper = taskRecordMapper;
-        this.redisCache = redisCache;
+        this.sysUserService = sysUserService;
     }
 
     @Override
@@ -127,11 +126,16 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 // 签收人
                 taskRecord.setAssignee(his.getAssignee());
                 if(his.getAssignee() != null){
-                    String key = userCacheKey + his.getAssignee();
-                    if(redisCache.hasKey(key)){
-                        BaseUserEntity baseUser = JsonUtils.convertValue(redisCache.get(key), BaseUserEntity.class);
-                        taskRecord.setAssigneeName(baseUser.getRealName());
-                    }else{
+                    String assignee = his.getAssignee();
+                    try{
+                        Long userId = Long.valueOf(assignee);
+                        SysUserEntity sysUserEntity = sysUserService.getUser(userId);
+                        if(sysUserEntity != null){
+                            taskRecord.setAssigneeName(sysUserEntity.getUsername());
+                        }else{
+                            taskRecord.setAssigneeName(his.getAssignee());
+                        }
+                    }catch (Exception e){
                         taskRecord.setAssigneeName(his.getAssignee());
                     }
                 }

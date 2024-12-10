@@ -6,9 +6,9 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
+import com.iris.support.service.SysParamsService;
 import com.iris.sys.base.enums.SysParamsEnum;
 import com.iris.sys.base.vo.SysCaptchaVO;
-import com.iris.sys.base.service.SysParamsService;
 import com.iris.sys.base.service.SysCaptchaService;
 import org.springframework.stereotype.Service;
 

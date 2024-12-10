@@ -32,6 +32,11 @@
             <groupId>com.iris</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-support</artifactId>
+            <version>1.0.0.20241210</version>
+        </dependency>
     </dependencies>
 
 </project>

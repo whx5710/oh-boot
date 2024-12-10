@@ -1,6 +1,6 @@
 package com.iris.sys.base.service;
 
-import com.iris.sys.base.entity.SysUserEntity;
+import com.iris.support.entity.SysUserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface SysUserDetailsService {
