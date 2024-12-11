@@ -7,8 +7,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component;
  * @author 王小费 whx5710@qq.com
  */
 @Aspect
-@Component
+@Configuration
+@EnableAspectJAutoProxy
 public class DsAspect {
     private final static Logger log = LoggerFactory.getLogger(DsAspect.class);
 
@@ -26,12 +28,30 @@ public class DsAspect {
         this.environment = environment;
     }
 
-    //环绕通知-类和方法
-    @Around("@within(ds),@annotation(ds)")
-    public Object around(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable{
+    //环绕通知-方法
+    @Around("@annotation(ds)")
+    public Object aroundMethod(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable{
+        return proceed(joinPoint, ds);
+    }
+
+    //环绕通知-类
+    @Around("@within(ds)")
+    public Object aroundType(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable{
+        return proceed(joinPoint, ds);
+    }
+
+
+    /**
+     * 切换数据源
+     * @param joinPoint
+     * @param ds
+     * @return
+     * @throws Throwable
+     */
+    private Object proceed(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable {
         String key = ds.value().trim();
         // 支持动态参数（可配置）
-        if(key.startsWith("$")){
+        if(key.startsWith("${")){
             key = environment.resolvePlaceholders(key);
         }
         log.debug("切换数据源[{}]", key);
