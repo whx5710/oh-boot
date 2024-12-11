@@ -1,5 +1,7 @@
 package com.iris.support.mapper;
 
+import com.iris.core.constant.Constant;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysParamsEntity;
 import com.iris.support.query.SysParamsQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,6 +16,7 @@ import java.util.List;
  * 
  */
 @Mapper
+@Ds(Constant.DYNAMIC_SYS_DB)
 public interface SysParamsMapper {
 
     default boolean isExist(String paramKey) {

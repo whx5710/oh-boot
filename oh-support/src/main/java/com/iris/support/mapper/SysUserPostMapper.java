@@ -1,5 +1,7 @@
 package com.iris.support.mapper;
 
+import com.iris.core.constant.Constant;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysUserPostEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,6 +14,7 @@ import java.util.List;
 * @author 王小费 whx5710@qq.com
 */
 @Mapper
+@Ds(Constant.DYNAMIC_SYS_DB)
 public interface SysUserPostMapper {
 
     /**

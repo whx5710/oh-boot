@@ -1,5 +1,7 @@
 package com.iris.support.mapper;
 
+import com.iris.core.constant.Constant;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysDictDataEntity;
 import com.iris.support.query.SysDictDataQuery;
 import com.iris.support.vo.SysDictVO;
@@ -16,6 +18,7 @@ import java.util.List;
  *
  */
 @Mapper
+@Ds(Constant.DYNAMIC_SYS_DB)
 public interface SysDictDataMapper {
 
     @Select("${sql}")

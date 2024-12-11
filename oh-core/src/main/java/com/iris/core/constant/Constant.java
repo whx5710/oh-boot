@@ -81,7 +81,10 @@ public interface Constant {
      * 系统内部数据源
      */
     String SYS_DB = "sysDb";
-
+    /**
+     * 系统内部数据源（动态配置）
+     */
+    String DYNAMIC_SYS_DB = "${spring.datasource.sys-data-source.sys-default:"+ Constant.SYS_DB +"}";
 
     /**
      * 客户端ID

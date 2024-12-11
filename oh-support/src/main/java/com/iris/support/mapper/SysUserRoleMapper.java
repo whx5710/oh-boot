@@ -1,5 +1,7 @@
 package com.iris.support.mapper;
 
+import com.iris.core.constant.Constant;
+import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,6 +15,7 @@ import java.util.List;
  *
  */
 @Mapper
+@Ds(Constant.DYNAMIC_SYS_DB)
 public interface SysUserRoleMapper {
 
     /**

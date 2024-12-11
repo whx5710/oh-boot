@@ -15,6 +15,8 @@ import com.iris.support.entity.SysUserEntity;
 import com.iris.support.service.SysUserService;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +32,8 @@ import java.util.List;
  */
 @Service
 public class TaskRecordServiceImpl implements TaskRecordService {
+
+    private final static Logger log = LoggerFactory.getLogger(TaskRecordServiceImpl.class);
 
     private final HistoryService historyService;
 
@@ -131,11 +135,12 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                         Long userId = Long.valueOf(assignee);
                         SysUserEntity sysUserEntity = sysUserService.getUser(userId);
                         if(sysUserEntity != null){
-                            taskRecord.setAssigneeName(sysUserEntity.getUsername());
+                            taskRecord.setAssigneeName(sysUserEntity.getRealName());
                         }else{
                             taskRecord.setAssigneeName(his.getAssignee());
                         }
                     }catch (Exception e){
+                        log.error("获取用户信息错误！{}", e.getMessage());
                         taskRecord.setAssigneeName(his.getAssignee());
                     }
                 }
