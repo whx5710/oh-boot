@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 
@@ -19,10 +20,20 @@ import org.springframework.stereotype.Component;
 public class DsAspect {
     private final static Logger log = LoggerFactory.getLogger(DsAspect.class);
 
+    private Environment environment;
+
+    public DsAspect(Environment environment){
+        this.environment = environment;
+    }
+
     //环绕通知-类和方法
     @Around("@within(ds),@annotation(ds)")
     public Object around(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable{
-        String key = ds.value();
+        String key = ds.value().trim();
+        // 支持动态参数（可配置）
+        if(key.startsWith("$")){
+            key = environment.resolvePlaceholders(key);
+        }
         log.debug("切换数据源[{}]", key);
         DynamicDataSourceHolder.setDynamicDataSourceKey(key);
         try {
