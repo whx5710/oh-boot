@@ -120,7 +120,7 @@ public class TaskHandlerService {
      * 完成任务前，先保存前后任务信息
      * @param taskVO
      */
-    @Transactional(rollbackFor = Exception.class)
+    //@Transactional(rollbackFor = Exception.class)
     public List<TaskRecordVO> completeTask(TaskVO taskVO){
         AssertUtils.isBlank(taskVO.getTaskId(), "【参数异常】任务ID");
         AssertUtils.isBlank(taskVO.getProInstId(), "【参数异常】流程实例ID");

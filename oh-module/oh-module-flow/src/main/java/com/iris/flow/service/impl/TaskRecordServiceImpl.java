@@ -136,12 +136,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                         SysUserEntity sysUserEntity = sysUserService.getUser(userId);
                         if(sysUserEntity != null){
                             taskRecord.setAssigneeName(sysUserEntity.getRealName());
-                        }else{
-                            taskRecord.setAssigneeName(his.getAssignee());
                         }
                     }catch (Exception e){
                         log.error("获取用户信息错误！{}", e.getMessage());
-                        taskRecord.setAssigneeName(his.getAssignee());
                     }
                 }
                 taskRecord.setStartTime(DateUtils.dateToLocalDate(his.getStartTime()));
