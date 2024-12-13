@@ -10,6 +10,7 @@ import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.CommonEnum;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.DateUtils;
+import com.iris.core.utils.JsonUtils;
 import com.iris.core.utils.PageResult;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.support.mapper.SysUserMapper;
@@ -28,8 +29,6 @@ import com.iris.support.entity.SysUserEntity;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -241,6 +240,34 @@ public class SysUserServiceImpl  implements SysUserService {
     public SysUserEntity getUser(Long userId) {
         AssertUtils.isNull(userId, "用户ID");
         return sysUserMapper.getById(userId);
+    }
+
+    /**
+     * 根据用户ID获取用户(优先读取缓存)
+     * @param userId 用户ID
+     * @param cache 为true则优先读取缓存
+     * @return 用户信息
+     */
+    @Override
+    public SysUserEntity getUser(Long userId, Boolean cache) {
+        AssertUtils.isNull(userId, "用户ID");
+        if(cache == null){
+            cache = false;
+        }
+        String key = RedisKeys.getUserCacheKey(userId);
+        if(!redisCache.hasKey(key)){
+            SysUserEntity user = sysUserMapper.getById(userId);
+            if(user != null && user.getId() != null){
+                redisCache.set(key, user, 7200);// 缓存2小时
+            }
+            return user;
+        }else{
+            if(cache){
+                return JsonUtils.convertValue(redisCache.get(key), SysUserEntity.class);
+            }else{
+                return sysUserMapper.getById(userId);
+            }
+        }
     }
 
     @Override

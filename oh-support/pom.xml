@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>oh-support</artifactId>
-    <description>系统core框架</description>
+    <description>组织机构框架</description>
     <!-- 框架版本 -->
     <version>1.0.0.20241210</version>
 

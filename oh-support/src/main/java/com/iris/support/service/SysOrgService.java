@@ -32,4 +32,12 @@ public interface SysOrgService {
 	List<Long> getSubOrgIdList(Long id);
 
 	SysOrgEntity getById(Long id);
+
+	/**
+	 * 根据ID获取机构信息
+	 * @param id 用户ID
+	 * @param cache 为true则优先读取缓存
+	 * @return 机构信息
+	 */
+	SysOrgEntity getById(Long id, Boolean cache);
 }

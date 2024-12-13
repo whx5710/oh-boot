@@ -65,7 +65,6 @@ public class SysUserEntity extends BaseEntity {
     /**
      * 机构名称
      */
-//    @TableField(exist=false)
     private String orgName;
 
     public String getUsername() {

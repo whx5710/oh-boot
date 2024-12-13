@@ -39,7 +39,7 @@
 	</select>
 
 	<select id="getById" resultType="com.iris.support.entity.SysOrgEntity">
-		select * from sys_org where id = #{id}
+		select a.*,b.name parentName from sys_org a left join sys_org b on a.parent_id = b.id where a.id = #{id}
 	</select>
 
 </mapper>

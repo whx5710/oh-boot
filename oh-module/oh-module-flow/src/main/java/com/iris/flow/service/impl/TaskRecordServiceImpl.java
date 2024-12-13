@@ -133,7 +133,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     String assignee = his.getAssignee();
                     try{
                         Long userId = Long.valueOf(assignee);
-                        SysUserEntity sysUserEntity = sysUserService.getUser(userId);
+                        SysUserEntity sysUserEntity = sysUserService.getUser(userId, true);
                         if(sysUserEntity != null){
                             taskRecord.setAssigneeName(sysUserEntity.getRealName());
                         }

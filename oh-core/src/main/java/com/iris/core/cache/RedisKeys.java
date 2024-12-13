@@ -8,18 +8,21 @@ package com.iris.core.cache;
  */
 public class RedisKeys {
 
+    // 前缀
+    public static final String PREFIX = "sys:";
+
     /**
      * 验证码Key
      */
     public static String getCaptchaKey(String key) {
-        return "sys:captcha:" + key;
+        return PREFIX + "captcha:" + key;
     }
 
     /**
      * accessToken Key
      */
     public static String getAccessTokenKey(String accessToken) {
-        return "sys:access:" + accessToken;
+        return PREFIX + "access:" + accessToken;
     }
 
     /**
@@ -28,11 +31,11 @@ public class RedisKeys {
      * @return
      */
     public static String getAccessRefreshTokenKey(String refreshToken) {
-        return "sys:accessRefresh:" + refreshToken;
+        return PREFIX + "accessRefresh:" + refreshToken;
     }
 
     public static String getLogKey() {
-        return "sys:log";
+        return PREFIX + "log";
     }
 
     /**
@@ -41,7 +44,7 @@ public class RedisKeys {
      * @return k
      */
     public static String getClientKey(String clientId) {
-        return "sys:openapi:" + clientId;
+        return PREFIX + "openapi:" + clientId;
     }
 
     /**
@@ -50,7 +53,7 @@ public class RedisKeys {
      * @return key
      */
     public static String getAuthCountKey(String loginName){
-        return "sys:account:authCount:" + loginName;
+        return PREFIX + "account:authCount:" + loginName;
     }
 
     /**
@@ -58,7 +61,24 @@ public class RedisKeys {
      * @return sys:msg:log
      */
     public static String getDataMsgKey() {
-        return "sys:msg:log";
+        return PREFIX + "msg:log";
     }
 
+    /**
+     * 用户信息key
+     * @param userId 用户ID
+     * @return
+     */
+    public static String getUserCacheKey(Long userId){
+        return PREFIX + "user:info:" + userId;
+    }
+
+    /**
+     * 机构key
+     * @param orgId
+     * @return
+     */
+    public static String getOrgCacheKey(Long orgId){
+        return PREFIX + "org:info:" + orgId;
+    }
 }

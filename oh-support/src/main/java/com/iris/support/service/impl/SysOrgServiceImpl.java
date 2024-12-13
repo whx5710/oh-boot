@@ -2,6 +2,10 @@ package com.iris.support.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iris.core.cache.RedisCache;
+import com.iris.core.cache.RedisKeys;
+import com.iris.core.utils.AssertUtils;
+import com.iris.core.utils.JsonUtils;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.TreeUtils;
 import com.iris.support.mapper.SysOrgMapper;
@@ -28,9 +32,13 @@ public class SysOrgServiceImpl implements SysOrgService {
 	private final SysUserMapper sysUserMapper;
 	private final SysOrgMapper sysOrgMapper;
 
-	public SysOrgServiceImpl(SysUserMapper sysUserMapper, SysOrgMapper sysOrgMapper) {
+	private final RedisCache redisCache;
+
+	public SysOrgServiceImpl(SysUserMapper sysUserMapper, SysOrgMapper sysOrgMapper,
+							 RedisCache redisCache) {
 		this.sysUserMapper = sysUserMapper;
 		this.sysOrgMapper = sysOrgMapper;
+		this.redisCache = redisCache;
 	}
 
 	@Override
@@ -120,7 +128,36 @@ public class SysOrgServiceImpl implements SysOrgService {
 
 	@Override
 	public SysOrgEntity getById(Long id) {
+		AssertUtils.isNull(id, "机构ID");
 		return sysOrgMapper.getById(id);
+	}
+
+	/**
+	 * 根据ID获取机构信息
+	 * @param id 用户ID
+	 * @param cache 为true则优先读取缓存
+	 * @return 机构信息
+	 */
+	@Override
+	public SysOrgEntity getById(Long id, Boolean cache) {
+		AssertUtils.isNull(id, "机构ID");
+		if(cache == null){
+			cache = false;
+		}
+		String key = RedisKeys.getOrgCacheKey(id);
+		if(!redisCache.hasKey(key)){
+			SysOrgEntity org = sysOrgMapper.getById(id);
+			if(org != null && org.getId() != null){
+				redisCache.set(key, org, 7200);// 缓存2小时
+			}
+			return org;
+		}else{
+			if(cache){
+				return JsonUtils.convertValue(redisCache.get(key), SysOrgEntity.class);
+			}else{
+				return sysOrgMapper.getById(id);
+			}
+		}
 	}
 
 	private void getTree(Long id, List<SysOrgEntity> orgList, List<Long> subIdList) {
