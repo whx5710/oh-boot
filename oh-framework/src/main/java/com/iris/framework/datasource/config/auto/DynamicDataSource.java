@@ -39,6 +39,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return primaryDb;
     }
 
+    /**
+     * 指定主数据源
+     * @param primaryDb
+     */
     public void setPrimaryDb(String primaryDb) {
         this.primaryDb = primaryDb;
     }

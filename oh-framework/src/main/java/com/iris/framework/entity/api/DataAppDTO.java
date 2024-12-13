@@ -1,6 +1,8 @@
 package com.iris.framework.entity.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ public class DataAppDTO {
 	/**
 	 * id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 	//@Schema(description = "客户端名称")
 	private String name;
@@ -38,6 +41,7 @@ public class DataAppDTO {
 	/**
 	 * 创建者
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long  creator;
 
 	/**

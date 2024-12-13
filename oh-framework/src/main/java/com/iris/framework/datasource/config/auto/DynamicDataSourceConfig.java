@@ -2,6 +2,7 @@ package com.iris.framework.datasource.config.auto;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.iris.core.exception.ServerException;
+import com.iris.core.utils.JsonUtils;
 import com.iris.framework.datasource.config.DataSourceProperty;
 import com.iris.framework.common.properties.DynamicDataSourceProperties;
 import org.slf4j.Logger;
@@ -44,6 +45,8 @@ public class DynamicDataSourceConfig {
         DataSource masterDataSource = null;
         // 主数据源key
         String primary = dynamicDataSourceProperties.getSysDataSource().getPrimary();
+
+        // 生成数据库连接
         for(Map.Entry<String,DataSourceProperty> item: map.entrySet()){
             DataSourceProperty dataSourceProperty = item.getValue();
             String key = item.getKey();
@@ -60,49 +63,8 @@ public class DynamicDataSourceConfig {
                 masterDataSource = druidDs;
             }
         }
-        //设置动态数据源
-        DynamicDataSource dynamicDataSource = new DynamicDataSource();
-        String master = null;
-        String sysDefaultDb = dynamicDataSourceProperties.getSysDataSource().getSysDefault();
-        if(primary == null || primary.isEmpty()){
-            if(masterDataSource == null){
-                if(dataSourceMap.containsKey(sysDefaultDb)){
-                    master = sysDefaultDb;
-                    dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(sysDefaultDb));
-                }else{
-                    // 优先系统配置的主数据源，其次是 masterDb，再次是 sysDb
-                    log.error("请配置连接主库！primary > masterDb > sysDb");
-                }
-            }else {
-                master = primary;
-                dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
-            }
-        }else{
-            master = primary;
-            if(dataSourceMap.containsKey(primary)){
-                dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(primary));
-            }else{
-                log.error("未找到对应的主数据源 [{}]，请检查", master);
-                if(dataSourceMap.containsKey(sysDefaultDb)){
-                    dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(sysDefaultDb));
-                    log.warn("未找到配置的主数据源 [{}]，已切换到 [{}] 数据源", master, sysDefaultDb);
-                    master = sysDefaultDb;
-                }
-            }
-        }
-        dynamicDataSource.setTargetDataSources(dataSourceMap);
-        // 将数据源信息备份在 DataSources 中
-        dynamicDataSource.setDynamicDataSources(dataSourceMap);
-        if(dataSourceMap.containsKey(master)){
-            log.info("动态数据源初始完成，主数据源 [{}]", master);
-            if(!dataSourceMap.containsKey(sysDefaultDb)){
-                log.warn("无系统数据源 [{}]", sysDefaultDb);
-            }
-            dynamicDataSource.setPrimaryDb(master);
-        }else{
-            log.error("动态数据源初始完成，无主数据源，请检查");
-        }
-        return dynamicDataSource;
+        // 组装数据源
+        return buildDs(dataSourceMap, masterDataSource, primary);
     }
 
     /**
@@ -145,5 +107,58 @@ public class DynamicDataSourceConfig {
                 connection.close();
             }
         }
+    }
+
+    /**
+     * 组装数据源
+     * @param dataSourceMap 数据源map
+     * @param masterDataSource 主数据源
+     * @param primary 主数据源名
+     * @return
+     */
+    private DynamicDataSource buildDs(Map<Object, Object> dataSourceMap, DataSource masterDataSource, String primary){
+        //设置动态数据源
+        DynamicDataSource dynamicDataSource = new DynamicDataSource();
+        String master = null;
+        String sysDefaultDb = dynamicDataSourceProperties.getSysDataSource().getSysDefault();
+        if(primary == null || primary.isEmpty()){
+            if(masterDataSource == null){
+                if(dataSourceMap.containsKey(sysDefaultDb)){
+                    master = sysDefaultDb;
+                    dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(sysDefaultDb));
+                }else{
+                    // 优先系统配置的主数据源，其次是 masterDb，再次是 sysDb
+                    log.error("请配置连接主库！primary > masterDb > sysDb");
+                }
+            }else {
+                master = primary;
+                dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
+            }
+        }else{
+            master = primary;
+            if(dataSourceMap.containsKey(primary)){
+                dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(primary));
+            }else{
+                log.error("未找到对应的主数据源 [{}]，请检查", master);
+                if(dataSourceMap.containsKey(sysDefaultDb)){
+                    dynamicDataSource.setDefaultTargetDataSource(dataSourceMap.get(sysDefaultDb));
+                    log.warn("未找到配置的主数据源 [{}]，已切换到 [{}] 数据源", master, sysDefaultDb);
+                    master = sysDefaultDb;
+                }
+            }
+        }
+        dynamicDataSource.setTargetDataSources(dataSourceMap);
+        // 将数据源信息备份在 DataSources 中
+        dynamicDataSource.setDynamicDataSources(dataSourceMap);
+        if(dataSourceMap.containsKey(master)){
+            log.info("动态数据源{}初始完成，主数据源 [{}]",dataSourceMap.keySet(), master);
+            if(!dataSourceMap.containsKey(sysDefaultDb)){
+                log.warn("无系统数据源 [{}]", sysDefaultDb);
+            }
+            dynamicDataSource.setPrimaryDb(master);
+        }else{
+            log.error("动态数据源初始完成，无主数据源，请检查");
+        }
+        return dynamicDataSource;
     }
 }

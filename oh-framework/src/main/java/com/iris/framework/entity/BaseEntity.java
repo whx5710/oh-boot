@@ -1,6 +1,8 @@
 package com.iris.framework.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.iris.core.utils.DateUtils;
 import com.iris.core.entity.IDEntity;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +18,7 @@ public abstract class BaseEntity extends IDEntity{
     /**
      * 创建者
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long  creator;
 
     /**
@@ -28,6 +31,7 @@ public abstract class BaseEntity extends IDEntity{
     /**
      * 更新者
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long  updater;
 
     /**
