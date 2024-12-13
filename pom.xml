@@ -58,8 +58,6 @@
 		<hutool.version>5.8.25</hutool.version>
 		<!-- 系统资源监控 -->
 		<oshi.version>6.4.0</oshi.version>
-		<!-- bean 拷贝 -->
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<!-- camunda 工作流相关 -->
 		<camunda.version>7.20.0</camunda.version>
 		<!-- swagger（xiaoymin版本）生成在线文档 -->
@@ -113,17 +111,6 @@
 				<artifactId>oshi-core</artifactId>
 				<version>${oshi.version}</version>
 			</dependency>
-			<!--bean映射-->
-			<dependency>
-				<groupId>org.mapstruct</groupId>
-				<artifactId>mapstruct</artifactId>
-				<version>${mapstruct.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mapstruct</groupId>
-				<artifactId>mapstruct-processor</artifactId>
-				<version>${mapstruct.version}</version>
-			</dependency>
 			<!-- 工作流 -->
 			<dependency>
 				<groupId>org.camunda.bpm.springboot</groupId>
@@ -169,15 +156,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring.security}</version>
-		</dependency>
-		<!--bean映射-->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
 		</dependency>
 	</dependencies>
 
