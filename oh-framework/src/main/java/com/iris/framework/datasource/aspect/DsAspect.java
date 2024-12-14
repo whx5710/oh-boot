@@ -22,7 +22,7 @@ import org.springframework.core.env.Environment;
 public class DsAspect {
     private final static Logger log = LoggerFactory.getLogger(DsAspect.class);
 
-    private Environment environment;
+    private final Environment environment;
 
     public DsAspect(Environment environment){
         this.environment = environment;

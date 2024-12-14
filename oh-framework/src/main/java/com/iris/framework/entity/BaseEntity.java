@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.iris.core.utils.DateUtils;
 import com.iris.core.entity.IDEntity;
+import com.iris.framework.datasource.annotations.TableColumn;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public abstract class BaseEntity extends IDEntity{
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    @TableColumn(columnName = "create_time")
     private LocalDateTime createTime;
 
     /**
@@ -39,11 +41,13 @@ public abstract class BaseEntity extends IDEntity{
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    @TableColumn(columnName = "update_time")
     private LocalDateTime updateTime;
 
     /**
      * 数据状态标记，0删除1有效
      */
+    @TableColumn(columnName = "db_status")
     private Integer dbStatus = 1;
 
     public Long getCreator() {
