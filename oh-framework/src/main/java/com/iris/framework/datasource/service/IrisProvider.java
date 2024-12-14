@@ -1,8 +1,8 @@
 package com.iris.framework.datasource.service;
 
+import com.iris.core.exception.ServerException;
 import com.iris.framework.datasource.annotations.TableColumn;
 import com.iris.framework.datasource.annotations.TableName;
-import org.apache.ibatis.jdbc.SQL;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 通用provider
+ * 通用provider,拼接增删查改，通过 @InsertProvider、@DeleteProvider 等注解操作，
+ * 减少sql编写
+ * @author 王小费 whx5710@qq.com
  */
 public class IrisProvider {
 
@@ -24,8 +26,10 @@ public class IrisProvider {
         Class<?> clazz = entity.getClass();
         // 获取表名
         TableName apoTable = clazz.getAnnotation(TableName.class);
+        if(apoTable == null){
+            throw new ServerException("实体类没指定表名，执行失败！");
+        }
         String tableName = apoTable.value();
-        System.out.println(tableName);
         List<Field> fields = new ArrayList<>();
         while (clazz != null){
             fields.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
@@ -33,7 +37,6 @@ public class IrisProvider {
         }
         String colStr = "";
         String valueStr = "";
-        SQL sql = new SQL();
         for(int i = 0; i < fields.size(); i++){
             Field field = fields.get(i);
             if(field.isAnnotationPresent(TableColumn.class)){ // 判断是否有该注解

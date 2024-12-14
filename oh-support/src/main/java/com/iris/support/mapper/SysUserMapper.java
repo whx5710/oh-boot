@@ -2,9 +2,12 @@ package com.iris.support.mapper;
 
 import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.annotations.Ds;
+import com.iris.framework.datasource.mapper.BaseMapper;
+import com.iris.framework.datasource.service.IrisProvider;
 import com.iris.support.entity.SysUserEntity;
 import com.iris.support.query.SysRoleUserQuery;
 import com.iris.support.query.SysUserQuery;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,7 +21,7 @@ import java.util.List;
  */
 @Mapper
 @Ds(Constant.DYNAMIC_SYS_DB)
-public interface SysUserMapper {
+public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 
 	List<SysUserEntity> getList(@Param("params") SysUserQuery params);
 
@@ -31,6 +34,10 @@ public interface SysUserMapper {
 	SysUserEntity getByMobile(String mobile);
 	// 保存用户
 	int insertUser(SysUserEntity sysUserEntity);
+
+	// 动态拼接SQL
+	@InsertProvider(method = "insertEntity", type = IrisProvider.class)
+	int insert(SysUserEntity entity);
 
 	boolean updateById(SysUserEntity sysUserEntity);
 

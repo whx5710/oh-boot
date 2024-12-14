@@ -1,5 +1,7 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableColumn;
+import com.iris.framework.datasource.annotations.TableName;
 import com.iris.framework.entity.BaseEntity;
 import com.iris.support.enums.UserStatusEnum;
 
@@ -11,60 +13,74 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  *
  */
+@TableName("sys_user")
 public class SysUserEntity extends BaseEntity {
     /**
      * 用户名
      */
+    @TableColumn(columnName = "username")
     private String username;
     /**
      * 密码
      */
+    @TableColumn(columnName = "password")
     private String password;
     /**
      * 姓名
      */
+    @TableColumn(columnName = "real_name")
     private String realName;
     /**
      * 头像
      */
+    @TableColumn(columnName = "avatar")
     private String avatar;
     /**
      * 性别   0：男   1：女   2：未知
      */
+    @TableColumn(columnName = "gender")
     private Integer gender;
     /**
      * 邮箱
      */
+    @TableColumn(columnName = "email")
     private String email;
     /**
      * 手机号
      */
+    @TableColumn(columnName = "mobile")
     private String mobile;
     /**
      * 机构ID
      */
+    @TableColumn(columnName = "org_id")
     private Long orgId;
     /**
      * 超级管理员   0：否   1：是
      */
+    @TableColumn(columnName = "super_admin")
     private Integer superAdmin;
     /**
      * 状态  {@link UserStatusEnum}
      */
+    @TableColumn(columnName = "status")
     private Integer status;
 
     /**
      * 修改吗密码时间
      */
+    @TableColumn(columnName = "pwd_modify_time")
     private LocalDateTime pwdModifyTime;
 
     /**
      * 用户密钥，用于第三方系统登录
      */
+    @TableColumn(columnName = "user_key")
     private String userKey;
     /**
      * 机构名称
      */
+    @TableColumn(isExists = false)
     private String orgName;
 
     public String getUsername() {

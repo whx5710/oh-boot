@@ -139,7 +139,8 @@ public class SysUserServiceImpl  implements SysUserService {
             entity.setStatus(1);
         }
         // 保存用户
-        sysUserMapper.insertUser(entity);
+        //sysUserMapper.insertUser(entity);
+        sysUserMapper.insert(entity); // 保存用户-动态sql
 
         // 保存用户角色关系
         sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
