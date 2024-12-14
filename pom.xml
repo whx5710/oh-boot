@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -30,9 +30,9 @@
 		<module>oh-sys</module>
 		<module>oh-module</module>
 		<module>oh-support</module>
-		<module>oh-core</module>
+		<!--<module>oh-core</module>
 		<module>oh-common</module>
-		<module>oh-framework</module>
+		<module>oh-framework</module>-->
 	</modules>
 
 	<properties>
@@ -58,6 +58,8 @@
 		<hutool.version>5.8.25</hutool.version>
 		<!-- 系统资源监控 -->
 		<oshi.version>6.4.0</oshi.version>
+		<!-- bean 拷贝 -->
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<!-- camunda 工作流相关 -->
 		<camunda.version>7.20.0</camunda.version>
 		<!-- swagger（xiaoymin版本）生成在线文档 -->
@@ -111,6 +113,17 @@
 				<artifactId>oshi-core</artifactId>
 				<version>${oshi.version}</version>
 			</dependency>
+			<!--bean映射-->
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct-processor</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
 			<!-- 工作流 -->
 			<dependency>
 				<groupId>org.camunda.bpm.springboot</groupId>
@@ -156,6 +169,15 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring.security}</version>
+		</dependency>
+		<!--bean映射-->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
 		</dependency>
 	</dependencies>
 

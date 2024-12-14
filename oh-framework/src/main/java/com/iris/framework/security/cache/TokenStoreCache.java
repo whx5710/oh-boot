@@ -2,7 +2,6 @@ package com.iris.framework.security.cache;
 
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
-import com.iris.framework.common.convert.RefreshTokenConvert;
 import com.iris.framework.common.properties.SecurityProperties;
 import com.iris.framework.security.user.RefreshTokenInfo;
 import com.iris.framework.security.user.UserDetail;
@@ -40,7 +39,15 @@ public class TokenStoreCache {
         user.setPassword("");
         redisCache.set(key, user, securityProperties.getAccessTokenExpire());
         // 刷新token
-        RefreshTokenInfo refreshTokenInfo = RefreshTokenConvert.INSTANCE.convert(user);
+        RefreshTokenInfo refreshTokenInfo = new RefreshTokenInfo();
+        refreshTokenInfo.setId( user.getId() );
+        refreshTokenInfo.setUsername( user.getUsername() );
+        refreshTokenInfo.setRealName( user.getRealName() );
+        refreshTokenInfo.setGender( user.getGender() );
+        refreshTokenInfo.setEmail( user.getEmail() );
+        refreshTokenInfo.setMobile( user.getMobile() );
+        refreshTokenInfo.setIp( user.getIp() );
+
         refreshTokenInfo.setRefreshToken(refreshToken); // 刷新token
         refreshTokenInfo.setAccessToken(accessToken); // token
         String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);

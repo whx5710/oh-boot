@@ -17,8 +17,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <!-- hutool 工具包 -->
         <hutool.version>5.8.25</hutool.version>
-        <!-- bean 拷贝 -->
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -67,17 +65,6 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
             <version>${hutool.version}</version>
-        </dependency>
-        <!--bean映射-->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${mapstruct.version}</version>
         </dependency>
     </dependencies>
 </project>
