@@ -3,6 +3,8 @@ package com.iris.framework.datasource.mapper;
 
 import com.iris.framework.datasource.service.IrisProvider;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
 
 /**
  * 基础Mapper，集合公共接口
@@ -25,6 +27,7 @@ public interface BaseMapper<T>{
      * @param id
      * @return
      */
+//    @SelectProvider(method = "selectById", type = IrisProvider.class)
 //    T selectById(@Param("id") Long id);
 
 }

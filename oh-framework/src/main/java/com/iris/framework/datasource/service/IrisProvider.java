@@ -3,6 +3,7 @@ package com.iris.framework.datasource.service;
 import com.iris.core.exception.ServerException;
 import com.iris.framework.datasource.annotations.TableColumn;
 import com.iris.framework.datasource.annotations.TableName;
+import org.apache.ibatis.annotations.Param;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,16 +26,11 @@ public class IrisProvider {
     public <T> String insertEntity(T entity)  {
         Class<?> clazz = entity.getClass();
         // 获取表名
-        TableName apoTable = clazz.getAnnotation(TableName.class);
-        if(apoTable == null){
+        String tableName = clazz.getAnnotation(TableName.class).value();
+        if(tableName == null || tableName.isEmpty()){
             throw new ServerException("实体类没指定表名，执行失败！");
         }
-        String tableName = apoTable.value();
-        List<Field> fields = new ArrayList<>();
-        while (clazz != null){
-            fields.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
-            clazz = clazz.getSuperclass();
-        }
+        List<Field> fields = getFields(clazz);
         String colStr = "";
         String valueStr = "";
         for(int i = 0; i < fields.size(); i++){
@@ -57,5 +53,24 @@ public class IrisProvider {
         colStr = colStr.substring(1);
         valueStr = valueStr.substring(1);
         return "insert into " + tableName + "(" + colStr + ") values (" + valueStr + ")";
+    }
+
+    /**
+     * 获取实体类属性
+     * @param clazz 类
+     * @return list
+     */
+    private List<Field> getFields(Class<?> clazz){
+        // 获取表名
+        TableName apoTable = clazz.getAnnotation(TableName.class);
+        if(apoTable == null){
+            throw new ServerException("实体类没指定表名，执行失败！");
+        }
+        List<Field> fields = new ArrayList<>();
+        while (clazz != null){
+            fields.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
     }
 }
