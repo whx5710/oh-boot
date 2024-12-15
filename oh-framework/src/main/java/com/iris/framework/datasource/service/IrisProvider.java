@@ -1,9 +1,9 @@
 package com.iris.framework.datasource.service;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.iris.core.exception.ServerException;
 import com.iris.framework.datasource.annotations.TableColumn;
 import com.iris.framework.datasource.annotations.TableName;
-import org.apache.ibatis.annotations.Param;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -11,8 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 通用provider,拼接增删查改，通过 @InsertProvider、@DeleteProvider 等注解操作，
- * 减少sql编写
+ * 通用provider,拼接增删查改，通过 @InsertProvider、@UpdateProvider 等注解操作，减少sql编写 <br/>
+ * 单表插入      insertEntity <br/>
+ * 根据ID更新单表 updateById
  * @author 王小费 whx5710@qq.com
  */
 public class IrisProvider {
@@ -53,6 +54,56 @@ public class IrisProvider {
         colStr = colStr.substring(1);
         valueStr = valueStr.substring(1);
         return "insert into " + tableName + "(" + colStr + ") values (" + valueStr + ")";
+    }
+
+    /**
+     * 根据ID更新数据
+     * @param entity 实体
+     * @return sql
+     * @param <T> p
+     */
+    public <T> String updateById(T entity)  {
+        Class<?> clazz = entity.getClass();
+        // 获取表名
+        String tableName = clazz.getAnnotation(TableName.class).value();
+        if(tableName == null || tableName.isEmpty()){
+            throw new ServerException("实体类没指定表名，执行失败！");
+        }
+        List<Field> fields = getFields(clazz);
+        String setStr = "";
+        boolean hasId = false;
+        for(int i = 0; i < fields.size(); i++){
+            Field field = fields.get(i);
+            if(field.isAnnotationPresent(TableColumn.class)){ // 判断是否有该注解
+                TableColumn annotation = field.getAnnotation(TableColumn.class);
+                if(!annotation.isExists()){ // 剔除非数据库字段
+                    fields.remove(i);
+                    i--;
+                }else{
+                    if(annotation.columnName().equals("id")){
+                        hasId = true;
+                    }else{
+                        if(ReflectUtil.getFieldValue(entity, field.getName()) != null){// 不为空才更新
+                            setStr = String.join(", ", setStr, annotation.columnName() + " = #{" + field.getName() + "}");
+                        }
+                    }
+                }
+            }else {
+                // 无注解的字段默认成与数据库字段一致
+                if(field.getName().equals("id")){
+                    hasId = true;
+                }else{
+                    if(ReflectUtil.getFieldValue(entity, field.getName()) != null){
+                        setStr = String.join(", ", setStr, field.getName() + " = #{" + field.getName() + "}");
+                    }
+                }
+            }
+        }
+        if(!hasId){
+            throw new ServerException("无id字段，不能进行更新！");
+        }
+        setStr = setStr.substring(1);
+        return "update " + tableName + " set " + setStr + " where id = #{id}";
     }
 
     /**

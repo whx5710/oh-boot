@@ -82,7 +82,7 @@
 		select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.mobile = #{mobile}
 	</select>
 
-	<update id="updateById" parameterType="com.iris.support.entity.SysUserEntity">
+	<!--<update id="updateById" parameterType="com.iris.support.entity.SysUserEntity">
 		update sys_user
 		<set>
 			<if test="username != null and username != ''">username = #{username},</if>
@@ -102,7 +102,7 @@
 			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}
-	</update>
+	</update>-->
 
 	<select id="countByOrgId" resultType="Integer">
 		select count(1) from sys_user where db_status != 0 and org_id = #{orgId}
