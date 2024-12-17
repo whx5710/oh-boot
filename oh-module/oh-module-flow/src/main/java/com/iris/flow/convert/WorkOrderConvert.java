@@ -15,7 +15,7 @@ import java.util.List;
 * @since 1.0.0 2024-02-23
 */
 @Mapper
-@DecoratedWith(WorkOrderExtendConvert.class)
+@DecoratedWith(WorkOrderExtendConvert.class) // 指定实现类
 public interface WorkOrderConvert {
     WorkOrderConvert INSTANCE = Mappers.getMapper(WorkOrderConvert.class);
 

@@ -56,7 +56,7 @@ public class PageAspect {
         try {
             //调用分页插件传入开始页码和页面容量
             Page<Object> page = PageHelper.startPage(pageNum, limit);
-            //执行被增强的方法，不写，则被增强方法不执行
+            //执行
             result = proceedingJoinPoint.proceed(args);
             if(pageFilter != null){
                 //获取并封装分页后的参数

@@ -1,17 +1,59 @@
 ## 说明
 oh-framework是系统框架，包括鉴权拦截、数据库、多数据源、异常以及基础类等。
-- 数据源切换使用 @Ds 注解进行切换，可作用到类和方法上
+- 默认使用druid连接池，数据源切换使用 @Ds 注解进行切换，可作用到类和方法上
 - 使用PageHelper进行分页，也可以使用@Page注解进行分页操作
+- 支持动态SQL，通过 @TableName、@TableColumn和ProviderService自动生成SQL语句
 - 异步消息消费；实现JobService接口可异步消费消息，通过JobServiceConsumer.jobConsume 执行业务代码
 - 在方法上使用 @OperateLog 注解可记录操作日志
 ## 引入
 根据实际版本引入，如下所示：
 
 ```xml
-
 <dependency>
     <groupId>com.iris</groupId>
     <artifactId>oh-framework</artifactId>
     <version>${版本号}</version>
 </dependency>
+```
+配置说明
+```yaml
+iris:
+  security:
+    access-token-expire: 43200      # token有效期
+    refresh-token-expire: 604800    # 刷新token有效期
+    auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
+    lock-time: 3600                 # 账号锁定时间(秒)
+    ignore-urls:                    # 忽略鉴权的url
+      - /swagger/**
+      - /swagger-ui/**
+      - /doc.html
+  open-api: # 异步调用接口
+    type: 2 # 1直接保存 2使用MQ异步保存
+    auto-start-up: false # Kafka监听是否开启
+    cache-time: 604800 # 日志缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
+  xss:
+    enabled: true
+    exclude-urls:
+      - /oh-generator/**
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    sys-data-source:
+      primary: masterDb # 主数据源或者数据源组,默认 masterDb
+      sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
+    dynamic:
+      sysDb: # 数据源1
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        # 以下与druid的配置对应
+        initialSize: 10
+        minIdle: 10
+        maxActive: 100
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        checkConnection: true # 初始化时是否检查连接，默认false
+      masterDb: # 数据源2 配置同 sysDb
+        driver-class-name: com.mysql.cj.jdbc.Driver
 ```

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 表字段注解，是否存在、列名
+ * 表字段注解；字段是否存在表中、指定列名（默认属性名与表字段名一致，否则需指定字段名称）
  *
  * @author 王小费 whx5710@qq.com
  *
@@ -22,7 +22,7 @@ public @interface TableColumn {
     boolean isExists() default true;
 
     /**
-     * 列名
+     * 指定列名，与数据库表中字段一致
      * @return 列名
      */
     String columnName() default "";
