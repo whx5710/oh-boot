@@ -1,11 +1,5 @@
 package com.iris.framework.datasource.mapper;
 
-
-import com.iris.framework.datasource.service.IrisProvider;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
-
 /**
  * 基础Mapper，集合公共接口
  *
@@ -19,15 +13,15 @@ public interface BaseMapper<T>{
      * @param entity 实体类
      * @return int
      */
-    @InsertProvider(method = "insertEntity", type = IrisProvider.class)
-    int insert(T entity);
+//    @InsertProvider(method = "insert", type = ProviderService.class)
+//    int insert(T entity);
 
     /**
      * 根据ID获取实体
      * @param id
      * @return
      */
-//    @SelectProvider(method = "selectById", type = IrisProvider.class)
+//    @SelectProvider(method = "selectById", type = ProviderService.class)
 //    T selectById(@Param("id") Long id);
 
 }

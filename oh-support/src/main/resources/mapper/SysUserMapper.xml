@@ -53,7 +53,7 @@
 	</select>
 
 	<!--保存用户-->
-	<insert id="insertUser">
+	<!--<insert id="insertUser">
 		insert into sys_user (
 			username, password,
 			real_name, avatar,
@@ -72,7 +72,7 @@
 			#{dbStatus}, #{creator},
 			#{createTime}, #{pwdModifyTime},
 			#{userKey})
-	</insert>
+	</insert>-->
 
 	<select id="getByUsername" resultType="com.iris.support.entity.SysUserEntity">
 		select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.username = #{username}

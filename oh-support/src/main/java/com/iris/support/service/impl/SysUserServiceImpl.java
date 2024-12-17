@@ -309,7 +309,7 @@ public class SysUserServiceImpl  implements SysUserService {
             private void saveUser(List<SysUserExcelVO> result) {
                 List<SysUserEntity> sysUserEntities = SysUserConvert.INSTANCE.convertListEntity(result);
                 sysUserEntities.forEach(user -> user.setPassword(password));
-                sysUserEntities.forEach(sysUserMapper::insertUser);
+                sysUserEntities.forEach(sysUserMapper::insert);
             }
         });
 

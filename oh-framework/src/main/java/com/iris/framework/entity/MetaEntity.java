@@ -27,6 +27,8 @@ public class MetaEntity implements Serializable {
     // 主题
     private String topic;
 
+    // 数据
+    private Map<String, Object> data;
 
     public Long getId() {
         return id;
@@ -35,8 +37,6 @@ public class MetaEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    // 数据
-    private Map<String, Object> data;
 
     public String getFuncCode() {
         return funcCode;

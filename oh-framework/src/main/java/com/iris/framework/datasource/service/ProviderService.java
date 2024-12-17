@@ -11,12 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 通用provider,拼接增删查改，通过 @InsertProvider、@UpdateProvider 等注解操作，减少sql编写 <br/>
- * 单表插入      insertEntity <br/>
+ * 通用provider,拼接增删查改，通过 @InsertProvider、@UpdateProvider等注解操作，
+ * 减少sql编写，如果对SQL效率要求高，请慎用 <br/>
+ * 单表插入      insert <br/>
  * 根据ID更新单表 updateById
  * @author 王小费 whx5710@qq.com
  */
-public class IrisProvider {
+public class ProviderService {
 
     /**
      * 插入数据
@@ -24,7 +25,7 @@ public class IrisProvider {
      * @return
      * @param <T>
      */
-    public <T> String insertEntity(T entity)  {
+    public <T> String insert(T entity)  {
         Class<?> clazz = entity.getClass();
         // 获取表名
         String tableName = clazz.getAnnotation(TableName.class).value();

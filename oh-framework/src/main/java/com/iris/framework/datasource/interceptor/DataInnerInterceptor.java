@@ -3,13 +3,6 @@ package com.iris.framework.datasource.interceptor;
 import cn.hutool.core.util.ReflectUtil;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
-//import net.sf.jsqlparser.JSQLParserException;
-//import net.sf.jsqlparser.expression.Expression;
-//import net.sf.jsqlparser.expression.StringValue;
-//import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-//import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-//import net.sf.jsqlparser.statement.select.PlainSelect;
-//import net.sf.jsqlparser.statement.select.Select;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -60,17 +53,17 @@ public class DataInnerInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement) args[0];
-        // 新增
-        if (ms.getSqlCommandType().equals(SqlCommandType.INSERT)) {
+        if (ms.getSqlCommandType().equals(SqlCommandType.INSERT)) { // 新增
             autoInsertFill(invocation);
+            return invocation.proceed();
         }
-        // 更新
-        if (ms.getSqlCommandType().equals(SqlCommandType.UPDATE)) {
+        if (ms.getSqlCommandType().equals(SqlCommandType.UPDATE)) { // 更新
             autoUpdateFill(invocation);
+            return invocation.proceed();
         }
-        // 查询过滤
-        if (ms.getSqlCommandType().equals(SqlCommandType.SELECT)) {
+        if (ms.getSqlCommandType().equals(SqlCommandType.SELECT)) { // 查询过滤
             dataFilter(args);
+            return invocation.proceed();
         }
         return invocation.proceed();
     }
