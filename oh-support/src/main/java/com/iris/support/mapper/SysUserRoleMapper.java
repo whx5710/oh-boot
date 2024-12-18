@@ -5,6 +5,7 @@ import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface SysUserRoleMapper {
      *
      * @return  返回角色ID列表
      */
+    @Select("select role_id from sys_user_role where user_id = #{userId} and db_status = 1")
     List<Long> getRoleIdList(@Param("userId") Long userId);
 
     int saveBatch(@Param("list") List<SysUserRoleEntity> params);

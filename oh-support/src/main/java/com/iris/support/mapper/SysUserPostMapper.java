@@ -5,6 +5,7 @@ import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysUserPostEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface SysUserPostMapper {
      * 岗位ID列表
      * @param userId  用户ID
      */
+    @Select("select post_id from sys_user_post where user_id = #{userId} and db_status = 1")
     List<Long> getPostIdList(@Param("userId") Long userId);
 
     int saveBatch(@Param("list") List<SysUserPostEntity> param);

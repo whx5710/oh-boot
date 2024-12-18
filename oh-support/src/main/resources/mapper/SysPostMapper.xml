@@ -30,8 +30,4 @@
         WHERE id = #{id}
     </update>
 
-    <select id="getById" resultType="com.iris.support.entity.SysPostEntity">
-        select * from sys_post where id = #{id}
-    </select>
-
 </mapper>

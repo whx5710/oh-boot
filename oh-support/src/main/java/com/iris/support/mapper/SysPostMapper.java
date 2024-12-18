@@ -6,6 +6,7 @@ import com.iris.support.entity.SysPostEntity;
 import com.iris.support.query.SysPostQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public interface SysPostMapper {
 
     boolean updateById(SysPostEntity sysPostEntity);
 
+    @Select("select * from sys_post where id = #{id}")
     SysPostEntity getById(@Param("id") Long id);
 }

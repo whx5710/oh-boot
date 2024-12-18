@@ -6,6 +6,7 @@ import com.iris.support.entity.SysOrgEntity;
 import com.iris.support.query.SysOrgQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface SysOrgMapper {
     /**
      * 获取所有机构的id、pid列表
      */
+    @Select("select t1.id, t1.parent_id from sys_org t1 where t1.db_status = 1")
     List<SysOrgEntity> getIdAndPidList();
 
     // 保存机构信息
@@ -31,7 +33,9 @@ public interface SysOrgMapper {
 
     boolean updateById(SysOrgEntity sysOrgEntity);
 
+    @Select("select count(1) from sys_org where db_status != 0 and parent_id = #{parentId}")
     int countByParentId(@Param("parentId") long parentId);
 
-    SysOrgEntity getById(Long id);
+    @Select("select a.*,b.name parentName from sys_org a left join sys_org b on a.parent_id = b.id where a.id = #{id}")
+    SysOrgEntity getById(@Param("id") Long id);
 }

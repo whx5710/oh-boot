@@ -6,10 +6,7 @@ import com.iris.framework.datasource.service.ProviderService;
 import com.iris.support.entity.SysUserEntity;
 import com.iris.support.query.SysRoleUserQuery;
 import com.iris.support.query.SysUserQuery;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -25,13 +22,16 @@ public interface SysUserMapper {
 
 	List<SysUserEntity> getList(@Param("params") SysUserQuery params);
 
+	@Select("select t1.*, (select t2.name from sys_org t2 where t2.id = t1.org_id) orgName from sys_user t1 where t1.db_status = 1 and t1.id = #{id}")
 	SysUserEntity getById(@Param("id") Long id);
 
 	List<SysUserEntity> getRoleUserList(SysRoleUserQuery params);
 
-	SysUserEntity getByUsername(String username);
+	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.username = #{username}")
+	SysUserEntity getByUsername(@Param("username") String username);
 
-	SysUserEntity getByMobile(String mobile);
+	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.mobile = #{mobile}")
+	SysUserEntity getByMobile(@Param("mobile") String mobile);
 
 	// 保存用户
 	//void insertUser(SysUserEntity sysUserEntity);
@@ -44,5 +44,6 @@ public interface SysUserMapper {
 	@UpdateProvider(method = "updateById", type = ProviderService.class)
 	boolean updateById(SysUserEntity sysUserEntity);
 
+	@Select("select count(1) from sys_user where db_status != 0 and org_id = #{orgId}")
 	int countByOrgId(@Param("orgId")long orgId);
 }

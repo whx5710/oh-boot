@@ -3,10 +3,6 @@
 
 <mapper namespace="com.iris.support.mapper.SysUserPostMapper">
 
-    <select id="getPostIdList" resultType="long">
-        select post_id from sys_user_post where user_id = #{userId} and db_status = 1
-    </select>
-
     <insert id="saveBatch">
         INSERT INTO sys_user_post ( user_id, post_id, db_status, creator, create_time ) VALUES
         <foreach item="item" index="index" collection="list" separator=",">

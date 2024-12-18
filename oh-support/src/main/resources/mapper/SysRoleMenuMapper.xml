@@ -3,10 +3,6 @@
 
 <mapper namespace="com.iris.support.mapper.SysRoleMenuMapper">
 
-	<select id="getMenuIdList" resultType="long">
-		select menu_id from sys_role_menu where role_id = #{roleId} and db_status = 1
-	</select>
-
 	<update id="deleteByRoleIdList">
 		update sys_role_menu
 		<set>

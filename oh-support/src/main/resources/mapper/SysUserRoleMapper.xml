@@ -3,10 +3,6 @@
 
 <mapper namespace="com.iris.support.mapper.SysUserRoleMapper">
 
-    <select id="getRoleIdList" resultType="long">
-        select role_id from sys_user_role where user_id = #{userId} and db_status = 1
-    </select>
-
     <insert id="saveBatch">
         INSERT INTO sys_user_role (role_id, user_id, db_status, creator, create_time) VALUES
         <foreach item="item" index="index" collection="list" separator=",">

@@ -6,6 +6,7 @@ import com.iris.support.entity.SysDictTypeEntity;
 import com.iris.support.query.SysDictTypeQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -25,5 +26,6 @@ public interface SysDictTypeMapper {
 
     boolean updateById(SysDictTypeEntity param);
 
+    @Select("select * from sys_dict_type where id = #{id}")
     SysDictTypeEntity getById(@Param("id")Long id);
 }
