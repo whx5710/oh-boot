@@ -26,11 +26,6 @@
             <!-- 版本需与springboot版本兼容 -->
             <!--<version>3.2.4</version>-->
         </dependency>
-        <!-- 分页插件 -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-framework</artifactId>

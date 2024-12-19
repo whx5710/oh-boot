@@ -27,7 +27,7 @@
 	</developers>
 
 	<modules>
-		<module>oh-sys</module>
+		<module>oh-server</module>
 		<module>oh-module</module>
 		<module>oh-support</module>
 		<module>oh-core</module>
@@ -155,7 +155,6 @@
 				<version>${knife4j.version}</version>
 			</dependency>
 			<!-- end   ================================= 其他 ================================= -->
-
 		</dependencies>
 	</dependencyManagement>
 

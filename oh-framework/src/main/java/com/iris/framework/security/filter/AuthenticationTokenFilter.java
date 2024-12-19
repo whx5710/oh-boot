@@ -18,7 +18,7 @@ import java.io.IOException;
 
 /**
  * 认证过滤器
- *
+ * 注入用户信息
  * @author 王小费 whx5710@qq.com
  * 
  */
@@ -34,7 +34,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String accessToken = IrisTools.getAccessToken(request);
-        // accessToken为空，表示未登录
+        // accessToken为空-未登录
         if (accessToken == null || accessToken.isEmpty()) {
             chain.doFilter(request, response);
             return;
@@ -45,7 +45,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        // 用户存在
+        // 用户存在，注入用户信息
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         // 新建 SecurityContext
         SecurityContext context = SecurityContextHolder.createEmptyContext();
