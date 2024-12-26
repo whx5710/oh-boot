@@ -1,5 +1,5 @@
 ## 说明
-oh-framework是系统框架，包括鉴权拦截、数据库、多数据源、异常以及基础类等。
+oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数据库、多数据源、异常以及基础类等。
 - 默认使用druid连接池，数据源切换使用 @Ds 注解进行切换，可作用到类和方法上
 - 使用PageHelper进行分页，也可以使用@Page注解进行分页操作
 - 支持动态SQL，通过 @TableName、@TableColumn和ProviderService自动生成SQL语句
@@ -40,9 +40,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
-      sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
-    dynamic:
-      sysDb: # 数据源1
+      sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同
+    dynamic: # 数据源配置，支持多数据源
+      sysDb: # 数据源1 
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
@@ -54,6 +54,6 @@ spring:
         filters: wall,stat
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
         checkConnection: true # 初始化时是否检查连接，默认false
-      masterDb: # 数据源2 配置同 sysDb
+      mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
 ```
