@@ -1,11 +1,14 @@
 package com.iris.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.iris.framework.security.user.SecurityUser;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.support.mapper.SysRoleMenuMapper;
 import com.iris.support.service.SysRoleMenuService;
 import com.iris.support.entity.SysRoleMenuEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +33,7 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService {
 	public void saveOrUpdate(Long roleId, List<Long> menuIdList) {
 		// 数据库菜单ID列表
 		List<Long> dbMenuIdList = sysRoleMenuMapper.getMenuIdList(roleId);
-
+		UserDetail user = SecurityUser.getUser();
 		// 需要新增的菜单ID
 		Collection<Long> insertMenuIdList = CollUtil.subtract(menuIdList, dbMenuIdList);
 		if (CollUtil.isNotEmpty(insertMenuIdList)){
@@ -38,6 +41,8 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService {
 				SysRoleMenuEntity entity = new SysRoleMenuEntity();
 				entity.setMenuId(menuId);
 				entity.setRoleId(roleId);
+				entity.setCreator(user.getId());
+				entity.setCreateTime(LocalDateTime.now());
 				return entity;
 			}).collect(Collectors.toList());
 
@@ -50,6 +55,8 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService {
 		if (CollUtil.isNotEmpty(deleteMenuIdList)){
 			SysRoleMenuEntity param = new SysRoleMenuEntity();
 			param.setRoleId(roleId);
+			param.setUpdater(user.getId());
+			param.setUpdateTime(LocalDateTime.now());
 			sysRoleMenuMapper.deleteMenuIdList((List<Long>) deleteMenuIdList, param);
 		}
 	}

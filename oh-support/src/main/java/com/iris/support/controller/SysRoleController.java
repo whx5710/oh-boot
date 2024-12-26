@@ -1,11 +1,9 @@
-package com.iris.sys.base.controller;
+package com.iris.support.controller;
 
 import com.iris.common.operatelog.annotations.OperateLog;
 import com.iris.common.operatelog.enums.OperateTypeEnum;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
-import com.iris.framework.security.user.SecurityUser;
-import com.iris.framework.security.user.UserDetail;
 import com.iris.support.convert.SysRoleConvert;
 import com.iris.support.entity.SysRoleEntity;
 import com.iris.support.query.SysRoleQuery;
@@ -14,8 +12,6 @@ import com.iris.support.service.*;
 import com.iris.support.vo.SysRoleDataScopeVO;
 import com.iris.support.vo.SysRoleVO;
 import com.iris.support.vo.SysUserVO;
-import com.iris.sys.base.service.SysMenuService;
-import com.iris.sys.base.vo.SysMenuTreeVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -39,15 +35,17 @@ public class SysRoleController {
     private final SysUserService sysUserService;
     private final SysRoleMenuService sysRoleMenuService;
     private final SysRoleDataScopeService sysRoleDataScopeService;
-    private final SysMenuService sysMenuService;
+//    private final SysMenuService sysMenuService;
     private final SysUserRoleService sysUserRoleService;
 
-    public SysRoleController(SysRoleService sysRoleService, SysUserService sysUserService, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService, SysMenuService sysMenuService, SysUserRoleService sysUserRoleService) {
+    public SysRoleController(SysRoleService sysRoleService, SysUserService sysUserService, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService,
+//                             SysMenuService sysMenuService,
+                             SysUserRoleService sysUserRoleService) {
         this.sysRoleService = sysRoleService;
         this.sysUserService = sysUserService;
         this.sysRoleMenuService = sysRoleMenuService;
         this.sysRoleDataScopeService = sysRoleDataScopeService;
-        this.sysMenuService = sysMenuService;
+//        this.sysMenuService = sysMenuService;
         this.sysUserRoleService = sysUserRoleService;
     }
 
@@ -129,15 +127,15 @@ public class SysRoleController {
         return Result.ok();
     }
 
-    @GetMapping("menu")
-    @Operation(summary = "角色菜单")
-    @PreAuthorize("hasAuthority('sys:role:menu')")
-    public Result<List<SysMenuTreeVO>> menu() {
-        UserDetail user = SecurityUser.getUser();
-        List<SysMenuTreeVO> list = sysMenuService.getUserMenuList(user, null);
-
-        return Result.ok(list);
-    }
+//    @GetMapping("menu")
+//    @Operation(summary = "角色菜单")
+//    @PreAuthorize("hasAuthority('sys:role:menu')")
+//    public Result<List<SysMenuTreeVO>> menu() {
+//        UserDetail user = SecurityUser.getUser();
+//        List<SysMenuTreeVO> list = sysMenuService.getUserMenuList(user, null);
+//
+//        return Result.ok(list);
+//    }
 
     @GetMapping("user/page")
     @Operation(summary = "角色用户-分页")

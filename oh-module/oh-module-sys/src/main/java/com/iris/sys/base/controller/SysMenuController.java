@@ -120,9 +120,17 @@ public class SysMenuController {
         if (count > 0) {
             return Result.error("请先删除子菜单");
         }
-
         sysMenuService.delete(id);
-
         return Result.ok();
+    }
+
+
+    @GetMapping("/role")
+    @Operation(summary = "角色菜单")
+    @PreAuthorize("hasAuthority('sys:role:menu')")
+    public Result<List<SysMenuTreeVO>> roleMenu() {
+        UserDetail user = SecurityUser.getUser();
+        List<SysMenuTreeVO> list = sysMenuService.getUserMenuList(user, null);
+        return Result.ok(list);
     }
 }

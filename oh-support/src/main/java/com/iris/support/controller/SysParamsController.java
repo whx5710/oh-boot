@@ -1,4 +1,4 @@
-package com.iris.sys.base.controller;
+package com.iris.support.controller;
 
 import com.iris.common.operatelog.annotations.OperateLog;
 import com.iris.common.operatelog.enums.OperateTypeEnum;

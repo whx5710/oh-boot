@@ -1,5 +1,7 @@
 package com.iris.framework.security.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -10,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class SecurityUser {
 
-    //private static final Logger log = LoggerFactory.getLogger(SecurityUser.class);
+    private static final Logger log = LoggerFactory.getLogger(SecurityUser.class);
     /**
      * 获取用户信息
      */
@@ -19,7 +21,7 @@ public class SecurityUser {
         try {
             user = (UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (Exception e){
-            // log.warn("未获取到用户信息！{}", e.getMessage());
+             log.warn("未获取到用户信息！{}", e.getMessage());
             return new UserDetail();
         }
         return user;
