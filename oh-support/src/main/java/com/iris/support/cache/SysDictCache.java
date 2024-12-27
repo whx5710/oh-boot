@@ -53,6 +53,21 @@ public class SysDictCache {
     }
 
     /**
+     * 根据类型和值获取对象
+     * @param dictType
+     * @param value
+     * @return
+     */
+    public SysDictDataSingleVO get(String dictType, String value){
+        String key = SYSTEM_DICT_SINGLE_KEY + dictType + ":" + value;
+        if(redisCache.hasKey(key)){
+            return (SysDictDataSingleVO) redisCache.get(key);
+        }else {
+            return new SysDictDataSingleVO();
+        }
+    }
+
+    /**
      * 删除所有
      */
     public void delSingleAll(){

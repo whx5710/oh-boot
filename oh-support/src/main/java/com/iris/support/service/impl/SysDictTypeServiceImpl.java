@@ -153,6 +153,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
 
     @PostConstruct
     public void init() {
+        log.debug("加载字典数据到Redis缓存中");
         refreshTransCache();
     }
 }
