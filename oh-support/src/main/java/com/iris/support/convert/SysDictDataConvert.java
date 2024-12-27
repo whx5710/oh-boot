@@ -1,5 +1,6 @@
 package com.iris.support.convert;
 
+import com.iris.support.vo.SysDictDataSingleVO;
 import com.iris.support.vo.SysDictDataVO;
 import com.iris.support.entity.SysDictDataEntity;
 import org.mapstruct.Mapper;
@@ -16,5 +17,7 @@ public interface SysDictDataConvert {
     SysDictDataEntity convert(SysDictDataVO vo);
     
     List<SysDictDataVO> convertList(List<SysDictDataEntity> list);
+
+    SysDictDataSingleVO convertSingle(SysDictDataVO vo);
 
 }

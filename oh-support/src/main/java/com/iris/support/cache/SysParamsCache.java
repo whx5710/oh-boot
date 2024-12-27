@@ -1,6 +1,5 @@
 package com.iris.support.cache;
 
-import cn.hutool.core.collection.CollUtil;
 import com.iris.core.cache.RedisCache;
 import com.iris.support.entity.SysParamsEntity;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class SysParamsCache {
      */
     public void saveList(List<SysParamsEntity> list) {
         redisCache.delete(SYSTEM_PARAMS_KEY);
-        if (CollUtil.isEmpty(list)) {
+        if (list == null || list.size() == 0) {
             return;
         }
         

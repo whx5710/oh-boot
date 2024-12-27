@@ -3,10 +3,11 @@
 
 <mapper namespace="com.iris.support.mapper.SysDictDataMapper">
 
-    <select id="getList" resultType="com.iris.support.entity.SysDictDataEntity">
-        select * from sys_dict_data where db_status = 1
-        <if test="dictTypeId != null and dictTypeId != ''">and dict_type_id = #{dictTypeId}</if>
-        order by sort
+    <select id="getList" resultType="com.iris.support.vo.SysDictDataVO">
+        select a.*,b.dict_type from sys_dict_data a INNER JOIN sys_dict_type b on a.dict_type_id = b.id
+        where a.db_status = 1 and b.db_status = 1
+        <if test="dictTypeId != null and dictTypeId != ''">and a.dict_type_id = #{dictTypeId}</if>
+        order by a.dict_type_id,a.sort
     </select>
 
     <update id="updateById">

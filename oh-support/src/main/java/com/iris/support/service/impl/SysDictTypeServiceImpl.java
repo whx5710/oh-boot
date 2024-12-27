@@ -2,19 +2,23 @@ package com.iris.support.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iris.support.cache.SysDictCache;
+import com.iris.support.convert.SysDictDataConvert;
 import com.iris.support.mapper.SysDictDataMapper;
 import com.iris.support.mapper.SysDictTypeMapper;
 import com.iris.support.enums.DictSourceEnum;
 import com.iris.support.query.SysDictDataQuery;
 import com.iris.support.query.SysDictTypeQuery;
+import com.iris.support.vo.SysDictDataSingleVO;
+import com.iris.support.vo.SysDictDataVO;
 import com.iris.support.vo.SysDictTypeVO;
 import com.iris.support.vo.SysDictVO;
-import com.iris.support.entity.SysDictDataEntity;
 import com.iris.support.entity.SysDictTypeEntity;
 import com.iris.core.exception.ServerException;
 import com.iris.core.utils.PageResult;
 import com.iris.support.convert.SysDictTypeConvert;
 import com.iris.support.service.SysDictTypeService;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,12 +37,16 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
     private final SysDictDataMapper sysDictDataMapper;
     private final SysDictTypeMapper sysDictTypeMapper;
 
+    private final SysDictCache sysDictCache;
+
     private final Logger log = LoggerFactory.getLogger(SysDictTypeServiceImpl.class);
 
     public SysDictTypeServiceImpl(SysDictDataMapper sysDictDataMapper,
-                                  SysDictTypeMapper sysDictTypeMapper) {
+                                  SysDictTypeMapper sysDictTypeMapper,
+                                  SysDictCache sysDictCache) {
         this.sysDictDataMapper = sysDictDataMapper;
         this.sysDictTypeMapper = sysDictTypeMapper;
+        this.sysDictCache = sysDictCache;
     }
 
     @Override
@@ -88,7 +96,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
 
         // 全部字典数据列表
         SysDictDataQuery query = new SysDictDataQuery();
-        List<SysDictDataEntity> dataList = sysDictDataMapper.getList(query);
+        List<SysDictDataVO> dataList = sysDictDataMapper.getList(query);
 
         // 全部字典列表
         List<SysDictVO> dictList = new ArrayList<>(typeList.size());
@@ -96,7 +104,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
             SysDictVO dict = new SysDictVO();
             dict.setDictType(type.getDictType());
 
-            for (SysDictDataEntity data : dataList) {
+            for (SysDictDataVO data : dataList) {
                 if (type.getId().equals(data.getDictTypeId())) {
                     dict.getDataList().add(new SysDictVO.DictData(data.getDictLabel(), data.getDictValue(), data.getLabelClass()));
                 }
@@ -119,13 +127,32 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
         return dictList;
     }
 
+    /**
+     * 字典缓存刷新
+     */
     @Override
     public void refreshTransCache() {
-        log.info("是否需要刷新呢？");
+        //保存列表
+        List<SysDictVO> list = getDictList();
+        sysDictCache.saveList(list);
+        // 逐一单个保存
+        List<SysDictDataVO>  dataList = sysDictDataMapper.getList(new SysDictDataQuery());
+        sysDictCache.delSingleAll(); // 先清除
+        if(dataList != null && dataList.size() > 0){
+            for(SysDictDataVO vo: dataList){
+                SysDictDataSingleVO dataSingleVO = SysDictDataConvert.INSTANCE.convertSingle(vo);
+                sysDictCache.save(dataSingleVO);
+            }
+        }
     }
 
     @Override
     public SysDictTypeEntity getById(Long id) {
         return sysDictTypeMapper.getById(id);
+    }
+
+    @PostConstruct
+    public void init() {
+        refreshTransCache();
     }
 }

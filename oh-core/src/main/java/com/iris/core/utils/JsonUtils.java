@@ -60,6 +60,13 @@ public class JsonUtils {
     }
 
     /**
+     * 获取 ObjectMapper
+     * @return
+     */
+    public static ObjectMapper getObjectMapper(){
+        return objectMapper;
+    }
+    /**
      * 对象转json字符串
      * @param object
      * @return

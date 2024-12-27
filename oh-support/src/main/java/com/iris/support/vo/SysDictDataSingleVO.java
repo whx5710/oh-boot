@@ -1,25 +1,15 @@
 package com.iris.support.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import com.iris.core.utils.DateUtils;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
-/**
- * 字典数据
- *
- * @author 王小费 whx5710@qq.com
- * 
- */
-@Schema(description = "字典数据")
-public class SysDictDataVO implements Serializable {
+@Schema(description = "字典数据-简单")
+public class SysDictDataSingleVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -44,22 +34,9 @@ public class SysDictDataVO implements Serializable {
     @Schema(description = "字典值")
     private String dictValue;
 
-    @Schema(description = "备注")
-    private String remark;
-
     @Schema(description = "排序", requiredMode = Schema.RequiredMode.REQUIRED)
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
-
-    @Schema(description = "创建时间")
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新时间")
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    private LocalDateTime updateTime;
 
     public Long getId() {
         return id;
@@ -109,35 +86,4 @@ public class SysDictDataVO implements Serializable {
         this.dictValue = dictValue;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
 }

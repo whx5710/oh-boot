@@ -4,6 +4,7 @@ import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.annotations.Ds;
 import com.iris.support.entity.SysDictDataEntity;
 import com.iris.support.query.SysDictDataQuery;
+import com.iris.support.vo.SysDictDataVO;
 import com.iris.support.vo.SysDictVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +25,7 @@ public interface SysDictDataMapper {
     @Select("${sql}")
     List<SysDictVO.DictData> getListForSql(@Param("sql") String sql);
 
-    List<SysDictDataEntity> getList(SysDictDataQuery query);
+    List<SysDictDataVO> getList(SysDictDataQuery query);
 
     boolean updateById(SysDictDataEntity param);
 
