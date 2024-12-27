@@ -1,7 +1,7 @@
 ## 说明
 oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数据库、多数据源、异常以及基础类等。
 - 默认使用druid连接池，数据源切换使用 @Ds 注解进行切换，可作用到类和方法上
-- 使用PageHelper进行分页，也可以使用@Page注解进行分页操作
+- 使用PageHelper进行分页，也可以使用@Pages 注解进行分页操作
 - 支持动态SQL，通过 @TableName、@TableColumn和ProviderService自动生成SQL语句
 - 异步消息消费；实现JobService接口可异步消费消息，通过JobServiceConsumer.jobConsume 执行业务代码
 - 在方法上使用 @OperateLog 注解可记录操作日志

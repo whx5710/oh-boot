@@ -29,7 +29,7 @@ public class PageAspect {
     /**
      * 定义切入点
      */
-    @Pointcut("@annotation(com.iris.framework.datasource.annotations.Page)")
+    @Pointcut("@annotation(com.iris.framework.datasource.annotations.Pages)")
     public void annotation() {
     }
 
@@ -50,6 +50,7 @@ public class PageAspect {
                 pageFilter = (PageFilter<?>) arg;
                 pageNum = ObjectUtils.isEmpty(pageFilter.getPage())? pageNum:pageFilter.getPage();
                 limit = ObjectUtils.isEmpty(pageFilter.getLimit())? limit:pageFilter.getLimit();
+                break;
             }
         }
         Object result = null;
@@ -64,7 +65,7 @@ public class PageAspect {
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);
-            throw new ServerException("查询数据库异常");
+            throw new ServerException("查询数据异常，请联系管理员");
         }
         return result;
     }
