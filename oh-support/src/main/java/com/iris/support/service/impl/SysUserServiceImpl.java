@@ -63,7 +63,7 @@ public class SysUserServiceImpl  implements SysUserService {
     @Override
     public PageResult<SysUserVO> page(SysUserQuery query) {
         // 分页查询
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         // 数据列表
         List<SysUserEntity> list = sysUserMapper.getList(query);
         PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);

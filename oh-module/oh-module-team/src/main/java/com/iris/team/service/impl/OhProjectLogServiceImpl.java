@@ -31,7 +31,7 @@ public class OhProjectLogServiceImpl implements OhProjectLogService {
 
     @Override
     public PageResult<OhProjectLogVO> page(OhProjectLogQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<OhProjectLogEntity> list = ohProjectLogMapper.getList(query);
         PageInfo<OhProjectLogEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(OhProjectLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

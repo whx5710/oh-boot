@@ -2,8 +2,9 @@ package com.iris.framework.datasource.aspect;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageParam;
 import com.iris.core.exception.ServerException;
-import com.iris.framework.query.PageFilter;
+import com.iris.framework.query.Query;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -41,27 +42,28 @@ public class PageAspect {
         // 当前页码
         Integer pageNum = 1;
         //每页记录数
-        Integer limit = 10;
-        PageFilter<?> pageFilter = null;
+        Integer pageSize = 10;
+        Query query = null;
+        PageParam a;
         //获取被增强方法的参数
         Object[] args = proceedingJoinPoint.getArgs();
         for (Object arg : args) {
-            if(arg instanceof PageFilter) {
-                pageFilter = (PageFilter<?>) arg;
-                pageNum = ObjectUtils.isEmpty(pageFilter.getPage())? pageNum:pageFilter.getPage();
-                limit = ObjectUtils.isEmpty(pageFilter.getLimit())? limit:pageFilter.getLimit();
+            if(arg instanceof Query) {
+                query = (Query) arg;
+                pageNum = ObjectUtils.isEmpty(query.getPageNum())? pageNum:query.getPageNum();
+                pageSize = ObjectUtils.isEmpty(query.getPageSize())? pageSize:query.getPageSize();
                 break;
             }
         }
         Object result = null;
         try {
             //调用分页插件传入开始页码和页面容量
-            Page<Object> page = PageHelper.startPage(pageNum, limit);
+            Page<Object> page = PageHelper.startPage(pageNum, pageSize);
             //执行
             result = proceedingJoinPoint.proceed(args);
-            if(pageFilter != null){
+            if(query != null){
                 //获取并封装分页后的参数
-                pageFilter.setTotal(page.getTotal());
+                query.setTotal(page.getTotal());
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);

@@ -60,7 +60,7 @@ public class SysOrgServiceImpl implements SysOrgService {
 	 */
 	@Override
 	public PageResult<SysOrgVO> page(SysOrgQuery query) {
-		PageHelper.startPage(query.getPage(), query.getLimit());
+		PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		// 机构列表
 		List<SysOrgEntity> list = sysOrgMapper.getList(query);
 		PageInfo<SysOrgEntity> pageInfo = new PageInfo<>(list);

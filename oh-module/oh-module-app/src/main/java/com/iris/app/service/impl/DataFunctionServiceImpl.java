@@ -31,7 +31,7 @@ public class DataFunctionServiceImpl implements DataFunctionService {
 
     @Override
     public PageResult<DataFunctionVO> page(DataFunctionQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<DataFunctionEntity> list = dataFunctionMapper.getList(query);
         PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
@@ -39,7 +39,7 @@ public class DataFunctionServiceImpl implements DataFunctionService {
 
     @Override
     public PageResult<DataFunctionVO> pageByClientId(DataFunctionQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<DataFunctionEntity> list = dataFunctionMapper.pageByClientId(query.getClientId());
         PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

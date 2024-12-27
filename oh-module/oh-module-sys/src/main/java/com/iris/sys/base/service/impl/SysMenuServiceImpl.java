@@ -79,7 +79,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     public PageResult<SysMenuVO> page(SysMenuQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysMenuEntity> list = sysMenuMapper.getMenuList(query);
         PageInfo<SysMenuEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysMenuConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

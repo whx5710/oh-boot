@@ -52,7 +52,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Override
     public PageResult<TaskRecordEntity> page(TaskRecordQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<TaskRecordEntity> list = taskRecordMapper.getTaskList(new TaskRecordQuery());
         PageInfo<TaskRecordEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());

@@ -51,7 +51,7 @@ public class SysParamsServiceImpl implements SysParamsService {
 
     @Override
     public PageResult<SysParamsVO> page(SysParamsQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysParamsEntity> list = sysParamsMapper.getList(query);
         PageInfo<SysParamsEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysParamsConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

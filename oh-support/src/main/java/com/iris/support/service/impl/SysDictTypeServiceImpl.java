@@ -51,7 +51,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
 
     @Override
     public PageResult<SysDictTypeVO> page(SysDictTypeQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysDictTypeEntity> list = sysDictTypeMapper.getList(query);
         PageInfo<SysDictTypeEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysDictTypeConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

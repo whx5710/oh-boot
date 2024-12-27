@@ -34,7 +34,7 @@ public class SmsPlatformServiceImpl implements SmsPlatformService {
 
     @Override
     public PageResult<SmsPlatformVO> page(SmsPlatformQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SmsPlatformEntity> list = smsPlatformMapper.getList(query);
         PageInfo<SmsPlatformEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SmsPlatformConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

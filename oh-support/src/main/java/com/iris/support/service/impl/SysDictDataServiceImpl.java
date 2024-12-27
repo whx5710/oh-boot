@@ -28,7 +28,7 @@ public class SysDictDataServiceImpl implements SysDictDataService {
 
     @Override
     public PageResult<SysDictDataVO> page(SysDictDataQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysDictDataVO> list = sysDictDataMapper.getList(query);
         PageInfo<SysDictDataVO> pageInfo = new PageInfo<>(list);
         return new PageResult<>(list, pageInfo.getTotal());

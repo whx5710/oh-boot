@@ -49,7 +49,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public PageResult<ScheduleJobVO> page(ScheduleJobQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<ScheduleJobEntity> list = scheduleJobMapper.getList(query);
         PageInfo<ScheduleJobEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(ScheduleJobConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

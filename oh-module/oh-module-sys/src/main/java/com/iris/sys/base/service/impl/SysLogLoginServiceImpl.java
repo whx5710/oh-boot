@@ -37,7 +37,7 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
 
     @Override
     public PageResult<SysLogLoginVO> page(SysLogLoginQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysLogLoginEntity> list = sysLogLoginMapper.getList(query);
         PageInfo<SysLogLoginEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysLogLoginConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

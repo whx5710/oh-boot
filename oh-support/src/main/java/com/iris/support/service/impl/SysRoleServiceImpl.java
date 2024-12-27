@@ -46,7 +46,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 		// 数据权限
 		query.setSqlFilter(getDataScopeFilter(null,null));
 
-		PageHelper.startPage(query.getPage(), query.getLimit());
+		PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		List<SysRoleEntity> list = sysRoleMapper.getList(query);
 		PageInfo<SysRoleEntity> pageInfo = new PageInfo<>(list);
 		return new PageResult<>(SysRoleConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

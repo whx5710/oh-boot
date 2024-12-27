@@ -36,7 +36,7 @@ public class SysPostServiceImpl implements SysPostService {
 
     @Override
     public PageResult<SysPostVO> page(SysPostQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysPostEntity> entityList = sysPostMapper.getList(query);
         PageInfo<SysPostEntity> pageInfo = new PageInfo<>(entityList);
         return new PageResult<>(SysPostConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());

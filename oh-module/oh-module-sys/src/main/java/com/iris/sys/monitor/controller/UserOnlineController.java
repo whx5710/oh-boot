@@ -42,7 +42,7 @@ public class UserOnlineController {
         List<String> keys = tokenStoreCache.getUserKeyList();
 
         // 逻辑分页
-        List<String> keyList = ListUtil.page(query.getPage() - 1, query.getLimit(), keys);
+        List<String> keyList = ListUtil.page(query.getPageNum() - 1, query.getPageSize(), keys);
 
         List<UserOnlineVO> userOnlineList = new ArrayList<>();
         keyList.forEach(key -> {
@@ -59,7 +59,6 @@ public class UserOnlineController {
                 userOnlineVO.setIp(user.getIp());
                 userOnlineList.add(userOnlineVO);
             }
-
         });
 
         return Result.ok(new PageResult<>(userOnlineList, keys.size()));
@@ -73,7 +72,6 @@ public class UserOnlineController {
         if (StrUtil.isBlank(accessToken)) {
             Result.error("token不能为空");
         }
-
         // 删除用户信息
         tokenStoreCache.deleteUser(accessToken);
 

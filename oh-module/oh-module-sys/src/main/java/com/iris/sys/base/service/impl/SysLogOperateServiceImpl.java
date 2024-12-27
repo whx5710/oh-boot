@@ -45,7 +45,7 @@ public class SysLogOperateServiceImpl implements SysLogOperateService {
 
     @Override
     public PageResult<SysLogOperateVO> page(SysLogOperateQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysLogOperateEntity> list = sysLogOperateMapper.getList(query);
         PageInfo<SysLogOperateEntity> pageInfo = new PageInfo<>(list);
         return new PageResult<>(SysLogOperateConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
