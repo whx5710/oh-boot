@@ -2,6 +2,7 @@ package com.iris.support.mapper;
 
 import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.annotations.Ds;
+import com.iris.framework.datasource.annotations.Pages;
 import com.iris.framework.datasource.service.ProviderService;
 import com.iris.support.entity.SysUserEntity;
 import com.iris.support.query.SysRoleUserQuery;
@@ -25,6 +26,7 @@ public interface SysUserMapper {
 	@Select("select t1.*, (select t2.name from sys_org t2 where t2.id = t1.org_id) orgName from sys_user t1 where t1.db_status = 1 and t1.id = #{id}")
 	SysUserEntity getById(@Param("id") Long id);
 
+	@Pages
 	List<SysUserEntity> getRoleUserList(SysRoleUserQuery params);
 
 	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.username = #{username}")

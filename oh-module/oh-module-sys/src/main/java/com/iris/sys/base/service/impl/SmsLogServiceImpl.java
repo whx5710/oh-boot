@@ -1,7 +1,5 @@
 package com.iris.sys.base.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SmsLogConvert;
 import com.iris.sys.base.entity.SmsLogEntity;
@@ -30,10 +28,8 @@ public class SmsLogServiceImpl implements SmsLogService {
 
     @Override
     public PageResult<SmsLogVO> page(SmsLogQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<SmsLogEntity> list = smsLogMapper.getList(query);
-        PageInfo<SmsLogEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SmsLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(SmsLogConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

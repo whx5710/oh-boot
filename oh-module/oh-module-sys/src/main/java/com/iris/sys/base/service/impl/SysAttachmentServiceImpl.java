@@ -1,7 +1,5 @@
 package com.iris.sys.base.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SysAttachmentConvert;
 import com.iris.sys.base.entity.SysAttachmentEntity;
@@ -29,10 +27,8 @@ public class SysAttachmentServiceImpl implements SysAttachmentService {
 
     @Override
     public PageResult<SysAttachmentVO> page(SysAttachmentQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<SysAttachmentEntity> list = sysAttachmentMapper.getList(query);
-        PageInfo<SysAttachmentEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SysAttachmentConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(SysAttachmentConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

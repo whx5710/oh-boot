@@ -1,7 +1,5 @@
 package com.iris.app.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.exception.ServerException;
 import com.iris.app.convert.DataAppConvert;
 import com.iris.app.entity.DataAppEntity;
@@ -35,10 +33,8 @@ public class DataAppServiceImpl implements DataAppService {
 
     @Override
     public PageResult<DataAppDTO> page(DataAppQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<DataAppEntity> list = dataAppMapper.getList(query);
-        PageInfo<DataAppEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(DataAppConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(DataAppConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

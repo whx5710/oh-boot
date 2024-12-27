@@ -256,11 +256,9 @@ public class SysUserServiceImpl  implements SysUserService {
 
     @Override
     public PageResult<SysUserVO> roleUserPage(SysRoleUserQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         // 数据列表
         List<SysUserEntity> list = sysUserMapper.getRoleUserList(query);
-        PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SysUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

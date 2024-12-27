@@ -1,5 +1,6 @@
 package com.iris.app.mapper;
 
+import com.iris.framework.datasource.annotations.Pages;
 import com.iris.framework.entity.api.DataAppDTO;
 import com.iris.app.entity.DataAppEntity;
 import com.iris.app.query.DataAppQuery;
@@ -19,6 +20,7 @@ import java.util.List;
 public interface DataAppMapper {
     List<DataAppDTO> listAuthority(@Param("params") DataFunctionAuthorityQuery params);
 
+    @Pages
     List<DataAppEntity> getList(DataAppQuery dataAppQuery);
 
     int insertDataApp(DataAppEntity dataAppEntity);

@@ -1,7 +1,6 @@
 package com.iris.flow.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.Page;
 import com.iris.flow.convert.FlowNodeConvert;
 import com.iris.flow.entity.FlowNodeEntity;
 import com.iris.flow.mapper.FlowNodeMapper;
@@ -31,10 +30,8 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
-        List<FlowNodeEntity> list = flowNodeMapper.getList(query);
-        PageInfo<FlowNodeEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        Page<FlowNodeEntity> page = flowNodeMapper.getList(query);
+        return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     @Override

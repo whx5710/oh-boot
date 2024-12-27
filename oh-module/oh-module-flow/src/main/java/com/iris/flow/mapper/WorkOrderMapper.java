@@ -1,11 +1,12 @@
 package com.iris.flow.mapper;
 
+import com.github.pagehelper.Page;
 import com.iris.flow.entity.WorkOrderEntity;
 import com.iris.flow.query.WorkOrderQuery;
+import com.iris.framework.datasource.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
 
 /**
 * 工单表
@@ -15,7 +16,9 @@ import java.util.List;
 */
 @Mapper
 public interface WorkOrderMapper {
-    List<WorkOrderEntity> getOrderList(WorkOrderQuery query);
+
+    @Pages
+    Page<WorkOrderEntity> getOrderList(WorkOrderQuery query);
 
     int saveOrder(WorkOrderEntity param);
 

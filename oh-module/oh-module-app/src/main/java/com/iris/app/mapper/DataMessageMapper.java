@@ -1,13 +1,12 @@
 package com.iris.app.mapper;
 
+import com.github.pagehelper.Page;
 import com.iris.app.entity.DataMsgEntity;
 import com.iris.app.query.DataMsgQuery;
 import com.iris.app.vo.DataMsgVO;
-import com.iris.framework.datasource.annotations.Page;
+import com.iris.framework.datasource.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
 * 项目信息表
@@ -18,8 +17,8 @@ import java.util.List;
 @Mapper
 public interface DataMessageMapper {
 
-    @Page // 分页注解
-    List<DataMsgVO> getList(DataMsgQuery query);
+    @Pages // 分页注解
+    Page<DataMsgVO> getList(DataMsgQuery query);
 
     int insertDataMsg(DataMsgEntity param);
 

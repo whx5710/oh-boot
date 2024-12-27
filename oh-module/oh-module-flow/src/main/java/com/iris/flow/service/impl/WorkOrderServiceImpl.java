@@ -1,7 +1,6 @@
 package com.iris.flow.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.Page;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.utils.IrisTools;
 import com.iris.core.utils.JsonUtils;
@@ -59,10 +58,8 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
 
     @Override
     public PageResult<WorkOrderVO> page(WorkOrderQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
-        List<WorkOrderEntity> list = workOrderMapper.getOrderList(query);
-        PageInfo<WorkOrderEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(WorkOrderConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        Page<WorkOrderEntity> page = workOrderMapper.getOrderList(query);
+        return new PageResult<>(WorkOrderConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
 

@@ -1,8 +1,7 @@
 package com.iris.flow.service.impl;
 
 import cn.hutool.core.util.EscapeUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.Page;
 import com.iris.flow.convert.FlowConvert;
 import com.iris.flow.entity.FlowEntity;
 import com.iris.flow.mapper.FlowMapper;
@@ -33,10 +32,8 @@ public class FlowServiceImpl implements FlowService {
 
     @Override
     public PageResult<FlowVO> page(FlowQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
-        List<FlowEntity> list = flowMapper.getList(query);
-        PageInfo<FlowEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(FlowConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        Page<FlowEntity> page = flowMapper.getList(query);
+        return new PageResult<>(FlowConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     /**

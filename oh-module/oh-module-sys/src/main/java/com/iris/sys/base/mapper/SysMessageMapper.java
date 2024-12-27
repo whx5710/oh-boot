@@ -1,5 +1,6 @@
 package com.iris.sys.base.mapper;
 
+import com.iris.framework.datasource.annotations.Pages;
 import com.iris.sys.base.entity.SysMessageEntity;
 import com.iris.sys.base.query.SysMessageQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +17,7 @@ import java.util.List;
 @Mapper
 public interface SysMessageMapper {
 
+    @Pages
     List<SysMessageEntity> getList(SysMessageQuery query);
 
     int save(SysMessageEntity param);

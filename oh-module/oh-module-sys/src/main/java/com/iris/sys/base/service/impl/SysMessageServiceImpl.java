@@ -1,7 +1,5 @@
 package com.iris.sys.base.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.sys.base.convert.SysMessageConvert;
@@ -32,10 +30,8 @@ public class SysMessageServiceImpl implements SysMessageService {
 
     @Override
     public PageResult<SysMessageVO> page(SysMessageQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<SysMessageEntity> list = sysMessageMapper.getList(query);
-        PageInfo<SysMessageEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SysMessageConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(SysMessageConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

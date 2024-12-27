@@ -1,7 +1,5 @@
 package com.iris.sys.base.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.sys.base.convert.SysVersionInfoConvert;
 import com.iris.sys.base.entity.SysVersionInfoEntity;
@@ -30,10 +28,8 @@ public class SysVersionInfoServiceImpl implements SysVersionInfoService {
 
     @Override
     public PageResult<SysVersionInfoVO> page(SysVersionInfoQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<SysVersionInfoEntity> list = sysVersionInfoMapper.getList(query);
-        PageInfo<SysVersionInfoEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SysVersionInfoConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(SysVersionInfoConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

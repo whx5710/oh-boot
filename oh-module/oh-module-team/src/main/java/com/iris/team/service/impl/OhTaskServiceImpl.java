@@ -1,7 +1,5 @@
 package com.iris.team.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.constant.Constant;
 import com.iris.core.utils.PageResult;
 import com.iris.framework.datasource.service.impl.BaseServiceImpl;
@@ -37,10 +35,8 @@ public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService 
     public PageResult<OhTaskVO> page(OhTaskQuery query) {
         // 查询参数
         Map<String, Object> params = getParams(query);
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<OhTaskEntity> list = ohTaskMapper.getList(params);
-        PageInfo<OhTaskEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(OhTaskConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(OhTaskConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     private Map<String, Object> getParams(OhTaskQuery query) {

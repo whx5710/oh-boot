@@ -1,5 +1,6 @@
 package com.iris.sys.base.mapper;
 
+import com.iris.framework.datasource.annotations.Pages;
 import com.iris.sys.base.entity.SysVersionInfoEntity;
 import com.iris.sys.base.query.SysVersionInfoQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +17,7 @@ import java.util.List;
 @Mapper
 public interface SysVersionInfoMapper {
 
+    @Pages
     List<SysVersionInfoEntity> getList(SysVersionInfoQuery query);
 
     int save(SysVersionInfoEntity param);

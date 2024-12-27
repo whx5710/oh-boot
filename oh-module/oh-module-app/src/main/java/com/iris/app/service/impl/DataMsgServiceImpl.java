@@ -2,6 +2,7 @@ package com.iris.app.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import com.github.pagehelper.Page;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.Constant;
@@ -73,8 +74,8 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @Override
     public PageResult<DataMsgVO> page(DataMsgQuery query) {
-        List<DataMsgVO> list = dataMessageMapper.getList(query);
-        return new PageResult<>(list, query.getTotal());
+        Page<DataMsgVO> page = dataMessageMapper.getList(query);
+        return new PageResult<>(page.getResult(), page.getTotal());
     }
 
     /**

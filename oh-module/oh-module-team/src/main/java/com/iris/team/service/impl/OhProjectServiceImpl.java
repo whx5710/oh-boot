@@ -1,7 +1,5 @@
 package com.iris.team.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.team.convert.OhProjectConvert;
 import com.iris.team.entity.OhProjectEntity;
@@ -31,10 +29,8 @@ public class OhProjectServiceImpl implements OhProjectService {
 
     @Override
     public PageResult<OhProjectVO> page(OhProjectQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<OhProjectEntity> list = ohProjectMapper.getList(query);
-        PageInfo<OhProjectEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(OhProjectConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(OhProjectConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.iris.team.mapper;
 
+import com.iris.framework.datasource.annotations.Pages;
 import com.iris.team.entity.OhProjectEntity;
 import com.iris.team.query.OhProjectQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,6 +16,8 @@ import java.util.List;
 */
 @Mapper
 public interface OhProjectMapper {
+
+    @Pages
     List<OhProjectEntity> getList(OhProjectQuery query);
 
     int save(OhProjectEntity param);

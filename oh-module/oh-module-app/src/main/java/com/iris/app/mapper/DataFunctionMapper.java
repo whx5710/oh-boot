@@ -4,6 +4,7 @@ import com.iris.app.entity.DataFunctionAuthorityEntity;
 import com.iris.app.entity.DataFunctionEntity;
 import com.iris.app.query.DataFunctionAuthorityQuery;
 import com.iris.app.query.DataFunctionQuery;
+import com.iris.framework.datasource.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,6 +29,7 @@ public interface DataFunctionMapper {
 
     DataFunctionEntity getById(@Param("id")Long id);
 
+    @Pages
     List<DataFunctionAuthorityEntity> getAuthorityList(DataFunctionAuthorityQuery params);
 
     int insertFuncAuthority(DataFunctionAuthorityEntity params);

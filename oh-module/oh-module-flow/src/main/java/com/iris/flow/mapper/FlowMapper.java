@@ -1,7 +1,9 @@
 package com.iris.flow.mapper;
 
+import com.github.pagehelper.Page;
 import com.iris.flow.entity.FlowEntity;
 import com.iris.flow.query.FlowQuery;
+import com.iris.framework.datasource.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +24,8 @@ public interface FlowMapper {
 
     int save(FlowEntity flowEntity);
 
-    List<FlowEntity> getList(FlowQuery query);
+    @Pages
+    Page<FlowEntity> getList(FlowQuery query);
 
     List<FlowEntity> getByKey(@Param("key")String key);
 }

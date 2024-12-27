@@ -1,11 +1,11 @@
 package com.iris.flow.mapper;
 
+import com.github.pagehelper.Page;
 import com.iris.flow.entity.FlowNodeEntity;
 import com.iris.flow.query.FlowNodeQuery;
+import com.iris.framework.datasource.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
 * 环节定义表
@@ -16,7 +16,8 @@ import java.util.List;
 @Mapper
 public interface FlowNodeMapper {
 
-    List<FlowNodeEntity> getList(FlowNodeQuery query);
+    @Pages
+    Page<FlowNodeEntity> getList(FlowNodeQuery query);
 
     int save(FlowNodeEntity param);
 

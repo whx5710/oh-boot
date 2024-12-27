@@ -1,7 +1,5 @@
 package com.iris.team.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.team.convert.OhTaskUserConvert;
 import com.iris.team.entity.OhTaskUserEntity;
@@ -29,10 +27,8 @@ public class OhTaskUserServiceImpl implements OhTaskUserService {
     }
     @Override
     public PageResult<OhTaskUserVO> page(OhTaskUserQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<OhTaskUserEntity> list = ohTaskUserMapper.getList(query);
-        PageInfo<OhTaskUserEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(OhTaskUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(OhTaskUserConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

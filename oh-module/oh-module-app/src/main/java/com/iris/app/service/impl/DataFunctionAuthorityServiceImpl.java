@@ -1,7 +1,5 @@
 package com.iris.app.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.core.exception.ServerException;
 import com.iris.app.convert.DataFunctionAuthorityConvert;
@@ -33,10 +31,8 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
 
     @Override
     public PageResult<DataFunctionAuthorityVO> page(DataFunctionAuthorityQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<DataFunctionAuthorityEntity> list = dataFunctionMapper.getAuthorityList(query);
-        PageInfo<DataFunctionAuthorityEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(DataFunctionAuthorityConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(DataFunctionAuthorityConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.iris.sys.quartz.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.iris.core.utils.PageResult;
 import com.iris.sys.quartz.convert.ScheduleJobLogConvert;
 import com.iris.sys.quartz.entity.ScheduleJobLogEntity;
@@ -29,10 +27,8 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     }
     @Override
     public PageResult<ScheduleJobLogVO> page(ScheduleJobLogQuery query) {
-        PageHelper.startPage(query.getPage(), query.getLimit());
         List<ScheduleJobLogEntity> list = scheduleJobMapper.getLogList(query);
-        PageInfo<ScheduleJobLogEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(ScheduleJobLogConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(ScheduleJobLogConvert.INSTANCE.convertList(list), query.getTotal());
     }
 
     @Override
