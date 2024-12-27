@@ -11,8 +11,8 @@ import com.iris.flow.service.TaskRecordService;
 import com.iris.flow.vo.TaskRecordVO;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.PageResult;
+import com.iris.support.cache.SysUserCache;
 import com.iris.support.entity.SysUserEntity;
-import com.iris.support.service.SysUserService;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.slf4j.Logger;
@@ -40,14 +40,14 @@ public class TaskRecordServiceImpl implements TaskRecordService {
     private final TaskRecordMapper taskRecordMapper;
 
 
-    private final SysUserService sysUserService;
+    private final SysUserCache sysUserCache;
 
 
     public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper,
-                                 SysUserService sysUserService){
+                                 SysUserCache sysUserCache){
         this.historyService = historyService;
         this.taskRecordMapper = taskRecordMapper;
-        this.sysUserService = sysUserService;
+        this.sysUserCache = sysUserCache;
     }
 
     @Override
@@ -133,7 +133,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     String assignee = his.getAssignee();
                     try{
                         Long userId = Long.valueOf(assignee);
-                        SysUserEntity sysUserEntity = sysUserService.getUser(userId, true);
+                        SysUserEntity sysUserEntity = sysUserCache.getUser(userId);
                         if(sysUserEntity != null){
                             taskRecord.setAssigneeName(sysUserEntity.getRealName());
                         }

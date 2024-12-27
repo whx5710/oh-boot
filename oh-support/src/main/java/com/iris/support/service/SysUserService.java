@@ -43,14 +43,6 @@ public interface SysUserService {
     SysUserEntity getUser(Long userId);
 
     /**
-     * 根据用户ID获取用户(优先读取缓存)
-     * @param userId 用户ID
-     * @param cache 为true则优先读取缓存
-     * @return 用户信息
-     */
-    SysUserEntity getUser(Long userId, Boolean cache);
-
-    /**
      * 修改密码
      *
      * @param id          用户ID
