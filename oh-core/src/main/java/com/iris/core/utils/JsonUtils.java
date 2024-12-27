@@ -36,11 +36,11 @@ public class JsonUtils {
 
     private final static Logger log = LoggerFactory.getLogger(JsonUtils.class);
 
-    static {
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // 未知的属性
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 空beans
-
+    /**
+     * 日期格式化
+     * @return
+     */
+    public static JavaTimeModule getJavaTimeModule(){
         // 日期时间处理
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         // LocalDateTime
@@ -55,16 +55,14 @@ public class JsonUtils {
         // date
         javaTimeModule.addSerializer(Date.class,new DateSerializer(false,new SimpleDateFormat(DateUtils.DATE_TIME_PATTERN)));
         javaTimeModule.addDeserializer(Date.class,new DateDeserializers.DateDeserializer());
-
-        objectMapper.registerModule(javaTimeModule);
+        return javaTimeModule;
     }
 
-    /**
-     * 获取 ObjectMapper
-     * @return
-     */
-    public static ObjectMapper getObjectMapper(){
-        return objectMapper;
+    static {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // 未知的属性
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 空beans
+        objectMapper.registerModule(getJavaTimeModule());
     }
     /**
      * 对象转json字符串
