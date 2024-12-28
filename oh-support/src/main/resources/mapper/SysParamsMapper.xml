@@ -6,7 +6,7 @@
         select * from sys_params where db_status = 1
         <if test="paramValue != null and paramValue != ''">and param_value = #{paramValue}</if>
         <if test="paramKey != null and paramKey != ''">and param_key = #{paramKey}</if>
-        <if test="paramType != null and paramType != ''">and param_type = #{paramType}</if>
+        <if test="paramType != null">and param_type = #{paramType}</if>
         <if test="idList != null and idList.size() > 0">
             and id in
             <foreach item="id" index="index" collection="idList" open="(" separator="," close=")">
@@ -25,7 +25,7 @@
             <if test="paramValue != null and paramValue != ''">param_value = #{paramValue},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null and updater != ''">updater = #{updater},</if>
+            <if test="updater != null">updater = #{updater},</if>
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
