@@ -2,8 +2,6 @@ package com.iris.support.entity;
 
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Objects;
-
 /**
  * 参数管理
  *
@@ -18,7 +16,7 @@ public class SysParamsEntity extends BaseEntity {
     private String paramName;
 
     /**
-     * 系统参数
+     * 系统参数   0：否   1：是
      */
     private Integer paramType;
 
@@ -77,15 +75,4 @@ public class SysParamsEntity extends BaseEntity {
         this.remark = remark;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysParamsEntity that)) return false;
-        return Objects.equals(getParamName(), that.getParamName()) && Objects.equals(getParamType(), that.getParamType()) && Objects.equals(getParamKey(), that.getParamKey()) && Objects.equals(getParamValue(), that.getParamValue()) && Objects.equals(getRemark(), that.getRemark());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getParamName(), getParamType(), getParamKey(), getParamValue(), getRemark());
-    }
 }
