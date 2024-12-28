@@ -2,7 +2,6 @@ package com.iris.framework.datasource.aspect;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageParam;
 import com.iris.core.exception.ServerException;
 import com.iris.framework.query.Query;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -44,7 +43,6 @@ public class PageAspect {
         //每页记录数
         Integer pageSize = 10;
         Query query = null;
-        PageParam a;
         //获取被增强方法的参数
         Object[] args = proceedingJoinPoint.getArgs();
         for (Object arg : args) {
@@ -64,6 +62,8 @@ public class PageAspect {
             if(query != null){
                 //获取并封装分页后的参数
                 query.setTotal(page.getTotal());
+            }else{
+                log.warn("参数缺少com.iris.framework.query.Query对象，默认查询第{}页{}条",pageNum, pageSize);
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);
