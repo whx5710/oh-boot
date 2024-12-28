@@ -1,5 +1,6 @@
 package com.iris.sys.base.mapper;
 
+import com.iris.framework.datasource.annotations.Pages;
 import com.iris.sys.base.entity.SmsLogEntity;
 import com.iris.sys.base.query.SmsLogQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,6 +16,7 @@ import java.util.List;
 @Mapper
 public interface SmsLogMapper {
 
+    @Pages
     List<SmsLogEntity> getList(SmsLogQuery query);
 
     SmsLogEntity getById(@Param("id")Long id);
