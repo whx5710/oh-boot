@@ -12,7 +12,7 @@ public class Query extends PageParam {
 
     private String sqlFilter; // 过滤SQL
 
-    private Long total;
+    private Long total = 0L;
 
     public String getSqlFilter() {
         return sqlFilter;
