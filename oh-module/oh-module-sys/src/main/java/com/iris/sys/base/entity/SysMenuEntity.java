@@ -43,6 +43,11 @@ public class SysMenuEntity extends BaseEntity {
 	private String icon;
 
 	/**
+	 * 是否缓存
+	 */
+	private Boolean noCache;
+
+	/**
 	 * 备注
 	 */
 	private String mark;
@@ -120,6 +125,14 @@ public class SysMenuEntity extends BaseEntity {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public Boolean getNoCache() {
+		return noCache;
+	}
+
+	public void setNoCache(Boolean noCache) {
+		this.noCache = noCache;
 	}
 
 	public String getMark() {

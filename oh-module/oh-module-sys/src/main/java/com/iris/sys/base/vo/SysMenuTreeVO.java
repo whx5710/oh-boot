@@ -46,6 +46,12 @@ public class SysMenuTreeVO extends TreeNode<SysMenuTreeVO> {
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
 
+    /**
+     * 是否缓存
+     */
+    @Schema(description = "缓存")
+    private Boolean noCache;
+
     @Schema(description = "创建时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
@@ -110,6 +116,14 @@ public class SysMenuTreeVO extends TreeNode<SysMenuTreeVO> {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public Boolean getNoCache() {
+        return noCache;
+    }
+
+    public void setNoCache(Boolean noCache) {
+        this.noCache = noCache;
     }
 
     public LocalDateTime getCreateTime() {
