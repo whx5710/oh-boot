@@ -35,17 +35,14 @@ public class SysRoleController {
     private final SysUserService sysUserService;
     private final SysRoleMenuService sysRoleMenuService;
     private final SysRoleDataScopeService sysRoleDataScopeService;
-//    private final SysMenuService sysMenuService;
     private final SysUserRoleService sysUserRoleService;
 
-    public SysRoleController(SysRoleService sysRoleService, SysUserService sysUserService, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService,
-//                             SysMenuService sysMenuService,
-                             SysUserRoleService sysUserRoleService) {
+    public SysRoleController(SysRoleService sysRoleService, SysUserService sysUserService, SysRoleMenuService sysRoleMenuService,
+                             SysRoleDataScopeService sysRoleDataScopeService, SysUserRoleService sysUserRoleService) {
         this.sysRoleService = sysRoleService;
         this.sysUserService = sysUserService;
         this.sysRoleMenuService = sysRoleMenuService;
         this.sysRoleDataScopeService = sysRoleDataScopeService;
-//        this.sysMenuService = sysMenuService;
         this.sysUserRoleService = sysUserRoleService;
     }
 
@@ -126,16 +123,6 @@ public class SysRoleController {
 
         return Result.ok();
     }
-
-//    @GetMapping("menu")
-//    @Operation(summary = "角色菜单")
-//    @PreAuthorize("hasAuthority('sys:role:menu')")
-//    public Result<List<SysMenuTreeVO>> menu() {
-//        UserDetail user = SecurityUser.getUser();
-//        List<SysMenuTreeVO> list = sysMenuService.getUserMenuList(user, null);
-//
-//        return Result.ok(list);
-//    }
 
     @GetMapping("user/page")
     @Operation(summary = "角色用户-分页")

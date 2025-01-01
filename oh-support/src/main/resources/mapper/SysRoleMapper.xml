@@ -22,7 +22,7 @@
         WHERE id = #{id}
     </update>
 
-    <insert id="insertRole" parameterType="com.iris.support.entity.SysRoleEntity">
+    <insert id="insertRole" parameterType="com.iris.support.entity.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_role ( name, remark, data_scope, org_id, db_status, creator, create_time)
         VALUES
         (#{name}, #{remark}, #{dataScope}, #{orgId}, #{dbStatus}, #{creator}, #{createTime})
