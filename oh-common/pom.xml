@@ -17,8 +17,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <!-- excel 工具 -->
         <easyexcel.version>4.0.3</easyexcel.version>
-        <!-- swagger（xiaoymin版本）生成在线文档 -->
-        <knife4j.version>4.5.0</knife4j.version>
     </properties>
 
     <dependencies>
@@ -32,12 +30,6 @@
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-core</artifactId>
-        </dependency>
-        <!-- 接口文档 -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 </project>

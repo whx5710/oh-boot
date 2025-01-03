@@ -2,8 +2,6 @@ package com.iris.sys.base.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.common.utils.ExcelUtils;
-import com.iris.core.utils.DateUtils;
 import com.iris.core.utils.HttpContextUtils;
 import com.iris.core.utils.IpUtils;
 import com.iris.core.utils.PageResult;
@@ -18,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,7 +64,7 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
         List<SysLogLoginVO> sysLogLoginVOS = SysLogLoginConvert.INSTANCE.convertList(list);
 //        transService.transBatch(sysLogLoginVOS);
         // 写到浏览器打开
-        ExcelUtils.excelExport(SysLogLoginVO.class, "system_login_log_excel" + DateUtils.format(new Date()), null, sysLogLoginVOS);
+        //ExcelUtils.excelExport(SysLogLoginVO.class, "system_login_log_excel" + DateUtils.format(new Date()), null, sysLogLoginVOS);
     }
 
     /**

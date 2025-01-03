@@ -1,7 +1,7 @@
 package com.iris.support.controller;
 
-import com.iris.common.operatelog.annotations.OperateLog;
-import com.iris.common.operatelog.enums.OperateTypeEnum;
+import com.iris.framework.operatelog.annotations.OperateLog;
+import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.core.constant.Constant;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;

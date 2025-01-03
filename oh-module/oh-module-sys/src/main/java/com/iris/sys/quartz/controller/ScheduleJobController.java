@@ -2,8 +2,8 @@ package com.iris.sys.quartz.controller;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.iris.common.operatelog.annotations.OperateLog;
-import com.iris.common.operatelog.enums.OperateTypeEnum;
+import com.iris.framework.operatelog.annotations.OperateLog;
+import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.core.exception.ServerException;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;

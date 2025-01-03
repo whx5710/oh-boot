@@ -1,6 +1,6 @@
-package com.iris.common.operatelog.annotations;
+package com.iris.framework.operatelog.annotations;
 
-import com.iris.common.operatelog.enums.OperateTypeEnum;
+import com.iris.framework.operatelog.enums.OperateTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

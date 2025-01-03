@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.common.operatelog.dto.OperateLogDTO;
+import com.iris.framework.operatelog.dto.OperateLogDTO;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.utils.ExceptionUtils;

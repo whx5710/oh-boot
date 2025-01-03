@@ -1,8 +1,8 @@
-package com.iris.common.operatelog.aspect;
+package com.iris.framework.operatelog.aspect;
 
-import com.iris.common.operatelog.annotations.OperateLog;
-import com.iris.common.operatelog.dto.OperateLogDTO;
-import com.iris.common.operatelog.service.OperateLogService;
+import com.iris.framework.operatelog.annotations.OperateLog;
+import com.iris.framework.operatelog.dto.OperateLogDTO;
+import com.iris.framework.operatelog.service.OperateLogService;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.Constant;
@@ -11,6 +11,8 @@ import com.iris.core.utils.HttpContextUtils;
 import com.iris.core.utils.IpUtils;
 import com.iris.core.utils.IrisTools;
 import com.iris.core.utils.JsonUtils;
+import com.iris.framework.security.user.SecurityUser;
+import com.iris.framework.security.user.UserDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -119,6 +121,12 @@ public class OperateLogAspect {
                 BaseUserEntity userEntity = JsonUtils.convertValue(object, BaseUserEntity.class);
                 log.setUserId(userEntity.getId());
                 log.setRealName(userEntity.getRealName());
+            }else{
+                UserDetail userDetail = SecurityUser.getUser();
+                if(userDetail != null){
+                    log.setUserId(userDetail.getId());
+                    log.setRealName(userDetail.getRealName());
+                }
             }
 
             // 请求端信息

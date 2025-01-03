@@ -22,7 +22,7 @@ public class SecurityUser {
             user = (UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (Exception e){
              log.warn("未获取到用户信息！{}", e.getMessage());
-            return new UserDetail();
+            return null;
         }
         return user;
     }

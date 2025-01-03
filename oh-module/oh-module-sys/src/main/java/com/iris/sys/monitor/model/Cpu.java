@@ -57,7 +57,7 @@ public class Cpu {
         this.setCpuNum(cpuInfo.getCpuNum());
         this.setTotal(cpuInfo.getToTal());
         this.setSys(cpuInfo.getSys());
-        this.setUsed(cpuInfo.getUser());
+        this.setUsed(cpuInfo.getUsed());
         this.setWait(cpuInfo.getWait());
         this.setFree(cpuInfo.getFree());
     }
