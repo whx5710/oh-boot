@@ -43,7 +43,23 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     public void save(SysMenuTreeVO vo) {
         SysMenuEntity entity = SysMenuConvert.INSTANCE.convert(vo);
-
+        // url不以 / 开头
+        if(entity.getUrl() != null && entity.getUrl().startsWith("/")){
+            entity.setUrl(entity.getUrl().substring(1));
+        }
+        // 显示路径以 / 开头
+        if(entity.getMenuPath() != null && !entity.getMenuPath().startsWith("/")){
+            entity.setMenuPath("/" + entity.getMenuPath());
+        }
+        // 判断显示路径是否存在
+        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()){
+            SysMenuEntity param = new SysMenuEntity();
+            param.setMenuPath(entity.getMenuPath());
+            List<SysMenuEntity> list = sysMenuMapper.getList(param);
+            if(list != null && !list.isEmpty()){
+                throw new ServerException("显示路径已存在，请换一个!");
+            }
+        }
         // 保存菜单
         sysMenuMapper.save(entity);
     }
@@ -56,7 +72,27 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (entity.getId().equals(entity.getParentId())) {
             throw new ServerException("上级菜单不能为自己");
         }
-
+        // url不以 / 开头
+        if(entity.getUrl() != null && entity.getUrl().startsWith("/")){
+            entity.setUrl(entity.getUrl().substring(1));
+        }
+        // 显示路径以 / 开头
+        if(entity.getMenuPath() != null && !entity.getMenuPath().startsWith("/")){
+            entity.setMenuPath("/" + entity.getMenuPath());
+        }
+        // 判断显示路径是否存在
+        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()){
+            SysMenuEntity param = new SysMenuEntity();
+            param.setMenuPath(entity.getMenuPath());
+            List<SysMenuEntity> list = sysMenuMapper.getList(param);
+            if(list != null && !list.isEmpty()){
+                for(SysMenuEntity item : list){
+                    if(!item.getId().equals(entity.getId())){
+                        throw new ServerException("显示路径已存在，请换一个!");
+                    }
+                }
+            }
+        }
         // 更新菜单
         sysMenuMapper.updateById(entity);
     }

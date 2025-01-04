@@ -25,6 +25,9 @@ public class SysMenuEntity extends BaseEntity {
 	 * 菜单URL
 	 */
 	private String url;
+
+	// 菜单路径
+	private String menuPath;
 	/**
 	 * 授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)
 	 */
@@ -85,6 +88,14 @@ public class SysMenuEntity extends BaseEntity {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getMenuPath() {
+		return menuPath;
+	}
+
+	public void setMenuPath(String menuPath) {
+		this.menuPath = menuPath;
 	}
 
 	public String getAuthority() {

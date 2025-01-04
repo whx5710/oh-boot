@@ -40,8 +40,8 @@
 	</select>
 
 	<insert id="save">
-		INSERT INTO sys_menu (parent_id, name, url, authority, type, open_style, icon, sort, db_status, mark, creator, create_time)
-		VALUES (#{parentId}, #{name}, #{url}, #{authority}, #{type}, #{openStyle}, #{icon}, #{sort}, #{dbStatus}, #{mark}, #{creator}, #{createTime})
+		INSERT INTO sys_menu (parent_id, name, url, menu_path, authority, type, open_style, icon, sort, db_status, mark, creator, create_time)
+		VALUES (#{parentId}, #{name}, #{url}, #{menuPath}, #{authority}, #{type}, #{openStyle}, #{icon}, #{sort}, #{dbStatus}, #{mark}, #{creator}, #{createTime})
 	</insert>
 
 	<update id="updateById">
@@ -50,6 +50,7 @@
 			<if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
 			<if test="name != null and name != ''">name = #{name},</if>
 			<if test="url != null and url != ''">url = #{url},</if>
+			<if test="menuPath != null and menuPath != ''">menu_path = #{menuPath},</if>
 			<if test="authority != null and authority != ''">authority = #{authority},</if>
 			<if test="type != null">type = #{type},</if>
 			<if test="openStyle != null">open_style = #{openStyle},</if>
@@ -66,6 +67,7 @@
 	<select id="getList" resultType="com.iris.sys.base.entity.SysMenuEntity">
 		select * from sys_menu where db_status = 1
 		<if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
+		<if test="menuPath != null and menuPath != ''">and menu_path = #{menuPath}</if>
 		order by sort
 	</select>
 

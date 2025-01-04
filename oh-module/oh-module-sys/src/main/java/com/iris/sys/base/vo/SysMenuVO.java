@@ -33,6 +33,9 @@ public class SysMenuVO extends IDEntity implements Serializable {
     @Schema(description = "菜单URL")
     private String url;
 
+    @Schema(description = "菜单路径")
+    private String menuPath;
+
     @Schema(description = "类型  0：菜单   1：按钮   2：接口")
     @Min(value = 0, message = "类型不正确")
     @Max(value = 2, message = "类型不正确")
@@ -85,6 +88,14 @@ public class SysMenuVO extends IDEntity implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getMenuPath() {
+        return menuPath;
+    }
+
+    public void setMenuPath(String menuPath) {
+        this.menuPath = menuPath;
     }
 
     public Integer getType() {
