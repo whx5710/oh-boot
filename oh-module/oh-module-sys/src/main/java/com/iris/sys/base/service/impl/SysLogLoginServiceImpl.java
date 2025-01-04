@@ -1,10 +1,10 @@
 package com.iris.sys.base.service.impl;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.core.utils.HttpContextUtils;
-import com.iris.core.utils.IpUtils;
-import com.iris.core.utils.PageResult;
+import com.iris.core.utils.*;
 import com.iris.sys.base.convert.SysLogLoginConvert;
 import com.iris.sys.base.entity.SysLogLoginEntity;
 import com.iris.sys.base.mapper.SysLogLoginMapper;
@@ -13,9 +13,12 @@ import com.iris.sys.base.service.SysLogLoginService;
 import com.iris.sys.base.vo.AnalysisVO;
 import com.iris.sys.base.vo.SysLogLoginVO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,9 +65,11 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
     public void export() {
         List<SysLogLoginEntity> list = sysLogLoginMapper.getList(new SysLogLoginQuery());
         List<SysLogLoginVO> sysLogLoginVOS = SysLogLoginConvert.INSTANCE.convertList(list);
-//        transService.transBatch(sysLogLoginVOS);
         // 写到浏览器打开
-        //ExcelUtils.excelExport(SysLogLoginVO.class, "system_login_log_excel" + DateUtils.format(new Date()), null, sysLogLoginVOS);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("登录日志","日志"), SysLogLoginVO.class, sysLogLoginVOS);
+        HttpServletResponse response = HttpContextUtils.getHttpServletResponse();
+        AssertUtils.isNull(response, "接口响应");
+        ExcelUtils.downLoadExcel("登录日志" + DateUtils.format(new Date()), response, workbook);
     }
 
     /**

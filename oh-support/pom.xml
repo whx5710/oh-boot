@@ -22,9 +22,5 @@
             <groupId>com.iris</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.iris</groupId>
-            <artifactId>oh-common</artifactId>
-        </dependency>
     </dependencies>
 </project>

@@ -24,11 +24,6 @@
             <groupId>com.iris</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
-        <!-- 公用模块 -->
-        <dependency>
-            <groupId>com.iris</groupId>
-            <artifactId>oh-common</artifactId>
-        </dependency>
         <!-- 基础支撑、组织架构 -->
         <dependency>
             <groupId>com.iris</groupId>

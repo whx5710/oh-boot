@@ -28,10 +28,6 @@
         </dependency>
         <dependency>
             <groupId>com.iris</groupId>
-            <artifactId>oh-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.iris</groupId>
             <artifactId>oh-support</artifactId>
             <version>1.0.0.20241210</version>
         </dependency>
@@ -62,11 +58,11 @@
             <artifactId>oshi-core</artifactId>
         </dependency>
         <!-- excel操作 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>${easyexcel.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- websocket -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

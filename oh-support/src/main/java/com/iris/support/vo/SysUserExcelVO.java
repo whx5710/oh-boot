@@ -1,8 +1,6 @@
 package com.iris.support.vo;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.iris.common.excel.LocalDateTimeConverter;
+import cn.afterturn.easypoi.excel.annotation.Excel;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,43 +19,39 @@ public class SysUserExcelVO implements Serializable {
     /**
      * 本属性对于导出无用，只是用于翻译
      */
-    @ExcelIgnore
     private Long id;
 
-    @ExcelProperty("用户名")
+    @Excel(name = "用户名", orderNum = "1")
     private String username;
 
-    @ExcelProperty("姓名")
+    @Excel(name = "姓名", orderNum = "2")
     private String realName;
 
-    @ExcelIgnore
     private Integer gender;
 
-    @ExcelProperty(value = "性别")
+    @Excel(name = "性别", orderNum = "3")
     private String genderLabel;
 
-    @ExcelProperty("邮箱")
+    @Excel(name = "邮箱", orderNum = "4")
     private String email;
 
-    @ExcelProperty("手机号")
+    @Excel(name = "手机号", orderNum = "5")
     private String mobile;
 
-    @ExcelProperty("机构ID")
+    @Excel(name = "机构ID", orderNum = "6")
     private Long orgId;
 
-    @ExcelIgnore
     private Integer status;
 
-    @ExcelProperty(value = "状态")
+    @Excel(name = "状态", orderNum = "7")
     private String statusLabel;
 
-    @ExcelIgnore
     private Integer superAdmin;
 
-    @ExcelProperty(value = "超级管理员")
+    @Excel(name = "超级管理员", orderNum = "8")
     private String superAdminLabel;
 
-    @ExcelProperty(value = "创建时间", converter = LocalDateTimeConverter.class)
+    @Excel(name = "创建时间", orderNum = "9", exportFormat = "yyyy年MM月dd日 HH时mm分ss秒", width = 20)
     private LocalDateTime createTime;
 
     public Long getId() {

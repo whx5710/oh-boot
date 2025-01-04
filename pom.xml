@@ -31,7 +31,7 @@
 		<module>oh-module</module>
 		<module>oh-support</module>
 		<module>oh-core</module>
-		<module>oh-common</module>
+		<!--<module>oh-common</module>-->
 		<module>oh-framework</module>
 	</modules>
 
@@ -84,11 +84,6 @@
 				<groupId>com.iris</groupId>
 				<artifactId>oh-framework</artifactId>
 				<version>${iris.framework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.iris</groupId>
-				<artifactId>oh-common</artifactId>
-				<version>${iris.common.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.iris</groupId>

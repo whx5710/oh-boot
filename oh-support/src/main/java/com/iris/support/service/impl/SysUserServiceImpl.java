@@ -1,16 +1,14 @@
 package com.iris.support.service.impl;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iris.common.excel.ExcelFinishCallBack;
-import com.iris.common.utils.ExcelUtils;
 import com.iris.core.cache.RedisCache;
 import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.CommonEnum;
-import com.iris.core.utils.AssertUtils;
-import com.iris.core.utils.DateUtils;
-import com.iris.core.utils.PageResult;
+import com.iris.core.utils.*;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.support.mapper.SysUserMapper;
 import com.iris.support.enums.SuperAdminEnum;
@@ -26,6 +24,8 @@ import com.iris.support.service.SysUserRoleService;
 import com.iris.core.exception.ServerException;
 import com.iris.support.entity.SysUserEntity;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -264,7 +264,7 @@ public class SysUserServiceImpl  implements SysUserService {
     @Override
     public void importByExcel(MultipartFile file, String password) {
 
-        ExcelUtils.readAnalysis(file, SysUserExcelVO.class, new ExcelFinishCallBack<SysUserExcelVO>() {
+        /*ExcelUtils.readAnalysis(file, SysUserExcelVO.class, new ExcelFinishCallBack<SysUserExcelVO>() {
             @Override
             public void doAfterAllAnalysed(List<SysUserExcelVO> result) {
                 saveUser(result);
@@ -280,17 +280,19 @@ public class SysUserServiceImpl  implements SysUserService {
                 sysUserEntities.forEach(user -> user.setPassword(password));
                 sysUserEntities.forEach(sysUserMapper::insert);
             }
-        });
+        });*/
 
     }
 
     @Override
     public void export() {
-        List<SysUserEntity> list = sysUserMapper.getList(new SysUserQuery()); // list(Wrappers.lambdaQuery(SysUserEntity.class).eq(SysUserEntity::getSuperAdmin, SuperAdminEnum.NO.getValue()));
+        List<SysUserEntity> list = sysUserMapper.getList(new SysUserQuery());
         List<SysUserExcelVO> userExcelVOS = SysUserConvert.INSTANCE.convert2List(list);
-        // transService.transBatch(userExcelVOS);
         // 写到浏览器打开
-        ExcelUtils.excelExport(SysUserExcelVO.class, "system_user_excel" + DateUtils.format(new Date()), null, userExcelVOS);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("用户信息表","系统用户"), SysUserExcelVO .class, userExcelVOS);
+        HttpServletResponse response = HttpContextUtils.getHttpServletResponse();
+        AssertUtils.isNull(response, "接口响应");
+        ExcelUtils.downLoadExcel("用户信息" + DateUtils.format(new Date()), response, workbook);
     }
 
     /**
