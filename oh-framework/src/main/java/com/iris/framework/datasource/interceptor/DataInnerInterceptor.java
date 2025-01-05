@@ -158,25 +158,19 @@ public class DataInnerInterceptor implements Interceptor {
      * @return 拼接好的SQL
      */
     private String getSelect(String buildSql, String sqlFilter){
-        /*try {
-            Select select = (Select) CCJSqlParserUtil.parse(buildSql);
-            PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-
-            Expression expression = plainSelect.getWhere();
-            if(expression == null){
-                plainSelect.setWhere(new StringValue(sqlFilter));
-            }else{
-                AndExpression andExpression =  new AndExpression(expression, new StringValue(sqlFilter));
-                plainSelect.setWhere(andExpression);
-            }
-            // 需用双引号，比如 concat('%', ?)
-            return select.toString().replaceAll("'", "");
-        }catch (JSQLParserException e){
-            log.error("数据过滤SQL拼接失败，请检查!{}",e.getMessage());
-            return buildSql;
-        }*/
-        log.warn("查询过滤功能未实现");
-        return buildSql;
+        log.debug("原始sql = {}", buildSql);
+        log.debug("过滤sql = {}", sqlFilter);
+        String where = "WHERE";
+        String sqlTmp = buildSql.toUpperCase();
+        String sql = "";
+        if(sqlTmp.contains(where)){
+            int i = sqlTmp.lastIndexOf(where) + where.length();
+            sql = buildSql.substring(0, i) + sqlFilter + " and" + buildSql.substring(i);
+        }else{
+            sql = buildSql + sqlFilter;
+        }
+        log.debug("拼接后的sql = {}", sql);
+        return sql;
     }
 
     @Override

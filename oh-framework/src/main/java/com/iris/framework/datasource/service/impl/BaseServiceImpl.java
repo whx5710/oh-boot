@@ -1,10 +1,10 @@
 package com.iris.framework.datasource.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.service.BaseService;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -25,6 +25,9 @@ public class BaseServiceImpl implements BaseService {
      */
     protected String getDataScopeFilter(String tableAlias, String orgIdAlias) {
         UserDetail user = SecurityUser.getUser();
+        if(user == null){
+            return null;
+        }
         // 如果是超级管理员，则不进行数据过滤
         if (user.getSuperAdmin().equals(Constant.SUPER_ADMIN)) {
             return null;
@@ -36,7 +39,7 @@ public class BaseServiceImpl implements BaseService {
         }
 
         // 获取表的别名
-        if (StringUtils.hasText(tableAlias)) {
+        if (!tableAlias.isEmpty()) {
             tableAlias += ".";
         }
 
@@ -51,19 +54,12 @@ public class BaseServiceImpl implements BaseService {
         }
         // 数据过滤
         if (!dataScopeList.isEmpty()) {
-            if (!StringUtils.hasText(orgIdAlias)) {
+            if (orgIdAlias == null || orgIdAlias.isEmpty()) {
                 orgIdAlias = "org_id";
             }
             sqlFilter.append(tableAlias).append(orgIdAlias);
-            StringBuilder inStr = new StringBuilder();
-            for(int i = 0; i < dataScopeList.size(); i++){
-                if(i == (dataScopeList.size() - 1)){
-                    inStr.append(dataScopeList.get(i));
-                }else{
-                    inStr.append(dataScopeList.get(i)).append(",");
-                }
-            }
-            sqlFilter.append(" in(").append(inStr).append(")");
+
+            sqlFilter.append(" in(").append(StrUtil.join(",", dataScopeList)).append(")");
 
             sqlFilter.append(" or ");
         }
