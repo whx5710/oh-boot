@@ -1,11 +1,13 @@
 package com.iris.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.iris.framework.security.user.SecurityUser;
 import com.iris.support.mapper.SysRoleDataScopeMapper;
 import com.iris.support.service.SysRoleDataScopeService;
 import com.iris.support.entity.SysRoleDataScopeEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,8 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
                 SysRoleDataScopeEntity entity = new SysRoleDataScopeEntity();
                 entity.setOrgId(orgId);
                 entity.setRoleId(roleId);
+                entity.setCreateTime(LocalDateTime.now());
+                entity.setCreator(SecurityUser.getUserId());
                 return entity;
             }).collect(Collectors.toList());
 
@@ -48,6 +52,8 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
         if (CollUtil.isNotEmpty(deleteOrgIdList)){
             SysRoleDataScopeEntity param = new SysRoleDataScopeEntity();
             param.setRoleId(roleId);
+            param.setUpdateTime(LocalDateTime.now());
+            param.setUpdater(SecurityUser.getUserId());
             sysRoleDataScopeMapper.deleteOrgIdList((List<Long>) deleteOrgIdList, param);
         }
     }
@@ -59,6 +65,8 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        sysRoleDataScopeMapper.deleteByRoleIdList(roleIdList, new SysRoleDataScopeEntity());
+        SysRoleDataScopeEntity param = new SysRoleDataScopeEntity();
+        param.setUpdater(SecurityUser.getUserId());
+        sysRoleDataScopeMapper.deleteByRoleIdList(roleIdList, param);
     }
 }
