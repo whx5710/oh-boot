@@ -58,6 +58,11 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
         return userDetail;
     }
 
+    /**
+     * 获取数据范围
+     * @param userDetail
+     * @return
+     */
     private List<Long> getDataScope(UserDetail userDetail) {
         Integer dataScope = sysRoleMapper.getDataScopeByUserId(userDetail.getId());
         if (dataScope == null) {
