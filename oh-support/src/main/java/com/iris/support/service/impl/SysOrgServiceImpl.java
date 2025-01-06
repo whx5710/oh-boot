@@ -160,6 +160,12 @@ public class SysOrgServiceImpl implements SysOrgService {
 		}
 	}
 
+	/**
+	 * 递归查询ID下面的机构
+	 * @param id
+	 * @param orgList
+	 * @param subIdList
+	 */
 	private void getTree(Long id, List<SysOrgEntity> orgList, List<Long> subIdList) {
 		for(SysOrgEntity org : orgList){
 			if (org.getParentId().equals(id)){

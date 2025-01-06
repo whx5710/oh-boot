@@ -1,11 +1,13 @@
 package com.iris.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.iris.framework.security.user.SecurityUser;
 import com.iris.support.mapper.SysUserRoleMapper;
 import com.iris.support.service.SysUserRoleService;
 import com.iris.support.entity.SysUserRoleEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +42,8 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
                 SysUserRoleEntity entity = new SysUserRoleEntity();
                 entity.setUserId(userId);
                 entity.setRoleId(roleId);
+                entity.setCreator(SecurityUser.getUserId());
+                entity.setCreateTime(LocalDateTime.now());
                 return entity;
             }).collect(Collectors.toList());
 
@@ -52,6 +56,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         if (CollUtil.isNotEmpty(deleteRoleIdList)){
             SysUserRoleEntity param = new SysUserRoleEntity();
             param.setUserId(userId);
+            param.setUpdater(SecurityUser.getUserId());
             sysUserRoleMapper.deleteByRoleIdList((List<Long>) deleteRoleIdList, param);
         }
     }
@@ -62,6 +67,8 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
             SysUserRoleEntity entity = new SysUserRoleEntity();
             entity.setUserId(userId);
             entity.setRoleId(roleId);
+            entity.setCreator(SecurityUser.getUserId());
+            entity.setCreateTime(LocalDateTime.now());
             return entity;
         }).collect(Collectors.toList());
 
@@ -71,7 +78,10 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        sysUserRoleMapper.deleteByRoleIdList(roleIdList, new SysUserRoleEntity());
+        SysUserRoleEntity param = new SysUserRoleEntity();
+        param.setUpdater(SecurityUser.getUserId());
+        param.setUpdateTime(LocalDateTime.now());
+        sysUserRoleMapper.deleteByRoleIdList(roleIdList, param);
     }
 
     @Override
@@ -83,6 +93,8 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     public void deleteByUserIdList(Long roleId, List<Long> userIdList) {
         SysUserRoleEntity param = new SysUserRoleEntity();
         param.setRoleId(roleId);
+        param.setUpdateTime(LocalDateTime.now());
+        param.setUpdater(SecurityUser.getUserId());
         sysUserRoleMapper.deleteByUserIdList(userIdList, param);
     }
 

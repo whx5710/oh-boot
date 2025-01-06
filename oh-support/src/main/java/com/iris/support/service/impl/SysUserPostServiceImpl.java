@@ -1,11 +1,13 @@
 package com.iris.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.iris.framework.security.user.SecurityUser;
 import com.iris.support.mapper.SysUserPostMapper;
 import com.iris.support.service.SysUserPostService;
 import com.iris.support.entity.SysUserPostEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +42,8 @@ public class SysUserPostServiceImpl implements SysUserPostService {
                 SysUserPostEntity entity = new SysUserPostEntity();
                 entity.setUserId(userId);
                 entity.setPostId(postId);
+                entity.setCreator(SecurityUser.getUserId());
+                entity.setCreateTime(LocalDateTime.now());
                 return entity;
             }).collect(Collectors.toList());
             // 批量新增
@@ -51,18 +55,23 @@ public class SysUserPostServiceImpl implements SysUserPostService {
         if (CollUtil.isNotEmpty(deletePostIdList)){
             SysUserPostEntity param = new SysUserPostEntity();
             param.setUserId(userId);
+            param.setUpdater(SecurityUser.getUserId());
             sysUserPostMapper.deleteByPostIdList((List<Long>) deletePostIdList, param);
         }
     }
 
     @Override
     public void deleteByPostIdList(List<Long> postIdList) {
-        sysUserPostMapper.deleteByPostIdList(postIdList, new SysUserPostEntity());
+        SysUserPostEntity param = new SysUserPostEntity();
+        param.setUpdater(SecurityUser.getUserId());
+        sysUserPostMapper.deleteByPostIdList(postIdList, param);
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        sysUserPostMapper.deleteByUserIdList(userIdList, new SysUserPostEntity());
+        SysUserPostEntity param = new SysUserPostEntity();
+        param.setUpdater(SecurityUser.getUserId());
+        sysUserPostMapper.deleteByUserIdList(userIdList, param);
     }
 
     @Override
