@@ -27,18 +27,23 @@ public @interface Idempotent {
 
     /**
      * redis锁前缀
-     * @return
+     * @return s
      */
     String keyPrefix(); // idempotent
 
     /**
      * key分隔符
-     * @return
+     * @return redis的key
      */
-    String delimiter() default "|";
+    String delimiter() default ":";
 
     /**
      * 提示信息，正在执行中的提示
      */
     String message() default "重复请求，请稍后重试";
+
+    /**
+     * 幂等的超时时间内限制请求；为true时，不会清除锁定，未过期的，不能请求，比如限制1秒内多少次请求
+     */
+    boolean limit() default false;
 }
