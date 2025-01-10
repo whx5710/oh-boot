@@ -43,9 +43,6 @@ public class TokenStoreCache {
         refreshTokenInfo.setId( user.getId() );
         refreshTokenInfo.setUsername( user.getUsername() );
         refreshTokenInfo.setRealName( user.getRealName() );
-        refreshTokenInfo.setGender( user.getGender() );
-        refreshTokenInfo.setEmail( user.getEmail() );
-        refreshTokenInfo.setMobile( user.getMobile() );
         refreshTokenInfo.setIp( user.getIp() );
 
         refreshTokenInfo.setRefreshToken(refreshToken); // 刷新token
