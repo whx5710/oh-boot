@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 幂等注解
+ * 幂等注解,防止重复提交
  * @author 王小费 whx5710@qq.com
  * 2025-01-10
  */
