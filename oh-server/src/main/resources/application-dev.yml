@@ -11,8 +11,8 @@ server:
     session.cookie.http-only: true
 iris:
   security:
-    access-token-expire: 43200      # 过期时间，12小时过期
-    refresh-token-expire: 604800    # 7天过期
+    access-token-expire: 7200      # 过期时间-秒，2小时过期
+    refresh-token-expire: 43200    # 刷新token-秒 12小时
     auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
     lock-time: 3600                 # 账号锁定时间(秒)
     ignore-urls:                    # 忽略鉴权的url
