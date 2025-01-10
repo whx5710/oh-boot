@@ -1,5 +1,6 @@
 package com.iris.sys.base.vo;
 
+import com.iris.framework.utils.annotations.RequestKeyParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
@@ -16,6 +17,7 @@ public class SysAccountLoginVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @RequestKeyParam // 结合 @Idempotent 判断是否重复请求
     @Schema(description = "用户名")
     private String username;
 

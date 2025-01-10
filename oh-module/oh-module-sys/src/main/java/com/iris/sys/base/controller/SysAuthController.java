@@ -4,6 +4,8 @@ import com.iris.core.exception.ServerException;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.IrisTools;
 import com.iris.core.utils.Result;
+import com.iris.framework.utils.annotations.Idempotent;
+import com.iris.framework.utils.annotations.RequestKeyParam;
 import com.iris.sys.base.service.SysAuthService;
 import com.iris.sys.base.service.SysCaptchaService;
 import com.iris.sys.base.vo.SysAccountLoginVO;
@@ -44,6 +46,7 @@ public class SysAuthController {
 
     @PostMapping("login")
     @Operation(summary = "账号密码登录")
+    @Idempotent(keyPrefix = "auth:account", limit = true, message = "登录请求重复操作！") // 限制1秒内只能请求一次
     public Result<SysTokenVO> login(@RequestBody SysAccountLoginVO login) {
         SysTokenVO token = sysAuthService.loginByAccount(login);
         return Result.ok(token);
@@ -51,18 +54,18 @@ public class SysAuthController {
 
     /**
      * 通过用户名、密码和密钥登录
-     * 为了安全，请在服务端调用该接口，防止直接打开链接，只支持post
+     * 为了安全使用 @Idempotent 和 @RequestKeyParam 注解防止重复请求，频繁请求
      * @param userName 用户名
      * @param password base64编码的密码
      * @param userKey  用户密钥
      * @return token
      */
-//    @PostMapping("/loginByKey")
     @RequestMapping(value = "/loginByKey", method = {RequestMethod.GET,RequestMethod.POST})
     @Operation(summary = "账号密码登录(无验证码，适用于外部对接)")
     @Parameters({@Parameter(name="userName", description = "用户名"), @Parameter(name="password", description = "base64编码的密码"),
             @Parameter(name="userKey", description = "用户密钥")})
-    public Result<SysTokenVO> loginByKey(@RequestParam String userName, @RequestParam String password,
+    @Idempotent(keyPrefix = "auth:key", timeout = 15, limit = true, message = "登录请求过于频繁，请稍候再操作！") // 限制15秒内只能请求1次
+    public Result<SysTokenVO> loginByKey(@RequestKeyParam String userName, @RequestParam String password,
                                          @RequestParam String userKey) {
         AssertUtils.isBlank(password, "密码不能为空！");
         SysAccountLoginVO login = new SysAccountLoginVO();
