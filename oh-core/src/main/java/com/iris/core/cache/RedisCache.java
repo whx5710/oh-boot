@@ -2,6 +2,9 @@ package com.iris.core.cache;
 
 import com.iris.core.utils.DateUtils;
 import com.iris.core.utils.IrisTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
@@ -20,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisCache {
 
+    private final static Logger log = LoggerFactory.getLogger(RedisCache.class);
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     public RedisCache(RedisTemplate<String, Object> redisTemplate){
@@ -30,6 +35,8 @@ public class RedisCache {
      * 不设置过期时长
      */
     public final static long NOT_EXPIRE = -1L;
+
+    private static final Long SUCCESS = 1L;
 
     /**
      *
@@ -96,7 +103,7 @@ public class RedisCache {
      */
     public void deleteAll(String key) {
         Set<String> keys = redisTemplate.keys(key + "*");
-        assert keys != null;
+        //assert keys != null;
         redisTemplate.delete(keys);
     }
 
@@ -215,14 +222,18 @@ public class RedisCache {
      */
     public Long getIncrement(String key, long liveTime) {
         RedisAtomicLong counter = null;
-        counter = new RedisAtomicLong(key, redisTemplate.getConnectionFactory());
-        Long increment =  counter.incrementAndGet(); // 加1后的值
+        RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
+        if(redisConnectionFactory == null){
+            return -1L;
+        }
+        counter = new RedisAtomicLong(key, redisConnectionFactory);
+        long increment =  counter.incrementAndGet(); // 加1后的值
         //初始设置过期时间
-        boolean result = (null == increment || increment.longValue() == 1) && liveTime > 0;
+        boolean result = (increment == 1) && liveTime > 0;
         if (result) {
             counter.set(1);
             counter.expire(liveTime, TimeUnit.SECONDS);
-            increment = 1L;
+            // increment = 1L;
         }
         return increment;
     }
@@ -241,4 +252,55 @@ public class RedisCache {
         return ca.getTimeInMillis();
     }
 
+    /**
+     * 加锁
+     * @param key
+     * @param value
+     * @param expireTime
+     * @param unit
+     * @return
+     */
+    public Boolean tryLock(String key, String value, long expireTime, TimeUnit unit) {
+        try {
+            //SET命令返回OK ，则证明获取锁成功
+            return redisTemplate.opsForValue().setIfAbsent(key, value, expireTime, unit);
+        } catch (Exception e) {
+            log.error("加锁失败！{}", e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * 加锁
+     * @param key
+     * @param expireTime
+     * @param unit
+     * @return
+     */
+    public Boolean tryLock(String key, long expireTime, TimeUnit unit) {
+        return tryLock(key, String.valueOf(System.currentTimeMillis()), expireTime, unit);
+    }
+
+
+    /**
+     * 解锁
+     * @param key
+     * @return
+     */
+    public Boolean unlock(String key) {
+        try {
+//            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+//            RedisScript<String> redisScript = new DefaultRedisScript<>(script, String.class);
+            //redis脚本执行
+            //Object result = redisTemplate.execute(redisScript, Collections.singletonList(key), value))
+            Object result = redisTemplate.delete(Collections.singletonList(key));
+            if (SUCCESS.equals(result)) {
+                return true;
+            }
+        } catch (Exception e) {
+            log.error("解锁失败！{}", e.getMessage());
+            return false;
+        }
+        return false;
+    }
 }

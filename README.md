@@ -30,7 +30,7 @@ oh-module    业务模块
     - oh-module-team   协同管理【业务功能，未开发】
     - ...              扩展其他业务模块
 ```
-通过`oh-core`、`oh-framework`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程，
+通过`oh-core`、`oh-framework`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程
 
 ## 快速开始
 环境：JDK17+、MySQL8+、Redis、Kafka(RocketMq)

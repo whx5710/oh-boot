@@ -5,6 +5,7 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 - 支持动态SQL，通过 @TableName、@TableColumn和ProviderService自动生成SQL语句
 - 异步消息消费；实现JobService接口可异步消费消息，通过JobServiceConsumer.jobConsume 执行业务代码
 - 在方法上使用 @OperateLog 注解可记录操作日志
+- 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交
 ## 引入
 根据实际版本引入，如下所示：
 
