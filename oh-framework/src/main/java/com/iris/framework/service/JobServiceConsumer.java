@@ -6,7 +6,7 @@ import com.iris.core.constant.Constant;
 import com.iris.core.utils.JsonUtils;
 import com.iris.core.utils.Result;
 import com.iris.framework.common.properties.OpenApiProperties;
-import com.iris.framework.common.utils.ServiceFactory;
+import com.iris.framework.utils.ServiceFactory;
 import com.iris.framework.entity.api.MsgEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

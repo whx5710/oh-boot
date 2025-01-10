@@ -1,4 +1,4 @@
-package com.iris.framework.common.utils;
+package com.iris.framework.utils;
 
 import com.iris.core.exception.ServerException;
 import com.iris.core.utils.AssertUtils;
