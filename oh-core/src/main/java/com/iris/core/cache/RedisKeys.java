@@ -11,6 +11,8 @@ public class RedisKeys {
     // 前缀
     public static final String PREFIX = "sys:";
 
+    public static final String ACCESS = PREFIX + "access:";
+
     /**
      * 验证码Key
      */
@@ -22,16 +24,20 @@ public class RedisKeys {
      * accessToken Key
      */
     public static String getAccessTokenKey(String accessToken) {
-        return PREFIX + "access:" + accessToken;
+        return ACCESS + "token:" + accessToken;
+    }
+
+    public static String getUserInfoKey(String userId, String accessToken) {
+        return ACCESS + "user:" + userId + ":" + accessToken;
     }
 
     /**
      * 刷新token key
-     * @param refreshToken
-     * @return
+     * @param refreshToken r
+     * @return s
      */
     public static String getAccessRefreshTokenKey(String refreshToken) {
-        return PREFIX + "accessRefresh:" + refreshToken;
+        return ACCESS + "refresh:" + refreshToken;
     }
 
     public static String getLogKey() {
@@ -67,7 +73,7 @@ public class RedisKeys {
     /**
      * 用户信息key
      * @param userId 用户ID
-     * @return
+     * @return s
      */
     public static String getUserCacheKey(Long userId){
         return PREFIX + "user:info:" + userId;
@@ -75,8 +81,8 @@ public class RedisKeys {
 
     /**
      * 机构key
-     * @param orgId
-     * @return
+     * @param orgId 组织机构ID
+     * @return s
      */
     public static String getOrgCacheKey(Long orgId){
         return PREFIX + "org:info:" + orgId;

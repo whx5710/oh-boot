@@ -8,6 +8,7 @@ import com.iris.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,15 +41,17 @@ public class TokenStoreCache {
         redisCache.set(key, user, securityProperties.getAccessTokenExpire());
         // 刷新token
         RefreshTokenInfo refreshTokenInfo = new RefreshTokenInfo();
-        refreshTokenInfo.setId( user.getId() );
-        refreshTokenInfo.setUsername( user.getUsername() );
-        refreshTokenInfo.setRealName( user.getRealName() );
-        refreshTokenInfo.setIp( user.getIp() );
+        refreshTokenInfo.setId(user.getId());
+        refreshTokenInfo.setUsername(user.getUsername());
+        refreshTokenInfo.setRealName(user.getRealName());
+        refreshTokenInfo.setIp(user.getIp());
 
         refreshTokenInfo.setRefreshToken(refreshToken); // 刷新token
         refreshTokenInfo.setAccessToken(accessToken); // token
         String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
         redisCache.set(refreshKey, refreshTokenInfo, securityProperties.getRefreshTokenExpire());
+
+        redisCache.set(RedisKeys.getUserInfoKey(String.valueOf(user.getId()), accessToken), user, securityProperties.getAccessTokenExpire());
     }
 
     /**
@@ -63,12 +66,26 @@ public class TokenStoreCache {
 
     /**
      * 根据token，删除redis
-     * @param accessToken
+     * @param accessToken token
      */
     public void deleteUser(String accessToken) {
         String key = RedisKeys.getAccessTokenKey(accessToken);
         redisCache.delete(key);
     }
+
+    /**
+     * 根据userId，删除redis
+     * @param userId token
+     */
+    public void deleteUserById(Long userId) {
+        List<String> tokens = this.getTokenByUserId(userId);
+        for(String token : tokens){
+            deleteUser(token);
+        }
+        String key = RedisKeys.getUserInfoKey(String.valueOf(userId), "");
+        redisCache.deleteAll(key);
+    }
+
 
     /**
      * 获取所有用户token的key
@@ -83,4 +100,42 @@ public class TokenStoreCache {
         }
         return list;
     }
+
+    /**
+     * 获取所有用户ID的key
+     * @return list
+     */
+    public List<String> getUserIdList() {
+        String pattern = RedisKeys.getUserInfoKey("*", "*");
+        Set<String> sets = redisCache.keys(pattern);
+        List<String> list = new ArrayList<>();
+        if(sets != null){
+            Set<String> tmp = new HashSet<>();
+            for(String key: sets){
+                String s = key.substring(0, key.lastIndexOf(":"));
+                tmp.add(s.substring(s.lastIndexOf(":") + 1));
+            }
+            list.addAll(tmp);
+        }
+        return list;
+    }
+
+    /**
+     * 根据用户ID获取所有token
+     * @return list
+     */
+    public List<String> getTokenByUserId(Long userId) {
+        String pattern = RedisKeys.getUserInfoKey(String.valueOf(userId), "*");
+        Set<String> sets = redisCache.keys(pattern);
+        List<String> list = new ArrayList<>();
+        if(sets != null){
+            Set<String> tmp = new HashSet<>();
+            for(String key: sets){
+                tmp.add(key.substring(key.lastIndexOf(":") + 1));
+            }
+            list.addAll(tmp);
+        }
+        return list;
+    }
+
 }
