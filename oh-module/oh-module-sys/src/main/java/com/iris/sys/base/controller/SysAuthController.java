@@ -65,7 +65,7 @@ public class SysAuthController {
     @Parameters({@Parameter(name="userName", description = "用户名"), @Parameter(name="password", description = "base64编码的密码"),
             @Parameter(name="userKey", description = "用户密钥")})
     @Idempotent(keyPrefix = "auth:key", timeout = 5, limit = true, message = "登录请求过于频繁，请稍候再操作！") // 同一个账号限制5秒内只能请求1次
-    public Result<SysTokenVO> loginByKey(@RequestKeyParam String userName, @RequestParam String password,
+    public Result<SysTokenVO> loginByKey(@RequestKeyParam @RequestParam String userName, @RequestParam String password,
                                          @RequestParam String userKey) {
         AssertUtils.isBlank(password, "密码不能为空！");
         SysAccountLoginVO login = new SysAccountLoginVO();
