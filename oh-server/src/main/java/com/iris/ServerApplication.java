@@ -24,6 +24,7 @@
 package com.iris;
 
 import cn.hutool.core.util.URLUtil;
+import com.iris.framework.utils.SpringContextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -33,6 +34,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.net.InetAddress;
 
@@ -52,7 +54,8 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 
 	// 启动系统
 	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
+		ConfigurableApplicationContext applicationContext = SpringApplication.run(ServerApplication.class, args);
+		SpringContextUtil.setApplicationContext(applicationContext);
 		/*SpringApplication app = new SpringApplication(ServerApplication.class);
 		app.setLazyInitialization(true); // 启用懒加载
 		app.run(args);*/
