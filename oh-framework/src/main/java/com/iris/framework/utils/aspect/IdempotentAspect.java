@@ -65,10 +65,11 @@ public class IdempotentAspect {
                 throw new ServerException(idempotent.message());
             }
             try {
+                log.debug("锁定请求，防止重复操作");
                 return joinPoint.proceed();
             } catch (Throwable throwable) {
                 log.error("系统异常，", throwable);
-                throw new ServerException("系统异常，" + throwable.getMessage());
+                throw new ServerException("系统异常!{}" + throwable.getMessage());
             }
         } catch (Exception e) {
             throw new ServerException(e.getMessage());
