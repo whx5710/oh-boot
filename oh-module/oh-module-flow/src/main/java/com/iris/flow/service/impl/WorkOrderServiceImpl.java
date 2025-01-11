@@ -19,6 +19,8 @@ import com.iris.core.exception.ServerException;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.Result;
 import com.iris.framework.service.JobService;
+import com.iris.framework.utils.annotations.Idempotent;
+import com.iris.framework.utils.annotations.RequestKeyParam;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +36,14 @@ import java.util.Map;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-02-23
  */
-@Service
+@Service(WorkOrderServiceImpl.funcCode)
 public class WorkOrderServiceImpl implements WorkOrderService, JobService, InitializingBean {
 
+    // 功能号
+    public static final String funcCode = "F1003";
+
     private final String processKey = "Process_demo20231222";
+
     private final TaskHandlerService taskHandlerService;
 
     private final ProcessHandlerService processHandlerService;
@@ -120,7 +126,8 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result<List<TaskRecordVO>> handle(MetaEntity data) throws ServerException {
+    @Idempotent(keyPrefix = "flow:order:save")
+    public Result<List<TaskRecordVO>> handle(@RequestKeyParam MetaEntity data) throws ServerException {
 //        JsonUtils.parseObject()
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
         if(workOrderVO.getId() == null || workOrderVO.getId() == 0L){
@@ -147,6 +154,6 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        ServiceFactory.register("F1003", this, "工单保存服务"); // 保存工单，启动流程业务
+        ServiceFactory.register(funcCode, this, "工单保存服务"); // 保存工单，启动流程业务
     }
 }
