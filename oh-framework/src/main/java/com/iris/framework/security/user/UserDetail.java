@@ -1,12 +1,16 @@
 package com.iris.framework.security.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iris.core.entity.BaseUserEntity;
+import com.iris.core.utils.DateUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +33,9 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
     private Integer status;
     private Integer superAdmin;
     // 登录时间戳
-    private Long loginTime;
+    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    private LocalDateTime loginTime;
     // token刷新时间
     private Long refreshTokenExpire;
     // 用户密钥
@@ -85,11 +91,11 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
         this.superAdmin = superAdmin;
     }
 
-    public Long getLoginTime() {
+    public LocalDateTime getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Long loginTime) {
+    public void setLoginTime(LocalDateTime loginTime) {
         this.loginTime = loginTime;
     }
 

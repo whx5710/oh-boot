@@ -19,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -55,7 +54,7 @@ public class UserOnlineController {
                 userOnlineVO.setGender(user.getGender());
                 userOnlineVO.setEmail(user.getEmail());
                 userOnlineVO.setAccessToken(key.replace(RedisKeys.getAccessTokenKey(""), ""));
-                userOnlineVO.setLoginTime(DateUtil.format(new Date(user.getLoginTime()), "yyyy-MM-dd HH:mm:ss"));
+                userOnlineVO.setLoginTime(DateUtil.format(user.getLoginTime(), "yyyy-MM-dd HH:mm:ss"));
                 userOnlineVO.setIp(user.getIp());
                 userOnlineList.add(userOnlineVO);
             }

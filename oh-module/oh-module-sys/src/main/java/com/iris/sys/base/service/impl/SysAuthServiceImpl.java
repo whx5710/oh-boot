@@ -33,6 +33,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 /**
  * 权限认证服务
  *
@@ -150,7 +152,7 @@ public class SysAuthServiceImpl implements SysAuthService {
                 // 重新查询用户信息
                 SysUserEntity sysUserEntity = sysUserService.getUser(userDetail.getId());
                 UserDetail userDetailDb = (UserDetail) sysUserDetailsService.getUserDetails(sysUserEntity);
-                userDetailDb.setLoginTime(System.currentTimeMillis());
+                userDetailDb.setLoginTime(LocalDateTime.now());
                 userDetailDb.setIp(ip);
                 userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
                 // 生成 accessToken
@@ -288,8 +290,7 @@ public class SysAuthServiceImpl implements SysAuthService {
             throw new ServerException(msg);
         }
         // 登录时间和token刷新时间
-        long date = System.currentTimeMillis();
-        user.setLoginTime(date);
+        user.setLoginTime(LocalDateTime.now());
         user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
         // 生成 accessToken
         String accessToken = IrisTools.generator();
