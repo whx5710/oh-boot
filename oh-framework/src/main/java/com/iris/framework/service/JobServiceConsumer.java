@@ -8,7 +8,6 @@ import com.iris.core.utils.Result;
 import com.iris.framework.common.properties.OpenApiProperties;
 import com.iris.framework.utils.ServiceFactory;
 import com.iris.framework.entity.api.MsgEntity;
-import com.iris.framework.utils.SpringContextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -101,7 +100,7 @@ public class JobServiceConsumer {
         }
         String funcCode = dataMsg.getFuncCode();
         try {
-            JobService jobService = SpringContextUtil.getBean(funcCode, JobService.class);
+            JobService jobService = ServiceFactory.getBean(funcCode, JobService.class);
             // 在业务处理过程中，发生异常，可直接抛出异常，状态会记录在消息表中
             if(check){
                 jobService.check(dataMsg.getData());
