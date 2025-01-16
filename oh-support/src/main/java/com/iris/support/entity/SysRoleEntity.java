@@ -1,5 +1,7 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
+import com.iris.framework.datasource.annotations.TableName;
 import com.iris.framework.entity.BaseEntity;
 import com.iris.support.enums.DataScopeEnum;
 
@@ -11,6 +13,7 @@ import java.util.Objects;
  * @author 王小费 whx5710@qq.com
  * 
  */
+@TableName("sys_role")
 public class SysRoleEntity extends BaseEntity {
 	/**
 	 * 角色名称
@@ -23,10 +26,12 @@ public class SysRoleEntity extends BaseEntity {
 	/**
 	 * 数据范围  {@link DataScopeEnum}
 	 */
+	@TableField("data_scope")
 	private Integer dataScope;
 	/**
 	 * 机构ID
 	 */
+	@TableField("org_id")
 	private Long orgId;
 
 	public String getName() {

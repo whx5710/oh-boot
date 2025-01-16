@@ -2,11 +2,10 @@ package com.iris.support.mapper;
 
 import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.annotations.Ds;
+import com.iris.framework.datasource.service.ProviderService;
 import com.iris.support.entity.SysRoleEntity;
 import com.iris.support.query.SysRoleQuery;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,6 +19,8 @@ import java.util.List;
 @Ds(Constant.DYNAMIC_SYS_DB)
 public interface SysRoleMapper {
 
+    // 动态拼接SQL
+    @InsertProvider(method = ProviderService.INSERT,type = ProviderService.class)
     int insertRole(SysRoleEntity sysRoleEntity);
 
     /**
@@ -30,6 +31,8 @@ public interface SysRoleMapper {
 
     List<SysRoleEntity> getList(SysRoleQuery sysRoleQuery);
 
+    // 动态拼接SQL
+    @UpdateProvider(method = ProviderService.UPDATE, type = ProviderService.class)
     boolean updateById(SysRoleEntity sysRoleEntity);
 
     @Select("select * from sys_role where id = #{id}")

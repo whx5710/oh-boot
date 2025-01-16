@@ -1,7 +1,5 @@
 package com.iris.support.entity;
 
-import com.iris.framework.datasource.annotations.TableField;
-import com.iris.framework.datasource.annotations.TableName;
 import com.iris.framework.entity.BaseEntity;
 import com.iris.support.enums.UserStatusEnum;
 
@@ -13,74 +11,60 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("sys_user")
 public class SysUserEntity extends BaseEntity {
     /**
      * 用户名
      */
-    @TableField("username")
     private String username;
     /**
      * 密码
      */
-    @TableField("password")
     private String password;
     /**
      * 姓名
      */
-    @TableField("real_name")
     private String realName;
     /**
      * 头像
      */
-    @TableField("avatar")
     private String avatar;
     /**
      * 性别   0：男   1：女   2：未知
      */
-    @TableField("gender")
     private Integer gender;
     /**
      * 邮箱
      */
-    @TableField("email")
     private String email;
     /**
      * 手机号
      */
-    @TableField("mobile")
     private String mobile;
     /**
      * 机构ID
      */
-    @TableField("org_id")
     private Long orgId;
     /**
      * 超级管理员   0：否   1：是
      */
-    @TableField("super_admin")
     private Integer superAdmin;
     /**
      * 状态  {@link UserStatusEnum}
      */
-    @TableField("status")
     private Integer status;
 
     /**
      * 修改吗密码时间
      */
-    @TableField("pwd_modify_time")
     private LocalDateTime pwdModifyTime;
 
     /**
      * 用户密钥，用于第三方系统登录
      */
-    @TableField("user_key")
     private String userKey;
     /**
      * 机构名称
      */
-    @TableField(exists = false)
     private String orgName;
 
     public String getUsername() {

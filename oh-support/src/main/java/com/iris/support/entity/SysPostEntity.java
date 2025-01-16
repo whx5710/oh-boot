@@ -1,5 +1,7 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
+import com.iris.framework.datasource.annotations.TableName;
 import com.iris.framework.entity.BaseEntity;
 
 import java.util.Objects;
@@ -10,14 +12,17 @@ import java.util.Objects;
  * @author 王小费 whx5710@qq.com
  *
  */
+@TableName("sys_post")
 public class SysPostEntity extends BaseEntity {
 	/**
 	* 岗位编码
 	*/
+	@TableField("post_code")
 	private String postCode;
 	/**
 	* 岗位名称
 	*/
+	@TableField("post_name")
 	private String postName;
 	/**
 	* 排序

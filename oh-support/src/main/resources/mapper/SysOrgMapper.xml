@@ -11,12 +11,12 @@
 		order by t1.sort asc
 	</select>
 
-	<insert id="insertOrg">
+	<!--<insert id="insertOrg">
 		insert into sys_org ( parent_id, name, note, sort, db_status, creator, create_time)
 		values ( #{parentId}, #{name}, #{note}, #{sort}, #{dbStatus}, #{creator}, #{createTime})
-	</insert>
+	</insert>-->
 
-	<update id="updateById">
+	<!--<update id="updateById">
 		UPDATE sys_org
 		<set>
 			<if test="parentId != null">parent_id = #{parentId},</if>
@@ -28,6 +28,6 @@
 			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}
-	</update>
+	</update>-->
 
 </mapper>

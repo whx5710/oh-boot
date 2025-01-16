@@ -46,4 +46,49 @@
 			and t1.gender = #{gender}
 		</if>
 	</select>
+
+	<!--保存用户-->
+	<insert id="insertUser">
+		insert into sys_user (
+			username, password,
+			real_name, avatar,
+			gender, email,
+			mobile, org_id,
+			super_admin, status,
+			db_status, creator,
+			create_time, pwd_modify_time,
+			user_key
+		) values (
+			#{username}, #{password},
+			#{realName}, #{avatar},
+			#{gender}, #{email},
+			#{mobile}, #{orgId},
+			#{superAdmin}, #{status},
+			#{dbStatus}, #{creator},
+			#{createTime}, #{pwdModifyTime},
+			#{userKey})
+	</insert>
+
+	<update id="updateById" parameterType="com.iris.support.entity.SysUserEntity">
+		update sys_user
+		<set>
+			<if test="username != null and username != ''">username = #{username},</if>
+			<if test="password != null and password != ''">password = #{password},</if>
+			<if test="realName != null and realName != ''">real_name = #{realName},</if>
+			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+			<if test="gender != null">gender = #{gender},</if>
+			<if test="email != null and email != ''">email = #{email},</if>
+			<if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+			<if test="orgId != null">org_id = #{orgId},</if>
+			<if test="superAdmin != null">super_admin = #{superAdmin},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="dbStatus != null">db_status = #{dbStatus},</if>
+			<if test="updater != null">updater = #{updater},</if>
+			<if test="pwdModifyTime != null">pwd_modify_time = #{pwdModifyTime},</if>
+			<if test="userKey != null and userKey != ''">user_key = #{userKey},</if>
+			update_time = #{updateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+
 </mapper>

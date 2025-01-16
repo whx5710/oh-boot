@@ -11,12 +11,12 @@
         order by sort
     </select>
 
-    <insert id="insertPost">
+    <!--<insert id="insertPost">
         INSERT INTO sys_post ( post_code, post_name, sort, status, db_status, creator, create_time )
         VALUES (#{postCode}, #{postName}, #{sort}, #{status}, 1, #{creator}, #{createTime})
-    </insert>
+    </insert>-->
 
-    <update id="updateById">
+    <!--<update id="updateById">
         UPDATE sys_post
         <set>
             <if test="postCode != null and postCode != ''">post_code = #{postCode},</if>
@@ -28,6 +28,6 @@
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
-    </update>
+    </update>-->
 
 </mapper>

@@ -2,11 +2,10 @@ package com.iris.support.mapper;
 
 import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.annotations.Ds;
+import com.iris.framework.datasource.service.ProviderService;
 import com.iris.support.entity.SysOrgEntity;
 import com.iris.support.query.SysOrgQuery;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -29,8 +28,10 @@ public interface SysOrgMapper {
     List<SysOrgEntity> getIdAndPidList();
 
     // 保存机构信息
+    @InsertProvider(method = ProviderService.INSERT, type = ProviderService.class)
     int insertOrg(SysOrgEntity sysOrgEntity);
 
+    @UpdateProvider(method = ProviderService.UPDATE, type = ProviderService.class)
     boolean updateById(SysOrgEntity sysOrgEntity);
 
     @Select("select count(1) from sys_org where db_status != 0 and parent_id = #{parentId}")

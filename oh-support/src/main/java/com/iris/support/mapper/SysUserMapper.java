@@ -3,7 +3,6 @@ package com.iris.support.mapper;
 import com.iris.core.constant.Constant;
 import com.iris.framework.datasource.annotations.Ds;
 import com.iris.framework.datasource.annotations.Pages;
-import com.iris.framework.datasource.service.ProviderService;
 import com.iris.support.entity.SysUserEntity;
 import com.iris.support.query.SysRoleUserQuery;
 import com.iris.support.query.SysUserQuery;
@@ -36,14 +35,10 @@ public interface SysUserMapper {
 	SysUserEntity getByMobile(@Param("mobile") String mobile);
 
 	// 保存用户
-	//void insertUser(SysUserEntity sysUserEntity);
+	void insertUser(SysUserEntity sysUserEntity);
 
-	// 动态拼接SQL
-	@InsertProvider(method = "insert", type = ProviderService.class)
-	int insert(SysUserEntity entity);
 
-	// 动态拼接SQL
-	@UpdateProvider(method = "updateById", type = ProviderService.class)
+	// 根据ID修改用户信息
 	boolean updateById(SysUserEntity sysUserEntity);
 
 	@Select("select count(1) from sys_user where db_status != 0 and org_id = #{orgId}")

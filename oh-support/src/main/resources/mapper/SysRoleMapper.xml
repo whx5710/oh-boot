@@ -8,7 +8,7 @@
         <if test="name != null and name != ''">and name = #{name}</if>
     </select>
 
-    <update id="updateById">
+    <!--<update id="updateById">
         UPDATE sys_role
         <set>
             <if test="name != null and name != ''">name = #{name},</if>
@@ -20,12 +20,12 @@
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
-    </update>
+    </update>-->
 
-    <insert id="insertRole" parameterType="com.iris.support.entity.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
+    <!--<insert id="insertRole" parameterType="com.iris.support.entity.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_role ( name, remark, data_scope, org_id, db_status, creator, create_time)
         VALUES
         (#{name}, #{remark}, #{dataScope}, #{orgId}, #{dbStatus}, #{creator}, #{createTime})
-    </insert>
+    </insert>-->
 
 </mapper>
