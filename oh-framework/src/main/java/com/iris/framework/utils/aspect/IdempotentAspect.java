@@ -1,6 +1,7 @@
 package com.iris.framework.utils.aspect;
 
 import com.iris.core.cache.RedisCache;
+import com.iris.core.cache.RedisKeys;
 import com.iris.core.exception.ServerException;
 import com.iris.framework.utils.annotations.Idempotent;
 import com.iris.framework.utils.annotations.RequestKeyParam;
@@ -52,7 +53,7 @@ public class IdempotentAspect {
         Method method = methodSignature.getMethod();
         Idempotent idempotent = method.getAnnotation(Idempotent.class);
         if (idempotent.keyPrefix().isEmpty()) {
-            throw new ServerException("重复提交前缀不能为空");
+            throw new ServerException("前缀不能为空");
         }
         //获取自定义key
         final String lockKey = getLockKey(joinPoint);
@@ -81,14 +82,13 @@ public class IdempotentAspect {
         }
     }
 
-
     /**
      * 获取LockKey
      *
      * @param joinPoint 切入点
      * @return key
      */
-    public String getLockKey(ProceedingJoinPoint joinPoint) {
+    private String getLockKey(ProceedingJoinPoint joinPoint) {
         //获取连接点的方法签名对象
         MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         //Method对象
@@ -106,7 +106,7 @@ public class IdempotentAspect {
             if (keyParam == null) {
                 continue;
             }
-            //如果属性是RequestKeyParam注解，则拼接 连接符 "& + RequestKeyParam"
+            //如果属性是RequestKeyParam注解，则拼接 连接符 ": + RequestKeyParam"
             sb.append(idempotent.delimiter()).append(args[i]);
         }
         //如果方法上没有加RequestKeyParam注解
@@ -127,12 +127,12 @@ public class IdempotentAspect {
                     }
                     //如果有，设置Accessible为true（为true时可以使用反射访问私有变量，否则不能访问私有变量）
                     field.setAccessible(true);
-                    //如果属性是RequestKeyParam注解，则拼接 连接符" & + RequestKeyParam"
+                    //如果属性是RequestKeyParam注解，则拼接 连接符": + RequestKeyParam"
                     sb.append(idempotent.delimiter()).append(ReflectionUtils.getField(field, object));
                 }
             }
         }
         //返回指定前缀的key
-        return idempotent.keyPrefix() + sb;
+        return RedisKeys.PREFIX + "idempotent:" + idempotent.keyPrefix() + sb;
     }
 }

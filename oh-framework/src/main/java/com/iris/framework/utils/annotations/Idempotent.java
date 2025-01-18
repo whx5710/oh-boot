@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Idempotent {
     /**
-     * 幂等的超时时间，默认为 1 秒
-     * 注意，如果执行时间超过它，请求还是会进来
+     * 幂等的超时时间，默认为 1 秒<br/>
+     * 注意：如果执行时间超过它，请求还是会进来
      */
     int timeout() default 1;
 
@@ -26,10 +26,10 @@ public @interface Idempotent {
     TimeUnit timeUnit() default TimeUnit.SECONDS;
 
     /**
-     * redis锁前缀
+     * redis锁前缀；会在入参的基础上，在最前端拼接上 RedisKeys.PREFIX + idempotent:
      * @return s
      */
-    String keyPrefix(); // idempotent
+    String keyPrefix();
 
     /**
      * key分隔符
@@ -43,7 +43,8 @@ public @interface Idempotent {
     String message() default "重复请求，请稍后重试";
 
     /**
-     * 幂等的超时时间内限制请求；为true时，不会清除锁定，未过期的，不能请求，比如限制1秒内多少次请求
+     * 为true时，timeout时间内限制请求；即调用完成后，不会清除未过期的锁定，用于限制请求频率，<br/>
+     * 比如限制10秒内只能1次请求：limit = true,timeout = 10
      */
     boolean limit() default false;
 }

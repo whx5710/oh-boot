@@ -52,7 +52,7 @@
 		<druid.version>1.2.23</druid.version>
 		<!-- 框架版本信息 -->
 		<iris.framework.version>2.0.2.20241110</iris.framework.version>
-		<iris.common.version>2.0.2.20241110</iris.common.version>
+		<iris.core.version>2.0.2.20241110</iris.core.version>
 		<!-- hutool 工具包 -->
 		<hutool.version>5.8.25</hutool.version>
 		<!-- 系统资源监控 -->
@@ -87,7 +87,7 @@
 			<dependency>
 				<groupId>com.iris</groupId>
 				<artifactId>oh-core</artifactId>
-				<version>${iris.framework.version}</version>
+				<version>${iris.core.version}</version>
 			</dependency>
 			<!-- end   ================================= 项目相关 ================================= -->
 

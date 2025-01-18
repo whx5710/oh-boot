@@ -13,17 +13,17 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TableColumn {
+public @interface TableField {
 
     /**
      * 字段是否存在
      * @return bool
      */
-    boolean isExists() default true;
+    boolean exists() default true;
 
     /**
      * 指定列名，与数据库表中字段一致
      * @return 列名
      */
-    String columnName() default "";
+    String value() default "";
 }
