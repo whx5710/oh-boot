@@ -27,6 +27,12 @@
 		<if test="params.orgId != null and params.orgId != 0">
 			and t1.org_id = #{params.orgId}
 		</if>
+		<if test="params.tenantId != null and params.tenantId != ''">
+			and t1.tenant_id = #{params.tenantId}
+		</if>
+		<if test="params.unTenantId != null and params.unTenantId != ''">
+			and ifnull(t1.tenant_id, '') != #{params.unTenantId}
+		</if>
 		<if test="params.keyWord != null and params.keyWord.trim() != ''">
 			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%") )
 		</if>
@@ -48,7 +54,7 @@
 	</select>
 
 	<!--保存用户-->
-	<insert id="insertUser">
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_user (
 			username, password,
 			real_name, avatar,
@@ -57,7 +63,8 @@
 			super_admin, status,
 			db_status, creator,
 			create_time, pwd_modify_time,
-			user_key
+			user_key,
+			tenant_id
 		) values (
 			#{username}, #{password},
 			#{realName}, #{avatar},
@@ -66,7 +73,8 @@
 			#{superAdmin}, #{status},
 			#{dbStatus}, #{creator},
 			#{createTime}, #{pwdModifyTime},
-			#{userKey})
+			#{userKey},
+			#{tenantId})
 	</insert>
 
 	<update id="updateById" parameterType="com.iris.support.entity.SysUserEntity">
@@ -86,6 +94,17 @@
 			<if test="updater != null">updater = #{updater},</if>
 			<if test="pwdModifyTime != null">pwd_modify_time = #{pwdModifyTime},</if>
 			<if test="userKey != null and userKey != ''">user_key = #{userKey},</if>
+			<if test="tenantId != null and tenantId != ''">tenant_id = #{tenantId},</if>
+			update_time = #{updateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="unbindUser" parameterType="com.iris.support.entity.SysUserEntity">
+		update sys_user
+		<set>
+			tenant_id = #{tenantId},
+			<if test="updater != null">updater = #{updater},</if>
 			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}

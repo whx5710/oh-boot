@@ -1,15 +1,17 @@
 ## 项目说明
 
-oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
+oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-Plus请自行引入依赖包）、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
 - 采用组件模式，扩展不同的业务功能，可以很方便的实现各种业务需求，若想使用某个组件，按需引入即可。
-- 通用接口，可对接入客户端接口级别授权。加入Kafka/RocketMq，支持MQ异步接口，支持海量请求。
-- 通过Druid连接池支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源，@Pages分页。
-- 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率。
 - 支持定时任务（分布式可使用xxl-job）、文件存储、短信对接等。
 - 前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。
 - 完善的资源监控，可监控服务器资源，数据库连接等。
 - 保姆级注释，确保每行代码都能看懂，开发无忧。
 - 严格的接口角色权限控制，拒绝垂直越权。
+- 通用接口，可对接入客户端接口级别授权。加入Kafka/RocketMq，支持MQ异步接口，支持海量请求。
+- 通过Druid连接池支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源，@Pages分页 【2024年10月】
+- 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
+- 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
+- 增加租户功能，隔离业务数据 【2025年1月】
 - 工程代码：https://gitee.com/whx233/oh-boot
 - - 独立系统管理 https://gitee.com/whx233/oh-sys (从oh-boot剥离)
 - - 前端工程    https://gitee.com/whx233/oh-admin (暂未开源 Vue3)
@@ -18,7 +20,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、
 - 官网地址：
 
 ## 代码目录  
-`oh-core`、`oh-framework`属于系统框架类模块，分别是核心包和框架包，各自存放相关的代码
+`oh-core`、`oh-framework`属于系统框架类模块，分别是核心包和框架包，各自存放相关的代码；项目上可独立打成jar包引入
 ```
 oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类
 oh-framework 系统框架，包括数据库、基础实体类、鉴权

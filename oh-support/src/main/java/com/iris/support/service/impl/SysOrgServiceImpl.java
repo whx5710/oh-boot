@@ -8,6 +8,9 @@ import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.JsonUtils;
 import com.iris.core.utils.PageResult;
 import com.iris.core.utils.TreeUtils;
+import com.iris.framework.security.user.SecurityUser;
+import com.iris.framework.security.user.UserDetail;
+import com.iris.support.cache.TenantCache;
 import com.iris.support.mapper.SysOrgMapper;
 import com.iris.support.mapper.SysUserMapper;
 import com.iris.support.query.SysOrgQuery;
@@ -34,11 +37,14 @@ public class SysOrgServiceImpl implements SysOrgService {
 
 	private final RedisCache redisCache;
 
+	private final TenantCache tenantCache;
+
 	public SysOrgServiceImpl(SysUserMapper sysUserMapper, SysOrgMapper sysOrgMapper,
-							 RedisCache redisCache) {
+							 RedisCache redisCache, TenantCache tenantCache) {
 		this.sysUserMapper = sysUserMapper;
 		this.sysOrgMapper = sysOrgMapper;
 		this.redisCache = redisCache;
+		this.tenantCache = tenantCache;
 	}
 
 	@Override
@@ -50,6 +56,14 @@ public class SysOrgServiceImpl implements SysOrgService {
 		// 机构列表
 		List<SysOrgEntity> entityList = sysOrgMapper.getList(query);
 
+		UserDetail user = SecurityUser.getUser();
+		if(user != null && user.getSuperAdmin() == 1){
+			for(SysOrgEntity item : entityList){
+				if(item.getTenantId() != null){
+					item.setName(item.getName() +"[" + item.getTenantId() + "]");
+				}
+			}
+		}
 		return TreeUtils.build(SysOrgConvert.INSTANCE.convertList(entityList));
 	}
 
@@ -64,7 +78,11 @@ public class SysOrgServiceImpl implements SysOrgService {
 		// 机构列表
 		List<SysOrgEntity> list = sysOrgMapper.getList(query);
 		PageInfo<SysOrgEntity> pageInfo = new PageInfo<>(list);
-		return new PageResult<>(SysOrgConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+		List<SysOrgVO> voList =SysOrgConvert.INSTANCE.convertList(pageInfo.getList());
+		for(SysOrgVO vo: voList){
+			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+		}
+		return new PageResult<>(voList, pageInfo.getTotal());
 	}
 
 	@Override

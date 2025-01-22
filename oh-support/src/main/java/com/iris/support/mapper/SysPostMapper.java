@@ -20,6 +20,7 @@ public interface SysPostMapper {
 
     List<SysPostEntity> getList(SysPostQuery sysPostQuery);
 
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
     @InsertProvider(method = ProviderService.INSERT, type = ProviderService.class)
     int insertPost(SysPostEntity sysPostEntity);
 

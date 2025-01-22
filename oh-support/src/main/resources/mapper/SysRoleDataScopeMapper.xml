@@ -13,9 +13,9 @@
     </select>
 
     <insert id="saveBatch">
-        INSERT INTO sys_role_data_scope (role_id, org_id, db_status, creator, create_time) VALUES
+        INSERT INTO sys_role_data_scope (role_id, org_id, db_status, creator, create_time, tenant_id) VALUES
         <foreach item="item" index="index" collection="list" separator=",">
-            (#{item.roleId}, #{item.orgId}, #{item.dbStatus}, #{item.creator}, #{item.createTime})
+            (#{item.roleId}, #{item.orgId}, #{item.dbStatus}, #{item.creator}, #{item.createTime}, #{tenantId})
         </foreach>
     </insert>
 

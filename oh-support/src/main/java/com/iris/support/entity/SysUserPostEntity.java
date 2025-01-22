@@ -1,8 +1,8 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Objects;
 
 /**
  * 用户岗位关系
@@ -19,6 +19,9 @@ public class SysUserPostEntity extends BaseEntity {
 	* 岗位ID
 	*/
 	private Long postId;
+
+	@TableField(exists = false)
+	private String tenantId;
 
 	public Long getUserId() {
 		return userId;
@@ -37,14 +40,12 @@ public class SysUserPostEntity extends BaseEntity {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysUserPostEntity that)) return false;
-		return Objects.equals(getUserId(), that.getUserId()) && Objects.equals(getPostId(), that.getPostId());
+	public String getTenantId() {
+		return tenantId;
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(getUserId(), getPostId());
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

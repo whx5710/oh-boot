@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.core.exception.ServerException;
 import com.iris.core.utils.AssertUtils;
+import com.iris.support.cache.TenantCache;
 import com.iris.support.mapper.SysPostMapper;
 import com.iris.support.query.SysPostQuery;
 import com.iris.support.vo.SysPostVO;
@@ -28,10 +29,13 @@ import java.util.Objects;
 public class SysPostServiceImpl implements SysPostService {
     private final SysUserPostService sysUserPostService;
     private final SysPostMapper sysPostMapper;
+    private final TenantCache tenantCache;
 
-    public SysPostServiceImpl(SysUserPostService sysUserPostService, SysPostMapper sysPostMapper) {
+    public SysPostServiceImpl(SysUserPostService sysUserPostService, SysPostMapper sysPostMapper,
+                              TenantCache tenantCache) {
         this.sysUserPostService = sysUserPostService;
         this.sysPostMapper = sysPostMapper;
+        this.tenantCache = tenantCache;
     }
 
     @Override
@@ -39,7 +43,11 @@ public class SysPostServiceImpl implements SysPostService {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SysPostEntity> entityList = sysPostMapper.getList(query);
         PageInfo<SysPostEntity> pageInfo = new PageInfo<>(entityList);
-        return new PageResult<>(SysPostConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        List<SysPostVO> list = SysPostConvert.INSTANCE.convertList(pageInfo.getList());
+        for(SysPostVO vo: list){
+            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+        }
+        return new PageResult<>(list, pageInfo.getTotal());
     }
 
     @Override

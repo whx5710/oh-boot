@@ -38,7 +38,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     /**
      * 启动项目时，初始化定时器
      */
-    @PostConstruct
+//    @PostConstruct
     public void init() throws SchedulerException {
         scheduler.clear();
         List<ScheduleJobEntity> scheduleJobList = scheduleJobMapper.getList(null);

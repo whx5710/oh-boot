@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iris.sys.base.mapper.TenantMemberMapper">
+    <select id="getById" resultType="com.iris.sys.base.entity.TenantMemberEntity">
+        select * from tenant_member where id = #{id}
+    </select>
+
+    <select id="tenantList" resultType="com.iris.sys.base.entity.TenantMemberEntity">
+        select * from tenant_member where db_status = 1
+        <if test="tenantName != null and tenantName != ''">
+            and (tenant_name like concat('%',#{tenantName}, '%') or note like concat('%',#{tenantName}, '%')
+                or tenant_id like concat('%',#{tenantName},'%'))
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        order by sort
+    </select>
+</mapper>

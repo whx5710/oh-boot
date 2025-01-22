@@ -3,6 +3,7 @@ package com.iris.support.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iris.framework.datasource.service.impl.BaseServiceImpl;
+import com.iris.support.cache.TenantCache;
 import com.iris.support.mapper.SysRoleMapper;
 import com.iris.support.enums.DataScopeEnum;
 import com.iris.support.query.SysRoleQuery;
@@ -32,36 +33,48 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	private final SysRoleDataScopeService sysRoleDataScopeService;
 	private final SysUserRoleService sysUserRoleService;
 	private final SysRoleMapper sysRoleMapper;
+	private final TenantCache tenantCache;
 
 	public SysRoleServiceImpl(SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService,
-							  SysUserRoleService sysUserRoleService, SysRoleMapper sysRoleMapper) {
+							  SysUserRoleService sysUserRoleService, SysRoleMapper sysRoleMapper, TenantCache tenantCache) {
 		this.sysRoleMenuService = sysRoleMenuService;
 		this.sysRoleDataScopeService = sysRoleDataScopeService;
 		this.sysUserRoleService = sysUserRoleService;
 		this.sysRoleMapper = sysRoleMapper;
+		this.tenantCache = tenantCache;
 	}
 
 	@Override
 	public PageResult<SysRoleVO> page(SysRoleQuery query) {
 		// 数据权限
 		query.setSqlFilter(getDataScopeFilter(null,null));
-
 		PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		List<SysRoleEntity> list = sysRoleMapper.getList(query);
 		PageInfo<SysRoleEntity> pageInfo = new PageInfo<>(list);
-		return new PageResult<>(SysRoleConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+		List<SysRoleVO> voList = SysRoleConvert.INSTANCE.convertList(pageInfo.getList());
+		for(SysRoleVO vo: voList){
+			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+		}
+		return new PageResult<>(voList, pageInfo.getTotal());
 	}
 
 	@Override
 	public List<SysRoleVO> getList(SysRoleQuery query) {
 		List<SysRoleEntity> entityList = sysRoleMapper.getList(query);
-		return SysRoleConvert.INSTANCE.convertList(entityList);
+		List<SysRoleVO> voList = SysRoleConvert.INSTANCE.convertList(entityList);
+		for(SysRoleVO vo: voList){
+			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+		}
+		return voList;
 	}
 
 	@Override
 	public void save(SysRoleVO vo) {
 		SysRoleEntity entity = SysRoleConvert.INSTANCE.convert(vo);
 
+		if(entity.getIsSystem() == 1){
+			entity.setTenantId(null);
+		}
 		// 保存角色
 		entity.setDataScope(DataScopeEnum.SELF.getValue());
 		sysRoleMapper.insertRole(entity);
@@ -73,7 +86,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleServic
 	@Override
 	public void update(SysRoleVO vo) {
 		SysRoleEntity entity = SysRoleConvert.INSTANCE.convert(vo);
-
 		// 更新角色
 		sysRoleMapper.updateById(entity);
 

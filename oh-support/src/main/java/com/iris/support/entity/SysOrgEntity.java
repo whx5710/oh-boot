@@ -30,6 +30,7 @@ public class SysOrgEntity extends BaseEntity {
 	/**
 	 * 上级名称
 	 */
+	@TableField(exists = false)
 	private String parentName;
 
 	// 备注

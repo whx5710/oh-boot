@@ -48,13 +48,14 @@ public class SysMenuServiceImpl implements SysMenuService {
             entity.setUrl(entity.getUrl().substring(1));
         }
         // 显示路径以 / 开头
-        if(entity.getMenuPath() != null && !entity.getMenuPath().startsWith("/")){
+        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty() && !entity.getMenuPath().startsWith("/")){
             entity.setMenuPath("/" + entity.getMenuPath());
         }
         // 判断显示路径是否存在
         if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()){
             SysMenuEntity param = new SysMenuEntity();
             param.setMenuPath(entity.getMenuPath());
+            param.setType(0);
             List<SysMenuEntity> list = sysMenuMapper.getList(param);
             if(list != null && !list.isEmpty()){
                 throw new ServerException("显示路径已存在，请换一个!");
@@ -77,7 +78,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             entity.setUrl(entity.getUrl().substring(1));
         }
         // 显示路径以 / 开头
-        if(entity.getMenuPath() != null && !entity.getMenuPath().startsWith("/")){
+        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty() && !entity.getMenuPath().startsWith("/")){
             entity.setMenuPath("/" + entity.getMenuPath());
         }
         // 判断显示路径是否存在

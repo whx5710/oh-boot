@@ -121,11 +121,13 @@ public class OperateLogAspect {
                 BaseUserEntity userEntity = JsonUtils.convertValue(object, BaseUserEntity.class);
                 log.setUserId(userEntity.getId());
                 log.setRealName(userEntity.getRealName());
+                log.setTenantId(userEntity.getTenantId());
             }else{
                 UserDetail userDetail = SecurityUser.getUser();
                 if(userDetail != null){
                     log.setUserId(userDetail.getId());
                     log.setRealName(userDetail.getRealName());
+                    log.setTenantId(userDetail.getTenantId());
                 }
             }
 

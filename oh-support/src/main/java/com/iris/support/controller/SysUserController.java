@@ -1,5 +1,6 @@
 package com.iris.support.controller;
 
+import com.iris.core.exception.ServerException;
 import com.iris.framework.operatelog.annotations.OperateLog;
 import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.core.utils.PageResult;
@@ -65,6 +66,14 @@ public class SysUserController {
         sysUserService.unlock(userName);
         return Result.ok();
     }
+    // 绑定/解绑 租户的管理用户
+    @PostMapping("/tenantUser/{tenantID}/{flag}")
+    @Operation(summary = "管理租户用户,flag 1 绑定 2 解绑")
+    @PreAuthorize("hasAuthority('sys:user:update')")
+    public Result<String> tenantUser(@PathVariable("tenantID") String tenantID, @PathVariable("flag")Integer flag, @RequestBody List<Long> userIdList) {
+        sysUserService.updateTenantUser(tenantID, userIdList, flag);
+        return Result.ok();
+    }
 
     // 根据用户ID获取用户信息
     @GetMapping("{id}")
@@ -87,6 +96,9 @@ public class SysUserController {
     public Result<String> password(@RequestBody @Valid SysUserPasswordVO vo) {
         // 原密码不正确
         UserDetail user = SecurityUser.getUser();
+        if(user == null){
+            throw new ServerException("请先登录！");
+        }
         if (!passwordEncoder.matches(vo.getPassword(), user.getPassword())) {
             return Result.error("原密码不正确");
         }

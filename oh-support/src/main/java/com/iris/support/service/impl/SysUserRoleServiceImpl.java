@@ -2,6 +2,7 @@ package com.iris.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.iris.framework.security.user.SecurityUser;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.support.mapper.SysUserRoleMapper;
 import com.iris.support.service.SysUserRoleService;
 import com.iris.support.entity.SysUserRoleEntity;
@@ -38,11 +39,13 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         // 需要新增的角色ID
         Collection<Long> insertRoleIdList = CollUtil.subtract(roleIdList, dbRoleIdList);
         if (CollUtil.isNotEmpty(insertRoleIdList)){
+            UserDetail user = SecurityUser.getUser();
             List<SysUserRoleEntity> roleList = insertRoleIdList.stream().map(roleId -> {
                 SysUserRoleEntity entity = new SysUserRoleEntity();
                 entity.setUserId(userId);
                 entity.setRoleId(roleId);
                 entity.setCreator(SecurityUser.getUserId());
+                entity.setTenantId(user==null?null:user.getTenantId());
                 entity.setCreateTime(LocalDateTime.now());
                 return entity;
             }).collect(Collectors.toList());

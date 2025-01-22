@@ -49,9 +49,11 @@
 		<mybatis.version>3.0.3</mybatis.version>
 		<!--分页插件-->
 		<pagehelper.version>2.1.0</pagehelper.version>
+		<!-- 阿里连接池 -->
 		<druid.version>1.2.23</druid.version>
 		<!-- 框架版本信息 -->
-		<iris.framework.version>2.0.2.20241110</iris.framework.version>
+		<iris.framework.version>3.0.1.20250123</iris.framework.version>
+		<!-- 框架版本信息 -->
 		<iris.core.version>2.0.2.20241110</iris.core.version>
 		<!-- hutool 工具包 -->
 		<hutool.version>5.8.25</hutool.version>

@@ -51,7 +51,6 @@ public class SysRoleController {
     @PreAuthorize("hasAuthority('sys:role:page')")
     public Result<PageResult<SysRoleVO>> page(@ParameterObject @Valid SysRoleQuery query) {
         PageResult<SysRoleVO> page = sysRoleService.page(query);
-
         return Result.ok(page);
     }
 

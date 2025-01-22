@@ -46,6 +46,8 @@ public class DataInnerInterceptor implements Interceptor {
     private final static String ORG_ID = "orgId";
     // 数据状态标记，0删除1有效
     private final static String DB_STATUS = "dbStatus";
+    // 租户ID
+    private final static String TENANT_ID = "tenantId";
 
     private final static String SQL_FILTER = "sqlFilter";
 
@@ -87,6 +89,11 @@ public class DataInnerInterceptor implements Interceptor {
             if (ReflectUtil.hasField(params.getClass(), ORG_ID) && ReflectUtil.getFieldValue(params, ORG_ID) == null) {
                 ReflectUtil.setFieldValue(params, ORG_ID, user.getOrgId());
             }
+            // 租户ID
+            if (ReflectUtil.hasField(params.getClass(), TENANT_ID) &&
+                    (ReflectUtil.getFieldValue(params, TENANT_ID) == null || ReflectUtil.getFieldValue(params, TENANT_ID).equals(""))) {
+                ReflectUtil.setFieldValue(params, TENANT_ID, user.getTenantId());
+            }
         }
         // 创建时间
         if (ReflectUtil.hasField(params.getClass(), CREATE_TIME) && ReflectUtil.getFieldValue(params, CREATE_TIME) == null) {
@@ -112,6 +119,11 @@ public class DataInnerInterceptor implements Interceptor {
             // 创建人ID
             if (ReflectUtil.hasField(params.getClass(), UPDATER) && ReflectUtil.getFieldValue(params, UPDATER) == null) {
                 ReflectUtil.setFieldValue(params, UPDATER, user.getId());
+            }
+            // 租户ID
+            if (ReflectUtil.hasField(params.getClass(), TENANT_ID) &&
+                    (ReflectUtil.getFieldValue(params, TENANT_ID) == null || ReflectUtil.getFieldValue(params, TENANT_ID).equals(""))) {
+                ReflectUtil.setFieldValue(params, TENANT_ID, user.getTenantId());
             }
         }
         // 更新时间

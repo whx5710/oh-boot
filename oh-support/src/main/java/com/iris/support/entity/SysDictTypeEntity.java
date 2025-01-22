@@ -1,8 +1,7 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.entity.BaseEntity;
-
-import java.util.Objects;
 
 /**
  * 字典类型
@@ -35,6 +34,9 @@ public class SysDictTypeEntity extends BaseEntity {
      * 动态sql
      */
     private String dictSql;
+
+    @TableField(exists = false)
+    private String tenantId;
 
     public String getDictType() {
         return dictType;
@@ -85,14 +87,12 @@ public class SysDictTypeEntity extends BaseEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysDictTypeEntity that)) return false;
-        return Objects.equals(getDictType(), that.getDictType()) && Objects.equals(getDictName(), that.getDictName()) && Objects.equals(getRemark(), that.getRemark()) && Objects.equals(getSort(), that.getSort()) && Objects.equals(getDictSource(), that.getDictSource()) && Objects.equals(getDictSql(), that.getDictSql());
+    public String getTenantId() {
+        return tenantId;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getDictType(), getDictName(), getRemark(), getSort(), getDictSource(), getDictSql());
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

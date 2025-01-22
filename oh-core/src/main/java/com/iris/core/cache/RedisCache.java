@@ -194,7 +194,7 @@ public class RedisCache {
      *
      * @param prefix 前缀
      * @param key redis键
-     * @param length 长度
+     * @param length 每天自增序号的长度
      * @return 格式化的编码
      */
     public String getDayIncrementCode(String prefix, String key, int length) {

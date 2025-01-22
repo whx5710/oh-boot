@@ -40,6 +40,8 @@ public interface SysUserMapper {
 
 	// 根据ID修改用户信息
 	boolean updateById(SysUserEntity sysUserEntity);
+	// 解绑租户用户
+	boolean unbindUser(SysUserEntity sysUserEntity);
 
 	@Select("select count(1) from sys_user where db_status != 0 and org_id = #{orgId}")
 	int countByOrgId(@Param("orgId")long orgId);

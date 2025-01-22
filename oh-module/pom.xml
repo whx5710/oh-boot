@@ -28,6 +28,10 @@
         <module>oh-module-sys</module>
     </modules>
     <dependencies>
+        <dependency>
+            <groupId>com.iris</groupId>
+            <artifactId>oh-core</artifactId>
+        </dependency>
         <!-- 接口文档 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>

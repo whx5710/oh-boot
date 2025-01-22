@@ -49,6 +49,11 @@ public abstract class BaseEntity extends IDEntity{
      */
     @TableField("db_status")
     private Integer dbStatus = 1;
+    /**
+     * 租户ID
+     */
+    @TableField("tenant_id")
+    private String tenantId;
 
     public Long getCreator() {
         return creator;
@@ -94,5 +99,13 @@ public abstract class BaseEntity extends IDEntity{
      */
     public void setDbStatus(Integer dbStatus) {
         this.dbStatus = dbStatus;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

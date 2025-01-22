@@ -43,6 +43,8 @@ public class SysLogLoginEntity {
      * 操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误
      */
     private Integer operation;
+    // 租户ID
+    private String tenantId;
 
     /**
      * 创建时间
@@ -111,5 +113,13 @@ public class SysLogLoginEntity {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

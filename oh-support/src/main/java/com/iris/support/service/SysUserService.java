@@ -67,4 +67,11 @@ public interface SysUserService {
      * 导出用户信息表格
      */
     void export();
+    /**
+     * 更新租户
+     * @param tenantID 组合ID
+     * @param userIdList 用户ID
+     * @param flag 1 绑定 2 解绑
+     */
+    void updateTenantUser(String tenantID, List<Long> userIdList, Integer flag);
 }

@@ -87,6 +87,10 @@ public class SysUserVO implements Serializable {
     @Schema(description = "修改吗密码时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime pwdModifyTime;
+    @Schema(description = "租户ID")
+    private String tenantId;
+    @Schema(description = "租户")
+    private String tenantName;
 
     public Long getId() {
         return id;
@@ -222,5 +226,21 @@ public class SysUserVO implements Serializable {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

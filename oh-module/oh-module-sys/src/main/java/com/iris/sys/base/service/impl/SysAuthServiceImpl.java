@@ -83,7 +83,7 @@ public class SysAuthServiceImpl implements SysAuthService {
         boolean flag = sysCaptchaService.validate(login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
-            sysLogLoginService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue());
+            sysLogLoginService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
             // 登录失败计数
             int authCount = loginCount(login.getUsername());
             if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
@@ -197,7 +197,7 @@ public class SysAuthServiceImpl implements SysAuthService {
             }
         }
         // 保存登录日志
-        sysLogLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue());
+        sysLogLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
     }
 
     /**

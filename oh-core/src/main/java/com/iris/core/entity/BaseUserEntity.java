@@ -16,6 +16,7 @@ public class BaseUserEntity extends IDEntity {
     private Integer gender;
     private String email;
     private String mobile;
+    private String tenantId;
 
     public String getUsername() {
         return username;
@@ -55,5 +56,13 @@ public class BaseUserEntity extends IDEntity {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

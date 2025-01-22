@@ -3,8 +3,8 @@
 
 <mapper namespace="com.iris.sys.base.mapper.SysLogOperateMapper">
     <insert id="save">
-        INSERT INTO sys_log_operate (module, name, req_uri, req_method, req_params, ip, address, user_agent, operate_type, duration, status, user_id, real_name, result_msg, create_time)
-        VALUES (#{module}, #{name}, #{reqUri}, #{reqMethod}, #{reqParams}, #{ip}, #{address}, #{userAgent}, #{operateType}, #{duration}, #{status}, #{userId}, #{realName}, #{resultMsg}, #{createTime})
+        INSERT INTO sys_log_operate (module, name, req_uri, req_method, req_params, ip, address, user_agent, operate_type, duration, status, user_id, real_name, result_msg, create_time, tenant_id)
+        VALUES (#{module}, #{name}, #{reqUri}, #{reqMethod}, #{reqParams}, #{ip}, #{address}, #{userAgent}, #{operateType}, #{duration}, #{status}, #{userId}, #{realName}, #{resultMsg}, #{createTime}, #{tenantId})
     </insert>
 
     <select id="getList" resultType="com.iris.sys.base.entity.SysLogOperateEntity">

@@ -37,6 +37,6 @@ public interface SysOrgMapper {
     @Select("select count(1) from sys_org where db_status != 0 and parent_id = #{parentId}")
     int countByParentId(@Param("parentId") long parentId);
 
-    @Select("select a.*,b.name parentName from sys_org a left join sys_org b on a.parent_id = b.id where a.id = #{id}")
+    @Select("select a.* from sys_org a where a.id = #{id}")
     SysOrgEntity getById(@Param("id") Long id);
 }

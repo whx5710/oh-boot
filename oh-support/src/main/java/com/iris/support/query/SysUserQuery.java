@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import com.iris.framework.query.Query;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 用户查询
@@ -31,6 +30,12 @@ public class SysUserQuery extends Query {
 
     @Schema(description = "关键字")
     private String keyWord;
+
+    @Schema(description = "租户ID")
+    private String tenantId;
+
+    @Schema(description = "排除租户ID")
+    private String unTenantId;
 
     @Schema(description = "用户名集合")
     private List<String> userNames;
@@ -91,15 +96,19 @@ public class SysUserQuery extends Query {
         this.userNames = userNames;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysUserQuery that)) return false;
-        return Objects.equals(getUsername(), that.getUsername()) && Objects.equals(getMobile(), that.getMobile()) && Objects.equals(getGender(), that.getGender()) && Objects.equals(getRealName(), that.getRealName()) && Objects.equals(getOrgId(), that.getOrgId()) && Objects.equals(getKeyWord(), that.getKeyWord());
+    public String getTenantId() {
+        return tenantId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUsername(), getMobile(), getGender(), getRealName(), getOrgId(), getKeyWord());
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getUnTenantId() {
+        return unTenantId;
+    }
+
+    public void setUnTenantId(String unTenantId) {
+        this.unTenantId = unTenantId;
     }
 }

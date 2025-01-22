@@ -41,6 +41,11 @@ public class SysPostVO implements Serializable {
     @Min(value = 0, message = "状态不正确")
     @Max(value = 1, message = "状态不正确")
     private Integer status;
+    @Schema(description = "租户ID")
+    private String tenantId;
+
+    @Schema(description = "租户")
+    private String tenantName;
 
     @Schema(description = "创建时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
@@ -92,5 +97,21 @@ public class SysPostVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

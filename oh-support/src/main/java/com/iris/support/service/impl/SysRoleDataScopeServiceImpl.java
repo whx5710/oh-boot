@@ -2,6 +2,7 @@ package com.iris.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.iris.framework.security.user.SecurityUser;
+import com.iris.framework.security.user.UserDetail;
 import com.iris.support.mapper.SysRoleDataScopeMapper;
 import com.iris.support.service.SysRoleDataScopeService;
 import com.iris.support.entity.SysRoleDataScopeEntity;
@@ -34,12 +35,20 @@ public class SysRoleDataScopeServiceImpl implements SysRoleDataScopeService {
         // 需要新增的机构ID
         Collection<Long> insertOrgIdList = CollUtil.subtract(orgIdList, dbOrgIdList);
         if (CollUtil.isNotEmpty(insertOrgIdList)){
+            UserDetail user = SecurityUser.getUser();
+            String tenantId;
+            if(user != null){
+                tenantId = user.getTenantId();
+            } else {
+                tenantId = null;
+            }
             List<SysRoleDataScopeEntity> orgList = insertOrgIdList.stream().map(orgId -> {
                 SysRoleDataScopeEntity entity = new SysRoleDataScopeEntity();
                 entity.setOrgId(orgId);
                 entity.setRoleId(roleId);
                 entity.setCreateTime(LocalDateTime.now());
                 entity.setCreator(SecurityUser.getUserId());
+                entity.setTenantId(tenantId);
                 return entity;
             }).collect(Collectors.toList());
 

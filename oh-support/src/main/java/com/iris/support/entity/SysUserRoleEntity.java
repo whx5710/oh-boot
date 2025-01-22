@@ -1,8 +1,8 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Objects;
 
 /**
  * 用户角色关系
@@ -21,6 +21,9 @@ public class SysUserRoleEntity extends BaseEntity {
 	 */
 	private Long userId;
 
+	@TableField(exists = false)
+	private String tenantId;
+
 	public Long getRoleId() {
 		return roleId;
 	}
@@ -38,14 +41,12 @@ public class SysUserRoleEntity extends BaseEntity {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysUserRoleEntity that)) return false;
-		return Objects.equals(getRoleId(), that.getRoleId()) && Objects.equals(getUserId(), that.getUserId());
+	public String getTenantId() {
+		return tenantId;
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(getRoleId(), getUserId());
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

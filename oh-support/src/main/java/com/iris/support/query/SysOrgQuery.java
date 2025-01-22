@@ -17,6 +17,9 @@ public class SysOrgQuery extends Query {
     @Schema(description = "父级ID")
     private Long parentId;
 
+    @Schema(description = "租户ID")
+    private String tenantId;
+
     public String getName() {
         return name;
     }
@@ -31,5 +34,13 @@ public class SysOrgQuery extends Query {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

@@ -12,7 +12,7 @@ public enum ErrorCode {
     NOT_FOUND(404, "未找到访问资源"),
     INTERNAL_SERVER_ERROR(500, "服务器异常，请稍后再试"),
     MISSING_PARAMETER_ERROR(500, "缺少参数错误，请检查"),
-    HTTP_MSG_NOT_READABLE(500, "消息不可读异常，请检查");
+    HTTP_MSG_NOT_READABLE(500, "服务发生异常，联系管理员");
 
     private final int code;
     private final String msg;

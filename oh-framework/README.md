@@ -1,11 +1,12 @@
 ## 说明
 oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数据库、多数据源、异常以及基础类等。
-- 默认使用druid连接池，数据源切换使用 @Ds 注解进行切换，可作用到类和方法上
-- 使用PageHelper进行分页，也可以使用@Pages 注解进行分页操作
-- 支持动态SQL，通过 @TableName、@TableColumn和ProviderService自动生成SQL语句
 - 异步消息消费；实现JobService接口可异步消费消息，通过JobServiceConsumer.jobConsume 执行业务代码
 - 在方法上使用 @OperateLog 注解可记录操作日志
-- 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交
+- 使用PageHelper进行分页，也可以使用@Pages 注解进行分页操作 【2024年10月】
+- 通过Druid连接池支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源 【2024年10月】
+- 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
+- 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
+- 增加租户功能，隔离业务数据 【2025年1月】
 ## 引入
 根据实际版本引入，如下所示：
 
@@ -39,6 +40,12 @@ iris:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    multi-tenant: # 多租户配置
+      dialect: mysql # 数据库方言，默认mysql
+      tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
+      table-pattern: ^sys_.* # 需要隔离的表名称（正则表达式）
+      # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
+      ignore-table: sys_dict_type,sys_dict_data
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同

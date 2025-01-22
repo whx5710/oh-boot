@@ -20,6 +20,10 @@
     <dependencies>
         <dependency>
             <groupId>com.iris</groupId>
+            <artifactId>oh-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.iris</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
     </dependencies>

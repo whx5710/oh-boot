@@ -29,7 +29,7 @@ public class AuthenticationEvents {
         UserDetail user = (UserDetail) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        sysLogLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue());
+        sysLogLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
     }
 
     @EventListener
@@ -38,7 +38,7 @@ public class AuthenticationEvents {
         String username = (String) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        sysLogLoginService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue());
+        sysLogLoginService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
     }
 
 }

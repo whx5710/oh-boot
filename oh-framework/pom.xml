@@ -9,7 +9,7 @@
     <artifactId>oh-framework</artifactId>
     <description>系统core框架</description>
     <!-- 框架版本 -->
-    <version>2.0.2.20241110</version>
+    <version>3.0.1.20250123</version>
 
     <properties>
         <java.version>21</java.version>

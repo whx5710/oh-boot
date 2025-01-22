@@ -26,6 +26,12 @@ public class SysOrgVO extends TreeNode<SysOrgVO> {
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
 
+    @Schema(description = "租户ID")
+    private String tenantId;
+
+    @Schema(description = "租户")
+    private String tenantName;
+
     @Schema(description = "创建时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
@@ -86,5 +92,21 @@ public class SysOrgVO extends TreeNode<SysOrgVO> {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

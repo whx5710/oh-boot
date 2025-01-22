@@ -3,6 +3,7 @@ package com.iris.core.entity;
 import com.iris.core.utils.JsonUtils;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 实体类-超类
@@ -16,5 +17,13 @@ public class SuperEntity implements Serializable {
      */
     public String toJson(){
         return JsonUtils.toJsonString(this);
+    }
+
+    /**
+     * 将对象转换成Map
+     * @return
+     */
+    public Map toMap(){
+        return JsonUtils.convertValue(this, Map.class);
     }
 }

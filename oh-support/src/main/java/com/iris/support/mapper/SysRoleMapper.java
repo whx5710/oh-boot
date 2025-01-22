@@ -19,8 +19,9 @@ import java.util.List;
 @Ds(Constant.DYNAMIC_SYS_DB)
 public interface SysRoleMapper {
 
-    // 动态拼接SQL
-    @InsertProvider(method = ProviderService.INSERT,type = ProviderService.class)
+
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
+    @InsertProvider(method = ProviderService.INSERT,type = ProviderService.class) // 动态拼接SQL
     int insertRole(SysRoleEntity sysRoleEntity);
 
     /**

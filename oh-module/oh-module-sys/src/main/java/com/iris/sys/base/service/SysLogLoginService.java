@@ -30,7 +30,7 @@ public interface SysLogLoginService {
      * @param status    登录状态
      * @param operation 操作信息
      */
-    void save(String username, Integer status, Integer operation);
+    void save(String username, Integer status, Integer operation, String tenantId);
 
     /**
      * 导出登录日志

@@ -1,5 +1,6 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.entity.BaseEntity;
 
 /**
@@ -33,6 +34,9 @@ public class SysDictDataEntity extends BaseEntity {
      * 排序
      */
     private Integer sort;
+
+    @TableField(exists = false)
+    private String tenantId;
 
     public Long getDictTypeId() {
         return dictTypeId;
@@ -80,5 +84,15 @@ public class SysDictDataEntity extends BaseEntity {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    @Override
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    @Override
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

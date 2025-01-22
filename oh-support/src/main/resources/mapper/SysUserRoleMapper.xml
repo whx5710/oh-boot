@@ -13,7 +13,7 @@
     <update id="deleteByUserIdList">
         update sys_user_role
         <set>
-            <if test="param != null and param.updater != null">updater = #{updater},</if>
+            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
             db_status = 0,
             update_time = sysdate()
         </set>

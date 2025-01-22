@@ -1,7 +1,7 @@
 package com.iris.framework.security.config;
 
 import com.iris.framework.security.exception.SecurityAuthenticationEntryPoint;
-import com.iris.framework.security.filter.AuthenticationTokenFilter;
+import com.iris.framework.security.filter.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,11 +26,11 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityFilterConfig {
-    private final AuthenticationTokenFilter authenticationTokenFilter;
+    private final AuthenticationFilter authenticationFilter;
     private final PermitResource permitResource;
 
-    public SecurityFilterConfig(AuthenticationTokenFilter authenticationTokenFilter, PermitResource permitResource) {
-        this.authenticationTokenFilter = authenticationTokenFilter;
+    public SecurityFilterConfig(AuthenticationFilter authenticationFilter, PermitResource permitResource) {
+        this.authenticationFilter = authenticationFilter;
         this.permitResource = permitResource;
     }
 
@@ -41,7 +41,7 @@ public class SecurityFilterConfig {
         String[] permits = permitList.toArray(new String[0]);
         // 相关配置请查看官方例子
         // https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/builders/HttpSecurity.html
-        http.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(permits).permitAll()

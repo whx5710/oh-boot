@@ -5,8 +5,6 @@ import com.iris.framework.datasource.annotations.TableName;
 import com.iris.framework.entity.BaseEntity;
 import com.iris.support.enums.DataScopeEnum;
 
-import java.util.Objects;
-
 /**
  * 角色
  * 
@@ -31,8 +29,13 @@ public class SysRoleEntity extends BaseEntity {
 	/**
 	 * 机构ID
 	 */
-	@TableField("org_id")
-	private Long orgId;
+//	@TableField("org_id")
+//	private Long orgId;
+	/**
+	 * 系统内置
+	 */
+	@TableField("is_system")
+	private Integer isSystem;
 
 	public String getName() {
 		return name;
@@ -58,23 +61,19 @@ public class SysRoleEntity extends BaseEntity {
 		this.dataScope = dataScope;
 	}
 
-	public Long getOrgId() {
-		return orgId;
+//	public Long getOrgId() {
+//		return orgId;
+//	}
+
+//	public void setOrgId(Long orgId) {
+//		this.orgId = orgId;
+//	}
+
+	public Integer getIsSystem() {
+		return isSystem;
 	}
 
-	public void setOrgId(Long orgId) {
-		this.orgId = orgId;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysRoleEntity that)) return false;
-		return Objects.equals(getName(), that.getName()) && Objects.equals(getRemark(), that.getRemark()) && Objects.equals(getDataScope(), that.getDataScope()) && Objects.equals(getOrgId(), that.getOrgId());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getName(), getRemark(), getDataScope(), getOrgId());
+	public void setIsSystem(Integer isSystem) {
+		this.isSystem = isSystem;
 	}
 }

@@ -5,7 +5,12 @@
 
     <select id="getList" parameterType="com.iris.support.query.SysRoleQuery">
         select * from sys_role where db_status != 0
-        <if test="name != null and name != ''">and name = #{name}</if>
+        <if test="name != null and name != ''">
+            and (name like concat('%',#{name}, '%') or tenant_id = #{name})
+        </if>
+        <if test="tenantId != null and tenantId != ''">and tenant_id = #{tenantId}</if>
+        <if test="isSystem != null">and is_system = #{isSystem}</if>
+        order by create_time desc
     </select>
 
     <!--<update id="updateById">

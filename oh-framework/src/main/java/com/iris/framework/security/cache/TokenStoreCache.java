@@ -38,6 +38,9 @@ public class TokenStoreCache {
         // token用户信息
         String key = RedisKeys.getAccessTokenKey(accessToken);
         user.setPassword("");
+        if(user.getSuperAdmin() == 1){
+            user.setTenantId(null);
+        }
         redisCache.set(key, user, securityProperties.getAccessTokenExpire());
         // 刷新token
         RefreshTokenInfo refreshTokenInfo = new RefreshTokenInfo();

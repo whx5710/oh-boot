@@ -35,7 +35,7 @@
     </select>
 
     <insert id="save">
-        INSERT INTO sys_log_login (username, ip, address, user_agent, status, operation, create_time)
-        VALUES (#{username}, #{ip}, #{address}, #{userAgent}, #{status}, #{operation}, #{createTime})
+        INSERT INTO sys_log_login (username, ip, address, user_agent, status, operation, create_time, tenant_id)
+        VALUES (#{username}, #{ip}, #{address}, #{userAgent}, #{status}, #{operation}, #{createTime}, #{tenantId})
     </insert>
 </mapper>

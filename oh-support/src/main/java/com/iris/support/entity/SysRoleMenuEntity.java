@@ -1,8 +1,8 @@
 package com.iris.support.entity;
 
+import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.entity.BaseEntity;
 
-import java.util.Objects;
 
 /**
  * 角色菜单关系
@@ -19,6 +19,9 @@ public class SysRoleMenuEntity extends BaseEntity {
 	 * 菜单ID
 	 */
 	private Long menuId;
+
+	@TableField(exists = false)
+	private String tenantId;
 
 	public Long getRoleId() {
 		return roleId;
@@ -37,14 +40,12 @@ public class SysRoleMenuEntity extends BaseEntity {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysRoleMenuEntity that)) return false;
-		return Objects.equals(getRoleId(), that.getRoleId()) && Objects.equals(getMenuId(), that.getMenuId());
+	public String getTenantId() {
+		return tenantId;
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(getRoleId(), getMenuId());
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

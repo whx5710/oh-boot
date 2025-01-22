@@ -35,6 +35,18 @@ public class SysRoleVO implements Serializable {
     @Schema(description = "数据范围  0：全部数据  1：本机构及子机构数据  2：本机构数据  3：本人数据  4：自定义数据")
     private Integer dataScope;
 
+    @Schema(description = "租户ID")
+    private String tenantId;
+
+    @Schema(description = "租户")
+    private String tenantName;
+
+    /**
+     * 系统内置
+     */
+    @Schema(description = "是否系统内置角色1是 不能修改")
+    private Integer isSystem;
+
     @Schema(description = "菜单ID列表")
     private List<Long> menuIdList;
 
@@ -78,6 +90,22 @@ public class SysRoleVO implements Serializable {
         this.dataScope = dataScope;
     }
 
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
+    }
+
     public List<Long> getMenuIdList() {
         return menuIdList;
     }
@@ -100,5 +128,13 @@ public class SysRoleVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getIsSystem() {
+        return isSystem;
+    }
+
+    public void setIsSystem(Integer isSystem) {
+        this.isSystem = isSystem;
     }
 }

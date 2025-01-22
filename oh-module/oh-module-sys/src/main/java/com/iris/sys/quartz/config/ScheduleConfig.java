@@ -18,7 +18,7 @@ import java.util.Properties;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Configuration
+//@Configuration
 public class ScheduleConfig {
     @Value("spring.datasource.driver-class-name")
     private String driver;

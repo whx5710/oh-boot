@@ -8,7 +8,7 @@
 		where t1.db_status = 1
 		<if test="name != null and name != ''">and name like concat('%', #{name}, '%')</if>
 		<if test="parentId != null">and parent_id = #{parentId}</if>
-		order by t1.sort asc
+		order by t1.tenant_id,t1.sort asc
 	</select>
 
 	<!--<insert id="insertOrg">

@@ -12,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.ReflectionUtils;
@@ -42,7 +41,6 @@ public class IdempotentAspect {
     public void annotation() {
     }
 
-    @Autowired
     public IdempotentAspect(RedisCache redisCache) {
         this.redisCache = redisCache;
     }
@@ -55,13 +53,13 @@ public class IdempotentAspect {
         if (idempotent.keyPrefix().isEmpty()) {
             throw new ServerException("前缀不能为空");
         }
-        //获取自定义key
+        // 获取自定义key
         final String lockKey = getLockKey(joinPoint);
         boolean isLocked = false;
         try {
-            //尝试抢占锁, redis的key + 锁定时间
+            // 尝试抢占锁, redis的key + 锁定时间
             isLocked = redisCache.tryLock(lockKey, idempotent.timeout(), idempotent.timeUnit());
-            //没有拿到锁说明已经有了请求了
+            // 没有拿到锁说明已经有了请求了
             if(!isLocked){
                 throw new ServerException(idempotent.message());
             }
@@ -75,7 +73,7 @@ public class IdempotentAspect {
         } catch (Exception e) {
             throw new ServerException(e.getMessage());
         } finally {
-            //释放锁
+            // 释放锁
             if (isLocked && !idempotent.limit()) {
                 redisCache.unlock(lockKey);
             }
@@ -125,7 +123,7 @@ public class IdempotentAspect {
                     if (annotation == null) {
                         continue;
                     }
-                    //如果有，设置Accessible为true（为true时可以使用反射访问私有变量，否则不能访问私有变量）
+                    //如果有，设置Accessible为true,启用安全检查（为true时可以使用反射访问私有变量，否则不能访问私有变量）
                     field.setAccessible(true);
                     //如果属性是RequestKeyParam注解，则拼接 连接符": + RequestKeyParam"
                     sb.append(idempotent.delimiter()).append(ReflectionUtils.getField(field, object));

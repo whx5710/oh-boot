@@ -44,7 +44,7 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
     }
 
     @Override
-    public void save(String username, Integer status, Integer operation) {
+    public void save(String username, Integer status, Integer operation, String tenantId) {
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         assert request != null;
         String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
@@ -58,6 +58,7 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
         entity.setIp(ip);
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
+        entity.setTenantId(tenantId);
         sysLogLoginMapper.save(entity);
     }
 

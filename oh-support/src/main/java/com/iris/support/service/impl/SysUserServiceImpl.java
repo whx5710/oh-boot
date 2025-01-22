@@ -10,6 +10,7 @@ import com.iris.core.cache.RedisKeys;
 import com.iris.core.constant.CommonEnum;
 import com.iris.core.utils.*;
 import com.iris.framework.security.user.SecurityUser;
+import com.iris.support.cache.TenantCache;
 import com.iris.support.mapper.SysUserMapper;
 import com.iris.support.enums.SuperAdminEnum;
 import com.iris.support.query.SysRoleUserQuery;
@@ -45,6 +46,7 @@ public class SysUserServiceImpl  implements SysUserService {
     private final SysUserPostService sysUserPostService;
     private final RedisCache redisCache;
     private final SysUserMapper sysUserMapper;
+    private final TenantCache tenantCache;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -53,11 +55,12 @@ public class SysUserServiceImpl  implements SysUserService {
     private SysParamsService sysParamsService;
 
     public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserPostService sysUserPostService,
-                              RedisCache redisCache, SysUserMapper sysUserMapper) {
+                              RedisCache redisCache, SysUserMapper sysUserMapper, TenantCache tenantCache) {
         this.sysUserRoleService = sysUserRoleService;
         this.sysUserPostService = sysUserPostService;
         this.redisCache = redisCache;
         this.sysUserMapper = sysUserMapper;
+        this.tenantCache = tenantCache;
     }
 
     @Override
@@ -67,7 +70,11 @@ public class SysUserServiceImpl  implements SysUserService {
         // 数据列表
         List<SysUserEntity> list = sysUserMapper.getList(query);
         PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SysUserConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        List<SysUserVO> voList = SysUserConvert.INSTANCE.convertList(pageInfo.getList());
+        for(SysUserVO vo: voList){
+            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+        }
+        return new PageResult<>(voList, pageInfo.getTotal());
     }
 
     /**
@@ -258,7 +265,11 @@ public class SysUserServiceImpl  implements SysUserService {
     public PageResult<SysUserVO> roleUserPage(SysRoleUserQuery query) {
         // 数据列表
         List<SysUserEntity> list = sysUserMapper.getRoleUserList(query);
-        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), query.getTotal());
+        List<SysUserVO> voList = SysUserConvert.INSTANCE.convertList(list);
+        for(SysUserVO vo: voList){
+            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+        }
+        return new PageResult<>(voList, query.getTotal());
     }
 
     @Override
@@ -293,6 +304,42 @@ public class SysUserServiceImpl  implements SysUserService {
         HttpServletResponse response = HttpContextUtils.getHttpServletResponse();
         AssertUtils.isNull(response, "接口响应");
         ExcelUtils.downLoadExcel("用户信息" + DateUtils.format(new Date()), response, workbook);
+    }
+
+    /**
+     * 更新租户
+     * @param tenantID 组合ID
+     * @param userIdList 用户ID
+     * @param flag 1 绑定 2 解绑
+     */
+    @Override
+    public void updateTenantUser(String tenantID, List<Long> userIdList, Integer flag) {
+        AssertUtils.isNull(userIdList, "用户ID");
+        AssertUtils.isNull(tenantID, "租户ID");
+        for(Long userId: userIdList){
+            SysUserEntity user = sysUserMapper.getById(userId);
+            if(user == null || user.getId() == null){
+                throw new ServerException("用户不存在");
+            }
+            if(flag == 1){
+                if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
+                    throw new ServerException("用户已存在其他租户中【" + user.getTenantId() + "】");
+                }
+                user.setTenantId(tenantID);
+                sysUserMapper.updateById(user);
+            }else if(flag == 2){
+                if(user.getTenantId() == null || user.getTenantId().isEmpty()){
+                    throw new ServerException("用户未绑定租户，不能解绑");
+                }
+                if(!tenantID.equals(user.getTenantId())){
+                    throw new ServerException("租户ID不准确，不能解绑");
+                }
+                user.setTenantId(null);
+                sysUserMapper.unbindUser(user);// 解绑用户
+            }else{
+                throw new ServerException("未知操作，租户用户操作失败！");
+            }
+        }
     }
 
     /**
