@@ -20,6 +20,12 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 配置说明
 ```yaml
 iris:
+  multi-tenant: # 多租户配置
+    dialect: mysql # 数据库方言，默认mysql
+    tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
+    table-pattern: ^sys_.* # 需要隔离的表名称（正则表达式）
+    # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
+    ignore-table: sys_dict_type,sys_dict_data
   security:
     access-token-expire: 43200      # token有效期
     refresh-token-expire: 604800    # 刷新token有效期
@@ -40,12 +46,6 @@ iris:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
-    multi-tenant: # 多租户配置
-      dialect: mysql # 数据库方言，默认mysql
-      tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
-      table-pattern: ^sys_.* # 需要隔离的表名称（正则表达式）
-      # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
-      ignore-table: sys_dict_type,sys_dict_data
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同

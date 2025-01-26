@@ -14,7 +14,7 @@ import java.util.Set;
 @Component
 @ConfigurationProperties(prefix = MultiTenantProperties.PREFIX)
 public class MultiTenantProperties {
-    public static final String PREFIX = "spring.datasource.multi-tenant";
+    public static final String PREFIX = "iris.multi-tenant";
 
     /**
      * 忽略的系统内置表： sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post
