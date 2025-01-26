@@ -3,6 +3,7 @@ package com.iris.core.utils;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.iris.core.constant.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.ObjectUtils;
@@ -16,6 +17,14 @@ import java.util.Base64;
  *
  */
 public class IrisTools {
+
+    public static final String LOW_LETTER = "abcdefghijklmnopqrstuvwxyz";
+
+    public static final String CAPITAL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    public static final String NUM = "1234567890";
+
+    public static final String CHAR = "~!@#$%^&*()_+";
 
     // 参数1为终端ID，参数2为数据中心ID
     static Snowflake snowflake = IdUtil.getSnowflake(1, 1);
@@ -90,5 +99,23 @@ public class IrisTools {
         }
         sb.append(str);
         return sb.toString();
+    }
+
+    /**
+     * 生成10个长度随机字符串
+     * @param length 长度
+     * @return str
+     */
+    public static String getRandom(int length){
+        String a = RandomUtil.randomString(LOW_LETTER, 1);
+        String b = RandomUtil.randomString(CAPITAL, 1);
+        String c = RandomUtil.randomString(NUM, 1);
+        String d = RandomUtil.randomString(CHAR, 1);
+        boolean e = RandomUtil.randomBoolean();
+        if(e){
+            return a + b + c + d + RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4);
+        }else {
+            return RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4) + a + b + c + d;
+        }
     }
 }

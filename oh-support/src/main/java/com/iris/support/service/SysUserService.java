@@ -74,4 +74,11 @@ public interface SysUserService {
      * @param flag 1 绑定 2 解绑
      */
     void updateTenantUser(String tenantID, List<Long> userIdList, Integer flag);
+
+    /**
+     * 重置密码
+     * @param userId 用户ID
+     * @return 密码
+     */
+    String resetPwd(Long userId);
 }

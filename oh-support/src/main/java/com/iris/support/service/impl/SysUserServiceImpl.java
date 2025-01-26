@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -235,6 +236,11 @@ public class SysUserServiceImpl  implements SysUserService {
         // 用户岗位列表
         List<Long> postIdList = sysUserPostService.getPostIdList(userId);
         user.setPostIdList(postIdList);
+
+        // 租户名
+        if(user.getTenantId() != null){
+            user.setTenantName(tenantCache.getNameByTenantId(user.getTenantId()));
+        }
         return user;
     }
 
@@ -340,6 +346,26 @@ public class SysUserServiceImpl  implements SysUserService {
                 throw new ServerException("未知操作，租户用户操作失败！");
             }
         }
+    }
+
+    /**
+     * 重置密码
+     * @param userId 用户ID
+     * @return 密码
+     */
+    @Override
+    public String resetPwd(Long userId) {
+        AssertUtils.isNull(userId, "用户ID");
+        SysUserEntity user = sysUserMapper.getById(userId);
+        if(user == null || user.getId() == null){
+            throw new ServerException("未找到对应的用户，重置密码失败！");
+        }
+        String pwd = IrisTools.getRandom(8);
+        user.setPassword(passwordEncoder.encode(pwd));
+        user.setUpdateTime(LocalDateTime.now());
+        user.setUpdater(SecurityUser.getUserId());
+        sysUserMapper.updateById(user);
+        return pwd;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.iris.support.controller;
 
 import com.iris.core.exception.ServerException;
+import com.iris.core.utils.IrisTools;
 import com.iris.framework.operatelog.annotations.OperateLog;
 import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.core.utils.PageResult;
@@ -64,7 +65,7 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<String> unlock(@PathVariable("userName")String userName) {
         sysUserService.unlock(userName);
-        return Result.ok();
+        return Result.ok("操作成功");
     }
     // 绑定/解绑 租户的管理用户
     @PostMapping("/tenantUser/{tenantID}/{flag}")
@@ -72,7 +73,7 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> tenantUser(@PathVariable("tenantID") String tenantID, @PathVariable("flag")Integer flag, @RequestBody List<Long> userIdList) {
         sysUserService.updateTenantUser(tenantID, userIdList, flag);
-        return Result.ok();
+        return Result.ok("操作成功");
     }
 
     // 根据用户ID获取用户信息
@@ -104,7 +105,7 @@ public class SysUserController {
         }
         // 修改密码
         sysUserService.updatePassword(user.getId(), vo.getNewPassword());
-        return Result.ok();
+        return Result.ok("修改成功");
     }
 
     @PostMapping
@@ -112,13 +113,17 @@ public class SysUserController {
     @OperateLog(type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid SysUserVO vo) {
-        // 新增密码不能为空
+        // 新增密码
+        String msg = "新增成功！";
         if (ObjectUtils.isEmpty(vo.getPassword())) {
-            return Result.error("密码不能为空");
+            // return Result.error("密码不能为空");
+            String pwd = IrisTools.getRandom(8);
+            vo.setPassword(pwd);
+            msg = msg + "密码为" + pwd;
         }
         // 保存
         sysUserService.save(vo);
-        return Result.ok();
+        return Result.ok(msg);
     }
 
     @PostMapping("register")
@@ -133,7 +138,7 @@ public class SysUserController {
         vo.setRoleIdList(null);
         // 保存
         sysUserService.save(vo);
-        return Result.ok();
+        return Result.ok("提交成功");
     }
 
     @PutMapping
@@ -142,7 +147,7 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> update(@RequestBody @Valid SysUserVO vo) {
         sysUserService.update(vo);
-        return Result.ok();
+        return Result.ok("修改成功");
     }
 
     @DeleteMapping
@@ -157,7 +162,15 @@ public class SysUserController {
 
         sysUserService.delete(idList);
 
-        return Result.ok();
+        return Result.ok("删除成功");
+    }
+
+    @GetMapping("/resetPwd/{id}")
+    @Operation(summary = "重置密码")
+    @OperateLog(type = OperateTypeEnum.GET)
+    @PreAuthorize("hasAuthority('sys:user:delete')")
+    public Result<String> resetPwd(@PathVariable("id") Long id){
+        return Result.ok(sysUserService.resetPwd(id));
     }
 
     @PostMapping("import")
@@ -170,7 +183,7 @@ public class SysUserController {
         }
         sysUserService.importByExcel(file, passwordEncoder.encode("123456"));
 
-        return Result.ok();
+        return Result.ok("导入成功");
     }
 
     @GetMapping("export")

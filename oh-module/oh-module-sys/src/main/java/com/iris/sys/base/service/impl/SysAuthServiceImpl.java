@@ -9,11 +9,13 @@ import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.HttpContextUtils;
 import com.iris.core.utils.IpUtils;
 import com.iris.core.utils.IrisTools;
+import com.iris.framework.common.properties.MultiTenantProperties;
 import com.iris.framework.common.properties.SecurityProperties;
 import com.iris.framework.security.cache.TokenStoreCache;
 import com.iris.framework.security.mobile.MobileAuthenticationToken;
 import com.iris.framework.security.user.RefreshTokenInfo;
 import com.iris.framework.security.user.UserDetail;
+import com.iris.support.cache.TenantCache;
 import com.iris.support.entity.SysUserEntity;
 import com.iris.support.service.SysUserService;
 import com.iris.support.vo.SysUserVO;
@@ -52,13 +54,16 @@ public class SysAuthServiceImpl implements SysAuthService {
     private final SmsApi smsApi;
 
     private final RedisCache redisCache;
+    private final TenantCache tenantCache;
 
     private final SecurityProperties securityProperties;
+    private final MultiTenantProperties tenantProperties;
 
     public SysAuthServiceImpl(SysCaptchaService sysCaptchaService, TokenStoreCache tokenStoreCache,
                               AuthenticationManager authenticationManager, SysLogLoginService sysLogLoginService,
                               SysUserService sysUserService, SmsApi smsApi, RedisCache redisCache,
-                              SecurityProperties securityProperties, SysUserDetailsService sysUserDetailsService) {
+                              SecurityProperties securityProperties, SysUserDetailsService sysUserDetailsService,
+                              TenantCache tenantCache, MultiTenantProperties tenantProperties) {
         this.sysCaptchaService = sysCaptchaService;
         this.tokenStoreCache = tokenStoreCache;
         this.authenticationManager = authenticationManager;
@@ -68,6 +73,8 @@ public class SysAuthServiceImpl implements SysAuthService {
         this.smsApi = smsApi;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
+        this.tenantCache = tenantCache;
+        this.tenantProperties = tenantProperties;
     }
 
     /**
@@ -136,9 +143,9 @@ public class SysAuthServiceImpl implements SysAuthService {
 
     /**
      * 刷新token
-     * @param refreshToken
-     * @param request
-     * @return
+     * @param refreshToken 刷新token
+     * @param request 请求
+     * @return token
      */
     @Override
     public SysTokenVO refreshToken(String refreshToken, HttpServletRequest request) {
@@ -289,6 +296,23 @@ public class SysAuthServiceImpl implements SysAuthService {
             }
             throw new ServerException(msg);
         }
+        // 租户判断
+        if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
+                && !tenantCache.valid(user.getTenantId())){
+            // 登录失败计数
+            int authCount =loginCount(login.getUsername());
+            if(authCount > 0){
+                if((securityProperties.getAuthCount() - authCount) > 0){
+                    msg = "租户无效，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+                }else{
+                    msg = "租户无效，账号即将锁定";
+                }
+            }else{
+                msg = "租户无效，登录失败";
+            }
+            throw new ServerException(msg);
+        }
+
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());
         user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
