@@ -43,6 +43,81 @@ oh-module    业务模块
 - 4、启动服务 `com.iris.ServerApplication`
 - 5、API文档地址：http://localhost:8080/doc.html 数据库监控地址：http://localhost:8080/druid/login.html
 
+## 配置说明
+```yaml
+iris:
+  security:
+    access-token-expire: 7200      # 过期时间-秒，2小时过期
+    refresh-token-expire: 43200    # 刷新token-秒 12小时
+    auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
+    lock-time: 3600                 # 账号锁定时间(秒)
+    ignore-urls:                    # 忽略鉴权的url
+      - /swagger-ui/**
+      - /druid/**
+  open-api:
+    type: 2 # 1直接保存 2使用MQ异步保存，默认直接保存
+    auto-start-up: false # Kafka监听是否开启,默认不开启false
+    cache-time: 604800 # 缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
+  xss:
+    enabled: true
+    exclude-urls:
+      - /oh-generator/**
+  # 文件存储相关
+  storage:
+    enabled: true
+    config:
+      type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
+      domain: http://localhost:8080
+    local.path: /data/图片/upload
+# https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    multi-tenant: # 多租户配置
+      dialect: mysql # 数据库方言，默认mysql
+      tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
+      table-pattern: ^sys_.* # 需要隔离的表名称（正则表达式）
+      # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
+      ignore-table: sys_dict_type,sys_dict_data
+    sys-data-source:
+      primary: masterDb # 主数据源或者数据源组,默认 masterDb
+      sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同
+    dynamic: # 数据源配置，支持多数据源
+      sysDb: # 数据源1 
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        # 以下与druid的配置对应
+        initialSize: 10
+        minIdle: 10
+        maxActive: 100
+        filters: wall,stat
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        checkConnection: true # 初始化时是否检查连接，默认false
+      mysqlDb: # 数据源2 配置同 sysDb
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin # 正式环境需配置复杂密码
+      web-stat-filter: # Druid Web统计过滤器配置
+        enabled: true # 启用Web统计过滤器
+        session-stat-enable: true # 启用会话统计功能
+        session-stat-max-count: 1000 # 最大会话统计数量
+# 日志信息
+logging:
+  # 字符集设置
+  charset:
+    file: UTF-8
+    console: UTF-8
+  level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+    com.iris: DEBUG
+    org.springframework.web: debug # web相关的日志级别
+
+```
 ## 沟通交流
 
 邮箱：whx5710@qq.com 【王小费】
