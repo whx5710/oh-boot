@@ -1,7 +1,6 @@
 package com.iris.support.cache;
 
 import com.iris.core.cache.RedisCache;
-import com.iris.core.utils.JsonUtils;
 import com.iris.framework.common.constant.CommConstant;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ public class TenantCache {
      * @return 租户名
      */
     public String getNameByTenantId(String tenantId){
-        Map map = getTenantToMap(tenantId);
+        Map<String, Object> map = getTenantToMap(tenantId);
         if(map != null && map.containsKey("tenantName") && map.get("tenantName") != null){
             return (String) map.get("tenantName");
         }else{
@@ -37,17 +36,32 @@ public class TenantCache {
     }
 
     /**
+     * 租户是否有效
+     * @param tenantId 租户ID
+     * @return b
+     */
+    public Boolean valid(String tenantId){
+        Map<String, Object> map = getTenantToMap(tenantId);
+        if(map == null){
+            return false;
+        }
+        Integer status = (Integer) map.get("status");
+        Integer dbStatus = (Integer) map.get("dbStatus");
+        return status == 1 && dbStatus == 1;
+    }
+
+    /**
      * 获取租户基本信息
      * @param tenantId 租户ID
      * @return map
      */
-    public Map getTenantToMap(String tenantId){
+    public Map<String, Object> getTenantToMap(String tenantId){
         if(tenantId == null || tenantId.isEmpty()){
             return null;
         }
         Object obj = redisCache.get(CommConstant.TENANT_PREFIX + tenantId);
         if(obj != null){
-            return JsonUtils.convertValue(obj, Map.class);
+            return (Map<String, Object>) obj;
         }else{
             return null;
         }

@@ -23,7 +23,7 @@ public class OperateLogService {
     @Async
     public void saveLog(OperateLogDTO log) {
         String key = RedisKeys.getLogKey();
-        // 保存到Redis队列,存7天
-        redisCache.leftPush(key, log, 604800); // 60*60*24*7
+        // 保存到Redis队列,存3天
+        redisCache.leftPush(key, log, 259200); // 60*60*24*3
     }
 }

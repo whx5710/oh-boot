@@ -17,6 +17,8 @@ public class TenantMemberQuery extends Query {
 
     private Integer status;
 
+    private String keyWord;
+
     public String getTenantName() {
         return tenantName;
     }
@@ -47,5 +49,13 @@ public class TenantMemberQuery extends Query {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }

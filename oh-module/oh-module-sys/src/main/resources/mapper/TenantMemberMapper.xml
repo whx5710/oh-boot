@@ -15,6 +15,9 @@
         <if test="status != null">
             and status = #{status}
         </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (tenant_name like concat('%',#{keyWord}, '%') or tenant_id like concat('%',#{keyWord},'%'))
+        </if>
         order by sort
     </select>
 </mapper>

@@ -48,14 +48,14 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         AssertUtils.isBlank(vo.getTenantId(), "租户ID");
         TenantMemberEntity entity = TenantMemberConvert.INSTANCE.convert(vo);
         tenantMemberMapper.save(entity);
-        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toJson());
+        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toMap());
     }
 
     @Override
     public void update(TenantMemberVO vo) {
         tenantMemberMapper.update(TenantMemberConvert.INSTANCE.convert(vo));
         TenantMemberEntity entity = tenantMemberMapper.getById(vo.getId());
-        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toJson());
+        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toMap());
     }
 
     @Override

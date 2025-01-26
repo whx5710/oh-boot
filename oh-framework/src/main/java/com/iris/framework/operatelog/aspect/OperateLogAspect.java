@@ -85,7 +85,7 @@ public class OperateLogAspect {
         OperateLogDTO log = new OperateLogDTO();
 
         // 执行时长
-        long duration = startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli() - LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        long duration = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli() - startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();
         log.setDuration((int) duration);
         // 操作类型
         log.setOperateType(operateLog.type()[0].getValue());
