@@ -1,5 +1,6 @@
 package com.iris.sys.base.mapper;
 
+import com.iris.framework.datasource.mapper.BaseMapper;
 import com.iris.sys.base.entity.SysLogLoginEntity;
 import com.iris.sys.base.query.SysLogLoginQuery;
 import com.iris.sys.base.vo.AnalysisVO;
@@ -15,7 +16,7 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface SysLogLoginMapper {
+public interface SysLogLoginMapper extends BaseMapper<SysLogLoginEntity> {
 
     /**
      * 统计最近几天相关操作情况

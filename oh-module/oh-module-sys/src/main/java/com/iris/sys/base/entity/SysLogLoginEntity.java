@@ -1,5 +1,7 @@
 package com.iris.sys.base.entity;
 
+import com.iris.framework.datasource.annotations.TableName;
+
 import java.time.LocalDateTime;
 
 /**
@@ -8,6 +10,7 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * 
  */
+@TableName("sys_log_login")
 public class SysLogLoginEntity {
     /**
      * id

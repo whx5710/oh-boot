@@ -18,6 +18,6 @@ import java.util.List;
 public interface OhTaskUserMapper extends BaseMapper<OhTaskUserEntity> {
     List<OhTaskUserEntity> getList(OhTaskUserQuery query);
     int save(OhTaskUserEntity param);
-	boolean updateById(OhTaskUserEntity param);
+	int updateById(OhTaskUserEntity param);
     OhTaskUserEntity getById(@Param("id")Long id);
 }

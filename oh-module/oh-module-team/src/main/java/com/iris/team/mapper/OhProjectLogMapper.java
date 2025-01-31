@@ -21,7 +21,7 @@ public interface OhProjectLogMapper extends BaseMapper<OhProjectLogEntity> {
 
     int save(OhProjectLogEntity param);
 
-    boolean updateById(OhProjectLogEntity param);
+    int updateById(OhProjectLogEntity param);
 
     OhProjectLogEntity getById(@Param("id")Long id);
 }

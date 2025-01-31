@@ -59,7 +59,8 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
         entity.setTenantId(tenantId);
-        sysLogLoginMapper.save(entity);
+//        sysLogLoginMapper.save(entity);
+        sysLogLoginMapper.insert(entity);
     }
 
     @Override

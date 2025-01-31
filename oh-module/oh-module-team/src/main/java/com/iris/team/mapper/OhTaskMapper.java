@@ -21,7 +21,7 @@ public interface OhTaskMapper extends BaseMapper<OhTaskEntity> {
 
     int save(OhTaskEntity param);
 
-    boolean updateById(OhTaskEntity param);
+    int updateById(OhTaskEntity param);
 
     OhTaskEntity getById(@Param("id")Long id);
 }
