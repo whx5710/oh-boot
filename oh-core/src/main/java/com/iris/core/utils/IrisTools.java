@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 系统常用公共工具
@@ -25,6 +27,8 @@ public class IrisTools {
     public static final String NUM = "1234567890";
 
     public static final String CHAR = "~!@#$%^&*()_+";
+
+    private static final Pattern humpPattern = Pattern.compile("[A-Z]");
 
     // 参数1为终端ID，参数2为数据中心ID
     static Snowflake snowflake = IdUtil.getSnowflake(1, 1);
@@ -117,5 +121,25 @@ public class IrisTools {
         }else {
             return RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4) + a + b + c + d;
         }
+    }
+
+
+    /**
+     * 驼峰转下划线
+     * @param str 原始
+     * @return 下划线
+     */
+    public static String humpToLine(String str) {
+        Matcher matcher = humpPattern.matcher(str);
+        StringBuilder sb = new StringBuilder();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(sb);
+        String s = sb.toString();
+        if(s.startsWith("_")){
+            s = s.substring(1);
+        }
+        return s;
     }
 }
