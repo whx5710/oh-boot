@@ -33,6 +33,9 @@
 		<if test="params.unTenantId != null and params.unTenantId != ''">
 			and ifnull(t1.tenant_id, '') != #{params.unTenantId}
 		</if>
+		<if test="params.tenantFlag != null and params.tenantFlag != 0">
+			and ifnull(t1.tenant_id, '') != ''
+		</if>
 		<if test="params.keyWord != null and params.keyWord.trim() != ''">
 			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%")
 			or t1.username like concat("%",#{params.keyWord},"%") or t1.mobile like concat("%",#{params.keyWord},"%")

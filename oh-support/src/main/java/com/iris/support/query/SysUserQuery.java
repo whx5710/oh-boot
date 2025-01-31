@@ -40,6 +40,9 @@ public class SysUserQuery extends Query {
     @Schema(description = "用户名集合")
     private List<String> userNames;
 
+    @Schema(description = "租户标识，0所有1租户")
+    private Integer tenantFlag = 0;
+
     public String getUsername() {
         return username;
     }
@@ -110,5 +113,13 @@ public class SysUserQuery extends Query {
 
     public void setUnTenantId(String unTenantId) {
         this.unTenantId = unTenantId;
+    }
+
+    public Integer getTenantFlag() {
+        return tenantFlag;
+    }
+
+    public void setTenantFlag(Integer tenantFlag) {
+        this.tenantFlag = tenantFlag;
     }
 }
