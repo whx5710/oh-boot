@@ -146,8 +146,7 @@ public class DataInnerInterceptor implements Interceptor {
         if (params != null) {
             // 数据过滤SQL
             String sqlFilter = null;
-            if("java.util.HashMap".equals(params.getClass().getName())){
-                HashMap hashMap = (HashMap) params;
+            if(params instanceof HashMap<?,?> hashMap){
                 if(hashMap.containsKey(SQL_FILTER) && hashMap.get(SQL_FILTER) != null){
                     sqlFilter = (String) hashMap.get(SQL_FILTER);
                 }
