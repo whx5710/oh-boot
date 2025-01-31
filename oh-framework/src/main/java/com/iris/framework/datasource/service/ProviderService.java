@@ -2,6 +2,7 @@ package com.iris.framework.datasource.service;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.iris.core.exception.ServerException;
+import com.iris.core.utils.IrisTools;
 import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.datasource.annotations.TableId;
 import com.iris.framework.datasource.annotations.TableName;
@@ -24,7 +25,7 @@ public class ProviderService {
 
     public static final String INSERT = "insert";
     public static final String UPDATE = "updateById";
-    public static final String DELETE = "deleteById";
+    public static final String DELETE = "delete";
 
     private final Logger log = LoggerFactory.getLogger(ProviderService.class);
 
@@ -53,7 +54,7 @@ public class ProviderService {
                 }
             } else {
                 // 无注解的字段默认成与数据库字段一致
-                sbCol.append(comma).append(field.getName());
+                sbCol.append(comma).append(IrisTools.humpToLine(field.getName()));
                 sbValue.append(comma).append("#{").append(field.getName()).append("}");
             }
         }
@@ -106,7 +107,7 @@ public class ProviderService {
                     hasId = true;
                 }
                 if (ReflectUtil.getFieldValue(entity, field.getName()) != null) {
-                    sb.append(comma).append(field.getName()).append(" = #{").append(field.getName()).append("}");
+                    sb.append(comma).append(IrisTools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
                 }
             }
         }
@@ -131,7 +132,7 @@ public class ProviderService {
      * @return sql
      * @param <T> t
      */
-    public <T> String deleteById(T entity) {
+    public <T> String delete(T entity) {
         Class<?> clazz = entity.getClass();
         String tableName = getTableName(clazz); // 表名
         List<Field> fields = getFields(clazz); // 属性列表
@@ -144,7 +145,7 @@ public class ProviderService {
                 if(tableId.value() != null && !tableId.value().isEmpty()){
                     sbWhere.append(and).append(tableId.value()).append(" = #{").append(field.getName()).append("}");
                 }else{
-                    sbWhere.append(and).append(field.getName()).append(" = #{").append(field.getName()).append("}");
+                    sbWhere.append(and).append(IrisTools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
                 }
                 hasMultipleId = true;
             }else{
@@ -191,7 +192,9 @@ public class ProviderService {
         TableName apoTable = clazz.getAnnotation(TableName.class);
         if(apoTable == null){
             log.warn("实体类没指定表名（@TableName），默认使用类名作为表名");
-            return clazz.getName().toLowerCase();
+            String s = clazz.getName();
+            int i = s.lastIndexOf(".");
+            return IrisTools.humpToLine(s.substring(i + 1));
         }else{
             String tableName = apoTable.value();
             if(tableName == null || tableName.isEmpty()){
