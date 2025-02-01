@@ -21,13 +21,12 @@ public class HashDto extends HashMap<String, Object> {
      */
     public String getStr(String key){
         Object obj = this.get(key);
-        if(obj instanceof Date date){
-            return DateUtils.format(date, DateUtils.DATE_TIME_PATTERN);
-        }else if(obj instanceof LocalDateTime dateTime){
-            return DateUtils.format(dateTime, DateUtils.DATE_TIME_PATTERN);
-        }else{
-            return obj.toString();
-        }
+        return switch (obj) {
+            case null -> null;
+            case Date date -> DateUtils.format(date, DateUtils.DATE_TIME_PATTERN);
+            case LocalDateTime dateTime -> DateUtils.format(dateTime, DateUtils.DATE_TIME_PATTERN);
+            default -> obj.toString();
+        };
     }
 
     /**
@@ -35,18 +34,23 @@ public class HashDto extends HashMap<String, Object> {
      * @param key key
      * @return int
      */
-    public int getInt(String key){
+    public Integer getInt(String key){
         Object obj = this.get(key);
-        if(obj instanceof Integer i){
-            return i;
-        }else if(obj instanceof String str){
-            try {
-                return Integer.parseInt(str);
-            }catch (NumberFormatException e){
-                throw new ServerException("数字类型不正确，获取失败");
+        switch (obj) {
+            case null -> {
+                return null;
             }
-        }else{
-            throw new ServerException("数字类型不正确，获取失败");
+            case Integer i -> {
+                return i;
+            }
+            case String str -> {
+                try {
+                    return Integer.parseInt(str);
+                } catch (NumberFormatException e) {
+                    throw new ServerException("数字类型不正确，获取失败");
+                }
+            }
+            default -> throw new ServerException("数字类型不正确，获取失败");
         }
     }
 
@@ -57,6 +61,9 @@ public class HashDto extends HashMap<String, Object> {
      */
     public Long getLong(String key){
         Object obj = this.get(key);
+        if(obj == null){
+            return null;
+        }
         switch (obj) {
             case Long l -> {
                 return l;
@@ -77,7 +84,7 @@ public class HashDto extends HashMap<String, Object> {
             case LocalDateTime localDateTime -> {
                 return localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
             }
-            case null, default -> throw new ServerException("数字类型不正确[Long]，获取失败");
+            default -> throw new ServerException("数字类型不正确[Long]，获取失败");
         }
     }
 
@@ -89,20 +96,24 @@ public class HashDto extends HashMap<String, Object> {
      */
     public Date getDate(String key, String pattern){
         Object obj = this.get(key);
-        if(obj instanceof Date date){
-            return date;
-        }else if(obj instanceof String str){
-            try {
-                if(pattern == null || pattern.isEmpty()){
-                    return DateUtils.parse(str, DateUtils.DATE_TIME_PATTERN);
-                }else{
-                    return DateUtils.parse(str, pattern);
-                }
-            }catch (Exception e){
-                throw new ServerException(str + " 日期格式不正确");
+        switch (obj) {
+            case Date date -> {
+                return date;
             }
-        }else{
-            return null;
+            case String str -> {
+                try {
+                    if (pattern == null || pattern.isEmpty()) {
+                        return DateUtils.parse(str, DateUtils.DATE_TIME_PATTERN);
+                    } else {
+                        return DateUtils.parse(str, pattern);
+                    }
+                } catch (Exception e) {
+                    throw new ServerException(str + " 日期格式不正确");
+                }
+            }
+            case null, default -> {
+                return null;
+            }
         }
     }
 
@@ -123,16 +134,20 @@ public class HashDto extends HashMap<String, Object> {
      */
     public LocalDateTime getLocalDateTime(String key, String pattern){
         Object obj = this.get(key);
-        if(obj instanceof LocalDateTime localDateTime){
-            return localDateTime;
-        }else if(obj instanceof String str){
-            if(pattern == null || pattern.isEmpty()){
-                return DateUtils.parseLocalDateTime(str);
-            }else{
-                return DateUtils.parseLocalDateTime(str, pattern);
+        switch (obj) {
+            case LocalDateTime localDateTime -> {
+                return localDateTime;
             }
-        }else{
-            return null;
+            case String str -> {
+                if (pattern == null || pattern.isEmpty()) {
+                    return DateUtils.parseLocalDateTime(str);
+                } else {
+                    return DateUtils.parseLocalDateTime(str, pattern);
+                }
+            }
+            case null, default -> {
+                return null;
+            }
         }
     }
 
@@ -143,5 +158,28 @@ public class HashDto extends HashMap<String, Object> {
      */
     public LocalDateTime getLocalDateTime(String key){
         return getLocalDateTime(key, null);
+    }
+
+    /**
+     * 返回布尔类型
+     * @param key key
+     * @return bool
+     */
+    public Boolean getBool(String key){
+        Object obj = this.get(key);
+        switch (obj) {
+            case Boolean b -> {
+                return b;
+            }
+            case String str -> {
+                return !str.equalsIgnoreCase("false") && !str.equals("0");
+            }
+            case Integer i -> {
+                return i != 0;
+            }
+            case null, default -> {
+                return null;
+            }
+        }
     }
 }
