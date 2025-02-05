@@ -1,7 +1,7 @@
 package com.iris.core.cache;
 
 import com.iris.core.utils.DateUtils;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -204,7 +204,7 @@ public class RedisCache {
         //当天失效
         long liveTime = (dayEndTime - System.currentTimeMillis()) / 1000;
         Long increment = getIncrement(key, liveTime);
-        String sequence = IrisTools.getSequence(increment, length);
+        String sequence = Tools.getSequence(increment, length);
         if (prefix != null) {
             code = code + prefix;
         }

@@ -360,7 +360,7 @@ public class SysUserServiceImpl  implements SysUserService {
         if(user == null || user.getId() == null){
             throw new ServerException("未找到对应的用户，重置密码失败！");
         }
-        String pwd = IrisTools.getRandom(8);
+        String pwd = Tools.getRandom(8);
         user.setPassword(passwordEncoder.encode(pwd));
         user.setUpdateTime(LocalDateTime.now());
         user.setUpdater(SecurityUser.getUserId());

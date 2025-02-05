@@ -2,7 +2,7 @@ package com.iris.flow.service.impl;
 
 import com.github.pagehelper.Page;
 import com.iris.core.cache.RedisCache;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.core.utils.JsonUtils;
 import com.iris.flow.convert.WorkOrderConvert;
 import com.iris.flow.entity.WorkOrderEntity;
@@ -131,7 +131,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
 //        JsonUtils.parseObject()
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
         if(workOrderVO.getId() == null || workOrderVO.getId() == 0L){
-            workOrderVO.setId(IrisTools.snowFlakeId());
+            workOrderVO.setId(Tools.snowFlakeId());
         }
         // 启动流程
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);

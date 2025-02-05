@@ -2,7 +2,7 @@ package com.iris.framework.datasource.service;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.iris.core.exception.ServerException;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.framework.datasource.annotations.TableField;
 import com.iris.framework.datasource.annotations.TableId;
 import com.iris.framework.datasource.annotations.TableName;
@@ -54,7 +54,7 @@ public class ProviderService {
                 }
             } else {
                 // 无注解的字段默认成与数据库字段一致
-                sbCol.append(comma).append(IrisTools.humpToLine(field.getName()));
+                sbCol.append(comma).append(Tools.humpToLine(field.getName()));
                 sbValue.append(comma).append("#{").append(field.getName()).append("}");
             }
         }
@@ -107,7 +107,7 @@ public class ProviderService {
                     hasId = true;
                 }
                 if (ReflectUtil.getFieldValue(entity, field.getName()) != null) {
-                    sb.append(comma).append(IrisTools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
+                    sb.append(comma).append(Tools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
                 }
             }
         }
@@ -145,7 +145,7 @@ public class ProviderService {
                 if(tableId.value() != null && !tableId.value().isEmpty()){
                     sbWhere.append(and).append(tableId.value()).append(" = #{").append(field.getName()).append("}");
                 }else{
-                    sbWhere.append(and).append(IrisTools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
+                    sbWhere.append(and).append(Tools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
                 }
                 hasMultipleId = true;
             }else{
@@ -194,7 +194,7 @@ public class ProviderService {
             log.warn("实体类没指定表名（@TableName），默认使用类名作为表名");
             String s = clazz.getName();
             int i = s.lastIndexOf(".");
-            return IrisTools.humpToLine(s.substring(i + 1));
+            return Tools.humpToLine(s.substring(i + 1));
         }else{
             String tableName = apoTable.value();
             if(tableName == null || tableName.isEmpty()){

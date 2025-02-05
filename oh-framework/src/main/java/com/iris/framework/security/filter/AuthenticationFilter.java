@@ -1,6 +1,6 @@
 package com.iris.framework.security.filter;
 
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.framework.common.properties.MultiTenantProperties;
 import com.iris.framework.utils.TenantContextHolder;
 import jakarta.servlet.FilterChain;
@@ -42,7 +42,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String accessToken = IrisTools.getAccessToken(request);
+        String accessToken = Tools.getAccessToken(request);
         // accessToken为空-未登录
         if (accessToken == null || accessToken.isEmpty()) {
             chain.doFilter(request, response);

@@ -9,7 +9,7 @@ import com.iris.core.constant.Constant;
 import com.iris.core.entity.BaseUserEntity;
 import com.iris.core.utils.HttpContextUtils;
 import com.iris.core.utils.IpUtils;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.core.utils.JsonUtils;
 import com.iris.framework.security.user.SecurityUser;
 import com.iris.framework.security.user.UserDetail;
@@ -114,7 +114,7 @@ public class OperateLogAspect {
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         if (request != null) {
             // 用户信息
-            String accessToken = IrisTools.getAccessToken(request);
+            String accessToken = Tools.getAccessToken(request);
             String key = RedisKeys.getAccessTokenKey(accessToken);
             Object object = redisCache.get(key);
             if(object != null){

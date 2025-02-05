@@ -2,7 +2,7 @@ package com.iris.sys.base.controller;
 
 import com.iris.core.exception.ServerException;
 import com.iris.core.utils.AssertUtils;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.core.utils.Result;
 import com.iris.framework.utils.annotations.Idempotent;
 import com.iris.framework.utils.annotations.RequestKeyParam;
@@ -71,7 +71,7 @@ public class SysAuthController {
         SysAccountLoginVO login = new SysAccountLoginVO();
         login.setUsername(userName);
         try {
-            password = IrisTools.base64Decode(password);
+            password = Tools.base64Decode(password);
         }catch (IllegalArgumentException e){
             throw new ServerException("请检查密码参数是否合法！");
         }
@@ -108,7 +108,7 @@ public class SysAuthController {
     @PostMapping("logout")
     @Operation(summary = "退出")
     public Result<String> logout(HttpServletRequest request, @RequestParam(required = false) String refreshToken) {
-        sysAuthService.logout(IrisTools.getAccessToken(request), refreshToken);
+        sysAuthService.logout(Tools.getAccessToken(request), refreshToken);
         return Result.ok();
     }
 }

@@ -1,7 +1,7 @@
 package com.iris.support.controller;
 
 import com.iris.core.exception.ServerException;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.framework.operatelog.annotations.OperateLog;
 import com.iris.framework.operatelog.enums.OperateTypeEnum;
 import com.iris.core.utils.PageResult;
@@ -117,7 +117,7 @@ public class SysUserController {
         String msg = "新增成功！";
         if (ObjectUtils.isEmpty(vo.getPassword())) {
             // return Result.error("密码不能为空");
-            String pwd = IrisTools.getRandom(8);
+            String pwd = Tools.getRandom(8);
             vo.setPassword(pwd);
             msg = msg + "密码为" + pwd;
         }

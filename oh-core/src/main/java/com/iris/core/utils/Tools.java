@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author 王小费 whx5710@qq.com
  *
  */
-public class IrisTools {
+public class Tools {
 
     public static final String LOW_LETTER = "abcdefghijklmnopqrstuvwxyz";
 

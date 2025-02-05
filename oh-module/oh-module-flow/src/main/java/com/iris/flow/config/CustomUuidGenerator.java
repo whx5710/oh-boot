@@ -1,6 +1,6 @@
 package com.iris.flow.config;
 
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import org.camunda.bpm.engine.impl.cfg.IdGenerator;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +29,6 @@ public class CustomUuidGenerator implements IdGenerator {
         // return redisCache.getDayIncrementCode("", "oh.flow.index", 10);
 
         // 雪花算法ID
-        return String.valueOf(IrisTools.snowFlakeId());
+        return String.valueOf(Tools.snowFlakeId());
     }
 }

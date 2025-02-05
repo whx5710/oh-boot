@@ -8,7 +8,7 @@ import com.iris.core.exception.ServerException;
 import com.iris.core.utils.AssertUtils;
 import com.iris.core.utils.HttpContextUtils;
 import com.iris.core.utils.IpUtils;
-import com.iris.core.utils.IrisTools;
+import com.iris.core.utils.Tools;
 import com.iris.framework.common.properties.MultiTenantProperties;
 import com.iris.framework.common.properties.SecurityProperties;
 import com.iris.framework.security.cache.TokenStoreCache;
@@ -131,9 +131,9 @@ public class SysAuthServiceImpl implements SysAuthService {
         UserDetail user = (UserDetail) authentication.getPrincipal();
 
         // 生成 accessToken
-        String accessToken = IrisTools.generator();
+        String accessToken = Tools.generator();
 
-        String refreshToken = IrisTools.generator();
+        String refreshToken = Tools.generator();
 
         // 保存用户信息到缓存
         tokenStoreCache.saveUser(accessToken, refreshToken, user);
@@ -163,8 +163,8 @@ public class SysAuthServiceImpl implements SysAuthService {
                 userDetailDb.setIp(ip);
                 userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
                 // 生成 accessToken
-                String accessToken = IrisTools.generator();
-                refreshToken = IrisTools.generator();
+                String accessToken = Tools.generator();
+                refreshToken = Tools.generator();
                 // 保存用户信息到缓存
                 tokenStoreCache.saveUser(accessToken, refreshToken, userDetailDb);
                 return new SysTokenVO(accessToken, refreshToken);
@@ -317,8 +317,8 @@ public class SysAuthServiceImpl implements SysAuthService {
         user.setLoginTime(LocalDateTime.now());
         user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
         // 生成 accessToken
-        String accessToken = IrisTools.generator();
-        String refreshToken = IrisTools.generator();
+        String accessToken = Tools.generator();
+        String refreshToken = Tools.generator();
         // IP
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         String ip = IpUtils.getIpAddress(request);
