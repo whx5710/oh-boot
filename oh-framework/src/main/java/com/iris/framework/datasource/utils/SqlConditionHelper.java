@@ -17,8 +17,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SqlConditionHelper {
+    private final Logger log = LoggerFactory.getLogger(SqlConditionHelper.class);
 
-     private final Logger log = LoggerFactory.getLogger(SqlConditionHelper.class);
+    private static final String LEFT = "LEFT";
+
+    private static final String RIGHT = "RIGHT";
 
     private final FieldConditionDecision conditionDecision;
 
@@ -103,7 +106,11 @@ public class SqlConditionHelper {
             SQLSelectQueryBlock selectQueryBlock = (SQLSelectQueryBlock) (((SQLQueryExpr) where).getSubQuery()).getQuery();
             addSelectStatementCondition(selectQueryBlock, selectQueryBlock.getFrom(), fieldName, fieldValue);
         }else{
-            log.warn("where中添加指定筛选条件：没有拦截到 {}", where.getClass().getName());
+            if(where == null){
+                log.warn("where中添加指定筛选条件：where条件为空");
+            }else{
+                log.warn("where中添加指定筛选条件：没有拦截到 {}", where.getClass().getName());
+            }
         }
     }
 
@@ -118,8 +125,24 @@ public class SqlConditionHelper {
         SQLExpr where = updateStatement.getWhere();
         //添加子查询中的where条件
         addSQLExprCondition(where, fieldName, fieldValue);
-        SQLExpr newCondition = newEqualityCondition(updateStatement.getTableName().getSimpleName(),
-                updateStatement.getTableSource().getAlias(), fieldName, fieldValue, where);
+        SQLTableSource sqlTableSource = updateStatement.getTableSource();
+        SQLExpr newCondition = null;
+        if(sqlTableSource instanceof SQLJoinTableSource sqlJoinTableSource){
+            if(sqlJoinTableSource.getJoinType().name().contains(LEFT)
+                    || sqlJoinTableSource.getJoinType().name().contains("INNER_JOIN")){
+                newCondition = newEqualityCondition(updateStatement.getTableName().getSimpleName(),
+                        sqlJoinTableSource.getLeft().getAlias(), fieldName, fieldValue, where);
+            }else if(sqlJoinTableSource.getJoinType().name.contains(RIGHT)){
+                newCondition = newEqualityCondition(updateStatement.getTableName().getSimpleName(),
+                        sqlJoinTableSource.getRight().getAlias(), fieldName, fieldValue, where);
+            }else{
+                newCondition = newEqualityCondition(updateStatement.getTableName().getSimpleName(),
+                        updateStatement.getTableSource().getAlias(), fieldName, fieldValue, where);
+            }
+        }else{
+            newCondition = newEqualityCondition(updateStatement.getTableName().getSimpleName(),
+                    updateStatement.getTableSource().getAlias(), fieldName, fieldValue, where);
+        }
         updateStatement.setWhere(newCondition);
     }
 
@@ -145,8 +168,14 @@ public class SqlConditionHelper {
             case SQLJoinTableSource joinObject -> {
                 SQLTableSource left = joinObject.getLeft();
                 SQLTableSource right = joinObject.getRight();
-                addSelectStatementCondition(queryObject, left, fieldName, fieldValue);
-                addSelectStatementCondition(queryObject, right, fieldName, fieldValue);
+                if(joinObject.getJoinType().name().contains(LEFT)){
+                    addSelectStatementCondition(queryObject, left, fieldName, fieldValue);
+                } else if (joinObject.getJoinType().name().contains(RIGHT)) {
+                    addSelectStatementCondition(queryObject, right, fieldName, fieldValue);
+                }else{
+                    addSelectStatementCondition(queryObject, left, fieldName, fieldValue);
+                    addSelectStatementCondition(queryObject, right, fieldName, fieldValue);
+                }
             }
             case SQLSubqueryTableSource sqlSubqueryTableSource -> {
                 SQLSelect subSelectObject = sqlSubqueryTableSource.getSelect();
@@ -176,7 +205,6 @@ public class SqlConditionHelper {
         /*if (fieldValue == null && !conditionDecision.isAllowNullValue()){
             return originCondition;
         }*/
-
         String filedName = (tableAlias == null || tableAlias.isEmpty()) ? fieldName : tableAlias + "." + fieldName;
         SQLExpr condition = new SQLBinaryOpExpr(new SQLIdentifierExpr(filedName), new SQLCharExpr(fieldValue), SQLBinaryOperator.Equality);
         return SQLUtils.buildCondition(SQLBinaryOperator.BooleanAnd, condition, false, originCondition);
@@ -188,30 +216,22 @@ public class SqlConditionHelper {
 //        String sql = "select * from user s where s.name='333'";
 //        String sql = "select * from (select * from tab t where id = 2 and name = 'wenshao') s where s.name='333'";
 //        String sql="select u.*,g.name from user u join user_group g on u.groupId=g.groupId where u.name='123'";
-
 //        String sql = "update user set name=? where id =(select id from user s)";
-//        String sql = "delete from user where id = ( select id from user s )";
-
+//        String sql = "update sys_user as a inner JOIN sys_user_role as b on a.id = b.user_id set a.name = b.role_name " +
+//                "where a.id = b.user_id";
+//        String sql = "update sys_user  set user_name = 'whx' where id = 123";
+        String sql = "delete from user where id = ( select id from user s )";
 //        String sql = "insert into user (id,name) select g.id,g.name from user_group g where id=1";
-
-        String sql = "select * from sys_user a INNER JOIN sys_user_role b on a.id = b.user_id";
+//        String sql = "select * from sys_user a INNER JOIN sys_user_role b on a.id = b.user_id";
+//        String sql = "select * from sys_user a LEFT JOIN sys_user_role b on a.id = b.user_id";
+//        String sql = "select * from sys_user a right JOIN sys_user_role b on a.id = b.user_id";
         List<SQLStatement> statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
         SQLStatement sqlStatement = statementList.get(0);
         //决策器定义
-        SqlConditionHelper helper = new SqlConditionHelper(new FieldConditionDecision() {
-            @Override
-            public boolean adjudge(String tableName, String fieldName) {
-                return true;
-            }
-
-            @Override
-            public boolean isAllowNullValue() {
-                return false;
-            }
-        });
+        SqlConditionHelper helper = new SqlConditionHelper(new FieldConditionDecision(new MultiTenantProperties()));
         //添加多租户条件，domain是字段名，whx是筛选值
         helper.addStatementCondition(sqlStatement, "domain", "whx");
         System.out.println("源sql：" + sql);
-        System.out.println("修改后sql:" + SQLUtils.toSQLString(statementList, JdbcConstants.POSTGRESQL));
+        System.out.println("修改后sql:" + SQLUtils.toSQLString(statementList, JdbcConstants.MYSQL));
     }*/
 }
