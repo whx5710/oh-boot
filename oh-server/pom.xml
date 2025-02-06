@@ -10,13 +10,15 @@
     </parent>
     <groupId>com.iris.server</groupId>
     <artifactId>oh-server</artifactId>
-    <description>系统基础功能</description>
+    <description>系统入口</description>
     <packaging>jar</packaging>
 
     <properties>
         <module.version>1.0.0</module.version>
-        <!-- excel 工具 -->
-        <easyexcel.version>4.0.3</easyexcel.version>
+        <!-- 用户部门角色等 -->
+        <iris.support>1.0.0.20241210</iris.support>
+        <!-- 打包的版本 -->
+        <revision>3.0.1_20250204</revision>
     </properties>
     <dependencies>
         <!-- 系统框架 -->
@@ -32,7 +34,7 @@
         <dependency>
             <groupId>com.iris</groupId>
             <artifactId>oh-support</artifactId>
-            <version>1.0.0.20241210</version>
+            <version>${iris.support}</version>
         </dependency>
         <!-- 对外接口 -->
         <dependency>
@@ -59,7 +61,8 @@
             <version>${module.version}</version>
         </dependency>
     </dependencies>
-    <build>
+    <build><!-- 打jar包命名-${revision} -->
+        <finalName>${project.artifactId}-${revision}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -13,7 +13,7 @@
 	<version>3.0.0</version>
 	<name>oh-boot</name>
 	<description>
-		基于SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台
+		基于SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid(Hikari)连接池、Kafka等框架开发的一套SpringBoot快速开发平台
 	</description>
 	<packaging>pom</packaging>
 	<url>https://gitee.com/whx233</url>
@@ -44,23 +44,23 @@
 		<!--springboot版本-->
 		<spring-boot-dependencies.version>3.4.0</spring-boot-dependencies.version>
 		<!-- spring security -->
-		<spring.security>6.4.1</spring.security>
+		<spring.security>6.4.2</spring.security>
 		<!-- mybatis 版本 -->
-		<mybatis.version>3.0.3</mybatis.version>
+		<mybatis.version>3.0.4</mybatis.version>
 		<!--分页插件-->
 		<pagehelper.version>2.1.0</pagehelper.version>
 		<!-- 阿里连接池 -->
-		<druid.version>1.2.23</druid.version>
+		<druid.version>1.2.24</druid.version>
 		<!-- 框架版本信息 -->
-		<iris.framework.version>3.0.1.20250123</iris.framework.version>
+		<iris.framework.version>3.1.0.20250204</iris.framework.version>
 		<!-- 框架版本信息 -->
 		<iris.core.version>2.0.2.20241110</iris.core.version>
 		<!-- hutool 工具包 -->
-		<hutool.version>5.8.25</hutool.version>
+		<hutool.version>5.8.35</hutool.version>
 		<!-- 系统资源监控 -->
 		<oshi.version>6.4.0</oshi.version>
 		<!-- bean 拷贝 -->
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<mapstruct.version>1.6.3</mapstruct.version>
 		<!-- camunda 工作流相关 -->
 		<camunda.version>7.20.0</camunda.version>
 		<!-- swagger（xiaoymin版本）生成在线文档 -->
