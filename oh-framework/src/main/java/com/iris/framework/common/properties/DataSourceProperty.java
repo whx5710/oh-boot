@@ -1,8 +1,9 @@
-package com.iris.framework.datasource.config;
+package com.iris.framework.common.properties;
 
 /**
  * 数据库连接属性
  * @author 王小费 whx5710@qq.com
+ * @since 2024-08-11
  */
 public class DataSourceProperty {
     /**
@@ -40,6 +41,18 @@ public class DataSourceProperty {
      * 最大连接数
      */
     private String maxActive;
+
+    /**
+     * 获取连接时的最大等待时间，单位为毫秒。默认30秒
+     * 配置了maxWait后，默认启用公平锁
+     */
+    private String maxWait = "30000";
+
+    /**
+     * Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+     */
+    private String maxLifetime = "1800000";
+
     // wall,stat
     private String filters;
 
@@ -112,6 +125,22 @@ public class DataSourceProperty {
 
     public void setMaxActive(String maxActive) {
         this.maxActive = maxActive;
+    }
+
+    public String getMaxWait() {
+        return maxWait;
+    }
+
+    public void setMaxWait(String maxWait) {
+        this.maxWait = maxWait;
+    }
+
+    public String getMaxLifetime() {
+        return maxLifetime;
+    }
+
+    public void setMaxLifetime(String maxLifetime) {
+        this.maxLifetime = maxLifetime;
     }
 
     public String getFilters() {

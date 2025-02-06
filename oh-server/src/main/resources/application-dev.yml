@@ -63,7 +63,9 @@ spring:
       # 是否开启 SSL
       ssl.enabled: false
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    #数据源的类型 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
+    #type: com.alibaba.druid.pool.DruidDataSource
+    type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
@@ -76,7 +78,9 @@ spring:
         initialSize: 10
         minIdle: 10
         maxActive: 100
-        filters: wall,stat
+        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
         checkConnection: true # 初始化时是否检查连接，默认false
       masterDb: # 主数据源
@@ -87,10 +91,11 @@ spring:
         initialSize: 10
         minIdle: 10
         maxActive: 120
-        filters: wall,stat
+        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
-        checkConnection: false # 初始化时是否检查连接，默认false
-    druid:
+    druid: # 使用Hikari连接池，监控无效
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*

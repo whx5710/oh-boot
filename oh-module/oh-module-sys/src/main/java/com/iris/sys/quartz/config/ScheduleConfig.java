@@ -2,10 +2,9 @@ package com.iris.sys.quartz.config;
 
 import com.iris.core.constant.Constant;
 import com.iris.framework.common.properties.SysDataSourceProperties;
-import com.iris.framework.datasource.config.auto.DynamicDataSource;
+import com.iris.framework.datasource.config.DynamicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.sql.DataSource;

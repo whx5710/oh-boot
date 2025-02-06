@@ -1,4 +1,4 @@
-package com.iris.framework.datasource.config.auto;
+package com.iris.framework.datasource.config;
 
 import com.iris.framework.datasource.utils.DynamicDataSourceHolder;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * 动态数据源
  * @author 王小费 whx5710@qq.com
+ * @since 2024-08-11
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
 

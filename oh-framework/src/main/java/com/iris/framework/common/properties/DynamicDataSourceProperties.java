@@ -1,6 +1,6 @@
 package com.iris.framework.common.properties;
 
-import com.iris.framework.datasource.config.DataSourceProperty;
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class DynamicDataSourceProperties {
     /**
      * 连接池类型，如果不设置自动查找 Druid > HikariCp
      */
-    private Class<? extends DataSource> type;
+    private Class<? extends DataSource> type = DruidDataSource.class;
 
     /**
      * 系统数据源基础配置

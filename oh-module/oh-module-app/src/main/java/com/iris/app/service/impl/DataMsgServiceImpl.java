@@ -9,7 +9,7 @@ import com.iris.core.constant.Constant;
 import com.iris.core.utils.*;
 import com.iris.framework.common.properties.OpenApiProperties;
 import com.iris.framework.utils.ServiceFactory;
-import com.iris.framework.datasource.config.auto.DynamicDataSource;
+import com.iris.framework.datasource.config.DynamicDataSource;
 import com.iris.framework.entity.api.DataAppDTO;
 import com.iris.framework.entity.api.MsgEntity;
 import com.iris.core.exception.ServerException;

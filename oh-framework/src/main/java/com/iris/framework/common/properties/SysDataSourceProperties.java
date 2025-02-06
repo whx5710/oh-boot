@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * 系统数据库连接相关配置
  * @author 王小费 whx5710@qq.com
+ * @since 2024-08-11
  */
 @Component
 @ConfigurationProperties(prefix = SysDataSourceProperties.PREFIX)

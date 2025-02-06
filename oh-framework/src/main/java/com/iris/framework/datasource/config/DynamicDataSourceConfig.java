@@ -1,9 +1,11 @@
-package com.iris.framework.datasource.config.auto;
+package com.iris.framework.datasource.config;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.iris.core.exception.ServerException;
-import com.iris.framework.datasource.config.DataSourceProperty;
+import com.iris.framework.common.properties.DataSourceProperty;
 import com.iris.framework.common.properties.DynamicDataSourceProperties;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 多数据源信息配置类，读取数据源配置信息并注册成bean
- * 主数据源获取顺序 primary > masterDb > sysDb
+ * 多数据源信息配置类，读取数据源配置信息并注册成bean <br/>
+ * 同过配置支持Druid、Hikari连接池 2025-02-04 <br/>
+ * 主数据源获取顺序 primary > masterDb > sysDb <br/>
  * @author 王小费 whx5710@qq.com
+ * @since 2024-08-11
  */
 @Configuration
 public class DynamicDataSourceConfig {
@@ -40,6 +44,7 @@ public class DynamicDataSourceConfig {
         Map<String, DataSourceProperty> map = dynamicDataSourceProperties.getDynamic();
         Map<Object, Object> dataSourceMap = new HashMap<>(map.size());
         log.debug("初始化动态数据源，数据源总共 {} 个", map.size());
+        String type = dynamicDataSourceProperties.getType().getName(); // DruidDataSource
         // 主数据源
         DataSource masterDataSource = null;
         // 主数据源key
@@ -50,16 +55,20 @@ public class DynamicDataSourceConfig {
             DataSourceProperty dataSourceProperty = item.getValue();
             String key = item.getKey();
             // druid,也可以换成其他连接池
-            Map<String, String> properties = getDsMap(key, dataSourceProperty);
             log.debug("初始化 {} 数据源", key);
-            DataSource druidDs = DruidDataSourceFactory.createDataSource(properties);
+            DataSource ds = null;
+            if(type.contains("HikariDataSource")){
+                ds = createHikariDS(key, dataSourceProperty);
+            }else{
+                ds = createDruidDS(key, dataSourceProperty);
+            }
             // 校验数据库连接是否正常
             if(dataSourceProperty.getCheckConnection()){
-                checkDs(druidDs, key);
+                checkDs(ds, key);
             }
-            dataSourceMap.put(key, druidDs);
+            dataSourceMap.put(key, ds);
             if(key.equals(primary)){
-                masterDataSource = druidDs;
+                masterDataSource = ds;
             }
         }
         // 组装数据源
@@ -67,12 +76,12 @@ public class DynamicDataSourceConfig {
     }
 
     /**
-     * 组装连接属性
+     * 组装Druid连接属性
      * @param name name
      * @param dataSourceProperty ds
      * @return map
      */
-    private static Map<String, String> getDsMap(String name,DataSourceProperty dataSourceProperty) {
+    private static DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
         Map<String, String> properties = new HashMap<>();
         properties.put(DruidDataSourceFactory.PROP_URL, dataSourceProperty.getUrl()); // 地址
         properties.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, dataSourceProperty.getDriverClassName()); // 驱动名
@@ -81,11 +90,32 @@ public class DynamicDataSourceConfig {
         properties.put(DruidDataSourceFactory.PROP_INITIALSIZE, dataSourceProperty.getInitialSize()); // 初始化连接数
         properties.put(DruidDataSourceFactory.PROP_MINIDLE, dataSourceProperty.getMinIdle()); // 最小空闲连接数
         properties.put(DruidDataSourceFactory.PROP_MAXACTIVE, dataSourceProperty.getMaxActive()); // 最大连接数
+        properties.put(DruidDataSourceFactory.PROP_MAXWAIT, dataSourceProperty.getMaxWait()); // 获取连接时的最大等待时间，单位为毫秒
         properties.put(DruidDataSourceFactory.PROP_FILTERS, dataSourceProperty.getFilters());
         // 连接属性，慢SQL
         properties.put(DruidDataSourceFactory.PROP_CONNECTIONPROPERTIES, dataSourceProperty.getConnectionProperties());
         properties.put(DruidDataSourceFactory.PROP_NAME, name); // 名称
-        return properties;
+        return DruidDataSourceFactory.createDataSource(properties);
+    }
+
+    /**
+     * 配置Hikari连接属性
+     * @param key 连接名
+     * @param dataSourceProperty 属性
+     * @return 数据库连接
+     */
+    private static HikariDataSource createHikariDS(String key,DataSourceProperty dataSourceProperty){
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setUsername(dataSourceProperty.getUsername()); // 用户名
+        hikariConfig.setPassword(dataSourceProperty.getPassword()); // 密码
+        hikariConfig.setJdbcUrl(dataSourceProperty.getUrl()); // url
+        hikariConfig.setDriverClassName(dataSourceProperty.getDriverClassName()); // 驱动
+        hikariConfig.setMinimumIdle(Integer.parseInt(dataSourceProperty.getMinIdle())); // 最小连接数
+        hikariConfig.setMaximumPoolSize(Integer.parseInt(dataSourceProperty.getMaxActive())); // 连接池最大连接数
+        hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
+        hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        hikariConfig.setPoolName(key); // 连接池名称
+        return new HikariDataSource(hikariConfig);
     }
 
     /**

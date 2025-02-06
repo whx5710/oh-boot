@@ -12,6 +12,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 - 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】
+- 支持Druid、Hikari连接池【2025年2月】
 - 工程代码：https://gitee.com/whx233/oh-boot
 - - 独立系统管理 https://gitee.com/whx233/oh-sys (从oh-boot剥离)
 - - 前端工程    https://gitee.com/whx233/oh-admin (暂未开源 Vue3)
@@ -92,12 +93,14 @@ spring:
         initialSize: 10
         minIdle: 10
         maxActive: 100
-        filters: wall,stat
+        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
         checkConnection: true # 初始化时是否检查连接，默认false
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
-    druid:
+    druid: # 使用Hikari连接池，监控无效
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*

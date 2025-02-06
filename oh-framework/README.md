@@ -7,6 +7,7 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 - 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】
+- 支持Druid、Hikari连接池【2025年2月】
 ## 引入
 根据实际版本引入，如下所示：
 
@@ -45,7 +46,7 @@ iris:
       - /oh-generator/**
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型，通过此配置判断连接池，支持 com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同
@@ -53,15 +54,16 @@ spring:
       sysDb: # 数据源1 
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
-        password: 123456
-        # 以下与druid的配置对应
-        initialSize: 10
-        minIdle: 10
-        maxActive: 100
-        filters: wall,stat
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+        username: root # 用户名
+        password: 123456 # 密码
+        initialSize: 10 # 初始连接数
+        minIdle: 10 # 最小连接数
+        maxActive: 100 # 最大连接数
+        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
         checkConnection: true # 初始化时是否检查连接，默认false
+        filters: wall,stat # druid监控
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
 ```
