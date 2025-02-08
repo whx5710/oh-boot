@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.flow.mapper.WorkOrderMapper">
-    <select id="getOrderList" resultType="com.iris.flow.entity.WorkOrderEntity">
+<mapper namespace="com.finn.flow.mapper.WorkOrderMapper">
+    <select id="getOrderList" resultType="com.finn.flow.entity.WorkOrderEntity">
         select * from oh_work_order where db_status = 1
     </select>
     <!-- 保存工单，回写ID -->
@@ -34,7 +34,7 @@
         WHERE id = #{id}
     </update>
 
-    <select id="getOrderById" resultType="com.iris.flow.entity.WorkOrderEntity">
+    <select id="getOrderById" resultType="com.finn.flow.entity.WorkOrderEntity">
         select * from oh_work_order where id = #{id}
     </select>
 </mapper>

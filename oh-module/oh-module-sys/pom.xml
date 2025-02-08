@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.iris.module</groupId>
+        <groupId>com.finn.module</groupId>
         <artifactId>oh-module</artifactId>
         <version>1.0.0</version>
     </parent>
-    <groupId>com.iris.sys</groupId>
+    <groupId>com.finn.sys</groupId>
     <artifactId>oh-module-sys</artifactId>
     <description>系统基础功能</description>
 
@@ -23,11 +23,11 @@
     <dependencies>
         <!-- 系统框架 -->
         <dependency>
-            <groupId>com.iris</groupId>
+            <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.iris</groupId>
+            <groupId>com.finn</groupId>
             <artifactId>oh-support</artifactId>
             <version>1.0.0.20241210</version>
         </dependency>

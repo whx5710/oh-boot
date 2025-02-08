@@ -6,7 +6,7 @@
 <!-- debug：当此属性设置为 true 时，将打印出 logback 内部日志信息，实时查看 logback 运行状态。默认值为 false。 -->
 <configuration debug="false" scan="true" scanPeriod="30 seconds">
 
-    <logger name="com.iris" level="DEBUG"/>
+    <logger name="com.finn" level="DEBUG"/>
     <!-- camunda 流程日志打印 -->
     <!--<logger name="org.camunda.bpm" level="DEBUG"/>-->
 

@@ -1,0 +1,48 @@
+package com.finn.support.mapper;
+
+import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.annotations.Ds;
+import com.finn.framework.datasource.annotations.Pages;
+import com.finn.support.entity.SysUserEntity;
+import com.finn.support.query.SysRoleUserQuery;
+import com.finn.support.query.SysUserQuery;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+/**
+ * 系统用户
+ * 
+ * @author 王小费 whx5710@qq.com
+ *
+ */
+@Mapper
+@Ds(Constant.DYNAMIC_SYS_DB)
+public interface SysUserMapper {
+
+	List<SysUserEntity> getList(@Param("params") SysUserQuery params);
+
+	@Select("select t1.*, (select t2.name from sys_org t2 where t2.id = t1.org_id) orgName from sys_user t1 where t1.db_status = 1 and t1.id = #{id}")
+	SysUserEntity getById(@Param("id") Long id);
+
+	@Pages
+	List<SysUserEntity> getRoleUserList(SysRoleUserQuery params);
+
+	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.username = #{username}")
+	SysUserEntity getByUsername(@Param("username") String username);
+
+	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.mobile = #{mobile}")
+	SysUserEntity getByMobile(@Param("mobile") String mobile);
+
+	// 保存用户
+	void insertUser(SysUserEntity sysUserEntity);
+
+
+	// 根据ID修改用户信息
+	boolean updateById(SysUserEntity sysUserEntity);
+	// 解绑租户用户
+	boolean unbindUser(SysUserEntity sysUserEntity);
+
+	@Select("select count(1) from sys_user where db_status != 0 and org_id = #{orgId}")
+	int countByOrgId(@Param("orgId")long orgId);
+}

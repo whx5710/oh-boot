@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.support.mapper.SysUserMapper">
-	<select id="getList" resultType="com.iris.support.entity.SysUserEntity">
+<mapper namespace="com.finn.support.mapper.SysUserMapper">
+	<select id="getList" resultType="com.finn.support.entity.SysUserEntity">
 		select t1.*, t2.name orgName
 		from sys_user t1 left join sys_org t2 on t1.org_id = t2.id
 		where t1.super_admin = 0 and t1.db_status = 1
@@ -44,7 +44,7 @@
 		order by t1.create_time desc
 	</select>
 
-	<select id="getRoleUserList" resultType="com.iris.support.entity.SysUserEntity">
+	<select id="getRoleUserList" resultType="com.finn.support.entity.SysUserEntity">
 		select t1.*,t3.name as org_name from sys_user t1 left join sys_user_role t2 on t1.id = t2.user_id
 		left join sys_org t3 on t1.org_id = t3.id
 		where t1.db_status = 1 and t2.db_status = 1 and t2.role_id = #{roleId}
@@ -83,7 +83,7 @@
 			#{tenantId})
 	</insert>
 
-	<update id="updateById" parameterType="com.iris.support.entity.SysUserEntity">
+	<update id="updateById" parameterType="com.finn.support.entity.SysUserEntity">
 		update sys_user
 		<set>
 			<if test="username != null and username != ''">username = #{username},</if>
@@ -106,7 +106,7 @@
 		WHERE id = #{id}
 	</update>
 
-	<update id="unbindUser" parameterType="com.iris.support.entity.SysUserEntity">
+	<update id="unbindUser" parameterType="com.finn.support.entity.SysUserEntity">
 		update sys_user
 		<set>
 			tenant_id = #{tenantId},

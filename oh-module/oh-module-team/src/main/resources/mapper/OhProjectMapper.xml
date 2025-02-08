@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.team.mapper.OhProjectMapper">
+<mapper namespace="com.finn.team.mapper.OhProjectMapper">
 
-    <resultMap type="com.iris.team.entity.OhProjectEntity" id="ohProjectMap">
+    <resultMap type="com.finn.team.entity.OhProjectEntity" id="ohProjectMap">
         <result property="id" column="id"/>
         <result property="projectCode" column="project_code"/>
         <result property="projectName" column="project_name"/>
@@ -24,7 +24,7 @@
         VALUES (#{projectCode}, #{projectName}, #{projectAlias}, #{startTime}, #{endTime}, #{director}, #{directorName}, #{status}, #{dbStatus}, #{creator}, #{createTime})
     </insert>
 
-    <select id="getList" resultType="com.iris.team.entity.OhProjectEntity">
+    <select id="getList" resultType="com.finn.team.entity.OhProjectEntity">
         select * from oh_project where db_status = 1
         <if test="status != null">and status = #{status}</if>
         <if test="startTime != null">and start_time &gt;= #{startTime}</if>
@@ -54,7 +54,7 @@
         id = #{id}
     </update>
 
-    <select id="getById" resultType="com.iris.team.entity.OhProjectEntity">
+    <select id="getById" resultType="com.finn.team.entity.OhProjectEntity">
         select * from oh_project where id = #{id}
     </select>
 

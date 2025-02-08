@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.sys.base.mapper.SysLogLoginMapper">
+<mapper namespace="com.finn.sys.base.mapper.SysLogLoginMapper">
 
     <!-- 统计最近几天相关操作情况 -->
-    <select id="latestDateCount" resultType="com.iris.sys.base.vo.AnalysisVO">
+    <select id="latestDateCount" resultType="com.finn.sys.base.vo.AnalysisVO">
         select '登录情况' as label,t1.dates as analysisTime,IFNULL(t2.analysisCount, 0) analysisValue from (
         select * from (
         SELECT
@@ -24,7 +24,7 @@
         order by t1.dates
     </select>
 
-    <select id="getList" resultType="com.iris.sys.base.entity.SysLogLoginEntity">
+    <select id="getList" resultType="com.finn.sys.base.entity.SysLogLoginEntity">
         select * from sys_log_login
         <where>
             <if test="username != null and username != ''">and username like concat('%', #{username}, '%')</if>

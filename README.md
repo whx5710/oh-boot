@@ -41,12 +41,12 @@ oh-module    业务模块
 - 1、克隆项目 `git clone https://gitee.com/whx233/oh-boot.git`
 - 2、创建数据库，分别创建 oh-sys 和 oh-boot数据库（可合并成一个库），并分别执行db\mysql目录下的SQL脚本
 - 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka/RocketMq（如果需要）、文件存储路径等
-- 4、启动服务 `com.iris.ServerApplication`
+- 4、启动服务 `com.finn.ServerApplication`
 - 5、API文档地址：http://localhost:8080/doc.html 数据库监控地址：http://localhost:8080/druid/login.html
 
 ## 配置说明
 ```yaml
-iris:
+finn:
   multi-tenant: # 多租户配置
     dialect: mysql # 数据库方言，默认mysql
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
@@ -117,7 +117,7 @@ logging:
     file: UTF-8
     console: UTF-8
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-    com.iris: DEBUG
+    com.finn: DEBUG
     org.springframework.web: debug # web相关的日志级别
 
 ```

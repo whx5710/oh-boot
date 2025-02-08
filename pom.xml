@@ -8,7 +8,7 @@
 		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.iris</groupId>
+	<groupId>com.finn</groupId>
 	<artifactId>oh-boot</artifactId>
 	<version>3.0.0</version>
 	<name>oh-boot</name>
@@ -52,9 +52,9 @@
 		<!-- 阿里连接池 -->
 		<druid.version>1.2.24</druid.version>
 		<!-- 框架版本信息 -->
-		<iris.framework.version>3.1.0.20250204</iris.framework.version>
+		<finn.framework.version>3.1.0.20250204</finn.framework.version>
 		<!-- 框架版本信息 -->
-		<iris.core.version>2.0.2.20241110</iris.core.version>
+		<finn.core.version>2.0.2.20241110</finn.core.version>
 		<!-- hutool 工具包 -->
 		<hutool.version>5.8.35</hutool.version>
 		<!-- 系统资源监控 -->
@@ -82,14 +82,14 @@
 			<!-- start ================================= 项目相关 ================================= -->
 			<!-- 系统框架 -->
 			<dependency>
-				<groupId>com.iris</groupId>
+				<groupId>com.finn</groupId>
 				<artifactId>oh-framework</artifactId>
-				<version>${iris.framework.version}</version>
+				<version>${finn.framework.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.iris</groupId>
+				<groupId>com.finn</groupId>
 				<artifactId>oh-core</artifactId>
-				<version>${iris.core.version}</version>
+				<version>${finn.core.version}</version>
 			</dependency>
 			<!-- end   ================================= 项目相关 ================================= -->
 

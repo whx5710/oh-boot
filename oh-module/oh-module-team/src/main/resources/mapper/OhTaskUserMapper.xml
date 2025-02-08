@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.team.mapper.OhTaskUserMapper">
+<mapper namespace="com.finn.team.mapper.OhTaskUserMapper">
 
-    <resultMap type="com.iris.team.entity.OhTaskUserEntity" id="ohTaskUserMap">
+    <resultMap type="com.finn.team.entity.OhTaskUserEntity" id="ohTaskUserMap">
         <result property="id" column="id"/>
         <result property="taskId" column="task_id"/>
         <result property="userId" column="user_id"/>
@@ -16,7 +16,7 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <select id="getList" resultType="com.iris.team.entity.OhTaskUserEntity">
+    <select id="getList" resultType="com.finn.team.entity.OhTaskUserEntity">
         select * from oh_task_user where db_status = 1
     </select>
 
@@ -39,7 +39,7 @@
         WHERE id = #{id}
     </update>
 
-    <select id="getById" resultType="com.iris.team.entity.OhTaskUserEntity">
+    <select id="getById" resultType="com.finn.team.entity.OhTaskUserEntity">
         select * from oh_task_user where id = #{id}
     </select>
 </mapper>

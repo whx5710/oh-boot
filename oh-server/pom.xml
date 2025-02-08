@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.iris</groupId>
+        <groupId>com.finn</groupId>
         <artifactId>oh-boot</artifactId>
         <version>3.0.0</version>
     </parent>
-    <groupId>com.iris.server</groupId>
+    <groupId>com.finn.server</groupId>
     <artifactId>oh-server</artifactId>
     <description>系统入口</description>
     <packaging>jar</packaging>
@@ -16,47 +16,47 @@
     <properties>
         <module.version>1.0.0</module.version>
         <!-- 用户部门角色等 -->
-        <iris.support>1.0.0.20241210</iris.support>
+        <finn.support>1.0.0.20241210</finn.support>
         <!-- 打包的版本 -->
         <revision>3.0.1_20250204</revision>
     </properties>
     <dependencies>
         <!-- 系统框架 -->
         <dependency>
-            <groupId>com.iris</groupId>
+            <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.iris</groupId>
+            <groupId>com.finn</groupId>
             <artifactId>oh-core</artifactId>
         </dependency>
         <!-- 基础支撑、组织架构 -->
         <dependency>
-            <groupId>com.iris</groupId>
+            <groupId>com.finn</groupId>
             <artifactId>oh-support</artifactId>
-            <version>${iris.support}</version>
+            <version>${finn.support}</version>
         </dependency>
         <!-- 对外接口 -->
         <dependency>
-            <groupId>com.iris.app</groupId>
+            <groupId>com.finn.app</groupId>
             <artifactId>oh-module-app</artifactId>
             <version>${module.version}</version>
         </dependency>
         <!-- 协同任务 -->
         <dependency>
-            <groupId>com.iris.team</groupId>
+            <groupId>com.finn.team</groupId>
             <artifactId>oh-module-team</artifactId>
             <version>${module.version}</version>
         </dependency>
         <!-- 工作流 -->
         <dependency>
-            <groupId>com.iris.flow</groupId>
+            <groupId>com.finn.flow</groupId>
             <artifactId>oh-module-flow</artifactId>
             <version>${module.version}</version>
         </dependency>
         <!-- 系统管理 -->
         <dependency>
-            <groupId>com.iris.sys</groupId>
+            <groupId>com.finn.sys</groupId>
             <artifactId>oh-module-sys</artifactId>
             <version>${module.version}</version>
         </dependency>
@@ -69,7 +69,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!-- 设置启动入口main -->
                 <configuration>
-                    <mainClass>com.iris.ServerApplication</mainClass>
+                    <mainClass>com.finn.ServerApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

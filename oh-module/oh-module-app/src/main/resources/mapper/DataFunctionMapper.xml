@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.app.mapper.DataFunctionMapper">
+<mapper namespace="com.finn.app.mapper.DataFunctionMapper">
 
-    <select id="getList" resultType="com.iris.app.entity.DataFunctionEntity">
+    <select id="getList" resultType="com.finn.app.entity.DataFunctionEntity">
         select * from data_function where db_status = 1
         <if test="keyWord != null and keyWord != ''">
             and (name like concat('%', #{keyWord}, '%') or func_code like concat('%',#{keyWord}, '%'))
@@ -29,11 +29,11 @@
         VALUES ( #{name}, #{funcCode}, #{isAsync}, #{remark}, #{creator}, #{createTime}, #{dbStatus} )
     </insert>
 
-    <select id="getById" resultType="com.iris.app.entity.DataFunctionEntity">
+    <select id="getById" resultType="com.finn.app.entity.DataFunctionEntity">
         select * from data_function where id = #{id}
     </select>
 
-    <select id="pageByClientId" resultType="com.iris.app.entity.DataFunctionEntity">
+    <select id="pageByClientId" resultType="com.finn.app.entity.DataFunctionEntity">
         SELECT
         *
         FROM
@@ -43,7 +43,7 @@
         AND EXISTS ( SELECT 1 FROM data_function_authority b WHERE a.func_code = b.func_code AND b.db_status = 1 AND b.client_id = #{clientId})
     </select>
 
-    <select id="getAuthorityList" resultType="com.iris.app.entity.DataFunctionAuthorityEntity">
+    <select id="getAuthorityList" resultType="com.finn.app.entity.DataFunctionAuthorityEntity">
         select * from data_function_authority where db_status = 1
         <if test="clientId != null and clientId != ''">and client_id = #{clientId}</if>
     </select>
@@ -74,7 +74,7 @@
             and func_code = #{funcCode}
     </update>
 
-    <select id="getFuncAuthorityById" resultType="com.iris.app.entity.DataFunctionAuthorityEntity">
+    <select id="getFuncAuthorityById" resultType="com.finn.app.entity.DataFunctionAuthorityEntity">
         select * from data_function_authority where id = #{id}
     </select>
 </mapper>

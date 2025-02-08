@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.support.mapper.SysUserPostMapper">
+<mapper namespace="com.finn.support.mapper.SysUserPostMapper">
 
     <insert id="saveBatch">
         INSERT INTO sys_user_post ( user_id, post_id, db_status, creator, create_time ) VALUES

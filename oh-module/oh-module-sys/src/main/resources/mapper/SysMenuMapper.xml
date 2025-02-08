@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.sys.base.mapper.SysMenuMapper">
+<mapper namespace="com.finn.sys.base.mapper.SysMenuMapper">
 
-	<select id="getMenuList" resultType="com.iris.sys.base.entity.SysMenuEntity">
+	<select id="getMenuList" resultType="com.finn.sys.base.entity.SysMenuEntity">
 		select t1.*,t2.name as parent_name from sys_menu t1 left join sys_menu t2 on t1.parent_id = t2.id where t1.db_status = 1
 		<if test="query.type != null">
 			and t1.type = #{query.type}
@@ -17,7 +17,7 @@
 		order by t1.sort asc
 	</select>
 
-	<select id="getUserMenuList" resultType="com.iris.sys.base.entity.SysMenuEntity">
+	<select id="getUserMenuList" resultType="com.finn.sys.base.entity.SysMenuEntity">
 		select t3.* from sys_user_role t1
 			left join sys_role_menu t2 on t1.role_id = t2.role_id
 			left join sys_menu t3 on t2.menu_id = t3.id
@@ -64,7 +64,7 @@
 		WHERE id = #{id}
 	</update>
 
-	<select id="getList" resultType="com.iris.sys.base.entity.SysMenuEntity">
+	<select id="getList" resultType="com.finn.sys.base.entity.SysMenuEntity">
 		select * from sys_menu where db_status = 1
 		<if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
 		<if test="menuPath != null and menuPath != ''">and menu_path = #{menuPath}</if>
@@ -72,7 +72,7 @@
 		order by sort
 	</select>
 
-	<select id="getById" resultType="com.iris.sys.base.entity.SysMenuEntity">
+	<select id="getById" resultType="com.finn.sys.base.entity.SysMenuEntity">
 		select * from sys_menu where id = #{id}
 	</select>
 </mapper>

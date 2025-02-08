@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.sys.base.mapper.SysVersionInfoMapper">
+<mapper namespace="com.finn.sys.base.mapper.SysVersionInfoMapper">
 
-    <resultMap type="com.iris.sys.base.entity.SysVersionInfoEntity" id="sysVersionInfoMap">
+    <resultMap type="com.finn.sys.base.entity.SysVersionInfoEntity" id="sysVersionInfoMap">
         <result property="id" column="id"/>
         <result property="versionNum" column="version_num"/>
         <result property="content" column="content"/>
@@ -16,7 +16,7 @@
         <result property="isCurrVersion" column="is_curr_version"/>
     </resultMap>
 
-    <select id="getList" resultType="com.iris.sys.base.entity.SysVersionInfoEntity">
+    <select id="getList" resultType="com.finn.sys.base.entity.SysVersionInfoEntity">
         select * from sys_version_info where db_status = 1
         <if test="keyWord != null and keyWord != ''">
             and (content like concat('%', #{keyWord}, '%') or version_num like concat('%',#{versionNum}, '%'))
@@ -51,7 +51,7 @@
         where db_status = 1
     </update>
 
-    <select id="getById" resultType="com.iris.sys.base.entity.SysVersionInfoEntity">
+    <select id="getById" resultType="com.finn.sys.base.entity.SysVersionInfoEntity">
         select * from sys_version_info where id = #{id}
     </select>
 </mapper>

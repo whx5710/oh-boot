@@ -9,7 +9,7 @@ server:
   servlet:
     context-path: /
     session.cookie.http-only: true
-iris:
+finn:
   multi-tenant: # 多租户配置
     dialect: mysql # 数据库方言，默认mysql
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
@@ -194,7 +194,7 @@ logging:
     file: UTF-8
     console: UTF-8
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-    com.iris: DEBUG
+    com.finn: DEBUG
     org.springframework.web: debug # web相关的日志级别
     # root: DEBUG
 #  pattern:

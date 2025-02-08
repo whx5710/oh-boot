@@ -35,7 +35,7 @@ spring:
 # mybatis配置说明: https://mybatis.net.cn/configuration.html
 mybatis:
   mapper-locations: classpath*:/mapper/**/*.xml
-  type-aliases-package: com.iris.*.entity # 实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.finn.*.entity # 实体扫描，多个package用逗号或者分号分隔
   # 原生配置
   configuration:
     map-underscore-to-camel-case: true # 是否开启驼峰命名自动映射
@@ -69,9 +69,9 @@ pagehelper:
 #    bootstrap:
 #      enable: true                                   #开启系统启动时预读取nacos的配置，用于满足@Value注入数据的场景
 #    namespace: 3b00ce0d-eca1-4ef0-a764-199212d930ac  # 配置所属命名空间的id,此处我们配置名称为dev的id，可以在命名空间列表查看id的值
-#    prefix: iris                                     # 配置文件的前缀,默认为 spring.application.name 的值
+#    prefix: finn                                     # 配置文件的前缀,默认为 spring.application.name 的值
 #    group: ${spring.profiles.active}                 # 配置所属分组
-#    data-id: iris-dev.yaml                           # 配置ID
+#    data-id: finn-dev.yaml                           # 配置ID
 #    type: yaml                                       # 配置文件类型,对应nacos配置页面的配置格式，默认是properties
 #    server-addr: localhost:8848                      # nacos服务器地址
 #    auto-refresh: true                               # 开启自动刷新nacos配置

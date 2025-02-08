@@ -1,5 +1,5 @@
-# 构建镜像，执行命令：【docker build -t oh-iris:1.0.0 .】
-# 启动容器，执行命令： docker run --name oh-iris -d -p 8080:8080 oh-iris:1.0.0
+# 构建镜像，执行命令：【docker build -t oh-finn:1.0.0 .】
+# 启动容器，执行命令： docker run --name oh-finn -d -p 8080:8080 oh-finn:1.0.0
 
 FROM eclipse-temurin:21-jre
 MAINTAINER 王小费

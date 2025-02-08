@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.flow.mapper.FlowMapper">
+<mapper namespace="com.finn.flow.mapper.FlowMapper">
 
-    <resultMap type="com.iris.flow.entity.FlowEntity" id="flowMap">
+    <resultMap type="com.finn.flow.entity.FlowEntity" id="flowMap">
         <result property="id" column="id"/>
         <result property="keyCode" column="keyCode"/>
         <result property="name" column="name"/>
@@ -16,12 +16,12 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <insert id="save" parameterType="com.iris.flow.entity.FlowEntity">
+    <insert id="save" parameterType="com.finn.flow.entity.FlowEntity">
         INSERT INTO bpmn_flow (key_code, name, xml, svg_str, version_tag, note, db_status, creator, create_time)
         VALUES (#{keyCode}, #{name}, #{xml}, #{svgStr}, #{versionTag}, #{note}, #{dbStatus}, #{creator}, #{createTime})
     </insert>
 
-    <update id="updateById" parameterType="com.iris.flow.entity.FlowEntity">
+    <update id="updateById" parameterType="com.finn.flow.entity.FlowEntity">
         UPDATE bpmn_flow
         <set>
             <if test="keyCode != null and keyCode != ''">key_code = #{keyCode},</if>
@@ -37,11 +37,11 @@
         WHERE id = #{id}
     </update>
 
-    <select id="getById" resultType="com.iris.flow.entity.FlowEntity">
+    <select id="getById" resultType="com.finn.flow.entity.FlowEntity">
         select * from bpmn_flow where id = #{id}
     </select>
 
-    <select id="getList" resultType="com.iris.flow.entity.FlowEntity">
+    <select id="getList" resultType="com.finn.flow.entity.FlowEntity">
         select * from bpmn_flow where db_status = 1
         <if test="name != null and name != ''">
             and (name like concat('%', #{name}, '%') or key_code like concat('%', #{name}, '%'))
@@ -49,7 +49,7 @@
         order by create_time desc
     </select>
 
-    <select id="getByKey" resultType="com.iris.flow.entity.FlowEntity">
+    <select id="getByKey" resultType="com.finn.flow.entity.FlowEntity">
         select * from bpmn_flow where key_code = #{key}
     </select>
 </mapper>

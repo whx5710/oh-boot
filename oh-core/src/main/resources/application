@@ -1,4 +1,4 @@
-iris:
+finn:
   security:
     access-token-expire: 43200      # 过期时间，12小时过期
     refresh-token-expire: 604800    # 7天过期
@@ -93,6 +93,6 @@ logging:
     file: UTF-8
     console: UTF-8
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-    com.iris: DEBUG
+    com.finn: DEBUG
     org.springframework.web: debug # web相关的日志级别
     # root: DEBUG

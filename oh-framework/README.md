@@ -13,14 +13,14 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 
 ```xml
 <dependency>
-    <groupId>com.iris</groupId>
+    <groupId>com.finn</groupId>
     <artifactId>oh-framework</artifactId>
     <version>${版本号}</version>
 </dependency>
 ```
 配置说明
 ```yaml
-iris:
+finn:
   multi-tenant: # 多租户配置
     dialect: mysql # 数据库方言，默认mysql
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id

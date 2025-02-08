@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   oh-boot:
-    image: oh-iris:1.0.0
+    image: oh-finn:1.0.0
     container_name: oh-boot
     ports:
       - 8080:8080

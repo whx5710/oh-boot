@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iris.support.mapper.SysRoleDataScopeMapper">
+<mapper namespace="com.finn.support.mapper.SysRoleDataScopeMapper">
 
     <select id="getOrgIdList" resultType="long">
         select org_id from sys_role_data_scope where role_id = #{roleId} and db_status = 1
