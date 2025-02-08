@@ -96,7 +96,7 @@ public class OpenApiController {
 
         System.out.println("开始请求");
 
-        for(int i = 0; i< 10; i++){
+        for(int i = 0; i< 1000; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
             data.put("createDate", LocalDateTime.now());
             data.put("reportTime", LocalDateTime.now(ZoneId.of("+8")));

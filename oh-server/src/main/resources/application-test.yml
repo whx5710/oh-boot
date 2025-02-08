@@ -17,7 +17,7 @@ finn:
     # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
     ignore-table: sys_dict_type,sys_dict_data
   security:
-    access-token-expire: 7200      # 过期时间-秒，2小时
+    access-token-expire: 7200      # 过期时间-秒，2小时过期
     refresh-token-expire: 43200    # 刷新token-秒 12小时
     auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
     lock-time: 3600                 # 账号锁定时间(秒)
@@ -63,20 +63,24 @@ spring:
       # 是否开启 SSL
       ssl.enabled: false
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
+    #数据源的类型 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
+    #type: com.alibaba.druid.pool.DruidDataSource
+    type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
-    dynamic: # 动态多数据源
+    dynamic:
       sysDb: # 系统管理数据源
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys3.0?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
         password: 123456
         initialSize: 10
         minIdle: 10
         maxActive: 100
-        filters: wall,stat
+        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
         checkConnection: true # 初始化时是否检查连接，默认false
       masterDb: # 主数据源
@@ -87,15 +91,17 @@ spring:
         initialSize: 10
         minIdle: 10
         maxActive: 120
-        filters: wall,stat
+        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        hikariLog: true # 是否开启hikari监控日志打印，默认false
+        filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
-        checkConnection: false # 初始化时是否检查连接，默认false
-    druid:
+    druid: # 使用Hikari连接池，监控无效
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
         login-username: admin
-        login-password: dB254U9de4c5f4P7Abf # 正式环境需配置复杂密码
+        login-password: admin # 正式环境需配置复杂密码
       web-stat-filter: # Druid Web统计过滤器配置
         enabled: true # 启用Web统计过滤器
         session-stat-enable: true # 启用会话统计功能
@@ -145,13 +151,13 @@ spring:
 # 接口文档
 knife4j:
   enable: true  # 开启增强配置
-  production: true # 是否开启生产环境保护策略,默认false
+  production: false # 是否开启生产环境保护策略,默认false
   setting:
     enable-footer-custom: true # 是否开启自定义Footer
     footer-custom-content: 2024一起来写代码吧-[王小费](https://gitee.com/whx233)
 # 工作流配置 https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/
 camunda.bpm:
-  # enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.
+  #enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.
   process-engine-name: OH工作流   # Name of the process engine
   auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
   database:
@@ -171,7 +177,7 @@ camunda.bpm:
     historyCleanupBatchSize: 100 # 单次批量处理实例数
   admin-user:
     id: admin
-    password: daB254U9de4c5f4P7Ab
+    password: admin
   # 定时任务
   job-execution:
     enabled: true # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
@@ -180,8 +186,8 @@ camunda.bpm:
     cors:
       enabled: true
       allowed-origins: "*"
-  filter.create: 所有任务
-
+  filter:
+    create: 所有任务
 # 日志信息
 logging:
   # 字符集设置
@@ -190,5 +196,4 @@ logging:
     console: UTF-8
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
     com.finn: DEBUG
-    # root: DEBUG
-    org.springframework.web: debug # web相关的日志级别
+    org.springframework.web: DEBUG # web相关的日志级别

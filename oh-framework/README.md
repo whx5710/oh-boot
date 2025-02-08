@@ -3,11 +3,11 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 - 异步消息消费；实现JobService接口可异步消费消息，通过JobServiceConsumer.jobConsume 执行业务代码
 - 在方法上使用 @OperateLog 注解可记录操作日志
 - 使用PageHelper进行分页，也可以使用@Pages 注解进行分页操作 【2024年10月】
-- 通过Druid连接池支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源 【2024年10月】
+- 通过前端参数或后端AOP、@Ds注解切换数据源 【2024年10月】
 - 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】
-- 支持Druid、Hikari连接池【2025年2月】
+- 支持Druid、Hikari连接池，可对连接池使用情况监控【2025年2月】
 ## 引入
 根据实际版本引入，如下所示：
 
@@ -61,6 +61,7 @@ spring:
         maxActive: 100 # 最大连接数
         maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
         maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        hikariLog: true # 是否开启hikari监控日志打印，默认false
         checkConnection: true # 初始化时是否检查连接，默认false
         filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500

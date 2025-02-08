@@ -93,6 +93,7 @@ spring:
         maxActive: 120
         maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
         maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        hikariLog: true # 是否开启hikari监控日志打印，默认false
         filters: wall,stat # druid监控
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
     druid: # 使用Hikari连接池，监控无效

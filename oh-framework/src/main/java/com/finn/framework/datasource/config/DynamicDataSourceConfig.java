@@ -1,6 +1,8 @@
 package com.finn.framework.datasource.config;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Slf4jReporter;
 import com.finn.core.exception.ServerException;
 import com.finn.framework.common.properties.DataSourceProperty;
 import com.finn.framework.common.properties.DynamicDataSourceProperties;
@@ -17,6 +19,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 多数据源信息配置类，读取数据源配置信息并注册成bean <br/>
@@ -82,7 +85,7 @@ public class DynamicDataSourceConfig {
      * @param dataSourceProperty ds
      * @return map
      */
-    private static DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
+    private DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
         Map<String, String> properties = new HashMap<>();
         properties.put(DruidDataSourceFactory.PROP_URL, dataSourceProperty.getUrl()); // 地址
         properties.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, dataSourceProperty.getDriverClassName()); // 驱动名
@@ -105,7 +108,7 @@ public class DynamicDataSourceConfig {
      * @param dataSourceProperty 属性
      * @return 数据库连接
      */
-    private static HikariDataSource createHikariDS(String key,DataSourceProperty dataSourceProperty){
+    private HikariDataSource createHikariDS(String key,DataSourceProperty dataSourceProperty){
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setUsername(dataSourceProperty.getUsername()); // 用户名
         hikariConfig.setPassword(dataSourceProperty.getPassword()); // 密码
@@ -116,6 +119,10 @@ public class DynamicDataSourceConfig {
         hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
         hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
         hikariConfig.setPoolName(key); // 连接池名称
+        // 监控
+        if(dataSourceProperty.getHikariLog()){
+            hikariConfig.setMetricRegistry(initMetricRegistry(key));
+        }
         try{
             return new HikariDataSource(hikariConfig);
         }catch (HikariPool.PoolInitializationException e){
@@ -194,5 +201,22 @@ public class DynamicDataSourceConfig {
             log.error("动态数据源初始完成，无主数据源，请检查");
         }
         return dynamicDataSource;
+    }
+
+    /**
+     * 配置指标监控
+     * @param poolName 连接池名
+     * @return m
+     */
+    public MetricRegistry initMetricRegistry(String poolName) {
+        MetricRegistry metricRegistry = new MetricRegistry();
+        Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
+                .filter((name, metric) -> name.startsWith(poolName))
+                .outputTo(log)
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build();
+        reporter.start(45, TimeUnit.SECONDS); // 45秒打印一次
+        return metricRegistry;
     }
 }

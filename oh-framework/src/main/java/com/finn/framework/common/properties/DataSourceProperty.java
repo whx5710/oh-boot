@@ -62,6 +62,8 @@ public class DataSourceProperty {
 
     // 检查连接
     private Boolean checkConnection = false;
+    // Hikari 监控日志
+    private Boolean hikariLog = false;
 
     public String getDriverClassName() {
         return driverClassName;
@@ -173,5 +175,13 @@ public class DataSourceProperty {
 
     public void setCheckConnection(Boolean checkConnection) {
         this.checkConnection = checkConnection;
+    }
+
+    public Boolean getHikariLog() {
+        return hikariLog;
+    }
+
+    public void setHikariLog(Boolean hikariLog) {
+        this.hikariLog = hikariLog;
     }
 }
