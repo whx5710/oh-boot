@@ -6,6 +6,7 @@ import com.iris.framework.common.properties.DataSourceProperty;
 import com.iris.framework.common.properties.DynamicDataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -115,7 +116,11 @@ public class DynamicDataSourceConfig {
         hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
         hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
         hikariConfig.setPoolName(key); // 连接池名称
-        return new HikariDataSource(hikariConfig);
+        try{
+            return new HikariDataSource(hikariConfig);
+        }catch (HikariPool.PoolInitializationException e){
+            throw new ServerException("创建数据库连接失败!", e.getMessage());
+        }
     }
 
     /**
@@ -143,7 +148,7 @@ public class DynamicDataSourceConfig {
      * @param dataSourceMap 数据源map
      * @param masterDataSource 主数据源
      * @param primary 主数据源名
-     * @return
+     * @return ds
      */
     private DynamicDataSource buildDs(Map<Object, Object> dataSourceMap, DataSource masterDataSource, String primary){
         //设置动态数据源
