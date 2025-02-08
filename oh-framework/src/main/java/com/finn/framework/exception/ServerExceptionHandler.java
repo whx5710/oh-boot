@@ -1,7 +1,7 @@
 package com.finn.framework.exception;
 
 import com.finn.core.exception.ErrorCode;
-import com.finn.core.exception.FinnExceptionHandler;
+import com.finn.core.exception.SuperExceptionHandler;
 import com.finn.core.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *
  */
 @RestControllerAdvice
-public class ServerExceptionHandler extends FinnExceptionHandler {
+public class ServerExceptionHandler extends SuperExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(ServerExceptionHandler.class);
 

@@ -19,9 +19,9 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  *
  */
 @RestControllerAdvice
-public class FinnExceptionHandler {
+public class SuperExceptionHandler {
 
-    private final Logger log = LoggerFactory.getLogger(FinnExceptionHandler.class);
+    private final Logger log = LoggerFactory.getLogger(SuperExceptionHandler.class);
 
     /**
      * 处理自定义异常
