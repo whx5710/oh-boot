@@ -35,7 +35,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -142,8 +141,8 @@ public class DataMsgServiceImpl implements DataMsgService {
 
     /**
      * 校验接口基本信息
-     * @param request
-     * @return
+     * @param request 请求
+     * @return 消息实体
      */
     @Override
     public MsgEntity basicCheck(HttpServletRequest request) {
@@ -188,9 +187,8 @@ public class DataMsgServiceImpl implements DataMsgService {
     public Result<?> submit(Map<String, Object> params, MsgEntity msgEntity) {
         msgEntity.setData(params);
         Boolean isAsync = msgEntity.getAsync(); // 接口是否支持异步
-        Optional<JobService> optional = ServiceFactory.getService(msgEntity.getFuncCode());
-        if(optional.isPresent()){
-            JobService jobService = optional.get();
+        JobService jobService = ServiceFactory.getBean(msgEntity.getFuncCode(), JobService.class);
+        if(jobService != null){
             // 校验参数
             jobService.check(params);
             if (!isAsync || openApiProperties.getType() == 1) { // 1直接保存 2使用MQ异步保存

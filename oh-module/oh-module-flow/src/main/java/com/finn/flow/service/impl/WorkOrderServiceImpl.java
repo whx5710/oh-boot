@@ -13,7 +13,6 @@ import com.finn.flow.service.TaskHandlerService;
 import com.finn.flow.service.WorkOrderService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.WorkOrderVO;
-import com.finn.framework.utils.ServiceFactory;
 import com.finn.framework.entity.MetaEntity;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.PageResult;
@@ -21,7 +20,6 @@ import com.finn.core.utils.Result;
 import com.finn.framework.service.JobService;
 import com.finn.framework.utils.annotations.Idempotent;
 import com.finn.framework.utils.annotations.RequestKeyParam;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +35,7 @@ import java.util.Map;
  * @since 1.0.0 2024-02-23
  */
 @Service(WorkOrderServiceImpl.funcCode)
-public class WorkOrderServiceImpl implements WorkOrderService, JobService, InitializingBean {
+public class WorkOrderServiceImpl implements WorkOrderService, JobService {
 
     // 功能号
     public static final String funcCode = "F1003";
@@ -146,14 +144,5 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService, Initi
         // 模拟业务处理异常
 //        throw new ServerException("模拟异常！！！");
         return Result.ok(list);
-    }
-
-    /**
-     * 注册服务
-     * @throws Exception e
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        ServiceFactory.register(funcCode, this, "工单保存服务"); // 保存工单，启动流程业务
     }
 }

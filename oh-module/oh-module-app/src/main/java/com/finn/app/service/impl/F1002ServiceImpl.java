@@ -2,12 +2,10 @@ package com.finn.app.service.impl;
 
 import com.finn.core.utils.JsonUtils;
 import com.finn.core.utils.Result;
-import com.finn.framework.utils.ServiceFactory;
 import com.finn.framework.entity.MetaEntity;
 import com.finn.framework.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -15,8 +13,8 @@ import java.util.Map;
 /**
  * 业务一
  */
-@Service
-public class F1002ServiceImpl implements JobService, InitializingBean {
+@Service("F1002")
+public class F1002ServiceImpl implements JobService {
     private final Logger log = LoggerFactory.getLogger(F1002ServiceImpl.class);
 
     @Override
@@ -28,11 +26,6 @@ public class F1002ServiceImpl implements JobService, InitializingBean {
     public Result<String> handle(MetaEntity data) {
         log.info("处理业务二数据 F1002");
         return Result.ok("操作成功");
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        ServiceFactory.register("F1002", this, "测试 - 业务一");
     }
 
 }
