@@ -1,13 +1,12 @@
 package com.finn.framework.datasource.config;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Slf4jReporter;
 import com.finn.core.exception.ServerException;
 import com.finn.framework.common.properties.DataSourceProperty;
 import com.finn.framework.common.properties.DynamicDataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariPoolMXBean;
 import com.zaxxer.hikari.pool.HikariPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -119,12 +120,13 @@ public class DynamicDataSourceConfig {
         hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
         hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
         hikariConfig.setPoolName(key); // 连接池名称
-        // 监控
-        if(dataSourceProperty.getHikariLog()){
-            hikariConfig.setMetricRegistry(initMetricRegistry(key));
-        }
         try{
-            return new HikariDataSource(hikariConfig);
+            HikariDataSource dataSource = new HikariDataSource(hikariConfig);
+            // 打印监控日志
+            if(dataSourceProperty.getHikariLog()){
+                hikariMonitor(key, dataSource);
+            }
+            return dataSource;
         }catch (HikariPool.PoolInitializationException e){
             throw new ServerException("创建数据库连接失败!", e.getMessage());
         }
@@ -204,19 +206,21 @@ public class DynamicDataSourceConfig {
     }
 
     /**
-     * 配置指标监控
-     * @param poolName 连接池名
-     * @return m
+     * 连接池配置指标监控
+     * @param dataSource 连接对象
      */
-    public MetricRegistry initMetricRegistry(String poolName) {
-        MetricRegistry metricRegistry = new MetricRegistry();
-        Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
-                .filter((name, metric) -> name.startsWith(poolName))
-                .outputTo(log)
-                .convertRatesTo(TimeUnit.SECONDS)
-                .convertDurationsTo(TimeUnit.MILLISECONDS)
-                .build();
-        reporter.start(45, TimeUnit.SECONDS); // 45秒打印一次
-        return metricRegistry;
+    private void hikariMonitor(String name, HikariDataSource dataSource) {
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(() -> {
+            HikariPoolMXBean hikariPoolMXBean = dataSource.getHikariPoolMXBean();
+            if (null != hikariPoolMXBean) {
+                log.info("{} - 连接总数:{}, 活跃连接数:{}, 空闲连接数:{}, 等待连接数:{}",
+                        name,
+                        hikariPoolMXBean.getTotalConnections(),
+                        hikariPoolMXBean.getActiveConnections(),
+                        hikariPoolMXBean.getIdleConnections(),
+                        hikariPoolMXBean.getThreadsAwaitingConnection());
+            }
+        }, 0, 30, TimeUnit.SECONDS);
     }
 }
