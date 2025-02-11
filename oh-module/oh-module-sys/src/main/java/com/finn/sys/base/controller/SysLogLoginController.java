@@ -41,7 +41,7 @@ public class SysLogLoginController {
 
     @GetMapping("export")
     @Operation(summary = "导出excel")
-    @OperateLog(type = OperateTypeEnum.EXPORT)
+    @OperateLog(module = "登录日志", name = "导出excel", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:log:login')")
     public void export() {
         sysLogLoginService.export();

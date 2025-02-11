@@ -54,7 +54,7 @@ public class ScheduleJobLogController {
 
     @DeleteMapping
     @Operation(summary = "删除日志")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         scheduleJobLogService.delete(idList);

@@ -69,7 +69,7 @@ public class SysOrgController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "机构管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:org:save')")
     public Result<String> save(@RequestBody @Valid SysOrgVO vo) {
         sysOrgService.save(vo);
@@ -79,7 +79,7 @@ public class SysOrgController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "机构管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:org:update')")
     public Result<String> update(@RequestBody @Valid SysOrgVO vo) {
         sysOrgService.update(vo);
@@ -89,7 +89,7 @@ public class SysOrgController {
 
     @DeleteMapping("{id}")
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "机构管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:org:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {
         sysOrgService.delete(id);

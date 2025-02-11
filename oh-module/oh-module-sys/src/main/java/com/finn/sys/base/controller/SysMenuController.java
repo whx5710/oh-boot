@@ -92,7 +92,7 @@ public class SysMenuController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "菜单管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:menu:save')")
     public Result<String> save(@RequestBody @Valid SysMenuTreeVO vo) {
         sysMenuService.save(vo);
@@ -102,7 +102,7 @@ public class SysMenuController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
     public Result<String> update(@RequestBody @Valid SysMenuTreeVO vo) {
         sysMenuService.update(vo);
@@ -112,7 +112,7 @@ public class SysMenuController {
 
     @DeleteMapping("{id}")
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {
         // 判断是否有子菜单或按钮

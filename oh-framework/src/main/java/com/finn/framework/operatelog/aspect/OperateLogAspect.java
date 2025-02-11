@@ -13,8 +13,6 @@ import com.finn.core.utils.Tools;
 import com.finn.core.utils.JsonUtils;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -61,10 +59,8 @@ public class OperateLogAspect {
         try {
             //执行方法
             Object result = joinPoint.proceed();
-
             //保存日志
             saveLog(joinPoint, operateLog, startTime, Constant.SUCCESS);
-
             return result;
         } catch (Exception e) {
             //保存日志
@@ -83,7 +79,6 @@ public class OperateLogAspect {
      */
     private void saveLog(ProceedingJoinPoint joinPoint, OperateLog operateLog, LocalDateTime startTime, Integer status) {
         OperateLogDTO log = new OperateLogDTO();
-
         // 执行时长
         long duration = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli() - startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();
         log.setDuration((int) duration);
@@ -93,23 +88,6 @@ public class OperateLogAspect {
         log.setModule(operateLog.module());
         // 设置name值
         log.setName(operateLog.name());
-
-        // 如果没有指定module值，则从tag读取
-        if (log.getModule() == null || log.getModule().isEmpty()) {
-            Tag tag = getClassAnnotation(joinPoint, Tag.class);
-            if (tag != null) {
-                log.setModule(tag.name());
-            }
-        }
-
-        // 如果没有指定name值，则从operation读取
-        if (log.getName() == null || log.getName().isEmpty()) {
-            Operation operation = getMethodAnnotation(joinPoint, Operation.class);
-            if (operation != null) {
-                log.setName(operation.summary());
-            }
-        }
-
         // 请求相关
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         if (request != null) {
@@ -156,7 +134,6 @@ public class OperateLogAspect {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String[] argNames = methodSignature.getParameterNames();
         Object[] argValues = joinPoint.getArgs();
-
         // 拼接参数
         Map<String, Object> args = new HashMap<>(argValues.length);
         for (int i = 0; i < argNames.length; i++) {
@@ -164,7 +141,6 @@ public class OperateLogAspect {
             Object argValue = argValues[i];
             args.put(argName, ignoreArgs(argValue) ? "[ignore]" : argValue);
         }
-
         return JsonUtils.toJsonString(args);
     }
 

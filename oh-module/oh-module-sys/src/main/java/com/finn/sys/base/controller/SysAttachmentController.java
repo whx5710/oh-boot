@@ -43,7 +43,7 @@ public class SysAttachmentController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "附件管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:attachment:save')")
     public Result<String> save(@RequestBody SysAttachmentVO vo) {
         sysAttachmentService.save(vo);
@@ -53,7 +53,7 @@ public class SysAttachmentController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "附件管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:attachment:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         sysAttachmentService.delete(idList);

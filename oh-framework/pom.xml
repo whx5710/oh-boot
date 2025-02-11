@@ -17,8 +17,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <!-- hutool 工具包 -->
         <hutool.version>5.8.35</hutool.version>
-        <!-- swagger（xiaoymin版本）生成在线文档 -->
-        <knife4j.version>4.5.0</knife4j.version>
     </properties>
 
     <dependencies>
@@ -67,12 +65,6 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
             <version>${hutool.version}</version>
-        </dependency>
-        <!-- 接口文档 -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 </project>

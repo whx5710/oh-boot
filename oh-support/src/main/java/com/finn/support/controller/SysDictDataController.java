@@ -54,7 +54,7 @@ public class SysDictDataController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "字典数据管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:dict:save')")
     public Result<String> save(@RequestBody @Valid SysDictDataVO vo) {
         sysDictDataService.save(vo);
@@ -64,7 +64,7 @@ public class SysDictDataController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "字典数据管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:dict:update')")
     public Result<String> update(@RequestBody @Valid SysDictDataVO vo) {
         sysDictDataService.update(vo);
@@ -74,7 +74,7 @@ public class SysDictDataController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "字典数据管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:dict:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         sysDictDataService.delete(idList);

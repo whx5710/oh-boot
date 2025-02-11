@@ -64,7 +64,7 @@ public class SmsPlatformController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "短信平台", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sms:platform:save')")
     public Result<String> save(@RequestBody SmsPlatformVO vo) {
         smsPlatformService.save(vo);
@@ -74,7 +74,7 @@ public class SmsPlatformController {
 
     @PostMapping("send")
     @Operation(summary = "发送短信")
-    @OperateLog(type = OperateTypeEnum.OTHER)
+    @OperateLog(module = "短信平台", name = "发送短信", type = OperateTypeEnum.OTHER)
     @PreAuthorize("hasAuthority('sms:platform:update')")
     public Result<String> send(@RequestBody SmsSendVO vo) {
         SmsPlatformEntity entity = smsPlatformService.getById(vo.getId());
@@ -104,7 +104,7 @@ public class SmsPlatformController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "短信平台", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sms:platform:update')")
     public Result<String> update(@RequestBody @Valid SmsPlatformVO vo) {
         smsPlatformService.update(vo);
@@ -114,7 +114,7 @@ public class SmsPlatformController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "短信平台", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sms:platform:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         smsPlatformService.delete(idList);

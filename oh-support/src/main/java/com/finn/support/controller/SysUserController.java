@@ -93,7 +93,7 @@ public class SysUserController {
 
     @PutMapping("password")
     @Operation(summary = "修改密码")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "用户管理", name = "修改密码", type = OperateTypeEnum.UPDATE)
     public Result<String> password(@RequestBody @Valid SysUserPasswordVO vo) {
         // 原密码不正确
         UserDetail user = SecurityUser.getUser();
@@ -110,7 +110,7 @@ public class SysUserController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "用户管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid SysUserVO vo) {
         // 新增密码
@@ -128,7 +128,7 @@ public class SysUserController {
 
     @PostMapping("register")
     @Operation(summary = "用户注册")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "用户管理", name = "用户注册", type = OperateTypeEnum.INSERT)
     public Result<String> register(@RequestBody @Valid SysUserVO vo) {
         // 新增密码不能为空
         if (ObjectUtils.isEmpty(vo.getPassword())) {
@@ -143,7 +143,7 @@ public class SysUserController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "用户管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> update(@RequestBody @Valid SysUserVO vo) {
         sysUserService.update(vo);
@@ -152,7 +152,7 @@ public class SysUserController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "用户管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         Long userId = SecurityUser.getUserId();
@@ -167,7 +167,7 @@ public class SysUserController {
 
     @GetMapping("/resetPwd/{id}")
     @Operation(summary = "重置密码")
-    @OperateLog(type = OperateTypeEnum.GET)
+    @OperateLog(module = "用户管理", name = "重置密码", type = OperateTypeEnum.GET)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> resetPwd(@PathVariable("id") Long id){
         return Result.ok(sysUserService.resetPwd(id));
@@ -175,7 +175,7 @@ public class SysUserController {
 
     @PostMapping("import")
     @Operation(summary = "导入用户")
-    @OperateLog(type = OperateTypeEnum.IMPORT)
+    @OperateLog(module = "用户管理", name = "导入用户", type = OperateTypeEnum.IMPORT)
     @PreAuthorize("hasAuthority('sys:user:import')")
     public Result<String> importExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -188,7 +188,7 @@ public class SysUserController {
 
     @GetMapping("export")
     @Operation(summary = "导出用户")
-    @OperateLog(type = OperateTypeEnum.EXPORT)
+    @OperateLog(module = "用户管理", name = "导出用户", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:user:export')")
     public void export() {
         sysUserService.export();

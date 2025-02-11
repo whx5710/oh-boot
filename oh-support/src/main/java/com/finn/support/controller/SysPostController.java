@@ -63,7 +63,7 @@ public class SysPostController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "岗位管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:post:save')")
     public Result<String> save(@RequestBody SysPostVO vo) {
         sysPostService.save(vo);
@@ -73,7 +73,7 @@ public class SysPostController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "岗位管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:post:update')")
     public Result<String> update(@RequestBody @Valid SysPostVO vo) {
         sysPostService.update(vo);
@@ -83,7 +83,7 @@ public class SysPostController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "岗位管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:post:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         sysPostService.delete(idList);

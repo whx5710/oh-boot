@@ -63,7 +63,7 @@ public class SysParamsController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "参数管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:params:all')")
     public Result<String> save(@RequestBody SysParamsVO vo) {
         sysParamsService.save(vo);
@@ -72,7 +72,7 @@ public class SysParamsController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @OperateLog(type = OperateTypeEnum.UPDATE)
+    @OperateLog(module = "参数管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:params:all')")
     public Result<String> update(@RequestBody @Valid SysParamsVO vo) {
         sysParamsService.update(vo);
@@ -81,7 +81,7 @@ public class SysParamsController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @OperateLog(type = OperateTypeEnum.DELETE)
+    @OperateLog(module = "参数管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:params:all')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         sysParamsService.delete(idList);

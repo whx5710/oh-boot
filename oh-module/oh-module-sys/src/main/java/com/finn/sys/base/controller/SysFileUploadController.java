@@ -31,7 +31,7 @@ public class SysFileUploadController {
 
     @PostMapping("upload")
     @Operation(summary = "上传")
-    @OperateLog(type = OperateTypeEnum.INSERT)
+    @OperateLog(module = "文件上传", name = "上传", type = OperateTypeEnum.INSERT)
     public Result<SysFileUploadVO> upload(@RequestParam("file") MultipartFile file) throws Exception {
         if (file.isEmpty()) {
             return Result.error("请选择需要上传的文件");

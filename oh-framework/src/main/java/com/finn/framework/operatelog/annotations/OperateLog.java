@@ -24,7 +24,7 @@ public @interface OperateLog {
     /**
      * 操作名
      */
-    String name() default "";
+    String name();
 
     /**
      * 操作类型
