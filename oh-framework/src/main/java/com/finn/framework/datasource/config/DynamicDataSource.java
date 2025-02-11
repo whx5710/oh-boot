@@ -80,6 +80,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         if(key == null || key.equals("")){
             key = primaryDb;
+            log.warn("使用默认数据源！【{}】", key);
         }
         log.debug("SqlSessionFactory使用{}数据源", key);
         sqlSessionFactoryBean.setDataSource(getDs(key));
