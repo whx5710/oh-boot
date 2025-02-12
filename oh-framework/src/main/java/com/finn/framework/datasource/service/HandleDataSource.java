@@ -2,6 +2,7 @@ package com.finn.framework.datasource.service;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.finn.core.exception.ServerException;
+import com.finn.core.utils.AssertUtils;
 import com.finn.framework.common.properties.DataSourceProperty;
 import com.finn.framework.datasource.config.DynamicDataSource;
 import com.zaxxer.hikari.HikariConfig;
@@ -72,6 +73,7 @@ public class HandleDataSource {
         dynamicDataSource.setTargetDataSources(dataSourceMap);
         // 主数据源
         dynamicDataSource.setPrimaryDb(masterDataSource);
+        AssertUtils.isNull(masterDataSource, "数据库连接对象");
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
         // 将数据源信息备份在 DynamicDataSource 中
         dynamicDataSource.setDynamicDataSources(dsTmp);
