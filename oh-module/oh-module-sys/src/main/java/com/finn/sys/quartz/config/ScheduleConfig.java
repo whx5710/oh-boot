@@ -68,9 +68,9 @@ public class ScheduleConfig {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setSchedulerName("OhScheduler");
         // 切换数据源，使用系统内置数据源；根据实际情况使用数据源
-        Map<Object, Object> map = dataSource.getDynamicDataSources();
+        Map<String, DataSource> map = dataSource.getDynamicDataSources();
         // 使用系统管理库
-        factory.setDataSource((DataSource) map.get(sysDataSourceProperties.getSysDefault()));
+        factory.setDataSource(map.get(sysDataSourceProperties.getSysDefault()));
         factory.setQuartzProperties(prop);
         // 延时启动
         factory.setStartupDelay(10);

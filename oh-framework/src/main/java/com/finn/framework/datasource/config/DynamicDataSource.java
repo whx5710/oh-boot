@@ -24,19 +24,19 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     @Value("${mybatis.mapper-locations:noPath}")
     String locationPattern;
 
-    private Map<Object, Object> dynamicDataSources;
+    private Map<String, DataSource> dynamicDataSources;
 
-    private String primaryDb;
+    private DataSource primaryDb;
 
     public DynamicDataSource(){
 
     }
 
-    public DynamicDataSource(Map<Object, Object> dynamicDataSources){
+    public DynamicDataSource(Map<String, DataSource> dynamicDataSources){
         this.dynamicDataSources = dynamicDataSources;
     }
 
-    public String getPrimaryDb() {
+    public DataSource getPrimaryDb() {
         return primaryDb;
     }
 
@@ -44,7 +44,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * 指定主数据源
      * @param primaryDb
      */
-    public void setPrimaryDb(String primaryDb) {
+    public void setPrimaryDb(DataSource primaryDb) {
         this.primaryDb = primaryDb;
     }
 
@@ -53,11 +53,11 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return DynamicDataSourceHolder.getDynamicDataSourceKey();
     }
 
-    public Map<Object, Object> getDynamicDataSources() {
+    public Map<String, DataSource> getDynamicDataSources() {
         return dynamicDataSources;
     }
 
-    public void setDynamicDataSources(Map<Object, Object> defineTargetDataSources) {
+    public void setDynamicDataSources(Map<String, DataSource> defineTargetDataSources) {
         this.dynamicDataSources = defineTargetDataSources;
     }
 
@@ -67,7 +67,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * @return
      */
     public DataSource getDs(String key){
-        return (DataSource) this.dynamicDataSources.get(key);
+        return this.dynamicDataSources.get(key);
     }
 
     /**
@@ -79,11 +79,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     public SqlSessionFactory getSqlSessionFactory(String key) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         if(key == null || key.equals("")){
-            key = primaryDb;
-            log.warn("使用默认数据源！【{}】", key);
+            sqlSessionFactoryBean.setDataSource(primaryDb);
+        }else{
+            sqlSessionFactoryBean.setDataSource(getDs(key));
         }
-        log.debug("SqlSessionFactory使用{}数据源", key);
-        sqlSessionFactoryBean.setDataSource(getDs(key));
         // 对应mybatis的xml路径
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(locationPattern));
         return sqlSessionFactoryBean.getObject();

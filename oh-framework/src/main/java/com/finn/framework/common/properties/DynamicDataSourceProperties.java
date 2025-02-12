@@ -22,7 +22,7 @@ public class DynamicDataSourceProperties {
     @NestedConfigurationProperty
     SysDataSourceProperties sysDataSource = new SysDataSourceProperties();
     /**
-     * druid每一个数据源属性
+     * 每一个数据源属性
      */
     private Map<String, DataSourceProperty> dynamic = new LinkedHashMap<>();
 
