@@ -3,7 +3,7 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 - 异步消息消费；实现JobService接口可异步消费消息，通过JobServiceConsumer.jobConsume 执行业务代码
 - 在方法上使用 @OperateLog 注解可记录操作日志
 - 使用PageHelper进行分页，也可以使用@Pages 注解进行分页操作 【2024年10月】
-- 通过前端参数或后端AOP、@Ds注解切换数据源 【2024年10月】
+- 通过AOP、@Ds注解切换数据源,初始至少有2个数据源，分别是系统内置数据源和主数据源，两个数据源可以相同 【2024年10月】
 - 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】

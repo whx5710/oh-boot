@@ -32,31 +32,44 @@ public class HandleDataSource {
      * 组装数据源,
      * 主数据源和系统数据源都为空的情况下，默认第一个数据源
      * @param dataSourceMap 数据源集合
-     * @param masterDataSource 主数据源
-     * @param sysDataSource 系统内置数据源
+     * @param primary 主数据源
+     * @param sysDb 系统内置数据源
      * @return 动态数据源
      */
-    public DynamicDataSource buildDs(Map<Object, Object> dataSourceMap, DataSource masterDataSource, DataSource sysDataSource){
+    public DynamicDataSource buildDs(Map<Object, Object> dataSourceMap, String primary, String sysDb){
         //设置动态数据源
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
-        dynamicDataSource.setTargetDataSources(dataSourceMap);
-
+        DataSource masterDataSource = null;
+        DataSource sysDataSource = null;
+        if(dataSourceMap.containsKey(primary)){
+            masterDataSource = (DataSource) dataSourceMap.get(primary);
+        }
+        if(dataSourceMap.containsKey(sysDb)){
+            sysDataSource = (DataSource) dataSourceMap.get(sysDb);
+        }
         Map<String, DataSource> dsTmp = new HashMap<>(dataSourceMap.size());
         for(Map.Entry<Object,Object> item: dataSourceMap.entrySet()){
             String key = (String) item.getKey();
             DataSource dataSource = (DataSource) item.getValue();
-            // 主数据源
             if(masterDataSource == null){
-                if(sysDataSource == null){
-                    log.warn("主数据源和系统内置数据源都为空，默认第一个数据源【{}】为主数据源", key);
-                    masterDataSource = dataSource;
-                }else{
-                    log.warn("主数据源为空，默认为系统数据源");
-                    masterDataSource = sysDataSource;
-                }
+                log.warn("未找到主数据源，默认使用{}数据源", key);
+                masterDataSource = dataSource;
+                dsTmp.put(primary, dataSource);
+            }
+            if(sysDataSource == null){
+                log.warn("未找到系统内置数据源，默认使用{}数据源", key);
+                sysDataSource = dataSource;
+                dsTmp.put(sysDb, dataSource);
             }
             dsTmp.put(key, dataSource);
         }
+        if(!dataSourceMap.containsKey(primary)){
+            dataSourceMap.put(primary, masterDataSource);
+        }
+        if(!dataSourceMap.containsKey(sysDb)){
+            dataSourceMap.put(sysDb, sysDataSource);
+        }
+        dynamicDataSource.setTargetDataSources(dataSourceMap);
         // 主数据源
         dynamicDataSource.setPrimaryDb(masterDataSource);
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
