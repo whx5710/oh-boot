@@ -27,6 +27,13 @@ public class RedisKeys {
         return ACCESS + "token:" + accessToken;
     }
 
+    /**
+     * 用户信息key<br/>
+     * sys:access:user:用户ID:token令牌
+     * @param userId
+     * @param accessToken
+     * @return
+     */
     public static String getUserInfoKey(String userId, String accessToken) {
         return ACCESS + "user:" + userId + ":" + accessToken;
     }

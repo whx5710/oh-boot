@@ -53,7 +53,7 @@ public class TokenStoreCache {
         refreshTokenInfo.setAccessToken(accessToken); // token
         String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
         redisCache.set(refreshKey, refreshTokenInfo, securityProperties.getRefreshTokenExpire());
-
+        // 用户信息
         redisCache.set(RedisKeys.getUserInfoKey(String.valueOf(user.getId()), accessToken), user, securityProperties.getAccessTokenExpire());
     }
 
