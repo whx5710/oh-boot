@@ -2,6 +2,7 @@ package com.finn.core.entity;
 
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.DateUtils;
+import com.finn.core.utils.JsonUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -181,5 +182,14 @@ public class HashDto extends HashMap<String, Object> {
                 return null;
             }
         }
+    }
+
+
+    /**
+     * 对象转json 2025-02-09
+     * @return json字符串
+     */
+    public String toJson(){
+        return JsonUtils.toJsonString(this);
     }
 }

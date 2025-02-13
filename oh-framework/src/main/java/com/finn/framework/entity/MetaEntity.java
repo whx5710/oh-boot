@@ -1,23 +1,14 @@
 package com.finn.framework.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-
-import java.io.Serializable;
-import java.util.Map;
+import com.finn.core.entity.HashDto;
+import com.finn.core.entity.IDEntity;
 
 /**
  * 元素 Entity基类
  * 数据传输
  * @author 王小费 whx5710@qq.com
  */
-public class MetaEntity implements Serializable {
-
-    /**
-     * id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+public class MetaEntity extends IDEntity {
 
     // 功能号
     private String funcCode;
@@ -28,15 +19,7 @@ public class MetaEntity implements Serializable {
     private String topic;
 
     // 数据
-    private Map<String, Object> data;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private HashDto data;
 
     public String getFuncCode() {
         return funcCode;
@@ -62,11 +45,11 @@ public class MetaEntity implements Serializable {
         this.topic = topic;
     }
 
-    public Map<String, Object> getData() {
+    public HashDto getData() {
         return data;
     }
 
-    public void setData(Map<String, Object> data) {
+    public void setData(HashDto data) {
         this.data = data;
     }
 }

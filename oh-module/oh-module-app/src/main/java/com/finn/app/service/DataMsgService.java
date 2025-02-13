@@ -1,5 +1,6 @@
 package com.finn.app.service;
 
+import com.finn.core.entity.HashDto;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
 import com.finn.framework.entity.api.MsgEntity;
@@ -8,7 +9,6 @@ import com.finn.app.vo.DataMsgVO;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * mq日志
@@ -38,5 +38,5 @@ public interface DataMsgService {
      * @param params
      * @return
      */
-    Result<?> submit(Map<String, Object> params, MsgEntity msgEntity);
+    Result<?> submit(HashDto params, MsgEntity msgEntity);
 }

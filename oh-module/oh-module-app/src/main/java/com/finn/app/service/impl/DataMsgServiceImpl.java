@@ -2,6 +2,7 @@ package com.finn.app.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import com.finn.core.entity.HashDto;
 import com.finn.core.utils.*;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
@@ -34,7 +35,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -184,7 +184,7 @@ public class DataMsgServiceImpl implements DataMsgService {
      * @return
      */
     @Override
-    public Result<?> submit(Map<String, Object> params, MsgEntity msgEntity) {
+    public Result<?> submit(HashDto params, MsgEntity msgEntity) {
         msgEntity.setData(params);
         Boolean isAsync = msgEntity.getAsync(); // 接口是否支持异步
         JobService jobService = ServiceFactory.getBean(msgEntity.getFuncCode(), JobService.class);
@@ -196,7 +196,7 @@ public class DataMsgServiceImpl implements DataMsgService {
             }else{
                 msgEntity.setId(Tools.snowFlakeId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
-                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(Constant.TOPIC_SUBMIT, JsonUtils.toJsonString(msgEntity));
+                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(Constant.TOPIC_SUBMIT, msgEntity.toJson());
                     //执行成功回调
                     completableFuture.thenAccept(msg -> {
                         log.debug("发送成功");
@@ -224,8 +224,8 @@ public class DataMsgServiceImpl implements DataMsgService {
     @PostConstruct
     public void saveLogJob() {
         ScheduledExecutorService scheduledService = ThreadUtil.createScheduledExecutor(1);
-        // 每隔20秒，执行一次
-        scheduledService.scheduleWithFixedDelay(this::saveMsgLog, 1, 20, TimeUnit.SECONDS);
+        // 每隔30秒，执行一次
+        scheduledService.scheduleWithFixedDelay(this::saveMsgLog, 1, 30, TimeUnit.SECONDS);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.finn.flow.service.impl;
 
+import com.finn.core.entity.HashDto;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.Tools;
@@ -25,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 工单表
@@ -107,7 +107,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
      * @param data 数据
      */
     @Override
-    public void check(Map<String, Object> data) {
+    public void check(HashDto data) {
         // 判断流程是否部署
         if(!processHandlerService.isPeploy(processKey)){
             throw new ServerException("流程还未部署，请部署");
@@ -126,7 +126,6 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
     @Transactional(rollbackFor = Exception.class)
     @Idempotent(keyPrefix = "flow:order:save")
     public Result<List<TaskRecordVO>> handle(@RequestKeyParam MetaEntity data) throws ServerException {
-//        JsonUtils.parseObject()
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
         if(workOrderVO.getId() == null || workOrderVO.getId() == 0L){
             workOrderVO.setId(Tools.snowFlakeId());

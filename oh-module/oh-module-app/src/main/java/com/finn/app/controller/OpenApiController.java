@@ -3,6 +3,7 @@ package com.finn.app.controller;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.finn.core.constant.Constant;
+import com.finn.core.entity.HashDto;
 import com.finn.core.utils.JsonUtils;
 import com.finn.core.utils.Result;
 import com.finn.framework.entity.api.MsgEntity;
@@ -55,7 +56,7 @@ public class OpenApiController {
      */
     @Operation(summary = "公共接口")
     @PostMapping("/submit")
-    public Result<?> submit(@RequestBody Map<String, Object> params, HttpServletRequest request) {
+    public Result<?> submit(@RequestBody HashDto params, HttpServletRequest request) {
         MsgEntity msgEntity = dataMsgService.basicCheck(request);
         return dataMsgService.submit(params, msgEntity);
     }
@@ -90,7 +91,7 @@ public class OpenApiController {
         head.put(Constant.CLIENT_ID,"C0001");
         head.put(Constant.SECRET_KEY,"c28a8120682d4b4fa50325ed34748e0e");
         head.put(Constant.FUNC_CODE,"F1003");
-        Map<String, Object> data = new HashMap<>();
+        HashDto data = new HashDto();
         data.put("name","王小费");
         data.put("sex","男");
 
