@@ -1,5 +1,6 @@
 package com.finn.core.utils;
 
+import com.finn.core.entity.HashDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
@@ -8,8 +9,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Http
@@ -50,10 +49,10 @@ public class HttpContextUtils {
      * @param request
      * @return
      */
-    public static Map<String, String> getParameterMap(HttpServletRequest request) {
+    public static HashDto getParameterDto(HttpServletRequest request) {
         Enumeration<String> parameters = request.getParameterNames();
 
-        Map<String, String> params = new HashMap<>();
+        HashDto params = new HashDto();
         while (parameters.hasMoreElements()) {
             String parameter = parameters.nextElement();
             String value = request.getParameter(parameter);
@@ -61,7 +60,6 @@ public class HttpContextUtils {
                 params.put(parameter, value);
             }
         }
-
         return params;
     }
 
