@@ -8,7 +8,10 @@ import com.finn.core.constant.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,21 +109,22 @@ public class Tools {
     }
 
     /**
-     * 生成10个长度随机字符串
+     * 生成length个长度随机字符串
      * @param length 长度
-     * @return str
+     * @return str 最小返回5个长度随机数
      */
     public static String getRandom(int length){
         String a = RandomUtil.randomString(LOW_LETTER, 1);
         String b = RandomUtil.randomString(CAPITAL, 1);
         String c = RandomUtil.randomString(NUM, 1);
         String d = RandomUtil.randomString(CHAR, 1);
-        boolean e = RandomUtil.randomBoolean();
-        if(e){
-            return a + b + c + d + RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4);
-        }else {
-            return RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4) + a + b + c + d;
-        }
+        String msg = a + b + c + d + RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4);
+        String [] str = msg.split("");
+        List<String> list = Arrays.asList(str);
+        Collections.shuffle(list); // 随机排序
+        StringBuilder stringBuilder = new StringBuilder(list.size());
+        list.forEach(stringBuilder::append);
+        return stringBuilder.toString();
     }
 
 
@@ -142,4 +146,5 @@ public class Tools {
         }
         return s;
     }
+
 }
