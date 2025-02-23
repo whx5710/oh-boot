@@ -7,8 +7,8 @@
         <if test="title != null and title != ''">and title like concat('%', #{title}, '%')</if>
         <if test="content != null and content != ''">and content like concat('%', #{content}, '%')</if>
         <if test="state != null and state != ''">and state = #{state}</if>
-        <if test="toId != null">and to_id = #{toId}</if>
-        <if test="fromId != null">and from_id = #{fromId}</if>
+        <if test="toId != null and toId != 0">and to_id = #{toId}</if>
+        <if test="fromId != null and fromId != 0">and from_id = #{fromId}</if>
         <if test="noState != null and noState != ''">and no_state != #{noState}</if>
         order by id desc
     </select>
@@ -32,9 +32,9 @@
             <if test="content != null and content != ''">content = #{content},</if>
             <if test="type != null and type != ''">type = #{type},</if>
             <if test="state != null and state != ''">state = #{state},</if>
-            <if test="fromId != null and fromId != ''">from_id = #{fromId},</if>
+            <if test="fromId != null and fromId != 0">from_id = #{fromId},</if>
             <if test="fromName != null and fromName != ''">from_name = #{fromName},</if>
-            <if test="toId != null and toId != ''">to_id = #{toId},</if>
+            <if test="toId != null and toId != 0">to_id = #{toId},</if>
             <if test="toName != null and toName != ''">to_name = #{toName},</if>
             <if test="dbStatus != null">db_status = #{dbStatus},</if>
             <if test="updater != null and updater != ''">updater = #{updater},</if>
