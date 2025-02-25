@@ -4,8 +4,6 @@ import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
-import java.util.Objects;
-
 /**
  * 机构管理
  * 
@@ -74,17 +72,5 @@ public class SysOrgEntity extends BaseEntity {
 
 	public void setNote(String note) {
 		this.note = note;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysOrgEntity that)) return false;
-		return Objects.equals(getParentId(), that.getParentId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getSort(), that.getSort()) && Objects.equals(getParentName(), that.getParentName());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getParentId(), getName(), getSort(), getParentName());
 	}
 }

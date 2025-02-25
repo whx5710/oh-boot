@@ -3,8 +3,6 @@ package com.finn.sys.base.query;
 import com.finn.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.Objects;
-
 /**
  * 操作日志查询
  *
@@ -57,15 +55,4 @@ public class SysLogOperateQuery extends Query {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysLogOperateQuery that)) return false;
-        return Objects.equals(getRealName(), that.getRealName()) && Objects.equals(getModule(), that.getModule()) && Objects.equals(getReqUri(), that.getReqUri()) && Objects.equals(getStatus(), that.getStatus());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getRealName(), getModule(), getReqUri(), getStatus());
-    }
 }

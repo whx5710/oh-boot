@@ -2,8 +2,6 @@ package com.finn.sys.base.entity;
 
 import com.finn.framework.entity.BaseEntity;
 
-import java.util.Objects;
-
 /**
  * 附件管理
  *
@@ -61,17 +59,5 @@ public class SysAttachmentEntity extends BaseEntity {
 
     public void setPlatform(String platform) {
         this.platform = platform;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysAttachmentEntity that)) return false;
-        return Objects.equals(getName(), that.getName()) && Objects.equals(getUrl(), that.getUrl()) && Objects.equals(getSize(), that.getSize()) && Objects.equals(getPlatform(), that.getPlatform());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getUrl(), getSize(), getPlatform());
     }
 }

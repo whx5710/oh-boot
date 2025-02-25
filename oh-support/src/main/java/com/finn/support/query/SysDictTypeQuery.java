@@ -3,8 +3,6 @@ package com.finn.support.query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.finn.framework.query.Query;
 
-import java.util.Objects;
-
 /**
  * 字典类型
  *
@@ -35,15 +33,4 @@ public class SysDictTypeQuery extends Query {
         this.dictName = dictName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysDictTypeQuery that)) return false;
-        return Objects.equals(getDictType(), that.getDictType()) && Objects.equals(getDictName(), that.getDictName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getDictType(), getDictName());
-    }
 }

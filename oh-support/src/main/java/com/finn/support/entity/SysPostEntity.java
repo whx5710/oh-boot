@@ -4,8 +4,6 @@ import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
-import java.util.Objects;
-
 /**
  * 岗位管理
  *
@@ -65,15 +63,4 @@ public class SysPostEntity extends BaseEntity {
 		this.status = status;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysPostEntity that)) return false;
-		return Objects.equals(getPostCode(), that.getPostCode()) && Objects.equals(getPostName(), that.getPostName()) && Objects.equals(getSort(), that.getSort()) && Objects.equals(getStatus(), that.getStatus());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getPostCode(), getPostName(), getSort(), getStatus());
-	}
 }

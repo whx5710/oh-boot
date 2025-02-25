@@ -2,8 +2,6 @@ package com.finn.support.entity;
 
 import com.finn.framework.entity.BaseEntity;
 
-import java.util.Objects;
-
 /**
  * 角色数据权限
  *
@@ -34,17 +32,5 @@ public class SysRoleDataScopeEntity extends BaseEntity {
 
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof SysRoleDataScopeEntity that)) return false;
-		return Objects.equals(getRoleId(), that.getRoleId()) && Objects.equals(getOrgId(), that.getOrgId());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getRoleId(), getOrgId());
 	}
 }

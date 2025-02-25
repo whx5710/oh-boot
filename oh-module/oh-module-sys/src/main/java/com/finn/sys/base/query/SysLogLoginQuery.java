@@ -3,8 +3,6 @@ package com.finn.sys.base.query;
 import com.finn.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.Objects;
-
 /**
  * 登录日志查询
  *
@@ -46,15 +44,4 @@ public class SysLogLoginQuery extends Query {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysLogLoginQuery that)) return false;
-        return Objects.equals(getUsername(), that.getUsername()) && Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getStatus(), that.getStatus());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUsername(), getAddress(), getStatus());
-    }
 }

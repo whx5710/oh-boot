@@ -3,8 +3,6 @@ package com.finn.support.query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.finn.framework.query.Query;
 
-import java.util.Objects;
-
 /**
  * 岗位管理
  *
@@ -46,15 +44,4 @@ public class SysPostQuery extends Query {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysPostQuery that)) return false;
-        return Objects.equals(getPostCode(), that.getPostCode()) && Objects.equals(getPostName(), that.getPostName()) && Objects.equals(getStatus(), that.getStatus());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getPostCode(), getPostName(), getStatus());
-    }
 }

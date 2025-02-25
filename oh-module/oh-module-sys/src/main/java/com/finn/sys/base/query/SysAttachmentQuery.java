@@ -3,8 +3,6 @@ package com.finn.sys.base.query;
 import com.finn.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.Objects;
-
 /**
  * 附件管理查询
  *
@@ -35,15 +33,4 @@ public class SysAttachmentQuery extends Query {
         this.platform = platform;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SysAttachmentQuery that)) return false;
-        return Objects.equals(getName(), that.getName()) && Objects.equals(getPlatform(), that.getPlatform());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getPlatform());
-    }
 }
