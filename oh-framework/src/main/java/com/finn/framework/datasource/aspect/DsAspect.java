@@ -50,8 +50,8 @@ public class DsAspect {
      */
     private Object proceed(ProceedingJoinPoint joinPoint, Ds ds) throws Throwable {
         String key = ds.value().trim();
-        // 支持动态参数（可配置）
-        if(key.startsWith("${")){
+        // 支持动态参数（可配置）如 ${spring.datasource.sys-data-source.sys-default:sysDb}
+        if(key.startsWith("${") && key.endsWith("}")){
             key = environment.resolvePlaceholders(key);
         }
         log.debug("切换数据源[{}]", key);

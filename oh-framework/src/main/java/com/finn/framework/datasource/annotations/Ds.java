@@ -12,5 +12,5 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 public @interface Ds {
-    String value() default "";
+    String value();
 }
