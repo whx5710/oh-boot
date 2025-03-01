@@ -1,7 +1,7 @@
 package com.finn.framework.datasource.service;
 
-import cn.hutool.core.util.ReflectUtil;
 import com.finn.core.exception.ServerException;
+import com.finn.core.utils.ReflectUtil;
 import com.finn.core.utils.Tools;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableId;
@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,7 +40,7 @@ public class ProviderService {
     public <T> String insert(T entity) {
         Class<?> clazz = entity.getClass();
         String tableName = getTableName(clazz);
-        List<Field> fields = getFields(clazz);
+        List<Field> fields = ReflectUtil.getFields(clazz);
         StringBuilder sbCol = new StringBuilder();
         StringBuilder sbValue = new StringBuilder();
         for (Field field : fields) {
@@ -75,7 +73,7 @@ public class ProviderService {
      */
     public <T> String updateById(T entity) {
         Class<?> clazz = entity.getClass();
-        List<Field> fields = getFields(clazz); // 属性列表
+        List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
         String tableName = getTableName(clazz); // 表名
         StringBuilder sb = new StringBuilder();
         boolean hasId = false;
@@ -89,8 +87,13 @@ public class ProviderService {
                         hasId = true;
                     }
                     // 不为空才更新
-                    if (ReflectUtil.getFieldValue(entity, field.getName()) != null) {
-                        sb.append(comma).append(annotation.value()).append(" = #{").append(field.getName()).append("}");
+                    try {
+                        Object object = ReflectUtil.getValue(entity, field.getName());
+                        if(object != null){
+                            sb.append(comma).append(annotation.value()).append(" = #{").append(field.getName()).append("}");
+                        }
+                    }catch (NoSuchFieldException e){
+                        log.warn("无{}属性！", field.getName());
                     }
                 }
             }else if(field.isAnnotationPresent(TableId.class)){
@@ -106,8 +109,13 @@ public class ProviderService {
                 if (field.getName().equals("id")) {
                     hasId = true;
                 }
-                if (ReflectUtil.getFieldValue(entity, field.getName()) != null) {
-                    sb.append(comma).append(Tools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
+                try {
+                    Object object = ReflectUtil.getValue(entity, field.getName());
+                    if(object != null){
+                        sb.append(comma).append(Tools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
+                    }
+                } catch (NoSuchFieldException e){
+                    log.warn("无{}属性！", field.getName());
                 }
             }
         }
@@ -135,7 +143,7 @@ public class ProviderService {
     public <T> String delete(T entity) {
         Class<?> clazz = entity.getClass();
         String tableName = getTableName(clazz); // 表名
-        List<Field> fields = getFields(clazz); // 属性列表
+        List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
         StringBuilder sbWhere = new StringBuilder();
         boolean hasId = false;
         boolean hasMultipleId = false;
@@ -167,19 +175,6 @@ public class ProviderService {
         sql.append("delete from ").append(tableName).append(sqlWhere);
         log.debug("生成删除SQL: {}", sql);
         return sql.toString();
-    }
-    /**
-     * 获取实体类属性
-     * @param clazz 类
-     * @return list
-     */
-    private List<Field> getFields(Class<?> clazz){
-        List<Field> fields = new ArrayList<>();
-        while (clazz != null){
-            fields.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
-            clazz = clazz.getSuperclass();
-        }
-        return fields;
     }
 
     /**

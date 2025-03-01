@@ -1,6 +1,6 @@
 package com.finn.framework.datasource.interceptor;
 
-import cn.hutool.core.util.ReflectUtil;
+import com.finn.core.utils.ReflectUtil;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import org.apache.ibatis.cache.CacheKey;
@@ -72,7 +72,7 @@ public class DataInnerInterceptor implements Interceptor {
 
     /**
      * 新增自动填充
-     * @param invocation
+     * @param invocation p
      */
     private void autoInsertFill(Invocation invocation) {
         UserDetail user = SecurityUser.getUser();
@@ -82,32 +82,53 @@ public class DataInnerInterceptor implements Interceptor {
         Object params = args[1];
         if (user != null && user.getId() != null) {
             // 创建人ID
-            if (ReflectUtil.hasField(params.getClass(), CREATOR) && ReflectUtil.getFieldValue(params, CREATOR) == null) {
-                ReflectUtil.setFieldValue(params, CREATOR, user.getId());
+            try {
+                Object object = ReflectUtil.getValue(params, CREATOR);
+                if(object == null){
+                    ReflectUtil.setValue(params, CREATOR, user.getId(), false);
+                }
+            }catch (NoSuchFieldException e){
+                log.warn("无{}属性！", CREATOR);
             }
             // 所属组织
-            if (ReflectUtil.hasField(params.getClass(), ORG_ID) && ReflectUtil.getFieldValue(params, ORG_ID) == null) {
-                ReflectUtil.setFieldValue(params, ORG_ID, user.getOrgId());
+            try {
+                ReflectUtil.setValue(params, ORG_ID, user.getOrgId(), false);
+            }catch (NoSuchFieldException e){
+                log.warn("无{}属性！", ORG_ID);
             }
             // 租户ID
-            if (ReflectUtil.hasField(params.getClass(), TENANT_ID) &&
-                    (ReflectUtil.getFieldValue(params, TENANT_ID) == null || ReflectUtil.getFieldValue(params, TENANT_ID).equals(""))) {
-                ReflectUtil.setFieldValue(params, TENANT_ID, user.getTenantId());
+            try {
+                Object object = ReflectUtil.getValue(params, TENANT_ID);
+                if(object == null || object.equals("")){
+                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), false);
+                }
+            }catch (NoSuchFieldException e){
+                log.warn("无{}属性！", TENANT_ID);
             }
         }
         // 创建时间
-        if (ReflectUtil.hasField(params.getClass(), CREATE_TIME) && ReflectUtil.getFieldValue(params, CREATE_TIME) == null) {
-            ReflectUtil.setFieldValue(params, CREATE_TIME, date);
+        try {
+            Object object = ReflectUtil.getValue(params, CREATE_TIME);
+            if(object == null){
+                ReflectUtil.setValue(params, CREATE_TIME, date, false);
+            }
+        }catch (NoSuchFieldException e){
+            log.warn("无{}属性！", CREATE_TIME);
         }
         // 有效标识
-        if (ReflectUtil.hasField(params.getClass(), DB_STATUS) && ReflectUtil.getFieldValue(params, DB_STATUS) == null) {
-            ReflectUtil.setFieldValue(params, DB_STATUS, 1);
+        try {
+            Object object = ReflectUtil.getValue(params, DB_STATUS);
+            if(object == null){
+                ReflectUtil.setValue(params, DB_STATUS, 1, false);
+            }
+        }catch (NoSuchFieldException e){
+            log.warn("无{}属性！", DB_STATUS);
         }
     }
 
     /**
      * 更新自动填充
-     * @param invocation
+     * @param invocation p
      */
     private void autoUpdateFill(Invocation invocation) {
         UserDetail user = SecurityUser.getUser();
@@ -116,23 +137,42 @@ public class DataInnerInterceptor implements Interceptor {
         Object[] args = invocation.getArgs();
         Object params = args[1];
         if (user != null && user.getId() != null) {
-            // 创建人ID
-            if (ReflectUtil.hasField(params.getClass(), UPDATER) && ReflectUtil.getFieldValue(params, UPDATER) == null) {
-                ReflectUtil.setFieldValue(params, UPDATER, user.getId());
+            // 更新人ID
+            try {
+                Object object = ReflectUtil.getValue(params, UPDATER);
+                if(object == null){
+                    ReflectUtil.setValue(params, UPDATER, user.getId(), false);
+                }
+            }catch (NoSuchFieldException e){
+                log.warn("无{}属性！", UPDATER);
             }
             // 租户ID
-            if (ReflectUtil.hasField(params.getClass(), TENANT_ID) &&
-                    (ReflectUtil.getFieldValue(params, TENANT_ID) == null || ReflectUtil.getFieldValue(params, TENANT_ID).equals(""))) {
-                ReflectUtil.setFieldValue(params, TENANT_ID, user.getTenantId());
+            try {
+                Object object = ReflectUtil.getValue(params, TENANT_ID);
+                if(object == null || object.equals("")){
+                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), false);
+                }
+            }catch (NoSuchFieldException e){
+                log.warn("无{}属性！", TENANT_ID);
             }
         }
         // 更新时间
-        if (ReflectUtil.hasField(params.getClass(), UPDATE_TIME) && ReflectUtil.getFieldValue(params, UPDATE_TIME) == null) {
-            ReflectUtil.setFieldValue(params, UPDATE_TIME, date);
+        try {
+            Object object = ReflectUtil.getValue(params, UPDATE_TIME);
+            if(object == null){
+                ReflectUtil.setValue(params, UPDATE_TIME, date, false);
+            }
+        }catch (NoSuchFieldException e){
+            log.warn("无{}属性！", UPDATE_TIME);
         }
         // 有效标识
-        if (ReflectUtil.hasField(params.getClass(), DB_STATUS) && ReflectUtil.getFieldValue(params, DB_STATUS) == null) {
-            ReflectUtil.setFieldValue(params, DB_STATUS, 1);
+        try {
+            Object object = ReflectUtil.getValue(params, DB_STATUS);
+            if(object == null){
+                ReflectUtil.setValue(params, DB_STATUS, 1, false);
+            }
+        }catch (NoSuchFieldException e){
+            log.warn("无{}属性！", DB_STATUS);
         }
     }
 
@@ -151,13 +191,22 @@ public class DataInnerInterceptor implements Interceptor {
                     sqlFilter = (String) hashMap.get(SQL_FILTER);
                 }
             }else{
-                if((ReflectUtil.hasField(params.getClass(), SQL_FILTER) && ReflectUtil.getFieldValue(params, SQL_FILTER) != null)){
-                    sqlFilter = (String) ReflectUtil.getFieldValue(params, SQL_FILTER);
+                try {
+                    Object object = ReflectUtil.getValue(params, SQL_FILTER);
+                    if(object != null){
+                        sqlFilter = (String) object;
+                    }
+                }catch (NoSuchFieldException e){
+                    log.warn("无{}属性！", SQL_FILTER);
                 }
             }
             if(sqlFilter != null){
                 BoundSql boundSql = (BoundSql) args[5];
-                ReflectUtil.setFieldValue(boundSql, "sql", getSelect(boundSql.getSql(), sqlFilter));
+                try {
+                    ReflectUtil.setValue(boundSql, "sql", getSelect(boundSql.getSql(), sqlFilter));
+                }catch (NoSuchFieldException e){
+                    log.warn("无{}属性！", "sql");
+                }
             }
         }
     }
