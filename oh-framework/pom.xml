@@ -15,8 +15,6 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <!-- hutool 工具包 -->
-        <hutool.version>5.8.35</hutool.version>
     </properties>
 
     <dependencies>
@@ -59,12 +57,6 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- hutool 相关包引入 xxs 关键字过滤 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-http</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 </project>

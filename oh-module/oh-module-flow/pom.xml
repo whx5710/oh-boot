@@ -32,6 +32,11 @@
             <artifactId>oh-support</artifactId>
             <version>1.0.0.20241210</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

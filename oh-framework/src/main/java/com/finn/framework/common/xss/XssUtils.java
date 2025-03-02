@@ -1,7 +1,7 @@
 package com.finn.framework.common.xss;
 
-import cn.hutool.http.HTMLFilter;
 import com.finn.core.utils.ReflectUtil;
+import com.finn.framework.common.xss.http.HTMLFilter;
 
 
 /**

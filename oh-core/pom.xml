@@ -17,8 +17,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <!-- 面向切面 -->
         <aspectj.version>1.9.22.1</aspectj.version>
-        <!-- hutool 工具包 -->
-        <hutool.version>5.8.25</hutool.version>
     </properties>
 
     <dependencies>
@@ -38,12 +36,6 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
             <version>6.1.0</version>
-        </dependency>
-        <!-- hutool 相关包引入 xxs 关键字过滤 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/cn.afterturn/easypoi-spring-boot-starter -->
         <dependency>
