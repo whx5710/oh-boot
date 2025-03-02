@@ -49,6 +49,8 @@ import java.util.concurrent.TimeUnit;
 public class DataMsgServiceImpl implements DataMsgService {
 
     private final Logger log = LoggerFactory.getLogger(DataMsgServiceImpl.class);
+    // ID
+    private final IdWorker idWorker = new IdWorker(1,1);
 
     private final RedisCache redisCache;
     private final DataMessageMapper dataMessageMapper;
@@ -194,7 +196,7 @@ public class DataMsgServiceImpl implements DataMsgService {
             if (!isAsync || openApiProperties.getType() == 1) { // 1直接保存 2使用MQ异步保存
                 return jobService.handle(msgEntity);
             }else{
-                msgEntity.setId(Tools.snowFlakeId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
+                msgEntity.setId(idWorker.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
                     CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(Constant.TOPIC_SUBMIT, msgEntity.toJson());
                     //执行成功回调

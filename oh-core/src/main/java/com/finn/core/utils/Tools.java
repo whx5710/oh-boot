@@ -1,8 +1,6 @@
 package com.finn.core.utils;
 
-import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.finn.core.constant.Constant;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,9 +31,6 @@ public class Tools {
 
     private static final Pattern humpPattern = Pattern.compile("[A-Z]");
 
-    // 参数1为终端ID，参数2为数据中心ID
-    static Snowflake snowflake = IdUtil.getSnowflake(1, 1);
-
     /**
      * Base64 编码
      * @param src 原字符串
@@ -61,14 +56,6 @@ public class Tools {
      */
     public static String generator() {
         return UUID.fastUUID().toString(true);
-    }
-
-    /**
-     * 生成雪花算法ID
-     * @return
-     */
-    public static long snowFlakeId() {
-        return snowflake.nextId();
     }
 
     /**

@@ -1,10 +1,9 @@
 package com.finn.flow.service.impl;
 
 import com.finn.core.entity.HashDto;
+import com.finn.core.utils.*;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
-import com.finn.core.utils.Tools;
-import com.finn.core.utils.JsonUtils;
 import com.finn.flow.convert.WorkOrderConvert;
 import com.finn.flow.entity.WorkOrderEntity;
 import com.finn.flow.mapper.WorkOrderMapper;
@@ -16,8 +15,6 @@ import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.WorkOrderVO;
 import com.finn.framework.entity.MetaEntity;
 import com.finn.core.exception.ServerException;
-import com.finn.core.utils.PageResult;
-import com.finn.core.utils.Result;
 import com.finn.framework.service.JobService;
 import com.finn.framework.utils.annotations.Idempotent;
 import com.finn.framework.utils.annotations.RequestKeyParam;
@@ -49,6 +46,8 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
     private final WorkOrderMapper workOrderMapper;
 
     private final RedisCache redisCache;
+
+    IdWorker idWorker = new IdWorker(1,1);
 
 
     public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,
@@ -128,7 +127,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
     public Result<List<TaskRecordVO>> handle(@RequestKeyParam MetaEntity data) throws ServerException {
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
         if(workOrderVO.getId() == null || workOrderVO.getId() == 0L){
-            workOrderVO.setId(Tools.snowFlakeId());
+            workOrderVO.setId(idWorker.nextId());
         }
         // 启动流程
         List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);

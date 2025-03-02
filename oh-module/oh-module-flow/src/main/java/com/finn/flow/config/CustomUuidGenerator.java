@@ -1,6 +1,6 @@
 package com.finn.flow.config;
 
-import com.finn.core.utils.Tools;
+import com.finn.core.utils.IdWorker;
 import org.camunda.bpm.engine.impl.cfg.IdGenerator;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +19,7 @@ public class CustomUuidGenerator implements IdGenerator {
     public CustomUuidGenerator(RedisCache redisCache) {
         this.redisCache = redisCache;
     }*/
+    IdWorker idWorker = new IdWorker();
 
     @Override
     public String getNextId() {
@@ -29,6 +30,6 @@ public class CustomUuidGenerator implements IdGenerator {
         // return redisCache.getDayIncrementCode("", "oh.flow.index", 10);
 
         // 雪花算法ID
-        return String.valueOf(Tools.snowFlakeId());
+        return String.valueOf(idWorker.nextId());
     }
 }
