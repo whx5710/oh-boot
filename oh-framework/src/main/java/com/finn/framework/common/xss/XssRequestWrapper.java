@@ -1,6 +1,5 @@
 package com.finn.framework.common.xss;
 
-import cn.hutool.core.io.IoUtil;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +7,9 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         }
 
         // 读取内容，进行xss过滤
-        String content = IoUtil.readUtf8(super.getInputStream());
+        String content = inputStreamToStr(super.getInputStream());
         content = filterXss(content);
 
         // 返回新的 ServletInputStream
@@ -110,6 +111,22 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         content = Pattern.compile("<").matcher(content).replaceAll("&lt;");
         content = Pattern.compile(">").matcher(content).replaceAll("&gt;");
         return XssUtils.filter(content);
+    }
+
+    /**
+     * 输入流转字符串
+     * @param inputStream is
+     * @return str
+     * @throws IOException e
+     */
+    private String inputStreamToStr(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString(StandardCharsets.UTF_8);
     }
 
 }

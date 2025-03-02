@@ -1,6 +1,5 @@
 package com.finn.framework.datasource.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.finn.core.constant.Constant;
 import com.finn.framework.datasource.service.BaseService;
 import com.finn.framework.security.user.SecurityUser;
@@ -59,8 +58,14 @@ public class BaseServiceImpl implements BaseService {
             }
             sqlFilter.append(tableAlias).append(orgIdAlias);
 
-            sqlFilter.append(" in(").append(StrUtil.join(",", dataScopeList)).append(")");
-
+            StringBuilder result = new StringBuilder();
+            for(Long dsl: dataScopeList){
+                result.append(dsl).append(",");
+            }
+            if (!result.isEmpty()) {
+                result.deleteCharAt(result.length() - 1); // 移除最后一个多余的逗号
+            }
+            sqlFilter.append(" in(").append(result).append(")");
             sqlFilter.append(" or ");
         }
 
