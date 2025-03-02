@@ -1,15 +1,10 @@
 package com.finn.core.utils;
 
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.RandomUtil;
 import com.finn.core.constant.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +50,8 @@ public class Tools {
      * 生成随机字符串UUID
      */
     public static String generator() {
-        return UUID.fastUUID().toString(true);
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replaceAll("-","");
     }
 
     /**
@@ -101,11 +97,26 @@ public class Tools {
      * @return str 最小返回5个长度随机数
      */
     public static String getRandom(int length){
-        String a = RandomUtil.randomString(LOW_LETTER, 1);
-        String b = RandomUtil.randomString(CAPITAL, 1);
-        String c = RandomUtil.randomString(NUM, 1);
-        String d = RandomUtil.randomString(CHAR, 1);
-        String msg = a + b + c + d + RandomUtil.randomString(LOW_LETTER + CAPITAL + NUM + CHAR, length - 4);
+        StringBuffer sb = new StringBuffer();
+        Random random = new Random();
+        int number = random.nextInt(LOW_LETTER.length());
+        sb.append(LOW_LETTER.charAt(number));
+
+        number = random.nextInt(CAPITAL.length());
+        sb.append(CAPITAL.charAt(number));
+
+        number = random.nextInt(NUM.length());
+        sb.append(NUM.charAt(number));
+
+        number = random.nextInt(CHAR.length());
+        sb.append(CHAR.charAt(number));
+
+        int l = length - 4;
+        for(int i = 0; i < l; i++){
+            number = random.nextInt((LOW_LETTER + CAPITAL + NUM + CHAR).length());
+            sb.append((LOW_LETTER + CAPITAL + NUM + CHAR).charAt(number));
+        }
+        String msg = sb.toString();
         String [] str = msg.split("");
         List<String> list = Arrays.asList(str);
         Collections.shuffle(list); // 随机排序
@@ -133,5 +144,4 @@ public class Tools {
         }
         return s;
     }
-
 }

@@ -1,7 +1,7 @@
 package com.finn.framework.common.xss;
 
-import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.http.HTMLFilter;
+import com.finn.core.utils.ReflectUtil;
 
 
 /**
@@ -14,7 +14,12 @@ public class XssUtils {
     private static final ThreadLocal<HTMLFilter> HTML_FILTER = ThreadLocal.withInitial(() -> {
         HTMLFilter htmlFilter = new HTMLFilter();
         // 避免 " 被转成 &quot; 字符
-        ReflectUtil.setFieldValue(htmlFilter, "encodeQuotes", false);
+        try {
+            ReflectUtil.setValue(htmlFilter, "encodeQuotes", false);
+        }catch (NoSuchFieldException e){
+            //e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
         return htmlFilter;
     });
 
