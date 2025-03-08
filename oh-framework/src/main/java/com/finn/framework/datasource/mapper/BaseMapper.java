@@ -1,6 +1,8 @@
 package com.finn.framework.datasource.mapper;
 
-import com.finn.framework.datasource.service.ProviderService;
+import com.finn.framework.datasource.service.ModifyProviderService;
+import com.finn.framework.datasource.service.SelectProviderService;
+import com.finn.framework.query.Query;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public interface BaseMapper<T>{
      * @return int
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
-    @InsertProvider(method = ProviderService.INSERT, type = ProviderService.class)
+    @InsertProvider(method = ModifyProviderService.INSERT, type = ModifyProviderService.class)
     int insert(T entity);
 
     /**
@@ -27,7 +29,7 @@ public interface BaseMapper<T>{
      * @param entity 实体类
      * @return int
      */
-    @UpdateProvider(method = ProviderService.UPDATE, type = ProviderService.class)
+    @UpdateProvider(method = ModifyProviderService.UPDATE, type = ModifyProviderService.class)
     int updateById(T entity);
 
     /**
@@ -35,9 +37,23 @@ public interface BaseMapper<T>{
      * @param entity 实体类
      * @return boolean
      */
-    @DeleteProvider(method = ProviderService.DELETE, type = ProviderService.class)
+    @DeleteProvider(method = ModifyProviderService.DELETE, type = ModifyProviderService.class)
     boolean delete(T entity);
 
-    @SelectProvider(method = ProviderService.SELECT, type = ProviderService.class)
+    /**
+     * 查询列表
+     * @param entry 实体类
+     * @return list
+     */
+    @SelectProvider(method = SelectProviderService.SELECT_LIST, type = SelectProviderService.class)
     List<T> selectList(T entry);
+
+    /**
+     * 分页查询
+     * @param query 参数
+     * @param clazz 类别
+     * @return list
+     */
+    @SelectProvider(method = SelectProviderService.SELECT_PAGE, type = SelectProviderService.class)
+    List<T> selectPage(@Param("query") Query query, @Param("clazz")Class<T> clazz);
 }
