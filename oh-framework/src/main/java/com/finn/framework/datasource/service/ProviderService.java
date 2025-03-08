@@ -24,6 +24,7 @@ public class ProviderService {
     public static final String INSERT = "insert";
     public static final String UPDATE = "updateById";
     public static final String DELETE = "delete";
+    public static final String SELECT = "select";
 
     private final Logger log = LoggerFactory.getLogger(ProviderService.class);
 
@@ -175,6 +176,49 @@ public class ProviderService {
         sql.append("delete from ").append(tableName).append(sqlWhere);
         log.debug("生成删除SQL: {}", sql);
         return sql.toString();
+    }
+
+    /**
+     * 通用查询
+     * @param entity 实体类
+     * @return sql
+     * @param <T> t
+     */
+    public <T> String select(T entity){
+        Class<?> clazz = entity.getClass();
+        String tableName = getTableName(clazz);
+        List<Field> fields = ReflectUtil.getFields(clazz);
+        StringBuilder where = new StringBuilder();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
+                TableField annotation = field.getAnnotation(TableField.class);
+                if (annotation.exists()) { // 剔除非数据库字段
+                    try {
+                        Object object = ReflectUtil.getValue(entity, field.getName());
+                        if(object != null){
+                            where.append(and).append(annotation.value()).append(" = ").append("#{").append(field.getName()).append("}");
+                        }
+                    } catch (NoSuchFieldException e){
+                        log.warn("无{}属性！", field.getName());
+                    }
+                }
+            } else {
+                // 无注解的字段默认成与数据库字段一致
+                try {
+                    Object object = ReflectUtil.getValue(entity, field.getName());
+                    if(object != null){
+                        where.append(and).append(field.getName()).append(" = ").append("#{").append(field.getName()).append("}");
+                    }
+                } catch (NoSuchFieldException e){
+                    log.warn("无{}属性！", field.getName());
+                }
+            }
+        }
+        // 拼接
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from ").append(tableName).append(" where ").append(where.substring(and.length()));
+        log.debug("生成查询SQL: {}", sql);
+        return  sql.toString();
     }
 
     /**

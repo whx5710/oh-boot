@@ -1,10 +1,9 @@
 package com.finn.framework.datasource.mapper;
 
 import com.finn.framework.datasource.service.ProviderService;
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * 基础Mapper，集合公共接口
@@ -38,4 +37,7 @@ public interface BaseMapper<T>{
      */
     @DeleteProvider(method = ProviderService.DELETE, type = ProviderService.class)
     boolean delete(T entity);
+
+    @SelectProvider(method = ProviderService.SELECT, type = ProviderService.class)
+    List<T> selectList(T entry);
 }
