@@ -2,7 +2,7 @@ package com.finn.support.mapper;
 
 import com.finn.core.constant.Constant;
 import com.finn.framework.datasource.annotations.Ds;
-import com.finn.framework.datasource.service.ProviderService;
+import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.support.entity.SysOrgEntity;
 import com.finn.support.query.SysOrgQuery;
 import org.apache.ibatis.annotations.*;
@@ -28,10 +28,10 @@ public interface SysOrgMapper {
     List<SysOrgEntity> getIdAndPidList();
 
     // 保存机构信息
-    @InsertProvider(method = ProviderService.INSERT, type = ProviderService.class)
+    @InsertProvider(method = ModifyProviderService.INSERT, type = ModifyProviderService.class)
     int insertOrg(SysOrgEntity sysOrgEntity);
 
-    @UpdateProvider(method = ProviderService.UPDATE, type = ProviderService.class)
+    @UpdateProvider(method = ModifyProviderService.UPDATE, type = ModifyProviderService.class)
     boolean updateById(SysOrgEntity sysOrgEntity);
 
     @Select("select count(1) from sys_org where db_status != 0 and parent_id = #{parentId}")

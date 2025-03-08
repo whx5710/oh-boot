@@ -2,7 +2,7 @@ package com.finn.support.mapper;
 
 import com.finn.core.constant.Constant;
 import com.finn.framework.datasource.annotations.Ds;
-import com.finn.framework.datasource.service.ProviderService;
+import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.support.entity.SysRoleEntity;
 import com.finn.support.query.SysRoleQuery;
 import org.apache.ibatis.annotations.*;
@@ -21,7 +21,7 @@ public interface SysRoleMapper {
 
 
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
-    @InsertProvider(method = ProviderService.INSERT,type = ProviderService.class) // 动态拼接SQL
+    @InsertProvider(method = ModifyProviderService.INSERT,type = ModifyProviderService.class) // 动态拼接SQL
     int insertRole(SysRoleEntity sysRoleEntity);
 
     /**
@@ -33,7 +33,7 @@ public interface SysRoleMapper {
     List<SysRoleEntity> getList(SysRoleQuery sysRoleQuery);
 
     // 动态拼接SQL
-    @UpdateProvider(method = ProviderService.UPDATE, type = ProviderService.class)
+    @UpdateProvider(method = ModifyProviderService.UPDATE, type = ModifyProviderService.class)
     boolean updateById(SysRoleEntity sysRoleEntity);
 
     @Select("select * from sys_role where id = #{id}")

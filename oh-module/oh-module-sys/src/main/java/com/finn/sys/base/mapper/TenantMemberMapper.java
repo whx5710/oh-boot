@@ -1,6 +1,6 @@
 package com.finn.sys.base.mapper;
 
-import com.finn.framework.datasource.service.ProviderService;
+import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.sys.base.entity.TenantMemberEntity;
 import com.finn.sys.base.query.TenantMemberQuery;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -22,10 +22,10 @@ public interface TenantMemberMapper {
     List<TenantMemberEntity> tenantList(TenantMemberQuery query);
 
 
-    @InsertProvider(method = ProviderService.INSERT, type = ProviderService.class)
+    @InsertProvider(method = ModifyProviderService.INSERT, type = ModifyProviderService.class)
     void save(TenantMemberEntity entity);
 
-    @UpdateProvider(method = ProviderService.UPDATE, type = ProviderService.class)
+    @UpdateProvider(method = ModifyProviderService.UPDATE, type = ModifyProviderService.class)
     void update(TenantMemberEntity entity);
 
     TenantMemberEntity getById(@Param("id")Long id);
