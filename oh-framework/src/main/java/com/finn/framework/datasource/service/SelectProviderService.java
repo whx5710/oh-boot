@@ -6,7 +6,6 @@ import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -38,10 +37,6 @@ public class SelectProviderService extends ProviderService{
         String tableName;
         String orderBy = null;
         StringBuilder whereSb = new StringBuilder();
-        // 当前页码
-        Integer pageNum = 1;
-        //每页记录数
-        Integer pageSize = 10;
         if(params.containsKey("clazz") && params.get("clazz") instanceof Class<?> clazz){
             tableName = getTableName(clazz);
             entityFields = ReflectUtil.getFields(clazz);
@@ -50,10 +45,6 @@ public class SelectProviderService extends ProviderService{
         }
         if(params.containsKey(queryKey) && params.get(queryKey) instanceof Query query){
             orderBy = query.getOrderBy();
-            pageNum = ObjectUtils.isEmpty(query.getPageNum())? pageNum:query.getPageNum();
-            pageSize = ObjectUtils.isEmpty(query.getPageSize())? pageSize:query.getPageSize();
-            query.setPageNum(pageNum);
-            query.setPageSize(pageSize);
             // 查询参数属性
             List<Field> queryFields = ReflectUtil.getFields(query.getClass());
             for(Field enField : entityFields){
