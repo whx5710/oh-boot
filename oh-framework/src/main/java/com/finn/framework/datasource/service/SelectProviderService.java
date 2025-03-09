@@ -34,15 +34,14 @@ public class SelectProviderService extends ProviderService{
      * @return sql
      */
     public String selectPage(Map<String, Object> params){
-        // 当前页码
-        Integer pageNum = 1;
-        //每页记录数
-        Integer pageSize = 10;
         List<Field> entityFields = null;
         String tableName;
         String orderBy = null;
         StringBuilder whereSb = new StringBuilder();
-
+        // 当前页码
+        Integer pageNum = 1;
+        //每页记录数
+        Integer pageSize = 10;
         if(params.containsKey("clazz") && params.get("clazz") instanceof Class<?> clazz){
             tableName = getTableName(clazz);
             entityFields = ReflectUtil.getFields(clazz);
@@ -50,9 +49,11 @@ public class SelectProviderService extends ProviderService{
             throw new ServerException("未指定实体类，不能进行映射");
         }
         if(params.containsKey(queryKey) && params.get(queryKey) instanceof Query query){
+            orderBy = query.getOrderBy();
             pageNum = ObjectUtils.isEmpty(query.getPageNum())? pageNum:query.getPageNum();
             pageSize = ObjectUtils.isEmpty(query.getPageSize())? pageSize:query.getPageSize();
-            orderBy = query.getOrderBy();
+            query.setPageNum(pageNum);
+            query.setPageSize(pageSize);
             // 查询参数属性
             List<Field> queryFields = ReflectUtil.getFields(query.getClass());
             for(Field enField : entityFields){
@@ -83,14 +84,12 @@ public class SelectProviderService extends ProviderService{
             sql.append(where).append(whereSb.substring(and.length()));
         }
         // 排序
-        if(orderBy != null){
+        if(orderBy != null && !orderBy.isEmpty()){
             orderBy = orderBy.trim();
             if(!orderBy.isEmpty()){
                 sql.append(" order by ").append(orderBy);
             }
         }
-        // 分页
-        sql.append(" limit ").append((pageNum - 1) * pageSize).append(comma).append(pageSize);
         log.debug("生成分页查询SQL: {}", sql);
         return sql.toString();
     }
