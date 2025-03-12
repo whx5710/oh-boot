@@ -80,6 +80,27 @@ public class ReflectUtil {
     }
 
     /**
+     * 获取 Field
+     * @param clazz 对象
+     * @param fieldName 属性名
+     * @return Field
+     * @throws NoSuchFieldException 异常
+     */
+    public static Field getFieldByClass(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        List<Field> list = getFields(clazz);
+        if(!list.isEmpty()){
+            for(Field field: list){
+                if(field.getName().equals(fieldName)){
+                    return field;
+                }
+            }
+        }else{
+            throw new NoSuchFieldException();
+        }
+        return clazz.getDeclaredField(fieldName);
+    }
+
+    /**
      * 获取所有 Field
      * @param clazz 类
      * @return list
