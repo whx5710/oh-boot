@@ -1,9 +1,11 @@
 package com.finn.framework.datasource.service;
 
+import com.finn.core.entity.Parameter;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.query.Query;
+import com.finn.framework.utils.ParameterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +15,7 @@ import java.util.Map;
 
 /**
  * 通用provider,拼接增删查改，通过 @SelectProvider注解操作，减少sql编写<br/>
- * 单表查询      selectList selectPage <br/>
+ * 单表查询      selectList selectPage selectPageByParam <br/>
  * 注意：如果对查询性能有要求，不建议使用
  * @author 王小费 whx5710@qq.com
  */
@@ -22,6 +24,8 @@ public class SelectProviderService extends ProviderService{
     public static final String SELECT_LIST = "selectList";
 
     public static final String SELECT_PAGE = "selectPage";
+
+    public static final String SELECT_PARAM_PAGE = "selectPageByParam";
 
     private static final String queryKey = "query";
 
@@ -126,5 +130,32 @@ public class SelectProviderService extends ProviderService{
         sql.append("select * from ").append(tableName).append(where).append(whereSb.substring(and.length()));
         log.debug("生成查询SQL: {}", sql);
         return  sql.toString();
+    }
+
+
+    /**
+     * 通用单表查询
+     * @param param 查询参数
+     * @return str
+     * @param <T> t
+     */
+    public <T> String selectPageByParam(ParameterBuilder param){
+        Class<T> clazz = param.getClazz();
+        String tableName = getTableName(clazz);
+        List<Field> fields = ReflectUtil.getFields(clazz);
+        String orderBy = param.getOrderBy();
+        StringBuilder whereSb = new StringBuilder();
+        if(param.list() != null && !param.list().isEmpty()){
+            List<Parameter> list = param.list();
+            for(Parameter item: list){
+
+            }
+        }
+
+        System.out.println(fields);
+        System.out.println(clazz.getName());
+        List<Parameter> list = param.list();
+        System.out.println(list);
+        return "";
     }
 }

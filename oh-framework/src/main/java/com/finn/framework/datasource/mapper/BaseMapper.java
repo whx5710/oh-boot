@@ -4,6 +4,7 @@ import com.finn.framework.datasource.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.framework.datasource.service.SelectProviderService;
 import com.finn.framework.query.Query;
+import com.finn.framework.utils.ParameterBuilder;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -59,4 +60,8 @@ public interface BaseMapper<T>{
     @Pages
     @SelectProvider(method = SelectProviderService.SELECT_PAGE, type = SelectProviderService.class)
     Page<T> selectPage(@Param("query") Query query, @Param("clazz")Class<T> clazz);
+
+    @Pages
+    @SelectProvider(method = SelectProviderService.SELECT_PARAM_PAGE, type = SelectProviderService.class)
+    Page<T> selectPageByParam(ParameterBuilder<T> param);
 }
