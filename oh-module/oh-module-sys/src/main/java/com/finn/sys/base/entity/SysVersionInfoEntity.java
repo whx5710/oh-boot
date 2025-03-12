@@ -2,6 +2,8 @@ package com.finn.sys.base.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
+import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,11 +15,13 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-09-16
  */
+@TableName("sys_version_info")
 public class SysVersionInfoEntity extends BaseEntity {
 
 	/**
 	* 版本号
 	*/
+	@TableField("version_num")
 	private String versionNum;
 
 	/**

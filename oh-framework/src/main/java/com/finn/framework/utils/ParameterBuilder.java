@@ -12,6 +12,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 参数构建类
+ * @author 王小费
+ * @since 2025-03-12
+ */
 public class ParameterBuilder<T> extends Query {
 
     public static final String EQ = "eq"; // 等于
@@ -19,7 +24,7 @@ public class ParameterBuilder<T> extends Query {
     public static final String LIKE = "like"; // 模糊查询
     public static final String IN = "in"; // 模糊查询
 
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
 
     Class<T> clazz;
 
@@ -32,7 +37,7 @@ public class ParameterBuilder<T> extends Query {
     }
 
     public static <T> ParameterBuilder<T> of(Class<T> clazz) {
-        ParameterBuilder parameterBuilder = new ParameterBuilder();
+        ParameterBuilder<T> parameterBuilder = new ParameterBuilder<>();
         parameterBuilder.setClazz(clazz);
         return parameterBuilder;
     }
@@ -44,7 +49,7 @@ public class ParameterBuilder<T> extends Query {
      * @return
      */
     public ParameterBuilder<T> eq(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getMethodName(function);
+        String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, EQ, value, getColName(fieldName)));
         return this;
     }
@@ -56,7 +61,7 @@ public class ParameterBuilder<T> extends Query {
      * @return
      */
     public ParameterBuilder<T> ne(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getMethodName(function);
+        String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, NE, value, getColName(fieldName)));
         return this;
     }
@@ -68,7 +73,7 @@ public class ParameterBuilder<T> extends Query {
      * @return
      */
     public ParameterBuilder<T> like(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getMethodName(function);
+        String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LIKE, value, getColName(fieldName)));
         return this;
     }

@@ -139,23 +139,42 @@ public class SelectProviderService extends ProviderService{
      * @return str
      * @param <T> t
      */
-    public <T> String selectPageByParam(ParameterBuilder param){
+    public <T> String selectPageByParam(ParameterBuilder<T> param){
         Class<T> clazz = param.getClazz();
         String tableName = getTableName(clazz);
-        List<Field> fields = ReflectUtil.getFields(clazz);
         String orderBy = param.getOrderBy();
         StringBuilder whereSb = new StringBuilder();
         if(param.list() != null && !param.list().isEmpty()){
             List<Parameter> list = param.list();
             for(Parameter item: list){
-
+                switch (item.getExpression()) {
+                    case ParameterBuilder.EQ ->
+                            whereSb.append(and).append(item.getColName()).append(" = #{").append(item.getField()).append("}");
+                    case ParameterBuilder.NE ->
+                            whereSb.append(and).append(item.getColName()).append(" != #{").append(item.getField()).append("}");
+                    case ParameterBuilder.LIKE ->
+                            whereSb.append(and).append(item.getColName()).append(" like '%#{").append(item.getField()).append("}%");
+                    case ParameterBuilder.IN ->
+                            whereSb.append(and).append(item.getColName()).append(" in (#{").append(item.getField()).append("})");
+                    default -> System.out.println(item);
+                }
             }
         }
-
-        System.out.println(fields);
-        System.out.println(clazz.getName());
-        List<Parameter> list = param.list();
-        System.out.println(list);
-        return "";
+        // 拼接
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from ").append(tableName);
+        // where 条件
+        if(!whereSb.isEmpty()){
+            sql.append(where).append(whereSb.substring(and.length()));
+        }
+        // 排序
+        if(orderBy != null && !orderBy.isEmpty()){
+            orderBy = orderBy.trim();
+            if(!orderBy.isEmpty()){
+                sql.append(" order by ").append(orderBy);
+            }
+        }
+        log.debug("生成分页SQL: {}", sql);
+        return sql.toString();
     }
 }
