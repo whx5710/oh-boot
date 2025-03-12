@@ -1,6 +1,6 @@
 package com.finn.support.vo;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.idev.excel.annotation.ExcelProperty;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,37 +21,37 @@ public class SysUserExcelVO implements Serializable {
      */
     private Long id;
 
-    @Excel(name = "用户名", orderNum = "1")
+    @ExcelProperty(value = "用户名", order = 1)
     private String username;
 
-    @Excel(name = "姓名", orderNum = "2")
+    @ExcelProperty(value = "姓名", order = 2)
     private String realName;
 
     private Integer gender;
 
-    @Excel(name = "性别", orderNum = "3")
+    @ExcelProperty(value = "性别", order = 3)
     private String genderLabel;
 
-    @Excel(name = "邮箱", orderNum = "4")
+    @ExcelProperty(value = "邮箱", order = 4)
     private String email;
 
-    @Excel(name = "手机号", orderNum = "5")
+    @ExcelProperty(value = "手机号", order = 5)
     private String mobile;
 
-    @Excel(name = "机构ID", orderNum = "6")
+    @ExcelProperty(value = "机构ID", order = 6)
     private Long orgId;
 
     private Integer status;
 
-    @Excel(name = "状态", orderNum = "7")
+    @ExcelProperty(value = "状态", order = 7)
     private String statusLabel;
 
     private Integer superAdmin;
 
-    @Excel(name = "超级管理员", orderNum = "8")
+    @ExcelProperty(value = "超级管理员", order = 8)
     private String superAdminLabel;
 
-    @Excel(name = "创建时间", orderNum = "9", exportFormat = "yyyy年MM月dd日 HH时mm分ss秒", width = 20)
+    @ExcelProperty(value = "创建时间", order = 9)
     private LocalDateTime createTime;
 
     public Long getId() {

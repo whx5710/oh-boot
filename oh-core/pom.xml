@@ -37,11 +37,16 @@
             <scope>provided</scope>
             <version>6.1.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/cn.afterturn/easypoi-spring-boot-starter -->
+        <!-- hutool 工具 -->
         <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-spring-boot-starter</artifactId>
-            <version>4.5.0</version>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/cn.idev.excel/fastexcel -->
+        <dependency>
+            <groupId>cn.idev.excel</groupId>
+            <artifactId>fastexcel</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 </project>

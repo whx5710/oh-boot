@@ -1,7 +1,5 @@
 package com.finn.sys.base.service.impl;
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
-import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.finn.core.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,12 +11,9 @@ import com.finn.sys.base.service.SysLogLoginService;
 import com.finn.sys.base.vo.AnalysisVO;
 import com.finn.sys.base.vo.SysLogLoginVO;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,11 +62,7 @@ public class SysLogLoginServiceImpl implements SysLogLoginService {
     public void export() {
         List<SysLogLoginEntity> list = sysLogLoginMapper.getList(new SysLogLoginQuery());
         List<SysLogLoginVO> sysLogLoginVOS = SysLogLoginConvert.INSTANCE.convertList(list);
-        // 写到浏览器打开
-        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("登录日志","日志"), SysLogLoginVO.class, sysLogLoginVOS);
-        HttpServletResponse response = HttpContextUtils.getHttpServletResponse();
-        AssertUtils.isNull(response, "接口响应");
-        ExcelUtils.downLoadExcel("登录日志" + DateUtils.format(new Date()), response, workbook);
+        ExcelUtils.excelExport(SysLogLoginVO.class, "登录日志", "日志", sysLogLoginVOS);
     }
 
     /**

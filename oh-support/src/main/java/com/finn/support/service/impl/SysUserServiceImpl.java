@@ -1,8 +1,5 @@
 package com.finn.support.service.impl;
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
-import cn.afterturn.easypoi.excel.entity.ExportParams;
-import cn.hutool.core.util.StrUtil;
 import com.finn.core.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,8 +22,6 @@ import com.finn.support.service.SysUserRoleService;
 import com.finn.core.exception.ServerException;
 import com.finn.support.entity.SysUserEntity;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -159,7 +154,7 @@ public class SysUserServiceImpl  implements SysUserService {
     @Override
     public void update(SysUserVO vo) {
         // 如果密码不为空，则进行加密处理
-        if (StrUtil.isBlank(vo.getPassword())) {
+        if (vo.getPassword() == null || vo.getPassword().isEmpty()) {
             vo.setPassword(null);
         } else {
             // 密码验证
@@ -246,8 +241,8 @@ public class SysUserServiceImpl  implements SysUserService {
 
     /**
      * 根据用户ID获取用户
-     * @param userId
-     * @return
+     * @param userId 用户ID
+     * @return e
      */
     @Override
     public SysUserEntity getUser(Long userId) {
@@ -305,11 +300,7 @@ public class SysUserServiceImpl  implements SysUserService {
     public void export() {
         List<SysUserEntity> list = sysUserMapper.getList(new SysUserQuery());
         List<SysUserExcelVO> userExcelVOS = SysUserConvert.INSTANCE.convert2List(list);
-        // 写到浏览器打开
-        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("用户信息表","系统用户"), SysUserExcelVO .class, userExcelVOS);
-        HttpServletResponse response = HttpContextUtils.getHttpServletResponse();
-        AssertUtils.isNull(response, "接口响应");
-        ExcelUtils.downLoadExcel("用户信息" + DateUtils.format(new Date()), response, workbook);
+        ExcelUtils.excelExport(SysUserExcelVO.class, "用户信息", "用户信息", userExcelVOS);
     }
 
     /**
