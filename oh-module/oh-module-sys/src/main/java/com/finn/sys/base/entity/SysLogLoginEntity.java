@@ -1,5 +1,6 @@
 package com.finn.sys.base.entity;
 
+import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class SysLogLoginEntity {
     /**
      * User Agent
      */
+    @TableField("user_agent")
     private String userAgent;
 
     /**
@@ -47,11 +49,13 @@ public class SysLogLoginEntity {
      */
     private Integer operation;
     // 租户ID
+    @TableField("tenant_id")
     private String tenantId;
 
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private LocalDateTime createTime;
 
     public Long getId() {
