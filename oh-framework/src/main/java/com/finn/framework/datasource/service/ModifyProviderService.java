@@ -2,9 +2,9 @@ package com.finn.framework.datasource.service;
 
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
-import com.finn.core.utils.Tools;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableId;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,29 +33,22 @@ public class ModifyProviderService extends ProviderService{
      * @param <T> t
      */
     public <T> String insert(T entity) {
+        SQL sql = new SQL();
         Class<?> clazz = entity.getClass();
         String tableName = getTableName(clazz);
         List<Field> fields = ReflectUtil.getFields(clazz);
-        StringBuilder sbCol = new StringBuilder();
-        StringBuilder sbValue = new StringBuilder();
+        sql.INSERT_INTO(tableName);
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
-                    sbCol.append(comma).append(annotation.value());
-                    sbValue.append(comma).append("#{").append(field.getName()).append("}");
+                    sql.VALUES(annotation.value(), "#{" + field.getName() + "}");
                 }
             } else {
                 // 无注解的字段默认成与数据库字段一致
-                sbCol.append(comma).append(Tools.humpToLine(field.getName()));
-                sbValue.append(comma).append("#{").append(field.getName()).append("}");
+                sql.VALUES(field.getName(), "#{" + field.getName() + "}");
             }
         }
-        // 拼接
-        String colStr = sbCol.substring(comma.length());
-        String valueStr = sbValue.substring(comma.length());
-        StringBuilder sql = new StringBuilder();
-        sql.append("insert into ").append(tableName).append("(").append(colStr).append(") values (").append(valueStr).append(")");
         log.debug("生成插入SQL: {}", sql);
         return  sql.toString();
     }
@@ -70,10 +63,10 @@ public class ModifyProviderService extends ProviderService{
         Class<?> clazz = entity.getClass();
         List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
         String tableName = getTableName(clazz); // 表名
-        StringBuilder sb = new StringBuilder();
         boolean hasId = false;
         boolean hasMultipleId = false;
-        StringBuilder sbWhere = new StringBuilder();
+        SQL sql = new SQL();
+        sql.UPDATE(tableName);
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
@@ -85,7 +78,7 @@ public class ModifyProviderService extends ProviderService{
                     try {
                         Object object = ReflectUtil.getValue(entity, field.getName());
                         if(object != null){
-                            sb.append(comma).append(annotation.value()).append(" = #{").append(field.getName()).append("}");
+                            sql.SET(annotation.value() + " = #{" + field.getName() + "}");
                         }
                     }catch (NoSuchFieldException e){
                         log.warn("无{}属性！", field.getName());
@@ -94,9 +87,9 @@ public class ModifyProviderService extends ProviderService{
             }else if(field.isAnnotationPresent(TableId.class)){
                 TableId tableId = field.getAnnotation(TableId.class);
                 if(tableId.value() != null && !tableId.value().isEmpty()){
-                    sbWhere.append(and).append(tableId.value()).append(" = #{").append(field.getName()).append("}");
+                    sql.WHERE(tableId.value() + " = #{" + field.getName() + "}");
                 }else{
-                    sbWhere.append(and).append(field.getName()).append(" = #{").append(field.getName()).append("}");
+                    sql.WHERE(field.getName() + " = #{" + field.getName() + "}");
                 }
                 hasMultipleId = true;
             } else {
@@ -107,24 +100,20 @@ public class ModifyProviderService extends ProviderService{
                 try {
                     Object object = ReflectUtil.getValue(entity, field.getName());
                     if(object != null){
-                        sb.append(comma).append(Tools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
+                        sql.SET(field.getName() + " = #{" + field.getName() + "} ");
                     }
                 } catch (NoSuchFieldException e){
                     log.warn("无{}属性！", field.getName());
                 }
             }
         }
-        String sqlWhere = where;
-        if(hasMultipleId){
-            sqlWhere = sqlWhere + sbWhere.substring(and.length());
-        }else if(hasId){
-            sqlWhere = sqlWhere + "id = #{id}";
-        }else{
-            throw new ServerException("无id字段或指定条件ID字段，不能进行更新！");
+        if(!hasMultipleId){
+            if(hasId){
+                sql.WHERE("id = #{id}");
+            }else {
+                throw new ServerException("无id字段或指定条件ID字段，不能进行更新！");
+            }
         }
-        String setStr = sb.substring(comma.length());
-        StringBuilder sql = new StringBuilder();
-        sql.append("update ").append(tableName).append(" set ").append(setStr).append(sqlWhere);
         log.debug("生成修改SQL: {}", sql);
         return  sql.toString();
     }
@@ -139,16 +128,17 @@ public class ModifyProviderService extends ProviderService{
         Class<?> clazz = entity.getClass();
         String tableName = getTableName(clazz); // 表名
         List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
-        StringBuilder sbWhere = new StringBuilder();
         boolean hasId = false;
         boolean hasMultipleId = false;
+        SQL sql = new SQL();
+        sql.DELETE_FROM(tableName);
         for(Field field : fields){
             if(field.isAnnotationPresent(TableId.class)){
                 TableId tableId = field.getAnnotation(TableId.class);
                 if(tableId.value() != null && !tableId.value().isEmpty()){
-                    sbWhere.append(and).append(tableId.value()).append(" = #{").append(field.getName()).append("}");
+                    sql.WHERE(tableId.value() + " = #{" + field.getName() + "}");
                 }else{
-                    sbWhere.append(and).append(Tools.humpToLine(field.getName())).append(" = #{").append(field.getName()).append("}");
+                    sql.WHERE(field.getName() + " = #{" + field.getName() + "}");
                 }
                 hasMultipleId = true;
             }else{
@@ -158,16 +148,13 @@ public class ModifyProviderService extends ProviderService{
                 }
             }
         }
-        String sqlWhere = where;
-        if(hasMultipleId){
-            sqlWhere = sqlWhere + sbWhere.substring(and.length());
-        }else if(hasId){
-            sqlWhere = sqlWhere + "id = #{id}";
-        }else{
-            throw new ServerException("无id字段或指定条件ID字段，不能进行删除！");
+        if(!hasMultipleId){
+            if(hasId){
+                sql.WHERE("id = #{id}");
+            }else {
+                throw new ServerException("无id字段或指定条件ID字段，不能进行删除！");
+            }
         }
-        StringBuilder sql = new StringBuilder();
-        sql.append("delete from ").append(tableName).append(sqlWhere);
         log.debug("生成删除SQL: {}", sql);
         return sql.toString();
     }
