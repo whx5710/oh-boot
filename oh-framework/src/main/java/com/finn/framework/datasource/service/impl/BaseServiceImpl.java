@@ -1,11 +1,17 @@
 package com.finn.framework.datasource.service.impl;
 
 import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.mapper.SuperMapper;
 import com.finn.framework.datasource.service.BaseService;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
+import com.finn.framework.utils.ParameterBuilder;
+import com.github.pagehelper.Page;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -14,7 +20,12 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public class BaseServiceImpl implements BaseService {
+@Component
+public class BaseServiceImpl<T> implements BaseService {
+
+    @Resource
+    private SuperMapper<T> superMapper;
+
     /**
      * 原生SQL 数据权限
      *
@@ -75,5 +86,16 @@ public class BaseServiceImpl implements BaseService {
         sqlFilter.append(")");
 
         return sqlFilter.toString();
+    }
+
+    /**
+     * 通用查询
+     * @param param 参数
+     * @return page
+     */
+    protected Page<T> selectPageByParam(ParameterBuilder<T> param){
+        String sql = param.buildSelectSQL();
+        Map<String, Object> selectParams = param.getSelectParams();
+        return superMapper.selectPageByParam(sql, selectParams);
     }
 }

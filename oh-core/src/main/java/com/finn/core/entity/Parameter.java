@@ -19,6 +19,13 @@ public class Parameter extends SuperEntity{
 
     }
 
+    /**
+     * 初始化参数
+     * @param field 字段
+     * @param expression 表达式
+     * @param value 值
+     * @param colName 列名
+     */
     public Parameter(String field, String expression, Object value, String colName){
         this.field = field;
         this.expression = expression;
