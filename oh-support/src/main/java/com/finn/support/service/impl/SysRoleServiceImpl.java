@@ -28,7 +28,7 @@ import java.util.List;
  *
  */
 @Service
-public class SysRoleServiceImpl extends BaseServiceImpl implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implements SysRoleService {
 	private final SysRoleMenuService sysRoleMenuService;
 	private final SysRoleDataScopeService sysRoleDataScopeService;
 	private final SysUserRoleService sysUserRoleService;
