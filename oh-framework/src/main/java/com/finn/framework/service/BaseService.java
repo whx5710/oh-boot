@@ -1,4 +1,4 @@
-package com.finn.framework.datasource.service;
+package com.finn.framework.service;
 
 /**
  * 基础服务接口，所有Service接口都要继承

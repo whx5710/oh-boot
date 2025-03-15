@@ -2,7 +2,7 @@ package com.finn.team.service.impl;
 
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.PageResult;
-import com.finn.framework.datasource.service.impl.BaseServiceImpl;
+import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.team.convert.OhTaskConvert;
 import com.finn.team.entity.OhTaskEntity;
 import com.finn.team.mapper.OhTaskMapper;

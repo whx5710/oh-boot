@@ -29,7 +29,16 @@ public class ParamsBuilder<T> extends Query {
     public static final String EQ = "eq"; // 等于
     public static final String NE = "ne"; // 不等于
     public static final String LIKE = "like"; // 模糊查询
-    public static final String IN = "in"; // 模糊查询
+    public static final String LIKE_RIGHT = "likeRight"; // 模糊查询
+    public static final String LIKE_LEFT = "likeLeft"; // 模糊查询
+    public static final String NOT_LIKE = "notLike"; // 模糊查询
+    public static final String IN = "in"; // in
+    public static final String GT = "gt"; // 大于
+    public static final String GE = "ge"; // 大于等于
+    public static final String LT = "lt"; // 小于
+    public static final String LE = "le"; // 小于等于
+    public static final String IS_NULL = "isNull"; // 为空
+    public static final String IS_NOT_NULL = "isNotNull"; // 为空
 
     // 参数集合
     List<Parameter> parameters = new ArrayList<>();
@@ -89,6 +98,112 @@ public class ParamsBuilder<T> extends Query {
     }
 
     /**
+     * 右模糊查询
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> likeRight(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, LIKE_RIGHT, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 左模糊查询
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> likeLeft(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, LIKE_LEFT, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 模糊查询
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> notLike(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, NOT_LIKE, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 大于
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> gt(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, GT, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 大于等于
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> ge(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, GE, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 小于
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> lt(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, LT, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 小于等于
+     * @param function f
+     * @param value 值
+     * @return p
+     */
+    public ParamsBuilder<T> le(Func1<T, ?> function, Object value) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, LE, value, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 为空
+     * @param function f
+     * @return p
+     */
+    public ParamsBuilder<T> isNull(Func1<T, ?> function) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, IS_NULL, null, getColName(fieldName)));
+        return this;
+    }
+
+    /**
+     * 不为空
+     * @param function f
+     * @return p
+     */
+    public ParamsBuilder<T> isNotNull(Func1<T, ?> function) {
+        String fieldName = LambdaUtil.getFieldName(function);
+        this.parameters.add(new Parameter(fieldName, IS_NOT_NULL, null, getColName(fieldName)));
+        return this;
+    }
+
+    /**
      * 在某范围
      * @param function f
      * @param value 值
@@ -122,9 +237,18 @@ public class ParamsBuilder<T> extends Query {
                 selectParams.put(item.getField(), item.getValue());
                 switch (item.getExpression()) {
                     case EQ -> sql.WHERE(item.getColName() + " = #{fp." + item.getField() + "}");
-                    case NE -> sql.WHERE(item.getColName() + " != #{fp." + item.getField() + "}");
+                    case NE -> sql.WHERE(item.getColName() + " <> #{fp." + item.getField() + "}");
                     case LIKE -> sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "},'%')");
+                    case LIKE_RIGHT -> sql.WHERE(item.getColName() + " like concat(#{fp." + item.getField() + "},'%')");
+                    case LIKE_LEFT -> sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "})");
+                    case NOT_LIKE -> sql.WHERE(item.getColName() + " not like concat('%',#{fp." + item.getField() + "},'%')");
                     case IN -> sql.WHERE(item.getColName() + " in " + buildInStr(item));
+                    case GT -> sql.WHERE(item.getColName() + " > #{fp." + item.getField() + "}");
+                    case GE -> sql.WHERE(item.getColName() + " >= #{fp." + item.getField() + "}");
+                    case LT -> sql.WHERE(item.getColName() + " < #{fp." + item.getField() + "}");
+                    case LE -> sql.WHERE(item.getColName() + " <= #{fp." + item.getField() + "}");
+                    case IS_NULL -> sql.WHERE(item.getColName() + " is null");
+                    case IS_NOT_NULL -> sql.WHERE(item.getColName() + " is not null");
                     default -> log.warn("未知的表达式！{}", item.getExpression());
                 }
             }

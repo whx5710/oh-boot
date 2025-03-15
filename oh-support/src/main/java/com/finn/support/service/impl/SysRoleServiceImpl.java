@@ -2,7 +2,7 @@ package com.finn.support.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.finn.framework.datasource.service.impl.BaseServiceImpl;
+import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.support.cache.TenantCache;
 import com.finn.support.mapper.SysRoleMapper;
 import com.finn.support.enums.DataScopeEnum;

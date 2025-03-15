@@ -1,8 +1,8 @@
-package com.finn.framework.datasource.service.impl;
+package com.finn.framework.service.impl;
 
 import com.finn.core.constant.Constant;
 import com.finn.framework.datasource.mapper.SuperMapper;
-import com.finn.framework.datasource.service.BaseService;
+import com.finn.framework.service.BaseService;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.utils.ParamsBuilder;

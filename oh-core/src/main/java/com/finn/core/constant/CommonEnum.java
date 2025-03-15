@@ -2,6 +2,7 @@ package com.finn.core.constant;
 
 /**
  * 公共枚举
+ * @author 王小费
  */
 public enum CommonEnum {
 
