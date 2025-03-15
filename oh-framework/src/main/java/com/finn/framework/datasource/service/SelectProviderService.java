@@ -23,8 +23,6 @@ public class SelectProviderService extends ProviderService{
 
     public static final String SELECT_PAGE = "selectPage";
 
-    public static final String SELECT_PARAM_PAGE = "selectPageByParam";
-
     private static final String queryKey = "query";
 
     private final Logger log = LoggerFactory.getLogger(SelectProviderService.class);
