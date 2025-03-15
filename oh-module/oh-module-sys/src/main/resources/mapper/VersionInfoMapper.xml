@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.sys.base.mapper.VersionInfoMapper">
+
+    <resultMap type="com.finn.sys.base.entity.VersionInfoEntity" id="sysVersionInfoMap">
+        <result property="id" column="id"/>
+        <result property="versionNum" column="version_num"/>
+        <result property="content" column="content"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="dbStatus" column="db_status"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isCurrVersion" column="is_curr_version"/>
+    </resultMap>
+
+    <select id="getList" resultType="com.finn.sys.base.entity.VersionInfoEntity">
+        select * from sys_version_info where db_status = 1
+        <if test="keyWord != null and keyWord != ''">
+            and (content like concat('%', #{keyWord}, '%') or version_num like concat('%',#{versionNum}, '%'))
+        </if>
+        <if test="isCurrVersion != null">and is_curr_version = #{isCurrVersion}</if>
+        order by release_time desc
+    </select>
+
+    <insert id="save">
+        INSERT INTO sys_version_info (version_num, content, release_time, is_curr_version, cover_picture, db_status, creator, create_time)
+        VALUES (#{versionNum}, #{content}, #{releaseTime}, #{isCurrVersion}, #{coverPicture}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>
+
+    <update id="updateById">
+        UPDATE sys_version_info
+        <set>
+            <if test="versionNum != null and versionNum != ''">version_num = #{versionNum},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+            <if test="isCurrVersion != null and isCurrVersion != ''">is_curr_version = #{isCurrVersion},</if>
+            <if test="coverPicture != null and coverPicture != ''">cover_picture = #{coverPicture},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateCurVersion">
+        UPDATE sys_version_info
+        set is_curr_version = #{isCurrVersion}
+        where db_status = 1
+    </update>
+
+    <select id="getById" resultType="com.finn.sys.base.entity.VersionInfoEntity">
+        select * from sys_version_info where id = #{id}
+    </select>
+</mapper>

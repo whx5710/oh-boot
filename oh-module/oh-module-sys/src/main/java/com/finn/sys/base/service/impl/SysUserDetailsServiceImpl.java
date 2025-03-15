@@ -1,14 +1,14 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.framework.security.user.UserDetail;
-import com.finn.support.convert.SysUserConvert;
-import com.finn.support.entity.SysUserEntity;
-import com.finn.support.mapper.SysRoleDataScopeMapper;
-import com.finn.support.mapper.SysRoleMapper;
-import com.finn.support.service.SysOrgService;
+import com.finn.support.convert.UserConvert;
+import com.finn.support.entity.UserEntity;
+import com.finn.support.mapper.RoleDataScopeMapper;
+import com.finn.support.mapper.RoleMapper;
+import com.finn.support.service.OrgService;
 import com.finn.sys.base.enums.DataScopeEnum;
 import com.finn.sys.base.enums.UserStatusEnum;
-import com.finn.sys.base.service.SysMenuService;
+import com.finn.sys.base.service.MenuService;
 import com.finn.sys.base.service.SysUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -25,22 +25,22 @@ import java.util.Set;
  */
 @Service
 public class SysUserDetailsServiceImpl implements SysUserDetailsService {
-    private final SysMenuService sysMenuService;
-    private final SysOrgService sysOrgService;
-    private final SysRoleMapper sysRoleMapper;
-    private final SysRoleDataScopeMapper sysRoleDataScopeMapper;
+    private final MenuService menuService;
+    private final OrgService orgService;
+    private final RoleMapper roleMapper;
+    private final RoleDataScopeMapper roleDataScopeMapper;
 
-    public SysUserDetailsServiceImpl(SysMenuService sysMenuService, SysOrgService sysOrgService, SysRoleMapper sysRoleMapper, SysRoleDataScopeMapper sysRoleDataScopeMapper) {
-        this.sysMenuService = sysMenuService;
-        this.sysOrgService = sysOrgService;
-        this.sysRoleMapper = sysRoleMapper;
-        this.sysRoleDataScopeMapper = sysRoleDataScopeMapper;
+    public SysUserDetailsServiceImpl(MenuService menuService, OrgService orgService, RoleMapper roleMapper, RoleDataScopeMapper roleDataScopeMapper) {
+        this.menuService = menuService;
+        this.orgService = orgService;
+        this.roleMapper = roleMapper;
+        this.roleDataScopeMapper = roleDataScopeMapper;
     }
 
     @Override
-    public UserDetails getUserDetails(SysUserEntity userEntity) {
+    public UserDetails getUserDetails(UserEntity userEntity) {
         // 转换成UserDetail对象
-        UserDetail userDetail = SysUserConvert.INSTANCE.convertDetail(userEntity);
+        UserDetail userDetail = UserConvert.INSTANCE.convertDetail(userEntity);
 
         // 账号不可用
         if (userEntity.getStatus() == UserStatusEnum.DISABLE.getValue()) {
@@ -52,7 +52,7 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
         userDetail.setDataScopeList(dataScopeList);
 
         // 用户权限列表
-        Set<String> authoritySet = sysMenuService.getUserAuthority(userDetail);
+        Set<String> authoritySet = menuService.getUserAuthority(userDetail);
         userDetail.setAuthoritySet(authoritySet);
 
         return userDetail;
@@ -64,7 +64,7 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
      * @return
      */
     private List<Long> getDataScope(UserDetail userDetail) {
-        Integer dataScope = sysRoleMapper.getDataScopeByUserId(userDetail.getId());
+        Integer dataScope = roleMapper.getDataScopeByUserId(userDetail.getId());
         if (dataScope == null) {
             return new ArrayList<>();
         }
@@ -74,9 +74,9 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
             return null;
         } else if (dataScope.equals(DataScopeEnum.ORG_AND_CHILD.getValue())) {
             // 本机构及子机构数据
-            List<Long> dataScopeList = sysOrgService.getSubOrgIdList(userDetail.getOrgId());
+            List<Long> dataScopeList = orgService.getSubOrgIdList(userDetail.getOrgId());
             // 自定义数据权限范围
-            dataScopeList.addAll(sysRoleDataScopeMapper.getDataScopeList(userDetail.getId()));
+            dataScopeList.addAll(roleDataScopeMapper.getDataScopeList(userDetail.getId()));
 
             return dataScopeList;
         } else if (dataScope.equals(DataScopeEnum.ORG_ONLY.getValue())) {
@@ -84,12 +84,12 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
             List<Long> dataScopeList = new ArrayList<>();
             dataScopeList.add(userDetail.getOrgId());
             // 自定义数据权限范围
-            dataScopeList.addAll(sysRoleDataScopeMapper.getDataScopeList(userDetail.getId()));
+            dataScopeList.addAll(roleDataScopeMapper.getDataScopeList(userDetail.getId()));
 
             return dataScopeList;
         } else if (dataScope.equals(DataScopeEnum.CUSTOM.getValue())) {
             // 自定义数据权限范围
-            return sysRoleDataScopeMapper.getDataScopeList(userDetail.getId());
+            return roleDataScopeMapper.getDataScopeList(userDetail.getId());
         }
 
         return new ArrayList<>();

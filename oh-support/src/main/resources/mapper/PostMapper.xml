@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.support.mapper.PostMapper">
+
+    <select id="getList" resultType="com.finn.support.entity.PostEntity">
+        select * from sys_post where db_status = 1
+        <if test="postCode != null and postCode != ''">and post_code = #{postCode}</if>
+        <if test="postName != null and postName != ''">and post_name like concat('%', #{postName}, '%')</if>
+        <if test="status != null">and status = #{status}</if>
+        order by sort
+    </select>
+
+    <!--<insert id="insertPost">
+        INSERT INTO sys_post ( post_code, post_name, sort, status, db_status, creator, create_time )
+        VALUES (#{postCode}, #{postName}, #{sort}, #{status}, 1, #{creator}, #{createTime})
+    </insert>-->
+
+    <!--<update id="updateById">
+        UPDATE sys_post
+        <set>
+            <if test="postCode != null and postCode != ''">post_code = #{postCode},</if>
+            <if test="postName != null and postName != ''">post_name = #{postName},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>-->
+
+</mapper>

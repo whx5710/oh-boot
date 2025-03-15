@@ -5,8 +5,8 @@ import cn.hutool.core.util.ReflectUtil;
 import com.finn.core.utils.ExceptionUtils;
 import com.finn.core.utils.JsonUtils;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.sys.base.entity.SysMessageEntity;
-import com.finn.sys.base.vo.SysMessageVO;
+import com.finn.sys.base.entity.MessageEntity;
+import com.finn.sys.base.vo.MessageVO;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -31,12 +31,12 @@ public class WebSocketHandler {
 
     private final Logger log = LoggerFactory.getLogger(WebSocketHandler.class);
 
-    private static SysMessageService sysMessageService;
+    private static MessageService messageService;
 
     // @Component注解，通过该方法注入service
     @Autowired
-    public void setSysMessageService(SysMessageService sysMessageService){
-        WebSocketHandler.sysMessageService = sysMessageService;
+    public void setSysMessageService(MessageService messageService){
+        WebSocketHandler.messageService = messageService;
     }
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -64,30 +64,30 @@ public class WebSocketHandler {
             webSockets.add(this);
             sessionPool.put(userId, session);
             // 查询是否有未发送的消息
-            List<SysMessageVO> list = sysMessageService.unSendMsg(Long.valueOf(userId));
+            List<MessageVO> list = messageService.unSendMsg(Long.valueOf(userId));
             if(!ObjectUtils.isEmpty(list)){
-                for(SysMessageVO sysMessageVO: list){
-                    int i = this.sendMessage(userId, sysMessageVO.toJson());
+                for(MessageVO messageVO : list){
+                    int i = this.sendMessage(userId, messageVO.toJson());
                     if(i == 1){
-                        SysMessageEntity sysMessageEntity = new SysMessageEntity();
-                        BeanUtil.copyProperties(sysMessageVO, sysMessageEntity);
-                        sysMessageEntity.setState("1");
-                        sysMessageService.updateById(sysMessageEntity);
+                        MessageEntity messageEntity = new MessageEntity();
+                        BeanUtil.copyProperties(messageVO, messageEntity);
+                        messageEntity.setState("1");
+                        messageService.updateById(messageEntity);
                     }
                 }
             }
             // 查询收件箱是否有待阅读消息，有则提示查看
-            list = sysMessageService.unReadMsg(Long.valueOf(userId));
+            list = messageService.unReadMsg(Long.valueOf(userId));
             if(!ObjectUtils.isEmpty(list)){
                 String msg = "您有多条未读消息，请查看消息中心！";
                 if(list.size() < 10){
                     msg = "您有" + list.size() + "条未读消息，请在消息中心查看！";
                 }
-                SysMessageVO sysMessageVO = new SysMessageVO();
-                sysMessageVO.setContent(msg);
-                sysMessageVO.setTitle("消息提醒");
-                sysMessageVO.setType("success");
-                int i = this.sendMessage(userId, sysMessageVO.toJson());
+                MessageVO messageVO = new MessageVO();
+                messageVO.setContent(msg);
+                messageVO.setTitle("消息提醒");
+                messageVO.setType("success");
+                int i = this.sendMessage(userId, messageVO.toJson());
             }
             log.info("【websocket消息】有新的连接，总数为:{}", webSockets.size());
         } catch (Exception e) {
@@ -117,31 +117,31 @@ public class WebSocketHandler {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        SysMessageVO sysMessageVO = JsonUtils.parseObject(message, SysMessageVO.class);
+        MessageVO messageVO = JsonUtils.parseObject(message, MessageVO.class);
         Principal principal = session.getUserPrincipal();
         UserDetail user = (UserDetail) ReflectUtil.getFieldValue(principal, "principal");
-        if(sysMessageVO.getFromId() == null){
-            sysMessageVO.setFromId(user.getId());
+        if(messageVO.getFromId() == null){
+            messageVO.setFromId(user.getId());
         }
-        if(sysMessageVO.getFromName() == null){
-            sysMessageVO.setFromName(user.getRealName());
+        if(messageVO.getFromName() == null){
+            messageVO.setFromName(user.getRealName());
         }
-        if(ObjectUtils.isEmpty(sysMessageVO.getType())){
-            sysMessageVO.setType("success");
-        }else if(sysMessageVO.getType().equals("heartBeat")){ // 心跳
+        if(ObjectUtils.isEmpty(messageVO.getType())){
+            messageVO.setType("success");
+        }else if(messageVO.getType().equals("heartBeat")){ // 心跳
             log.debug("【websocket消息】收到客户【{}-{}】端消息:{}",user.getId(), user.getRealName(), message);
             return;
         }
         log.info("【websocket消息】收到客户端【{}-{}】消息:{}",user.getId(), user.getRealName(), message);
-        sysMessageVO.setState("0");
+        messageVO.setState("0");
         int i = 0; // 0未发生成功1发送成功-1发送异常
-        if(!ObjectUtils.isEmpty(sysMessageVO.getToId())){
-            i = sendMessage(String.valueOf(sysMessageVO.getToId()), sysMessageVO.toJson());
+        if(!ObjectUtils.isEmpty(messageVO.getToId())){
+            i = sendMessage(String.valueOf(messageVO.getToId()), messageVO.toJson());
         }
         if(i == 1){
-            sysMessageVO.setState("1"); // 状态0未发送1未读2已读
+            messageVO.setState("1"); // 状态0未发送1未读2已读
         }
-        sysMessageService.save(sysMessageVO);
+        messageService.save(messageVO);
     }
 
     /** 发送错误时的处理

@@ -1,7 +1,7 @@
 package com.finn.sys.base.controller;
 
 import com.finn.core.utils.Result;
-import com.finn.sys.base.service.SysLogLoginService;
+import com.finn.sys.base.service.LogLoginService;
 import com.finn.sys.base.vo.AnalysisVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,10 +25,10 @@ import java.util.Map;
 @Tag(name = "统计分析")
 public class AnalysisController {
 
-    private final SysLogLoginService sysLogLoginService;
+    private final LogLoginService logLoginService;
 
-    public AnalysisController(SysLogLoginService sysLogLoginService){
-        this.sysLogLoginService = sysLogLoginService;
+    public AnalysisController(LogLoginService logLoginService){
+        this.logLoginService = logLoginService;
     }
 
     /**
@@ -40,7 +40,7 @@ public class AnalysisController {
     @GetMapping("/latestLogin/{day}/{operation}")
     @Operation(summary = "统计最近几天相关操作情况")
     public Result<List<AnalysisVO>> latestLogin(@PathVariable("day")Integer day, @PathVariable("operation")Integer operation){
-        return Result.ok(sysLogLoginService.latestDate(day, operation));
+        return Result.ok(logLoginService.latestDate(day, operation));
     }
 
     /**
@@ -53,10 +53,10 @@ public class AnalysisController {
     @Operation(summary = "统计最近几天相关操作情况")
     public Result<Map<String, List<AnalysisVO>>> latestDateLogin(@PathVariable("day")Integer day){
         Map<String, List<AnalysisVO>> map = new HashMap<String, List<AnalysisVO>>();
-        map.put("登录成功", sysLogLoginService.latestDate(day, 0));
-        map.put("退出成功", sysLogLoginService.latestDate(day, 1));
-        map.put("验证码错误", sysLogLoginService.latestDate(day, 2));
-        map.put("账号密码错误", sysLogLoginService.latestDate(day, 3));
+        map.put("登录成功", logLoginService.latestDate(day, 0));
+        map.put("退出成功", logLoginService.latestDate(day, 1));
+        map.put("验证码错误", logLoginService.latestDate(day, 2));
+        map.put("账号密码错误", logLoginService.latestDate(day, 3));
         return Result.ok(map);
     }
 }

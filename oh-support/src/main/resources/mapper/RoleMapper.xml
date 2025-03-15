@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.support.mapper.RoleMapper">
+
+    <select id="getList" parameterType="com.finn.support.query.RoleQuery">
+        select * from sys_role where db_status != 0
+        <if test="name != null and name != ''">
+            and (name like concat('%',#{name}, '%') or tenant_id = #{name})
+        </if>
+        <if test="tenantId != null and tenantId != ''">and tenant_id = #{tenantId}</if>
+        <if test="isSystem != null">and is_system = #{isSystem}</if>
+        order by create_time desc
+    </select>
+
+    <!--<update id="updateById">
+        UPDATE sys_role
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="dataScope != null">data_scope = #{dataScope},</if>
+            <if test="orgId != null">org_id = #{orgId},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null and updater != 0">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>-->
+
+    <!--<insert id="insertRole" parameterType="entity.com.finn.support.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_role ( name, remark, data_scope, org_id, db_status, creator, create_time)
+        VALUES
+        (#{name}, #{remark}, #{dataScope}, #{orgId}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>-->
+
+</mapper>

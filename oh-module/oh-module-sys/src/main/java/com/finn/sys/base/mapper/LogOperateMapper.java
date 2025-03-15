@@ -1,0 +1,22 @@
+package com.finn.sys.base.mapper;
+
+import com.finn.sys.base.entity.LogOperateEntity;
+import com.finn.sys.base.query.LogOperateQuery;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+/**
+ * 操作日志
+ *
+ * @author 王小费 whx5710@qq.com
+ * 
+ */
+@Mapper
+public interface LogOperateMapper {
+
+    List<LogOperateEntity> getList(LogOperateQuery query);
+
+    int save(LogOperateEntity param);
+
+}

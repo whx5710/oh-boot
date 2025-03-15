@@ -1,8 +1,8 @@
 package com.finn.sys.security.service;
 
 import com.finn.framework.security.mobile.MobileUserDetailsService;
-import com.finn.support.entity.SysUserEntity;
-import com.finn.support.mapper.SysUserMapper;
+import com.finn.support.entity.UserEntity;
+import com.finn.support.mapper.UserMapper;
 import com.finn.sys.base.service.SysUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,17 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class MobileUserDetailsServiceImpl implements MobileUserDetailsService {
     private final SysUserDetailsService sysUserDetailsService;
-    private final SysUserMapper sysUserMapper;
+    private final UserMapper userMapper;
 
-    public MobileUserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, SysUserMapper sysUserMapper) {
+    public MobileUserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, UserMapper userMapper) {
         this.sysUserDetailsService = sysUserDetailsService;
-        this.sysUserMapper = sysUserMapper;
+        this.userMapper = userMapper;
     }
 
 
     @Override
     public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
-        SysUserEntity userEntity = sysUserMapper.getByMobile(mobile);
+        UserEntity userEntity = userMapper.getByMobile(mobile);
         if (userEntity == null) {
             throw new UsernameNotFoundException("手机号或验证码错误");
         }

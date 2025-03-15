@@ -11,8 +11,8 @@ import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.PageResult;
-import com.finn.support.cache.SysUserCache;
-import com.finn.support.entity.SysUserEntity;
+import com.finn.support.cache.UserCache;
+import com.finn.support.entity.UserEntity;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.slf4j.Logger;
@@ -40,14 +40,14 @@ public class TaskRecordServiceImpl implements TaskRecordService {
     private final TaskRecordMapper taskRecordMapper;
 
 
-    private final SysUserCache sysUserCache;
+    private final UserCache userCache;
 
 
     public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper,
-                                 SysUserCache sysUserCache){
+                                 UserCache userCache){
         this.historyService = historyService;
         this.taskRecordMapper = taskRecordMapper;
-        this.sysUserCache = sysUserCache;
+        this.userCache = userCache;
     }
 
     @Override
@@ -133,9 +133,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     String assignee = his.getAssignee();
                     try{
                         Long userId = Long.valueOf(assignee);
-                        SysUserEntity sysUserEntity = sysUserCache.getUser(userId);
-                        if(sysUserEntity != null){
-                            taskRecord.setAssigneeName(sysUserEntity.getRealName());
+                        UserEntity userEntity = userCache.getUser(userId);
+                        if(userEntity != null){
+                            taskRecord.setAssigneeName(userEntity.getRealName());
                         }
                     }catch (Exception e){
                         log.error("获取用户信息错误！{}", e.getMessage());

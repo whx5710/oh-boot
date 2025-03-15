@@ -6,8 +6,8 @@ import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
 import com.finn.framework.query.Query;
 import com.finn.framework.security.cache.TokenStoreCache;
-import com.finn.support.cache.SysUserCache;
-import com.finn.support.entity.SysUserEntity;
+import com.finn.support.cache.UserCache;
+import com.finn.support.entity.UserEntity;
 import com.finn.sys.monitor.vo.UserOnlineVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,11 +24,11 @@ import java.util.List;
 @Tag(name = "在线用户监控")
 public class UserOnlineController {
     private final TokenStoreCache tokenStoreCache;
-    private final SysUserCache sysUserCache;
+    private final UserCache userCache;
 
-    public UserOnlineController(TokenStoreCache tokenStoreCache, SysUserCache sysUserCache) {
+    public UserOnlineController(TokenStoreCache tokenStoreCache, UserCache userCache) {
         this.tokenStoreCache = tokenStoreCache;
-        this.sysUserCache = sysUserCache;
+        this.userCache = userCache;
     }
 
     @GetMapping("page")
@@ -43,7 +43,7 @@ public class UserOnlineController {
 
         List<UserOnlineVO> userOnlineList = new ArrayList<>();
         keyList.forEach(key -> {
-            SysUserEntity user = sysUserCache.getUser(Long.valueOf(key));
+            UserEntity user = userCache.getUser(Long.valueOf(key));
             if (user != null) {
                 UserOnlineVO userOnlineVO = new UserOnlineVO();
                 userOnlineVO.setId(user.getId());

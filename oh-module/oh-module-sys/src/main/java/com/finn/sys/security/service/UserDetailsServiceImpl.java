@@ -1,7 +1,7 @@
 package com.finn.sys.security.service;
 
-import com.finn.support.entity.SysUserEntity;
-import com.finn.support.mapper.SysUserMapper;
+import com.finn.support.entity.UserEntity;
+import com.finn.support.mapper.UserMapper;
 import com.finn.sys.base.service.SysUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,16 +17,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final SysUserDetailsService sysUserDetailsService;
-    private final SysUserMapper sysUserMapper;
+    private final UserMapper userMapper;
 
-    public UserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, SysUserMapper sysUserMapper) {
+    public UserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, UserMapper userMapper) {
         this.sysUserDetailsService = sysUserDetailsService;
-        this.sysUserMapper = sysUserMapper;
+        this.userMapper = userMapper;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUserEntity userEntity = sysUserMapper.getByUsername(username);
+        UserEntity userEntity = userMapper.getByUsername(username);
         if (userEntity == null) {
             throw new UsernameNotFoundException("用户名或密码错误");
         }

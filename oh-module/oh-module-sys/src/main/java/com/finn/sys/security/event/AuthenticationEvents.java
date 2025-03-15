@@ -3,7 +3,7 @@ package com.finn.sys.security.event;
 import com.finn.core.constant.Constant;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.sys.base.enums.LoginOperationEnum;
-import com.finn.sys.base.service.SysLogLoginService;
+import com.finn.sys.base.service.LogLoginService;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AuthenticationEvents {
-    private final SysLogLoginService sysLogLoginService;
+    private final LogLoginService logLoginService;
 
-    public AuthenticationEvents(SysLogLoginService sysLogLoginService) {
-        this.sysLogLoginService = sysLogLoginService;
+    public AuthenticationEvents(LogLoginService logLoginService) {
+        this.logLoginService = logLoginService;
     }
 
     @EventListener
@@ -29,7 +29,7 @@ public class AuthenticationEvents {
         UserDetail user = (UserDetail) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        sysLogLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
+        logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
     }
 
     @EventListener
@@ -38,7 +38,7 @@ public class AuthenticationEvents {
         String username = (String) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        sysLogLoginService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
+        logLoginService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
     }
 
 }
