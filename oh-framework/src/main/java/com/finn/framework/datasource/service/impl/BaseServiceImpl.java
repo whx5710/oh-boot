@@ -5,7 +5,7 @@ import com.finn.framework.datasource.mapper.SuperMapper;
 import com.finn.framework.datasource.service.BaseService;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.framework.utils.ParameterBuilder;
+import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -93,7 +93,7 @@ public class BaseServiceImpl<T> implements BaseService {
      * @param param 参数
      * @return page
      */
-    protected Page<T> selectPageByParam(ParameterBuilder<T> param){
+    protected Page<T> selectPageByParam(ParamsBuilder<T> param){
         String sql = param.buildSelectSQL();
         Map<String, Object> selectParams = param.getSelectParams();
         return superMapper.selectPageByParam(sql, selectParams);

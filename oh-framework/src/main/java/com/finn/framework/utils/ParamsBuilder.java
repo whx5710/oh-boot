@@ -22,9 +22,9 @@ import java.util.*;
  * @author 王小费
  * @since 2025-03-12
  */
-public class ParameterBuilder<T> extends Query {
+public class ParamsBuilder<T> extends Query {
 
-    private final Logger log = LoggerFactory.getLogger(ParameterBuilder.class);
+    private final Logger log = LoggerFactory.getLogger(ParamsBuilder.class);
 
     public static final String EQ = "eq"; // 等于
     public static final String NE = "ne"; // 不等于
@@ -46,10 +46,10 @@ public class ParameterBuilder<T> extends Query {
         this.clazz = clazz;
     }
 
-    public static <T> ParameterBuilder<T> of(Class<T> clazz) {
-        ParameterBuilder<T> parameterBuilder = new ParameterBuilder<>();
-        parameterBuilder.setClazz(clazz);
-        return parameterBuilder;
+    public static <T> ParamsBuilder<T> of(Class<T> clazz) {
+        ParamsBuilder<T> paramsBuilder = new ParamsBuilder<>();
+        paramsBuilder.setClazz(clazz);
+        return paramsBuilder;
     }
 
     /**
@@ -58,7 +58,7 @@ public class ParameterBuilder<T> extends Query {
      * @param value 值
      * @return p
      */
-    public ParameterBuilder<T> eq(Func1<T, ?> function, Object value) {
+    public ParamsBuilder<T> eq(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, EQ, value, getColName(fieldName)));
         return this;
@@ -70,7 +70,7 @@ public class ParameterBuilder<T> extends Query {
      * @param value 值
      * @return p
      */
-    public ParameterBuilder<T> ne(Func1<T, ?> function, Object value) {
+    public ParamsBuilder<T> ne(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, NE, value, getColName(fieldName)));
         return this;
@@ -82,7 +82,7 @@ public class ParameterBuilder<T> extends Query {
      * @param value 值
      * @return p
      */
-    public ParameterBuilder<T> like(Func1<T, ?> function, Object value) {
+    public ParamsBuilder<T> like(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LIKE, value, getColName(fieldName)));
         return this;
@@ -94,7 +94,7 @@ public class ParameterBuilder<T> extends Query {
      * @param value 值
      * @return p
      */
-    public ParameterBuilder<T> in(Func1<T, ?> function, Object value) {
+    public ParamsBuilder<T> in(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, IN, value, getColName(fieldName)));
         return this;
@@ -121,9 +121,9 @@ public class ParameterBuilder<T> extends Query {
             for(Parameter item: parameters){
                 selectParams.put(item.getField(), item.getValue());
                 switch (item.getExpression()) {
-                    case EQ -> sql.WHERE(item.getColName() + " = #{p." + item.getField() + "}");
-                    case NE -> sql.WHERE(item.getColName() + " != #{p." + item.getField() + "}");
-                    case LIKE -> sql.WHERE(item.getColName() + " like '%#{p." + item.getField() + "}%");
+                    case EQ -> sql.WHERE(item.getColName() + " = #{fp." + item.getField() + "}");
+                    case NE -> sql.WHERE(item.getColName() + " != #{fp." + item.getField() + "}");
+                    case LIKE -> sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "},'%')");
                     case IN -> sql.WHERE(item.getColName() + " in " + buildInStr(item));
                     default -> log.warn("未知的表达式！{}", item.getExpression());
                 }
@@ -188,10 +188,12 @@ public class ParameterBuilder<T> extends Query {
     private StringBuilder buildInStr(Parameter param){
         StringBuilder stringBuilder = new StringBuilder();
         if(param.getValue() instanceof Collection<?> collection){
-            return stringBuilder.append("<foreach item=\"item\" index=\"index\" collection=\"").append(param.getField())
-                    .append("\" open=\"(\" separator=\",\" close=\")\">").append("#{item}").append("</foreach>");
+            return stringBuilder.append("<foreach item=\"iValue\" index=\"index\" collection=\"")
+                    .append("#{fp.").append(param.getField()).append("}")
+                    .append("\" open=\"(\" separator=\",\" close=\")\">")
+                    .append("#{iValue}").append("</foreach>");
         }else{
-            throw new ServerException("非集合参数");
+            throw new ServerException("查询条件异常，请联系管理员[非集合参数]");
         }
     }
 }

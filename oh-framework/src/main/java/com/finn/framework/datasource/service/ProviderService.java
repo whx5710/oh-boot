@@ -18,7 +18,6 @@ public class ProviderService {
 
     private final Logger log = LoggerFactory.getLogger(ProviderService.class);
 
-    String comma = ", ";
     String where = " where ";
     String and = " and ";
 

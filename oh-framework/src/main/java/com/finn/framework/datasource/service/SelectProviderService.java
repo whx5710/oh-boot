@@ -1,11 +1,9 @@
 package com.finn.framework.datasource.service;
 
-import com.finn.core.entity.Parameter;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.query.Query;
-import com.finn.framework.utils.ParameterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,51 +128,5 @@ public class SelectProviderService extends ProviderService{
         sql.append("select * from ").append(tableName).append(where).append(whereSb.substring(and.length()));
         log.debug("生成查询SQL: {}", sql);
         return  sql.toString();
-    }
-
-
-    /**
-     * 通用单表查询
-     * @param param 查询参数
-     * @return str
-     * @param <T> t
-     */
-    public <T> String selectPageByParam(ParameterBuilder<T> param){
-        Class<T> clazz = param.getClazz();
-        String tableName = getTableName(clazz);
-        String orderBy = param.getOrderBy();
-        StringBuilder whereSb = new StringBuilder();
-        if(param.list() != null && !param.list().isEmpty()){
-            List<Parameter> list = param.list();
-            for(Parameter item: list){
-                switch (item.getExpression()) {
-                    case ParameterBuilder.EQ ->
-                            whereSb.append(and).append(item.getColName()).append(" = #{").append(item.getField()).append("}");
-                    case ParameterBuilder.NE ->
-                            whereSb.append(and).append(item.getColName()).append(" != #{").append(item.getField()).append("}");
-                    case ParameterBuilder.LIKE ->
-                            whereSb.append(and).append(item.getColName()).append(" like '%#{").append(item.getField()).append("}%");
-                    case ParameterBuilder.IN ->
-                            whereSb.append(and).append(item.getColName()).append(" in (#{").append(item.getField()).append("})");
-                    default -> System.out.println(item);
-                }
-            }
-        }
-        // 拼接
-        StringBuilder sql = new StringBuilder();
-        sql.append("select * from ").append(tableName);
-        // where 条件
-        if(!whereSb.isEmpty()){
-            sql.append(where).append(whereSb.substring(and.length()));
-        }
-        // 排序
-        if(orderBy != null && !orderBy.isEmpty()){
-            orderBy = orderBy.trim();
-            if(!orderBy.isEmpty()){
-                sql.append(" order by ").append(orderBy);
-            }
-        }
-        log.debug("生成分页SQL: {}", sql);
-        return sql.toString();
     }
 }

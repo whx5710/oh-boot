@@ -11,6 +11,6 @@ import java.util.Map;
 public interface SuperMapper<T> {
 
     @Pages
-    Page<T>  selectPageByParam(@Param("selectSql")String selectSql,@Param("p") Map<String, Object> selectParams);
+    Page<T>  selectPageByParam(@Param("selectSql")String selectSql,@Param("fp") Map<String, Object> selectParams);
 
 }
