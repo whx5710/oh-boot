@@ -56,14 +56,15 @@ public class PageAspect {
         Object result = null;
         try {
             //调用分页插件传入开始页码和页面容量
-            Page<Object> page = PageHelper.startPage(pageNum, pageSize);
-            //执行
-            result = proceedingJoinPoint.proceed(args);
-            if(query != null){
-                //获取并封装分页后的参数
-                query.setTotal(page.getTotal());
-            }else{
-                log.warn("参数缺少com.finn.framework.query.Query对象，默认查询第{}页{}条",pageNum, pageSize);
+            try (Page<Object> page = PageHelper.startPage(pageNum, pageSize)) {
+                //执行
+                result = proceedingJoinPoint.proceed(args);
+                if (query != null) {
+                    //获取并封装分页后的参数
+                    query.setTotal(page.getTotal());
+                } else {
+                    log.warn("参数缺少com.finn.framework.query.Query对象，默认查询第{}页{}条", pageNum, pageSize);
+                }
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);
