@@ -231,7 +231,8 @@ public class ParamsBuilder<T> extends Query {
         AssertUtils.isNull(clazz, "实体对象类");
         String tableName = getTableName(clazz);
         SQL sql = new SQL();
-        sql.SELECT("*").FROM(tableName);
+        buildColumn(sql);
+        sql.FROM(tableName);
         if(!parameters.isEmpty()){
             for(Parameter item: parameters){
                 selectParams.put(item.getField(), item.getValue());
@@ -253,8 +254,33 @@ public class ParamsBuilder<T> extends Query {
                 }
             }
         }
+        /*if(getPageNum() != null && getPageNum() > 0){
+            Query query = new Query();
+            query.setPageNum(getPageNum());
+            query.setPageSize(getPageSize());
+            selectParams.put("pages", query);
+        }*/
         log.debug("生成查询SQL: {}", sql);
         return sql.toString();
+    }
+
+    /**
+     * 组装列名
+     *
+     * @param sql
+     */
+    private void buildColumn(SQL sql){
+        List<Field> fields = ReflectUtil.getFields(clazz);
+        for(Field field: fields){
+            if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
+                TableField annotation = field.getAnnotation(TableField.class);
+                if (annotation.exists()) { // 剔除非数据库字段
+                    sql.SELECT(annotation.value() + " AS " + field.getName());
+                }
+            }else{
+                sql.SELECT(field.getName());
+            }
+        }
     }
 
     /**

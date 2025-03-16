@@ -1,6 +1,7 @@
 package com.finn.framework.service.impl;
 
 import com.finn.core.constant.Constant;
+import com.finn.core.utils.JsonUtils;
 import com.finn.framework.datasource.mapper.SuperMapper;
 import com.finn.framework.service.BaseService;
 import com.finn.framework.security.user.SecurityUser;
@@ -10,6 +11,7 @@ import com.github.pagehelper.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -96,6 +98,17 @@ public class BaseServiceImpl<T> implements BaseService {
     protected Page<T> selectPageByParam(ParamsBuilder<T> param){
         String sql = param.buildSelectSQL();
         Map<String, Object> selectParams = param.getSelectParams();
-        return superMapper.selectPageByParam(sql, selectParams);
+        Page<T> page = superMapper.selectPageByParam(sql, selectParams);
+        List<T> list = page.getResult();
+        List<T> result = new ArrayList<>();
+        // 数据类型转换
+        if(list != null && !list.isEmpty()){
+            for (T t : list) {
+                result.add(JsonUtils.convertValue(t, param.getClazz()));
+            }
+            page.removeAll(list);
+            page.addAll(result);
+        }
+        return page;
     }
 }
