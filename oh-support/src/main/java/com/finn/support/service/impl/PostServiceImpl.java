@@ -1,7 +1,7 @@
 package com.finn.support.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.support.cache.TenantCache;
@@ -40,14 +40,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageResult<PostVO> page(PostQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<PostEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<PostEntity> entityList = postMapper.getList(query);
-        PageInfo<PostEntity> pageInfo = new PageInfo<>(entityList);
-        List<PostVO> list = PostConvert.INSTANCE.convertList(pageInfo.getList());
+        List<PostVO> list = PostConvert.INSTANCE.convertList(entityList);
         for(PostVO vo: list){
             vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
         }
-        return new PageResult<>(list, pageInfo.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     @Override

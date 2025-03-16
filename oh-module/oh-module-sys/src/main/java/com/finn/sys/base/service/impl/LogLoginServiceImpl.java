@@ -1,8 +1,8 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.core.utils.*;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.sys.base.convert.LogLoginConvert;
 import com.finn.sys.base.entity.LogLoginEntity;
 import com.finn.sys.base.mapper.LogLoginMapper;
@@ -32,10 +32,9 @@ public class LogLoginServiceImpl implements LogLoginService {
 
     @Override
     public PageResult<LogLoginVO> page(LogLoginQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<LogLoginEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<LogLoginEntity> list = logLoginMapper.getList(query);
-        PageInfo<LogLoginEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(LogLoginConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(LogLoginConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

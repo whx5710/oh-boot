@@ -1,7 +1,7 @@
 package com.finn.support.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
 import com.finn.core.utils.AssertUtils;
@@ -74,15 +74,14 @@ public class OrgServiceImpl implements OrgService {
 	 */
 	@Override
 	public PageResult<OrgVO> page(OrgQuery query) {
-		PageHelper.startPage(query.getPageNum(), query.getPageSize());
+		Page<OrgEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		// 机构列表
 		List<OrgEntity> list = orgMapper.getList(query);
-		PageInfo<OrgEntity> pageInfo = new PageInfo<>(list);
-		List<OrgVO> voList = OrgConvert.INSTANCE.convertList(pageInfo.getList());
+		List<OrgVO> voList = OrgConvert.INSTANCE.convertList(list);
 		for(OrgVO vo: voList){
 			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
 		}
-		return new PageResult<>(voList, pageInfo.getTotal());
+		return new PageResult<>(voList, page.getTotal());
 	}
 
 	@Override

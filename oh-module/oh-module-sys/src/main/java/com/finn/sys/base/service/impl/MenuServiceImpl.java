@@ -1,8 +1,8 @@
 package com.finn.sys.base.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.constant.Constant;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.PageResult;
@@ -116,10 +116,9 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public PageResult<MenuVO> page(MenuQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<MenuEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<MenuEntity> list = menuMapper.getMenuList(query);
-        PageInfo<MenuEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(MenuConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(MenuConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

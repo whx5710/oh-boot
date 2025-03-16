@@ -1,8 +1,8 @@
 package com.finn.support.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.JsonUtils;
 import com.finn.support.cache.ParamsCache;
@@ -51,10 +51,9 @@ public class ParamsServiceImpl implements ParamsService {
 
     @Override
     public PageResult<ParamsVO> page(ParamsQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<ParamsEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<ParamsEntity> list = paramsMapper.getList(query);
-        PageInfo<ParamsEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(ParamsConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(ParamsConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

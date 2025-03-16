@@ -1,8 +1,8 @@
 package com.finn.support.service.impl;
 
 import com.finn.core.utils.*;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
 import com.finn.core.constant.CommonEnum;
@@ -62,15 +62,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResult<UserVO> page(UserQuery query) {
         // 分页查询
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<UserEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         // 数据列表
         List<UserEntity> list = userMapper.getList(query);
-        PageInfo<UserEntity> pageInfo = new PageInfo<>(list);
-        List<UserVO> voList = UserConvert.INSTANCE.convertList(pageInfo.getList());
+        List<UserVO> voList = UserConvert.INSTANCE.convertList(list);
         for(UserVO vo: voList){
             vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
         }
-        return new PageResult<>(voList, pageInfo.getTotal());
+        return new PageResult<>(voList, page.getTotal());
     }
 
     /**

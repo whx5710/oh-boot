@@ -1,7 +1,7 @@
 package com.finn.support.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.support.cache.DictCache;
 import com.finn.support.convert.DictDataConvert;
 import com.finn.support.mapper.DictDataMapper;
@@ -51,10 +51,9 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Override
     public PageResult<DictTypeVO> page(DictTypeQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<DictTypeEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<DictTypeEntity> list = dictTypeMapper.getList(query);
-        PageInfo<DictTypeEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(DictTypeConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(DictTypeConvert.INSTANCE.convertList(list), page.getTotal());
     }
     @Override
     public void save(DictTypeVO vo) {

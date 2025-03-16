@@ -1,7 +1,7 @@
 package com.finn.flow.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.utils.DateUtils;
 import com.finn.flow.convert.TaskRecordConvert;
 import com.finn.flow.entity.TaskRecordEntity;
@@ -52,10 +52,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Override
     public PageResult<TaskRecordEntity> page(TaskRecordQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<TaskRecordEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<TaskRecordEntity> list = taskRecordMapper.getTaskList(new TaskRecordQuery());
-        PageInfo<TaskRecordEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(pageInfo.getList(), pageInfo.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     @Override

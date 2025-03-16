@@ -1,7 +1,7 @@
 package com.finn.sys.base.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.PageResult;
@@ -37,10 +37,9 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     @Override
     public PageResult<TenantMemberVO> page(TenantMemberQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<TenantMemberEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<TenantMemberEntity> list = tenantMemberMapper.tenantList(query);
-        PageInfo<TenantMemberEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(TenantMemberConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(TenantMemberConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

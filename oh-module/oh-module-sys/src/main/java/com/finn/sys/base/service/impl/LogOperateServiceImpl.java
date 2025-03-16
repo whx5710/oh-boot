@@ -2,8 +2,8 @@ package com.finn.sys.base.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
@@ -45,10 +45,9 @@ public class LogOperateServiceImpl implements LogOperateService {
 
     @Override
     public PageResult<LogOperateVO> page(LogOperateQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<LogOperateEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<LogOperateEntity> list = logOperateMapper.getList(query);
-        PageInfo<LogOperateEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(LogOperateConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(LogOperateConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     /**

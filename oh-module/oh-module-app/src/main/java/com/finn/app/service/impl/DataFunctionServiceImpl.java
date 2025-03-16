@@ -1,7 +1,7 @@
 package com.finn.app.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.utils.PageResult;
 import com.finn.app.convert.DataFunctionConvert;
 import com.finn.app.entity.DataFunctionEntity;
@@ -31,18 +31,16 @@ public class DataFunctionServiceImpl implements DataFunctionService {
 
     @Override
     public PageResult<DataFunctionVO> page(DataFunctionQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<DataFunctionEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<DataFunctionEntity> list = dataFunctionMapper.getList(query);
-        PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override
     public PageResult<DataFunctionVO> pageByClientId(DataFunctionQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<DataFunctionEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<DataFunctionEntity> list = dataFunctionMapper.pageByClientId(query.getClientId());
-        PageInfo<DataFunctionEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

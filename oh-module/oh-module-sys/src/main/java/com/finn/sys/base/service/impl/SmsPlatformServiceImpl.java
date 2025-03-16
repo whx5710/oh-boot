@@ -1,7 +1,7 @@
 package com.finn.sys.base.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.PageResult;
 import com.finn.sys.base.cache.SmsPlatformCache;
@@ -34,10 +34,9 @@ public class SmsPlatformServiceImpl implements SmsPlatformService {
 
     @Override
     public PageResult<SmsPlatformVO> page(SmsPlatformQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<SmsPlatformEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<SmsPlatformEntity> list = smsPlatformMapper.getList(query);
-        PageInfo<SmsPlatformEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(SmsPlatformConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(SmsPlatformConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

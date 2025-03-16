@@ -1,7 +1,7 @@
 package com.finn.support.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.support.cache.TenantCache;
 import com.finn.support.mapper.RoleMapper;
@@ -48,14 +48,13 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	public PageResult<RoleVO> page(RoleQuery query) {
 		// 数据权限
 		query.setSqlFilter(getDataScopeFilter(null,null));
-		PageHelper.startPage(query.getPageNum(), query.getPageSize());
+		Page<RoleEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		List<RoleEntity> list = roleMapper.getList(query);
-		PageInfo<RoleEntity> pageInfo = new PageInfo<>(list);
-		List<RoleVO> voList = RoleConvert.INSTANCE.convertList(pageInfo.getList());
+		List<RoleVO> voList = RoleConvert.INSTANCE.convertList(list);
 		for(RoleVO vo: voList){
 			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
 		}
-		return new PageResult<>(voList, pageInfo.getTotal());
+		return new PageResult<>(voList, page.getTotal());
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.finn.sys.quartz.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.core.utils.PageResult;
 import com.finn.sys.quartz.convert.ScheduleJobConvert;
 import com.finn.sys.quartz.entity.ScheduleJobEntity;
@@ -48,10 +48,9 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public PageResult<ScheduleJobVO> page(ScheduleJobQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<ScheduleJobEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<ScheduleJobEntity> list = scheduleJobMapper.getList(query);
-        PageInfo<ScheduleJobEntity> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(ScheduleJobConvert.INSTANCE.convertList(pageInfo.getList()), pageInfo.getTotal());
+        return new PageResult<>(ScheduleJobConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
     @Override

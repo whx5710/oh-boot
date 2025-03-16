@@ -1,7 +1,7 @@
 package com.finn.support.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.finn.support.mapper.DictDataMapper;
 import com.finn.support.query.DictDataQuery;
 import com.finn.support.vo.DictDataVO;
@@ -28,10 +28,9 @@ public class DictDataServiceImpl implements DictDataService {
 
     @Override
     public PageResult<DictDataVO> page(DictDataQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        Page<DictDataEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<DictDataVO> list = dictDataMapper.getList(query);
-        PageInfo<DictDataVO> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(list, pageInfo.getTotal());
+        return new PageResult<>(list, page.getTotal());
     }
 
     @Override
