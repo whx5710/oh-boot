@@ -154,4 +154,20 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * 对象集合转 list
+     * @param fromValue
+     * @param clazz
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> parseArray(Object fromValue, Class<T> clazz) {
+        try {
+            return objectMapper.convertValue(fromValue, objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
+        } catch (Exception e) {
+            log.error("转list失败！{}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
 }
