@@ -5,4 +5,8 @@
     <select id="selectPageByParam" resultType="java.util.HashMap">
         ${selectSql}
     </select>
+
+    <select id="selectListByParam" resultType="java.util.HashMap">
+        ${selectSql}
+    </select>
 </mapper>

@@ -1,6 +1,8 @@
 package com.finn.support.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.finn.framework.datasource.mapper.SuperMapper;
+import com.finn.framework.service.impl.BaseServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.utils.AssertUtils;
@@ -29,13 +31,14 @@ import java.util.Map;
  *
  */
 @Service
-public class ParamsServiceImpl implements ParamsService {
+public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements ParamsService {
 
     private final ParamsCache paramsCache;
 
     private final ParamsMapper paramsMapper;
 
-    public ParamsServiceImpl(ParamsCache paramsCache, ParamsMapper paramsMapper){
+    public ParamsServiceImpl(ParamsCache paramsCache, ParamsMapper paramsMapper, SuperMapper<ParamsEntity> superMapper){
+        super(superMapper);
         this.paramsCache = paramsCache;
         this.paramsMapper = paramsMapper;
     }

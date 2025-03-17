@@ -9,7 +9,6 @@ import com.finn.core.utils.ReflectUtil;
 import com.finn.core.utils.Tools;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
-import com.finn.framework.query.Query;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,7 @@ import java.util.*;
  * @author 王小费
  * @since 2025-03-12
  */
-public class ParamsBuilder<T> extends Query {
+public class ParamsBuilder<T> extends HashMap {
 
     private final Logger log = LoggerFactory.getLogger(ParamsBuilder.class);
 
@@ -42,8 +41,6 @@ public class ParamsBuilder<T> extends Query {
 
     // 参数集合
     List<Parameter> parameters = new ArrayList<>();
-    // 查询参数
-    Map<String,Object> selectParams = new HashMap<>();
 
     Class<T> clazz;
 
@@ -70,6 +67,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> eq(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, EQ, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -82,6 +80,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> ne(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, NE, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -94,6 +93,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> like(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LIKE, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -106,6 +106,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> likeRight(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LIKE_RIGHT, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -118,6 +119,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> likeLeft(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LIKE_LEFT, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -130,6 +132,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> notLike(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, NOT_LIKE, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -142,6 +145,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> gt(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, GT, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -154,6 +158,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> ge(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, GE, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -166,6 +171,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> lt(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LT, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -178,6 +184,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> le(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, LE, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -212,6 +219,7 @@ public class ParamsBuilder<T> extends Query {
     public ParamsBuilder<T> in(Func1<T, ?> function, Object value) {
         String fieldName = LambdaUtil.getFieldName(function);
         this.parameters.add(new Parameter(fieldName, IN, value, getColName(fieldName)));
+        this.put(fieldName, value);
         return this;
     }
 
@@ -219,10 +227,16 @@ public class ParamsBuilder<T> extends Query {
         return this.parameters;
     }
 
-    public Map<String, Object> getSelectParams(){
-        return this.selectParams;
+
+    public ParamsBuilder<T> setPageNum(int pageNum){
+        this.put("pageNum", pageNum);
+        return this;
     }
 
+    public ParamsBuilder<T> setPageSize(int pageSize){
+        this.put("pageSize", pageSize);
+        return this;
+    }
     /**
      * 拼接查询sql
      * @return sql
@@ -235,7 +249,6 @@ public class ParamsBuilder<T> extends Query {
         sql.FROM(tableName);
         if(!parameters.isEmpty()){
             for(Parameter item: parameters){
-                selectParams.put(item.getField(), item.getValue());
                 switch (item.getExpression()) {
                     case EQ -> sql.WHERE(item.getColName() + " = #{fp." + item.getField() + "}");
                     case NE -> sql.WHERE(item.getColName() + " <> #{fp." + item.getField() + "}");
@@ -254,13 +267,7 @@ public class ParamsBuilder<T> extends Query {
                 }
             }
         }
-        /*if(getPageNum() != null && getPageNum() > 0){
-            Query query = new Query();
-            query.setPageNum(getPageNum());
-            query.setPageSize(getPageSize());
-            selectParams.put("pages", query);
-        }*/
-        log.debug("生成查询SQL: {}", sql);
+        // log.debug("生成查询SQL: {}", sql);
         return sql.toString();
     }
 
