@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Map;
+
 /**
  * 分页注解
  * @author 王小费 whx5710@qq.com
@@ -40,8 +42,10 @@ public class PageAspect {
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         // 当前页码
         Integer pageNum = 1;
+        Integer mPageNum = 0;
         //每页记录数
         Integer pageSize = 10;
+        Integer mPageSize = 0;
         Query query = null;
         //获取被增强方法的参数
         Object[] args = proceedingJoinPoint.getArgs();
@@ -51,10 +55,27 @@ public class PageAspect {
                 pageNum = ObjectUtils.isEmpty(query.getPageNum())? pageNum:query.getPageNum();
                 pageSize = ObjectUtils.isEmpty(query.getPageSize())? pageSize:query.getPageSize();
                 break;
+            }else if(arg instanceof Map map){
+                try {
+                    if(map.containsKey("pageNum") && map.get("pageNum") != null){
+                        mPageNum = (Integer) map.get("pageNum");
+                    }
+                    if(map.containsKey("pageSize") && map.get("pageSize") != null){
+                        mPageSize = (Integer) map.get("pageSize");
+                    }
+                }catch (Exception e){
+                    mPageSize = 0;
+                    mPageNum = 0;
+                    log.warn("分页参数转换失败！{}", e.getMessage());
+                }
             }
         }
         Object result = null;
         try {
+            if(query == null && mPageSize > 0 && mPageNum > 0){
+                pageNum = mPageNum;
+                pageSize = mPageSize;
+            }
             //调用分页插件传入开始页码和页面容量
             try (Page<Object> page = PageHelper.startPage(pageNum, pageSize)) {
                 //执行
@@ -62,9 +83,9 @@ public class PageAspect {
                 if (query != null) {
                     //获取并封装分页后的参数
                     query.setTotal(page.getTotal());
-                } else {
+                }/*else {
                     log.warn("参数缺少com.finn.framework.query.Query对象，默认查询第{}页{}条", pageNum, pageSize);
-                }
+                }*/
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);
