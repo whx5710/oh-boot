@@ -2,7 +2,6 @@ package com.finn.team.service.impl;
 
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.PageResult;
-import com.finn.framework.datasource.mapper.SuperMapper;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.team.convert.OhTaskConvert;
 import com.finn.team.entity.OhTaskEntity;
@@ -28,8 +27,7 @@ public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService 
 
     private final OhTaskMapper ohTaskMapper;
 
-    public OhTaskServiceImpl(OhTaskMapper ohTaskMapper, SuperMapper<OhTaskEntity> superMapper){
-        super(superMapper);
+    public OhTaskServiceImpl(OhTaskMapper ohTaskMapper){
         this.ohTaskMapper = ohTaskMapper;
     }
 

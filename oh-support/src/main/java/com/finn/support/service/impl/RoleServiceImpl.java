@@ -1,6 +1,5 @@
 package com.finn.support.service.impl;
 
-import com.finn.framework.datasource.mapper.SuperMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.framework.service.impl.BaseServiceImpl;
@@ -37,8 +36,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	private final TenantCache tenantCache;
 
 	public RoleServiceImpl(RoleMenuService roleMenuService, RoleDataScopeService roleDataScopeService,
-						   UserRoleService userRoleService, RoleMapper roleMapper, TenantCache tenantCache, SuperMapper<RoleEntity> superMapper) {
-		super(superMapper);
+						   UserRoleService userRoleService, RoleMapper roleMapper, TenantCache tenantCache) {
 		this.roleMenuService = roleMenuService;
 		this.roleDataScopeService = roleDataScopeService;
 		this.userRoleService = userRoleService;

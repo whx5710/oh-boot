@@ -8,6 +8,7 @@ import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -23,11 +24,8 @@ import java.util.List;
 @Component
 public class BaseServiceImpl<T> implements BaseService {
 
-    private final SuperMapper superMapper;
-
-    public BaseServiceImpl(SuperMapper superMapper){
-        this.superMapper = superMapper;
-    }
+    @Resource
+    private SuperMapper<T> superMapper;
 
     /**
      * 原生SQL 数据权限

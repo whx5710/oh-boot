@@ -1,7 +1,6 @@
 package com.finn.support.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.finn.framework.datasource.mapper.SuperMapper;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -37,8 +36,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
 
     private final ParamsMapper paramsMapper;
 
-    public ParamsServiceImpl(ParamsCache paramsCache, ParamsMapper paramsMapper, SuperMapper<ParamsEntity> superMapper){
-        super(superMapper);
+    public ParamsServiceImpl(ParamsCache paramsCache, ParamsMapper paramsMapper){
         this.paramsCache = paramsCache;
         this.paramsMapper = paramsMapper;
     }
