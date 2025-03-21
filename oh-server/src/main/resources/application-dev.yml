@@ -64,8 +64,8 @@ spring:
       ssl.enabled: false
   datasource:
     #数据源的类型 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
-    #type: com.alibaba.druid.pool.DruidDataSource
-    type: com.zaxxer.hikari.HikariDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    #type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb

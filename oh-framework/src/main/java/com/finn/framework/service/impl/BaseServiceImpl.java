@@ -3,7 +3,6 @@ package com.finn.framework.service.impl;
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.JsonUtils;
 import com.finn.framework.datasource.mapper.SuperMapper;
-import com.finn.framework.service.BaseService;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.utils.ParamsBuilder;
@@ -11,7 +10,6 @@ import com.github.pagehelper.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -22,7 +20,7 @@ import java.util.List;
  *
  */
 @Component
-public class BaseServiceImpl<T> implements BaseService {
+public class BaseServiceImpl<T> {
 
     @Resource
     private SuperMapper<T> superMapper;
@@ -115,7 +113,7 @@ public class BaseServiceImpl<T> implements BaseService {
      */
     protected List<T> selectByParam(ParamsBuilder<T> param){
         String sql = param.buildSelectSQL();
-        List<HashMap> list = superMapper.selectListByParam(sql, param);
+        List<T> list = superMapper.selectListByParam(sql, param);
         return JsonUtils.parseArray(list, param.getClazz());
     }
 }

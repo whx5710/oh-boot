@@ -23,7 +23,7 @@ import java.util.Map;
  * @since 1.0.0 2022-11-25
  */
 @Service
-public class OhTaskServiceImpl extends BaseServiceImpl implements OhTaskService {
+public class OhTaskServiceImpl extends BaseServiceImpl<OhTaskEntity> implements OhTaskService {
 
     private final OhTaskMapper ohTaskMapper;
 

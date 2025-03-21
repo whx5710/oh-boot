@@ -15,7 +15,7 @@ public interface SuperMapper<T> {
      * 分页查询
      * @param selectSql sql字符串
      * @param selectParams 参数
-     * @return
+     * @return page
      */
     @Pages
     Page<T>  selectPageByParam(@Param("selectSql")String selectSql,@Param("fp") Map<String, Object> selectParams);
@@ -25,7 +25,7 @@ public interface SuperMapper<T> {
      * 列表查询
      * @param selectSql sql字符串
      * @param selectParams 参数
-     * @return
+     * @return list
      */
     List<T> selectListByParam(@Param("selectSql")String selectSql, @Param("fp") Map<String, Object> selectParams);
 
