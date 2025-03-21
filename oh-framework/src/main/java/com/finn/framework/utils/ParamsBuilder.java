@@ -72,10 +72,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> eq(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, EQ, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return eq(function, value, false);
     }
 
     /**
@@ -99,10 +96,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> ne(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, NE, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return ne(function, value, false);
     }
 
     /**
@@ -126,10 +120,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> like(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LIKE, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return like(function, value, false);
     }
 
     /**
@@ -153,10 +144,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> likeRight(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LIKE_RIGHT, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return likeRight(function, value, false);
     }
 
     /**
@@ -180,10 +168,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> likeLeft(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LIKE_LEFT, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return likeLeft(function, value, false);
     }
 
     /**
@@ -207,10 +192,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> notLike(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, NOT_LIKE, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return notLike(function, value, false);
     }
 
     /**
@@ -234,10 +216,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> gt(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, GT, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return gt(function, value, false);
     }
 
     /**
@@ -261,10 +240,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> ge(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, GE, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return ge(function, value, false);
     }
 
     /**
@@ -288,10 +264,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> lt(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LT, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return lt(function, value, false);
     }
 
     /**
@@ -315,10 +288,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> le(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LE, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
+        return le(function, value, false);
     }
 
     /**
