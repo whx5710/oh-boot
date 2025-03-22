@@ -12,6 +12,9 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import static com.finn.core.constant.Constant.PAGE_NUM;
+import static com.finn.core.constant.Constant.PAGE_SIZE;
+
 /**
  * 通用provider,拼接增删查改，通过 @SelectProvider注解操作，减少sql编写<br/>
  * 单表查询      selectList selectPage selectPageByParam <br/>
@@ -141,7 +144,7 @@ public class SelectProviderService extends ProviderService{
      * @param <T> 类
      */
     public <T> String selectPageByParam(ParamsBuilder<T> fp){
-        return fp.buildSelectSQL();
+        return fp.getSqlStr();
     }
 
     /**
@@ -151,8 +154,8 @@ public class SelectProviderService extends ProviderService{
      * @param <T> 类
      */
     public <T> String selectListByParam(ParamsBuilder<T> fp){
-        fp.remove("pageNum");
-        fp.remove("pageSize");
-        return fp.buildSelectSQL();
+        fp.remove(PAGE_NUM);
+        fp.remove(PAGE_SIZE);
+        return fp.getSqlStr();
     }
 }

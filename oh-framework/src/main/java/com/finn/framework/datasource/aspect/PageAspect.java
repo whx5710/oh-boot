@@ -16,6 +16,9 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Map;
 
+import static com.finn.core.constant.Constant.PAGE_NUM;
+import static com.finn.core.constant.Constant.PAGE_SIZE;
+
 /**
  * 分页注解
  * @author 王小费 whx5710@qq.com
@@ -55,13 +58,13 @@ public class PageAspect {
                 pageNum = ObjectUtils.isEmpty(query.getPageNum())? pageNum:query.getPageNum();
                 pageSize = ObjectUtils.isEmpty(query.getPageSize())? pageSize:query.getPageSize();
                 break;
-            }else if(arg instanceof Map map){
+            }else if(arg instanceof Map<?, ?> map){
                 try {
-                    if(map.containsKey("pageNum") && map.get("pageNum") != null){
-                        mPageNum = (Integer) map.get("pageNum");
+                    if(map.containsKey(PAGE_NUM) && map.get(PAGE_NUM) != null){
+                        mPageNum = (Integer) map.get(PAGE_NUM);
                     }
-                    if(map.containsKey("pageSize") && map.get("pageSize") != null){
-                        mPageSize = (Integer) map.get("pageSize");
+                    if(map.containsKey(PAGE_SIZE) && map.get(PAGE_SIZE) != null){
+                        mPageSize = (Integer) map.get(PAGE_SIZE);
                     }
                 }catch (Exception e){
                     mPageSize = 0;

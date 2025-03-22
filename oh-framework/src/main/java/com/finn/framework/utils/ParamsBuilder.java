@@ -2,49 +2,34 @@ package com.finn.framework.utils;
 
 import cn.hutool.core.lang.func.Func1;
 import cn.hutool.core.lang.func.LambdaUtil;
-import com.finn.core.entity.Parameter;
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.ReflectUtil;
-import com.finn.core.utils.Tools;
-import com.finn.framework.datasource.annotations.TableField;
-import com.finn.framework.datasource.annotations.TableName;
 import org.apache.ibatis.jdbc.SQL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.List;
+
+import static com.finn.core.constant.Constant.PAGE_NUM;
+import static com.finn.core.constant.Constant.PAGE_SIZE;
 
 /**
  * 参数构建类
  * @author 王小费
  * @since 2025-03-12
  */
-public class ParamsBuilder<T> extends HashMap<String, Object> {
+public class ParamsBuilder<T> extends ParamsSQL<T> {
+    // 类
+    private Class<T> clazz;
 
-    private final Logger log = LoggerFactory.getLogger(ParamsBuilder.class);
+    private static SQL sql;
 
-    public static final String EQ = "eq"; // 等于
-    public static final String NE = "ne"; // 不等于
-    public static final String LIKE = "like"; // 模糊查询
-    public static final String LIKE_RIGHT = "likeRight"; // 模糊查询
-    public static final String LIKE_LEFT = "likeLeft"; // 模糊查询
-    public static final String NOT_LIKE = "notLike"; // 模糊查询
-    public static final String IN = "in"; // in
-    public static final String GT = "gt"; // 大于
-    public static final String GE = "ge"; // 大于等于
-    public static final String LT = "lt"; // 小于
-    public static final String LE = "le"; // 小于等于
-    public static final String IS_NULL = "isNull"; // 为空
-    public static final String IS_NOT_NULL = "isNotNull"; // 为空
-
-    // 参数集合
-    List<Parameter> parameters = new ArrayList<>();
-
-    Class<T> clazz;
-    // 排序
-    String orderBy;
+    // 初始化
+    public static <T> ParamsBuilder<T> of(Class<T> clazz) {
+        ParamsBuilder<T> ParamsBuilder = new ParamsBuilder<>();
+        String tableName = getTableName(clazz);
+        sql = new SQL();
+        ParamsBuilder.setClazz(clazz);
+        buildColumn(sql, clazz);
+        sql.FROM(tableName);
+        return ParamsBuilder;
+    }
 
     public Class<T> getClazz() {
         return clazz;
@@ -54,15 +39,8 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
         this.clazz = clazz;
     }
 
-    public ParamsBuilder<T> setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-        return this;
-    }
-
-    public static <T> ParamsBuilder<T> of(Class<T> clazz) {
-        ParamsBuilder<T> paramsBuilder = new ParamsBuilder<>();
-        paramsBuilder.setClazz(clazz);
-        return paramsBuilder;
+    public String getSqlStr() {
+        return sql.toString();
     }
 
     /**
@@ -83,9 +61,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> eq(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, EQ, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " = #{fp." + fieldName + "}");
+                    }
+                }else{
+                    sql.WHERE(colName + " = #{fp." + fieldName + "}");
+                }
+            }else{
+                sql.WHERE(colName + " = #{fp." + fieldName + "}");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -107,9 +98,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> ne(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, NE, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " <> #{fp." + fieldName + "}");
+                    }
+                }else{
+                    sql.WHERE(colName + " <> #{fp." + fieldName + "}");
+                }
+            }else{
+                sql.WHERE(colName + " <> #{fp." + fieldName + "}");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -131,11 +135,25 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> like(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LIKE, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "},'%')");
+                    }
+                }else{
+                    sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "},'%')");
+                }
+            }else{
+                sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "},'%')");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
+
 
     /**
      * 右模糊查询
@@ -155,9 +173,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> likeRight(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LIKE_RIGHT, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " like concat(#{fp." + fieldName + "},'%')");
+                    }
+                }else{
+                    sql.WHERE(colName + " like concat(#{fp." + fieldName + "},'%')");
+                }
+            }else{
+                sql.WHERE(colName + " like concat(#{fp." + fieldName + "},'%')");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -179,9 +210,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> likeLeft(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LIKE_LEFT, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "})");
+                    }
+                }else{
+                    sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "})");
+                }
+            }else{
+                sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "})");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -203,9 +247,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> notLike(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, NOT_LIKE, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " not like concat('%',#{fp." + fieldName + "},'%')");
+                    }
+                }else{
+                    sql.WHERE(colName + " not like concat('%',#{fp." + fieldName + "},'%')");
+                }
+            }else{
+                sql.WHERE(colName + " not like concat('%',#{fp." + fieldName + "},'%')");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -227,9 +284,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> gt(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, GT, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " > #{fp." + fieldName + "}");
+                    }
+                }else{
+                    sql.WHERE(colName + " > #{fp." + fieldName + "}");
+                }
+            }else{
+                sql.WHERE(colName + " > #{fp." + fieldName + "}");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -251,9 +321,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> ge(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, GE, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " >= #{fp." + fieldName + "}");
+                    }
+                }else{
+                    sql.WHERE(colName + " >= #{fp." + fieldName + "}");
+                }
+            }else{
+                sql.WHERE(colName + " >= #{fp." + fieldName + "}");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -275,9 +358,22 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> lt(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LT, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " < #{fp." + fieldName + "}");
+                    }
+                }else{
+                    sql.WHERE(colName + " < #{fp." + fieldName + "}");
+                }
+            }else{
+                sql.WHERE(colName + " < #{fp." + fieldName + "}");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
 
@@ -299,11 +395,25 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      * @return p
      */
     public ParamsBuilder<T> le(Func1<T, ?> function, Object value, Boolean isEmpty) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, LE, value, getColName(fieldName), isEmpty));
-        this.put(fieldName, value);
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            if(value instanceof String str){
+                if(str.isEmpty()){
+                    if(isEmpty){
+                        sql.WHERE(colName + " <= #{fp." + fieldName + "}");
+                    }
+                }else{
+                    sql.WHERE(colName + " <= #{fp." + fieldName + "}");
+                }
+            }else{
+                sql.WHERE(colName + " <= #{fp." + fieldName + "}");
+            }
+            this.put(fieldName, value);
+        }
         return this;
     }
+
 
     /**
      * 为空
@@ -312,7 +422,8 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      */
     public ParamsBuilder<T> isNull(Func1<T, ?> function) {
         String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, IS_NULL, null, getColName(fieldName)));
+        String colName = getColName(fieldName, clazz);
+        sql.WHERE(colName + " is null");
         return this;
     }
 
@@ -323,295 +434,65 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
      */
     public ParamsBuilder<T> isNotNull(Func1<T, ?> function) {
         String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, IS_NOT_NULL, null, getColName(fieldName)));
+        String colName = getColName(fieldName, clazz);
+        sql.WHERE(colName + " is not null");
         return this;
-    }
-
-    /**
-     * 在某范围
-     * @param function f
-     * @param value 值
-     * @return p
-     */
-    public ParamsBuilder<T> in(Func1<T, ?> function, Object value) {
-        String fieldName = LambdaUtil.getFieldName(function);
-        this.parameters.add(new Parameter(fieldName, IN, value, getColName(fieldName)));
-        this.put(fieldName, value);
-        return this;
-    }
-
-    public List<Parameter> list() {
-        return this.parameters;
-    }
-
-
-    public ParamsBuilder<T> setPageNum(int pageNum){
-        this.put("pageNum", pageNum);
-        return this;
-    }
-
-    public ParamsBuilder<T> setPageSize(int pageSize){
-        this.put("pageSize", pageSize);
-        return this;
-    }
-    /**
-     * 拼接查询sql
-     * @return sql
-     */
-    public String buildSelectSQL(){
-        AssertUtils.isNull(clazz, "实体对象类");
-        String tableName = getTableName(clazz);
-        SQL sql = new SQL();
-        buildColumn(sql);
-        sql.FROM(tableName);
-        if(!parameters.isEmpty()){
-            for(Parameter item: parameters){
-                if(item.getValue() != null){
-                    switch (item.getExpression()) {
-                        case EQ -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " = #{fp." + item.getField() + "}");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " = #{fp." + item.getField() + "}");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " = #{fp." + item.getField() + "}");
-                            }
-                        }
-                        case NE -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " <> #{fp." + item.getField() + "}");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " <> #{fp." + item.getField() + "}");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " <> #{fp." + item.getField() + "}");
-                            }
-                        }
-                        case LIKE -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "},'%')");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "},'%')");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "},'%')");
-                            }
-                        }
-                        case LIKE_RIGHT -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " like concat(#{fp." + item.getField() + "},'%')");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " like concat(#{fp." + item.getField() + "},'%')");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " like concat(#{fp." + item.getField() + "},'%')");
-                            }
-                        }
-                        case LIKE_LEFT -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "})");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "})");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " like concat('%',#{fp." + item.getField() + "})");
-                            }
-                        }
-                        case NOT_LIKE -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " not like concat('%',#{fp." + item.getField() + "},'%')");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " not like concat('%',#{fp." + item.getField() + "},'%')");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " not like concat('%',#{fp." + item.getField() + "},'%')");
-                            }
-                        }
-                        case IN -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " in " + buildInStr(item));
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " in " + buildInStr(item));
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " in " + buildInStr(item));
-                            }
-                        }
-                        case GT -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " > #{fp." + item.getField() + "}");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " > #{fp." + item.getField() + "}");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " > #{fp." + item.getField() + "}");
-                            }
-                        }
-                        case GE -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " >= #{fp." + item.getField() + "}");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " >= #{fp." + item.getField() + "}");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " >= #{fp." + item.getField() + "}");
-                            }
-                        }
-                        case LT -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " < #{fp." + item.getField() + "}");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " < #{fp." + item.getField() + "}");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " < #{fp." + item.getField() + "}");
-                            }
-                        }
-                        case LE -> {
-                            if(item.getValue() instanceof String str){
-                                if(str.isEmpty()){
-                                    if(item.getEmpty()){
-                                        sql.WHERE(item.getColName() + " <= #{fp." + item.getField() + "}");
-                                    }
-                                }else{
-                                    sql.WHERE(item.getColName() + " <= #{fp." + item.getField() + "}");
-                                }
-                            }else{
-                                sql.WHERE(item.getColName() + " <= #{fp." + item.getField() + "}");
-                            }
-                        }
-                        default -> log.warn("未知的表达式！{}", item.getExpression());
-                    }
-                }else{
-                    if(item.getExpression().equals(IS_NULL)){
-                        sql.WHERE(item.getColName() + " is null");
-                    }else if(item.getExpression().equals(IS_NOT_NULL)){
-                        sql.WHERE(item.getColName() + " is not null");
-                    }else{
-                        log.warn("未知的表达式!{} {} {}",item.getField(), item.getExpression(), item.getValue());
-                    }
-                }
-            }
-        }
-        String sqlStr = sql.toString();
-        if(orderBy != null){
-            sqlStr = sqlStr + " order by " + orderBy;
-        }
-        log.debug("生成查询SQL: {}", sqlStr);
-        return sqlStr;
-    }
-
-    /**
-     * 组装列名
-     *
-     * @param sql sql
-     */
-    private void buildColumn(SQL sql){
-        List<Field> fields = ReflectUtil.getFields(clazz);
-        for(Field field: fields){
-            if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
-                TableField annotation = field.getAnnotation(TableField.class);
-                if (annotation.exists()) { // 剔除非数据库字段
-                    sql.SELECT(annotation.value() + " AS " + field.getName());
-                }
-            }else{
-                sql.SELECT(field.getName());
-            }
-        }
-    }
-
-    /**
-     * 获取列名
-     * @param fieldName 属性名
-     * @return 列名
-     */
-    private String getColName(String fieldName) {
-        Field field = null;
-        try {
-            field = ReflectUtil.getFieldByClass(clazz, fieldName);
-        } catch (NoSuchFieldException e) {
-            throw new ServerException("【" + fieldName + "】字段未找到，请检查");
-        }
-        if(field.isAnnotationPresent(TableField.class)){ // 判断是否有该注解
-            TableField annotation = field.getAnnotation(TableField.class);
-            if(annotation.exists()){
-                return annotation.value();
-            }else{
-                throw new ServerException("【" + fieldName + "】字段不存在，请检查");
-            }
-        }else{
-            return fieldName;
-        }
-    }
-
-    /**
-     * 获取表名
-     * @param clazz c
-     * @return 表名
-     */
-    private String getTableName(Class<?> clazz){
-        // 获取表名
-        TableName apoTable = clazz.getAnnotation(TableName.class);
-        if(apoTable == null){
-            log.warn("实体类没指定表名（@TableName），默认使用类名作为表名");
-            String s = clazz.getName();
-            int i = s.lastIndexOf(".");
-            return Tools.humpToLine(s.substring(i + 1));
-        }else{
-            String tableName = apoTable.value();
-            if(tableName == null || tableName.isEmpty()){
-                throw new ServerException("未指定表名，执行失败");
-            }else{
-                return tableName;
-            }
-        }
     }
 
     /**
      * 拼接in 条件
-     * @param param p
-     * @return sql
+     * @param function f
+     * @param value v
+     * @return p
      */
-    private StringBuilder buildInStr(Parameter param){
-        StringBuilder stringBuilder = new StringBuilder();
-        if(param.getValue() instanceof Collection<?> collection){
-            return stringBuilder.append("<foreach item=\"iValue\" index=\"index\" collection=\"")
-                    .append("#{fp.").append(param.getField()).append("}")
-                    .append("\" open=\"(\" separator=\",\" close=\")\">")
-                    .append("#{iValue}").append("</foreach>");
-        }else{
-            throw new ServerException("查询条件异常，请联系管理员[非集合参数]");
+    public ParamsBuilder<T> in(Func1<T, ?> function, List<?> value){
+        if(value != null){
+            String fieldName = LambdaUtil.getFieldName(function);
+            String colName = getColName(fieldName, clazz);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(colName).append(" in (");
+            for(int i = 0; i < value.size(); i++){
+                String tmpStr = fieldName + "_" + i;
+                if(i == (value.size() -1)){
+                    stringBuilder.append("#{fp.").append(tmpStr).append("}");
+                }else{
+                    stringBuilder.append("#{fp.").append(tmpStr).append("}, ");
+                }
+                put(tmpStr, value.get(i));
+            }
+            stringBuilder.append(")");
+            sql.WHERE(stringBuilder.toString());
         }
+        return this;
+    }
+
+    /**
+     * 排序
+     * @param columns 列名
+     * @return p
+     */
+    public ParamsBuilder<T> setOrderBy(String... columns) {
+        sql.ORDER_BY(columns);
+        return this;
+    }
+
+    /**
+     * 设置页数
+     * @param pageNum i
+     * @return p
+     */
+    public ParamsBuilder<T> setPageNum(Integer pageNum) {
+        this.put(PAGE_NUM, pageNum);
+        return this;
+    }
+
+    /**
+     * 设置每页数
+     * @param pageSize i
+     * @return p
+     */
+    public ParamsBuilder<T> setPageSize(Integer pageSize) {
+        this.put(PAGE_SIZE, pageSize);
+        return this;
     }
 }

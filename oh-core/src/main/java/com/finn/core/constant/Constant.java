@@ -14,7 +14,9 @@ public interface Constant {
     /**
      * 当前页码
      */
-    String PAGE = "page";
+    String PAGE_NUM = "pageNum";
+
+    String PAGE_SIZE = "pageSize";
     /**
      * 数据权限
      */
