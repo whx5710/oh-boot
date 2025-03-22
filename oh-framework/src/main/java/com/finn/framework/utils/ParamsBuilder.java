@@ -519,7 +519,7 @@ public class ParamsBuilder<T> extends HashMap<String, Object> {
                     }else if(item.getExpression().equals(IS_NOT_NULL)){
                         sql.WHERE(item.getColName() + " is not null");
                     }else{
-                        log.warn("未知的表达式! {} {}", item.getExpression(), item.getValue());
+                        log.warn("未知的表达式!{} {} {}",item.getField(), item.getExpression(), item.getValue());
                     }
                 }
             }

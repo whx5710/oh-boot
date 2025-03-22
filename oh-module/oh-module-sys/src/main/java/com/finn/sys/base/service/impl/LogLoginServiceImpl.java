@@ -1,9 +1,6 @@
 package com.finn.sys.base.service.impl;
 
-import com.finn.core.constant.Constant;
 import com.finn.core.utils.*;
-import com.finn.framework.datasource.annotations.Ds;
-import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
 import com.finn.sys.base.convert.LogLoginConvert;
@@ -26,14 +23,13 @@ import java.util.List;
  *
  */
 @Service
-public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginEntity> implements LogLoginService {
+public class LogLoginServiceImpl implements LogLoginService {
     private final LogLoginMapper logLoginMapper;
 
     public LogLoginServiceImpl(LogLoginMapper logLoginMapper) {
         this.logLoginMapper = logLoginMapper;
     }
 
-    @Ds(Constant.DYNAMIC_SYS_DB)
     @Override
     public PageResult<LogLoginVO> page(LogLoginQuery query) {
         ParamsBuilder<LogLoginEntity> params = ParamsBuilder.of(LogLoginEntity.class)
@@ -42,7 +38,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginEntity> impleme
                 .eq(LogLoginEntity::getStatus, query.getStatus())
                 .setPageNum(query.getPageNum()).setPageSize(query.getPageSize())
                 .setOrderBy("id desc");
-        try (Page<LogLoginEntity> page = selectPageByParam(params)) {
+        try (Page<LogLoginEntity> page = logLoginMapper.selectPageByParam(params)) {
             return new PageResult<>(LogLoginConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }

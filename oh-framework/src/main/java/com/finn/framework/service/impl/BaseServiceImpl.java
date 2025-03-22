@@ -1,13 +1,8 @@
 package com.finn.framework.service.impl;
 
 import com.finn.core.constant.Constant;
-import com.finn.core.utils.JsonUtils;
-import com.finn.framework.datasource.mapper.SuperMapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.framework.utils.ParamsBuilder;
-import com.github.pagehelper.Page;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,9 +16,6 @@ import java.util.List;
  */
 @Component
 public class BaseServiceImpl<T> {
-
-    @Resource
-    private SuperMapper<T> superMapper;
 
     /**
      * 原生SQL 数据权限
@@ -87,33 +79,4 @@ public class BaseServiceImpl<T> {
         return sqlFilter.toString();
     }
 
-    /**
-     * 通用分页查询
-     * @param param 参数
-     * @return page结合
-     */
-    protected Page<T> selectPageByParam(ParamsBuilder<T> param){
-        String sql = param.buildSelectSQL();
-        Page<T> page = superMapper.selectPageByParam(sql, param);
-        List<T> list = page.getResult();
-        // 数据类型转换
-        if(list != null && !list.isEmpty()){
-            List<T> result = JsonUtils.parseArray(list, param.getClazz());
-            page.removeAll(list);
-            page.addAll(result);
-        }
-        return page;
-    }
-
-
-    /**
-     * 通用查询列表
-     * @param param 参数
-     * @return list集合
-     */
-    protected List<T> selectByParam(ParamsBuilder<T> param){
-        String sql = param.buildSelectSQL();
-        List<T> list = superMapper.selectListByParam(sql, param);
-        return JsonUtils.parseArray(list, param.getClazz());
-    }
 }
