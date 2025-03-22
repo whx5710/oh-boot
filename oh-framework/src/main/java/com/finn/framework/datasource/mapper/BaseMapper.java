@@ -4,6 +4,7 @@ import com.finn.framework.datasource.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.framework.datasource.service.SelectProviderService;
 import com.finn.framework.query.Query;
+import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -59,4 +60,21 @@ public interface BaseMapper<T>{
     @Pages
     @SelectProvider(method = SelectProviderService.SELECT_PAGE, type = SelectProviderService.class)
     Page<T> selectPage(@Param("query") Query query, @Param("clazz")Class<T> clazz);
+
+    /**
+     * 分页查询
+     * @param fp 参数
+     * @return page
+     */
+    @Pages
+    @SelectProvider(method = SelectProviderService.SELECT_PAGE_PARAM, type = SelectProviderService.class)
+    Page<T>  selectPageByParam(@Param("fp") ParamsBuilder<T> fp);
+
+    /**
+     * 查询列表
+     * @param fp 参数
+     * @return list
+     */
+    @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
+    List<T> selectListByParam(@Param("fp") ParamsBuilder<T> fp);
 }

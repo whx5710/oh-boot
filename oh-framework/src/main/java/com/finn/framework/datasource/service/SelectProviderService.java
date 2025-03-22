@@ -4,6 +4,7 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.query.Query;
+import com.finn.framework.utils.ParamsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,11 @@ public class SelectProviderService extends ProviderService{
     public static final String SELECT_LIST = "selectList";
 
     public static final String SELECT_PAGE = "selectPage";
+
+    public static final String SELECT_PAGE_PARAM = "selectPageByParam";
+
+    public static final String SELECT_LIST_PARAM = "selectListByParam";
+
 
     private static final String queryKey = "query";
 
@@ -126,5 +132,27 @@ public class SelectProviderService extends ProviderService{
         sql.append("select * from ").append(tableName).append(where).append(whereSb.substring(and.length()));
         log.debug("生成查询SQL: {}", sql);
         return  sql.toString();
+    }
+
+    /**
+     * 通用单表查询
+     * @param fp 参数
+     * @return sql
+     * @param <T> 类
+     */
+    public <T> String selectPageByParam(ParamsBuilder<T> fp){
+        return fp.buildSelectSQL();
+    }
+
+    /**
+     * 通用单表查询
+     * @param fp 参数
+     * @return sql
+     * @param <T> 类
+     */
+    public <T> String selectListByParam(ParamsBuilder<T> fp){
+        fp.remove("pageNum");
+        fp.remove("pageSize");
+        return fp.buildSelectSQL();
     }
 }
