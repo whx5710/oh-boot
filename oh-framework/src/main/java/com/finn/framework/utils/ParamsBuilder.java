@@ -467,6 +467,15 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
     }
 
     /**
+     * 或条件
+     * @return p
+     */
+    public ParamsBuilder<T> or() {
+        sql.OR();
+        return this;
+    }
+
+    /**
      * 排序
      * @param columns 列名
      * @return p
