@@ -3,7 +3,6 @@ package com.finn.framework.datasource.mapper;
 import com.finn.framework.datasource.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.framework.datasource.service.SelectProviderService;
-import com.finn.framework.query.Query;
 import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
@@ -42,24 +41,6 @@ public interface BaseMapper<T>{
      */
     @DeleteProvider(method = ModifyProviderService.DELETE, type = ModifyProviderService.class)
     boolean delete(T entity);
-
-    /**
-     * 查询列表
-     * @param entry 实体类
-     * @return list
-     */
-    @SelectProvider(method = SelectProviderService.SELECT_LIST, type = SelectProviderService.class)
-    List<T> selectList(T entry);
-
-    /**
-     * 分页查询
-     * @param query 参数
-     * @param clazz 类别
-     * @return list
-     */
-    @Pages
-    @SelectProvider(method = SelectProviderService.SELECT_PAGE, type = SelectProviderService.class)
-    Page<T> selectPage(@Param("query") Query query, @Param("clazz")Class<T> clazz);
 
     /**
      * 分页查询
