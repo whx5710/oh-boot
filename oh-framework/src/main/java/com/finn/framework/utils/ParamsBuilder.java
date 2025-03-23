@@ -4,6 +4,7 @@ import cn.hutool.core.lang.func.Func1;
 import cn.hutool.core.lang.func.LambdaUtil;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static com.finn.core.constant.Constant.PAGE_NUM;
@@ -463,6 +464,19 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             stringBuilder.append(")");
             sql.WHERE(stringBuilder.toString());
         }
+        return this;
+    }
+
+    /**
+     * 拼接SQL，参数增加fp. 前缀<br/>
+     * 示例：content like concat('%',#{fp.keyWord}, '%') or version_num like concat('%', #{fp.keyWord},'%'))
+     * @param sqlStr where条件
+     * @param param 参数
+     * @return p
+     */
+    public ParamsBuilder<T> jointSQL(String sqlStr, HashMap<String, Object> param){
+        sql.WHERE(sqlStr);
+        this.putAll(param);
         return this;
     }
 
