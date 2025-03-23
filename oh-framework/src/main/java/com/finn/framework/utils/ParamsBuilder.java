@@ -475,8 +475,10 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
      * @return p
      */
     public ParamsBuilder<T> jointSQL(String sqlStr, HashMap<String, Object> param){
-        sql.WHERE(sqlStr);
-        this.putAll(param);
+        if(param != null && !param.isEmpty()){
+            sql.WHERE(sqlStr);
+            this.putAll(param);
+        }
         return this;
     }
 
