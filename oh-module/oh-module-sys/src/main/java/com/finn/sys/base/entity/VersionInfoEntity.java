@@ -112,7 +112,7 @@ public class VersionInfoEntity extends IDEntity {
 	}
 
 	public void setIsCurrVersion(Boolean isCurrVersion) {
-		isCurrVersion = isCurrVersion;
+		this.isCurrVersion = isCurrVersion;
 	}
 
 	public String getCoverPicture() {

@@ -63,8 +63,8 @@ public class VersionInfoVO extends BaseEntity {
 		return isCurrVersion;
 	}
 
-	public void setIsCurrVersion(Boolean currVersion) {
-		isCurrVersion = currVersion;
+	public void setIsCurrVersion(Boolean isCurrVersion) {
+		this.isCurrVersion = isCurrVersion;
 	}
 
 	public String getCoverPicture() {
