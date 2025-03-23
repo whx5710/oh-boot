@@ -1,14 +1,17 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.core.utils.PageResult;
+import com.finn.framework.utils.ParamsBuilder;
 import com.finn.sys.base.convert.VersionInfoConvert;
 import com.finn.sys.base.entity.VersionInfoEntity;
 import com.finn.sys.base.mapper.VersionInfoMapper;
 import com.finn.sys.base.query.VersionInfoQuery;
 import com.finn.sys.base.service.VersionInfoService;
 import com.finn.sys.base.vo.VersionInfoVO;
+import com.github.pagehelper.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,8 +31,16 @@ public class VersionInfoServiceImpl implements VersionInfoService {
 
     @Override
     public PageResult<VersionInfoVO> page(VersionInfoQuery query) {
-        List<VersionInfoEntity> list = versionInfoMapper.getList(query);
-        return new PageResult<>(VersionInfoConvert.INSTANCE.convertList(list), query.getTotal());
+        ParamsBuilder<VersionInfoEntity> param = ParamsBuilder.of(VersionInfoEntity.class)
+                .eq(VersionInfoEntity::getIsCurrVersion, query.getCurrVersion())
+                .setPageNum(query.getPageNum()).setPageSize(query.getPageSize());
+        if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("keyWord", query.getKeyWord());
+            param.jointSQL("(content like concat('%',#{fp.keyWord}, '%') or version_num like concat('%', #{fp.keyWord},'%'))", hashMap);
+        }
+        Page<VersionInfoEntity> page = versionInfoMapper.selectPageByParam(param);
+        return new PageResult<>(VersionInfoConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     @Override

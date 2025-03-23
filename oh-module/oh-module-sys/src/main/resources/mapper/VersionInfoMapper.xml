@@ -30,7 +30,7 @@
         VALUES (#{versionNum}, #{content}, #{releaseTime}, #{isCurrVersion}, #{coverPicture}, #{dbStatus}, #{creator}, #{createTime})
     </insert>
 
-    <update id="updateById">
+    <!--<update id="updateById">
         UPDATE sys_version_info
         <set>
             <if test="versionNum != null and versionNum != ''">version_num = #{versionNum},</if>
@@ -43,7 +43,7 @@
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
-    </update>
+    </update>-->
 
     <update id="updateCurVersion">
         UPDATE sys_version_info

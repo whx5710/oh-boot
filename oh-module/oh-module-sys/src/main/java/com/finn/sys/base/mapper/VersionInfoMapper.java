@@ -1,6 +1,7 @@
 package com.finn.sys.base.mapper;
 
 import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.sys.base.entity.VersionInfoEntity;
 import com.finn.sys.base.query.VersionInfoQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,14 +16,14 @@ import java.util.List;
 * @since 1.0.0 2023-09-16
 */
 @Mapper
-public interface VersionInfoMapper {
+public interface VersionInfoMapper extends BaseMapper<VersionInfoEntity> {
 
     @Pages
     List<VersionInfoEntity> getList(VersionInfoQuery query);
 
     int save(VersionInfoEntity param);
 
-    boolean updateById(VersionInfoEntity param);
+    //boolean updateById(VersionInfoEntity param);
 
     boolean updateCurVersion(@Param("isCurrVersion")Boolean isCurrVersion);
 

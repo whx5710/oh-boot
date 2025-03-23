@@ -107,20 +107,12 @@ public class VersionInfoEntity extends IDEntity {
 		this.releaseTime = releaseTime;
 	}
 
-	public Boolean getCurrVersion() {
-		return isCurrVersion;
-	}
-
-	public void setCurrVersion(Boolean currVersion) {
-		isCurrVersion = currVersion;
-	}
-
 	public Boolean getIsCurrVersion() {
 		return isCurrVersion;
 	}
 
-	public void setIsCurrVersion(Boolean currVersion) {
-		isCurrVersion = currVersion;
+	public void setIsCurrVersion(Boolean isCurrVersion) {
+		isCurrVersion = isCurrVersion;
 	}
 
 	public String getCoverPicture() {
