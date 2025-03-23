@@ -33,14 +33,16 @@ public class VersionInfoServiceImpl implements VersionInfoService {
     public PageResult<VersionInfoVO> page(VersionInfoQuery query) {
         ParamsBuilder<VersionInfoEntity> param = ParamsBuilder.of(VersionInfoEntity.class)
                 .eq(VersionInfoEntity::getIsCurrVersion, query.getCurrVersion())
+                .eq(VersionInfoEntity::getDbStatus, 1)
                 .setPageNum(query.getPageNum()).setPageSize(query.getPageSize());
         if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("keyWord", query.getKeyWord());
             param.jointSQL("(content like concat('%',#{fp.keyWord}, '%') or version_num like concat('%', #{fp.keyWord},'%'))", hashMap);
         }
-        Page<VersionInfoEntity> page = versionInfoMapper.selectPageByParam(param);
-        return new PageResult<>(VersionInfoConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        try (Page<VersionInfoEntity> page = versionInfoMapper.selectPageByParam(param)) {
+            return new PageResult<>(VersionInfoConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        }
     }
 
     @Override
