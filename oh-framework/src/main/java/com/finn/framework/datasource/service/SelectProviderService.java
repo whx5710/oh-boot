@@ -8,7 +8,7 @@ import static com.finn.core.constant.Constant.PAGE_SIZE;
 
 /**
  * 通用provider,拼接增删查改，通过 @SelectProvider注解操作，减少sql编写<br/>
- * 单表查询      selectList selectPage selectPageByParam <br/>
+ * 单表查询      selectPageByParam、selectListByParam <br/>
  * 注意：如果对查询性能有要求，不建议使用
  * @author 王小费 whx5710@qq.com
  */
@@ -25,7 +25,7 @@ public class SelectProviderService extends ProviderService{
      * @param <T> 类
      */
     public <T> String selectPageByParam(ParamsBuilder<T> fp){
-        return fp.getSqlStr();
+        return fp.getSql().toString();
     }
 
     /**
@@ -37,6 +37,6 @@ public class SelectProviderService extends ProviderService{
     public <T> String selectListByParam(ParamsBuilder<T> fp){
         fp.remove(PAGE_NUM);
         fp.remove(PAGE_SIZE);
-        return fp.getSqlStr();
+        return fp.getSql().toString();
     }
 }

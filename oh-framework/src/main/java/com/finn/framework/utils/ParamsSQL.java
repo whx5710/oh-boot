@@ -40,45 +40,26 @@ public class ParamsSQL<T> extends HashMap<String, Object> {
     }
 
     /**
-     * 组装列名
+     * 组装列名，缓存列名
      *
      * @param sql sql
+     * @return colValue
      */
-    static void buildColumn(SQL sql, Class<?> clazz){
+    static HashMap<String, String> buildColumn(SQL sql, Class<?> clazz){
+        HashMap<String, String> colValue = new HashMap<>();
         List<Field> fields = ReflectUtil.getFields(clazz);
         for(Field field: fields){
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
                     sql.SELECT(annotation.value() + " AS " + field.getName());
+                    colValue.put(field.getName(), annotation.value()); // 缓存列名
                 }
             }else{
                 sql.SELECT(field.getName());
+                colValue.put(field.getName(), field.getName()); // 缓存列名
             }
         }
-    }
-
-    /**
-     * 获取列名
-     * @param fieldName 属性名
-     * @return 列名
-     */
-    String getColName(String fieldName, Class<T> clazz) {
-        Field field = null;
-        try {
-            field = ReflectUtil.getFieldByClass(clazz, fieldName);
-        } catch (NoSuchFieldException e) {
-            throw new ServerException("【" + fieldName + "】字段未找到，请检查");
-        }
-        if(field.isAnnotationPresent(TableField.class)){ // 判断是否有该注解
-            TableField annotation = field.getAnnotation(TableField.class);
-            if(annotation.exists()){
-                return annotation.value();
-            }else{
-                throw new ServerException("【" + fieldName + "】字段不存在，请检查");
-            }
-        }else{
-            return fieldName;
-        }
+        return colValue;
     }
 }

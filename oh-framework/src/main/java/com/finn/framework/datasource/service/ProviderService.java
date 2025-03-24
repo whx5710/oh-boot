@@ -9,17 +9,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 通用provider,拼接增删查改，通过 @InsertProvider、@UpdateProvider等注解操作，减少sql编写<br/>
- * 单表插入      insert <br/>
- * 根据ID更新数据 updateById，更新时，主键不一定是id，可以通过@TableId 指定<br/>
- * 根据ID删除数据 deleteById
  * @author 王小费 whx5710@qq.com
  */
 public class ProviderService {
 
     private final Logger log = LoggerFactory.getLogger(ProviderService.class);
-
-    String where = " where ";
-    String and = " and ";
 
     /**
      * 获取表名
