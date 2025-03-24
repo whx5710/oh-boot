@@ -36,8 +36,8 @@ public class LogLoginServiceImpl implements LogLoginService {
                 .like(LogLoginEntity::getUsername, query.getUsername())
                 .like(LogLoginEntity::getAddress, query.getAddress())
                 .eq(LogLoginEntity::getStatus, query.getStatus())
-                .setPageNum(query.getPageNum()).setPageSize(query.getPageSize())
-                .setOrderBy("id desc");
+                .pageNum(query.getPageNum()).pageSize(query.getPageSize())
+                .orderBy("id desc");
         try (Page<LogLoginEntity> page = logLoginMapper.selectPageByParam(params)) {
             return new PageResult<>(LogLoginConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
