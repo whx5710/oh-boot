@@ -12,7 +12,7 @@ import static com.finn.core.constant.Constant.PAGE_NUM;
 import static com.finn.core.constant.Constant.PAGE_SIZE;
 
 /**
- * 参数构建类；支持常用的单表查询语句构建,构建的SQL会在参数前增加 fp. 前缀
+ * 参数构建类；支持常用的单表查询语句构建
  * @author 王小费
  * @since 2025-03-12
  */
@@ -86,13 +86,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " = #{fp." + fieldName + "}");
+                        sql.WHERE(colName + " = #{" + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " = #{fp." + fieldName + "}");
+                    sql.WHERE(colName + " = #{" + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " = #{fp." + fieldName + "}");
+                sql.WHERE(colName + " = #{" + fieldName + "}");
             }
             this.put(fieldName, value);
         }
@@ -123,13 +123,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " <> #{fp." + fieldName + "}");
+                        sql.WHERE(colName + " <> #{" + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " <> #{fp." + fieldName + "}");
+                    sql.WHERE(colName + " <> #{" + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " <> #{fp." + fieldName + "}");
+                sql.WHERE(colName + " <> #{" + fieldName + "}");
             }
             this.put(fieldName, value);
         }
@@ -160,13 +160,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "},'%')");
+                        sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
                     }
                 }else{
-                    sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "},'%')");
+                    sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
                 }
             }else{
-                sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "},'%')");
+                sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
             }
             this.put(fieldName, value);
         }
@@ -197,13 +197,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " like concat(#{fp." + fieldName + "},'%')");
+                        sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
                     }
                 }else{
-                    sql.WHERE(colName + " like concat(#{fp." + fieldName + "},'%')");
+                    sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
                 }
             }else{
-                sql.WHERE(colName + " like concat(#{fp." + fieldName + "},'%')");
+                sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
             }
             this.put(fieldName, value);
         }
@@ -234,13 +234,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "})");
+                        sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
                     }
                 }else{
-                    sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "})");
+                    sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
                 }
             }else{
-                sql.WHERE(colName + " like concat('%',#{fp." + fieldName + "})");
+                sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
             }
             this.put(fieldName, value);
         }
@@ -271,13 +271,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " not like concat('%',#{fp." + fieldName + "},'%')");
+                        sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
                     }
                 }else{
-                    sql.WHERE(colName + " not like concat('%',#{fp." + fieldName + "},'%')");
+                    sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
                 }
             }else{
-                sql.WHERE(colName + " not like concat('%',#{fp." + fieldName + "},'%')");
+                sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
             }
             this.put(fieldName, value);
         }
@@ -308,13 +308,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " > #{fp." + fieldName + "}");
+                        sql.WHERE(colName + " > #{" + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " > #{fp." + fieldName + "}");
+                    sql.WHERE(colName + " > #{" + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " > #{fp." + fieldName + "}");
+                sql.WHERE(colName + " > #{" + fieldName + "}");
             }
             this.put(fieldName, value);
         }
@@ -345,13 +345,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " >= #{fp." + fieldName + "}");
+                        sql.WHERE(colName + " >= #{" + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " >= #{fp." + fieldName + "}");
+                    sql.WHERE(colName + " >= #{" + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " >= #{fp." + fieldName + "}");
+                sql.WHERE(colName + " >= #{" + fieldName + "}");
             }
             this.put(fieldName, value);
         }
@@ -382,13 +382,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " < #{fp." + fieldName + "}");
+                        sql.WHERE(colName + " < #{" + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " < #{fp." + fieldName + "}");
+                    sql.WHERE(colName + " < #{" + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " < #{fp." + fieldName + "}");
+                sql.WHERE(colName + " < #{" + fieldName + "}");
             }
             this.put(fieldName, value);
         }
@@ -419,13 +419,13 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " <= #{fp." + fieldName + "}");
+                        sql.WHERE(colName + " <= #{" + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " <= #{fp." + fieldName + "}");
+                    sql.WHERE(colName + " <= #{" + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " <= #{fp." + fieldName + "}");
+                sql.WHERE(colName + " <= #{" + fieldName + "}");
             }
             this.put(fieldName, value);
         }
@@ -471,9 +471,9 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
             for(int i = 0; i < value.size(); i++){
                 String tmpStr = fieldName + "_" + i;
                 if(i == (value.size() -1)){
-                    stringBuilder.append("#{fp.").append(tmpStr).append("}");
+                    stringBuilder.append("#{").append(tmpStr).append("}");
                 }else{
-                    stringBuilder.append("#{fp.").append(tmpStr).append("}, ");
+                    stringBuilder.append("#{").append(tmpStr).append("}, ");
                 }
                 put(tmpStr, value.get(i));
             }
@@ -499,9 +499,9 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
                 String tmpStr = fieldName + "_" + i;
                 if(value[i] != null){
                     if(i == (value.length -1)){
-                        stringBuilder.append("#{fp.").append(tmpStr).append("}");
+                        stringBuilder.append("#{").append(tmpStr).append("}");
                     }else{
-                        stringBuilder.append("#{fp.").append(tmpStr).append("}, ");
+                        stringBuilder.append("#{").append(tmpStr).append("}, ");
                     }
                     put(tmpStr, value[i]);
                 }
@@ -513,8 +513,8 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
     }
 
     /**
-     * 拼接SQL，参数增加fp. 前缀<br/>
-     * 示例：content like concat('%',#{fp.keyWord}, '%') or version_num like concat('%', #{fp.keyWord},'%'))
+     * 拼接SQL<br/>
+     * 示例：content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))
      * @param whereSQL where条件
      * @param param 参数
      * @return p
@@ -528,17 +528,24 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
     }
 
     /**
-     * 拼接SQL，参数增加fp. 前缀<br/>
-     * 示例：content like concat('%',#{fp.keyWord}, '%') or version_num like concat('%', #{fp.keyWord},'%'))
-     * @param whereSQL where条件;user_name = #{fp.userName}
+     * 拼接SQL<br/>
+     * 示例：content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))
+     * @param whereSQL where条件;user_name = #{userName}
      * @param fieldName userName
      * @param value 参数值
      * @return ParamsBuilder
      */
     public ParamsBuilder<T> jointSQL(String whereSQL, String fieldName, Object value){
-        if(value != null && fieldName != null){
-            sql.WHERE(whereSQL);
-            this.put(fieldName, value);
+        if(value != null && fieldName != null && !fieldName.isEmpty()){
+            if(value instanceof String str){
+                if(!str.isEmpty()){
+                    sql.WHERE(whereSQL);
+                    this.put(fieldName, value);
+                }
+            }else{
+                sql.WHERE(whereSQL);
+                this.put(fieldName, value);
+            }
         }
         return this;
     }

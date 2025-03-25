@@ -49,7 +49,7 @@ public interface BaseMapper<T>{
      */
     @Pages
     @SelectProvider(method = SelectProviderService.SELECT_PAGE_PARAM, type = SelectProviderService.class)
-    Page<T>  selectPageByParam(@Param("fp") ParamsBuilder<T> fp);
+    Page<T>  selectPageByParam(ParamsBuilder<T> fp);
 
     /**
      * 查询列表
@@ -57,5 +57,5 @@ public interface BaseMapper<T>{
      * @return list
      */
     @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
-    List<T> selectListByParam(@Param("fp") ParamsBuilder<T> fp);
+    List<T> selectListByParam(ParamsBuilder<T> fp);
 }
