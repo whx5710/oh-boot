@@ -4,6 +4,7 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
 import com.finn.core.utils.Tools;
 import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableId;
 import com.finn.framework.datasource.annotations.TableName;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -22,7 +23,7 @@ public class ParamsSQL<T> extends HashMap<String, Object> {
      * @param clazz c
      * @return 表名
      */
-    static String getTableName(Class<?> clazz){
+    public static String getTableName(Class<?> clazz){
         // 获取表名
         TableName apoTable = clazz.getAnnotation(TableName.class);
         if(apoTable == null){
@@ -62,4 +63,21 @@ public class ParamsSQL<T> extends HashMap<String, Object> {
         }
         return colValue;
     }
+
+    /**
+     * 获取主键
+     * @param clazz class
+     * @return str
+     */
+    public static String getPriKey(Class<?> clazz){
+        List<Field> fields = ReflectUtil.getFields(clazz);
+        for(Field field: fields){
+            if (field.isAnnotationPresent(TableId.class)) { // 判断是否有该注解
+                TableId annotation = field.getAnnotation(TableId.class);
+                return annotation.value();
+            }
+        }
+        return "id";
+    }
+
 }

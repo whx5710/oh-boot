@@ -58,4 +58,13 @@ public interface BaseMapper<T>{
      */
     @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
     List<T> selectListByParam(ParamsBuilder<T> fp);
+
+    /**
+     * 根据ID查询数据
+     * @param id id
+     * @param clazz c
+     * @return sql
+     */
+    @SelectProvider(method = SelectProviderService.FIND_BY_ID, type = SelectProviderService.class)
+    T findById(@Param("id")Long id,Class<T> clazz);
 }

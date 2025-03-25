@@ -4,6 +4,7 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableId;
+import com.finn.framework.utils.ParamsSQL;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import java.util.List;
  * 根据ID删除数据 deleteById
  * @author 王小费 whx5710@qq.com
  */
-public class ModifyProviderService extends ProviderService{
+public class ModifyProviderService {
 
     public static final String INSERT = "insert";
     public static final String UPDATE = "updateById";
@@ -35,7 +36,7 @@ public class ModifyProviderService extends ProviderService{
     public <T> String insert(T entity) {
         SQL sql = new SQL();
         Class<?> clazz = entity.getClass();
-        String tableName = getTableName(clazz);
+        String tableName = ParamsSQL.getTableName(clazz);
         List<Field> fields = ReflectUtil.getFields(clazz);
         sql.INSERT_INTO(tableName);
         for (Field field : fields) {
@@ -62,7 +63,7 @@ public class ModifyProviderService extends ProviderService{
     public <T> String updateById(T entity) {
         Class<?> clazz = entity.getClass();
         List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
-        String tableName = getTableName(clazz); // 表名
+        String tableName = ParamsSQL.getTableName(clazz); // 表名
         boolean hasId = false;
         boolean hasMultipleId = false;
         SQL sql = new SQL();
@@ -126,7 +127,7 @@ public class ModifyProviderService extends ProviderService{
      */
     public <T> String delete(T entity) {
         Class<?> clazz = entity.getClass();
-        String tableName = getTableName(clazz); // 表名
+        String tableName = ParamsSQL.getTableName(clazz); // 表名
         List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
         boolean hasId = false;
         boolean hasMultipleId = false;
