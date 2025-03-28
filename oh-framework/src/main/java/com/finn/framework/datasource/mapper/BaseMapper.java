@@ -61,8 +61,8 @@ public interface BaseMapper<T>{
 
     /**
      * 根据ID查询数据
-     * @param id id
-     * @param clazz c
+     * @param id id主键
+     * @param clazz 类名，用于获取表名
      * @return sql
      */
     @SelectProvider(method = SelectProviderService.FIND_BY_ID, type = SelectProviderService.class)
