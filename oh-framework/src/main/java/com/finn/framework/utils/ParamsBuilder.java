@@ -590,4 +590,16 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
         this.put(PAGE_SIZE, pageSize);
         return this;
     }
+
+    /**
+     * 分页查询
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @return p
+     */
+    public ParamsBuilder<T> page(Integer pageNum, Integer pageSize) {
+        this.put(PAGE_NUM, pageNum);
+        this.put(PAGE_SIZE, pageSize);
+        return this;
+    }
 }
