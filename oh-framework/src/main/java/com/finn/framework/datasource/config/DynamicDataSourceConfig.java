@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * 多数据源信息配置类，读取数据源配置信息并注册成bean <br/>
- * 同过配置支持Druid、Hikari连接池 2025-02-04 <br/>
+ * 通过配置支持Druid、Hikari连接池 2025-02-04 <br/>
  * 主数据源获取顺序 primary > masterDb > sysDb <br/>
  * 未匹配到主数据源和系统内置数据源，默认第一个数据源
  * @author 王小费 whx5710@qq.com

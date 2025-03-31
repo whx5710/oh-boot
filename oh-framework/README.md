@@ -9,6 +9,18 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 - 增加租户功能，隔离业务数据 【2025年1月】
 - 支持Druid、Hikari连接池，可对连接池使用情况监控【2025年2月】
 - BaseMapper接口支持单表通用操作，通过ParamsBuilder构建sql，无需编写脚本【2025年3月】
+
+## 结构说明
+- common     公共相关的
+- datasource 数据库相关
+- entity     实体类
+- exception  异常处理
+- operatelog 操作日志
+- query      查询实体类
+- security   鉴权相关
+- service    服务集合
+- utils      工具集合
+
 ## 引入
 根据实际版本引入，如下所示：
 
