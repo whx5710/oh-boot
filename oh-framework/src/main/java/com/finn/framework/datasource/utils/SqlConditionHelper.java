@@ -198,7 +198,7 @@ public class SqlConditionHelper {
      */
     private SQLExpr newEqualityCondition(String tableName, String tableAlias, String fieldName, String fieldValue, SQLExpr originCondition) {
         // 如果不需要设置条件
-        if (!conditionDecision.adjudge(tableName, fieldName)){
+        if (!conditionDecision.adjudge(tableName)){
             return originCondition;
         }
         // 如果条件字段不允许为空

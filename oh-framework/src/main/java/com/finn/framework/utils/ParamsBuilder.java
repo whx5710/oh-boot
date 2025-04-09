@@ -2,7 +2,6 @@ package com.finn.framework.utils;
 
 import cn.hutool.core.lang.func.Func1;
 import cn.hutool.core.lang.func.LambdaUtil;
-import com.finn.core.exception.ServerException;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.HashMap;
@@ -20,8 +19,6 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
 
     // sql构建器
     private SQL sql;
-    // 列名
-    private HashMap<String, String> colValue;
 
     // 初始化
     public static <T> ParamsBuilder<T> of(Class<T> clazz) {
@@ -42,24 +39,6 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
 
     public SQL getSql(){
         return sql;
-    }
-
-    // 缓存列名
-    public void setColValue(HashMap<String, String> colValue){
-        this.colValue = colValue;
-    }
-
-    /**
-     * 根据字段属性名，获取列名
-     * @param fieldName 字段名
-     * @return 列名
-     */
-    private String getColName(String fieldName){
-        if(colValue.containsKey(fieldName)){
-            return colValue.get(fieldName);
-        }else{
-            throw new ServerException("【" + fieldName + "】字段不存在，请检查");
-        }
     }
 
     /**
@@ -514,7 +493,7 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
 
     /**
      * 拼接SQL<br/>
-     * 示例：content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))
+     * 示例：(content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))
      * @param whereSQL where条件
      * @param param 参数
      * @return p

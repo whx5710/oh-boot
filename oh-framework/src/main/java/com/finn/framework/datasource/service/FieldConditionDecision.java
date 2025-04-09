@@ -29,10 +29,9 @@ public class FieldConditionDecision {
      * 判决某个表是否需要添加某个字段过滤
      *
      * @param tableName   表名称
-     * @param fieldName   字段名称
      * @return 返回 true 则需要拼接SQL，隔离数据
      */
-    public Boolean adjudge(String tableName, String fieldName){
+    public Boolean adjudge(String tableName){
         // 满足匹配
         String tableRegex = multiTenantProperties.getTablePattern();
         Pattern pattern = Pattern.compile(tableRegex);

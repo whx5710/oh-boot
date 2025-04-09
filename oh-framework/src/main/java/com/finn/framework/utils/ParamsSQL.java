@@ -18,6 +18,28 @@ import java.util.List;
  * @since 2025-03-22
  */
 public class ParamsSQL<T> extends HashMap<String, Object> {
+
+    // 列名
+    protected HashMap<String, String> colValue;
+
+    // 缓存列名
+    public void setColValue(HashMap<String, String> colValue){
+        this.colValue = colValue;
+    }
+
+    /**
+     * 根据字段属性名，获取列名
+     * @param fieldName 字段名
+     * @return 列名
+     */
+    protected String getColName(String fieldName){
+        if(colValue.containsKey(fieldName)){
+            return colValue.get(fieldName);
+        }else{
+            throw new ServerException("【" + fieldName + "】字段不存在，请检查");
+        }
+    }
+
     /**
      * 获取表名
      * @param clazz c
