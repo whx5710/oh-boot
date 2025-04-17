@@ -2,7 +2,7 @@ package com.finn.framework.security.filter;
 
 import com.finn.core.utils.Tools;
 import com.finn.framework.common.properties.MultiTenantProperties;
-import com.finn.framework.utils.TenantContextHolder;
+import com.finn.framework.tenant.TenantContextHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

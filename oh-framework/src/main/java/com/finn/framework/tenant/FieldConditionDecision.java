@@ -1,4 +1,4 @@
-package com.finn.framework.datasource.service;
+package com.finn.framework.tenant;
 
 import com.finn.framework.common.properties.MultiTenantProperties;
 import org.springframework.stereotype.Component;

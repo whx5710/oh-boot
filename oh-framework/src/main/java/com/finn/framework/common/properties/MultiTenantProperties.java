@@ -41,7 +41,7 @@ public class MultiTenantProperties {
     }
 
     /**
-     * 当前数据库的方言 mysql
+     * 当前数据库的方言,默认mysql
      * @return
      */
     public String getDialect() {
@@ -53,7 +53,7 @@ public class MultiTenantProperties {
     }
 
     /**
-     * 多租户字段名称
+     * 多租户字段名称，默认tenant_id
      * @return
      */
     public String getTenantIdField() {

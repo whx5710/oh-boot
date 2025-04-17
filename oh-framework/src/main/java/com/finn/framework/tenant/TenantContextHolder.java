@@ -1,4 +1,4 @@
-package com.finn.framework.utils;
+package com.finn.framework.tenant;
 
 /**
  * 租户标识信息

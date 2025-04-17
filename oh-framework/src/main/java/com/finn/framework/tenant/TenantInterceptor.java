@@ -1,4 +1,4 @@
-package com.finn.framework.datasource.interceptor;
+package com.finn.framework.tenant;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
@@ -7,12 +7,13 @@ import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.datasource.utils.SqlConditionHelper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.framework.utils.TenantContextHolder;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -25,7 +26,7 @@ import java.util.*;
 @Component
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class TenantInterceptor implements Interceptor {
-    // private final Logger log = LoggerFactory.getLogger(TenantInterceptor.class);
+     private final Logger log = LoggerFactory.getLogger(TenantInterceptor.class);
 
     private final SqlConditionHelper conditionHelper;
 
@@ -69,7 +70,7 @@ public class TenantInterceptor implements Interceptor {
      * @return 添加条件后的sql语句
      */
     private String addTenantCondition(String sql, String tenantId) {
-        // log.debug("原始SQL = {}", sql);
+        log.debug("原始SQL = {}", sql);
         if (sql == null || sql.isEmpty() || multiTenantProperties.getTenantIdField() == null
                 || multiTenantProperties.getTenantIdField().isEmpty()){
             return sql;

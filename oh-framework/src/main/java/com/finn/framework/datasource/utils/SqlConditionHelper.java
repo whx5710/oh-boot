@@ -6,7 +6,7 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.*;
 import com.alibaba.druid.sql.ast.statement.*;
 import com.finn.core.exception.ServerException;
-import com.finn.framework.datasource.service.FieldConditionDecision;
+import com.finn.framework.tenant.FieldConditionDecision;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
