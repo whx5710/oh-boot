@@ -1,7 +1,7 @@
-package com.finn.sys.base.convert;
+package com.finn.support.convert;
 
-import com.finn.sys.base.entity.LogLoginEntity;
-import com.finn.sys.base.vo.LogLoginVO;
+import com.finn.support.entity.LogLoginEntity;
+import com.finn.support.vo.LogLoginVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

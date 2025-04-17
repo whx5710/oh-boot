@@ -1,4 +1,4 @@
-package com.finn.sys.base.service.impl;
+package com.finn.support.service.impl;
 
 import cn.hutool.captcha.AbstractCaptcha;
 import cn.hutool.captcha.CaptchaUtil;
@@ -6,10 +6,10 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
+import com.finn.support.enums.ParamsEnum;
 import com.finn.support.service.ParamsService;
-import com.finn.sys.base.enums.ParamsEnum;
-import com.finn.sys.base.service.CaptchaService;
-import com.finn.sys.base.vo.CaptchaVO;
+import com.finn.support.service.CaptchaService;
+import com.finn.support.vo.CaptchaVO;
 import org.springframework.stereotype.Service;
 
 /**

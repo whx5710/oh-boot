@@ -33,4 +33,15 @@ public interface UserRoleMapper {
     boolean deleteByUserIdList(@Param("list") List<Long> userIdList,@Param("param") UserRoleEntity param);
 
     boolean deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param") UserRoleEntity param);
+
+    /**
+     * 查询用户权限列表
+     * @param userId  用户ID
+     */
+    List<String> getUserAuthorityList(@Param("userId") Long userId);
+
+    /**
+     * 查询所有权限列表
+     */
+    List<String> getAuthorityList();
 }

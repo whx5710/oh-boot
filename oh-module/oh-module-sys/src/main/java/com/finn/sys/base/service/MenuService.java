@@ -54,10 +54,5 @@ public interface MenuService {
 	 */
 	Long getSubMenuCount(Long pid);
 
-	/**
-	 * 获取用户权限列表
-	 */
-	Set<String> getUserAuthority(UserDetail user);
-
 	MenuEntity getById(Long id);
 }

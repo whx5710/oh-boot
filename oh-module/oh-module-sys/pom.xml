@@ -29,18 +29,13 @@
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-support</artifactId>
-            <version>1.0.0.20241210</version>
+            <version>1.0.1.20250417</version>
         </dependency>
 
         <!-- 定时任务 -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-        </dependency>
-        <!-- hutool验证码 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-captcha</artifactId>
         </dependency>
         <!-- hutool 扩展 -->
         <dependency>

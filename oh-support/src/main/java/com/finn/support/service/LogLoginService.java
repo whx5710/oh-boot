@@ -1,9 +1,10 @@
-package com.finn.sys.base.service;
+package com.finn.support.service;
 
 import com.finn.core.utils.PageResult;
-import com.finn.sys.base.query.LogLoginQuery;
-import com.finn.sys.base.vo.AnalysisVO;
-import com.finn.sys.base.vo.LogLoginVO;
+import com.finn.support.query.LogLoginQuery;
+import com.finn.support.vo.AnalysisVO;
+import com.finn.support.vo.LogLoginVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -43,5 +44,5 @@ public interface LogLoginService {
      * @param operation 操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误
      * @return 统计情况
      */
-    List<AnalysisVO> latestDate(int day, int operation);
+    List<AnalysisVO> latestDateCount(int day, int operation);
 }

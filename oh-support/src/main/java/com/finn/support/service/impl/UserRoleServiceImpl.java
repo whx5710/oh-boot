@@ -1,17 +1,17 @@
 package com.finn.support.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
+import com.finn.support.enums.SuperAdminEnum;
 import com.finn.support.mapper.UserRoleMapper;
 import com.finn.support.service.UserRoleService;
 import com.finn.support.entity.UserRoleEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -104,5 +104,26 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public List<Long> getRoleIdList(Long userId) {
         return userRoleMapper.getRoleIdList(userId);
+    }
+
+    @Override
+    public Set<String> getUserAuthority(UserDetail user) {
+        // 系统管理员，拥有最高权限
+        List<String> authorityList;
+        if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
+            authorityList = userRoleMapper.getAuthorityList();
+        } else {
+            authorityList = userRoleMapper.getUserAuthorityList(user.getId());
+        }
+
+        // 用户权限列表
+        Set<String> permsSet = new HashSet<>();
+        for (String authority : authorityList) {
+            if (StrUtil.isBlank(authority)) {
+                continue;
+            }
+            permsSet.addAll(Arrays.asList(authority.trim().split(",")));
+        }
+        return permsSet;
     }
 }

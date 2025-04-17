@@ -1,4 +1,4 @@
-package com.finn.sys.base.enums;
+package com.finn.support.enums;
 
 /**
  * 系统参数 枚举

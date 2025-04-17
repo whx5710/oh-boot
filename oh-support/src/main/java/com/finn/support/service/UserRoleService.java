@@ -1,6 +1,9 @@
 package com.finn.support.service;
 
+import com.finn.framework.security.user.UserDetail;
+
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户角色关系
@@ -48,4 +51,9 @@ public interface UserRoleService {
      * @param userId  用户ID
      */
     List<Long> getRoleIdList(Long userId);
+
+    /**
+     * 获取用户权限列表
+     */
+    Set<String> getUserAuthority(UserDetail user);
 }

@@ -1,6 +1,6 @@
-package com.finn.sys.base.service;
+package com.finn.support.service;
 
-import com.finn.sys.base.vo.CaptchaVO;
+import com.finn.support.vo.CaptchaVO;
 
 /**
  * 验证码

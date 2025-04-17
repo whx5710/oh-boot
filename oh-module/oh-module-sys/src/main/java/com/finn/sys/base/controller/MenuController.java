@@ -7,6 +7,7 @@ import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
+import com.finn.support.service.UserRoleService;
 import com.finn.sys.base.convert.MenuConvert;
 import com.finn.sys.base.entity.MenuEntity;
 import com.finn.sys.base.enums.MenuTypeEnum;
@@ -36,8 +37,11 @@ import java.util.Set;
 public class MenuController {
     private final MenuService menuService;
 
-    public MenuController(MenuService menuService) {
+    private final UserRoleService userRoleService;
+
+    public MenuController(MenuService menuService, UserRoleService userRoleService) {
         this.menuService = menuService;
+        this.userRoleService = userRoleService;
     }
 
     @GetMapping("nav")
@@ -53,7 +57,7 @@ public class MenuController {
     @Operation(summary = "用户权限标识")
     public Result<Set<String>> authority() {
         UserDetail user = SecurityUser.getUser();
-        Set<String> set = menuService.getUserAuthority(user);
+        Set<String> set = userRoleService.getUserAuthority(user);
 
         return Result.ok(set);
     }

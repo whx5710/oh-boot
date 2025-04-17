@@ -7,9 +7,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>oh-support</artifactId>
-    <description>组织机构框架</description>
+    <description>基础组织机构信息，包括人员、角色、部门、生成token等，业务模块中可按需引入</description>
     <!-- 框架版本 -->
-    <version>1.0.0.20241210</version>
+    <version>1.0.1.20250417</version>
 
     <properties>
         <java.version>21</java.version>
@@ -25,6 +25,11 @@
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
+        </dependency>
+        <!-- hutool验证码 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-captcha</artifactId>
         </dependency>
         <!-- 接口文档 -->
         <dependency>

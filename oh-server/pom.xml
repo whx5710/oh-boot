@@ -16,7 +16,7 @@
     <properties>
         <module.version>1.0.0</module.version>
         <!-- 用户部门角色等 -->
-        <finn.support>1.0.0.20241210</finn.support>
+        <finn.support>1.0.1.20250417</finn.support>
         <!-- 打包的版本 -->
         <revision>3.0.1_20250204</revision>
     </properties>

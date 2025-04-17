@@ -32,17 +32,6 @@ public interface MenuMapper {
 	 */
 	List<MenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("type") Integer type);
 
-	/**
-	 * 查询用户权限列表
-	 * @param userId  用户ID
-	 */
-	List<String> getUserAuthorityList(@Param("userId") Long userId);
-
-	/**
-	 * 查询所有权限列表
-	 */
-	List<String> getAuthorityList();
-
 	int save(MenuEntity param);
 
 	boolean updateById(MenuEntity param);

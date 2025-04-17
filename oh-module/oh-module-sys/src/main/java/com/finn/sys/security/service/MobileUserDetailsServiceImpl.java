@@ -3,7 +3,7 @@ package com.finn.sys.security.service;
 import com.finn.framework.security.mobile.MobileUserDetailsService;
 import com.finn.support.entity.UserEntity;
 import com.finn.support.mapper.UserMapper;
-import com.finn.sys.base.service.SysUserDetailsService;
+import com.finn.support.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MobileUserDetailsServiceImpl implements MobileUserDetailsService {
-    private final SysUserDetailsService sysUserDetailsService;
+    private final UserService userService;
     private final UserMapper userMapper;
 
-    public MobileUserDetailsServiceImpl(SysUserDetailsService sysUserDetailsService, UserMapper userMapper) {
-        this.sysUserDetailsService = sysUserDetailsService;
+    public MobileUserDetailsServiceImpl(UserMapper userMapper, UserService userService) {
+        this.userService = userService;
         this.userMapper = userMapper;
     }
-
 
     @Override
     public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
@@ -31,8 +30,7 @@ public class MobileUserDetailsServiceImpl implements MobileUserDetailsService {
         if (userEntity == null) {
             throw new UsernameNotFoundException("手机号或验证码错误");
         }
-
-        return sysUserDetailsService.getUserDetails(userEntity);
+        return userService.getUserDetails(userEntity);
     }
 
 }

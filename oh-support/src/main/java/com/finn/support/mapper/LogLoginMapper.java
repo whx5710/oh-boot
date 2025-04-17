@@ -1,9 +1,9 @@
-package com.finn.sys.base.mapper;
+package com.finn.support.mapper;
 
 import com.finn.framework.datasource.mapper.BaseMapper;
-import com.finn.sys.base.entity.LogLoginEntity;
-import com.finn.sys.base.query.LogLoginQuery;
-import com.finn.sys.base.vo.AnalysisVO;
+import com.finn.support.entity.LogLoginEntity;
+import com.finn.support.query.LogLoginQuery;
+import com.finn.support.vo.AnalysisVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-support</artifactId>
-            <version>1.0.0.20241210</version>
+            <version>1.0.1.20250417</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>

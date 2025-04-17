@@ -1,4 +1,4 @@
-package com.finn.sys.base.vo;
+package com.finn.support.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

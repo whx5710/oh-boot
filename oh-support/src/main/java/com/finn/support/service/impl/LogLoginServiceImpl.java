@@ -1,15 +1,18 @@
-package com.finn.sys.base.service.impl;
+package com.finn.support.service.impl;
 
-import com.finn.core.utils.*;
+import com.finn.core.utils.ExcelUtils;
+import com.finn.core.utils.HttpContextUtils;
+import com.finn.core.utils.IpUtils;
+import com.finn.core.utils.PageResult;
 import com.finn.framework.utils.ParamsBuilder;
+import com.finn.support.convert.LogLoginConvert;
+import com.finn.support.entity.LogLoginEntity;
+import com.finn.support.mapper.LogLoginMapper;
+import com.finn.support.query.LogLoginQuery;
+import com.finn.support.service.LogLoginService;
+import com.finn.support.vo.AnalysisVO;
+import com.finn.support.vo.LogLoginVO;
 import com.github.pagehelper.Page;
-import com.finn.sys.base.convert.LogLoginConvert;
-import com.finn.sys.base.entity.LogLoginEntity;
-import com.finn.sys.base.mapper.LogLoginMapper;
-import com.finn.sys.base.query.LogLoginQuery;
-import com.finn.sys.base.service.LogLoginService;
-import com.finn.sys.base.vo.AnalysisVO;
-import com.finn.sys.base.vo.LogLoginVO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -77,7 +80,7 @@ public class LogLoginServiceImpl implements LogLoginService {
      * @return 统计情况
      */
     @Override
-    public List<AnalysisVO> latestDate(int day, int operation) {
+    public List<AnalysisVO> latestDateCount(int day, int operation) {
         return logLoginMapper.latestDateCount(day, operation);
     }
 

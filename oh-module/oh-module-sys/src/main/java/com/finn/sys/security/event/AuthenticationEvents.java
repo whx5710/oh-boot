@@ -2,8 +2,8 @@ package com.finn.sys.security.event;
 
 import com.finn.core.constant.Constant;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.sys.base.enums.LoginOperationEnum;
-import com.finn.sys.base.service.LogLoginService;
+import com.finn.support.enums.LoginOperationEnum;
+import com.finn.support.service.LogLoginService;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;

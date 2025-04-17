@@ -6,12 +6,12 @@ import com.finn.core.utils.Tools;
 import com.finn.core.utils.Result;
 import com.finn.framework.utils.annotations.Idempotent;
 import com.finn.framework.utils.annotations.RequestKeyParam;
-import com.finn.sys.base.service.AuthService;
-import com.finn.sys.base.service.CaptchaService;
-import com.finn.sys.base.vo.AccountLoginVO;
-import com.finn.sys.base.vo.CaptchaVO;
-import com.finn.sys.base.vo.MobileLoginVO;
-import com.finn.sys.base.vo.TokenVO;
+import com.finn.support.service.AuthService;
+import com.finn.support.service.CaptchaService;
+import com.finn.support.vo.AccountLoginVO;
+import com.finn.support.vo.CaptchaVO;
+import com.finn.support.vo.MobileLoginVO;
+import com.finn.support.vo.TokenVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -79,16 +79,6 @@ public class AuthController {
         login.setUserKey(userKey);
         TokenVO token = authService.loginByUserKey(login);
         return Result.ok(token);
-    }
-
-    @PostMapping("send/code")
-    @Operation(summary = "发送短信验证码")
-    public Result<String> sendCode(String mobile) {
-        boolean flag = authService.sendCode(mobile);
-        if (!flag) {
-            return Result.error("短信发送失败！");
-        }
-        return Result.ok();
     }
 
     @PostMapping("mobile")

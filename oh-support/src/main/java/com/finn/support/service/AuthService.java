@@ -1,8 +1,8 @@
-package com.finn.sys.base.service;
+package com.finn.support.service;
 
-import com.finn.sys.base.vo.AccountLoginVO;
-import com.finn.sys.base.vo.MobileLoginVO;
-import com.finn.sys.base.vo.TokenVO;
+import com.finn.support.vo.AccountLoginVO;
+import com.finn.support.vo.MobileLoginVO;
+import com.finn.support.vo.TokenVO;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -41,13 +41,6 @@ public interface AuthService {
      * @return
      */
     TokenVO refreshToken(String refreshToken, HttpServletRequest request);
-
-    /**
-     * 发送手机验证码
-     *
-     * @param mobile 手机号
-     */
-    boolean sendCode(String mobile);
 
     /**
      * 退出登录

@@ -1,4 +1,4 @@
-package com.finn.sys.base.entity;
+package com.finn.support.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

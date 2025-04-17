@@ -1,4 +1,4 @@
-package com.finn.sys.base.vo;
+package com.finn.support.vo;
 
 import cn.idev.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;

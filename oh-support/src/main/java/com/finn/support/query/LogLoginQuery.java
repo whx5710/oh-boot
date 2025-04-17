@@ -1,4 +1,4 @@
-package com.finn.sys.base.query;
+package com.finn.support.query;
 
 import com.finn.framework.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;

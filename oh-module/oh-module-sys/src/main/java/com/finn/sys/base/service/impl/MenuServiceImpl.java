@@ -1,6 +1,5 @@
 package com.finn.sys.base.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.constant.Constant;
@@ -19,10 +18,7 @@ import com.finn.sys.base.vo.MenuTreeVO;
 import com.finn.sys.base.vo.MenuVO;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单管理
@@ -149,28 +145,6 @@ public class MenuServiceImpl implements MenuService {
         param.setParentId(pid);
         List<MenuEntity> list = menuMapper.getList(param);
         return (long) list.size();
-    }
-
-    @Override
-    public Set<String> getUserAuthority(UserDetail user) {
-        // 系统管理员，拥有最高权限
-        List<String> authorityList;
-        if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
-            authorityList = menuMapper.getAuthorityList();
-        } else {
-            authorityList = menuMapper.getUserAuthorityList(user.getId());
-        }
-
-        // 用户权限列表
-        Set<String> permsSet = new HashSet<>();
-        for (String authority : authorityList) {
-            if (StrUtil.isBlank(authority)) {
-                continue;
-            }
-            permsSet.addAll(Arrays.asList(authority.trim().split(",")));
-        }
-
-        return permsSet;
     }
 
     @Override

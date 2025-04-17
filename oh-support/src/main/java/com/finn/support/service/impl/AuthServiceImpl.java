@@ -1,6 +1,5 @@
-package com.finn.sys.base.service.impl;
+package com.finn.support.service.impl;
 
-import cn.hutool.core.util.RandomUtil;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
 import com.finn.core.constant.Constant;
@@ -17,17 +16,14 @@ import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.support.cache.TenantCache;
 import com.finn.support.entity.UserEntity;
+import com.finn.support.service.LogLoginService;
 import com.finn.support.service.UserService;
-import com.finn.support.vo.UserVO;
-import com.finn.sys.base.enums.LoginOperationEnum;
-import com.finn.sys.base.service.AuthService;
-import com.finn.sys.base.service.CaptchaService;
-import com.finn.sys.base.service.LogLoginService;
-import com.finn.sys.base.service.SysUserDetailsService;
-import com.finn.sys.base.vo.AccountLoginVO;
-import com.finn.sys.base.vo.MobileLoginVO;
-import com.finn.sys.base.vo.TokenVO;
-import com.finn.sys.sms.service.SmsApi;
+import com.finn.support.enums.LoginOperationEnum;
+import com.finn.support.service.AuthService;
+import com.finn.support.service.CaptchaService;
+import com.finn.support.vo.AccountLoginVO;
+import com.finn.support.vo.MobileLoginVO;
+import com.finn.support.vo.TokenVO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -50,8 +46,6 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final LogLoginService logLoginService;
     private final UserService userService;
-    private final SysUserDetailsService sysUserDetailsService;
-    private final SmsApi smsApi;
 
     private final RedisCache redisCache;
     private final TenantCache tenantCache;
@@ -61,16 +55,14 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthServiceImpl(CaptchaService captchaService, TokenStoreCache tokenStoreCache,
                            AuthenticationManager authenticationManager, LogLoginService logLoginService,
-                           UserService userService, SmsApi smsApi, RedisCache redisCache,
-                           SecurityProperties securityProperties, SysUserDetailsService sysUserDetailsService,
+                           UserService userService, RedisCache redisCache,
+                           SecurityProperties securityProperties,
                            TenantCache tenantCache, MultiTenantProperties tenantProperties) {
         this.captchaService = captchaService;
         this.tokenStoreCache = tokenStoreCache;
         this.authenticationManager = authenticationManager;
         this.logLoginService = logLoginService;
         this.userService = userService;
-        this.sysUserDetailsService = sysUserDetailsService;
-        this.smsApi = smsApi;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
         this.tenantCache = tenantCache;
@@ -158,7 +150,7 @@ public class AuthServiceImpl implements AuthService {
             if(userDetail.getIp().equals(ip)){
                 // 重新查询用户信息
                 UserEntity userEntity = userService.getUser(userDetail.getId());
-                UserDetail userDetailDb = (UserDetail) sysUserDetailsService.getUserDetails(userEntity);
+                UserDetail userDetailDb = (UserDetail) userService.getUserDetails(userEntity);
                 userDetailDb.setLoginTime(LocalDateTime.now());
                 userDetailDb.setIp(ip);
                 userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
@@ -174,20 +166,6 @@ public class AuthServiceImpl implements AuthService {
         }else{
             throw new ServerException("刷新token过期，请重新登录");
         }
-    }
-
-    @Override
-    public boolean sendCode(String mobile) {
-        // 生成6位验证码
-        String code = RandomUtil.randomNumbers(6);
-
-        UserVO user = userService.getByMobile(mobile);
-        if (user == null) {
-            throw new ServerException("手机号未注册");
-        }
-
-        // 发送短信
-        return smsApi.sendCode(mobile, "code", code);
     }
 
     @Override

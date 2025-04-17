@@ -1,6 +1,12 @@
 package com.finn.support.service.impl;
 
 import com.finn.core.utils.*;
+import com.finn.framework.security.user.UserDetail;
+import com.finn.support.enums.DataScopeEnum;
+import com.finn.support.enums.UserStatusEnum;
+import com.finn.support.mapper.RoleDataScopeMapper;
+import com.finn.support.mapper.RoleMapper;
+import com.finn.support.service.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.cache.RedisCache;
@@ -15,13 +21,10 @@ import com.finn.support.query.UserQuery;
 import com.finn.support.vo.UserExcelVO;
 import com.finn.support.vo.UserVO;
 import com.finn.support.convert.UserConvert;
-import com.finn.support.service.ParamsService;
-import com.finn.support.service.UserPostService;
-import com.finn.support.service.UserService;
-import com.finn.support.service.UserRoleService;
 import com.finn.core.exception.ServerException;
 import com.finn.support.entity.UserEntity;
 import jakarta.annotation.Resource;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -43,6 +46,9 @@ public class UserServiceImpl implements UserService {
     private final RedisCache redisCache;
     private final UserMapper userMapper;
     private final TenantCache tenantCache;
+    private final OrgService orgService;
+    private final RoleDataScopeMapper roleDataScopeMapper;
+    private final RoleMapper roleMapper;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -51,12 +57,17 @@ public class UserServiceImpl implements UserService {
     private ParamsService paramsService;
 
     public UserServiceImpl(UserRoleService userRoleService, UserPostService userPostService,
-                           RedisCache redisCache, UserMapper userMapper, TenantCache tenantCache) {
+                           RedisCache redisCache, UserMapper userMapper, TenantCache tenantCache,
+                           OrgService orgService, RoleDataScopeMapper roleDataScopeMapper,
+                           RoleMapper roleMapper) {
         this.userRoleService = userRoleService;
         this.userPostService = userPostService;
         this.redisCache = redisCache;
         this.userMapper = userMapper;
         this.tenantCache = tenantCache;
+        this.orgService = orgService;
+        this.roleDataScopeMapper = roleDataScopeMapper;
+        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -358,6 +369,32 @@ public class UserServiceImpl implements UserService {
         return pwd;
     }
 
+    @Override
+    public UserDetails getUserDetails(UserEntity userEntity) {
+        // 转换成UserDetail对象
+        UserDetail userDetail = UserConvert.INSTANCE.convertDetail(userEntity);
+
+        // 账号不可用
+        if (userEntity.getStatus() == UserStatusEnum.DISABLE.getValue()) {
+            userDetail.setEnabled(false);
+        }
+
+        // 数据权限范围
+        List<Long> dataScopeList = getDataScope(userDetail);
+        userDetail.setDataScopeList(dataScopeList);
+
+        // 用户权限列表
+        Set<String> authoritySet = userRoleService.getUserAuthority(userDetail);
+        userDetail.setAuthoritySet(authoritySet);
+
+        return userDetail;
+    }
+
+    @Override
+    public UserEntity getByUsername(String username) {
+        return userMapper.getByUsername(username);
+    }
+
     /**
      * 密码校验
      * @param password 原始密码
@@ -370,6 +407,43 @@ public class UserServiceImpl implements UserService {
         if(!AssertUtils.passwordStrength(grade, password)){
             throw new ServerException("密码: " + CommonEnum.getName(grade));
         }
+    }
+
+    /**
+     * 获取数据范围
+     * @param userDetail
+     * @return
+     */
+    private List<Long> getDataScope(UserDetail userDetail) {
+        Integer dataScope = roleMapper.getDataScopeByUserId(userDetail.getId());
+        if (dataScope == null) {
+            return new ArrayList<>();
+        }
+
+        if (dataScope.equals(DataScopeEnum.ALL.getValue())) {
+            // 全部数据权限，则返回null
+            return null;
+        } else if (dataScope.equals(DataScopeEnum.ORG_AND_CHILD.getValue())) {
+            // 本机构及子机构数据
+            List<Long> dataScopeList = orgService.getSubOrgIdList(userDetail.getOrgId());
+            // 自定义数据权限范围
+            dataScopeList.addAll(roleDataScopeMapper.getDataScopeList(userDetail.getId()));
+
+            return dataScopeList;
+        } else if (dataScope.equals(DataScopeEnum.ORG_ONLY.getValue())) {
+            // 本机构数据
+            List<Long> dataScopeList = new ArrayList<>();
+            dataScopeList.add(userDetail.getOrgId());
+            // 自定义数据权限范围
+            dataScopeList.addAll(roleDataScopeMapper.getDataScopeList(userDetail.getId()));
+
+            return dataScopeList;
+        } else if (dataScope.equals(DataScopeEnum.CUSTOM.getValue())) {
+            // 自定义数据权限范围
+            return roleDataScopeMapper.getDataScopeList(userDetail.getId());
+        }
+
+        return new ArrayList<>();
     }
 
     // 缓存用户信息

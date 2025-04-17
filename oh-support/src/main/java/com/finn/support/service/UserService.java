@@ -5,6 +5,7 @@ import com.finn.support.entity.UserEntity;
 import com.finn.support.query.RoleUserQuery;
 import com.finn.support.query.UserQuery;
 import com.finn.support.vo.UserVO;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -81,4 +82,13 @@ public interface UserService {
      * @return 密码
      */
     String resetPwd(Long userId);
+
+    /**
+     * 获取 UserDetails 对象
+     */
+    UserDetails getUserDetails(UserEntity userEntity);
+
+
+    UserEntity getByUsername(String username);
+
 }
