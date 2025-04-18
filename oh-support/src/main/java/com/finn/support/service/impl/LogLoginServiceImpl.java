@@ -62,8 +62,8 @@ public class LogLoginServiceImpl implements LogLoginService {
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
         entity.setTenantId(tenantId);
-//        sysLogLoginMapper.save(entity);
-        logLoginMapper.insert(entity);
+        logLoginMapper.save(entity);
+//        logLoginMapper.insert(entity);
     }
 
     @Override

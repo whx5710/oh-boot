@@ -219,26 +219,9 @@ public class AuthServiceImpl implements AuthService {
     private TokenVO createToken(AccountLoginVO login, boolean checkKey){
         String msg;
         Authentication authentication;
-        // 判断错误次数，超出则锁定账号
-        boolean authLockFlag = securityProperties.getAuthCount() > 0;
         String authCountKey = RedisKeys.getAuthCountKey(login.getUsername());
-        if(authLockFlag && redisCache.hasKey(authCountKey)){
-            // 错误次数
-            int authCount = (int) redisCache.get(authCountKey);
-            if(authCount >= securityProperties.getAuthCount()){
-                // 锁定时间（秒）
-                Long lockTime = redisCache.getExpire(authCountKey);
-                long time = 1;
-                if(lockTime > 3600){
-                    time = lockTime/3600;
-                    msg = "账号已被锁定，请" + time + "小时后再试！";
-                }else{
-                    time = lockTime/60;
-                    msg = "账号已被锁定，请" + (time==0?1:time) + "分钟后再试！";
-                }
-                throw new ServerException(msg);
-            }
-        }
+        // 判断错误次数，超出则锁定账号
+        checkLock(authCountKey);
         try {
             // 用户认证
             authentication = authenticationManager.authenticate(
@@ -260,20 +243,7 @@ public class AuthServiceImpl implements AuthService {
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();
         // 判断用户密钥
-        if (checkKey && !login.getUserKey().equals(user.getUserKey())) {
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0){
-                if((securityProperties.getAuthCount() - authCount) > 0){
-                    msg = "用户密钥错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-                }else{
-                    msg = "用户密钥错误，账号即将锁定";
-                }
-            }else{
-                msg = "用户密钥错误";
-            }
-            throw new ServerException(msg);
-        }
+        checkKey(checkKey, user.getUserKey(), login);
         // 租户判断
         if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
                 && !tenantCache.valid(user.getTenantId())){
@@ -306,5 +276,55 @@ public class AuthServiceImpl implements AuthService {
         // 限制次数内登录成功，清除错误计数
         redisCache.delete(authCountKey);
         return new TokenVO(accessToken, refreshToken);
+    }
+
+    /**
+     * 检查是否锁定账号
+     * @param authCountKey redis key
+     */
+    private void checkLock(String authCountKey){
+        String msg = "";
+        boolean authLockFlag = securityProperties.getAuthCount() > 0;
+        if(authLockFlag && redisCache.hasKey(authCountKey)){
+            // 错误次数
+            int authCount = (int) redisCache.get(authCountKey);
+            if(authCount >= securityProperties.getAuthCount()){
+                // 锁定时间（秒）
+                Long lockTime = redisCache.getExpire(authCountKey);
+                long time = 1;
+                if(lockTime > 3600){
+                    time = lockTime/3600;
+                    msg = "账号已被锁定，请" + time + "小时后再试！";
+                }else{
+                    time = lockTime/60;
+                    msg = "账号已被锁定，请" + (time==0?1:time) + "分钟后再试！";
+                }
+                throw new ServerException(msg);
+            }
+        }
+    }
+
+    /**
+     * 校验用户密钥
+     * @param checkKey 是否校验
+     * @param userKey 用户密钥
+     * @param login 登录参数
+     */
+    private void checkKey(boolean checkKey,String userKey, AccountLoginVO login){
+        String msg = "";
+        if (checkKey && !login.getUserKey().equals(userKey)) {
+            // 登录失败计数
+            int authCount =loginCount(login.getUsername());
+            if(authCount > 0){
+                if((securityProperties.getAuthCount() - authCount) > 0){
+                    msg = "用户密钥错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+                }else{
+                    msg = "用户密钥错误，账号即将锁定";
+                }
+            }else{
+                msg = "用户密钥错误";
+            }
+            throw new ServerException(msg);
+        }
     }
 }
