@@ -11,23 +11,4 @@
 		order by t1.tenant_id,t1.sort asc
 	</select>
 
-	<!--<insert id="insertOrg">
-		insert into sys_org ( parent_id, name, note, sort, db_status, creator, create_time)
-		values ( #{parentId}, #{name}, #{note}, #{sort}, #{dbStatus}, #{creator}, #{createTime})
-	</insert>-->
-
-	<!--<update id="updateById">
-		UPDATE sys_org
-		<set>
-			<if test="parentId != null">parent_id = #{parentId},</if>
-			<if test="name != null and name != ''">name = #{name},</if>
-			<if test="note != null and note != ''">note = #{note},</if>
-			<if test="sort != null">sort = #{sort},</if>
-			<if test="dbStatus != null">db_status = #{dbStatus},</if>
-			<if test="updater != null and updater != 0">updater = #{updater},</if>
-			update_time = #{updateTime}
-		</set>
-		WHERE id = #{id}
-	</update>-->
-
 </mapper>

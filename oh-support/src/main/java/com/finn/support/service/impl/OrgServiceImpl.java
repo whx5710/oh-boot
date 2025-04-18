@@ -49,22 +49,23 @@ public class OrgServiceImpl implements OrgService {
 
 	@Override
 	public List<OrgVO> getList(OrgQuery query) {
-
 		// 数据权限
 		// params.put(Constant.DATA_SCOPE, getDataScope("t1", "id"));
 
 		// 机构列表
 		List<OrgEntity> entityList = orgMapper.getList(query);
 
+		List<OrgVO> voList = OrgConvert.INSTANCE.convertList(entityList);
 		UserDetail user = SecurityUser.getUser();
 		if(user != null && user.getSuperAdmin() == 1){
-			for(OrgEntity item : entityList){
+			for(OrgVO item : voList){
 				if(item.getTenantId() != null){
-					item.setName(item.getName() +"[" + item.getTenantId() + "]");
+					item.setTenantName(tenantCache.getNameByTenantId(item.getTenantId()));
+					item.setName(item.getName() +" [" + item.getTenantName() + "]");
 				}
 			}
 		}
-		return TreeUtils.build(OrgConvert.INSTANCE.convertList(entityList));
+		return TreeUtils.build(voList);
 	}
 
 	/**
@@ -77,6 +78,17 @@ public class OrgServiceImpl implements OrgService {
 		Page<OrgEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		// 机构列表
 		List<OrgEntity> list = orgMapper.getList(query);
+		// 如果未获取到机构数据，且用户为租户，且parent_id = 0
+		if((list == null || list.size() == 0) && query.getParentId() != null && query.getParentId() == 0L){
+			UserDetail user = SecurityUser.getUser();
+			if(user != null && user.getSuperAdmin() != 1 && user.getTenantId() != null
+					&& !user.getTenantId().isEmpty()){
+				page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
+				// 机构列表
+				query.setParentId(user.getOrgId());
+				list = orgMapper.getList(query);
+			}
+		}
 		List<OrgVO> voList = OrgConvert.INSTANCE.convertList(list);
 		for(OrgVO vo: voList){
 			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
@@ -87,6 +99,13 @@ public class OrgServiceImpl implements OrgService {
 	@Override
 	public void save(OrgVO vo) {
 		OrgEntity entity = OrgConvert.INSTANCE.convert(vo);
+		// 判断是否租户新增部门，如果是租户，根部门对应该租户的所属部门
+		UserDetail user = SecurityUser.getUser();
+		if(user != null && entity.getParentId() == 0L){
+			if(user.getSuperAdmin() != 1 && user.getTenantId() != null && !user.getTenantId().isEmpty()){
+				entity.setParentId(user.getOrgId()==null?entity.getParentId():user.getOrgId());
+			}
+		}
 		orgMapper.insertOrg(entity);
 	}
 
@@ -102,6 +121,13 @@ public class OrgServiceImpl implements OrgService {
 		List<Long> subOrgList = getSubOrgIdList(entity.getId());
 		if(subOrgList.contains(entity.getParentId())){
 			throw new ServerException("上级机构不能为下级");
+		}
+		// 防止租户新增部门到根节点
+		UserDetail user = SecurityUser.getUser();
+		if(user != null && entity.getParentId() == 0L) {
+			if (user.getSuperAdmin() != 1 && user.getTenantId() != null && !user.getTenantId().isEmpty()) {
+				entity.setParentId(user.getOrgId()==null?entity.getParentId():user.getOrgId());
+			}
 		}
 		orgMapper.updateById(entity);
 	}
