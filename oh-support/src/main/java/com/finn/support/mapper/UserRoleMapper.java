@@ -28,6 +28,16 @@ public interface UserRoleMapper {
     @Select("select role_id from sys_user_role where user_id = #{userId} and db_status = 1")
     List<Long> getRoleIdList(@Param("userId") Long userId);
 
+    /**
+     * 根据用户ID获取非系统内置的角色ID
+     * @param userId 用户ID
+     * @return 角色ids
+     */
+    @Select("select sys_user_role.role_id from sys_user_role INNER JOIN sys_role " +
+            "on sys_user_role.role_id = sys_role.id and sys_user_role.db_status = 1 " +
+            "and sys_role.db_status = 1 and sys_role.is_system = 0 and sys_user_role.user_id = #{userId}")
+    List<Long> getTenantRoleIds(@Param("userId") Long userId);
+
     int saveBatch(@Param("list") List<UserRoleEntity> params);
 
     boolean deleteByUserIdList(@Param("list") List<Long> userIdList,@Param("param") UserRoleEntity param);

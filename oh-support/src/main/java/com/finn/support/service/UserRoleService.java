@@ -47,7 +47,7 @@ public interface UserRoleService {
     void deleteByUserIdList(Long roleId, List<Long> userIdList);
 
     /**
-     * 角色ID列表
+     * 角色ID列表，如果登录是租户，则不获取内置角色ID
      * @param userId  用户ID
      */
     List<Long> getRoleIdList(Long userId);

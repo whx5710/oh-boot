@@ -103,7 +103,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<Long> getRoleIdList(Long userId) {
-        return userRoleMapper.getRoleIdList(userId);
+        if(SecurityUser.isTenant()){
+            return userRoleMapper.getTenantRoleIds(userId);
+        }else{
+            return userRoleMapper.getRoleIdList(userId);
+        }
     }
 
     @Override
