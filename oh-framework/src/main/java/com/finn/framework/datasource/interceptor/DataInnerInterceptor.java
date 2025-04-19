@@ -100,7 +100,7 @@ public class DataInnerInterceptor implements Interceptor {
             try {
                 Object object = ReflectUtil.getValue(params, TENANT_ID);
                 if(object == null || object.equals("")){
-                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), false);
+                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
                 }
             }catch (NoSuchFieldException e){
                 log.warn("无{}属性！", TENANT_ID);
@@ -150,7 +150,7 @@ public class DataInnerInterceptor implements Interceptor {
             try {
                 Object object = ReflectUtil.getValue(params, TENANT_ID);
                 if(object == null || object.equals("")){
-                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), false);
+                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
                 }
             }catch (NoSuchFieldException e){
                 log.warn("无{}属性！", TENANT_ID);
