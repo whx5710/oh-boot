@@ -27,6 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (userEntity == null) {
             throw new UsernameNotFoundException("用户名或密码错误");
         }
+        // 系统中租户ID如果为null，都默认成空字符串
+        if(userEntity.getTenantId() == null){
+            userEntity.setTenantId("");
+        }
         return userService.getUserDetails(userEntity);
     }
 

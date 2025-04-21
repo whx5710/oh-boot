@@ -16,6 +16,7 @@ public class BaseUserEntity extends IDEntity {
     private Integer gender;
     private String email;
     private String mobile;
+    // 租户ID
     private String tenantId;
 
     public String getUsername() {

@@ -56,6 +56,7 @@ public class SecurityConfig {
         return new MobileAuthenticationProvider(mobileUserDetailsService, mobileVerifyCodeService);
     }
 
+    // 认证管理器
     @Bean
     public AuthenticationManager authenticationManager() {
         List<AuthenticationProvider> providerList = new ArrayList<>();
@@ -63,6 +64,7 @@ public class SecurityConfig {
         providerList.add(mobileAuthenticationProvider());
 
         ProviderManager providerManager = new ProviderManager(providerList);
+        // 事件注册，可监听登录事件，记录登录日志
         providerManager.setAuthenticationEventPublisher(new DefaultAuthenticationEventPublisher(applicationEventPublisher));
         return providerManager;
     }

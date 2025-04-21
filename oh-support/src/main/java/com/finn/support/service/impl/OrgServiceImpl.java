@@ -81,8 +81,7 @@ public class OrgServiceImpl implements OrgService {
 		// 如果未获取到机构数据，且用户为租户，且parent_id = 0
 		if((list == null || list.size() == 0) && query.getParentId() != null && query.getParentId() == 0L){
 			UserDetail user = SecurityUser.getUser();
-			if(user != null && user.getSuperAdmin() != 1 && user.getTenantId() != null
-					&& !user.getTenantId().isEmpty()){
+			if(user != null && user.getSuperAdmin() != 1 && SecurityUser.isTenant()){
 				page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
 				// 机构列表
 				query.setParentId(user.getOrgId());

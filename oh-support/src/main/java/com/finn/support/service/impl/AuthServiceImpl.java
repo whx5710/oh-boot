@@ -223,7 +223,8 @@ public class AuthServiceImpl implements AuthService {
         // 判断错误次数，超出则锁定账号
         checkLock(authCountKey);
         try {
-            // 用户认证
+            // 用户认证,调用authenticate对认证请求进行处理，入参是一个Authentication对象,封装了用户名和密码
+            // 返回一个已经被认证过的Authentication对象
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         } catch (BadCredentialsException e) {
