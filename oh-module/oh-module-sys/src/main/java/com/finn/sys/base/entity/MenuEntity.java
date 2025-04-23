@@ -143,7 +143,7 @@ public class MenuEntity extends BaseEntity {
 	}
 
 	public void setNoCache(Boolean noCache) {
-		this.noCache = noCache;
+		this.noCache = noCache==null?true:noCache;
 	}
 
 	public String getMark() {

@@ -6,9 +6,9 @@ import com.finn.sys.base.entity.MenuEntity;
 import com.finn.sys.base.query.MenuQuery;
 import com.finn.sys.base.vo.MenuTreeVO;
 import com.finn.sys.base.vo.MenuVO;
+import com.finn.sys.base.vo.RouteVO;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -47,6 +47,14 @@ public interface MenuService {
 	 * @param type 菜单类型
 	 */
 	List<MenuTreeVO> getUserMenuList(UserDetail user, Integer type);
+
+	/**
+	 * 用户菜单列表-route
+	 *
+	 * @param user  用户
+	 * @param type 菜单类型
+	 */
+	List<RouteVO> getUserRouteList(UserDetail user, Integer type);
 
 	/**
 	 * 获取子菜单的数量

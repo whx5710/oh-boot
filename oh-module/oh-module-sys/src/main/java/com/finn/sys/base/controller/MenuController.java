@@ -15,6 +15,7 @@ import com.finn.sys.base.query.MenuQuery;
 import com.finn.sys.base.service.MenuService;
 import com.finn.sys.base.vo.MenuTreeVO;
 import com.finn.sys.base.vo.MenuVO;
+import com.finn.sys.base.vo.RouteVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -51,6 +52,13 @@ public class MenuController {
         List<MenuTreeVO> list = menuService.getUserMenuList(user, MenuTypeEnum.MENU.getValue());
 
         return Result.ok(list);
+    }
+
+    @GetMapping("/route")
+    @Operation(summary = "菜单导航-route")
+    public Result<List<RouteVO>> route() {
+        UserDetail user = SecurityUser.getUser();
+        return Result.ok(menuService.getUserRouteList(user, MenuTypeEnum.MENU.getValue()));
     }
 
     @GetMapping("authority")
