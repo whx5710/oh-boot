@@ -137,7 +137,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<RouteVO> getUserRouteList(UserDetail user, Integer type) {
         List<MenuEntity> menuList = menuList(user, type);
-        if(menuList != null && menuList.size() > 0){
+        if(menuList != null && !menuList.isEmpty()){
             List<RouteVO> routeVOS = new ArrayList<>(menuList.size());
             // 创建route vo,组装meta
             for(MenuEntity item: menuList){
@@ -160,9 +160,13 @@ public class MenuServiceImpl implements MenuService {
         routeVO.setId(item.getId());
         routeVO.setParentId(item.getParentId());
         routeVO.setName(item.getName());
-        if(item.getUrl() != null && item.getUrl().length() > 0){
+        if(item.getUrl() != null && !item.getUrl().isEmpty()){
             if(!item.getUrl().startsWith("/")){
-                routeVO.setComponent("/" + item.getUrl());
+                if(item.getUrl().equals("BasicLayout")){
+                    routeVO.setComponent("BasicLayout");
+                }else {
+                    routeVO.setComponent("/" + item.getUrl());
+                }
             }else{
                 routeVO.setComponent(item.getUrl());
             }
@@ -170,6 +174,20 @@ public class MenuServiceImpl implements MenuService {
             routeVO.setComponent(item.getUrl());
         }
         routeVO.setPath(item.getMenuPath());
+
+        // 组装meta
+        RouteMetaVO metaVO = getMetaVO(item);
+
+        routeVO.setMeta(metaVO);
+        return routeVO;
+    }
+
+    /**
+     * 组装meta
+     * @param item
+     * @return
+     */
+    private static RouteMetaVO getMetaVO(MenuEntity item) {
         RouteMetaVO metaVO = new RouteMetaVO();
         metaVO.setTitle(item.getName());
         metaVO.setIcon(item.getIcon());
@@ -191,9 +209,7 @@ public class MenuServiceImpl implements MenuService {
             metaVO.setKeepAlive(true);
         }
         metaVO.setOrder(item.getSort());
-
-        routeVO.setMeta(metaVO);
-        return routeVO;
+        return metaVO;
     }
 
     @Override
