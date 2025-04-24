@@ -29,6 +29,11 @@ public class RouteMetaVO {
     // 用于配置页面是否在面包屑中隐藏，隐藏后页面不会在面包屑中显示
     Boolean hideInBreadcrumb = false;
 
+    // 用于配置页面是否固定标签页，固定后页面不可关闭。
+    Boolean affixTab = false;
+    // 用于配置当前路由不使用基础布局，仅在顶级时生效。默认情况下，所有的路由都会被包裹在基础布局中（包含顶部以及侧边等导航部件）
+    Boolean noBasicLayout = false;
+
     public String getTitle() {
         return title;
     }
@@ -107,5 +112,21 @@ public class RouteMetaVO {
 
     public void setHideInBreadcrumb(Boolean hideInBreadcrumb) {
         this.hideInBreadcrumb = hideInBreadcrumb;
+    }
+
+    public Boolean getAffixTab() {
+        return affixTab;
+    }
+
+    public void setAffixTab(Boolean affixTab) {
+        this.affixTab = affixTab;
+    }
+
+    public Boolean getNoBasicLayout() {
+        return noBasicLayout;
+    }
+
+    public void setNoBasicLayout(Boolean noBasicLayout) {
+        this.noBasicLayout = noBasicLayout;
     }
 }
