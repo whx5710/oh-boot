@@ -1,7 +1,6 @@
 package com.finn.flow.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 
 /**
@@ -10,12 +9,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2023-12-19
 */
-@Schema(description = "自定义流程表查询")
 public class FlowQuery extends Query {
-    @Schema(description = "流程code")
+    /**
+     * 流程code
+     */
     private String keyCode;
 
-    @Schema(description = "流程名称")
+    /**
+     * 流程名称
+     */
     private String name;
 
     public String getKeyCode() {

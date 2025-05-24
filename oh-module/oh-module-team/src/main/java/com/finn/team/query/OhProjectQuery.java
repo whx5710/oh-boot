@@ -1,7 +1,6 @@
 package com.finn.team.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
 * 项目信息表查询
@@ -9,16 +8,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2022-11-25
 */
-@Schema(description = "项目信息表查询")
 public class OhProjectQuery extends Query {
-    // 查询关键字
+    /**
+     * 查询关键字
+     */
     String keyWord;
 
-    // 状态（1开始2暂停3关闭）
+    /**
+     * 状态（1开始2暂停3关闭）
+     */
     Integer status;
-
+    /**
+     * 开始时间
+     */
     String startTime;
-
+    /**
+     * 结束时间
+     */
     String endTime;
 
     public String getKeyWord() {

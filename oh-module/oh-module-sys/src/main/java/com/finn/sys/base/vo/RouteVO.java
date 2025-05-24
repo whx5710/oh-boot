@@ -50,6 +50,14 @@ public class RouteVO extends TreeNode<RouteVO> {
     String component;
 
     String redirect;
+    // 类型:  catalog | menu | action
+    String type;
+    /**
+     * 状态 0停用 1有效
+     */
+    Integer status;
+    String authCode;
+    String parentName;
     RouteMetaVO meta;
 
     public String getName() {
@@ -90,5 +98,37 @@ public class RouteVO extends TreeNode<RouteVO> {
 
     public void setMeta(RouteMetaVO meta) {
         this.meta = meta;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

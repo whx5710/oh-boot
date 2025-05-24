@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private final RedisCache redisCache;
     private final UserMapper userMapper;
     private final TenantCache tenantCache;
-    private final OrgService orgService;
+    private final DeptService deptService;
     private final RoleDataScopeMapper roleDataScopeMapper;
     private final RoleMapper roleMapper;
 
@@ -58,14 +58,14 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserRoleService userRoleService, UserPostService userPostService,
                            RedisCache redisCache, UserMapper userMapper, TenantCache tenantCache,
-                           OrgService orgService, RoleDataScopeMapper roleDataScopeMapper,
+                           DeptService deptService, RoleDataScopeMapper roleDataScopeMapper,
                            RoleMapper roleMapper) {
         this.userRoleService = userRoleService;
         this.userPostService = userPostService;
         this.redisCache = redisCache;
         this.userMapper = userMapper;
         this.tenantCache = tenantCache;
-        this.orgService = orgService;
+        this.deptService = deptService;
         this.roleDataScopeMapper = roleDataScopeMapper;
         this.roleMapper = roleMapper;
     }
@@ -424,16 +424,16 @@ public class UserServiceImpl implements UserService {
             // 全部数据权限，则返回null
             return null;
         } else if (dataScope.equals(DataScopeEnum.ORG_AND_CHILD.getValue())) {
-            // 本机构及子机构数据
-            List<Long> dataScopeList = orgService.getSubOrgIdList(userDetail.getOrgId());
+            // 本部门及子部门数据
+            List<Long> dataScopeList = deptService.getSubDeptIdList(userDetail.getDeptId());
             // 自定义数据权限范围
             dataScopeList.addAll(roleDataScopeMapper.getDataScopeList(userDetail.getId()));
 
             return dataScopeList;
         } else if (dataScope.equals(DataScopeEnum.ORG_ONLY.getValue())) {
-            // 本机构数据
+            // 本部门数据
             List<Long> dataScopeList = new ArrayList<>();
-            dataScopeList.add(userDetail.getOrgId());
+            dataScopeList.add(userDetail.getDeptId());
             // 自定义数据权限范围
             dataScopeList.addAll(roleDataScopeMapper.getDataScopeList(userDetail.getId()));
 

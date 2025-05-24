@@ -1,7 +1,6 @@
 package com.finn.support.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import com.finn.core.utils.DateUtils;
@@ -16,41 +15,58 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@Schema(description = "字典类型")
 public class DictTypeVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "id")
+    /**
+     * id
+     */
     private Long id;
 
-    @Schema(description = "字典类型", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 字典类型
+     */
     @NotBlank(message = "字典类型不能为空")
     private String dictType;
 
-    @Schema(description = "字典名称", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 字典类型名称
+     */
     @NotBlank(message = "字典名称不能为空")
     private String dictName;
 
-    @Schema(description = "备注")
+    /**
+     * 备注
+     */
     private String remark;
 
-    @Schema(description = "排序", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 排序
+     */
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
-    @Schema(description = "更新时间")
+    /**
+     * 更新时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime updateTime;
 
-    @Schema(description = "来源  0：字典数据  1：动态SQL")
+    /**
+     * 来源  0：字典数据  1：动态SQL
+     */
     private Integer dictSource;
 
-    @Schema(description = "动态sql")
+    /**
+     * 动态sql
+     */
     private String dictSql;
 
     public Long getId() {

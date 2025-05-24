@@ -5,8 +5,6 @@ import com.finn.flow.entity.TaskRecordEntity;
 import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.core.utils.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("workflow/record")
-@Tag(name="环节运行记录表")
 public class TaskRecordController {
     private final TaskRecordService taskRecordService;
 
@@ -38,8 +35,12 @@ public class TaskRecordController {
 //        return Result.ok(page);
 //    }
 
+    /**
+     * 根据ID获取环节运行记录
+     * @param id 流程ID
+     * @return
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('workflow:record:info')")
     public Result<TaskRecordVO> get(@PathVariable("id") Long id){
         TaskRecordEntity entity = taskRecordService.getTaskRecordById(id);
@@ -56,8 +57,12 @@ public class TaskRecordController {
 //        return Result.ok();
 //    }
 
+    /**
+     * 修改环节
+     * @param vo
+     * @return
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('workflow:record:update')")
     public Result<String> update(@RequestBody @Valid TaskRecordVO vo){
         taskRecordService.update(vo);
@@ -65,12 +70,15 @@ public class TaskRecordController {
         return Result.ok();
     }
 
+    /**
+     * 删除环节
+     * @param idList
+     * @return
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('workflow:record:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         taskRecordService.delete(idList);
-
         return Result.ok();
     }
 }

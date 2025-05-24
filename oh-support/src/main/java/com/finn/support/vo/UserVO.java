@@ -3,7 +3,6 @@ package com.finn.support.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.finn.core.utils.DateUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.io.Serial;
@@ -12,84 +11,121 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 用户
+ * 用户信息
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "用户")
 public class UserVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "id")
+    /**
+     * ID
+     */
     private Long id;
 
-    @Schema(description = "用户名", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 用户名
+     */
     @NotBlank(message = "用户名不能为空")
     private String username;
 
-    @Schema(description = "密码")
+    /**
+     * 密码
+     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Schema(description = "姓名", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 姓名
+     */
     @NotBlank(message = "姓名不能为空")
     private String realName;
 
-    @Schema(description = "头像")
+    /**
+     * 头像
+     */
     private String avatar;
 
-    @Schema(description = "性别 0：男   1：女   2：未知", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 性别 0：男   1：女   2：未知
+     */
     @Min(value = 0, message = "性别不正确")
     @Max(value = 2, message = "性别不正确")
     private Integer gender;
 
-    @Schema(description = "邮箱")
+    /**
+     * 邮箱
+     */
     @Email(message = "邮箱格式不正确")
     private String email;
 
-    @Schema(description = "手机号", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 手机号
+     */
     @NotBlank(message = "手机号不能为空")
     private String mobile;
 
-    @Schema(description = "机构ID", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "机构ID不能为空")
-    private Long orgId;
+    /**
+     * 部门ID
+     */
+    @NotNull(message = "部门ID不能为空")
+    private Long deptId;
 
-    @Schema(description = "状态 0：停用    1：正常", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 状态 0：停用    1：正常
+     */
     @Min(value = 0, message = "用户状态不正确")
     @Max(value = 1, message = "用户状态不正确")
     private Integer status;
 
-    @Schema(description = "角色ID列表")
+    // 备注
+    private String note;
+
+    /**
+     * 角色ID列表
+     */
     private List<Long> roleIdList;
 
-    @Schema(description = "岗位ID列表")
+    /**
+     * 岗位ID列表
+     */
     private List<Long> postIdList;
 
-    @Schema(description = "超级管理员   0：否   1：是")
-    private Integer superAdmin;
+    /**
+     * 超级管理员   0：否   1：是
+     */
+    private Integer superAdmin = 0;
 
-    @Schema(description = "用户密钥，用于第三方登录")
+    /**
+     * 用户密钥，用于第三方接口登录，不校验验证码
+     */
     private String userKey;
 
-    @Schema(description = "机构名称")
-    private String orgName;
+    /**
+     * 部门名称
+     */
+    private String deptName;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
     /**
-     * 修改吗密码时间
+     * 修改密码时间
      */
-    @Schema(description = "修改吗密码时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime pwdModifyTime;
-    @Schema(description = "租户ID")
+    /**
+     * 租户ID
+     */
     private String tenantId;
-    @Schema(description = "租户")
+    /**
+     * 租户
+     */
     private String tenantName;
 
     public Long getId() {
@@ -156,12 +192,12 @@ public class UserVO implements Serializable {
         this.mobile = mobile;
     }
 
-    public Long getOrgId() {
-        return orgId;
+    public Long getDeptId() {
+        return deptId;
     }
 
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
     public Integer getStatus() {
@@ -196,12 +232,12 @@ public class UserVO implements Serializable {
         this.superAdmin = superAdmin;
     }
 
-    public String getOrgName() {
-        return orgName;
+    public String getDeptName() {
+        return deptName;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public LocalDateTime getCreateTime() {
@@ -242,5 +278,13 @@ public class UserVO implements Serializable {
 
     public void setTenantName(String tenantName) {
         this.tenantName = tenantName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

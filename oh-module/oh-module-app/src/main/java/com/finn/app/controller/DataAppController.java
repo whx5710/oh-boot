@@ -14,12 +14,9 @@ import com.finn.app.service.DataAppService;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.utils.RunnerHandler;
 import com.finn.app.vo.DataMsgVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +31,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("/sys/app")
-@Tag(name="客户端")
 public class DataAppController {
 
     @Resource
@@ -46,33 +42,49 @@ public class DataAppController {
     @Resource
     DataMsgService dataMsgService;
 
+    /**
+     * 分页
+     * @param query
+     * @return
+     */
     @GetMapping("/page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sys:app:page')")
-    public Result<PageResult<DataAppDTO>> page(@ParameterObject @Valid DataAppQuery query){
+    public Result<PageResult<DataAppDTO>> page(@Valid DataAppQuery query){
         PageResult<DataAppDTO> page = dataAppService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取客户端信息
+     * @param id 客户端ID
+     * @return app数据
+     */
     @GetMapping("/{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:app:info')")
     public Result<DataAppDTO> get(@PathVariable("id") Long id){
         DataAppEntity entity = dataAppService.getById(id);
         return Result.ok(DataAppConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存
+     * @param vo
+     * @return
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @PreAuthorize("hasAuthority('sys:app:save')")
     public Result<String> save(@RequestBody DataAppDTO vo){
         dataAppService.save(vo);
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo
+     * @return
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('sys:app:update')")
     public Result<String> update(@RequestBody @Valid DataAppDTO vo){
         dataAppService.update(vo);
@@ -80,8 +92,12 @@ public class DataAppController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList
+     * @return
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataAppService.delete(idList);
@@ -96,23 +112,26 @@ public class DataAppController {
         return Result.ok();
     }
 
+    /**
+     * 接口日志分页
+     * @param query
+     * @return
+     */
     @GetMapping("/logPage")
-    @Operation(summary = "接口日志分页")
     @PreAuthorize("hasAuthority('sys:app:page')")
-    public Result<PageResult<DataMsgVO>> logPage(@ParameterObject @Valid DataMsgQuery query){
+    public Result<PageResult<DataMsgVO>> logPage(@Valid DataMsgQuery query){
         PageResult<DataMsgVO> page = dataMsgService.page(query);
         return Result.ok(page);
     }
 
     /**
-     * 供查询异步报错的业务
+     * 根据客户端ID查询接口日志（无鉴权）
      * @param query p
      * @param request r
      * @return r
      */
     @GetMapping("/errLogPage")
-    @Operation(summary = "根据客户端ID查询接口日志（无鉴权）")
-    public Result<PageResult<DataMsgVO>> errLogPage(@ParameterObject @Valid DataMsgQuery query, HttpServletRequest request){
+    public Result<PageResult<DataMsgVO>> errLogPage(@Valid DataMsgQuery query, HttpServletRequest request){
         String clientId = query.getClientId();
         AssertUtils.isBlank(clientId,"客户端ID");
         String secretKey = query.getSecretKey();
@@ -129,8 +148,12 @@ public class DataAppController {
         return Result.ok(page);
     }
 
+    /**
+     * 删除请求记录
+     * @param idList
+     * @return
+     */
     @DeleteMapping("/deleteLog")
-    @Operation(summary = "删除请求记录")
     @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> deleteLog(@RequestBody List<Long> idList){
         dataMsgService.delete(idList);
@@ -138,8 +161,12 @@ public class DataAppController {
         return Result.ok();
     }
 
+    /**
+     * 根据时间删除报文记录
+     * @param date
+     * @return
+     */
     @GetMapping("/deleteByDate/{date}")
-    @Operation(summary = "根据时间删除报文记录")
     @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> deleteByDate(@PathVariable("date")String date){
         dataMsgService.deleteByDate(date);

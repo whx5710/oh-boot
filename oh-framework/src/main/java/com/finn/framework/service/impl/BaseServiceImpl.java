@@ -21,10 +21,10 @@ public class BaseServiceImpl<T> {
      * 原生SQL 数据权限
      *
      * @param tableAlias 表别名，多表关联时，需要填写表别名
-     * @param orgIdAlias 机构ID别名，null：表示org_id
+     * @param deptIdAlias 部门ID别名，null：表示dept_id
      * @return 返回数据权限
      */
-    protected String getDataScopeFilter(String tableAlias, String orgIdAlias) {
+    protected String getDataScopeFilter(String tableAlias, String deptIdAlias) {
         UserDetail user = SecurityUser.getUser();
         if(user == null){
             return null;
@@ -55,10 +55,10 @@ public class BaseServiceImpl<T> {
         }
         // 数据过滤
         if (!dataScopeList.isEmpty()) {
-            if (orgIdAlias == null || orgIdAlias.isEmpty()) {
-                orgIdAlias = "org_id";
+            if (deptIdAlias == null || deptIdAlias.isEmpty()) {
+                deptIdAlias = "dept_id";
             }
-            sqlFilter.append(tableAlias).append(orgIdAlias);
+            sqlFilter.append(tableAlias).append(deptIdAlias);
 
             StringBuilder result = new StringBuilder();
             for(Long dsl: dataScopeList){

@@ -1,8 +1,10 @@
 package com.finn.core.utils;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,16 +19,18 @@ public class TreeNode<T> implements Serializable {
     /**
      * 主键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 上级ID
      */
     //@NotNull(message = "上级ID不能为空")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
     /**
      * 子节点列表
      */
-    private List<T> children = new ArrayList<>();
+    private List<T> children;
 
     public Long getId() {
         return id;

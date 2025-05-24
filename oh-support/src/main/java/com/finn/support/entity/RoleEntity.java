@@ -27,15 +27,24 @@ public class RoleEntity extends BaseEntity {
 	@TableField("data_scope")
 	private Integer dataScope;
 	/**
-	 * 机构ID
+	 * 部门ID
 	 */
-//	@TableField("org_id")
-//	private Long orgId;
+//	@TableField("dept_id")
+//	private Long deptId;
 	/**
 	 * 系统内置
 	 */
 	@TableField("is_system")
-	private Integer isSystem;
+	private Integer isSystem = 0;
+
+	/**
+	 * 租户
+	 */
+	@TableField(exists = false)
+	private String tenantName;
+
+	@TableField(exists = false)
+	private String menuIds;
 
 	public String getName() {
 		return name;
@@ -61,12 +70,12 @@ public class RoleEntity extends BaseEntity {
 		this.dataScope = dataScope;
 	}
 
-//	public Long getOrgId() {
-//		return orgId;
+//	public Long getDeptId() {
+//		return deptId;
 //	}
 
-//	public void setOrgId(Long orgId) {
-//		this.orgId = orgId;
+//	public void setDeptId(Long deptId) {
+//		this.deptId = deptId;
 //	}
 
 	public Integer getIsSystem() {
@@ -75,5 +84,21 @@ public class RoleEntity extends BaseEntity {
 
 	public void setIsSystem(Integer isSystem) {
 		this.isSystem = isSystem;
+	}
+
+	public String getTenantName() {
+		return tenantName;
+	}
+
+	public void setTenantName(String tenantName) {
+		this.tenantName = tenantName;
+	}
+
+	public String getMenuIds() {
+		return menuIds;
+	}
+
+	public void setMenuIds(String menuIds) {
+		this.menuIds = menuIds;
 	}
 }

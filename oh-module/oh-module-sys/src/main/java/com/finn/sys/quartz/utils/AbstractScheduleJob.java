@@ -6,7 +6,6 @@ import com.finn.sys.quartz.entity.ScheduleJobEntity;
 import com.finn.sys.quartz.entity.ScheduleJobLogEntity;
 import com.finn.sys.quartz.enums.ScheduleStatusEnum;
 import com.finn.sys.quartz.service.ScheduleJobLogService;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
@@ -73,7 +72,7 @@ public abstract class AbstractScheduleJob implements Job {
 
         if (e != null) {
             log.setStatus(ScheduleStatusEnum.PAUSE.getValue());
-            String error = StringUtils.substring(ExceptionUtils.getExceptionMessage(e), 0, 2000);
+            String error = ExceptionUtils.getExceptionMessage(e).substring(0,2000);
             log.setError(error);
         } else {
             log.setStatus(ScheduleStatusEnum.NORMAL.getValue());

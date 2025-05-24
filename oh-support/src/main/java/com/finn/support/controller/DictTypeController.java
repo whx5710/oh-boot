@@ -10,10 +10,7 @@ import com.finn.support.query.DictTypeQuery;
 import com.finn.support.service.DictTypeService;
 import com.finn.support.vo.DictTypeVO;
 import com.finn.support.vo.DictVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +24,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("sys/dict/type")
-@Tag(name = "字典类型")
 public class DictTypeController {
     private final DictTypeService dictTypeService;
 
@@ -35,17 +31,25 @@ public class DictTypeController {
         this.dictTypeService = dictTypeService;
     }
 
+    /**
+     * 分页
+     * @param query 查询条件
+     * @return 列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sys:dict:page')")
-    public Result<PageResult<DictTypeVO>> page(@ParameterObject @Valid DictTypeQuery query) {
+    public Result<PageResult<DictTypeVO>> page(@Valid DictTypeQuery query) {
         PageResult<DictTypeVO> page = dictTypeService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取动态SQL生成的字典数据
+     * @param id 字典ID
+     * @return 数据列表
+     */
     @GetMapping("list/sql")
-    @Operation(summary = "动态SQL数据")
     @PreAuthorize("hasAuthority('sys:dict:page')")
     public Result<PageResult<DictVO.DictData>> listSql(Long id) {
         List<DictVO.DictData> list = dictTypeService.getDictSql(id);
@@ -55,8 +59,12 @@ public class DictTypeController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取字典类型信息
+     * @param id 字典类型ID
+     * @return
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:dict:info')")
     public Result<DictTypeVO> get(@PathVariable("id") Long id) {
         DictTypeEntity entity = dictTypeService.getById(id);
@@ -64,8 +72,12 @@ public class DictTypeController {
         return Result.ok(DictTypeConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 字典类型保存
+     * @param vo 字典类型信息
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @OperateLog(module = "字典类型管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:dict:save')")
     public Result<String> save(@RequestBody @Valid DictTypeVO vo) {
@@ -74,8 +86,12 @@ public class DictTypeController {
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo 字典类型信息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @OperateLog(module = "字典类型管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:dict:update')")
     public Result<String> update(@RequestBody @Valid DictTypeVO vo) {
@@ -84,8 +100,12 @@ public class DictTypeController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList 字典类型ID结合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @OperateLog(module = "字典类型管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:dict:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -94,21 +114,26 @@ public class DictTypeController {
         return Result.ok();
     }
 
+    /**
+     * 全部字典类型数据
+     * @return 列表
+     */
     @GetMapping("all")
-    @Operation(summary = "全部字典数据")
     public Result<List<DictVO>> all() {
         List<DictVO> dictList = dictTypeService.getDictList();
 
         return Result.ok(dictList);
     }
 
+    /**
+     * 刷新字典翻译缓存数据
+     * @return 提示信息
+     */
     @GetMapping("refreshTransCache")
-    @Operation(summary = "刷新字典翻译缓存数据")
     @PreAuthorize("hasAuthority('sys:dict:refreshTransCache')")
     public Result<String> refreshTransCache() {
         dictTypeService.refreshTransCache();
         return Result.ok();
     }
-
 
 }

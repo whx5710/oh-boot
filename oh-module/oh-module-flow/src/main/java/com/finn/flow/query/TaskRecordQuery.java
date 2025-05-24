@@ -1,7 +1,6 @@
 package com.finn.flow.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
 * 环节运行表查询
@@ -9,45 +8,70 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2024-02-03
 */
-@Schema(description = "环节运行表查询")
 public class TaskRecordQuery extends Query {
-    @Schema(description = "流程定义ID")
+    /**
+     * 流程定义ID
+     */
     private String procDefId;
 
-    @Schema(description = "环节实例ID")
+    /**
+     * 环节实例ID
+     */
     private String procInstId;
 
-    @Schema(description = "环节实例ID")
+    /**
+     * 环节实例ID
+     */
     private String actInstId;
 
-    @Schema(description = "任务ID")
+    /**
+     * 任务ID
+     */
     private String taskId;
 
-    @Schema(description = "环节key")
+    /**
+     * 环节key
+     */
     private String taskDefId;
 
-    @Schema(description = "环节名称")
+    /**
+     * 环节名称
+     */
     private String taskName;
 
-    @Schema(description = "来自于环节实例ID")
+    /**
+     * 来自于环节实例ID
+     */
     private String fromActInstId;
 
-    @Schema(description = "来自于任务key")
+    /**
+     * 来自于任务key
+     */
     private String fromTaskId;
 
-    @Schema(description = "来自于环节ID")
+    /**
+     * 来自于环节ID
+     */
     private String fromTaskDefId;
 
-    @Schema(description = "来自于环节名称")
+    /**
+     * 来自于环节名称
+     */
     private String fromTaskName;
 
-    @Schema(description = "当前标识，默认0，1标识当前环节")
+    /**
+     * 当前标识，默认0，1标识当前环节
+     */
     private Integer runMark;
 
-    @Schema(description = "受理人ID")
+    /**
+     * 受理人ID
+     */
     private String assignee;
 
-    @Schema(description = "受理人")
+    /**
+     * 受理人
+     */
     private String assigneeName;
 
     public String getProcDefId() {

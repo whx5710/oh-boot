@@ -10,12 +10,9 @@ import com.finn.flow.service.ProcessHandlerService;
 import com.finn.flow.vo.FlowVO;
 import com.finn.flow.vo.ProcessVO;
 import com.finn.core.utils.PageResult;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +28,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("/flow")
-@Tag(name="自定义流程表")
 public class FlowController {
     private final FlowService flowService;
 
@@ -42,16 +38,24 @@ public class FlowController {
         this.processHandlerService = processHandlerService;
     }
 
+    /**
+     * 分页
+     * @param query
+     * @return
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('flow:page')")
-    public Result<PageResult<FlowVO>> page(@ParameterObject @Valid FlowQuery query){
+    public Result<PageResult<FlowVO>> page(@Valid FlowQuery query){
         PageResult<FlowVO> page = flowService.page(query);
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取流程信息
+     * @param id 流程ID
+     * @return 流程信息
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('finn:flow:info')")
     public Result<FlowVO> get(@PathVariable("id") Long id){
         FlowEntity entity = flowService.getById(id);
@@ -59,8 +63,12 @@ public class FlowController {
         return Result.ok(FlowConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 根据keyCode保存或更新
+     * @param vo 流程信息
+     * @return 提示信息
+     */
     @PostMapping("/saveOrUpdate")
-    @Operation(summary = "根据keyCode保存或更新")
     @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> saveOrUpdate(@RequestBody FlowVO vo){
         flowService.save(vo);
@@ -68,8 +76,12 @@ public class FlowController {
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo 流程信息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('finn:flow:update')")
     public Result<String> update(@RequestBody @Valid FlowVO vo){
         flowService.update(vo);
@@ -77,8 +89,12 @@ public class FlowController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList 流程ID集合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('flow:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         flowService.delete(idList);

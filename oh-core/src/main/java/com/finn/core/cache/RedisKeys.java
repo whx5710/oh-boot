@@ -87,11 +87,11 @@ public class RedisKeys {
     }
 
     /**
-     * 机构key
-     * @param orgId 组织机构ID
+     * 部门key
+     * @param deptId 部门ID
      * @return s
      */
-    public static String getOrgCacheKey(Long orgId){
-        return PREFIX + "org:info:" + orgId;
+    public static String getDeptCacheKey(Long deptId){
+        return PREFIX + "dept:info:" + deptId;
     }
 }

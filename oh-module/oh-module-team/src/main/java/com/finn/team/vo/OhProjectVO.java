@@ -3,7 +3,6 @@ package com.finn.team.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
 import com.finn.framework.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,34 +13,49 @@ import java.time.LocalDateTime;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2022-11-25
 */
-@Schema(description = "项目信息表")
 public class OhProjectVO extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "项目编码")
+	/**
+	 * 项目编码
+	 */
 	private String projectCode;
 
-	@Schema(description = "项目名称")
+	/**
+	 * 项目名称
+	 */
 	private String projectName;
 
-	@Schema(description = "别名")
+	/**
+	 * 别名
+	 */
 	private String projectAlias;
 
-	@Schema(description = "开始时间")
+	/**
+	 * 开始时间
+	 */
 	@JsonFormat(pattern = DateUtils.DATE_PATTERN)
 	private LocalDateTime startTime;
 
-	@Schema(description = "结束时间")
+	/**
+	 * 结束时间
+	 */
 	@JsonFormat(pattern = DateUtils.DATE_PATTERN)
 	private LocalDateTime endTime;
 
-	@Schema(description = "负责人ID")
+	/**
+	 * 负责人ID
+	 */
 	private Long director;
 
-	@Schema(description = "负责人姓名")
+	/**
+	 * 负责人姓名
+	 */
 	private String directorName;
 
-	@Schema(description = "状态  0：停用   1：正常")
+	/**
+	 * 状态  0：停用   1：正常
+	 */
 	private Integer status;
 
 	/**

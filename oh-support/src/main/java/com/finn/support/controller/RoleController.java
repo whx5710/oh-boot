@@ -12,10 +12,7 @@ import com.finn.support.service.*;
 import com.finn.support.vo.RoleDataScopeVO;
 import com.finn.support.vo.RoleVO;
 import com.finn.support.vo.UserVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +26,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("sys/role")
-@Tag(name = "角色管理")
 public class RoleController {
     private final RoleService roleService;
     private final UserService userService;
@@ -46,16 +42,23 @@ public class RoleController {
         this.userRoleService = userRoleService;
     }
 
+    /**
+     * 角色分页列表
+     * @param query 查询条件
+     * @return 角色列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sys:role:page')")
-    public Result<PageResult<RoleVO>> page(@ParameterObject @Valid RoleQuery query) {
+    public Result<PageResult<RoleVO>> page(@Valid RoleQuery query) {
         PageResult<RoleVO> page = roleService.page(query);
         return Result.ok(page);
     }
 
+    /**
+     * 角色列表-不分页
+     * @return 角色列表
+     */
     @GetMapping("list")
-    @Operation(summary = "列表")
     @PreAuthorize("hasAuthority('sys:role:list')")
     public Result<List<RoleVO>> list() {
         List<RoleVO> list = roleService.getList(new RoleQuery());
@@ -63,8 +66,12 @@ public class RoleController {
         return Result.ok(list);
     }
 
+    /**
+     * 角色信息
+     * @param id 角色ID
+     * @return 角色信息
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:role:info')")
     public Result<RoleVO> get(@PathVariable("id") Long id) {
         RoleEntity entity = roleService.getById(id);
@@ -77,14 +84,18 @@ public class RoleController {
         role.setMenuIdList(menuIdList);
 
         // 查询角色对应的数据权限
-        List<Long> orgIdList = roleDataScopeService.getOrgIdList(id);
-        role.setOrgIdList(orgIdList);
+        List<Long> deptIdList = roleDataScopeService.getDeptIdList(id);
+        role.setDeptIdList(deptIdList);
 
         return Result.ok(role);
     }
 
+    /**
+     * 保存角色
+     * @param vo 角色数据
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @OperateLog(module = "角色管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:role:save')")
     public Result<String> save(@RequestBody @Valid RoleVO vo) {
@@ -93,8 +104,12 @@ public class RoleController {
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo 角色信息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @OperateLog(module = "角色管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> update(@RequestBody @Valid RoleVO vo) {
@@ -103,8 +118,12 @@ public class RoleController {
         return Result.ok();
     }
 
+    /**
+     * 数据权限
+     * @param vo 角色信息
+     * @return 提示信息
+     */
     @PutMapping("data-scope")
-    @Operation(summary = "数据权限")
     @OperateLog(module = "角色管理", name = "数据权限", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> dataScope(@RequestBody @Valid RoleDataScopeVO vo) {
@@ -113,8 +132,12 @@ public class RoleController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList 角色ID列表
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @OperateLog(module = "角色管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -123,8 +146,12 @@ public class RoleController {
         return Result.ok();
     }
 
+    /**
+     * 角色用户-分页
+     * @param query 角色用户查询条件
+     * @return
+     */
     @GetMapping("user/page")
-    @Operation(summary = "角色用户-分页")
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<PageResult<UserVO>> userPage(@Valid RoleUserQuery query) {
         PageResult<UserVO> page = userService.roleUserPage(query);
@@ -132,8 +159,13 @@ public class RoleController {
         return Result.ok(page);
     }
 
+    /**
+     * 删除角色用户
+     * @param roleId 角色ID
+     * @param userIdList 用户列表
+     * @return 提示信息
+     */
     @DeleteMapping("user/{roleId}")
-    @Operation(summary = "删除角色用户")
     @OperateLog(module = "角色管理", name = "删除角色用户", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> userDelete(@PathVariable("roleId") Long roleId, @RequestBody List<Long> userIdList) {
@@ -142,8 +174,13 @@ public class RoleController {
         return Result.ok();
     }
 
+    /**
+     * 分配角色给用户列表
+     * @param roleId 角色ID
+     * @param userIdList 用户ID列表
+     * @return 提示信息
+     */
     @PostMapping("user/{roleId}")
-    @Operation(summary = "分配角色给用户列表")
     @OperateLog(module = "角色管理", name = "分配角色给用户列表", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> userSave(@PathVariable("roleId") Long roleId, @RequestBody List<Long> userIdList) {

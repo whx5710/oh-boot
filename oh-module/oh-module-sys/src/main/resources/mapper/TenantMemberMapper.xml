@@ -9,14 +9,14 @@
     <select id="tenantList" resultType="com.finn.sys.base.entity.TenantMemberEntity">
         select * from tenant_member where db_status = 1
         <if test="tenantName != null and tenantName != ''">
-            and (tenant_name like concat('%',#{tenantName}, '%') or note like concat('%',#{tenantName}, '%')
-                or tenant_id like concat('%',#{tenantName},'%'))
+            and tenant_name like concat('%',#{tenantName}, '%')
         </if>
         <if test="status != null">
             and status = #{status}
         </if>
         <if test="keyWord != null and keyWord != ''">
-            and (tenant_name like concat('%',#{keyWord}, '%') or tenant_id like concat('%',#{keyWord},'%'))
+            and (tenant_name like concat('%',#{keyWord}, '%') or tenant_id like concat('%',#{keyWord},'%')
+            or note like concat('%',#{keyWord}, '%'))
         </if>
         order by sort
     </select>

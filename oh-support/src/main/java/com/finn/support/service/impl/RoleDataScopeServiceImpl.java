@@ -28,13 +28,13 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
     }
 
     @Override
-    public void saveOrUpdate(Long roleId, List<Long> orgIdList) {
-        // 数据库机构ID列表
-        List<Long> dbOrgIdList = getOrgIdList(roleId);
+    public void saveOrUpdate(Long roleId, List<Long> deptIdList) {
+        // 数据库部门ID列表
+        List<Long> dbDeptIdList = getDeptIdList(roleId);
 
-        // 需要新增的机构ID
-        Collection<Long> insertOrgIdList = CollUtil.subtract(orgIdList, dbOrgIdList);
-        if (CollUtil.isNotEmpty(insertOrgIdList)){
+        // 需要新增的部门ID
+        Collection<Long> insertDeptIdList = CollUtil.subtract(deptIdList, dbDeptIdList);
+        if (CollUtil.isNotEmpty(insertDeptIdList)){
             UserDetail user = SecurityUser.getUser();
             String tenantId;
             if(user != null){
@@ -42,9 +42,9 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
             } else {
                 tenantId = null;
             }
-            List<RoleDataScopeEntity> orgList = insertOrgIdList.stream().map(orgId -> {
+            List<RoleDataScopeEntity> orgList = insertDeptIdList.stream().map(deptId -> {
                 RoleDataScopeEntity entity = new RoleDataScopeEntity();
-                entity.setOrgId(orgId);
+                entity.setDeptId(deptId);
                 entity.setRoleId(roleId);
                 entity.setCreateTime(LocalDateTime.now());
                 entity.setCreator(SecurityUser.getUserId());
@@ -56,20 +56,20 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
             roleDataScopeMapper.saveBatch(orgList);
         }
 
-        // 需要删除的机构ID
-        Collection<Long> deleteOrgIdList = CollUtil.subtract(dbOrgIdList, orgIdList);
-        if (CollUtil.isNotEmpty(deleteOrgIdList)){
+        // 需要删除的部门ID
+        Collection<Long> deleteDeptIdList = CollUtil.subtract(dbDeptIdList, deptIdList);
+        if (CollUtil.isNotEmpty(deleteDeptIdList)){
             RoleDataScopeEntity param = new RoleDataScopeEntity();
             param.setRoleId(roleId);
             param.setUpdateTime(LocalDateTime.now());
             param.setUpdater(SecurityUser.getUserId());
-            roleDataScopeMapper.deleteOrgIdList((List<Long>) deleteOrgIdList, param);
+            roleDataScopeMapper.deleteDeptIdList((List<Long>) deleteDeptIdList, param);
         }
     }
 
     @Override
-    public List<Long> getOrgIdList(Long roleId) {
-        return roleDataScopeMapper.getOrgIdList(roleId);
+    public List<Long> getDeptIdList(Long roleId) {
+        return roleDataScopeMapper.getDeptIdList(roleId);
     }
 
     @Override

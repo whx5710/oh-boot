@@ -1,7 +1,6 @@
 package com.finn.support.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.finn.core.utils.DateUtils;
 
 import java.io.Serial;
@@ -14,43 +13,64 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@Schema(description = "参数管理")
 public class ParamsVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "id")
+    /**
+     * id
+     */
     private Long id;
 
-    @Schema(description = "参数名称")
+    /**
+     * 参数名称
+     */
     private String paramName;
 
-    @Schema(description = "系统参数")
+    /**
+     * 参数类型：系统参数   0：否   1：是
+     */
     private Integer paramType;
 
-    @Schema(description = "参数键")
+    /**
+     * 参数键
+     */
     private String paramKey;
 
-    @Schema(description = "参数值")
+    /**
+     * 参数值
+     */
     private String paramValue;
 
-    @Schema(description = "备注")
+    /**
+     * 备注
+     */
     private String remark;
 
-    @Schema(description = "数据状态标识，0删除1有效")
+    /**
+     * 数据状态标识，0删除1有效
+     */
     private Integer dbStatus;
 
-    @Schema(description = "创建者")
+    /**
+     * 创建者ID
+     */
     private Long creator;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
-    @Schema(description = "更新者")
+    /**
+     * 更新者ID
+     */
     private Long updater;
 
-    @Schema(description = "更新时间")
+    /**
+     * 更新时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime updateTime;
 

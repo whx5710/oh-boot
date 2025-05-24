@@ -14,6 +14,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 - 增加租户功能，隔离业务数据 【2025年1月】
 - 支持Druid、Hikari连接池【2025年2月】
 - BaseMapper接口支持单表通用操作，通过ParamsBuilder构建sql，无需编写脚本【2025年3月】
+- 接口文档解决方案改用smart-doc + Torna 无侵入式，文档统一管理【2025年5月】
 - 工程代码：https://gitee.com/whx233/oh-boot
 - - 独立系统管理 https://gitee.com/whx233/oh-sys (从oh-boot剥离)
 - - 前端工程    https://gitee.com/whx233/oh-admin (暂未开源 Vue3)
@@ -26,7 +27,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 ```
 oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类
 oh-framework 系统框架，包括数据库、基础实体类、鉴权
-oh-support   基础组织机构信息，如人员、角色、部门、登录等，业务模块中可按需引入
+oh-support   基础组织部门信息，如人员、角色、部门、登录等，业务模块中可按需引入
 oh-server    系统启动入口【根据实际情况，可集成到某个模块中】
 oh-module    业务模块
     - oh-module-sys    系统管理模块，包括鉴权、基础配置等
@@ -60,7 +61,7 @@ finn:
     auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
     lock-time: 3600                 # 账号锁定时间(秒)
     ignore-urls:                    # 忽略鉴权的url
-      - /swagger-ui/**
+      - /doc/**
       - /druid/**
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存，默认直接保存

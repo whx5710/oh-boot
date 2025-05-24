@@ -1,19 +1,21 @@
 package com.finn.sys.base.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
 * 短信日志查询
 *
 * @author 王小费 whx5710@qq.com
 */
-@Schema(description = "短信日志查询")
 public class SmsLogQuery extends Query {
-    @Schema(description = "平台ID")
+    /**
+     * 平台ID
+     */
     private Long platformId;
 
-    @Schema(description = "平台类型")
+    /**
+     * 平台类型
+     */
     private Integer platform;
 
     public Long getPlatformId() {

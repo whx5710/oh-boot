@@ -10,23 +10,23 @@ public enum MenuTypeEnum {
     /**
      * 菜单
      */
-    MENU(0),
+    MENU("menu"),
     /**
      * 按钮
      */
-    BUTTON(1),
+    BUTTON("button"),
     /**
-     * 接口
+     * 目录
      */
-    INTERFACE(2);
+    CATALOG("catalog");
 
-    private final int value;
+    private final String value;
 
-    MenuTypeEnum(int value) {
+    MenuTypeEnum(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 }

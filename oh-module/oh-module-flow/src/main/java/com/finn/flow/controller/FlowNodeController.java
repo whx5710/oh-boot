@@ -7,10 +7,7 @@ import com.finn.flow.service.FlowNodeService;
 import com.finn.flow.vo.FlowNodeVO;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +21,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("finn/node")
-@Tag(name="环节定义表")
 public class FlowNodeController {
     
     private final FlowNodeService flowNodeService;
@@ -33,17 +29,25 @@ public class FlowNodeController {
         this.flowNodeService = flowNodeService;
     }
 
+    /**
+     * 分页
+     * @param query 查询条件
+     * @return 列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('finn:node:page')")
-    public Result<PageResult<FlowNodeVO>> page(@ParameterObject @Valid FlowNodeQuery query){
+    public Result<PageResult<FlowNodeVO>> page(@Valid FlowNodeQuery query){
         PageResult<FlowNodeVO> page = flowNodeService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取流程信息
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('finn:node:info')")
     public Result<FlowNodeVO> get(@PathVariable("id") Long id){
         FlowNodeEntity entity = flowNodeService.getById(id);
@@ -51,8 +55,12 @@ public class FlowNodeController {
         return Result.ok(FlowNodeConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存
+     * @param vo 流程信息
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @PreAuthorize("hasAuthority('finn:node:save')")
     public Result<String> save(@RequestBody FlowNodeVO vo){
         flowNodeService.save(vo);
@@ -60,8 +68,12 @@ public class FlowNodeController {
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo 流程信息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('finn:node:update')")
     public Result<String> update(@RequestBody @Valid FlowNodeVO vo){
         flowNodeService.update(vo);
@@ -69,8 +81,12 @@ public class FlowNodeController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList 流程ID集合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('finn:node:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         flowNodeService.delete(idList);

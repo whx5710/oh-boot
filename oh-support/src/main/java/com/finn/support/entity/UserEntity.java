@@ -41,9 +41,9 @@ public class UserEntity extends BaseEntity {
      */
     private String mobile;
     /**
-     * 机构ID
+     * 部门ID
      */
-    private Long orgId;
+    private Long deptId;
     /**
      * 超级管理员   0：否   1：是
      */
@@ -52,6 +52,9 @@ public class UserEntity extends BaseEntity {
      * 状态  {@link UserStatusEnum}
      */
     private Integer status;
+
+    // 备注
+    private String note;
 
     /**
      * 修改吗密码时间
@@ -63,9 +66,9 @@ public class UserEntity extends BaseEntity {
      */
     private String userKey;
     /**
-     * 机构名称
+     * 部门名称
      */
-    private String orgName;
+    private String deptName;
 
     public String getUsername() {
         return username;
@@ -123,12 +126,12 @@ public class UserEntity extends BaseEntity {
         this.mobile = mobile;
     }
 
-    public Long getOrgId() {
-        return orgId;
+    public Long getDeptId() {
+        return deptId;
     }
 
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
     public Integer getSuperAdmin() {
@@ -147,12 +150,20 @@ public class UserEntity extends BaseEntity {
         this.status = status;
     }
 
-    public String getOrgName() {
-        return orgName;
+    public String getNote() {
+        return note;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public LocalDateTime getPwdModifyTime() {

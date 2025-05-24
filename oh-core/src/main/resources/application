@@ -8,10 +8,6 @@ finn:
       - /actuator/**
       - /v3/api-docs/**
       - /webjars/**
-      - /swagger/**
-      - /swagger-resources/**
-      - /swagger-ui.html
-      - /swagger-ui/**
       - /doc.html
       - /upload/**
       - /druid/**
@@ -79,13 +75,6 @@ spring:
         enabled: true # 启用Web统计过滤器
         session-stat-enable: true # 启用会话统计功能
         session-stat-max-count: 1000 # 最大会话统计数量
-# 接口文档
-knife4j:
-  enable: true  # 开启增强配置
-  production: false # 是否开启生产环境保护策略,默认false
-  setting:
-    enable-footer-custom: true # 是否开启自定义Footer
-    footer-custom-content: 2024一起来写代码吧-[王小费](https://gitee.com/whx233)
 # 日志信息
 logging:
   # 字符集设置

@@ -25,10 +25,6 @@ finn:
       - /actuator/**
       - /v3/api-docs/**
       - /webjars/**
-      - /swagger/**
-      - /swagger-resources/**
-      - /swagger-ui.html
-      - /swagger-ui/**
       - /doc.html
       - /upload/**
       - /druid/**
@@ -148,13 +144,6 @@ spring:
 #    retryNextServer: false # 是否在内部发送失败时重试另一个broker，默认false
 #    maxMessageSize: 4096 # 消息最大长度，默认1024 * 1024 * 4(默认4M)
 #    compressMessageBodyThreshold: 4096 # 压缩消息阈值，默认4k(1024 * 4)
-# 接口文档
-knife4j:
-  enable: true  # 开启增强配置
-  production: true # 是否开启生产环境保护策略,默认false
-  setting:
-    enable-footer-custom: true # 是否开启自定义Footer
-    footer-custom-content: 2024一起来写代码吧-[王小费](https://gitee.com/whx233)
 # 工作流配置 https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/
 camunda.bpm:
   #enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.

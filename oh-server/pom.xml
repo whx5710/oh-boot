@@ -72,6 +72,11 @@
                     <mainClass>com.finn.ServerApplication</mainClass>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.ly.smart-doc</groupId>
+                <artifactId>smart-doc-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 </project>

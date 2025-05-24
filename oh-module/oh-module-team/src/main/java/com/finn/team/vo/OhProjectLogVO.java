@@ -1,7 +1,6 @@
 package com.finn.team.vo;
 
 import com.finn.framework.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
 * 项目、任务操作日志
@@ -9,19 +8,26 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2022-11-25
 */
-@Schema(description = "项目、任务操作日志")
 public class OhProjectLogVO extends BaseEntity {
 
-	@Schema(description = "项目ID")
+	/**
+	 * 项目ID
+	 */
 	private Long projectId;
 
-	@Schema(description = "任务ID")
+	/**
+	 * 任务ID
+	 */
 	private Long taskId;
 
-	@Schema(description = "操作类型")
+	/**
+	 * 操作类型
+	 */
 	private String operation;
 
-	@Schema(description = "备注")
+	/**
+	 * 备注
+	 */
 	private String remark;
 
 	public Long getProjectId() {

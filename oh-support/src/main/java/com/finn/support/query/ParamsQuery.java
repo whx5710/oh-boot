@@ -1,6 +1,5 @@
 package com.finn.support.query;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.finn.framework.query.Query;
 
 import java.util.List;
@@ -11,18 +10,28 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@Schema(description = "参数管理查询")
 public class ParamsQuery extends Query {
-    @Schema(description = "系统参数")
+    /**
+     * 类型 - 系统参数 0：否   1：是
+     */
     private Integer paramType;
 
-    @Schema(description = "参数键")
+    /**
+     * 参数键
+     */
     private String paramKey;
 
-    @Schema(description = "参数值")
+    /**
+     * 参数值
+     */
     private String paramValue;
 
-    @Schema(description = "ID集合")
+    // 关键字搜索
+    private String keyWord;
+
+    /**
+     * ID集合
+     */
     List<Long> idList;
 
     public Integer getParamType() {
@@ -55,5 +64,13 @@ public class ParamsQuery extends Query {
 
     public void setIdList(List<Long> idList) {
         this.idList = idList;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }

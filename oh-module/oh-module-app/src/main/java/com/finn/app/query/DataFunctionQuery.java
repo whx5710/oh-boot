@@ -1,7 +1,6 @@
 package com.finn.app.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
 * 功能列表查询
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2023-07-30
 */
-@Schema(description = "功能列表查询")
 public class DataFunctionQuery extends Query {
     String clientId;
 

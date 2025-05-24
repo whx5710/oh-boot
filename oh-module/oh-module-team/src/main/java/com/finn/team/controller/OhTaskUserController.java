@@ -7,8 +7,6 @@ import com.finn.team.entity.OhTaskUserEntity;
 import com.finn.team.query.OhTaskUserQuery;
 import com.finn.team.service.OhTaskUserService;
 import com.finn.team.vo.OhTaskUserVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("team/user")
-@Tag(name="任务人员表")
 public class OhTaskUserController {
     private final OhTaskUserService ohTaskUserService;
 
@@ -31,8 +28,12 @@ public class OhTaskUserController {
         this.ohTaskUserService = ohTaskUserService;
     }
 
+    /**
+     * 分页查询
+     * @param query
+     * @return
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('team:user:page')")
     public Result<PageResult<OhTaskUserVO>> page(@Valid OhTaskUserQuery query){
         PageResult<OhTaskUserVO> page = ohTaskUserService.page(query);
@@ -40,8 +41,12 @@ public class OhTaskUserController {
         return Result.ok(page);
     }
 
+    /**
+     * 查询单个
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('team:user:info')")
     public Result<OhTaskUserVO> get(@PathVariable("id") Long id){
         OhTaskUserEntity entity = ohTaskUserService.getById(id);
@@ -49,8 +54,12 @@ public class OhTaskUserController {
         return Result.ok(OhTaskUserConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存
+     * @param vo
+     * @return
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @PreAuthorize("hasAuthority('team:user:save')")
     public Result<String> save(@RequestBody OhTaskUserVO vo){
         ohTaskUserService.save(vo);
@@ -58,8 +67,12 @@ public class OhTaskUserController {
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo
+     * @return
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('team:user:update')")
     public Result<String> update(@RequestBody @Valid OhTaskUserVO vo){
         ohTaskUserService.update(vo);
@@ -67,8 +80,12 @@ public class OhTaskUserController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList
+     * @return
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('team:user:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         ohTaskUserService.delete(idList);

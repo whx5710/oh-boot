@@ -10,8 +10,14 @@ import com.github.pagehelper.PageParam;
  */
 public class Query extends PageParam {
 
-    private String sqlFilter; // 过滤SQL
+    /**
+     * 过滤SQL
+     */
+    private String sqlFilter;
 
+    /**
+     * 总数
+     */
     private Long total = 0L;
 
     public String getSqlFilter() {

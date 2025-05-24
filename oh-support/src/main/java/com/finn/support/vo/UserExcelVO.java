@@ -38,8 +38,8 @@ public class UserExcelVO implements Serializable {
     @ExcelProperty(value = "手机号", order = 5)
     private String mobile;
 
-    @ExcelProperty(value = "机构ID", order = 6)
-    private Long orgId;
+    @ExcelProperty(value = "部门ID", order = 6)
+    private Long deptId;
 
     private Integer status;
 
@@ -110,12 +110,12 @@ public class UserExcelVO implements Serializable {
         this.mobile = mobile;
     }
 
-    public Long getOrgId() {
-        return orgId;
+    public Long getDeptId() {
+        return deptId;
     }
 
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
     public Integer getStatus() {

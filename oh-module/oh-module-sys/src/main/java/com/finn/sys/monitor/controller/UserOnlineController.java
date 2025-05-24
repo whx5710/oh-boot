@@ -9,10 +9,7 @@ import com.finn.framework.security.cache.TokenStoreCache;
 import com.finn.support.cache.UserCache;
 import com.finn.support.entity.UserEntity;
 import com.finn.sys.monitor.vo.UserOnlineVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("monitor/user")
-@Tag(name = "在线用户监控")
 public class UserOnlineController {
     private final TokenStoreCache tokenStoreCache;
     private final UserCache userCache;
@@ -31,10 +27,14 @@ public class UserOnlineController {
         this.userCache = userCache;
     }
 
+    /**
+     * 分页
+     * @param query 查询条件
+     * @return 列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('monitor:user:all')")
-    public Result<PageResult<UserOnlineVO>> page(@ParameterObject @Valid Query query) {
+    public Result<PageResult<UserOnlineVO>> page(@Valid Query query) {
         // 获取登录用户的全部key
         List<String> userIds = tokenStoreCache.getUserIdList(); // tokenStoreCache.getUserKeyList();
 
@@ -61,8 +61,12 @@ public class UserOnlineController {
         return Result.ok(new PageResult<>(userOnlineList, userIds.size()));
     }
 
+    /**
+     * 强制退出
+     * @param accessToken token
+     * @return 提示信息
+     */
     @GetMapping("/forceLogout/{accessToken}")
-    @Operation(summary = "强制退出")
     @PreAuthorize("hasAuthority('monitor:user:user')")
     public Result<String> forceLogout(@PathVariable("accessToken") String accessToken) {
         // token不能为空
@@ -75,8 +79,12 @@ public class UserOnlineController {
         return Result.ok();
     }
 
+    /**
+     * 强制退出
+     * @param userId 用户ID
+     * @return 提示信息
+     */
     @GetMapping("/forceLogoutAll/{userId}")
-    @Operation(summary = "强制退出")
     @PreAuthorize("hasAuthority('monitor:user:user')")
     public Result<String> forceLogoutAll(@PathVariable("userId") String userId) {
         // token不能为空

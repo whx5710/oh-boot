@@ -7,6 +7,10 @@
         <if test="paramValue != null and paramValue != ''">and param_value = #{paramValue}</if>
         <if test="paramKey != null and paramKey != ''">and param_key = #{paramKey}</if>
         <if test="paramType != null">and param_type = #{paramType}</if>
+        <if test="keyWord != null and keyWord != ''">
+            and (param_name like concat('%',#{keyWord}, '%') or param_value like concat('%',#{keyWord}, '%')
+            or param_key like concat('%',#{keyWord}, '%') or remark like concat('%',#{keyWord}, '%'))
+        </if>
         <if test="idList != null and idList.size() > 0">
             and id in
             <foreach item="id" index="index" collection="idList" open="(" separator="," close=")">

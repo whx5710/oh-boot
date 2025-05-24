@@ -1,7 +1,5 @@
 package com.finn.support.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +9,15 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "全部字典")
 public class DictVO {
-    @Schema(description = "字典类型")
+    /**
+     * 字典类型
+     */
     private String dictType;
 
-    @Schema(description = "字典数据列表")
+    /**
+     * 字典数据列表
+     */
     private List<DictData> dataList = new ArrayList<>();
 
     public String getDictType() {
@@ -35,15 +36,23 @@ public class DictVO {
         this.dataList = dataList;
     }
 
-    @Schema(description = "字典数据")
+    /**
+     * 字典数据
+     */
     public static class DictData {
-        @Schema(description = "字典标签")
+        /**
+         * 字典标签
+         */
         private String dictLabel;
 
-        @Schema(description = "字典值")
+        /**
+         * 字典值
+         */
         private String dictValue;
 
-        @Schema(description = "标签样式")
+        /**
+         * 标签样式
+         */
         private String labelClass;
 
         public DictData(String dictLabel, String dictValue, String labelClass) {

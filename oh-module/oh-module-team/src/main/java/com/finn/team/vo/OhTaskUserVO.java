@@ -1,7 +1,6 @@
 package com.finn.team.vo;
 
 import com.finn.framework.entity.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 
@@ -11,20 +10,27 @@ import java.io.Serializable;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2022-11-25
 */
-@Schema(description = "任务人员表")
 public class OhTaskUserVO extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "任务ID")
+	/**
+	 * 任务ID
+	 */
 	private Long taskId;
 
-	@Schema(description = "人员ID")
+	/**
+	 * 人员ID
+	 */
 	private Long userId;
 
-	@Schema(description = "用户昵称")
+	/**
+	 * 用户昵称
+	 */
 	private String nickName;
 
-	@Schema(description = "人员类型1负责人2协作人")
+	/**
+	 * 人员类型1负责人2协作人
+	 */
 	private String personType;
 
 	public Long getTaskId() {

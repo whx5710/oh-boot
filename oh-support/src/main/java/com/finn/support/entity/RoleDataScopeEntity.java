@@ -14,9 +14,9 @@ public class RoleDataScopeEntity extends BaseEntity {
 	 */
 	private Long roleId;
 	/**
-	 * 机构ID
+	 * 部门ID
 	 */
-	private Long orgId;
+	private Long deptId;
 
 	public Long getRoleId() {
 		return roleId;
@@ -26,11 +26,11 @@ public class RoleDataScopeEntity extends BaseEntity {
 		this.roleId = roleId;
 	}
 
-	public Long getOrgId() {
-		return orgId;
+	public Long getDeptId() {
+		return deptId;
 	}
 
-	public void setOrgId(Long orgId) {
-		this.orgId = orgId;
+	public void setDeptId(Long deptId) {
+		this.deptId = deptId;
 	}
 }

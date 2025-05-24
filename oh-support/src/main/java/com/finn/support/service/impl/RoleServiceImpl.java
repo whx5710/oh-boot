@@ -18,6 +18,8 @@ import com.finn.core.utils.PageResult;
 import com.finn.support.entity.RoleEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,11 +52,30 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 		query.setSqlFilter(getDataScopeFilter(null,null));
 		Page<RoleEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		List<RoleEntity> list = roleMapper.getList(query);
-		List<RoleVO> voList = RoleConvert.INSTANCE.convertList(list);
-		for(RoleVO vo: voList){
-			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+		List<RoleVO> roles = new ArrayList<>();
+		if(list != null && !list.isEmpty()){
+			for(RoleEntity item: list){
+				RoleVO vo = new RoleVO();
+				vo.setId(item.getId());
+				vo.setName(item.getName());
+				vo.setRemark(item.getRemark());
+				vo.setDataScope(item.getDataScope());
+				vo.setIsSystem(item.getIsSystem());
+				vo.setTenantId(item.getTenantId());
+				vo.setTenantName(item.getTenantName());
+				vo.setCreateTime(item.getCreateTime());
+				if(item.getMenuIds() != null){
+					String[] m = item.getMenuIds().split(",");
+					List<Long> longList = new ArrayList<>();
+					for(String s: m){
+						longList.add(Long.valueOf(s));
+					}
+					vo.setMenuIdList(longList);
+				}
+				roles.add(vo);
+			}
 		}
-		return new PageResult<>(voList, page.getTotal());
+		return new PageResult<>(roles, page.getTotal());
 	}
 
 	@Override
@@ -70,7 +91,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	@Override
 	public void save(RoleVO vo) {
 		RoleEntity entity = RoleConvert.INSTANCE.convert(vo);
-
+		if(entity.getIsSystem() == null){
+			entity.setIsSystem(0);
+		}
 		if(entity.getIsSystem() == 1){
 			entity.setTenantId(null);
 		}
@@ -101,7 +124,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 
 		// 更新角色数据权限关系
 		if(vo.getDataScope().equals(DataScopeEnum.CUSTOM.getValue())){
-			roleDataScopeService.saveOrUpdate(entity.getId(), vo.getOrgIdList());
+			roleDataScopeService.saveOrUpdate(entity.getId(), vo.getDeptIdList());
 		}else {
 			roleDataScopeService.deleteByRoleIdList(Collections.singletonList(vo.getId()));
 		}

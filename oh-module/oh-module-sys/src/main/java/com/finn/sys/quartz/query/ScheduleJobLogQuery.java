@@ -1,22 +1,26 @@
 package com.finn.sys.quartz.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
 * 定时任务日志查询
 *
 * @author 王小费 whx5710@qq.com
 */
-@Schema(description = "定时任务日志查询")
 public class ScheduleJobLogQuery extends Query {
-    @Schema(description = "任务id")
+    /**
+     * 任务id
+     */
     private Long jobId;
 
-    @Schema(description = "任务名称")
+    /**
+     * 任务名称
+     */
     private String jobName;
 
-    @Schema(description = "任务组名")
+    /**
+     * 任务组名
+     */
     private String jobGroup;
 
     public Long getJobId() {

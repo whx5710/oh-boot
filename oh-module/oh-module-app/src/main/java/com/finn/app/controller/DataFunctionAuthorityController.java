@@ -7,10 +7,7 @@ import com.finn.app.service.DataFunctionAuthorityService;
 import com.finn.app.vo.DataFunctionAuthorityVO;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +21,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("/sys/authority")
-@Tag(name="客户端接口授权")
 public class DataFunctionAuthorityController {
 
     private final DataFunctionAuthorityService dataFunctionAuthorityService;
@@ -33,51 +29,72 @@ public class DataFunctionAuthorityController {
         this.dataFunctionAuthorityService = dataFunctionAuthorityService;
     }
 
-
+    /**
+     * 分页
+     * @param query
+     * @return
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sys:authority:page')")
-    public Result<PageResult<DataFunctionAuthorityVO>> page(@ParameterObject @Valid DataFunctionAuthorityQuery query){
+    public Result<PageResult<DataFunctionAuthorityVO>> page(@Valid DataFunctionAuthorityQuery query){
         PageResult<DataFunctionAuthorityVO> page = dataFunctionAuthorityService.page(query);
         return Result.ok(page);
     }
 
+    /**
+     * 根据授权ID查询相关信息
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:authority:info')")
     public Result<DataFunctionAuthorityVO> get(@PathVariable("id") Long id){
         DataFunctionAuthorityEntity entity = dataFunctionAuthorityService.getById(id);
-
         return Result.ok(DataFunctionAuthorityConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存
+     * @param vo
+     * @return
+     */
     @PostMapping("save")
-    @Operation(summary = "保存")
     @PreAuthorize("hasAuthority('sys:authority:save')")
     public Result<String> save(@RequestBody DataFunctionAuthorityVO vo){
         dataFunctionAuthorityService.save(vo);
-
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo
+     * @return
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('sys:authority:update')")
     public Result<String> update(@RequestBody @Valid DataFunctionAuthorityVO vo){
         dataFunctionAuthorityService.update(vo);
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList
+     * @return
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('sys:authority:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataFunctionAuthorityService.delete(idList);
         return Result.ok();
     }
 
+    /**
+     * 授权、取消授权
+     * @param data
+     * @return
+     */
     @PostMapping("make")
-    @Operation(summary = "授权、取消授权")
     public Result<String> make(@RequestBody DataFunctionAuthorityVO data){
         dataFunctionAuthorityService.make(data);
         return Result.ok();

@@ -7,11 +7,8 @@ import com.finn.sys.base.entity.MessageEntity;
 import com.finn.sys.base.query.MessageQuery;
 import com.finn.sys.base.service.MessageService;
 import com.finn.sys.base.vo.MessageVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,45 +21,64 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("message")
-@Tag(name="系统消息")
 public class MessageController {
 
     @Resource
     private MessageService messageService;
 
+    /**
+     * 分页
+     * @param query 查询条件
+     * @return 分页列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
-    public Result<PageResult<MessageVO>> page(@ParameterObject @Valid MessageQuery query){
+    public Result<PageResult<MessageVO>> page(@Valid MessageQuery query){
         PageResult<MessageVO> page = messageService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取消息
+     * @param id 消息ID
+     * @return 消息数据
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     public Result<MessageVO> get(@PathVariable("id") Long id){
         MessageEntity entity = messageService.getById(id);
 
         return Result.ok(MessageConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存消息
+     * @param vo 消息
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     public Result<String> save(@RequestBody MessageVO vo){
         messageService.save(vo);
 
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo 消息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     public Result<String> update(@RequestBody @Valid MessageVO vo){
         messageService.update(vo);
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList 消息ID集合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     public Result<String> delete(@RequestBody List<Long> idList){
         messageService.delete(idList);
 

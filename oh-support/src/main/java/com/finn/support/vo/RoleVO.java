@@ -1,7 +1,6 @@
 package com.finn.support.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import com.finn.core.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,48 +11,64 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 角色管理
+ * 角色管理-角色信息
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "角色")
 public class RoleVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "id")
+    /**
+     * ID
+     */
     private Long id;
 
-    @Schema(description = "角色名称")
+    /**
+     * 角色名称
+     */
     @NotBlank(message = "角色名称不能为空")
     private String name;
 
-    @Schema(description = "备注")
+    /**
+     * 备注
+     */
     private String remark;
 
-    @Schema(description = "数据范围  0：全部数据  1：本机构及子机构数据  2：本机构数据  3：本人数据  4：自定义数据")
+    /**
+     * 数据范围  0：全部数据  1：本部门及子部门数据  2：本部门数据  3：本人数据  4：自定义数据
+     */
     private Integer dataScope;
 
-    @Schema(description = "租户ID")
+    /**
+     * 租户ID
+     */
     private String tenantId;
 
-    @Schema(description = "租户")
+    /**
+     * 租户
+     */
     private String tenantName;
 
     /**
-     * 系统内置
+     * 是否系统内置角色1是 不能修改
      */
-    @Schema(description = "是否系统内置角色1是 不能修改")
     private Integer isSystem;
 
-    @Schema(description = "菜单ID列表")
+    /**
+     * 菜单ID列表
+     */
     private List<Long> menuIdList;
 
-    @Schema(description = "机构ID列表")
-    private List<Long> orgIdList;
+    /**
+     * 部门ID列表
+     */
+    private List<Long> deptIdList;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
@@ -114,12 +129,12 @@ public class RoleVO implements Serializable {
         this.menuIdList = menuIdList;
     }
 
-    public List<Long> getOrgIdList() {
-        return orgIdList;
+    public List<Long> getDeptIdList() {
+        return deptIdList;
     }
 
-    public void setOrgIdList(List<Long> orgIdList) {
-        this.orgIdList = orgIdList;
+    public void setDeptIdList(List<Long> deptIdList) {
+        this.deptIdList = deptIdList;
     }
 
     public LocalDateTime getCreateTime() {

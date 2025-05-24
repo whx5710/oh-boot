@@ -3,7 +3,6 @@ package com.finn.flow.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.entity.IDEntity;
 import com.finn.core.utils.DateUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
@@ -13,57 +12,88 @@ import java.time.LocalDateTime;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2024-02-06
 */
-@Schema(description = "环节运行记录表")
 public class TaskRecordVO extends IDEntity {
 
-	@Schema(description = "流程定义ID")
+	/**
+	 * 流程定义ID
+	 */
 	private String procDefId;
 
-	@Schema(description = "环节实例ID")
+	/**
+	 * 环节实例ID
+	 */
 	private String procInstId;
 
-	@Schema(description = "环节实例ID")
+	/**
+	 * 环节实例ID
+	 */
 	private String actInstId;
 
-	@Schema(description = "任务ID")
+	/**
+	 * 任务ID
+	 */
 	private String taskId;
 
-	@Schema(description = "环节key")
+	/**
+	 * 环节key
+	 */
 	private String taskDefId;
 
-	@Schema(description = "环节名称")
+	/**
+	 * 环节名称
+	 */
 	private String taskName;
 
-	@Schema(description = "来自于环节实例ID")
+	/**
+	 * 来自于环节实例ID
+	 */
 	private String fromActInstId;
 
-	@Schema(description = "来自于任务key")
+	/**
+	 * 来自于任务key
+	 */
 	private String fromTaskId;
 
-	@Schema(description = "来自于环节ID")
+	/**
+	 * 来自于环节ID
+	 */
 	private String fromTaskDefId;
 
-	@Schema(description = "来自于环节名称")
+	/**
+	 * 来自于环节名称
+	 */
 	private String fromTaskName;
 
-	@Schema(description = "当前标识，默认0，1标识当前环节")
+	/**
+	 * 当前标识，默认0，1标识当前环节
+	 */
 	private Integer runMark;
 
-	@Schema(description = "受理人ID")
+	/**
+	 * 受理人ID
+	 */
 	private String assignee;
 
-	@Schema(description = "受理人")
+	/**
+	 * 受理人
+	 */
 	private String assigneeName;
 
-	@Schema(description = "开始时间")
+	/**
+	 * 开始时间
+	 */
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime startTime;
 
-	@Schema(description = "结束时间")
+	/**
+	 * 结束时间
+	 */
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime endTime;
 
-	@Schema(description = "时长")
+	/**
+	 * 时长
+	 */
 	private Long duration;
 
 	public String getProcDefId() {

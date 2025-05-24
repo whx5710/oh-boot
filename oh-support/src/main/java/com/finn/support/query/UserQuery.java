@@ -1,6 +1,5 @@
 package com.finn.support.query;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.finn.framework.query.Query;
 
 import java.util.List;
@@ -11,36 +10,55 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "用户查询")
 public class UserQuery extends Query {
-    @Schema(description = "用户名")
+    /**
+     * 用户名
+     */
     private String username;
 
-    @Schema(description = "手机号")
+    /**
+     * 手机号
+     */
     private String mobile;
 
-    @Schema(description = "性别")
+    /**
+     * 性别
+     */
     private Integer gender;
 
-    @Schema(description = "姓名")
+    /**
+     * 姓名
+     */
     private String realName;
 
-    @Schema(description = "机构ID")
-    private String orgId;
+    /**
+     * 部门ID
+     */
+    private String deptId;
 
-    @Schema(description = "关键字")
+    /**
+     * 关键字
+     */
     private String keyWord;
 
-    @Schema(description = "租户ID")
+    /**
+     * 租户ID
+     */
     private String tenantId;
 
-    @Schema(description = "排除租户ID")
+    /**
+     * 排除租户ID
+     */
     private String unTenantId;
 
-    @Schema(description = "用户名集合")
+    /**
+     * 用户名集合
+     */
     private List<String> userNames;
 
-    @Schema(description = "租户标识，0所有1租户")
+    /**
+     * 租户标识，0所有1租户
+     */
     private Integer tenantFlag = 0;
 
     public String getUsername() {
@@ -75,12 +93,12 @@ public class UserQuery extends Query {
         this.realName = realName;
     }
 
-    public String getOrgId() {
-        return orgId;
+    public String getDeptId() {
+        return deptId;
     }
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
     }
 
     public String getKeyWord() {

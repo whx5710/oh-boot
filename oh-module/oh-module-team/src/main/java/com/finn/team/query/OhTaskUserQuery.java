@@ -1,8 +1,6 @@
 package com.finn.team.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
-
 
 /**
 * 任务人员表查询
@@ -10,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2022-11-25
 */
-@Schema(description = "任务人员表查询")
 public class OhTaskUserQuery extends Query {
 
 }

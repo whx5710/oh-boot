@@ -1,7 +1,5 @@
 package com.finn.support.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -11,15 +9,18 @@ import java.io.Serializable;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "用户登录")
 public class TokenVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "access_token")
+    /**
+     * access_token
+     */
     private String accessToken;
 
-    @Schema(description = "refresh_token")
+    /**
+     * refresh_token
+     */
     private String refreshToken;
 
     public TokenVO(String accessToken, String refreshToken) {

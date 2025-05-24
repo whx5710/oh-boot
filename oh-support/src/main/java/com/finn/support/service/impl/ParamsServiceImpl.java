@@ -213,4 +213,15 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
         return paramsMapper.getById(id);
     }
 
+    @Override
+    public Boolean del(Long id) {
+        ParamsEntity entity = paramsMapper.getById(id);
+        if(entity == null || entity.getParamKey() == null){
+            return false;
+        }else {
+            entity.setDbStatus(0);
+            return paramsMapper.updateById(entity);
+        }
+    }
+
 }

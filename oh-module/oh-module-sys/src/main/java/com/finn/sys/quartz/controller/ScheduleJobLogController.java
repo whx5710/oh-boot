@@ -9,10 +9,7 @@ import com.finn.sys.quartz.entity.ScheduleJobLogEntity;
 import com.finn.sys.quartz.query.ScheduleJobLogQuery;
 import com.finn.sys.quartz.service.ScheduleJobLogService;
 import com.finn.sys.quartz.vo.ScheduleJobLogVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +23,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("schedule/log")
-@Tag(name = "定时任务日志")
 public class ScheduleJobLogController {
     private final ScheduleJobLogService scheduleJobLogService;
 
@@ -34,17 +30,25 @@ public class ScheduleJobLogController {
         this.scheduleJobLogService = scheduleJobLogService;
     }
 
+    /**
+     * 分页
+     * @param query 查询参数
+     * @return 列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('schedule:log')")
-    public Result<PageResult<ScheduleJobLogVO>> page(@ParameterObject @Valid ScheduleJobLogQuery query) {
+    public Result<PageResult<ScheduleJobLogVO>> page(@Valid ScheduleJobLogQuery query) {
         PageResult<ScheduleJobLogVO> page = scheduleJobLogService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取定时任务日志
+     * @param id 日志ID
+     * @return 日志信息
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<ScheduleJobLogVO> get(@PathVariable("id") Long id) {
         ScheduleJobLogEntity entity = scheduleJobLogService.getById(id);
@@ -52,8 +56,12 @@ public class ScheduleJobLogController {
         return Result.ok(ScheduleJobLogConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 删除日志
+     * @param idList 日志ID集合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除日志")
     @OperateLog(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<String> delete(@RequestBody List<Long> idList) {

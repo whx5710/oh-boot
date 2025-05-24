@@ -1,7 +1,5 @@
 package com.finn.flow.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.HashMap;
 
 /**
@@ -16,33 +14,29 @@ public class TaskVO {
      * 流程定义KEY
      * Process_demo20231222
      */
-    @Schema(description = "流程定义KEY")
     private String proDefKey;
     /**
      * 流程定义ID
      * Process_demo20231222:13:0a229e0e-c03e-11ee-80d0-b48c9dca078f
      */
-    @Schema(description = "流程定义ID")
     private String proDefId;
     /**
      * 流程实例ID
      *
      */
-    @Schema(description = "流程实例ID")
     private String proInstId;
     /**
      * 任务ID
      */
-    @Schema(description = "任务ID")
     private String taskId;
 
-    // 业务ID
-    @Schema(description = "业务ID")
+    /**
+     * 业务ID
+     */
     private String businessKey;
     /**
      * 环节执行参数
      */
-    @Schema(description = "环节执行参数")
     private HashMap<String, Object> params;
 
     public String getProDefKey() {

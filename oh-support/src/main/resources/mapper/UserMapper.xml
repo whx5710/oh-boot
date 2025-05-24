@@ -3,8 +3,8 @@
 
 <mapper namespace="com.finn.support.mapper.UserMapper">
 	<select id="getList" resultType="com.finn.support.entity.UserEntity">
-		select t1.*, t2.name orgName
-		from sys_user t1 left join sys_org t2 on t1.org_id = t2.id
+		select t1.*, t2.name deptName
+		from sys_user t1 left join sys_dept t2 on t1.dept_id = t2.id
 		where t1.super_admin = 0 and t1.db_status = 1
 		<if test="params.username != null and params.username.trim() != ''">
 			and t1.username = #{params.username}
@@ -24,8 +24,8 @@
 		<if test="params.realName != null and params.realName.trim() != ''">
 			and t1.real_name like concat("%",#{params.realName},"%")
 		</if>
-		<if test="params.orgId != null and params.orgId != 0">
-			and t1.org_id = #{params.orgId}
+		<if test="params.deptId != null and params.deptId != 0">
+			and t1.dept_id = #{params.deptId}
 		</if>
 		<if test="params.tenantId != null and params.tenantId != ''">
 			and t1.tenant_id = #{params.tenantId}
@@ -39,14 +39,14 @@
 		<if test="params.keyWord != null and params.keyWord.trim() != ''">
 			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%")
 			or t1.username like concat("%",#{params.keyWord},"%") or t1.mobile like concat("%",#{params.keyWord},"%")
-			or t1.email like concat("%",#{params.keyWord},"%"))
+			or t1.email like concat("%",#{params.keyWord},"%") or t1.note like concat("%",#{params.keyWord},"%"))
 		</if>
 		order by t1.create_time desc
 	</select>
 
 	<select id="getRoleUserList" resultType="com.finn.support.entity.UserEntity">
-		select t1.*,t3.name as org_name from sys_user t1 left join sys_user_role t2 on t1.id = t2.user_id
-		left join sys_org t3 on t1.org_id = t3.id
+		select t1.*,t3.name as dept_name from sys_user t1 left join sys_user_role t2 on t1.id = t2.user_id
+		left join sys_dept t3 on t1.dept_id = t3.id
 		where t1.db_status = 1 and t2.db_status = 1 and t2.role_id = #{roleId}
 		<if test="username != null and username.trim() != ''">
 			and t1.username = #{username}
@@ -65,21 +65,21 @@
 			username, password,
 			real_name, avatar,
 			gender, email,
-			mobile, org_id,
+			mobile, dept_id,
 			super_admin, status,
 			db_status, creator,
 			create_time, pwd_modify_time,
-			user_key,
+			user_key,note,
 			tenant_id
 		) values (
 			#{username}, #{password},
 			#{realName}, #{avatar},
 			#{gender}, #{email},
-			#{mobile}, #{orgId},
+			#{mobile}, #{deptId},
 			#{superAdmin}, #{status},
 			#{dbStatus}, #{creator},
 			#{createTime}, #{pwdModifyTime},
-			#{userKey},
+			#{userKey},#{note},
 			#{tenantId})
 	</insert>
 
@@ -93,13 +93,14 @@
 			<if test="gender != null">gender = #{gender},</if>
 			<if test="email != null and email != ''">email = #{email},</if>
 			<if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
-			<if test="orgId != null">org_id = #{orgId},</if>
+			<if test="deptId != null">dept_id = #{deptId},</if>
 			<if test="superAdmin != null">super_admin = #{superAdmin},</if>
 			<if test="status != null">status = #{status},</if>
 			<if test="dbStatus != null">db_status = #{dbStatus},</if>
 			<if test="updater != null">updater = #{updater},</if>
 			<if test="pwdModifyTime != null">pwd_modify_time = #{pwdModifyTime},</if>
 			<if test="userKey != null and userKey != ''">user_key = #{userKey},</if>
+			<if test="note != null and note != ''">note = #{note},</if>
 			<if test="tenantId != null and tenantId != ''">tenant_id = #{tenantId},</if>
 			update_time = #{updateTime}
 		</set>

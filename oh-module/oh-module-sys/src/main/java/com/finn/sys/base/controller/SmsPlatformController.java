@@ -14,11 +14,7 @@ import com.finn.sys.base.vo.SmsSendVO;
 import com.finn.sys.sms.SmsContext;
 import com.finn.sys.sms.SmsService;
 import com.finn.sys.sms.config.SmsConfig;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.apache.commons.lang3.StringUtils;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +30,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("sms/platform")
-@Tag(name = "短信平台")
 public class SmsPlatformController {
     private final SmsPlatformService smsPlatformService;
     private final SmsService smsService;
@@ -44,17 +39,25 @@ public class SmsPlatformController {
         this.smsService = smsService;
     }
 
+    /**
+     * 分页
+     * @param query 查询参数
+     * @return 集合
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sms:platform:page')")
-    public Result<PageResult<SmsPlatformVO>> page(@ParameterObject @Valid SmsPlatformQuery query) {
+    public Result<PageResult<SmsPlatformVO>> page(@Valid SmsPlatformQuery query) {
         PageResult<SmsPlatformVO> page = smsPlatformService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID查询短信平台信息
+     * @param id 短信平台ID
+     * @return data
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sms:platform:info')")
     public Result<SmsPlatformVO> get(@PathVariable("id") Long id) {
         SmsPlatformEntity entity = smsPlatformService.getById(id);
@@ -62,8 +65,12 @@ public class SmsPlatformController {
         return Result.ok(SmsPlatformConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存
+     * @param vo 数据
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @OperateLog(module = "短信平台", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sms:platform:save')")
     public Result<String> save(@RequestBody SmsPlatformVO vo) {
@@ -72,8 +79,12 @@ public class SmsPlatformController {
         return Result.ok();
     }
 
+    /**
+     * 发送短信
+     * @param vo 短信信息
+     * @return 提示信息
+     */
     @PostMapping("send")
-    @Operation(summary = "发送短信")
     @OperateLog(module = "短信平台", name = "发送短信", type = OperateTypeEnum.OTHER)
     @PreAuthorize("hasAuthority('sms:platform:update')")
     public Result<String> send(@RequestBody SmsSendVO vo) {
@@ -82,7 +93,7 @@ public class SmsPlatformController {
 
         // 短信参数
         Map<String, String> params = new LinkedHashMap<>();
-        if (StringUtils.isNotBlank(vo.getParamValue())) {
+        if (vo.getParamValue() != null && !vo.getParamValue().isEmpty()) {
             params.put(vo.getParamKey(), vo.getParamValue());
         }
 
@@ -102,8 +113,12 @@ public class SmsPlatformController {
         }
     }
 
+    /**
+     * 修改
+     * @param vo 短信平台数据
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @OperateLog(module = "短信平台", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sms:platform:update')")
     public Result<String> update(@RequestBody @Valid SmsPlatformVO vo) {
@@ -112,8 +127,12 @@ public class SmsPlatformController {
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList ID集合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @OperateLog(module = "短信平台", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sms:platform:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {

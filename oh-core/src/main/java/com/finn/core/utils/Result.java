@@ -9,16 +9,24 @@ import com.finn.core.exception.ErrorCode;
  *
  */
 public class Result<T> {
-    // 编码 0表示成功，其他值表示失败
+    /**
+     * 编码 0表示成功，其他值表示失败
+     */
     private int code = 0;
 
-    // 请求是否成功
+    /**
+     * 请求是否成功
+     */
     private Boolean success = true;
 
-    // 消息内容
+    /**
+     * 消息内容
+     */
     private String msg = "success";
 
-    // 响应数据
+    /**
+     * 响应数据
+     */
     private T data;
 
     public int getCode() {

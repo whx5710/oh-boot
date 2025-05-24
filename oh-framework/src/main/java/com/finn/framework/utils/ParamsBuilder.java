@@ -442,7 +442,7 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
      * @return p
      */
     public ParamsBuilder<T> in(Func1<T, ?> function, List<?> value){
-        if(value != null){
+        if(value != null && value.size() > 0){
             String fieldName = LambdaUtil.getFieldName(function);
             String colName = getColName(fieldName);
             StringBuilder stringBuilder = new StringBuilder();

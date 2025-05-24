@@ -22,16 +22,16 @@ public interface UserMapper {
 
 	List<UserEntity> getList(@Param("params") UserQuery params);
 
-	@Select("select t1.*, (select t2.name from sys_org t2 where t2.id = t1.org_id) orgName from sys_user t1 where t1.db_status = 1 and t1.id = #{id}")
+	@Select("select t1.*, (select t2.name from sys_dept t2 where t2.id = t1.dept_id) deptName from sys_user t1 where t1.db_status = 1 and t1.id = #{id}")
 	UserEntity getById(@Param("id") Long id);
 
 	@Pages
 	List<UserEntity> getRoleUserList(RoleUserQuery params);
 
-	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.username = #{username}")
+	@Select("select a.*,b.name as dept_name from sys_user a left join sys_dept b on a.dept_id = b.id where a.db_status != 0 and a.username = #{username}")
 	UserEntity getByUsername(@Param("username") String username);
 
-	@Select("select a.*,b.name as org_name from sys_user a left join sys_org b on a.org_id = b.id where a.db_status != 0 and a.mobile = #{mobile}")
+	@Select("select a.*,b.name as dept_name from sys_user a left join sys_dept b on a.dept_id = b.id where a.db_status != 0 and a.mobile = #{mobile}")
 	UserEntity getByMobile(@Param("mobile") String mobile);
 
 	// 保存用户
@@ -43,6 +43,6 @@ public interface UserMapper {
 	// 解绑租户用户
 	boolean unbindUser(UserEntity userEntity);
 
-	@Select("select count(1) from sys_user where db_status != 0 and org_id = #{orgId}")
-	int countByOrgId(@Param("orgId")long orgId);
+	@Select("select count(1) from sys_user where db_status != 0 and dept_id = #{deptId}")
+	int countByDeptId(@Param("deptId")long deptId);
 }

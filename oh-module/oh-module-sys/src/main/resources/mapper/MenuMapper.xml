@@ -4,36 +4,52 @@
 <mapper namespace="com.finn.sys.base.mapper.MenuMapper">
 
 	<select id="getMenuList" resultType="com.finn.sys.base.entity.MenuEntity">
-		select t1.*,t2.name as parent_name from sys_menu t1 left join sys_menu t2 on t1.parent_id = t2.id where t1.db_status = 1
+		select t1.*,t2.title as parent_name from sys_menu t1 left join sys_menu t2 on t1.parent_id = t2.id where t1.db_status = 1
 		<if test="query.type != null">
 			and t1.type = #{query.type}
 		</if>
 		<if test="query.parentId != null">
 			and t1.parent_id = #{query.parentId}
 		</if>
-		<if test="query.name != null and query.name != ''">
-			and t1.name like concat('%', #{query.name}, '%')
+		<if test="query.keyWords != null and query.keyWords != ''">
+			and (t1.name like concat('%', #{query.keyWords}, '%') or t1.title like concat('%', #{query.keyWords}, '%'))
+		</if>
+		<if test="query.menuIds != null and query.menuIds.size() > 0">
+			and t1.id in
+			<foreach item="menuId" index="index" collection="query.menuIds" open="(" separator="," close=")">
+				#{menuId}
+			</foreach>
 		</if>
 		order by t1.sort asc
 	</select>
 
 	<select id="getUserMenuList" resultType="com.finn.sys.base.entity.MenuEntity">
-		select t3.* from sys_user_role t1
+		select t3.*,t4.title as parent_name from sys_user_role t1
 			left join sys_role_menu t2 on t1.role_id = t2.role_id
 			left join sys_menu t3 on t2.menu_id = t3.id
+			left join sys_menu t4 on t3.parent_id = t4.id
 		where t1.user_id = #{userId} and t1.db_status = 1 and t2.db_status = 1 and t3.db_status = 1
-		<if test="type != null">
-			and t3.type = #{type}
+		<if test="query.type != null and query.type != ''">
+			and t3.type = #{query.type}
+		</if>
+		<if test="query.keyWords != null and query.keyWords != ''">
+			and (t3.name like concat('%', #{query.keyWords}, '%') or t3.title like concat('%', #{query.keyWords}, '%'))
+		</if>
+		<if test="query.menuIds != null and query.menuIds.size() > 0">
+			and t3.id in
+			<foreach item="menuId" index="index" collection="query.menuIds" open="(" separator="," close=")">
+				#{menuId}
+			</foreach>
 		</if>
 		order by t3.sort asc
 	</select>
 
-	<insert id="save">
+	<!--<insert id="save">
 		INSERT INTO sys_menu (parent_id, name, url, menu_path, authority, type, open_style, icon, sort, db_status, mark, creator, create_time)
 		VALUES (#{parentId}, #{name}, #{url}, #{menuPath}, #{authority}, #{type}, #{openStyle}, #{icon}, #{sort}, #{dbStatus}, #{mark}, #{creator}, #{createTime})
-	</insert>
+	</insert>-->
 
-	<update id="updateById">
+	<!--<update id="updateById">
 		UPDATE sys_menu
 		<set>
 			<if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
@@ -51,7 +67,7 @@
 			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}
-	</update>
+	</update>-->
 
 	<select id="getList" resultType="com.finn.sys.base.entity.MenuEntity">
 		select * from sys_menu where db_status = 1

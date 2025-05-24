@@ -7,10 +7,7 @@ import com.finn.sys.base.entity.SmsLogEntity;
 import com.finn.sys.base.query.SmsLogQuery;
 import com.finn.sys.base.service.SmsLogService;
 import com.finn.sys.base.vo.SmsLogVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("sms/log")
-@Tag(name = "短信日志")
 public class SmsLogController {
     private final SmsLogService smsLogService;
 
@@ -33,17 +29,25 @@ public class SmsLogController {
         this.smsLogService = smsLogService;
     }
 
+    /**
+     * 分页
+     * @param query 查询条件
+     * @return
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sms:log')")
-    public Result<PageResult<SmsLogVO>> page(@ParameterObject @Valid SmsLogQuery query) {
+    public Result<PageResult<SmsLogVO>> page(@Valid SmsLogQuery query) {
         PageResult<SmsLogVO> page = smsLogService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID查询短信日志
+     * @param id 日志ID
+     * @return 数据
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sms:log')")
     public Result<SmsLogVO> get(@PathVariable("id") Long id) {
         SmsLogEntity entity = smsLogService.getById(id);

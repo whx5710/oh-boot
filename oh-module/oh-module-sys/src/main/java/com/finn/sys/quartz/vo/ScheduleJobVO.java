@@ -2,7 +2,6 @@ package com.finn.sys.quartz.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,41 +11,62 @@ import java.time.LocalDateTime;
 *
 * @author 王小费 whx5710@qq.com
 */
-@Schema(description = "定时任务")
 public class ScheduleJobVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "id")
+	/**
+	 * id
+	 */
 	private Long id;
 
-	@Schema(description = "任务名称")
+	/**
+	 * 任务名称
+	 */
 	private String jobName;
 
-	@Schema(description = "任务组名")
+	/**
+	 * 任务组名
+	 */
 	private String jobGroup;
 
-	@Schema(description = "bean名称")
+	/**
+	 * bean名称
+	 */
 	private String beanName;
 
-	@Schema(description = "执行方法")
+	/**
+	 * 执行方法
+	 */
 	private String method;
 
-	@Schema(description = "参数")
+	/**
+	 * 参数
+	 */
 	private String params;
 
-	@Schema(description = "cron表达式")
+	/**
+	 * cron表达式
+	 */
 	private String cronExpression;
 
-	@Schema(description = "状态 ")
+	/**
+	 * 状态
+	 */
 	private Integer status;
 
-	@Schema(description = "是否并发")
+	/**
+	 * 是否并发
+	 */
 	private Integer concurrent;
 
-	@Schema(description = "备注")
+	/**
+	 * 备注
+	 */
 	private String remark;
 
-	@Schema(description = "创建时间")
+	/**
+	 * 创建时间
+	 */
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime createTime;
 

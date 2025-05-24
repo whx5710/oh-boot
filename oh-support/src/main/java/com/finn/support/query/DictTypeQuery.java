@@ -1,21 +1,28 @@
 package com.finn.support.query;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.finn.framework.query.Query;
 
 /**
- * 字典类型
+ * 字典类型查询
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "字典类型查询")
 public class DictTypeQuery extends Query {
-    @Schema(description = "字典类型")
+    /**
+     * 字典类型
+     */
     private String dictType;
 
-    @Schema(description = "字典名称")
+    /**
+     * 字典名称
+     */
     private String dictName;
+
+    /**
+     * 搜索关键字
+     */
+    private String keyWords;
 
     public String getDictType() {
         return dictType;
@@ -33,4 +40,11 @@ public class DictTypeQuery extends Query {
         this.dictName = dictName;
     }
 
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
 }

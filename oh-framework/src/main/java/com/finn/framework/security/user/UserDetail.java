@@ -29,7 +29,7 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
     private String password;
     private String avatar;
     private Integer gender;
-    private Long orgId;
+    private Long deptId;
     private Integer status;
     private Integer superAdmin;
     // 登录时间戳
@@ -67,12 +67,12 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
         this.gender = gender;
     }
 
-    public Long getOrgId() {
-        return orgId;
+    public Long getDeptId() {
+        return deptId;
     }
 
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
     public Integer getStatus() {

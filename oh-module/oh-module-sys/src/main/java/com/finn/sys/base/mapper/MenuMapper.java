@@ -1,5 +1,6 @@
 package com.finn.sys.base.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.sys.base.entity.MenuEntity;
 import com.finn.sys.base.query.MenuQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,7 +15,7 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface MenuMapper {
+public interface MenuMapper extends BaseMapper<MenuEntity> {
 
 	List<MenuEntity> getList(MenuEntity query);
 	/**
@@ -28,13 +29,13 @@ public interface MenuMapper {
 	 * 查询用户菜单列表
 	 *
 	 * @param userId 用户ID
-	 * @param type 菜单类型
+	 * @param query 菜单参数
 	 */
-	List<MenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("type") Integer type);
+	List<MenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("query") MenuQuery query);
 
-	int save(MenuEntity param);
+	// int save(MenuEntity param);
 
-	boolean updateById(MenuEntity param);
+	// boolean updateById(MenuEntity param);
 
 	MenuEntity getById(@Param("id")Long id);
 

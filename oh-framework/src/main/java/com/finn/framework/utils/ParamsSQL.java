@@ -7,6 +7,8 @@ import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableId;
 import com.finn.framework.datasource.annotations.TableName;
 import org.apache.ibatis.jdbc.SQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import java.util.List;
  * @since 2025-03-22
  */
 public class ParamsSQL<T> extends HashMap<String, Object> {
+
+    private final static Logger log = LoggerFactory.getLogger(ParamsSQL.class);
 
     // 列名
     protected HashMap<String, String> colValue;
@@ -71,12 +75,25 @@ public class ParamsSQL<T> extends HashMap<String, Object> {
     static HashMap<String, String> buildColumn(SQL sql, Class<?> clazz){
         HashMap<String, String> colValue = new HashMap<>();
         List<Field> fields = ReflectUtil.getFields(clazz);
+        HashMap<String, Boolean> judge = new HashMap<>();
         for(Field field: fields){
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
-                    sql.SELECT(annotation.value() + " AS " + field.getName());
-                    colValue.put(field.getName(), annotation.value()); // 缓存列名
+                    if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
+                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
+                        log.warn("子类有覆盖 {} 字段，不查询该字段", annotation.value());
+                    }else{
+                        sql.SELECT(annotation.value() + " AS " + field.getName());
+                        colValue.put(field.getName(), annotation.value()); // 缓存列名
+                    }
+                }else{
+                    // 如果子类覆盖了父类的属性，存在 exists = false的情况
+                    String key = annotation.value()==null?field.getName():annotation.value();
+                    if(key.equals("")){
+                        key = field.getName();
+                    }
+                    judge.put(key, annotation.exists());
                 }
             }else{
                 sql.SELECT(field.getName());

@@ -1,36 +1,49 @@
 package com.finn.sys.monitor.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 /**
  * 在线用户
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "在线用户")
 public class UserOnlineVO {
-    @Schema(description = "id")
+    /**
+     * id
+     */
     private Long id;
 
-    @Schema(description = "用户名")
+    /**
+     * 用户名
+     */
     private String username;
 
-    @Schema(description = "姓名")
+    /**
+     * 姓名
+     */
     private String realName;
 
-    @Schema(description = "性别")
+    /**
+     * 性别
+     */
     private Integer gender;
 
-    @Schema(description = "邮箱")
+    /**
+     * 邮箱
+     */
     private String email;
 
-    @Schema(description = "accessToken")
+    /**
+     * accessToken
+     */
     private String accessToken;
 
-    @Schema(description = "登录时间")
+    /**
+     * 登录时间
+     */
     private String loginTime;
-    @Schema(description = "IP地址")
+    /**
+     * IP地址
+     */
     private String ip;
 
     public Long getId() {

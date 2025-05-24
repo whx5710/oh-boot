@@ -13,14 +13,14 @@ public interface RoleDataScopeService {
     /**
      * 保存或修改
      * @param roleId      角色ID
-     * @param orgIdList   机构ID列表
+     * @param deptIdList   部门ID列表
      */
-    void saveOrUpdate(Long roleId, List<Long> orgIdList);
+    void saveOrUpdate(Long roleId, List<Long> deptIdList);
 
     /**
-     * 根据角色ID，获取机构ID列表
+     * 根据角色ID，获取部门ID列表
      */
-    List<Long> getOrgIdList(Long roleId);
+    List<Long> getDeptIdList(Long roleId);
 
     /**
      * 根据角色id列表，删除角色数据权限关系

@@ -7,7 +7,6 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.JsonUtils;
 import com.finn.sys.sms.config.SmsConfig;
 import com.finn.sys.sms.service.SmsStrategy;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 
 import javax.net.ssl.*;
@@ -47,13 +46,13 @@ public class HuaweiSmsStrategy implements SmsStrategy {
 
         // 请求Body,不携带签名名称时,signature请填null
         String body = buildRequestBody(smsConfig.getSenderId(), "+86" + mobile, smsConfig.getTemplateId(), templateParas, null, smsConfig.getSignName());
-        if (StringUtils.isBlank(body)) {
+        if (body == null || body.isEmpty()) {
             throw new ServerException("body is null.");
         }
 
         // 请求Headers中的X-WSSE参数值
         String wsseHeader = buildWsseHeader(smsConfig.getAccessKey(), smsConfig.getSecretKey());
-        if (StringUtils.isBlank(wsseHeader)) {
+        if (wsseHeader == null || wsseHeader.isEmpty()) {
             throw new ServerException("wsse header is null.");
         }
 

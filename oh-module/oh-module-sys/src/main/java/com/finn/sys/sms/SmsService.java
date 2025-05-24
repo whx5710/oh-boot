@@ -10,7 +10,6 @@ import com.finn.sys.base.entity.SmsLogEntity;
 import com.finn.sys.base.service.SmsLogService;
 import com.finn.sys.base.service.SmsPlatformService;
 import com.finn.sys.sms.config.SmsConfig;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -81,7 +80,7 @@ public class SmsService {
         logEntity.setParams(JsonUtils.toJsonString(params));
 
         if(e != null) {
-            String error = StringUtils.substring(ExceptionUtils.getExceptionMessage(e), 0, 2000);
+            String error = ExceptionUtils.getExceptionMessage(e).substring(0, 2000);
             logEntity.setStatus(Constant.FAIL);
             logEntity.setError(error);
         }else {

@@ -1,7 +1,6 @@
 package com.finn.support.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * 登录日志查询
@@ -9,15 +8,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "登录日志查询")
 public class LogLoginQuery extends Query {
-    @Schema(description = "用户名")
+    /**
+     * 用户名
+     */
     private String username;
 
-    @Schema(description = "登录地点")
+    /**
+     * 登录地点
+     */
     private String address;
 
-    @Schema(description = "登录状态  0：失败   1：成功")
+    /**
+     * 登录状态  0：失败   1：成功
+     */
     private Integer status;
 
     public String getUsername() {

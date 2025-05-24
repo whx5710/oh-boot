@@ -63,8 +63,6 @@
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<!-- camunda 工作流相关 -->
 		<camunda.version>7.20.0</camunda.version>
-		<!-- swagger（xiaoymin版本）生成在线文档 -->
-		<knife4j.version>4.5.0</knife4j.version>
 	</properties>
 
 	<dependencyManagement>
@@ -144,12 +142,6 @@
 				<artifactId>pagehelper-spring-boot-starter</artifactId>
 				<version>${pagehelper.version}</version>
 			</dependency>
-			<!-- 接口文档 -->
-			<dependency>
-				<groupId>com.github.xiaoymin</groupId>
-				<artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-				<version>${knife4j.version}</version>
-			</dependency>
 			<!-- end   ================================= 其他 ================================= -->
 		</dependencies>
 	</dependencyManagement>
@@ -199,4 +191,27 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.ly.smart-doc</groupId>
+				<artifactId>smart-doc-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<!--指定生成文档的使用的配置文件-->
+					<configFile>${basedir}/src/main/resources/smart-doc.json</configFile>
+					<!--指定项目名称-->
+					<projectName>oh-boot-pro</projectName>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>html</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

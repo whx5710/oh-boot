@@ -3,7 +3,10 @@ package com.finn.sys.base.convert;
 import com.finn.sys.base.entity.MenuEntity;
 import com.finn.sys.base.vo.MenuTreeVO;
 import com.finn.sys.base.vo.MenuVO;
+import com.finn.sys.base.vo.RouteMetaVO;
+import com.finn.sys.base.vo.RouteVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -18,7 +21,10 @@ import java.util.List;
 public interface MenuConvert {
     MenuConvert INSTANCE = Mappers.getMapper(MenuConvert.class);
 
-    MenuEntity convert(MenuTreeVO vo);
+    MenuEntity convert(RouteVO vo);
+
+    @Mapping(target = "authority", ignore = true) // 忽略authority
+    MenuEntity convert(RouteMetaVO vo);
 
     MenuTreeVO convert(MenuEntity entity);
 

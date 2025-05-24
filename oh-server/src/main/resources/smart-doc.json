@@ -1,0 +1,11 @@
+{
+  "outPath": "target/doc",
+  "projectName": "oh-boot基础框架",
+  "packageFilters": "com.finn.support.controller.*,com.finn.sys.base.controller.*",
+  "openUrl": "http://localhost:7700/api",
+  "appToken": "0372881510384f1b901b7e886c92cd33",
+  "debugEnvName":"本地环境",
+  "debugEnvUrl":"http://127.0.0.1:8080",
+  "tornaDebug": true,
+  "replace": true
+}

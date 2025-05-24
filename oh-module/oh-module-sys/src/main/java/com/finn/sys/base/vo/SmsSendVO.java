@@ -1,7 +1,5 @@
 package com.finn.sys.base.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -10,21 +8,27 @@ import java.io.Serializable;
 *
 * @author 王小费 whx5710@qq.com
 */
-@Schema(description = "短信发送")
 public class SmsSendVO implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "id")
+	/**
+	 * ID
+	 */
 	private Long id;
-
-	@Schema(description = "手机号")
+	/**
+	 * 手机号
+	 */
 	private String mobile;
 
-	@Schema(description = "参数Key")
+	/**
+	 * 参数Key
+	 */
 	private String paramKey;
 
-	@Schema(description = "参数Value")
+	/**
+	 * 参数Value
+	 */
 	private String paramValue;
 
 	public Long getId() {

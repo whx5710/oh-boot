@@ -1,5 +1,9 @@
 package com.finn.sys.base.service.impl;
 
+import com.finn.core.utils.AssertUtils;
+import com.finn.core.utils.TreeNode;
+import com.finn.framework.security.user.SecurityUser;
+import com.finn.framework.utils.ParamsBuilder;
 import com.finn.sys.base.vo.RouteMetaVO;
 import com.finn.sys.base.vo.RouteVO;
 import com.github.pagehelper.Page;
@@ -20,9 +24,7 @@ import com.finn.sys.base.vo.MenuTreeVO;
 import com.finn.sys.base.vo.MenuVO;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 菜单管理
@@ -41,57 +43,63 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void save(MenuTreeVO vo) {
-        MenuEntity entity = MenuConvert.INSTANCE.convert(vo);
-        // url不以 / 开头
-        if(entity.getUrl() != null && entity.getUrl().startsWith("/")){
-            entity.setUrl(entity.getUrl().substring(1));
-        }
+    public void save(RouteVO vo) {
+        MenuEntity entity = MenuConvert.INSTANCE.convert(vo.getMeta());
+        /*if(vo.getMeta().getAuthority() != null){
+            entity.setAuthority(String.join(",", vo.getMeta().getAuthority()));
+        }*/
+        entity.setAuthority(vo.getAuthCode());
+        entity.setId(vo.getId());
+        entity.setParentId(vo.getParentId());
+        entity.setName(vo.getName());
+        entity.setPath(vo.getPath());
+        entity.setMenuPath(vo.getComponent());
+        entity.setType(vo.getType());
+        entity.setStatus(vo.getStatus());
+
         // 显示路径以 / 开头
-        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty() && !entity.getMenuPath().startsWith("/")){
+        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()
+                && !entity.getMenuPath().equals("BasicLayout")  && !entity.getMenuPath().startsWith("/")){
             entity.setMenuPath("/" + entity.getMenuPath());
         }
         // 判断显示路径是否存在
         if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()){
-            MenuEntity param = new MenuEntity();
-            param.setMenuPath(entity.getMenuPath());
-            param.setType(0);
-            List<MenuEntity> list = menuMapper.getList(param);
-            if(list != null && !list.isEmpty()){
+            if(pathExists(entity.getId(), entity.getPath())){
                 throw new ServerException("显示路径已存在，请换一个!");
             }
         }
         // 保存菜单
-        menuMapper.save(entity);
+        menuMapper.insert(entity);
     }
 
     @Override
-    public void update(MenuTreeVO vo) {
-        MenuEntity entity = MenuConvert.INSTANCE.convert(vo);
+    public void update(RouteVO vo) {
+        MenuEntity entity = MenuConvert.INSTANCE.convert(vo.getMeta());
+        /*if(vo.getMeta().getAuthority() != null){
+            entity.setAuthority(String.join(",", vo.getMeta().getAuthority()));
+        }*/
+        entity.setAuthority(vo.getAuthCode());
+        entity.setId(vo.getId());
+        entity.setParentId(vo.getParentId());
+        entity.setName(vo.getName());
+        entity.setPath(vo.getPath());
+        entity.setMenuPath(vo.getComponent());
+        entity.setType(vo.getType());
+        entity.setStatus(vo.getStatus());
 
         // 上级菜单不能为自己
         if (entity.getId().equals(entity.getParentId())) {
             throw new ServerException("上级菜单不能为自己");
         }
-        // url不以 / 开头
-        if(entity.getUrl() != null && entity.getUrl().startsWith("/")){
-            entity.setUrl(entity.getUrl().substring(1));
-        }
         // 显示路径以 / 开头
-        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty() && !entity.getMenuPath().startsWith("/")){
+        if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()
+                && !entity.getMenuPath().equals("BasicLayout")  && !entity.getMenuPath().startsWith("/")){
             entity.setMenuPath("/" + entity.getMenuPath());
         }
         // 判断显示路径是否存在
         if(entity.getMenuPath() != null && !entity.getMenuPath().isEmpty()){
-            MenuEntity param = new MenuEntity();
-            param.setMenuPath(entity.getMenuPath());
-            List<MenuEntity> list = menuMapper.getList(param);
-            if(list != null && !list.isEmpty()){
-                for(MenuEntity item : list){
-                    if(!item.getId().equals(entity.getId())){
-                        throw new ServerException("显示路径已存在，请换一个!");
-                    }
-                }
+            if(pathExists(entity.getId(), entity.getPath())){
+                throw new ServerException("显示路径已存在，请换一个!");
             }
         }
         // 更新菜单
@@ -122,6 +130,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public List<MenuVO> list(MenuQuery query) {
+        return MenuConvert.INSTANCE.convertList(menuMapper.getMenuList(query));
+    }
+
+    @Override
     public List<MenuTreeVO> getMenuTreeList(MenuQuery query) {
         List<MenuEntity> menuList = menuMapper.getMenuList(query);
         return TreeUtils.build(MenuConvert.INSTANCE.convertTreeList(menuList),
@@ -129,15 +142,44 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<MenuTreeVO> getUserMenuList(UserDetail user, Integer type) {
-        List<MenuEntity> menuList = menuList(user, type);
+    public List<MenuTreeVO> getUserMenuList(MenuQuery query) {
+        query.setType("menu");
+        List<MenuEntity> menuList = menuList(query);
         return TreeUtils.build(MenuConvert.INSTANCE.convertTreeList(menuList));
     }
 
     @Override
-    public List<RouteVO> getUserRouteList(UserDetail user, Integer type) {
-        List<MenuEntity> menuList = menuList(user, type);
+    public List<RouteVO> getUserRouteList(MenuQuery query) {
+        if(query == null){
+            query = new MenuQuery();
+        }
+        String type = query.getType();
+        List<MenuEntity> menuList = menuList(query);
         if(menuList != null && !menuList.isEmpty()){
+            // 搜索-查询级联数据
+            if(query.getKeyWords() != null && !query.getKeyWords().isEmpty()){
+                MenuQuery tmp = new MenuQuery();
+                tmp.setType("all");
+                List<MenuEntity> menuListAll = menuList(tmp);
+                // list转map
+                Map<Long, TreeNode> nodeMap = new LinkedHashMap<>(menuListAll.size());
+                for(MenuEntity menu: menuListAll){
+                    TreeNode treeNode = new TreeNode<>();
+                    treeNode.setId(menu.getId());
+                    treeNode.setParentId(menu.getParentId());
+                    nodeMap.put(menu.getId(), treeNode);
+                }
+                List<Long> menuIds = new ArrayList<>();
+                for(MenuEntity menu: menuList){
+                    menuIds.add(menu.getId());
+                    TreeUtils.getParentIds(menu.getId(), nodeMap, menuIds);
+                }
+                // 根据id重新查询
+                query.setMenuIds(menuIds);
+                query.setKeyWords(null);
+                query.setType(type);
+                menuList = menuList(query);
+            }
             List<RouteVO> routeVOS = new ArrayList<>(menuList.size());
             // 创建route vo,组装meta
             for(MenuEntity item: menuList){
@@ -160,20 +202,24 @@ public class MenuServiceImpl implements MenuService {
         routeVO.setId(item.getId());
         routeVO.setParentId(item.getParentId());
         routeVO.setName(item.getName());
-        if(item.getUrl() != null && !item.getUrl().isEmpty()){
-            if(!item.getUrl().startsWith("/")){
-                if(item.getUrl().equals("BasicLayout")){
+        routeVO.setType(item.getType());
+        routeVO.setStatus(item.getStatus());
+        routeVO.setAuthCode(item.getAuthority());
+        routeVO.setParentName(item.getParentName());
+        if(item.getMenuPath() != null && !item.getMenuPath().isEmpty()){
+            if(!item.getMenuPath().startsWith("/")){
+                if(item.getMenuPath().equals("BasicLayout")){
                     routeVO.setComponent("BasicLayout");
                 }else {
-                    routeVO.setComponent("/" + item.getUrl());
+                    routeVO.setComponent("/" + item.getMenuPath());
                 }
             }else{
-                routeVO.setComponent(item.getUrl());
+                routeVO.setComponent(item.getMenuPath());
             }
         }else{
-            routeVO.setComponent(item.getUrl());
+            routeVO.setComponent(item.getMenuPath());
         }
-        routeVO.setPath(item.getMenuPath());
+        routeVO.setPath(item.getPath());
 
         // 组装meta
         RouteMetaVO metaVO = getMetaVO(item);
@@ -189,7 +235,7 @@ public class MenuServiceImpl implements MenuService {
      */
     private static RouteMetaVO getMetaVO(MenuEntity item) {
         RouteMetaVO metaVO = new RouteMetaVO();
-        metaVO.setTitle(item.getName());
+        metaVO.setTitle(item.getTitle());
         metaVO.setIcon(item.getIcon());
         // 权限列表
         if(item.getAuthority() != null && !item.getAuthority().isEmpty()){
@@ -197,17 +243,22 @@ public class MenuServiceImpl implements MenuService {
         }
         // 用于配置外链跳转路径，会在新窗口打开
         if(item.getOpenStyle() == 1){
-            metaVO.setLink(item.getUrl());
+            metaVO.setLink(item.getLink());
             metaVO.setOpenInNewWindow(true);
-        }
-        // 用于配置内嵌页面的 iframe 地址，设置后会在当前页面内嵌对应的页面
-        if(item.getUrl() != null && (item.getUrl().startsWith("http://") || item.getUrl().startsWith("https://"))){
-            metaVO.setIframeSrc(item.getUrl());
+        }else{
+            // 用于配置内嵌页面的 iframe 地址，设置后会在当前页面内嵌对应的页面
+            if(item.getLink() != null && (item.getLink().startsWith("http://") || item.getLink().startsWith("https://"))){
+                metaVO.setIframeSrc(item.getLink());
+            }
         }
         // 用于配置页面是否开启缓存，开启后页面会缓存，不会重新加载，仅在标签页启用时有效keepAlive
-        if(!item.getNoCache()){
-            metaVO.setKeepAlive(true);
-        }
+        metaVO.setKeepAlive(item.getKeepAlive());
+        metaVO.setAffixTab(item.getAffixTab());
+        metaVO.setHideInMenu(item.getHideInMenu());
+        metaVO.setHideInTab(item.getHideInTab());
+        metaVO.setBadge(item.getBadge());
+        metaVO.setBadgeType(item.getBadgeType());
+        metaVO.setBadgeVariants(item.getBadgeVariants());
         metaVO.setOrder(item.getSort());
         return metaVO;
     }
@@ -225,22 +276,55 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.getById(id);
     }
 
+    @Override
+    public Boolean nameExists(Long id, String name) {
+        if(name == null || name.isEmpty()){
+            return false;
+        }else {
+            ParamsBuilder<MenuEntity> params = ParamsBuilder.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
+            if(id != null && id != 0L){
+                params.ne(MenuEntity::getId, id);
+            }
+            return !menuMapper.selectListByParam(params).isEmpty();
+        }
+    }
+
+    @Override
+    public Boolean pathExists(Long id, String path) {
+        if(path == null || path.isEmpty()){
+            return false;
+        }else {
+            ParamsBuilder<MenuEntity> params = ParamsBuilder.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
+            if(id != null && id != 0L){
+                params.ne(MenuEntity::getId, id);
+            }
+            return !menuMapper.selectListByParam(params).isEmpty();
+        }
+    }
+
     /**
      * 获取菜单列表
-     * @param user 用户信息
-     * @param type 菜单类型
+     * 1、系统管理员可查询全部的
+     * 2、type = all 的查全部的
+     * 3、其他根据用户角色查询
+     * @param query type 菜单类型 null  全部 catalog | menu | action | all
      * @return
      */
-    private List<MenuEntity> menuList(UserDetail user, Integer type){
+    private List<MenuEntity> menuList(MenuQuery query){
+        if(query.getType() == null || query.getType().isEmpty()){
+            query.setType("menu");
+        }
         List<MenuEntity> menuList;
-
+        UserDetail user = SecurityUser.getUser();
+        AssertUtils.isNull(user, "用户信息为空，请登录");
+        if(query.getType().equalsIgnoreCase("all")){
+            query.setType(null);
+        }
         // 系统管理员，拥有最高权限
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
-            MenuQuery query = new MenuQuery();
-            query.setType(type);
             menuList = menuMapper.getMenuList(query);
         } else {
-            menuList = menuMapper.getUserMenuList(user.getId(), type);
+            menuList = menuMapper.getUserMenuList(user.getId(), query);
         }
         return menuList;
     }

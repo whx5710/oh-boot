@@ -7,8 +7,6 @@ import com.finn.team.entity.OhProjectLogEntity;
 import com.finn.team.query.OhProjectLogQuery;
 import com.finn.team.service.OhProjectLogService;
 import com.finn.team.vo.OhProjectLogVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,6 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("team/log")
-@Tag(name="项目、任务操作日志")
 public class OhProjectLogController {
     private final OhProjectLogService ohProjectLogService;
 
@@ -31,8 +28,12 @@ public class OhProjectLogController {
         this.ohProjectLogService = ohProjectLogService;
     }
 
+    /**
+     * 分页
+     * @param query
+     * @return
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('team:log:page')")
     public Result<PageResult<OhProjectLogVO>> page(@Valid OhProjectLogQuery query){
         PageResult<OhProjectLogVO> page = ohProjectLogService.page(query);
@@ -40,8 +41,12 @@ public class OhProjectLogController {
         return Result.ok(page);
     }
 
+    /**
+     * 获取项目日志
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('team:log:info')")
     public Result<OhProjectLogVO> get(@PathVariable("id") Long id){
         OhProjectLogEntity entity = ohProjectLogService.getById(id);
@@ -49,8 +54,12 @@ public class OhProjectLogController {
         return Result.ok(OhProjectLogConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存
+     * @param vo
+     * @return
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @PreAuthorize("hasAuthority('team:log:save')")
     public Result<String> save(@RequestBody OhProjectLogVO vo){
         ohProjectLogService.save(vo);
@@ -58,21 +67,27 @@ public class OhProjectLogController {
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo
+     * @return
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @PreAuthorize("hasAuthority('team:log:update')")
     public Result<String> update(@RequestBody @Valid OhProjectLogVO vo){
         ohProjectLogService.update(vo);
-
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param idList
+     * @return
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @PreAuthorize("hasAuthority('team:log:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         ohProjectLogService.delete(idList);
-
         return Result.ok();
     }
 }

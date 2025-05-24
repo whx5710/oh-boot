@@ -1,7 +1,5 @@
 package com.finn.support.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -11,18 +9,23 @@ import java.io.Serializable;
  * @author 王小费 whx5710@qq.com
  * 
  */
-@Schema(description = "图片验证码")
 public class CaptchaVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "key")
+    /**
+     * key
+     */
     private String key;
 
-    @Schema(description = "image base64")
+    /**
+     * 图片 base64 编码
+     */
     private String image;
 
-    @Schema(description = "是否开启验证码")
+    /**
+     * 是否开启验证码
+     */
     private boolean enabled;
 
     public String getKey() {

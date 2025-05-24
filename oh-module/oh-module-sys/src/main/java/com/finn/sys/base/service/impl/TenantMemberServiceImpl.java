@@ -1,5 +1,6 @@
 package com.finn.sys.base.service.impl;
 
+import com.finn.core.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.cache.RedisCache;
@@ -60,6 +61,19 @@ public class TenantMemberServiceImpl implements TenantMemberService {
     @Override
     public TenantMemberEntity getById(Long id) {
         return tenantMemberMapper.getById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        TenantMemberEntity entity = tenantMemberMapper.getById(id);
+        if(entity == null || entity.getId() == null){
+            throw new ServerException("未找到对应租户信息，删除失败");
+        }
+        if(entity.getStatus() == 1){
+            throw new ServerException("租户为正常状态，不能删除");
+        }
+        entity.setDbStatus(0);
+        tenantMemberMapper.update(entity);
     }
 
     /**

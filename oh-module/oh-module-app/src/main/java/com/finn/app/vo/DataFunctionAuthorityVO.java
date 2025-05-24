@@ -2,7 +2,6 @@ package com.finn.app.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,16 +18,24 @@ public class DataFunctionAuthorityVO implements Serializable {
 
 	private Integer id;
 
-	@Schema(description = "客户端ID")
+	/**
+	 * 客户端ID
+	 */
 	private String clientId;
 
-	@Schema(description = "功能号")
+	/**
+	 * 功能号
+	 */
 	private String funcCode;
 
-	@Schema(description = "功能号列表")
+	/**
+	 * 功能号列表
+	 */
 	private List<String> funcCodes;
 
-	@Schema(description = "备注")
+	/**
+	 * 备注
+	 */
 	private String remark;
 
 	private Long creator;

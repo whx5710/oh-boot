@@ -1,7 +1,6 @@
 package com.finn.sys.base.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 
 /**
@@ -10,12 +9,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2023-09-16
 */
-@Schema(description = "版本信息查询")
 public class VersionInfoQuery extends Query {
 
-    // 是否当前版本
+    /**
+     * 是否当前版本
+     */
     private Boolean isCurrVersion;
-
+    /**
+     * 关键字
+     */
     String keyWord;
 
     public String getKeyWord() {

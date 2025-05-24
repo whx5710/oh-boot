@@ -42,8 +42,8 @@ public class DataInnerInterceptor implements Interceptor {
     private final static String UPDATE_TIME = "updateTime";
     // 修改人ID
     private final static String UPDATER = "updater";
-    // 机构ID
-    private final static String ORG_ID = "orgId";
+    // 部门ID
+    private final static String ORG_ID = "deptId";
     // 数据状态标记，0删除1有效
     private final static String DB_STATUS = "dbStatus";
     // 租户ID
@@ -92,7 +92,7 @@ public class DataInnerInterceptor implements Interceptor {
             }
             // 所属组织
             try {
-                ReflectUtil.setValue(params, ORG_ID, user.getOrgId(), false);
+                ReflectUtil.setValue(params, ORG_ID, user.getDeptId(), false);
             }catch (NoSuchFieldException e){
                 log.warn("无{}属性！", ORG_ID);
             }

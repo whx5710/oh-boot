@@ -1,7 +1,6 @@
 package com.finn.support.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,42 +11,57 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 岗位管理
+ * 岗位信息
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "岗位管理")
 public class PostVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "id")
+    /**
+     * id
+     */
     private Long id;
 
-    @Schema(description = "岗位编码", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 岗位编码
+     */
     @NotBlank(message = "岗位编码不能为空")
     private String postCode;
 
-    @Schema(description = "岗位名称", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 岗位名称
+     */
     @NotBlank(message = "岗位名称不能为空")
     private String postName;
 
-    @Schema(description = "排序", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 排序
+     */
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
 
-    @Schema(description = "状态  0：停用   1：正常", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 状态  0：停用   1：正常
+     */
     @Min(value = 0, message = "状态不正确")
     @Max(value = 1, message = "状态不正确")
     private Integer status;
-    @Schema(description = "租户ID")
+    /**
+     * 租户ID
+     */
     private String tenantId;
 
-    @Schema(description = "租户")
+    /**
+     * 租户
+     */
     private String tenantName;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 

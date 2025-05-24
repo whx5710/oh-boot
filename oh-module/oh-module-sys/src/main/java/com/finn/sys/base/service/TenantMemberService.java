@@ -20,4 +20,6 @@ public interface TenantMemberService {
     void update(TenantMemberVO vo);
 
     TenantMemberEntity getById(Long id);
+
+    void delete(Long id);
 }

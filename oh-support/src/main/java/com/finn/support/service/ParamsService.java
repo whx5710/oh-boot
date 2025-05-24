@@ -82,4 +82,10 @@ public interface ParamsService {
     Map<String, String> getByKeys(List<String> keys);
 
     ParamsEntity getById(Long id);
+
+    /**
+     * 逻辑删除
+     * @param id ID
+     */
+    Boolean del(Long id);
 }

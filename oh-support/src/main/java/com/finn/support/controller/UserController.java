@@ -12,10 +12,7 @@ import com.finn.support.query.UserQuery;
 import com.finn.support.service.UserService;
 import com.finn.support.vo.UserPasswordVO;
 import com.finn.support.vo.UserVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ObjectUtils;
@@ -29,11 +26,11 @@ import java.util.List;
  * 用户管理
  *
  * @author 王小费 whx5710@qq.com
+ * @since 2024
  * 
  */
 @RestController
 @RequestMapping("sys/user")
-@Tag(name = "用户管理")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -43,56 +40,83 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * 用户列表-分页
+     * @param query 查询参数
+     * @return 用户列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('sys:user:page')")
-    public Result<PageResult<UserVO>> page(@ParameterObject @Valid UserQuery query) {
+    public Result<PageResult<UserVO>> page(@Valid UserQuery query) {
         PageResult<UserVO> page = userService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 被锁定的用户列表
+     * @param query 查询参数
+     * @return 用户列表
+     */
     @GetMapping("clockPage")
-    @Operation(summary = "被锁定的用户列表")
     @PreAuthorize("hasAuthority('sys:user:page')")
-    public Result<PageResult<UserVO>> clockPage(@ParameterObject @Valid UserQuery query) {
+    public Result<PageResult<UserVO>> clockPage(@Valid UserQuery query) {
         PageResult<UserVO> page = userService.clockPage(query);
         return Result.ok(page);
     }
 
+    /**
+     * 解锁用户
+     * @param userName 用户名
+     * @return 提示信息
+     */
     @GetMapping("unlock/{userName}")
-    @Operation(summary = "解锁用户")
     @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<String> unlock(@PathVariable("userName")String userName) {
         userService.unlock(userName);
         return Result.ok("操作成功");
     }
-    // 绑定/解绑 租户的管理用户
+
+    /**
+     * 绑定/解绑租户的管理用户
+     * @param tenantID 租户ID
+     * @param flag 1 绑定 2 解绑
+     * @param userIdList 用户列表
+     * @return 提示信息
+     */
     @PostMapping("/tenantUser/{tenantID}/{flag}")
-    @Operation(summary = "管理租户用户,flag 1 绑定 2 解绑")
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> tenantUser(@PathVariable("tenantID") String tenantID, @PathVariable("flag")Integer flag, @RequestBody List<Long> userIdList) {
         userService.updateTenantUser(tenantID, userIdList, flag);
         return Result.ok("操作成功");
     }
 
-    // 根据用户ID获取用户信息
+    /**
+     * 根据用户ID获取用户信息
+     * @param id 用户ID
+     * @return 用户信息
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:user:info')")
     public Result<UserVO> get(@PathVariable("id") Long id) {
         return Result.ok(userService.info(id));
     }
 
-    // 获取当前登录的用户
+    /**
+     * 获取当前登录的用户
+     * @return 用户信息
+     */
     @GetMapping("info")
-    @Operation(summary = "登录用户")
     public Result<UserVO> info() {
         return Result.ok(userService.info(null));
     }
 
+    /**
+     * 修改密码
+     * @param vo 用户密码信息
+     * @return 提示信息
+     */
     @PutMapping("password")
-    @Operation(summary = "修改密码")
     @OperateLog(module = "用户管理", name = "修改密码", type = OperateTypeEnum.UPDATE)
     public Result<String> password(@RequestBody @Valid UserPasswordVO vo) {
         // 原密码不正确
@@ -108,8 +132,12 @@ public class UserController {
         return Result.ok("修改成功");
     }
 
+    /**
+     * 保存用户
+     * @param vo 用户信息
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @OperateLog(module = "用户管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid UserVO vo) {
@@ -126,8 +154,12 @@ public class UserController {
         return Result.ok(msg);
     }
 
+    /**
+     * 用户注册
+     * @param vo 用户信息
+     * @return 提示信息
+     */
     @PostMapping("register")
-    @Operation(summary = "用户注册")
     @OperateLog(module = "用户管理", name = "用户注册", type = OperateTypeEnum.INSERT)
     public Result<String> register(@RequestBody @Valid UserVO vo) {
         // 新增密码不能为空
@@ -141,8 +173,12 @@ public class UserController {
         return Result.ok("提交成功");
     }
 
+    /**
+     * 修改用户信息
+     * @param vo 用户
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @OperateLog(module = "用户管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> update(@RequestBody @Valid UserVO vo) {
@@ -150,8 +186,12 @@ public class UserController {
         return Result.ok("修改成功");
     }
 
+    /**
+     * 删除用户
+     * @param idList 用户ID
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @OperateLog(module = "用户管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -165,16 +205,24 @@ public class UserController {
         return Result.ok("删除成功");
     }
 
+    /**
+     * 重置密码
+     * @param id 用户ID
+     * @return 提示信息
+     */
     @GetMapping("/resetPwd/{id}")
-    @Operation(summary = "重置密码")
     @OperateLog(module = "用户管理", name = "重置密码", type = OperateTypeEnum.GET)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> resetPwd(@PathVariable("id") Long id){
         return Result.ok(userService.resetPwd(id));
     }
 
+    /**
+     * 导入用户
+     * @param file excel文件
+     * @return 提示信息
+     */
     @PostMapping("import")
-    @Operation(summary = "导入用户")
     @OperateLog(module = "用户管理", name = "导入用户", type = OperateTypeEnum.IMPORT)
     @PreAuthorize("hasAuthority('sys:user:import')")
     public Result<String> importExcel(@RequestParam("file") MultipartFile file) {
@@ -186,8 +234,10 @@ public class UserController {
         return Result.ok("导入成功");
     }
 
+    /**
+     * 导出用户
+     */
     @GetMapping("export")
-    @Operation(summary = "导出用户")
     @OperateLog(module = "用户管理", name = "导出用户", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:user:export')")
     public void export() {

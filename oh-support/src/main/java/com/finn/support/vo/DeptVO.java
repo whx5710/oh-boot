@@ -2,7 +2,6 @@ package com.finn.support.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.TreeNode;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import com.finn.core.utils.DateUtils;
@@ -10,37 +9,50 @@ import com.finn.core.utils.DateUtils;
 import java.time.LocalDateTime;
 
 /**
- * 机构列表
+ * 部门列表
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
-@Schema(description = "机构")
-public class OrgVO extends TreeNode<OrgVO> {
+public class DeptVO extends TreeNode<DeptVO> {
 
-    @Schema(description = "机构名称", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank(message = "机构名称不能为空")
+    /**
+     * 部门名称
+     */
+    @NotBlank(message = "部门名称不能为空")
     private String name;
 
-    @Schema(description = "排序", requiredMode = Schema.RequiredMode.REQUIRED)
+    /**
+     * 排序
+     */
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
 
-    @Schema(description = "租户ID")
+    /**
+     * 租户ID
+     */
     private String tenantId;
 
-    @Schema(description = "租户")
+    /**
+     * 租户
+     */
     private String tenantName;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
-    @Schema(description = "修改时间")
+    /**
+     * 修改时间
+     */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime updateTime;
 
-    @Schema(description = "上级名称")
+    /**
+     * 上级名称
+     */
     private String parentName;
 
     // 备注

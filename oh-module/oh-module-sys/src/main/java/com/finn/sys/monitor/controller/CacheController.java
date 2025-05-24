@@ -3,10 +3,7 @@ package com.finn.sys.monitor.controller;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.Result;
 import com.finn.sys.monitor.vo.Cache;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.connection.RedisServerCommands;
 import org.springframework.data.redis.core.RedisCallback;
@@ -23,7 +20,6 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("monitor/cache")
-@Tag(name="缓存监控")
 public class CacheController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -35,7 +31,6 @@ public class CacheController {
      * Redis详情
      */
     @GetMapping("info")
-    @Operation(summary = "Redis详情")
     @PreAuthorize("hasAuthority('monitor:cache:all')")
     public Result<Map<String, Object>> getInfo() {
         Map<String, Object> result = new HashMap<>();
@@ -52,8 +47,10 @@ public class CacheController {
             commandStats.stringPropertyNames().forEach(key -> {
                 Map<String, Object> data = new HashMap<>();
                 String property = commandStats.getProperty(key);
-                data.put("name", StringUtils.substring(key, 8));
-                data.put("value", StringUtils.substringBetween(property, "calls=", ",use"));
+                // data.put("name", StringUtils.substring(key, 8));
+                data.put("name", key);
+                // data.put("value", StringUtils.substringBetween(property, "calls=", ",use"));
+                data.put("value", property);
                 pieList.add(data);
             });
         }
@@ -64,7 +61,6 @@ public class CacheController {
     /**
      * 获取所有的Key
      */
-    @Operation(summary = "获取所有的Key")
     @GetMapping("getCacheKeys")
     @PreAuthorize("hasAuthority('monitor:cache:all')")
     public Result<Set<String>> getCacheKeys() {
@@ -77,7 +73,6 @@ public class CacheController {
      *
      * @param cacheKey
      */
-    @Operation(summary = "获取结构化键下的Key值")
     @GetMapping("getCacheKeys/{cacheKey}")
     @PreAuthorize("hasAuthority('monitor:cache:all')")
     public Result<Set<String>> getCacheKeys(@PathVariable String cacheKey) {
@@ -90,7 +85,6 @@ public class CacheController {
      *
      * @param cacheKey
      */
-    @Operation(summary = "获取指定键的值")
     @GetMapping("getCacheValue/{cacheKey}")
     @PreAuthorize("hasAuthority('monitor:server:all')")
     public Result<Cache> getCacheValue(@PathVariable String cacheKey) {
@@ -110,7 +104,6 @@ public class CacheController {
      *
      * @param cacheKey > Key值
      */
-    @Operation(summary = "删除指定键的缓存")
     @DeleteMapping("delCacheKey/{cacheKey}")
     @PreAuthorize("hasAuthority('monitor:cache:all')")
     public Result<String> delCacheKey(@PathVariable String cacheKey) {
@@ -127,7 +120,6 @@ public class CacheController {
      *
      * @param cacheKey > Key值
      */
-    @Operation(summary = "删除结构化键下的缓存")
     @DeleteMapping("delCacheKeys/{cacheKey}")
     @PreAuthorize("hasAuthority('monitor:cache:all')")
     public Result<String> delCacheKeys(@PathVariable String cacheKey) {
@@ -139,7 +131,6 @@ public class CacheController {
     /**
      * 删除全部缓存
      */
-    @Operation(summary = "删除全部缓存")
     @DeleteMapping("delCacheAll")
     @PreAuthorize("hasAuthority('monitor:cache:all')")
     public Result<String> delCacheAll() {

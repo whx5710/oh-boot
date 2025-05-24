@@ -5,8 +5,6 @@ import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.Result;
 import com.finn.sys.base.vo.FileUploadVO;
 import com.finn.sys.storage.service.StorageService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("sys/file")
-@Tag(name = "文件上传")
 public class FileUploadController {
     private final StorageService storageService;
 
@@ -29,8 +26,13 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
+    /**
+     * 上传
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @PostMapping("upload")
-    @Operation(summary = "上传")
     @OperateLog(module = "文件上传", name = "上传", type = OperateTypeEnum.INSERT)
     public Result<FileUploadVO> upload(@RequestParam("file") MultipartFile file) throws Exception {
         if (file.isEmpty()) {

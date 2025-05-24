@@ -13,10 +13,7 @@ import com.finn.sys.quartz.query.ScheduleJobQuery;
 import com.finn.sys.quartz.service.ScheduleJobService;
 import com.finn.sys.quartz.utils.CronUtils;
 import com.finn.sys.quartz.vo.ScheduleJobVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +28,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("schedule")
-@Tag(name = "定时任务")
 public class ScheduleJobController {
     private final ScheduleJobService scheduleJobService;
 
@@ -39,17 +35,25 @@ public class ScheduleJobController {
         this.scheduleJobService = scheduleJobService;
     }
 
+    /**
+     * 分页
+     * @param query 查询参数
+     * @return 列表
+     */
     @GetMapping("page")
-    @Operation(summary = "分页")
     @PreAuthorize("hasAuthority('schedule:page')")
-    public Result<PageResult<ScheduleJobVO>> page(@ParameterObject @Valid ScheduleJobQuery query) {
+    public Result<PageResult<ScheduleJobVO>> page(@Valid ScheduleJobQuery query) {
         PageResult<ScheduleJobVO> page = scheduleJobService.page(query);
 
         return Result.ok(page);
     }
 
+    /**
+     * 根据ID获取定时任务
+     * @param id ID
+     * @return data
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('schedule:info')")
     public Result<ScheduleJobVO> get(@PathVariable("id") Long id) {
         ScheduleJobEntity entity = scheduleJobService.getById(id);
@@ -57,8 +61,12 @@ public class ScheduleJobController {
         return Result.ok(ScheduleJobConvert.INSTANCE.convert(entity));
     }
 
+    /**
+     * 保存定时任务
+     * @param vo 定时任务
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @OperateLog(module = "定时任务", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('schedule:save')")
     public Result<String> save(@RequestBody ScheduleJobVO vo) {
@@ -74,8 +82,12 @@ public class ScheduleJobController {
         return Result.ok();
     }
 
+    /**
+     * 修改定时任务
+     * @param vo 定时任务信息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @OperateLog(module = "定时任务", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('schedule:update')")
     public Result<String> update(@RequestBody @Valid ScheduleJobVO vo) {
@@ -91,8 +103,12 @@ public class ScheduleJobController {
         return Result.ok();
     }
 
+    /**
+     * 删除定时任务信息
+     * @param idList 定时任务ID集合
+     * @return 提示信息
+     */
     @DeleteMapping
-    @Operation(summary = "删除")
     @OperateLog(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('schedule:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -101,8 +117,12 @@ public class ScheduleJobController {
         return Result.ok();
     }
 
+    /**
+     * 执行定时任务
+     * @param vo 参数
+     * @return 提示信息
+     */
     @PutMapping("run")
-    @Operation(summary = "立即执行")
     @OperateLog(module = "定时任务", name = "立即执行", type = OperateTypeEnum.OTHER)
     @PreAuthorize("hasAuthority('schedule:run')")
     public Result<String> run(@RequestBody ScheduleJobVO vo) {
@@ -111,8 +131,12 @@ public class ScheduleJobController {
         return Result.ok();
     }
 
+    /**
+     * 修改状态
+     * @param vo 定时任务
+     * @return 提示信息
+     */
     @PutMapping("change-status")
-    @Operation(summary = "修改状态")
     @OperateLog(module = "定时任务", name = "修改状态", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('schedule:update')")
     public Result<String> changeStatus(@RequestBody ScheduleJobVO vo) {

@@ -1,7 +1,8 @@
 package com.finn.sys.base.query;
 
 import com.finn.framework.query.Query;
-import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
 
 /**
  * 菜单查询
@@ -9,16 +10,30 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "菜单查询")
 public class MenuQuery extends Query {
-    @Schema(description = "菜单名称")
+    /**
+     * 菜单名称
+     */
     private String name;
 
-    @Schema(description = "父级ID")
+    /**
+     * 父级ID
+     */
     private Long parentId;
 
-    @Schema(description = "类型   0：菜单   1：按钮   2：接口")
-    private Integer type;
+    /**
+     * 类型 catalog | menu | action | all
+     */
+    private String type;
+
+    /**
+     * 搜索关键字
+     */
+    private String keyWords;
+    /**
+     * 菜单ID集合
+     */
+    private List<Long> menuIds;
 
     public String getName() {
         return name;
@@ -36,11 +51,27 @@ public class MenuQuery extends Query {
         this.parentId = parentId;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+
+    public List<Long> getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(List<Long> menuIds) {
+        this.menuIds = menuIds;
     }
 }

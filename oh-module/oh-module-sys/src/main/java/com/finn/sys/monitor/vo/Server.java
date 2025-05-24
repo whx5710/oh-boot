@@ -1,10 +1,7 @@
 package com.finn.sys.monitor.vo;
 
 import com.finn.sys.monitor.model.*;
-import com.finn.sys.monitor.model.*;
 import com.finn.sys.monitor.utils.ArityUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
@@ -15,42 +12,36 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Server Info
+ * 服务器信息
  *
  * @author 王小费
  */
-@Tag(name = "服务器信息")
 public class Server {
 
     private final Logger log = LoggerFactory.getLogger(Server.class);
     /**
-     * Cpu Info
+     * CPU信息
      */
-    @Schema(description = "CPU信息")
     private Cpu cpu;
 
     /**
-     * Mem Info
+     * 内存信息
      */
-    @Schema(description = "内存信息")
     private Mem mem;
 
     /**
-     * Jvm Info
+     * JVM信息
      */
-    @Schema(description = "JVM信息")
     private Jvm jvm;
 
     /**
-     * Sys Info
+     * 系统信息
      */
-    @Schema(description = "系统信息")
     private Sys sys;
 
     /**
-     * SysFile Info
+     * 系统文件信息
      */
-    @Schema(description = "系统文件信息")
     private List<Disk> disks = new LinkedList<>();
 
     public Server() {

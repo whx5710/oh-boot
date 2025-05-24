@@ -46,8 +46,6 @@ finn:
     auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
     lock-time: 3600                 # 账号锁定时间(秒)
     ignore-urls:                    # 忽略鉴权的url
-      - /swagger/**
-      - /swagger-ui/**
       - /doc.html
   open-api: # 异步调用接口
     type: 2 # 1直接保存 2使用MQ异步保存

@@ -1,7 +1,6 @@
 package com.finn.support.vo;
 
 import com.finn.framework.utils.annotations.RequestKeyParam;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,25 +11,34 @@ import java.io.Serializable;
  * @author 王小费 whx5710@qq.com
  *
  */
-@Schema(description = "账号登录")
 public class AccountLoginVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 用户名
+     */
     @RequestKeyParam // 结合 @Idempotent 判断是否重复请求
-    @Schema(description = "用户名")
     private String username;
 
-    @Schema(description = "密码")
+    /**
+     * 密码
+     */
     private String password;
 
-    @Schema(description = "唯一key")
+    /**
+     * 唯一key
+     */
     private String key;
 
-    @Schema(description = "验证码")
+    /**
+     * 验证码
+     */
     private String captcha;
 
-    @Schema(description = "用户密钥，用于第三方系统登录")
+    /**
+     * 用户密钥，用于第三方系统登录
+     */
     private String userKey;
 
     public String getUsername() {

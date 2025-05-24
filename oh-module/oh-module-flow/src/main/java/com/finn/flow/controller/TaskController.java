@@ -5,8 +5,6 @@ import com.finn.flow.service.TaskHandlerService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
 import com.finn.core.utils.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +21,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/task")
-@Tag(name="流程任务")
 public class TaskController {
 
     private final TaskHandlerService taskHandlerService;
@@ -40,7 +37,6 @@ public class TaskController {
      * @param path
      * @return
      */
-    @Operation(summary = "根据文件路径，部署流程")
     @GetMapping("/deploy/{path}")
     @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> deploy(@PathVariable String path){
@@ -52,26 +48,38 @@ public class TaskController {
      * @param key
      * @return
      */
-    @Operation(summary = "根据自定义流程key部署流程")
     @GetMapping("/deployByKey/{key}")
     @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> deployByKey(@PathVariable String key){
         return Result.ok(processHandlerService.deployByKey(key));
     }
 
+    /**
+     * 根据KEY获取流程ID
+     * @param key
+     * @return
+     */
     @GetMapping("/getProcessByKey/{key}")
     public Result<String> getProcessByKey(@PathVariable String key){
         ProcessDefinition processDefinition = this.processHandlerService.getProcessByKey(key);
         return Result.ok(processDefinition.getId());
     }
 
-    @Operation(summary = "启动流程")
+    /**
+     * 启动流程
+     * @param taskVO
+     * @return
+     */
     @PostMapping("/startFlow")
     public Result<List<TaskRecordVO>> startFlow(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.startByProcessKey(taskVO.getProDefKey(), taskVO.getBusinessKey(), taskVO.getParams()));
     }
 
-    @Operation(summary = "根据自定义流程key启动流程")
+    /**
+     * 根据自定义流程key启动流程
+     * @param processKey 流程KEY
+     * @return
+     */
     @GetMapping("/startByProcessKey/{processKey}")
     public Result<List<TaskRecordVO>> startByProcessKey(@PathVariable String processKey){
         return Result.ok(taskHandlerService.startByProcessKey(processKey));
@@ -79,13 +87,19 @@ public class TaskController {
 
     /**
      * 完成任务
+     * @param taskVO
+     * @return
      */
-    @Operation(summary = "完成任务")
     @PostMapping("/completeTask")
     public Result<List<TaskRecordVO>> completeTask(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.completeTask(taskVO));
     }
 
+    /**
+     *
+     * @param proInsId
+     * @return
+     */
     @GetMapping("/getTaskByProInsId/{proInsId}")
     public Result<String> getTaskByProInsId(String proInsId){
         List<Task> list = taskHandlerService.getTaskByProInsId(proInsId);

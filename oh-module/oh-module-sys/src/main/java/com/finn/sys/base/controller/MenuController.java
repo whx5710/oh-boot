@@ -10,16 +10,12 @@ import com.finn.framework.security.user.UserDetail;
 import com.finn.support.service.UserRoleService;
 import com.finn.sys.base.convert.MenuConvert;
 import com.finn.sys.base.entity.MenuEntity;
-import com.finn.sys.base.enums.MenuTypeEnum;
 import com.finn.sys.base.query.MenuQuery;
 import com.finn.sys.base.service.MenuService;
 import com.finn.sys.base.vo.MenuTreeVO;
 import com.finn.sys.base.vo.MenuVO;
 import com.finn.sys.base.vo.RouteVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +30,6 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("sys/menu")
-@Tag(name = "菜单管理")
 public class MenuController {
     private final MenuService menuService;
 
@@ -45,49 +40,66 @@ public class MenuController {
         this.userRoleService = userRoleService;
     }
 
+    /**
+     * 菜单导航
+     * @return
+     */
     @GetMapping("nav")
-    @Operation(summary = "菜单导航")
     public Result<List<MenuTreeVO>> nav() {
-        UserDetail user = SecurityUser.getUser();
-        List<MenuTreeVO> list = menuService.getUserMenuList(user, MenuTypeEnum.MENU.getValue());
-
+        List<MenuTreeVO> list = menuService.getUserMenuList(new MenuQuery());
         return Result.ok(list);
     }
 
-    @GetMapping("/route")
-    @Operation(summary = "菜单导航-route")
-    public Result<List<RouteVO>> route() {
-        UserDetail user = SecurityUser.getUser();
-        return Result.ok(menuService.getUserRouteList(user, MenuTypeEnum.MENU.getValue()));
+    /**
+     * 获取菜单
+     * @param query 类型 catalog | menu | action | all
+     * @return
+     */
+    @PostMapping("/route")
+    public Result<List<RouteVO>> route(@RequestBody MenuQuery query) {
+        return Result.ok(menuService.getUserRouteList(query));
     }
 
+    /**
+     * 用户权限标识
+     * @return
+     */
     @GetMapping("authority")
-    @Operation(summary = "用户权限标识")
     public Result<Set<String>> authority() {
         UserDetail user = SecurityUser.getUser();
         Set<String> set = userRoleService.getUserAuthority(user);
-
         return Result.ok(set);
     }
 
-
+    /**
+     * 菜单列表-树形
+     * @param query 查询条件
+     * @return 集合
+     */
     @GetMapping("listTree")
-    @Operation(summary = "菜单列表-树形")
     @PreAuthorize("hasAuthority('sys:menu:list')")
-    public Result<List<MenuTreeVO>> listTree(@ParameterObject MenuQuery query) {
+    public Result<List<MenuTreeVO>> listTree(MenuQuery query) {
         List<MenuTreeVO> list = menuService.getMenuTreeList(query);
         return Result.ok(list);
     }
 
+    /**
+     * 菜单列表
+     * @param query 查询条件
+     * @return 集合
+     */
     @GetMapping("page")
-    @Operation(summary = "菜单列表")
     @PreAuthorize("hasAuthority('sys:menu:list')")
-    public Result<PageResult<MenuVO>> page(@ParameterObject MenuQuery query) {
+    public Result<PageResult<MenuVO>> page(MenuQuery query) {
         return Result.ok(menuService.page(query));
     }
 
+    /**
+     * 根据ID获取菜单
+     * @param id 菜单ID
+     * @return 菜单数据
+     */
     @GetMapping("{id}")
-    @Operation(summary = "信息")
     @PreAuthorize("hasAuthority('sys:menu:info')")
     public Result<MenuTreeVO> get(@PathVariable("id") Long id) {
         MenuEntity entity = menuService.getById(id);
@@ -102,28 +114,40 @@ public class MenuController {
         return Result.ok(vo);
     }
 
+    /**
+     * 保存
+     * @param vo 菜单信息
+     * @return 提示信息
+     */
     @PostMapping
-    @Operation(summary = "保存")
     @OperateLog(module = "菜单管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:menu:save')")
-    public Result<String> save(@RequestBody @Valid MenuTreeVO vo) {
+    public Result<String> save(@RequestBody @Valid RouteVO vo) {
         menuService.save(vo);
 
         return Result.ok();
     }
 
+    /**
+     * 修改
+     * @param vo 菜单信息
+     * @return 提示信息
+     */
     @PutMapping
-    @Operation(summary = "修改")
     @OperateLog(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
-    public Result<String> update(@RequestBody @Valid MenuTreeVO vo) {
+    public Result<String> update(@RequestBody @Valid RouteVO vo) {
         menuService.update(vo);
 
         return Result.ok();
     }
 
+    /**
+     * 删除
+     * @param id 菜单ID
+     * @return
+     */
     @DeleteMapping("{id}")
-    @Operation(summary = "删除")
     @OperateLog(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {
@@ -136,13 +160,51 @@ public class MenuController {
         return Result.ok();
     }
 
-
+    /**
+     * 角色菜单
+     * @return 菜单列表
+     */
     @GetMapping("/role")
-    @Operation(summary = "角色菜单")
     @PreAuthorize("hasAuthority('sys:role:menu')")
     public Result<List<MenuTreeVO>> roleMenu() {
-        UserDetail user = SecurityUser.getUser();
-        List<MenuTreeVO> list = menuService.getUserMenuList(user, null);
+        List<MenuTreeVO> list = menuService.getUserMenuList( null);
         return Result.ok(list);
     }
+
+    /**
+     * 菜单列表
+     * @param query 查询菜单
+     * @return 菜单列表
+     */
+    @GetMapping("/list")
+    @PreAuthorize("hasAuthority('sys:menu:list')")
+    public Result<List<MenuVO>> list(MenuQuery query) {
+        return Result.ok(menuService.list(query));
+    }
+
+    /**
+     * 菜单名称是否存在
+     * @param name 菜单名称
+     * @param id 菜单ID（排除的）
+     * @return 是否存在
+     */
+    @GetMapping("/nameExists")
+    @PreAuthorize("hasAuthority('sys:menu:list')")
+    public Result<Boolean> nameExists(@RequestParam String name, @RequestParam(required = false) Long id) {
+        return Result.ok(menuService.nameExists(id, name));
+    }
+
+    /**
+     * 菜单路径是否存在
+     * @param path 菜单路径
+     * @param id 菜单ID（排除的）
+     * @return 是否存在
+     */
+    @GetMapping("/pathExists")
+    @PreAuthorize("hasAuthority('sys:menu:list')")
+    public Result<Boolean> pathExists(@RequestParam String path, @RequestParam(required = false) Long id) {
+        return Result.ok(menuService.pathExists(id, path));
+    }
+
+
 }

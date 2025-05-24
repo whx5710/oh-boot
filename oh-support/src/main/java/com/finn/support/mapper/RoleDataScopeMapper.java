@@ -19,9 +19,9 @@ import java.util.List;
 public interface RoleDataScopeMapper {
 
     /**
-     * 根据角色ID，获取机构ID列表
+     * 根据角色ID，获取部门ID列表
      */
-    List<Long> getOrgIdList(@Param("roleId") Long roleId);
+    List<Long> getDeptIdList(@Param("roleId") Long roleId);
 
     /**
      * 获取用户的数据权限列表
@@ -32,5 +32,5 @@ public interface RoleDataScopeMapper {
 
     int deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param") RoleDataScopeEntity param);
 
-    int deleteOrgIdList(@Param("list") List<Long> orgIdList, @Param("param") RoleDataScopeEntity param);
+    int deleteDeptIdList(@Param("list") List<Long> deptIdList, @Param("param") RoleDataScopeEntity param);
 }

@@ -9,8 +9,6 @@ import com.finn.core.utils.Result;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.utils.ListenerHandler;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +22,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/openApi")
-@Tag(name = "公共接口入口")
 public class OpenApiController {
     /**
      * 启动Kafka命令
@@ -54,7 +51,6 @@ public class OpenApiController {
      * @param request 请求
      * @return 返回
      */
-    @Operation(summary = "公共接口")
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody HashDto params, HttpServletRequest request) {
         MsgEntity msgEntity = dataMsgService.basicCheck(request);

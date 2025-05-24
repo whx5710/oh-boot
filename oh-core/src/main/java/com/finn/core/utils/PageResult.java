@@ -14,10 +14,14 @@ public class PageResult<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // 总记录数
+    /**
+     * 总记录数
+     */
     private int total;
 
-    // 列表数据
+    /**
+     * 列表数据
+     */
     private List<T> list;
 
     public int getTotal() {
