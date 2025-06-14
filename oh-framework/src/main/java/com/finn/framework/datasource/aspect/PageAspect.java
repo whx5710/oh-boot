@@ -75,9 +75,13 @@ public class PageAspect {
         }
         Object result = null;
         try {
-            if(query == null && mPageSize > 0 && mPageNum > 0){
-                pageNum = mPageNum;
-                pageSize = mPageSize;
+            if(query == null){
+                if(mPageSize > 0 && mPageNum > 0){
+                    pageNum = mPageNum;
+                    pageSize = mPageSize;
+                }else{
+                    throw new ServerException("分页参数异常，请检查！");
+                }
             }
             //调用分页插件传入开始页码和页面容量
             try (Page<Object> page = PageHelper.startPage(pageNum, pageSize)) {
@@ -92,7 +96,11 @@ public class PageAspect {
             }
         } catch (Exception e) {
             log.error("查询数据库异常",e);
-            throw new ServerException("查询数据异常，请联系管理员");
+            if(e instanceof ServerException serverException){
+                throw new ServerException(serverException.getMessage());
+            }else{
+                throw new ServerException("查询数据异常，请联系管理员", e);
+            }
         }
         return result;
     }

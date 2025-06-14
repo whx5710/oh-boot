@@ -16,7 +16,7 @@ public interface AttachmentService {
 
     PageResult<AttachmentVO> page(AttachmentQuery query);
 
-    void save(AttachmentVO vo);
+    Long save(AttachmentVO vo);
 
     void update(AttachmentVO vo);
 

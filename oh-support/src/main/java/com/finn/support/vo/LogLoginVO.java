@@ -63,6 +63,8 @@ public class LogLoginVO implements Serializable {
     @ExcelProperty(value = "操作信息")
     private String operationLabel;
 
+    @ExcelProperty(value = "租户名称")
+    private String tenantName;
     /**
      * 创建时间
      */
@@ -148,5 +150,13 @@ public class LogLoginVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

@@ -43,6 +43,15 @@ public class AttachmentVO implements Serializable {
     private String platform;
 
     /**
+     * 租户ID
+     */
+    private String tenantId;
+
+    /**
+     * 租户名称
+     */
+    private String tenantName;
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
@@ -94,5 +103,21 @@ public class AttachmentVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

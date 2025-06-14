@@ -4,8 +4,9 @@
 <mapper namespace="com.finn.sys.base.mapper.AttachmentMapper">
     <select id="getList" resultType="com.finn.sys.base.entity.AttachmentEntity">
         select * from sys_attachment where db_status = 1
+        <if test="tenantId != null and tenantId != ''">and tenant_id = #{tenantId}</if>
         <if test="platform != null and platform != ''">and platform = #{platform}</if>
-        <if test="name != null and name != ''">and name like concat('%',#{platform}, '%')</if>
+        <if test="name != null and name != ''">and name like concat('%',#{name}, '%')</if>
         order by id desc
     </select>
 
@@ -15,7 +16,7 @@
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="url != null and url != ''">url = #{url},</if>
             <if test="size != null">size = #{size},</if>
-            <if test="platform != null platform != ''">platform = #{platform},</if>
+            <if test="platform != null and platform != ''">platform = #{platform},</if>
             <if test="dbStatus != null">db_status = #{dbStatus},</if>
             <if test="updater != null">updater = #{updater},</if>
             update_time = #{updateTime}
@@ -23,8 +24,8 @@
         WHERE id = #{id}
     </update>
 
-    <insert id="insertAttach">
-        INSERT INTO sys_attachment (name, url, size, platform, db_status, creator, create_time)
-        VALUES (#{name}, #{url}, #{size}, #{platform}, #{dbStatus}, #{creator}, #{createTime})
+    <insert id="insertAttach" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_attachment (id, name, url, size, platform, db_status, creator, create_time, tenant_id)
+        VALUES (#{id}, #{name}, #{url}, #{size}, #{platform}, #{dbStatus}, #{creator}, #{createTime}, #{tenantId})
     </insert>
 </mapper>

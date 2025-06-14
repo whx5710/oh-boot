@@ -1,6 +1,6 @@
 package com.finn.support.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
@@ -74,7 +74,7 @@ public class PostController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "岗位管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "岗位管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:post:save')")
     public Result<String> save(@RequestBody PostVO vo) {
         postService.save(vo);
@@ -88,7 +88,7 @@ public class PostController {
      * @return 提示信息
      */
     @PutMapping
-    @OperateLog(module = "岗位管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @Log(module = "岗位管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:post:update')")
     public Result<String> update(@RequestBody @Valid PostVO vo) {
         postService.update(vo);
@@ -102,7 +102,7 @@ public class PostController {
      * @return 提示信息
      */
     @DeleteMapping
-    @OperateLog(module = "岗位管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "岗位管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:post:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         postService.delete(idList);

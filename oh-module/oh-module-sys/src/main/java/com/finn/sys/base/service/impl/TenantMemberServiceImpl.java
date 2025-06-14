@@ -1,6 +1,7 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.core.exception.ServerException;
+import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.cache.RedisCache;
@@ -47,6 +48,13 @@ public class TenantMemberServiceImpl implements TenantMemberService {
     public void save(TenantMemberVO vo) {
         AssertUtils.isBlank(vo.getTenantId(), "租户ID");
         TenantMemberEntity entity = TenantMemberConvert.INSTANCE.convert(vo);
+        // 判断租户ID是否存在
+        ParamsBuilder<TenantMemberEntity> params = ParamsBuilder.of(TenantMemberEntity.class)
+                .eq(TenantMemberEntity::getTenantId, entity.getTenantId()).eq(TenantMemberEntity::getDbStatus, 1);
+        List<TenantMemberEntity> list = tenantMemberMapper.selectListByParam(params);
+        if(list != null && !list.isEmpty()){
+            throw new ServerException("租户ID已存在！[" + list.getFirst().getTenantName()+ "]");
+        }
         tenantMemberMapper.save(entity);
         redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
     }

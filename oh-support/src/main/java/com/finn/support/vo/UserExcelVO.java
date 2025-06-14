@@ -51,7 +51,13 @@ public class UserExcelVO implements Serializable {
     @ExcelProperty(value = "超级管理员", order = 8)
     private String superAdminLabel;
 
-    @ExcelProperty(value = "创建时间", order = 9)
+    @ExcelProperty(value = "租户ID", order = 9)
+    private String tenantId;
+
+    @ExcelProperty(value = "租户名称", order = 10)
+    private String tenantName;
+
+    @ExcelProperty(value = "创建时间", order = 11)
     private LocalDateTime createTime;
 
     public Long getId() {
@@ -156,5 +162,21 @@ public class UserExcelVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

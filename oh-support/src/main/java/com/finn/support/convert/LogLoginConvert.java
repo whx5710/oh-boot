@@ -2,6 +2,7 @@ package com.finn.support.convert;
 
 import com.finn.support.entity.LogLoginEntity;
 import com.finn.support.vo.LogLoginVO;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * 
  */
 @Mapper
+@DecoratedWith(LogLoginExtConvert.class) // 指定实现类
 public interface LogLoginConvert {
     LogLoginConvert INSTANCE = Mappers.getMapper(LogLoginConvert.class);
 

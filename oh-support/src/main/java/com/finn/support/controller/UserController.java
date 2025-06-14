@@ -2,7 +2,7 @@ package com.finn.support.controller;
 
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.Tools;
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
@@ -117,7 +117,7 @@ public class UserController {
      * @return 提示信息
      */
     @PutMapping("password")
-    @OperateLog(module = "用户管理", name = "修改密码", type = OperateTypeEnum.UPDATE)
+    @Log(module = "用户管理", name = "修改密码", type = OperateTypeEnum.UPDATE)
     public Result<String> password(@RequestBody @Valid UserPasswordVO vo) {
         // 原密码不正确
         UserDetail user = SecurityUser.getUser();
@@ -138,7 +138,7 @@ public class UserController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "用户管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "用户管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid UserVO vo) {
         // 新增密码
@@ -160,7 +160,7 @@ public class UserController {
      * @return 提示信息
      */
     @PostMapping("register")
-    @OperateLog(module = "用户管理", name = "用户注册", type = OperateTypeEnum.INSERT)
+    @Log(module = "用户管理", name = "用户注册", type = OperateTypeEnum.INSERT)
     public Result<String> register(@RequestBody @Valid UserVO vo) {
         // 新增密码不能为空
         if (ObjectUtils.isEmpty(vo.getPassword())) {
@@ -179,7 +179,7 @@ public class UserController {
      * @return 提示信息
      */
     @PutMapping
-    @OperateLog(module = "用户管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @Log(module = "用户管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> update(@RequestBody @Valid UserVO vo) {
         userService.update(vo);
@@ -192,7 +192,7 @@ public class UserController {
      * @return 提示信息
      */
     @DeleteMapping
-    @OperateLog(module = "用户管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "用户管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         Long userId = SecurityUser.getUserId();
@@ -211,7 +211,7 @@ public class UserController {
      * @return 提示信息
      */
     @GetMapping("/resetPwd/{id}")
-    @OperateLog(module = "用户管理", name = "重置密码", type = OperateTypeEnum.GET)
+    @Log(module = "用户管理", name = "重置密码", type = OperateTypeEnum.GET)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> resetPwd(@PathVariable("id") Long id){
         return Result.ok(userService.resetPwd(id));
@@ -223,7 +223,7 @@ public class UserController {
      * @return 提示信息
      */
     @PostMapping("import")
-    @OperateLog(module = "用户管理", name = "导入用户", type = OperateTypeEnum.IMPORT)
+    @Log(module = "用户管理", name = "导入用户", type = OperateTypeEnum.IMPORT)
     @PreAuthorize("hasAuthority('sys:user:import')")
     public Result<String> importExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -238,9 +238,9 @@ public class UserController {
      * 导出用户
      */
     @GetMapping("export")
-    @OperateLog(module = "用户管理", name = "导出用户", type = OperateTypeEnum.EXPORT)
+    @Log(module = "用户管理", name = "导出用户", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:user:export')")
-    public void export() {
-        userService.export();
+    public void export(@Valid UserQuery query) {
+        userService.export(query);
     }
 }

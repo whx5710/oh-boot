@@ -4,7 +4,6 @@ import com.finn.core.utils.PageResult;
 import com.finn.support.query.LogLoginQuery;
 import com.finn.support.vo.AnalysisVO;
 import com.finn.support.vo.LogLoginVO;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public interface LogLoginService {
     /**
      * 导出登录日志
      */
-    void export();
+    void export(LogLoginQuery query);
 
     /**
      * 统计最近几天相关操作情况

@@ -29,6 +29,10 @@ public class DeptQuery extends Query {
      */
     private String tenantId;
     /**
+     * 租户名称
+     */
+    private String tenantName;
+    /**
      * 部门ID集合
      */
     private List<String> deptIds;
@@ -63,5 +67,13 @@ public class DeptQuery extends Query {
 
     public void setDeptIds(List<String> deptIds) {
         this.deptIds = deptIds;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

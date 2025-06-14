@@ -13,7 +13,6 @@ import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
 import com.finn.core.constant.CommonEnum;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.support.cache.TenantCache;
 import com.finn.support.mapper.UserMapper;
 import com.finn.support.enums.SuperAdminEnum;
 import com.finn.support.query.RoleUserQuery;
@@ -45,7 +44,6 @@ public class UserServiceImpl implements UserService {
     private final UserPostService userPostService;
     private final RedisCache redisCache;
     private final UserMapper userMapper;
-    private final TenantCache tenantCache;
     private final DeptService deptService;
     private final RoleDataScopeMapper roleDataScopeMapper;
     private final RoleMapper roleMapper;
@@ -57,14 +55,13 @@ public class UserServiceImpl implements UserService {
     private ParamsService paramsService;
 
     public UserServiceImpl(UserRoleService userRoleService, UserPostService userPostService,
-                           RedisCache redisCache, UserMapper userMapper, TenantCache tenantCache,
+                           RedisCache redisCache, UserMapper userMapper,
                            DeptService deptService, RoleDataScopeMapper roleDataScopeMapper,
                            RoleMapper roleMapper) {
         this.userRoleService = userRoleService;
         this.userPostService = userPostService;
         this.redisCache = redisCache;
         this.userMapper = userMapper;
-        this.tenantCache = tenantCache;
         this.deptService = deptService;
         this.roleDataScopeMapper = roleDataScopeMapper;
         this.roleMapper = roleMapper;
@@ -77,9 +74,6 @@ public class UserServiceImpl implements UserService {
         // 数据列表
         List<UserEntity> list = userMapper.getList(query);
         List<UserVO> voList = UserConvert.INSTANCE.convertList(list);
-        for(UserVO vo: voList){
-            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
-        }
         return new PageResult<>(voList, page.getTotal());
     }
 
@@ -241,11 +235,6 @@ public class UserServiceImpl implements UserService {
         // 用户岗位列表
         List<Long> postIdList = userPostService.getPostIdList(userId);
         user.setPostIdList(postIdList);
-
-        // 租户名
-        if(user.getTenantId() != null){
-            user.setTenantName(tenantCache.getNameByTenantId(user.getTenantId()));
-        }
         return user;
     }
 
@@ -277,9 +266,6 @@ public class UserServiceImpl implements UserService {
         // 数据列表
         List<UserEntity> list = userMapper.getRoleUserList(query);
         List<UserVO> voList = UserConvert.INSTANCE.convertList(list);
-        for(UserVO vo: voList){
-            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
-        }
         return new PageResult<>(voList, query.getTotal());
     }
 
@@ -307,15 +293,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void export() {
-        List<UserEntity> list = userMapper.getList(new UserQuery());
+    public void export(UserQuery query) {
+        List<UserEntity> list = userMapper.getList(query);
+        if(list == null || list.isEmpty()){
+            throw new ServerException("无数据，导出失败");
+        }
         List<UserExcelVO> userExcelVOS = UserConvert.INSTANCE.convert2List(list);
         ExcelUtils.excelExport(UserExcelVO.class, "用户信息", "用户信息", userExcelVOS);
     }
 
     /**
      * 更新租户
-     * @param tenantID 组合ID
+     * @param tenantID 租户ID
      * @param userIdList 用户ID
      * @param flag 1 绑定 2 解绑
      */

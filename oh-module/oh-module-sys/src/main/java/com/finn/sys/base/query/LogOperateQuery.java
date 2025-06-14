@@ -29,6 +29,24 @@ public class LogOperateQuery extends Query {
      */
     private Integer status;
 
+    /**
+     * 关键字搜索
+     */
+    private String keyWords;
+    /**
+     * 开始时间
+     */
+    String startTime;
+    /**
+     * 结束时间
+     */
+    String endTime;
+
+    /**
+     * 租户
+     */
+    private String tenantId;
+
     public String getRealName() {
         return realName;
     }
@@ -61,4 +79,35 @@ public class LogOperateQuery extends Query {
         this.status = status;
     }
 
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 }

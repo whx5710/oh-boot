@@ -1,6 +1,6 @@
 package com.finn.support.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
@@ -96,7 +96,7 @@ public class RoleController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "角色管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "角色管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:role:save')")
     public Result<String> save(@RequestBody @Valid RoleVO vo) {
         roleService.save(vo);
@@ -110,7 +110,7 @@ public class RoleController {
      * @return 提示信息
      */
     @PutMapping
-    @OperateLog(module = "角色管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @Log(module = "角色管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> update(@RequestBody @Valid RoleVO vo) {
         roleService.update(vo);
@@ -124,7 +124,7 @@ public class RoleController {
      * @return 提示信息
      */
     @PutMapping("data-scope")
-    @OperateLog(module = "角色管理", name = "数据权限", type = OperateTypeEnum.UPDATE)
+    @Log(module = "角色管理", name = "数据权限", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> dataScope(@RequestBody @Valid RoleDataScopeVO vo) {
         roleService.dataScope(vo);
@@ -138,7 +138,7 @@ public class RoleController {
      * @return 提示信息
      */
     @DeleteMapping
-    @OperateLog(module = "角色管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "角色管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         roleService.delete(idList);
@@ -166,7 +166,7 @@ public class RoleController {
      * @return 提示信息
      */
     @DeleteMapping("user/{roleId}")
-    @OperateLog(module = "角色管理", name = "删除角色用户", type = OperateTypeEnum.DELETE)
+    @Log(module = "角色管理", name = "删除角色用户", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> userDelete(@PathVariable("roleId") Long roleId, @RequestBody List<Long> userIdList) {
         userRoleService.deleteByUserIdList(roleId, userIdList);
@@ -181,7 +181,7 @@ public class RoleController {
      * @return 提示信息
      */
     @PostMapping("user/{roleId}")
-    @OperateLog(module = "角色管理", name = "分配角色给用户列表", type = OperateTypeEnum.DELETE)
+    @Log(module = "角色管理", name = "分配角色给用户列表", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> userSave(@PathVariable("roleId") Long roleId, @RequestBody List<Long> userIdList) {
         userRoleService.saveUserList(roleId, userIdList);

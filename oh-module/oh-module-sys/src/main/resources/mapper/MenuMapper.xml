@@ -20,7 +20,7 @@
 				#{menuId}
 			</foreach>
 		</if>
-		order by t1.sort asc
+		order by t1.sort,t1.id asc
 	</select>
 
 	<select id="getUserMenuList" resultType="com.finn.sys.base.entity.MenuEntity">
@@ -41,7 +41,7 @@
 				#{menuId}
 			</foreach>
 		</if>
-		order by t3.sort asc
+		order by t3.sort,t3.id asc
 	</select>
 
 	<!--<insert id="save">

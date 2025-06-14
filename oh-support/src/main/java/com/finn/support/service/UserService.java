@@ -67,10 +67,10 @@ public interface UserService {
     /**
      * 导出用户信息表格
      */
-    void export();
+    void export(UserQuery query);
     /**
      * 更新租户
-     * @param tenantID 组合ID
+     * @param tenantID 租户ID
      * @param userIdList 用户ID
      * @param flag 1 绑定 2 解绑
      */

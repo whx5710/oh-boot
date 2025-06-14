@@ -34,6 +34,12 @@ public class DeptEntity extends BaseEntity {
     @TableField(exists = false)
     private String parentName;
 
+    /**
+     * 租户名称
+     */
+    @TableField(exists = false)
+    private String tenantName;
+
     // 备注
     private String note;
 
@@ -75,5 +81,13 @@ public class DeptEntity extends BaseEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

@@ -2,6 +2,7 @@ package com.finn.sys.base.convert;
 
 import com.finn.sys.base.entity.AttachmentEntity;
 import com.finn.sys.base.vo.AttachmentVO;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,7 +15,9 @@ import java.util.List;
  *
  */
 @Mapper
+@DecoratedWith(AttachmentExtConvert.class) // 指定实现类
 public interface AttachmentConvert {
+
     AttachmentConvert INSTANCE = Mappers.getMapper(AttachmentConvert.class);
 
     AttachmentEntity convert(AttachmentVO vo);

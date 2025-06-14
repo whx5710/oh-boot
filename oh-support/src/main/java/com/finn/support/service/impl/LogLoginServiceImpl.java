@@ -1,9 +1,11 @@
 package com.finn.support.service.impl;
 
+import com.finn.core.constant.Constant;
 import com.finn.core.utils.ExcelUtils;
 import com.finn.core.utils.HttpContextUtils;
 import com.finn.core.utils.IpUtils;
 import com.finn.core.utils.PageResult;
+import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.utils.ParamsBuilder;
 import com.finn.support.convert.LogLoginConvert;
 import com.finn.support.entity.LogLoginEntity;
@@ -26,6 +28,7 @@ import java.util.List;
  *
  */
 @Service
+@Ds(Constant.DYNAMIC_SYS_DB)
 public class LogLoginServiceImpl implements LogLoginService {
     private final LogLoginMapper logLoginMapper;
 
@@ -35,13 +38,7 @@ public class LogLoginServiceImpl implements LogLoginService {
 
     @Override
     public PageResult<LogLoginVO> page(LogLoginQuery query) {
-        ParamsBuilder<LogLoginEntity> params = ParamsBuilder.of(LogLoginEntity.class)
-                .like(LogLoginEntity::getUsername, query.getUsername())
-                .like(LogLoginEntity::getAddress, query.getAddress())
-                .eq(LogLoginEntity::getStatus, query.getStatus())
-                .pageNum(query.getPageNum()).pageSize(query.getPageSize())
-                .orderBy("id desc");
-        try (Page<LogLoginEntity> page = logLoginMapper.selectPageByParam(params)) {
+        try (Page<LogLoginEntity> page = logLoginMapper.selectPageByParam(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
             return new PageResult<>(LogLoginConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
@@ -67,8 +64,8 @@ public class LogLoginServiceImpl implements LogLoginService {
     }
 
     @Override
-    public void export() {
-        List<LogLoginEntity> list = logLoginMapper.getList(new LogLoginQuery());
+    public void export(LogLoginQuery query) {
+        List<LogLoginEntity> list = logLoginMapper.selectListByParam(buildParams(query));
         List<LogLoginVO> logLoginVOS = LogLoginConvert.INSTANCE.convertList(list);
         ExcelUtils.excelExport(LogLoginVO.class, "登录日志", "日志", logLoginVOS);
     }
@@ -84,4 +81,14 @@ public class LogLoginServiceImpl implements LogLoginService {
         return logLoginMapper.latestDateCount(day, operation);
     }
 
+    private ParamsBuilder<LogLoginEntity> buildParams(LogLoginQuery query){
+        return ParamsBuilder.of(LogLoginEntity.class)
+                .like(LogLoginEntity::getUsername, query.getUsername())
+                .like(LogLoginEntity::getAddress, query.getAddress())
+                .eq(LogLoginEntity::getStatus, query.getStatus())
+                .ge(LogLoginEntity::getCreateTime, query.getStartTime())
+                .le(LogLoginEntity::getCreateTime, query.getEndTime())
+                .eq(LogLoginEntity::getTenantId, query.getTenantId())
+                .orderBy("id desc");
+    }
 }

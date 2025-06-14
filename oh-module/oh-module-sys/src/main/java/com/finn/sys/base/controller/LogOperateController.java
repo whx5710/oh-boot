@@ -2,6 +2,9 @@ package com.finn.sys.base.controller;
 
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
+import com.finn.framework.operatelog.annotations.Log;
+import com.finn.framework.operatelog.enums.OperateTypeEnum;
+import com.finn.support.query.LogLoginQuery;
 import com.finn.sys.base.query.LogOperateQuery;
 import com.finn.sys.base.service.LogOperateService;
 import com.finn.sys.base.vo.LogOperateVO;
@@ -36,5 +39,15 @@ public class LogOperateController {
     public Result<PageResult<LogOperateVO>> page(@Valid LogOperateQuery query) {
         PageResult<LogOperateVO> page = logOperateService.page(query);
         return Result.ok(page);
+    }
+
+    /**
+     * 导出excel
+     */
+    @GetMapping("export")
+    @Log(module = "操作日志", name = "导出操作日志", type = OperateTypeEnum.EXPORT)
+    @PreAuthorize("hasAuthority('sys:operate:all')")
+    public void export(LogOperateQuery query) {
+        logOperateService.export(query);
     }
 }

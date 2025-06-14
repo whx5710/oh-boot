@@ -15,6 +15,11 @@ public class AttachmentQuery extends Query {
     private String name;
 
     /**
+     * 租户
+     */
+    private String tenantId;
+
+    /**
      * 存储平台
      */
     private String platform;
@@ -35,4 +40,11 @@ public class AttachmentQuery extends Query {
         this.platform = platform;
     }
 
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 }

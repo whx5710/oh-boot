@@ -11,6 +11,7 @@ import static com.finn.core.constant.Constant.PAGE_NUM;
 import static com.finn.core.constant.Constant.PAGE_SIZE;
 
 /**
+ * SQL 语句构建器<br/>
  * 参数构建类；支持常用的单表查询语句构建
  * @author 王小费
  * @since 2025-03-12
@@ -282,20 +283,21 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
      */
     public ParamsBuilder<T> gt(Func1<T, ?> function, Object value, Boolean isEmpty) {
         if(value != null){
+            String prefix = "Gt";
             String fieldName = LambdaUtil.getFieldName(function);
             String colName = getColName(fieldName);
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " > #{" + fieldName + "}");
+                        sql.WHERE(colName + " > #{" + prefix + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " > #{" + fieldName + "}");
+                    sql.WHERE(colName + " > #{" + prefix + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " > #{" + fieldName + "}");
+                sql.WHERE(colName + " > #{" + prefix + fieldName + "}");
             }
-            this.put(fieldName, value);
+            this.put(prefix + fieldName, value);
         }
         return this;
     }
@@ -319,20 +321,21 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
      */
     public ParamsBuilder<T> ge(Func1<T, ?> function, Object value, Boolean isEmpty) {
         if(value != null){
+            String prefix = "Ge";
             String fieldName = LambdaUtil.getFieldName(function);
             String colName = getColName(fieldName);
             if(value instanceof String str){
                 if(str.isEmpty()){
                     if(isEmpty){
-                        sql.WHERE(colName + " >= #{" + fieldName + "}");
+                        sql.WHERE(colName + " >= #{" + prefix + fieldName + "}");
                     }
                 }else{
-                    sql.WHERE(colName + " >= #{" + fieldName + "}");
+                    sql.WHERE(colName + " >= #{" + prefix + fieldName + "}");
                 }
             }else{
-                sql.WHERE(colName + " >= #{" + fieldName + "}");
+                sql.WHERE(colName + " >= #{" + prefix + fieldName + "}");
             }
-            this.put(fieldName, value);
+            this.put(prefix + fieldName, value);
         }
         return this;
     }
@@ -508,7 +511,7 @@ public class ParamsBuilder<T> extends ParamsSQL<T> {
 
     /**
      * 拼接SQL<br/>
-     * 示例：content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))
+     * 示例：(content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))
      * @param whereSQL where条件;user_name = #{userName}
      * @param fieldName userName
      * @param value 参数值

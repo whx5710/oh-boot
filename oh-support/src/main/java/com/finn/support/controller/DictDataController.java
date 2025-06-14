@@ -1,6 +1,6 @@
 package com.finn.support.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
@@ -62,7 +62,7 @@ public class DictDataController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "字典数据管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "字典数据管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:dict:save')")
     public Result<String> save(@RequestBody @Valid DictDataVO vo) {
         dictDataService.save(vo);
@@ -76,7 +76,7 @@ public class DictDataController {
      * @return 提示信息
      */
     @PutMapping
-    @OperateLog(module = "字典数据管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @Log(module = "字典数据管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:dict:update')")
     public Result<String> update(@RequestBody @Valid DictDataVO vo) {
         dictDataService.update(vo);
@@ -90,7 +90,7 @@ public class DictDataController {
      * @return 提示信息
      */
     @DeleteMapping
-    @OperateLog(module = "字典数据管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "字典数据管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:dict:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         dictDataService.delete(idList);

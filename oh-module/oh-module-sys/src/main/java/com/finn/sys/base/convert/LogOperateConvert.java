@@ -2,6 +2,7 @@ package com.finn.sys.base.convert;
 
 import com.finn.sys.base.entity.LogOperateEntity;
 import com.finn.sys.base.vo.LogOperateVO;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,6 +15,7 @@ import java.util.List;
  *
  */
 @Mapper
+@DecoratedWith(LogOperateExtConvert.class) // 指定实现类
 public interface LogOperateConvert {
     LogOperateConvert INSTANCE = Mappers.getMapper(LogOperateConvert.class);
 

@@ -34,7 +34,7 @@ public class UserVO implements Serializable {
     /**
      * 密码
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 安全问题
     private String password;
 
     /**
@@ -101,6 +101,7 @@ public class UserVO implements Serializable {
     /**
      * 用户密钥，用于第三方接口登录，不校验验证码
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 安全问题
     private String userKey;
 
     /**

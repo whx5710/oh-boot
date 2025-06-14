@@ -1,5 +1,8 @@
 package com.finn.sys.base.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -12,6 +15,9 @@ import java.io.Serializable;
 public class FileUploadVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
 
     /**
      * 文件名称
@@ -32,6 +38,14 @@ public class FileUploadVO implements Serializable {
      * 存储平台
      */
     private String platform;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

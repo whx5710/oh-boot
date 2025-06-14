@@ -1,5 +1,8 @@
 package com.finn.sys.base.entity;
 
+import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
+
 import java.time.LocalDateTime;
 
 /**
@@ -8,6 +11,7 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * 
  */
+@TableName("sys_log_operate")
 public class LogOperateEntity {
     /**
      * id
@@ -17,11 +21,13 @@ public class LogOperateEntity {
     /**
      * 用户ID
      */
+    @TableField("user_id")
     private Long userId;
 
     /**
      * 操作人
      */
+    @TableField("real_name")
     private String realName;
 
     /**
@@ -37,16 +43,19 @@ public class LogOperateEntity {
     /**
      * 请求URI
      */
+    @TableField("req_uri")
     private String reqUri;
 
     /**
      * 请求方法
      */
+    @TableField("req_method")
     private String reqMethod;
 
     /**
      * 请求参数
      */
+    @TableField("req_params")
     private String reqParams;
 
     /**
@@ -62,11 +71,13 @@ public class LogOperateEntity {
     /**
      * User Agent
      */
+    @TableField("user_agent")
     private String userAgent;
 
     /**
      * 操作类型
      */
+    @TableField("operate_type")
     private Integer operateType;
 
     /**
@@ -82,13 +93,19 @@ public class LogOperateEntity {
     /**
      * 返回消息
      */
+    @TableField("result_msg")
     private String resultMsg;
 
+    /**
+     * 租户ID
+     */
+    @TableField("tenant_id")
     private String tenantId;
 
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private LocalDateTime createTime;
 
     public Long getId() {

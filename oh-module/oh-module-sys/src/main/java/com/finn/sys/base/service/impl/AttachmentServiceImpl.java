@@ -32,10 +32,11 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
-    public void save(AttachmentVO vo) {
+    public Long save(AttachmentVO vo) {
         AttachmentEntity entity = AttachmentConvert.INSTANCE.convert(vo);
 
         attachmentMapper.insertAttach(entity);
+        return entity.getId();
     }
 
     @Override

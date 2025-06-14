@@ -23,6 +23,10 @@ public class PostQuery extends Query {
      * 状态  0：停用   1：正常
      */
     private Integer status;
+    /**
+     * 租户ID
+     */
+    private String tenantId;
 
     public String getPostCode() {
         return postCode;
@@ -48,4 +52,11 @@ public class PostQuery extends Query {
         this.status = status;
     }
 
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 }

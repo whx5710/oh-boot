@@ -1,5 +1,6 @@
 package com.finn.sys.base.vo;
 
+import cn.idev.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
 
@@ -30,71 +31,91 @@ public class LogOperateVO implements Serializable {
     /**
      * 操作人
      */
+    @ExcelProperty(value = "用户名")
     private String realName;
 
     /**
      * 模块名
      */
+    @ExcelProperty(value = "模块名")
     private String module;
 
     /**
      * 操作名
      */
+    @ExcelProperty(value = "操作名")
     private String name;
 
     /**
      * 请求URI
      */
+    @ExcelProperty(value = "请求URI")
     private String reqUri;
 
     /**
      * 请求方法
      */
+    @ExcelProperty(value = "请求方法")
     private String reqMethod;
 
     /**
      * 请求参数
      */
+    @ExcelProperty(value = "请求参数")
     private String reqParams;
 
     /**
      * 操作IP
      */
+    @ExcelProperty(value = "操作IP")
     private String ip;
 
     /**
      * 登录地点
      */
+    @ExcelProperty(value = "登录地点")
     private String address;
 
     /**
      * User Agent
      */
+    @ExcelProperty(value = "User Agent")
     private String userAgent;
 
     /**
      * 操作类型
      */
+    @ExcelProperty(value = "操作类型")
     private Integer operateType;
 
     /**
      * 执行时长
      */
+    @ExcelProperty(value = "执行时长(毫秒)")
     private Integer duration;
 
     /**
      * 操作状态
      */
+    @ExcelProperty(value = "操作状态")
     private Integer status;
 
     /**
      * 返回消息
      */
+    @ExcelProperty(value = "返回消息")
     private String resultMsg;
+
+    /**
+     * 租户名称
+     */
+    @ExcelProperty(value = "租户名称")
+    private String tenantName;
 
     /**
      * 创建时间
      */
+    @ExcelProperty(value = "创建时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
@@ -224,5 +245,13 @@ public class LogOperateVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

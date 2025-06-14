@@ -4,20 +4,20 @@
 <mapper namespace="com.finn.support.mapper.RoleMapper">
 
     <select id="getList" parameterType="com.finn.support.query.RoleQuery">
-        select sys_role.*,tenant_member.tenant_name,GROUP_CONCAT(sys_role_menu.menu_id) menuIds
-        from sys_role left join tenant_member on sys_role.tenant_id = tenant_member.tenant_id and tenant_member.db_status = 1
-        left join sys_role_menu on sys_role.id = sys_role_menu.role_id and sys_role_menu.db_status = 1
-        where sys_role.db_status != 0
+        select a.*,b.tenant_name,GROUP_CONCAT(c.menu_id) menuIds
+        from sys_role a left join tenant_member b on a.tenant_id = b.tenant_id and b.db_status = 1
+        left join sys_role_menu c on a.id = c.role_id and c.db_status = 1
+        where a.db_status != 0
         <if test="name != null and name != ''">
-            and sys_role.name like concat('%',#{name}, '%')
+            and a.name like concat('%',#{name}, '%')
         </if>
-        <if test="tenantId != null and tenantId != ''">and sys_role.tenant_id = #{tenantId}</if>
-        <if test="isSystem != null">and sys_role.is_system = #{isSystem}</if>
-        <if test="startTime != null and endTime != null">and DATE_FORMAT(sys_role.create_time,'%Y-%m-%d') between #{startTime} and #{endTime}</if>
-        <if test="remark != null and remark !=''">and sys_role.remark like concat('%',#{remark},'%')</if>
-        <if test="tenantName != null and tenantName !=''">and tenant_member.tenant_name like concat('%',#{tenantName},'%')</if>
-        group by sys_role.id
-        order by sys_role.create_time desc
+        <if test="tenantId != null and tenantId != ''">and a.tenant_id = #{tenantId}</if>
+        <if test="isSystem != null">and a.is_system = #{isSystem}</if>
+        <if test="startTime != null and endTime != null">and DATE_FORMAT(a.create_time,'%Y-%m-%d') between #{startTime} and #{endTime}</if>
+        <if test="remark != null and remark !=''">and a.remark like concat('%',#{remark},'%')</if>
+        <if test="tenantName != null and tenantName !=''">and b.tenant_name like concat('%',#{tenantName},'%')</if>
+        group by a.id
+        order by a.create_time desc
     </select>
 
     <!--<update id="updateById">

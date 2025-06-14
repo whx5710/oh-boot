@@ -43,7 +43,7 @@ public interface BaseMapper<T>{
     boolean delete(T entity);
 
     /**
-     * 分页查询
+     * 分页查询;需设置当前页和每页数量
      * @param fp 参数
      * @return page
      */

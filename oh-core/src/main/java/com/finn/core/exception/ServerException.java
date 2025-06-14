@@ -106,7 +106,7 @@ public class ServerException extends RuntimeException {
         super(msg, e);
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
-        this.stackInfo = msg;
+        this.stackInfo = e.getMessage();
         this.success = false;
         log.error("【{}】{}", this.code, this.msg);
     }

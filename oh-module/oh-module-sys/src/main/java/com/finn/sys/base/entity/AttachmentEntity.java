@@ -1,5 +1,6 @@
 package com.finn.sys.base.entity;
 
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 /**
@@ -8,6 +9,7 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  *
  */
+@TableName("sys_attachment")
 public class AttachmentEntity extends BaseEntity {
     /**
      * 附件名称
@@ -60,4 +62,5 @@ public class AttachmentEntity extends BaseEntity {
     public void setPlatform(String platform) {
         this.platform = platform;
     }
+
 }

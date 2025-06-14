@@ -75,23 +75,18 @@ public class DeptServiceImpl implements DeptService {
      */
     @Override
     public PageResult<DeptVO> page(DeptQuery query) {
+        if(query.getParentId() != null && query.getParentId() == 0L){
+            UserDetail user = SecurityUser.getUser();
+            if(user != null && user.getSuperAdmin() != 1 && SecurityUser.isTenant()){
+                // 租户全部部门列表
+                query.setParentId(user.getDeptId());
+            }
+        }
         Page<DeptEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         // 部门列表
         List<DeptEntity> list = deptMapper.getList(query);
-        // 如果未获取到部门数据，且用户为租户，且parent_id = 0
-        if((list == null || list.size() == 0) && query.getParentId() != null && query.getParentId() == 0L){
-            UserDetail user = SecurityUser.getUser();
-            if(user != null && user.getSuperAdmin() != 1 && SecurityUser.isTenant()){
-                page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-                // 部门列表
-                query.setParentId(user.getDeptId());
-                list = deptMapper.getList(query);
-            }
-        }
+
         List<DeptVO> voList = DeptConvert.INSTANCE.convertList(list);
-        for(DeptVO vo: voList){
-            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
-        }
         return new PageResult<>(voList, page.getTotal());
     }
 
@@ -100,7 +95,7 @@ public class DeptServiceImpl implements DeptService {
         DeptEntity entity = DeptConvert.INSTANCE.convert(vo);
         // 判断是否租户新增部门，如果是租户，根部门对应该租户的所属部门
         UserDetail user = SecurityUser.getUser();
-        if(user != null && entity.getParentId() != null && entity.getParentId() == 0L){
+        if(user != null && (entity.getParentId() == null || entity.getParentId() == 0L)){
             if(user.getSuperAdmin() != 1 && user.getTenantId() != null && !user.getTenantId().isEmpty()){
                 entity.setParentId(user.getDeptId()==null?entity.getParentId():user.getDeptId());
             }

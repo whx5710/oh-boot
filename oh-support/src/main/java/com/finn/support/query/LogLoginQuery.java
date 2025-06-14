@@ -24,6 +24,19 @@ public class LogLoginQuery extends Query {
      */
     private Integer status;
 
+    /**
+     * 开始时间
+     */
+    String startTime;
+    /**
+     * 结束时间
+     */
+    String endTime;
+    /**
+     * 租户ID
+     */
+    String tenantId;
+
     public String getUsername() {
         return username;
     }
@@ -48,4 +61,27 @@ public class LogLoginQuery extends Query {
         this.status = status;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 }

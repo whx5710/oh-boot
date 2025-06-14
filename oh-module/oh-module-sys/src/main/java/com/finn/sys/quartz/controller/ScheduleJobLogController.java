@@ -1,6 +1,6 @@
 package com.finn.sys.quartz.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
@@ -62,7 +62,7 @@ public class ScheduleJobLogController {
      * @return 提示信息
      */
     @DeleteMapping
-    @OperateLog(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         scheduleJobLogService.delete(idList);

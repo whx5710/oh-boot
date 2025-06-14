@@ -6,6 +6,7 @@
     <select id="getList" resultType="com.finn.support.entity.PostEntity">
         select * from sys_post where db_status = 1
         <if test="postCode != null and postCode != ''">and post_code = #{postCode}</if>
+        <if test="tenantId != null and tenantId != ''">and tenant_id = #{tenantId}</if>
         <if test="postName != null and postName != ''">and post_name like concat('%', #{postName}, '%')</if>
         <if test="status != null">and status = #{status}</if>
         order by sort

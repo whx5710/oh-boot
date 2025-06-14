@@ -1,6 +1,6 @@
 package com.finn.sys.base.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
@@ -47,12 +47,11 @@ public class AttachmentController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "附件管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "附件管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:attachment:save')")
     public Result<String> save(@RequestBody AttachmentVO vo) {
-        attachmentService.save(vo);
-
-        return Result.ok();
+        Long id = attachmentService.save(vo);
+        return Result.ok(String.valueOf(id));
     }
 
     /**
@@ -61,7 +60,7 @@ public class AttachmentController {
      * @return 提示信息
      */
     @DeleteMapping
-    @OperateLog(module = "附件管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "附件管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:attachment:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         attachmentService.delete(idList);

@@ -1,6 +1,6 @@
 package com.finn.support.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.PageResult;
@@ -81,7 +81,7 @@ public class DeptController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "部门管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "部门管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:dept:save')")
     public Result<String> save(@RequestBody @Valid DeptVO vo) {
         deptService.save(vo);
@@ -95,7 +95,7 @@ public class DeptController {
      * @return 提示信息
      */
     @PutMapping
-    @OperateLog(module = "部门管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @Log(module = "部门管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:dept:update')")
     public Result<String> update(@RequestBody @Valid DeptVO vo) {
         deptService.update(vo);
@@ -109,7 +109,7 @@ public class DeptController {
      * @return 提示信息
      */
     @DeleteMapping("{id}")
-    @OperateLog(module = "部门管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "部门管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:dept:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {
         deptService.delete(id);

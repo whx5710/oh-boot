@@ -2,8 +2,9 @@ package com.finn.sys.base.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import com.finn.core.utils.ExcelUtils;
+import com.finn.framework.utils.ParamsBuilder;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
@@ -45,9 +46,34 @@ public class LogOperateServiceImpl implements LogOperateService {
 
     @Override
     public PageResult<LogOperateVO> page(LogOperateQuery query) {
-        Page<LogOperateEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<LogOperateEntity> list = logOperateMapper.getList(query);
-        return new PageResult<>(LogOperateConvert.INSTANCE.convertList(list), page.getTotal());
+        Page<LogOperateEntity> page = logOperateMapper.selectPageByParam(getParams(query)
+                .page(query.getPageNum(), query.getPageSize()));
+        return new PageResult<>(LogOperateConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+    }
+
+    @Override
+    public void export(LogOperateQuery query) {
+        List<LogOperateEntity> list = logOperateMapper.selectListByParam(getParams(query));
+        List<LogOperateVO> vo = LogOperateConvert.INSTANCE.convertList(list);
+        ExcelUtils.excelExport(LogOperateVO.class, "操作日志", "日志", vo);
+    }
+
+    /**
+     * 构建SQL
+     * @param query
+     * @return
+     */
+    private ParamsBuilder<LogOperateEntity> getParams(LogOperateQuery query){
+        return ParamsBuilder.of(LogOperateEntity.class)
+                .eq(LogOperateEntity::getStatus, query.getStatus())
+                .like(LogOperateEntity::getRealName, query.getRealName())
+                .like(LogOperateEntity::getModule, query.getModule())
+                .like(LogOperateEntity::getReqUri, query.getReqUri())
+                .ge(LogOperateEntity::getCreateTime, query.getStartTime())
+                .le(LogOperateEntity::getCreateTime, query.getEndTime())
+                .eq(LogOperateEntity::getTenantId, query.getTenantId())
+                .jointSQL("(module like concat('%',#{keyWords},'%') or name like concat('%',#{keyWords},'%') or req_uri like concat('%',#{keyWords},'%') or real_name like concat('%',#{keyWords},'%'))","keyWords",query.getKeyWords())
+                .orderBy("create_time desc");
     }
 
     /**

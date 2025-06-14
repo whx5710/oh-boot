@@ -1,6 +1,6 @@
 package com.finn.sys.base.controller;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.PageResult;
@@ -120,7 +120,7 @@ public class MenuController {
      * @return 提示信息
      */
     @PostMapping
-    @OperateLog(module = "菜单管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @Log(module = "菜单管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:menu:save')")
     public Result<String> save(@RequestBody @Valid RouteVO vo) {
         menuService.save(vo);
@@ -134,7 +134,7 @@ public class MenuController {
      * @return 提示信息
      */
     @PutMapping
-    @OperateLog(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @Log(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
     public Result<String> update(@RequestBody @Valid RouteVO vo) {
         menuService.update(vo);
@@ -148,7 +148,7 @@ public class MenuController {
      * @return
      */
     @DeleteMapping("{id}")
-    @OperateLog(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @Log(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {
         // 判断是否有子菜单或按钮

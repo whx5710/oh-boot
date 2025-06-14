@@ -37,23 +37,23 @@
             <version>${finn.support}</version>
         </dependency>
         <!-- 对外接口 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.finn.app</groupId>
             <artifactId>oh-module-app</artifactId>
             <version>${module.version}</version>
         </dependency>
-        <!-- 协同任务 -->
+        &lt;!&ndash; 协同任务 &ndash;&gt;
         <dependency>
             <groupId>com.finn.team</groupId>
             <artifactId>oh-module-team</artifactId>
             <version>${module.version}</version>
         </dependency>
-        <!-- 工作流 -->
+        &lt;!&ndash; 工作流 &ndash;&gt;
         <dependency>
             <groupId>com.finn.flow</groupId>
             <artifactId>oh-module-flow</artifactId>
             <version>${module.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- 系统管理 -->
         <dependency>
             <groupId>com.finn.sys</groupId>

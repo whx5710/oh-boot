@@ -41,8 +41,8 @@ finn:
     enabled: true
     config:
       type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
-      domain: http://localhost:8080
-    local.path: /data/图片/upload
+      domain: http://localhost:5666/api/sysApi
+    local.path: /home/whx/文档/files
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:

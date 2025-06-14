@@ -13,4 +13,10 @@ import com.finn.sys.base.vo.LogOperateVO;
 public interface LogOperateService {
 
     PageResult<LogOperateVO> page(LogOperateQuery query);
+
+    /**
+     * 导出操作日志
+     * @param query 查询条件
+     */
+    void export(LogOperateQuery query);
 }

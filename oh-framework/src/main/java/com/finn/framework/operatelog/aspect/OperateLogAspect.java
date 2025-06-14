@@ -1,6 +1,6 @@
 package com.finn.framework.operatelog.aspect;
 
-import com.finn.framework.operatelog.annotations.OperateLog;
+import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.framework.operatelog.service.OperateLogService;
 import com.finn.core.cache.RedisCache;
@@ -52,19 +52,19 @@ public class OperateLogAspect {
         this.redisCache = redisCache;
     }
 
-    @Around("@annotation(operateLog)")
-    public Object around(ProceedingJoinPoint joinPoint, OperateLog operateLog) throws Throwable {
+    @Around("@annotation(log)")
+    public Object around(ProceedingJoinPoint joinPoint, Log log) throws Throwable {
         // 记录开始时间
         LocalDateTime startTime = LocalDateTime.now();
         try {
             //执行方法
             Object result = joinPoint.proceed();
             //保存日志
-            saveLog(joinPoint, operateLog, startTime, Constant.SUCCESS);
+            saveLog(joinPoint, log, startTime, Constant.SUCCESS);
             return result;
         } catch (Exception e) {
             //保存日志
-            saveLog(joinPoint, operateLog, startTime, Constant.FAIL);
+            saveLog(joinPoint, log, startTime, Constant.FAIL);
             throw e;
         }
     }
@@ -77,7 +77,7 @@ public class OperateLogAspect {
      * @param startTime
      * @param status
      */
-    private void saveLog(ProceedingJoinPoint joinPoint, OperateLog operateLog, LocalDateTime startTime, Integer status) {
+    private void saveLog(ProceedingJoinPoint joinPoint, Log operateLog, LocalDateTime startTime, Integer status) {
         OperateLogDTO log = new OperateLogDTO();
         // 执行时长
         long duration = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli() - startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();

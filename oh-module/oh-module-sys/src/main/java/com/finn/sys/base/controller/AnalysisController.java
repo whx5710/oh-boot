@@ -1,7 +1,6 @@
 package com.finn.sys.base.controller;
 
 import com.finn.core.utils.Result;
-import com.finn.support.mapper.LogLoginMapper;
 import com.finn.support.service.LogLoginService;
 import com.finn.support.vo.AnalysisVO;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,7 @@ public class AnalysisController {
 
     private final LogLoginService logLoginService;
 
-    public AnalysisController(LogLoginService logLoginService, LogLoginMapper logLoginMapper){
+    public AnalysisController(LogLoginService logLoginService){
         this.logLoginService = logLoginService;
     }
 
@@ -42,6 +41,7 @@ public class AnalysisController {
 
     /**
      * 最近几天登录情况
+     * @apiNote 操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误
      * @param day day
      * @return
      */
