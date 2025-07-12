@@ -6,6 +6,7 @@ import com.finn.framework.entity.api.MsgEntity;
 import com.finn.framework.service.JobServiceConsumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,6 +28,8 @@ public class JobServiceKafkaConsumer {
      * 默认不监听，可通过调用方法开启监听
      * @param message 消息
      */
+    // 指定使用beanname为doSomethingExecutor的线程池
+    @Async("doSomethingExecutor")
     @KafkaListener(id = Constant.OPEN_API, topics = Constant.TOPIC_SUBMIT, autoStartup = "${finn.open-api.auto-start-up:false}", groupId = "open-api-group-id")
     public void openApiJobConsume(String message, Acknowledgment ack) {
         MsgEntity dataMsg = JsonUtils.parseObject(message, MsgEntity.class);

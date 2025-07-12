@@ -1,5 +1,8 @@
 package com.finn.support.service.impl;
 
+import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.annotations.Ds;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.cache.RedisCache;
@@ -31,14 +34,12 @@ import java.util.List;
  *
  */
 @Service
+@Ds(Constant.DYNAMIC_SYS_DB)
 public class DeptServiceImpl implements DeptService {
     private final UserMapper userMapper;
     private final DeptMapper deptMapper;
-
     private final RedisCache redisCache;
-
     private final TenantCache tenantCache;
-
     public DeptServiceImpl(UserMapper userMapper, DeptMapper deptMapper,
                           RedisCache redisCache, TenantCache tenantCache) {
         this.userMapper = userMapper;
@@ -103,7 +104,7 @@ public class DeptServiceImpl implements DeptService {
         if(entity.getParentId() == null){
             entity.setParentId(0L);
         }
-        deptMapper.insertDept(entity);
+        deptMapper.insert(entity);
     }
 
     @Override
@@ -157,7 +158,8 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public List<Long> getSubDeptIdList(Long id) {
         // 所有部门的id、pid列表
-        List<DeptEntity> deptList = deptMapper.getIdAndPidList();
+        List<DeptEntity> deptList = deptMapper.selectListByWrapper(QueryWrapper.of(DeptEntity.class)
+                .eq(DeptEntity::getDbStatus, 1));
 
         // 递归查询所有子部门ID列表
         List<Long> subIdList = new ArrayList<>();
@@ -172,7 +174,7 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public DeptEntity getById(Long id) {
         AssertUtils.isNull(id, "部门ID");
-        return deptMapper.getById(id);
+        return deptMapper.findById(id, DeptEntity.class);
     }
 
     /**
@@ -189,7 +191,7 @@ public class DeptServiceImpl implements DeptService {
         }
         String key = RedisKeys.getDeptCacheKey(id);
         if(!redisCache.hasKey(key)){
-            DeptEntity dept = deptMapper.getById(id);
+            DeptEntity dept = deptMapper.findById(id, DeptEntity.class);
             if(dept != null && dept.getId() != null){
                 redisCache.set(key, dept, 7200);// 缓存2小时
             }
@@ -198,7 +200,7 @@ public class DeptServiceImpl implements DeptService {
             if(cache){
                 return JsonUtils.convertValue(redisCache.get(key), DeptEntity.class);
             }else{
-                return deptMapper.getById(id);
+                return deptMapper.findById(id, DeptEntity.class);
             }
         }
     }

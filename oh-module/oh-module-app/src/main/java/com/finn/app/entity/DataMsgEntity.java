@@ -1,27 +1,46 @@
 package com.finn.app.entity;
 
+import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 /**
  * 传输数据
  */
+@TableName("data_message")
 public class DataMsgEntity extends BaseEntity {
 
-    // 数据字符串
+    /**
+     * 数据字符串
+     */
+    @TableField("json_str")
     private String jsonStr;
-    // 功能号
+    /**
+     * 功能号
+      */
+    @TableField("func_code")
     private String funcCode;
-    // 客户端ID
+    /**
+     * 客户端ID
+     */
+    @TableField("client_id")
     private String clientId;
 
     private String topic;
 
-    // 状态0未处理1处理2未找到对应的服务类3业务处理失败
+    /**
+     * 状态0未处理1处理2未找到对应的服务类3业务处理失败
+     */
     private String state;
-    // 响应消息
+    /**
+     * 响应消息
+     */
+    @TableField("result_msg")
     private String resultMsg;
 
-    // 备注
+    /**
+     * 备注
+     */
     private String note;
 
     public String getJsonStr() {

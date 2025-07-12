@@ -9,6 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
 import com.zaxxer.hikari.pool.HikariPool;
+import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,8 @@ public class HandleDataSource {
      * @param sysDb 系统内置数据源
      * @return 动态数据源
      */
-    public DynamicDataSource buildDs(Map<Object, Object> dataSourceMap, String primary, String sysDb){
+    public DynamicDataSource buildDs(Map<Object, Object> dataSourceMap, String primary, String sysDb,
+                                     MybatisProperties mybatisProperties){
         //设置动态数据源
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         DataSource masterDataSource = null;
@@ -67,6 +69,7 @@ public class HandleDataSource {
         if(!dataSourceMap.containsKey(primary)){
             dataSourceMap.put(primary, masterDataSource);
         }
+        // 系统内置数据源
         if(!dataSourceMap.containsKey(sysDb)){
             dataSourceMap.put(sysDb, sysDataSource);
         }
@@ -77,6 +80,8 @@ public class HandleDataSource {
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
         // 将数据源信息备份在 DynamicDataSource 中
         dynamicDataSource.setDynamicDataSources(dsTmp);
+        // mybatis 配置
+        dynamicDataSource.setMybatisProperties(mybatisProperties);
         return dynamicDataSource;
     }
 

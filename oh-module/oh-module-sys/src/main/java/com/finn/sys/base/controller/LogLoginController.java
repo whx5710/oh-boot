@@ -9,9 +9,9 @@ import com.finn.support.service.LogLoginService;
 import com.finn.support.vo.LogLoginVO;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 登录日志
@@ -49,6 +49,30 @@ public class LogLoginController {
     @PreAuthorize("hasAuthority('sys:log:login')")
     public void export(LogLoginQuery query) {
         logLoginService.export(query);
+    }
+
+    /**
+     * 删除
+     * @param idList id集合
+     * @return str
+     */
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:log:login:delete')")
+    public Result<String> delete(@RequestBody List<Long> idList){
+        logLoginService.delete(idList);
+        return Result.ok();
+    }
+
+    /**
+     * 根据日期删除日志（删除日期之前的数据）
+     * @param date
+     * @return
+     */
+    @GetMapping("/deleteByDate/{date}")
+    @PreAuthorize("hasAuthority('sys:log:login:delete')")
+    public Result<String> deleteByDate(@PathVariable("date")String date){
+        logLoginService.deleteByDate(date);
+        return Result.ok();
     }
 
 }

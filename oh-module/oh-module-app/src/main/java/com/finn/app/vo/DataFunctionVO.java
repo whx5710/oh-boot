@@ -3,6 +3,7 @@ package com.finn.app.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -13,7 +14,9 @@ import java.time.LocalDateTime;
 * @since 1.0.0 2023-07-30
 */
 public class DataFunctionVO implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
+
 	private Integer id;
 
 	/**
@@ -34,6 +37,11 @@ public class DataFunctionVO implements Serializable {
 	 * 备注
 	 */
 	private String remark;
+
+	/**
+	 * 是否选中
+	 */
+	private Boolean checkedFunc;
 
 	private Long creator;
 
@@ -115,5 +123,13 @@ public class DataFunctionVO implements Serializable {
 
 	public void setAsync(Boolean async) {
 		isAsync = async;
+	}
+
+	public Boolean getCheckedFunc() {
+		return checkedFunc;
+	}
+
+	public void setCheckedFunc(Boolean checkedFunc) {
+		this.checkedFunc = checkedFunc;
 	}
 }

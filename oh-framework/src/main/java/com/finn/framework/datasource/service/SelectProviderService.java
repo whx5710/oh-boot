@@ -1,7 +1,7 @@
 package com.finn.framework.datasource.service;
 
-import com.finn.framework.utils.ParamsBuilder;
-import com.finn.framework.utils.ParamsSQL;
+import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import org.apache.ibatis.jdbc.SQL;
 
 
@@ -10,15 +10,15 @@ import static com.finn.core.constant.Constant.PAGE_SIZE;
 
 /**
  * 通用provider,拼接增删查改，通过 @SelectProvider注解操作，减少sql编写<br/>
- * 单表查询      selectPageByParam、selectListByParam <br/>
+ * 单表查询      selectPageByWrapper、selectListByWrapper <br/>
  * 注意：如果对查询性能有要求，不建议使用
  * @author 王小费 whx5710@qq.com
  */
 public class SelectProviderService {
 
-    public static final String SELECT_PAGE_PARAM = "selectPageByParam";
+    public static final String SELECT_PAGE_PARAM = "selectPageByWrapper";
 
-    public static final String SELECT_LIST_PARAM = "selectListByParam";
+    public static final String SELECT_LIST_PARAM = "selectListByWrapper";
 
     public static final String FIND_BY_ID = "findById";
 
@@ -28,7 +28,7 @@ public class SelectProviderService {
      * @return sql
      * @param <T> 类
      */
-    public <T> String selectPageByParam(ParamsBuilder<T> fp){
+    public <T> String selectPageByWrapper(QueryWrapper<T> fp){
         return fp.getSql().toString();
     }
 
@@ -38,7 +38,7 @@ public class SelectProviderService {
      * @return sql
      * @param <T> 类
      */
-    public <T> String selectListByParam(ParamsBuilder<T> fp){
+    public <T> String selectListByWrapper(QueryWrapper<T> fp){
         fp.remove(PAGE_NUM);
         fp.remove(PAGE_SIZE);
         return fp.getSql().toString();
@@ -46,8 +46,8 @@ public class SelectProviderService {
 
     public <T> String findById(Long id, Class<T> clazz){
         SQL sql = new SQL();
-        String tableName = ParamsSQL.getTableName(clazz);
-        String priKey = ParamsSQL.getPriKey(clazz);
+        String tableName = Wrapper.getTableName(clazz);
+        String priKey = Wrapper.getPriKey(clazz);
         sql.SELECT("*").FROM(tableName).WHERE(priKey + " = #{id}");
         return sql.toString();
     }

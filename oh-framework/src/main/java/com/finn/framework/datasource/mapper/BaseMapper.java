@@ -3,7 +3,8 @@ package com.finn.framework.datasource.mapper;
 import com.finn.framework.datasource.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.framework.datasource.service.SelectProviderService;
-import com.finn.framework.utils.ParamsBuilder;
+import com.finn.framework.datasource.utils.InsertWrapper;
+import com.finn.framework.datasource.utils.Wrapper;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -44,27 +45,51 @@ public interface BaseMapper<T>{
 
     /**
      * 分页查询;需设置当前页和每页数量
-     * @param fp 参数
+     * @param fp 使用QueryWrapper构建
      * @return page
      */
     @Pages
     @SelectProvider(method = SelectProviderService.SELECT_PAGE_PARAM, type = SelectProviderService.class)
-    Page<T>  selectPageByParam(ParamsBuilder<T> fp);
+    Page<T>  selectPageByWrapper(Wrapper<T> fp);
 
     /**
      * 查询列表
-     * @param fp 参数
+     * @param fp QueryWrapper
      * @return list
      */
     @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
-    List<T> selectListByParam(ParamsBuilder<T> fp);
+    List<T> selectListByWrapper(Wrapper<T> fp);
 
     /**
      * 根据ID查询数据
      * @param id id主键
      * @param clazz 类名，用于获取表名
-     * @return sql
+     * @return 实体对象
      */
     @SelectProvider(method = SelectProviderService.FIND_BY_ID, type = SelectProviderService.class)
     T findById(@Param("id")Long id,Class<T> clazz);
+
+    /**
+     * 删除接口
+     * @param fp 使用DeleteWrapper构建
+     * @return 删除数量
+     */
+    @DeleteProvider(method = ModifyProviderService.DELETE_PARAM, type = ModifyProviderService.class)
+    Integer deleteByWrapper(Wrapper<T> fp);
+
+    /**
+     * 修改数据
+     * @param fp 使用UpdateWrapper构建
+     * @return 更新数量
+     */
+    @UpdateProvider(method = ModifyProviderService.UPDATE_PARAM, type = ModifyProviderService.class)
+    Integer updateByWrapper(Wrapper<T> fp);
+
+    /**
+     * 新增
+     * @param fp 使用InsertWrapper构建
+     * @return 插入数量
+     */
+    @InsertProvider(method = ModifyProviderService.INSERT_PARAM, type = ModifyProviderService.class)
+    Integer insertByWrapper(InsertWrapper fp);
 }

@@ -1,7 +1,11 @@
 package com.finn.support.service.impl;
 
+import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.annotations.Ds;
+import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.utils.UpdateWrapper;
+import com.finn.framework.datasource.utils.Wrapper;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.support.cache.TenantCache;
@@ -26,6 +30,7 @@ import java.util.Objects;
  * 
  */
 @Service
+@Ds(Constant.DYNAMIC_SYS_DB)
 public class PostServiceImpl implements PostService {
     private final UserPostService userPostService;
     private final PostMapper postMapper;
@@ -40,9 +45,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageResult<PostVO> page(PostQuery query) {
-        Page<PostEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<PostEntity> entityList = postMapper.getList(query);
-        List<PostVO> list = PostConvert.INSTANCE.convertList(entityList);
+        Page<PostEntity> page = postMapper.selectPageByWrapper(getQueryWrapper(query));
+        List<PostVO> list = PostConvert.INSTANCE.convertList(page.getResult());
         for(PostVO vo: list){
             vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
         }
@@ -51,11 +55,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostVO> getList() {
-        PostQuery query = new PostQuery();
-        //正常岗位列表
-        query.setStatus(1);
-        List<PostEntity> entityList = postMapper.getList(query);
-
+        List<PostEntity> entityList = postMapper.selectListByWrapper(QueryWrapper.of(PostEntity.class)
+                .eq(PostEntity::getDbStatus, 1).orderBy("sort"));
         return PostConvert.INSTANCE.convertList(entityList);
     }
 
@@ -63,9 +64,8 @@ public class PostServiceImpl implements PostService {
     public void save(PostVO vo) {
         PostEntity entity = PostConvert.INSTANCE.convert(vo);
         AssertUtils.isBlank(entity.getPostCode(), "岗位编码");
-        PostQuery params = new PostQuery();
-        params.setPostCode(entity.getPostCode());
-        List<PostEntity> list = postMapper.getList(params);
+        List<PostEntity> list = postMapper.selectListByWrapper(QueryWrapper.of(PostEntity.class)
+                .eq(PostEntity::getDbStatus, 1).eq(PostEntity::getPostCode, entity.getPostCode()));
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("岗位编码已存在");
         }
@@ -77,9 +77,8 @@ public class PostServiceImpl implements PostService {
         PostEntity entity = PostConvert.INSTANCE.convert(vo);
         String postCode = entity.getPostCode();
         if(postCode != null && !postCode.isEmpty()){
-            PostQuery params = new PostQuery();
-            params.setPostCode(postCode);
-            List<PostEntity> list = postMapper.getList(params);
+            List<PostEntity> list = postMapper.selectListByWrapper(QueryWrapper.of(PostEntity.class)
+                    .eq(PostEntity::getDbStatus, 1).eq(PostEntity::getPostCode, postCode));
             if(!ObjectUtils.isEmpty(list)){
                 for(PostEntity item : list){
                     if(!Objects.equals(item.getId(), entity.getId())){
@@ -94,12 +93,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(List<Long> idList) {
         // 删除岗位
-        idList.forEach(id -> {
-            PostEntity p = new PostEntity();
-            p.setId(id);
-            p.setDbStatus(0);
-            postMapper.updateById(p);
-        });
+        postMapper.updateByWrapper(UpdateWrapper.of(PostEntity.class).set(PostEntity::getDbStatus, 0)
+                .in(PostEntity::getId, idList));
         // 删除岗位用户关系
         userPostService.deleteByPostIdList(idList);
     }
@@ -109,4 +104,21 @@ public class PostServiceImpl implements PostService {
         return postMapper.getById(id);
     }
 
+    /**
+     * 构建查询条件
+     * @param query
+     * @return
+     */
+    private Wrapper<PostEntity> getQueryWrapper(PostQuery query){
+        if(query == null){
+            return QueryWrapper.of(PostEntity.class).eq(PostEntity::getDbStatus, 1).orderBy("sort");
+        }else{
+            return QueryWrapper.of(PostEntity.class).eq(PostEntity::getDbStatus, 1)
+                    .like(PostEntity::getPostName, query.getPostName())
+                    .eq(PostEntity::getPostCode, query.getPostCode())
+                    .eq(PostEntity::getTenantId, query.getTenantId())
+                    .eq(PostEntity::getStatus, query.getStatus())
+                    .orderBy("sort").page(query.getPageNum(), query.getPageSize());
+        }
+    }
 }

@@ -33,14 +33,16 @@
         select * from data_function where id = #{id}
     </select>
 
-    <select id="pageByClientId" resultType="com.finn.app.entity.DataFunctionEntity">
+    <select id="pageByClientId" resultType="com.finn.app.vo.DataFunctionVO">
         SELECT
-        *
+        a.*,
+        if(b.client_id is null,0, 1) as checkedFunc
         FROM
         data_function a
-        WHERE
-        a.db_status = 1
-        AND EXISTS ( SELECT 1 FROM data_function_authority b WHERE a.func_code = b.func_code AND b.db_status = 1 AND b.client_id = #{clientId})
+        LEFT JOIN data_function_authority b ON a.func_code = b.func_code
+        AND b.db_status = 1
+        AND b.client_id = #{clientId}
+        WHERE a.db_status = 1
     </select>
 
     <select id="getAuthorityList" resultType="com.finn.app.entity.DataFunctionAuthorityEntity">

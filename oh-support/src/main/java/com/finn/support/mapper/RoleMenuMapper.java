@@ -1,7 +1,5 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.support.entity.RoleMenuEntity;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,7 +15,6 @@ import java.util.List;
  * 
  */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
 public interface RoleMenuMapper extends BaseMapper<RoleMenuEntity> {
 
 	/**

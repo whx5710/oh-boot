@@ -1,6 +1,7 @@
 package com.finn.support.entity;
 
 import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 /**
@@ -9,14 +10,17 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * 
  */
+@TableName("sys_dict_type")
 public class DictTypeEntity extends BaseEntity {
     /**
      * 字典类型
      */
+    @TableField("dict_type")
     private String dictType;
     /**
      * 字典名称
      */
+    @TableField("dict_name")
     private String dictName;
     /**
      * 备注
@@ -29,10 +33,12 @@ public class DictTypeEntity extends BaseEntity {
     /**
      * 来源  0：字典数据  1：动态SQL
      */
+    @TableField("dict_source")
     private Integer dictSource;
     /**
      * 动态sql
      */
+    @TableField("dict_sql")
     private String dictSql;
 
     @TableField(exists = false)

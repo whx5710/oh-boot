@@ -39,7 +39,7 @@ public class RedisCache {
     private static final Long SUCCESS = 1L;
 
     /**
-     *
+     * 缓存数据
      * @param key key
      * @param value 值
      * @param expire 时长-秒
@@ -51,10 +51,21 @@ public class RedisCache {
         }
     }
 
+    /**
+     * 缓存数据-长期
+     * @param key key
+     * @param value 值
+     */
     public void set(String key, Object value) {
         set(key, value, NOT_EXPIRE);
     }
 
+    /**
+     * 获取数据，重新设置有效时间
+     * @param key
+     * @param expire
+     * @return
+     */
     public Object get(String key, long expire) {
         Object value = redisTemplate.opsForValue().get(key);
         if (expire != NOT_EXPIRE) {
@@ -81,18 +92,36 @@ public class RedisCache {
         return redisTemplate.opsForValue().increment(key);
     }
 
+    /**
+     * 判断是否有key
+     * @param key
+     * @return
+     */
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
 
+    /**
+     * 获取key集合
+     * @param pattern
+     * @return
+     */
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
     }
 
+    /**
+     * 删除缓存
+     * @param key
+     */
     public void delete(String key) {
         redisTemplate.delete(key);
     }
 
+    /**
+     * 删除缓存
+     * @param keys
+     */
     public void delete(Collection<String> keys) {
         redisTemplate.delete(keys);
     }
@@ -154,7 +183,7 @@ public class RedisCache {
     }
 
     /**
-     *
+     * 过期时间
      * @param key
      * @param expire 时长-秒
      */

@@ -1,5 +1,7 @@
 package com.finn.support.service.impl;
 
+import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.support.mapper.UserPostMapper;
 import com.finn.support.service.UserPostService;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  *
  */
 @Service
+@Ds(Constant.DYNAMIC_SYS_DB)
 public class UserPostServiceImpl implements UserPostService {
 
     private final UserPostMapper userPostMapper;

@@ -1,6 +1,7 @@
 package com.finn.support.cache;
 
 import com.finn.core.cache.RedisCache;
+import com.finn.core.cache.RedisKeys;
 import com.finn.support.vo.DictDataSingleVO;
 import com.finn.support.vo.DictVO;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,9 @@ public class DictCache {
     /**
      * 字典管理 KEY
      */
-    private final String SYSTEM_DICT_KEY = "system:dict:list:";
+    private final String SYSTEM_DICT_KEY = RedisKeys.PREFIX +  "dict:list:";
 
-    private final String SYSTEM_DICT_SINGLE_KEY = "system:dict:key:";
+    private final String SYSTEM_DICT_SINGLE_KEY = RedisKeys.PREFIX + "dict:key:";
 
     public DictCache(RedisCache redisCache){
         this.redisCache = redisCache;

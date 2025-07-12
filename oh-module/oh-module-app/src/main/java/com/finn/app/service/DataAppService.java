@@ -2,7 +2,6 @@ package com.finn.app.service;
 
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.query.DataAppQuery;
-import com.finn.app.query.DataFunctionAuthorityQuery;
 import com.finn.core.utils.PageResult;
 import com.finn.framework.entity.api.DataAppDTO;
 import org.apache.ibatis.annotations.Param;
@@ -24,8 +23,6 @@ public interface DataAppService{
     void update(DataAppDTO vo);
 
     void delete(List<Long> idList);
-
-    List<DataAppDTO> listAuthority(DataFunctionAuthorityQuery params);
 
     DataAppDTO findByClientId(String clientId);
 

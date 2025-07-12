@@ -1,7 +1,5 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.support.entity.UserPostEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +13,6 @@ import java.util.List;
 * @author 王小费 whx5710@qq.com
 */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
 public interface UserPostMapper {
 
     /**

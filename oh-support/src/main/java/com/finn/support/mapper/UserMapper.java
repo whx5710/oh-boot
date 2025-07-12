@@ -1,7 +1,5 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.annotations.Pages;
 import com.finn.support.entity.UserEntity;
 import com.finn.support.query.RoleUserQuery;
@@ -17,7 +15,6 @@ import java.util.List;
  *
  */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
 public interface UserMapper {
 
 	List<UserEntity> getList(@Param("params") UserQuery params);

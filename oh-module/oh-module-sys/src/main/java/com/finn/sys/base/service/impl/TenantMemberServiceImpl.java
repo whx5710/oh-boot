@@ -1,9 +1,9 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.core.exception.ServerException;
-import com.finn.framework.utils.ParamsBuilder;
+import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.PageResult;
@@ -39,9 +39,8 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     @Override
     public PageResult<TenantMemberVO> page(TenantMemberQuery query) {
-        Page<TenantMemberEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<TenantMemberEntity> list = tenantMemberMapper.tenantList(query);
-        return new PageResult<>(TenantMemberConvert.INSTANCE.convertList(list), page.getTotal());
+        Page<TenantMemberEntity> page = tenantMemberMapper.selectPageByWrapper(getQueryWrapper(query));
+        return new PageResult<>(TenantMemberConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     @Override
@@ -49,9 +48,9 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         AssertUtils.isBlank(vo.getTenantId(), "租户ID");
         TenantMemberEntity entity = TenantMemberConvert.INSTANCE.convert(vo);
         // 判断租户ID是否存在
-        ParamsBuilder<TenantMemberEntity> params = ParamsBuilder.of(TenantMemberEntity.class)
+        Wrapper<TenantMemberEntity> params = QueryWrapper.of(TenantMemberEntity.class)
                 .eq(TenantMemberEntity::getTenantId, entity.getTenantId()).eq(TenantMemberEntity::getDbStatus, 1);
-        List<TenantMemberEntity> list = tenantMemberMapper.selectListByParam(params);
+        List<TenantMemberEntity> list = tenantMemberMapper.selectListByWrapper(params);
         if(list != null && !list.isEmpty()){
             throw new ServerException("租户ID已存在！[" + list.getFirst().getTenantName()+ "]");
         }
@@ -62,18 +61,18 @@ public class TenantMemberServiceImpl implements TenantMemberService {
     @Override
     public void update(TenantMemberVO vo) {
         tenantMemberMapper.update(TenantMemberConvert.INSTANCE.convert(vo));
-        TenantMemberEntity entity = tenantMemberMapper.getById(vo.getId());
+        TenantMemberEntity entity = tenantMemberMapper.findById(vo.getId(), TenantMemberEntity.class);
         redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
     }
 
     @Override
     public TenantMemberEntity getById(Long id) {
-        return tenantMemberMapper.getById(id);
+        return tenantMemberMapper.findById(id, TenantMemberEntity.class);
     }
 
     @Override
     public void delete(Long id) {
-        TenantMemberEntity entity = tenantMemberMapper.getById(id);
+        TenantMemberEntity entity = tenantMemberMapper.findById(id, TenantMemberEntity.class);
         if(entity == null || entity.getId() == null){
             throw new ServerException("未找到对应租户信息，删除失败");
         }
@@ -85,11 +84,28 @@ public class TenantMemberServiceImpl implements TenantMemberService {
     }
 
     /**
+     * 构建查询条件
+     * @param query
+     * @return
+     */
+    private Wrapper<TenantMemberEntity> getQueryWrapper(TenantMemberQuery query){
+        return QueryWrapper.of(TenantMemberEntity.class).eq(TenantMemberEntity::getDbStatus, 1)
+                .like(TenantMemberEntity::getTenantName, query.getTenantName())
+                .eq(TenantMemberEntity::getStatus, query.getStatus())
+                .jointSQL("(tenant_name like concat('%',#{keyWord}, '%') " +
+                        "or tenant_id like concat('%',#{keyWord},'%') " +
+                        "or note like concat('%',#{keyWord}, '%'))","keyWord", query.getKeyWord())
+                .page(query.getPageNum(), query.getPageSize())
+                .orderBy("sort");
+    }
+
+    /**
      * 初始化
      */
     @PostConstruct
     private void init(){
-        List<TenantMemberEntity> list = tenantMemberMapper.tenantList(new TenantMemberQuery());
+        List<TenantMemberEntity> list = tenantMemberMapper.selectListByWrapper(QueryWrapper.of(TenantMemberEntity.class)
+                .eq(TenantMemberEntity::getDbStatus, 1).orderBy("sort"));
         redisCache.deleteAll(CommConstant.TENANT_PREFIX + "*");
         if(list != null){
             for(TenantMemberEntity item : list){

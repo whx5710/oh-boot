@@ -134,7 +134,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 刷新token
+     * 刷新token<br/>
+     * refreshToken 不重新生成，防止泄露可无限生成token
      * @param refreshToken 刷新token
      * @param request 请求
      * @return token
@@ -145,18 +146,20 @@ public class AuthServiceImpl implements AuthService {
         if(redisCache.hasKey(refreshKey)){
             RefreshTokenInfo userDetail = (RefreshTokenInfo) redisCache.get(refreshKey);
             String ip = IpUtils.getIpAddress(request);
-            // 删除老的刷新token
-            redisCache.delete(refreshKey);
-            if(userDetail.getIp().equals(ip)){
+            // 获取刷新token有效时间
+            Long expire = redisCache.getExpire(refreshKey);
+            // 请求IP相同，且刷新token有效时长大于1秒才重新生成token
+            if(userDetail.getIp().equals(ip) && expire > 1){
                 // 重新查询用户信息
                 UserEntity userEntity = userService.getUser(userDetail.getId());
                 UserDetail userDetailDb = (UserDetail) userService.getUserDetails(userEntity);
                 userDetailDb.setLoginTime(LocalDateTime.now());
                 userDetailDb.setIp(ip);
-                userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
+                // userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
+                // 防止无限可刷新token，此处使用旧的刷新token有效时间
+                userDetailDb.setRefreshTokenExpire(expire);
                 // 生成 accessToken
                 String accessToken = Tools.generator();
-                refreshToken = Tools.generator();
                 // 保存用户信息到缓存
                 tokenStoreCache.saveUser(accessToken, refreshToken, userDetailDb);
                 return new TokenVO(accessToken, refreshToken);

@@ -2,8 +2,9 @@ package com.finn.sys.base.service.impl;
 
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.TreeNode;
+import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.utils.ParamsBuilder;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.sys.base.vo.RouteMetaVO;
 import com.finn.sys.base.vo.RouteVO;
 import com.github.pagehelper.Page;
@@ -281,11 +282,11 @@ public class MenuServiceImpl implements MenuService {
         if(name == null || name.isEmpty()){
             return false;
         }else {
-            ParamsBuilder<MenuEntity> params = ParamsBuilder.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
+            Wrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }
-            return !menuMapper.selectListByParam(params).isEmpty();
+            return !menuMapper.selectListByWrapper(params).isEmpty();
         }
     }
 
@@ -294,11 +295,11 @@ public class MenuServiceImpl implements MenuService {
         if(path == null || path.isEmpty()){
             return false;
         }else {
-            ParamsBuilder<MenuEntity> params = ParamsBuilder.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
+            Wrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }
-            return !menuMapper.selectListByParam(params).isEmpty();
+            return !menuMapper.selectListByWrapper(params).isEmpty();
         }
     }
 

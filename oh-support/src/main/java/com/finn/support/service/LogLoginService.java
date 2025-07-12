@@ -44,4 +44,16 @@ public interface LogLoginService {
      * @return 统计情况
      */
     List<AnalysisVO> latestDateCount(int day, int operation);
+
+    /**
+     * 删除日志
+     * @param idList
+     */
+    void delete(List<Long> idList);
+
+    /**
+     * 根据日期删除日志（删除日期之前的数据）
+     * @param date
+     */
+    void deleteByDate(String date);
 }

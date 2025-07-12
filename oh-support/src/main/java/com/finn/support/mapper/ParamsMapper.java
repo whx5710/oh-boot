@@ -1,9 +1,8 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
+import com.finn.framework.datasource.mapper.BaseMapper;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.support.entity.ParamsEntity;
-import com.finn.support.query.ParamsQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,21 +15,17 @@ import java.util.List;
  * 
  */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
-public interface ParamsMapper {
+public interface ParamsMapper extends BaseMapper<ParamsEntity> {
 
     default boolean isExist(String paramKey) {
-        ParamsQuery query = new ParamsQuery();
-        query.setParamKey(paramKey);
-        List<ParamsEntity> list = getList(query);
+        List<ParamsEntity> list = selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+                .eq(ParamsEntity::getDbStatus, 1).eq(ParamsEntity::getParamKey, paramKey));
         return list != null && !list.isEmpty();
     }
 
-    List<ParamsEntity> getList(ParamsQuery query);
-
-    boolean updateById(ParamsEntity param);
+//    List<ParamsEntity> getList(ParamsQuery query);
 
     ParamsEntity getById(@Param("id")Long id);
 
-    int save(ParamsEntity param);
+//    int save(ParamsEntity param);
 }

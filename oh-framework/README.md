@@ -7,9 +7,10 @@ oh-framework是系统框架，依赖于`oh-core`包，包括鉴权拦截、数�
 - 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】
-- 支持Druid、Hikari连接池，可对连接池使用情况监控【2025年2月】
-- BaseMapper接口支持单表通用操作，通过ParamsBuilder构建sql，无需编写脚本【2025年3月】
+- 支持Druid、Hikari连接池【2025年2月】
+- BaseMapper接口支持单表通用操作：通过QueryWrapper构建sql，无需编写脚本【2025年3月】
 - 接口文档解决方案改用smart-doc + Torna 无侵入式，文档统一管理【2025年5月】
+- BaseMapper接口支持单表通用操作;新增插入(InsertWrapper)、修改（UpdateWrapper）、删除（DeleteWrapper）脚本构建方法，无需编写sql脚本【2025年6月】
 
 ## 结构说明
 - common     公共相关的

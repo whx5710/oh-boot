@@ -97,8 +97,8 @@ public class AuthController {
      * @param request
      * @return
      */
-    @PostMapping("refreshToken")
-    public Result<TokenVO> refreshToken(@RequestParam String refreshToken, HttpServletRequest request) {
+    @PostMapping("refresh")
+    public Result<TokenVO> refresh(@RequestParam String refreshToken, HttpServletRequest request) {
         AssertUtils.isBlank(refreshToken, "刷新token");
         return Result.ok(authService.refreshToken(refreshToken, request));
     }

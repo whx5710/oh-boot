@@ -1,7 +1,8 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.core.utils.ExcelUtils;
-import com.finn.framework.utils.ParamsBuilder;
+import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.core.cache.RedisCache;
@@ -44,14 +45,14 @@ public class LogOperateServiceImpl implements LogOperateService {
 
     @Override
     public PageResult<LogOperateVO> page(LogOperateQuery query) {
-        Page<LogOperateEntity> page = logOperateMapper.selectPageByParam(getParams(query)
+        Page<LogOperateEntity> page = logOperateMapper.selectPageByWrapper(getParams(query)
                 .page(query.getPageNum(), query.getPageSize()));
         return new PageResult<>(LogOperateConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     @Override
     public void export(LogOperateQuery query) {
-        List<LogOperateEntity> list = logOperateMapper.selectListByParam(getParams(query));
+        List<LogOperateEntity> list = logOperateMapper.selectListByWrapper(getParams(query));
         List<LogOperateVO> vo = LogOperateConvert.INSTANCE.convertList(list);
         ExcelUtils.excelExport(LogOperateVO.class, "操作日志", "日志", vo);
     }
@@ -61,8 +62,8 @@ public class LogOperateServiceImpl implements LogOperateService {
      * @param query
      * @return
      */
-    private ParamsBuilder<LogOperateEntity> getParams(LogOperateQuery query){
-        return ParamsBuilder.of(LogOperateEntity.class)
+    private Wrapper<LogOperateEntity> getParams(LogOperateQuery query){
+        return QueryWrapper.of(LogOperateEntity.class)
                 .eq(LogOperateEntity::getStatus, query.getStatus())
                 .like(LogOperateEntity::getRealName, query.getRealName())
                 .like(LogOperateEntity::getModule, query.getModule())

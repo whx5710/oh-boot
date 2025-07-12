@@ -16,7 +16,7 @@
             and (a.func_code like concat('%',#{keyWord}, '%') or a.client_id like concat('%',#{keyWord}, '%')
             or a.topic like concat('%',#{keyWord}, '%'))
         </if>
-        order by a.create_time desc
+        order by a.create_time desc, a.id desc
     </select>
 
     <insert id="insertDataMsg">
@@ -27,22 +27,5 @@
     <update id="deleteByDate">
         update data_message set db_status = 0,update_time = sysdate()
         where db_status = 1 and create_time &lt;= #{date}
-    </update>
-
-    <update id="updateById">
-        UPDATE data_message
-        <set>
-            <if test="clientId != null and clientId != ''">client_id = #{clientId},</if>
-            <if test="funcCode != null and funcCode != ''">func_code = #{funcCode},</if>
-            <if test="topic != null and topic != ''">topic = #{topic},</if>
-            <if test="jsonStr != null and jsonStr != ''">json_str = #{jsonStr},</if>
-            <if test="state != null and state != ''">state = #{state},</if>
-            <if test="resultMsg != null and resultMsg != ''">result_msg = #{resultMsg},</if>
-            <if test="note != null and note != ''">note = #{note},</if>
-            <if test="updater != null">updater = #{updater},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            update_time = #{updateTime}
-        </set>
-        WHERE id = #{id}
     </update>
 </mapper>

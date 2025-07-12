@@ -1,6 +1,7 @@
 package com.finn.support.cache;
 
 import com.finn.core.cache.RedisCache;
+import com.finn.core.cache.RedisKeys;
 import com.finn.support.entity.ParamsEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class ParamsCache {
     /**
      * 参数管理 KEY
      */
-    private final String SYSTEM_PARAMS_KEY = "system:params";
+    private final String SYSTEM_PARAMS_KEY = RedisKeys.PREFIX + "params";
 
     public ParamsCache(RedisCache redisCache) {
         this.redisCache = redisCache;

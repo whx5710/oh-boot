@@ -1,7 +1,11 @@
 package com.finn.support.service.impl;
 
+import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.annotations.Ds;
+import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.utils.UpdateWrapper;
+import com.finn.framework.datasource.utils.Wrapper;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.finn.support.cache.DictCache;
 import com.finn.support.convert.DictDataConvert;
 import com.finn.support.mapper.DictDataMapper;
@@ -18,7 +22,6 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.PageResult;
 import com.finn.support.convert.DictTypeConvert;
 import com.finn.support.service.DictTypeService;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ import java.util.List;
  *
  */
 @Service
+@Ds(Constant.DYNAMIC_SYS_DB)
 public class DictTypeServiceImpl implements DictTypeService {
     private final DictDataMapper dictDataMapper;
     private final DictTypeMapper dictTypeMapper;
@@ -51,15 +55,14 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Override
     public PageResult<DictTypeVO> page(DictTypeQuery query) {
-        Page<DictTypeEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<DictTypeEntity> list = dictTypeMapper.getList(query);
-        return new PageResult<>(DictTypeConvert.INSTANCE.convertList(list), page.getTotal());
+        Page<DictTypeEntity> page = dictTypeMapper.selectPageByWrapper(getDictTypeQuery(query));
+        return new PageResult<>(DictTypeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
     @Override
     public void save(DictTypeVO vo) {
         DictTypeEntity entity = DictTypeConvert.INSTANCE.convert(vo);
 
-        dictTypeMapper.save(entity);
+        dictTypeMapper.insert(entity);
     }
 
     @Override
@@ -70,17 +73,13 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Override
     public void delete(List<Long> idList) {
-        idList.forEach(id -> {
-            DictTypeEntity param = new DictTypeEntity();
-            param.setId(id);
-            param.setDbStatus(0);
-            dictTypeMapper.updateById(param);
-        });
+        dictTypeMapper.updateByWrapper(UpdateWrapper.of(DictTypeEntity.class).set(DictTypeEntity::getDbStatus, 0)
+                .in(DictTypeEntity::getId, idList));
     }
 
     @Override
     public List<DictVO.DictData> getDictSql(Long id) {
-        DictTypeEntity entity = dictTypeMapper.getById(id);
+        DictTypeEntity entity = dictTypeMapper.findById(id, DictTypeEntity.class);
         try {
             return dictDataMapper.getListForSql(entity.getDictSql());
         } catch (Exception e) {
@@ -91,7 +90,7 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Override
     public List<DictVO> getDictList() {
         // 全部字典类型列表
-        List<DictTypeEntity> typeList = dictTypeMapper.getList(new DictTypeQuery());
+        List<DictTypeEntity> typeList = dictTypeMapper.selectListByWrapper(getDictTypeQuery(null));
 
         // 全部字典数据列表
         DictDataQuery query = new DictDataQuery();
@@ -108,7 +107,6 @@ public class DictTypeServiceImpl implements DictTypeService {
                     dict.getDataList().add(new DictVO.DictData(data.getDictLabel(), data.getDictValue(), data.getLabelClass()));
                 }
             }
-
             // 数据来源动态SQL
             if (type.getDictSource() == DictSourceEnum.SQL.getValue()) {
                 // 增加动态列表
@@ -119,10 +117,8 @@ public class DictTypeServiceImpl implements DictTypeService {
                     log.error("增加动态字典异常: type={}", type, e);
                 }
             }
-
             dictList.add(dict);
         }
-
         return dictList;
     }
 
@@ -147,12 +143,25 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Override
     public DictTypeEntity getById(Long id) {
-        return dictTypeMapper.getById(id);
+        return dictTypeMapper.findById(id, DictTypeEntity.class);
     }
 
-    @PostConstruct
-    public void init() {
-        log.debug("加载字典数据到Redis缓存中");
-        refreshTransCache();
+    /**
+     * 构建查询条件
+     * @param query
+     * @return
+     */
+    private Wrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
+        if(query == null){
+            return QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1);
+        }else{
+            return QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1)
+                    .like(DictTypeEntity::getDictType, query.getDictType())
+                    .like(DictTypeEntity::getDictName, query.getDictName())
+                    .jointSQL("(dict_name like concat('%',#{keyWords}, '%') " +
+                            "or dict_type like concat('%',#{keyWords}, '%') " +
+                            "or remark like concat('%',#{keyWords}, '%'))","keyWords", query.getKeyWords())
+                    .orderBy("sort").page(query.getPageNum(), query.getPageSize());
+        }
     }
 }

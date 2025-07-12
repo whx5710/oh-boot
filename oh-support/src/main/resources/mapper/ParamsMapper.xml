@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.finn.support.mapper.ParamsMapper">
-    <select id="getList" resultType="com.finn.support.entity.ParamsEntity">
+    <!--<select id="getList" resultType="com.finn.support.entity.ParamsEntity">
         select * from sys_params where db_status = 1
         <if test="paramValue != null and paramValue != ''">and param_value = #{paramValue}</if>
         <if test="paramKey != null and paramKey != ''">and param_key = #{paramKey}</if>
@@ -18,9 +18,9 @@
             </foreach>
         </if>
         order by id desc
-    </select>
+    </select>-->
 
-    <update id="updateById">
+    <!--<update id="updateById">
         UPDATE sys_params
         <set>
             <if test="paramName != null and paramName != ''">param_name = #{paramName},</if>
@@ -33,14 +33,14 @@
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
-    </update>
+    </update>-->
 
     <select id="getById" resultType="com.finn.support.entity.ParamsEntity">
         select * from sys_params where id = #{id}
     </select>
 
-    <insert id="save">
+    <!--<insert id="save">
         INSERT INTO sys_params (param_name, param_type, param_key, param_value, remark, db_status, creator, create_time)
         VALUES (#{paramName}, #{paramType}, #{paramKey}, #{paramValue}, #{remark}, #{dbStatus}, #{creator}, #{createTime})
-    </insert>
+    </insert>-->
 </mapper>

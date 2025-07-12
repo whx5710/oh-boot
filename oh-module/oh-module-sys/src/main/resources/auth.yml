@@ -2,7 +2,7 @@ auth:
   ignore-urls:
     - /sys/auth/captcha
     - /sys/auth/login
-    - /sys/auth/refreshToken
+    - /sys/auth/refresh
     - /sys/auth/loginByKey
     - /sys/auth/send/code
     - /sys/auth/mobile

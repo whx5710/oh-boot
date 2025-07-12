@@ -89,6 +89,12 @@ public class LogOperateVO implements Serializable {
     private Integer operateType;
 
     /**
+     * 操作类型
+     */
+    @ExcelProperty(value = "操作类型")
+    private String operateTypeLabel;
+
+    /**
      * 执行时长
      */
     @ExcelProperty(value = "执行时长(毫秒)")
@@ -253,5 +259,13 @@ public class LogOperateVO implements Serializable {
 
     public void setTenantName(String tenantName) {
         this.tenantName = tenantName;
+    }
+
+    public String getOperateTypeLabel() {
+        return operateTypeLabel;
+    }
+
+    public void setOperateTypeLabel(String operateTypeLabel) {
+        this.operateTypeLabel = operateTypeLabel;
     }
 }

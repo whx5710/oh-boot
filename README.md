@@ -13,8 +13,9 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】
 - 支持Druid、Hikari连接池【2025年2月】
-- BaseMapper接口支持单表通用操作，通过ParamsBuilder构建sql，无需编写脚本【2025年3月】
+- BaseMapper接口支持单表通用操作：通过QueryWrapper构建sql，无需编写脚本【2025年3月】
 - 接口文档解决方案改用smart-doc + Torna 无侵入式，文档统一管理【2025年5月】
+- BaseMapper接口支持单表通用操作;新增插入(InsertWrapper)、修改（UpdateWrapper）、删除（DeleteWrapper）脚本构建方法，无需编写sql脚本【2025年6月】
 - 工程代码：https://gitee.com/whx233/oh-boot
 - - 独立系统管理 https://gitee.com/whx233/oh-sys (从oh-boot剥离)
 - - 前端工程    https://gitee.com/whx233/oh-admin (暂未开源 Vue3)

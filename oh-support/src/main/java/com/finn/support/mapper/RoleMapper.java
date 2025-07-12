@@ -1,7 +1,5 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.support.entity.RoleEntity;
 import com.finn.support.query.RoleQuery;
@@ -16,7 +14,6 @@ import java.util.List;
  * 
  */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
 public interface RoleMapper {
 
 

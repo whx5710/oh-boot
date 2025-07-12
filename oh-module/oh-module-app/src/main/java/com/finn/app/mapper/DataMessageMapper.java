@@ -1,5 +1,6 @@
 package com.finn.app.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.github.pagehelper.Page;
 import com.finn.app.entity.DataMsgEntity;
 import com.finn.app.query.DataMsgQuery;
@@ -15,7 +16,7 @@ import org.apache.ibatis.annotations.Param;
 * @since 1.0.0 2023-07-21
 */
 @Mapper
-public interface DataMessageMapper {
+public interface DataMessageMapper extends BaseMapper<DataMsgEntity> {
 
     @Pages // 分页注解
     Page<DataMsgVO> getList(DataMsgQuery query);
@@ -24,5 +25,5 @@ public interface DataMessageMapper {
 
     boolean deleteByDate(@Param("date")String date);
 
-    boolean updateById(DataMsgEntity param);
+//    boolean updateById(DataMsgEntity param);
 }

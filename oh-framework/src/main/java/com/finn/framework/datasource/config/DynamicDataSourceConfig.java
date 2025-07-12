@@ -3,6 +3,7 @@ package com.finn.framework.datasource.config;
 import com.finn.framework.common.properties.DataSourceProperty;
 import com.finn.framework.common.properties.DynamicDataSourceProperties;
 import com.finn.framework.datasource.service.HandleDataSource;
+import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +27,12 @@ public class DynamicDataSourceConfig extends HandleDataSource {
 
     private final DynamicDataSourceProperties dynamicDataSourceProperties;
 
-    public DynamicDataSourceConfig(DynamicDataSourceProperties dynamicDataSourceProperties){
+    private final MybatisProperties mybatisProperties;
+
+    public DynamicDataSourceConfig(DynamicDataSourceProperties dynamicDataSourceProperties,
+                                   MybatisProperties mybatisProperties){
         this.dynamicDataSourceProperties = dynamicDataSourceProperties;
+        this.mybatisProperties = mybatisProperties;
     }
 
     /**
@@ -64,6 +69,6 @@ public class DynamicDataSourceConfig extends HandleDataSource {
         // 系统管理内置数据源key
         String sysDb = dynamicDataSourceProperties.getSysDataSource().getSysDefault();
         // 组装数据源
-        return buildDs(dataSourceMap, primary, sysDb);
+        return buildDs(dataSourceMap, primary, sysDb, mybatisProperties);
     }
 }

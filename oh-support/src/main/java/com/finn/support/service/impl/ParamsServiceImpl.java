@@ -1,8 +1,12 @@
 package com.finn.support.service.impl;
 
+import com.finn.core.constant.Constant;
+import com.finn.framework.datasource.annotations.Ds;
+import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.utils.UpdateWrapper;
+import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.JsonUtils;
 import com.finn.support.cache.ParamsCache;
@@ -11,7 +15,6 @@ import com.finn.support.query.ParamsQuery;
 import com.finn.support.vo.ParamsVO;
 import com.finn.support.convert.ParamsConvert;
 import com.finn.support.service.ParamsService;
-import jakarta.annotation.PostConstruct;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.PageResult;
 import com.finn.support.entity.ParamsEntity;
@@ -29,6 +32,7 @@ import java.util.Map;
  *
  */
 @Service
+@Ds(Constant.DYNAMIC_SYS_DB)
 public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements ParamsService {
 
     private final ParamsCache paramsCache;
@@ -40,20 +44,10 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
         this.paramsMapper = paramsMapper;
     }
 
-    @PostConstruct
-    public void init() {
-        // 查询列表
-        List<ParamsEntity> list = paramsMapper.getList(null);
-
-        // 保存到缓存
-        paramsCache.saveList(list);
-    }
-
     @Override
     public PageResult<ParamsVO> page(ParamsQuery query) {
-        Page<ParamsEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<ParamsEntity> list = paramsMapper.getList(query);
-        return new PageResult<>(ParamsConvert.INSTANCE.convertList(list), page.getTotal());
+        Page<ParamsEntity> page = paramsMapper.selectPageByWrapper(getQueryWrapper(query));
+        return new PageResult<>(ParamsConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     @Override
@@ -68,7 +62,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
 
         ParamsEntity entity = ParamsConvert.INSTANCE.convert(vo);
 
-        paramsMapper.save(entity);
+        paramsMapper.insert(entity);
 
         // 保存到缓存
         paramsCache.save(entity.getParamKey(), entity.getParamValue());
@@ -99,19 +93,14 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
 
     @Override
     public void delete(List<Long> idList) {
+        // 删除数据
+        paramsMapper.updateByWrapper(UpdateWrapper.of(ParamsEntity.class).set(ParamsEntity::getDbStatus, 0)
+                .in(ParamsEntity::getId, idList));
+
         // 查询列表
         ParamsQuery query = new ParamsQuery();
         query.setIdList(idList);
-        List<ParamsEntity> list = paramsMapper.getList(query);
-
-        // 删除数据
-        idList.forEach(id -> {
-            ParamsEntity param = new ParamsEntity();
-            param.setDbStatus(0);
-            param.setId(id);
-            paramsMapper.updateById(param);
-        });
-
+        List<ParamsEntity> list = paramsMapper.selectListByWrapper(getQueryWrapper(query));
         // 删除缓存
         String[] keys = list.stream().map(ParamsEntity::getParamKey).toArray(String[]::new);
         paramsCache.del(keys);
@@ -181,9 +170,8 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
      */
     @Override
     public ParamsEntity getByKey(String key) {
-        ParamsQuery query = new ParamsQuery();
-        query.setParamKey(key);
-        List<ParamsEntity> list = paramsMapper.getList(query);
+        List<ParamsEntity> list = paramsMapper.selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+                .eq(ParamsEntity::getDbStatus,1).eq(ParamsEntity::getParamKey, key));
         if(!list.isEmpty()){
             return list.getFirst();
         }
@@ -219,8 +207,29 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
             return false;
         }else {
             entity.setDbStatus(0);
-            return paramsMapper.updateById(entity);
+            return paramsMapper.updateById(entity) > 0;
         }
     }
 
+    /**
+     *
+     * @param query
+     * @return
+     */
+    private Wrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
+        if(query == null){
+            return QueryWrapper.of(ParamsEntity.class);
+        }else{
+            return QueryWrapper.of(ParamsEntity.class).eq(ParamsEntity::getParamKey, query.getParamKey())
+                    .eq(ParamsEntity::getParamValue, query.getParamValue())
+                    .eq(ParamsEntity::getParamType, query.getParamType())
+                    .in(ParamsEntity::getId, query.getIdList())
+                    .eq(ParamsEntity::getDbStatus, 1)
+                    .jointSQL("(param_name like concat('%',#{keyWord}, '%') " +
+                            "or param_value like concat('%',#{keyWord}, '%') " +
+                            "or param_key like concat('%',#{keyWord}, '%') " +
+                            "or remark like concat('%',#{keyWord}, '%'))","keyWord", query.getKeyWord())
+                    .page(query.getPageNum(), query.getPageSize());
+        }
+    }
 }

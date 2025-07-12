@@ -42,7 +42,26 @@ public class TokenStoreCache {
             user.setTenantId(""); // 租户ID为空，都用空字符串
         }
         redisCache.set(key, user, securityProperties.getAccessTokenExpire());
-        // 刷新token
+
+        // 刷新token，如果是重新刷新token，刷新token使用旧的有效期
+        if(refreshToken != null && !refreshToken.isEmpty()){
+            RefreshTokenInfo refreshTokenInfo = getRefreshTokenInfo(accessToken, refreshToken, user);
+            String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
+            redisCache.set(refreshKey, refreshTokenInfo, user.getRefreshTokenExpire());
+        }
+
+        // 用户信息
+        redisCache.set(RedisKeys.getUserInfoKey(String.valueOf(user.getId()), accessToken), user, securityProperties.getAccessTokenExpire());
+    }
+
+    /**
+     * 生成刷新token
+     * @param accessToken
+     * @param refreshToken
+     * @param user
+     * @return
+     */
+    private static RefreshTokenInfo getRefreshTokenInfo(String accessToken, String refreshToken, UserDetail user) {
         RefreshTokenInfo refreshTokenInfo = new RefreshTokenInfo();
         refreshTokenInfo.setId(user.getId());
         refreshTokenInfo.setUsername(user.getUsername());
@@ -51,10 +70,8 @@ public class TokenStoreCache {
 
         refreshTokenInfo.setRefreshToken(refreshToken); // 刷新token
         refreshTokenInfo.setAccessToken(accessToken); // token
-        String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
-        redisCache.set(refreshKey, refreshTokenInfo, securityProperties.getRefreshTokenExpire());
-        // 用户信息
-        redisCache.set(RedisKeys.getUserInfoKey(String.valueOf(user.getId()), accessToken), user, securityProperties.getAccessTokenExpire());
+        refreshTokenInfo.setExpiresIn(user.getRefreshTokenExpire()); // 刷新token有效时长
+        return refreshTokenInfo;
     }
 
     /**

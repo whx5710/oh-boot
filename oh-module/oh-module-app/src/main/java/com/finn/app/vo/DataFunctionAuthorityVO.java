@@ -5,7 +5,6 @@ import com.finn.core.utils.DateUtils;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
 * 客户端接口授权
@@ -27,11 +26,6 @@ public class DataFunctionAuthorityVO implements Serializable {
 	 * 功能号
 	 */
 	private String funcCode;
-
-	/**
-	 * 功能号列表
-	 */
-	private List<String> funcCodes;
 
 	/**
 	 * 备注
@@ -142,11 +136,4 @@ public class DataFunctionAuthorityVO implements Serializable {
 		this.appName = appName;
 	}
 
-	public List<String> getFuncCodes() {
-		return funcCodes;
-	}
-
-	public void setFuncCodes(List<String> funcCodes) {
-		this.funcCodes = funcCodes;
-	}
 }

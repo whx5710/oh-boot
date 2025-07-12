@@ -1,5 +1,6 @@
 package com.finn.app.controller;
 
+import com.finn.app.service.DataFunctionAuthorityService;
 import com.finn.core.constant.Constant;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.PageResult;
@@ -12,7 +13,6 @@ import com.finn.app.query.DataAppQuery;
 import com.finn.app.query.DataMsgQuery;
 import com.finn.app.service.DataAppService;
 import com.finn.app.service.DataMsgService;
-import com.finn.app.utils.RunnerHandler;
 import com.finn.app.vo.DataMsgVO;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class DataAppController {
     DataAppService dataAppService;
 
     @Resource
-    RunnerHandler runnerHandler;
+    DataFunctionAuthorityService dataFunctionAuthorityService;
 
     @Resource
     DataMsgService dataMsgService;
@@ -108,7 +108,7 @@ public class DataAppController {
     // 刷新权限
     @GetMapping("/appAuthority")
     public Result<String> appAuthority(){
-        runnerHandler.appAuthority();
+        dataFunctionAuthorityService.refreshAppAuthority(null);
         return Result.ok();
     }
 

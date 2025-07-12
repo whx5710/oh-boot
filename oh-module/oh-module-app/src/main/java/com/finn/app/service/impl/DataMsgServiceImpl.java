@@ -3,6 +3,7 @@ package com.finn.app.service.impl;
 import com.finn.app.convert.DataMsgConvert;
 import com.finn.core.entity.HashDto;
 import com.finn.core.utils.*;
+import com.finn.framework.datasource.utils.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
@@ -82,12 +83,8 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @Override
     public void delete(List<Long> idList) {
-        idList.forEach(id -> {
-            DataMsgEntity param = new DataMsgEntity();
-            param.setId(id);
-            param.setDbStatus(0);
-            dataMessageMapper.updateById(param);
-        });
+        dataMessageMapper.updateByWrapper(UpdateWrapper.of(DataMsgEntity.class)
+                .set(DataMsgEntity::getDbStatus, 0).in(DataMsgEntity::getId, idList));
     }
 
     /**
@@ -105,8 +102,8 @@ public class DataMsgServiceImpl implements DataMsgService {
         SqlSession sqlSession = null;
         try {
             String key = RedisKeys.getDataMsgKey();
-            // 每次插入800条
-            int count = 800;
+            // 每次插入1000条
+            int count = 1000;
             List<DataMsgEntity> list = new ArrayList<>();
             for (int i = 0; i < count; i++) {
                 MsgEntity msgEntity = (MsgEntity) redisCache.rightPop(key);
@@ -224,13 +221,14 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @PostConstruct
     public void saveLogJob() {
-        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(2);
-        //提交固定周期任务
-        ScheduledFuture<?> runnableFuture = scheduledThreadPoolExecutor.scheduleAtFixedRate(this::saveMsgLog, 1,30, TimeUnit.SECONDS);
-        //设置为true
-        //scheduledThreadPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(true);
-        //关闭线程池
-        //scheduledThreadPoolExecutor.shutdown();
+        try(ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(5);) {
+            //提交固定周期任务
+            ScheduledFuture<?> runnableFuture = scheduledThreadPoolExecutor.scheduleAtFixedRate(this::saveMsgLog, 1,10, TimeUnit.SECONDS);
+            //设置为true
+            //scheduledThreadPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(true);
+            //关闭线程池
+            //scheduledThreadPoolExecutor.shutdown();
+        }
     }
 
 }

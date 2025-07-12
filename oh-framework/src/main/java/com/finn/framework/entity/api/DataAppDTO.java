@@ -19,21 +19,33 @@ public class DataAppDTO {
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
-	//@Schema(description = "客户端名称")
+	/**
+	 * 客户端名称
+	 */
 	private String name;
 
-	//@Schema(description = "客户端ID")
+	/**
+	 * 客户端ID
+	 */
 	private String clientId;
 
-	//@Schema(description = "密钥")
+	/**
+	 * 密钥
+	 */
 	private String secretKey;
 
-	//@Schema(description = "备注")
+	/**
+	 * 备注
+	 */
 	private String remark;
 
-	//@Schema(description = "是否异步0否1是")
+	/**
+	 * 是否异步0否1是
+	 */
 	private Boolean isAsync;
-	// 功能号
+	/**
+	 * 功能号
+	 */
 	private String funcCode;
 
 	private String funcName;

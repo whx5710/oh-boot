@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 
 
 /**
- * 数据源切换
+ * 数据源切换拦截
  * @author 王小费 whx5710@qq.com
  */
 @Aspect

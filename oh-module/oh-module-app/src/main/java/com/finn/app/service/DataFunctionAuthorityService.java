@@ -26,4 +26,6 @@ public interface DataFunctionAuthorityService {
     void make(DataFunctionAuthorityVO data);
 
     DataFunctionAuthorityEntity getById(Long id);
+    // 刷新缓存
+    void refreshAppAuthority(String clientId);
 }

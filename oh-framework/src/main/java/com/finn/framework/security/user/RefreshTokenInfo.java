@@ -17,16 +17,30 @@ public class RefreshTokenInfo extends SuperEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
+    /**
+     * 用户名
+     */
     private String username;
-
+    /**
+     * 昵称
+     */
     private String realName;
-
+    /**
+     * token
+     */
     private String accessToken;
-
+    /**
+     * 刷新token
+     */
     private String refreshToken;
-
+    /**
+     * IP地址
+     */
     private String ip;
+    /**
+     * 过期时间-秒 默认2小时
+     */
+    private Long expiresIn = 7200L;
 
     public Long getId() {
         return id;
@@ -74,5 +88,13 @@ public class RefreshTokenInfo extends SuperEntity implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Long getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
     }
 }

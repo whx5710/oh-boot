@@ -29,8 +29,10 @@
     
     <select id="getList">
         select * from data_app where db_status = 1
-        <if test="keyWord != null and keyWord != ''">and (client_id like concat('%', #{keyWord}, '%') or name like concat('%', #{keyWord}, '%'))</if>
+        <if test="keyWord != null and keyWord != ''">and (client_id like concat('%', #{keyWord}, '%') or name like concat('%', #{keyWord}, '%')
+            or remark like concat('%', #{keyWord}, '%'))</if>
         <if test="clientId != null and clientId != ''">and client_id = #{clientId}</if>
+        order by create_time desc
     </select>
 
     <insert id="insertDataApp">

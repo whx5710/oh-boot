@@ -1,7 +1,5 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.support.entity.LogLoginEntity;
 import com.finn.support.query.LogLoginQuery;
@@ -18,7 +16,6 @@ import java.util.List;
  * 
  */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
 public interface LogLoginMapper extends BaseMapper<LogLoginEntity> {
 
     /**

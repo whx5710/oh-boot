@@ -1,7 +1,8 @@
 package com.finn.sys.base.service.impl;
 
 import com.finn.core.utils.PageResult;
-import com.finn.framework.utils.ParamsBuilder;
+import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.sys.base.convert.VersionInfoConvert;
 import com.finn.sys.base.entity.VersionInfoEntity;
 import com.finn.sys.base.mapper.VersionInfoMapper;
@@ -30,13 +31,13 @@ public class VersionInfoServiceImpl implements VersionInfoService {
 
     @Override
     public PageResult<VersionInfoVO> page(VersionInfoQuery query) {
-        ParamsBuilder<VersionInfoEntity> param = ParamsBuilder.of(VersionInfoEntity.class)
+        Wrapper<VersionInfoEntity> param = QueryWrapper.of(VersionInfoEntity.class)
                 .eq(VersionInfoEntity::getIsCurrVersion, query.getCurrVersion())
                 .eq(VersionInfoEntity::getDbStatus, 1)
                 .pageNum(query.getPageNum()).pageSize(query.getPageSize())
                 .jointSQL("(content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))",
                         "keyWord", query.getKeyWord());
-        try (Page<VersionInfoEntity> page = versionInfoMapper.selectPageByParam(param)) {
+        try (Page<VersionInfoEntity> page = versionInfoMapper.selectPageByWrapper(param)) {
             return new PageResult<>(VersionInfoConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }

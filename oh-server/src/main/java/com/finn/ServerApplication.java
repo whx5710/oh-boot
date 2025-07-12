@@ -34,6 +34,7 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.net.InetAddress;
 
@@ -41,6 +42,7 @@ import java.net.InetAddress;
  * 项目启动入口
  * 可设置到其他模块中，注意引入模块
  */
+@EnableAsync
 @SpringBootApplication
 public class ServerApplication extends SpringBootServletInitializer implements ApplicationRunner {
 	private final Logger log = LoggerFactory.getLogger(ServerApplication.class);

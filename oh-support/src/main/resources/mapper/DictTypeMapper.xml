@@ -3,7 +3,7 @@
 
 <mapper namespace="com.finn.support.mapper.DictTypeMapper">
 
-    <select id="getList" resultType="com.finn.support.entity.DictTypeEntity">
+    <!--<select id="getList" resultType="com.finn.support.entity.DictTypeEntity">
         select * from sys_dict_type where db_status = 1
         <if test="dictType != null and dictType != ''">and dict_type like concat('%',#{dictType}, '%')</if>
         <if test="dictName != null and dictName != ''">and dict_name like concat('%',#{dictName}, '%')</if>
@@ -12,14 +12,14 @@
             or remark like concat('%',#{keyWords}, '%'))
         </if>
         order by sort
-    </select>
+    </select>-->
 
-    <insert id="save">
+    <!--<insert id="save">
         INSERT INTO sys_dict_type ( dict_type, dict_name, dict_source, dict_sql, remark, sort, db_status, creator, create_time )
         VALUES ( #{dictType}, #{dictName}, #{dictSource}, #{dictSql}, #{remark}, #{sort}, #{dbStatus}, #{creator}, #{createTime} )
-    </insert>
+    </insert>-->
 
-    <update id="updateById">
+    <!--<update id="updateById">
         UPDATE sys_dict_type
         <set>
             <if test="dictType != null and dictType != ''">dict_type = #{dictType},</if>
@@ -33,5 +33,5 @@
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
-    </update>
+    </update>-->
 </mapper>

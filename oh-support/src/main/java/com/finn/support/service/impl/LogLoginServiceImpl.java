@@ -1,12 +1,15 @@
 package com.finn.support.service.impl;
 
 import com.finn.core.constant.Constant;
+import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ExcelUtils;
 import com.finn.core.utils.HttpContextUtils;
 import com.finn.core.utils.IpUtils;
 import com.finn.core.utils.PageResult;
 import com.finn.framework.datasource.annotations.Ds;
-import com.finn.framework.utils.ParamsBuilder;
+import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.utils.DeleteWrapper;
+import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.support.convert.LogLoginConvert;
 import com.finn.support.entity.LogLoginEntity;
 import com.finn.support.mapper.LogLoginMapper;
@@ -38,7 +41,7 @@ public class LogLoginServiceImpl implements LogLoginService {
 
     @Override
     public PageResult<LogLoginVO> page(LogLoginQuery query) {
-        try (Page<LogLoginEntity> page = logLoginMapper.selectPageByParam(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
+        try (Page<LogLoginEntity> page = logLoginMapper.selectPageByWrapper(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
             return new PageResult<>(LogLoginConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
@@ -65,7 +68,7 @@ public class LogLoginServiceImpl implements LogLoginService {
 
     @Override
     public void export(LogLoginQuery query) {
-        List<LogLoginEntity> list = logLoginMapper.selectListByParam(buildParams(query));
+        List<LogLoginEntity> list = logLoginMapper.selectListByWrapper(buildParams(query));
         List<LogLoginVO> logLoginVOS = LogLoginConvert.INSTANCE.convertList(list);
         ExcelUtils.excelExport(LogLoginVO.class, "登录日志", "日志", logLoginVOS);
     }
@@ -81,8 +84,29 @@ public class LogLoginServiceImpl implements LogLoginService {
         return logLoginMapper.latestDateCount(day, operation);
     }
 
-    private ParamsBuilder<LogLoginEntity> buildParams(LogLoginQuery query){
-        return ParamsBuilder.of(LogLoginEntity.class)
+    @Override
+    public void delete(List<Long> idList) {
+        if(idList == null || idList.isEmpty()){
+            throw new ServerException("ID不能为空");
+        }
+        for(Long id: idList){
+            LogLoginEntity log = new LogLoginEntity();
+            log.setId(id);
+            logLoginMapper.delete(log);
+        }
+    }
+
+    /**
+     * 根据日期删除日志（删除日期之前的数据）
+     * @param date
+     */
+    @Override
+    public void deleteByDate(String date) {
+        logLoginMapper.deleteByWrapper(DeleteWrapper.of(LogLoginEntity.class).le(LogLoginEntity::getCreateTime, date));
+    }
+
+    private Wrapper<LogLoginEntity> buildParams(LogLoginQuery query){
+        return QueryWrapper.of(LogLoginEntity.class)
                 .like(LogLoginEntity::getUsername, query.getUsername())
                 .like(LogLoginEntity::getAddress, query.getAddress())
                 .eq(LogLoginEntity::getStatus, query.getStatus())

@@ -4,12 +4,16 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ReflectUtil;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableId;
-import com.finn.framework.utils.ParamsSQL;
+import com.finn.framework.datasource.utils.InsertWrapper;
+import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.utils.DeleteWrapper;
+import com.finn.framework.datasource.utils.UpdateWrapper;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,8 +26,11 @@ import java.util.List;
 public class ModifyProviderService {
 
     public static final String INSERT = "insert";
+    public static final String INSERT_PARAM = "insertByWrapper";
     public static final String UPDATE = "updateById";
     public static final String DELETE = "delete";
+    public static final String DELETE_PARAM = "deleteByWrapper";
+    public static final String UPDATE_PARAM = "updateByWrapper";
 
     private final Logger log = LoggerFactory.getLogger(ModifyProviderService.class);
 
@@ -34,16 +41,29 @@ public class ModifyProviderService {
      * @param <T> t
      */
     public <T> String insert(T entity) {
+        HashMap<String, Boolean> judge = new HashMap<>(); // 判断字段是否存在
         SQL sql = new SQL();
         Class<?> clazz = entity.getClass();
-        String tableName = ParamsSQL.getTableName(clazz);
+        String tableName = Wrapper.getTableName(clazz);
         List<Field> fields = ReflectUtil.getFields(clazz);
         sql.INSERT_INTO(tableName);
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
-                    sql.VALUES(annotation.value(), "#{" + field.getName() + "}");
+                    if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
+                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
+                        log.warn("子类有覆盖 {} 字段，不新增该字段", annotation.value());
+                    }else{
+                        sql.VALUES(annotation.value(), "#{" + field.getName() + "}");
+                    }
+                }else{
+                    // 如果子类覆盖了父类的属性，存在 exists = false的情况
+                    String key = annotation.value()==null?field.getName():annotation.value();
+                    if(key.equals("")){
+                        key = field.getName();
+                    }
+                    judge.put(key, annotation.exists());
                 }
             } else {
                 // 无注解的字段默认成与数据库字段一致
@@ -61,9 +81,10 @@ public class ModifyProviderService {
      * @param <T> p
      */
     public <T> String updateById(T entity) {
+        HashMap<String, Boolean> judge = new HashMap<>(); // 判断字段是否存在
         Class<?> clazz = entity.getClass();
         List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
-        String tableName = ParamsSQL.getTableName(clazz); // 表名
+        String tableName = Wrapper.getTableName(clazz); // 表名
         boolean hasId = false;
         boolean hasMultipleId = false;
         SQL sql = new SQL();
@@ -72,18 +93,30 @@ public class ModifyProviderService {
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
-                    if (annotation.value().equals("id")) {
-                        hasId = true;
-                    }
-                    // 不为空才更新
-                    try {
-                        Object object = ReflectUtil.getValue(entity, field.getName());
-                        if(object != null){
-                            sql.SET(annotation.value() + " = #{" + field.getName() + "}");
+                    if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
+                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
+                        log.warn("子类有覆盖 {} 字段，不更新该字段", annotation.value());
+                    }else{
+                        if (annotation.value().equals("id")) {
+                            hasId = true;
                         }
-                    }catch (NoSuchFieldException e){
-                        log.warn("无{}属性！", field.getName());
+                        // 不为空才更新
+                        try {
+                            Object object = ReflectUtil.getValue(entity, field.getName());
+                            if(object != null){
+                                sql.SET(annotation.value() + " = #{" + field.getName() + "}");
+                            }
+                        }catch (NoSuchFieldException e){
+                            log.warn("无{}属性！", field.getName());
+                        }
                     }
+                }else{
+                    // 如果子类覆盖了父类的属性，存在 exists = false的情况
+                    String key = annotation.value()==null?field.getName():annotation.value();
+                    if(key.equals("")){
+                        key = field.getName();
+                    }
+                    judge.put(key, annotation.exists());
                 }
             }else if(field.isAnnotationPresent(TableId.class)){
                 TableId tableId = field.getAnnotation(TableId.class);
@@ -127,7 +160,7 @@ public class ModifyProviderService {
      */
     public <T> String delete(T entity) {
         Class<?> clazz = entity.getClass();
-        String tableName = ParamsSQL.getTableName(clazz); // 表名
+        String tableName = Wrapper.getTableName(clazz); // 表名
         List<Field> fields = ReflectUtil.getFields(clazz); // 属性列表
         boolean hasId = false;
         boolean hasMultipleId = false;
@@ -159,4 +192,34 @@ public class ModifyProviderService {
         log.debug("生成删除SQL: {}", sql);
         return sql.toString();
     }
+
+    /**
+     * 删除
+     * @param fp
+     * @return
+     * @param <T>
+     */
+    public <T> String deleteByWrapper(DeleteWrapper<T> fp){
+        return fp.getSql().toString();
+    }
+
+    /**
+     * 修改sql
+     * @param fp 参数 + sql
+     * @return sql
+     * @param <T> c
+     */
+    public <T> String updateByWrapper(UpdateWrapper<T> fp){
+        return fp.getSql().toString();
+    }
+
+    /**
+     * 新增sql
+     * @param fp 参数 + sql
+     * @return sql
+     */
+    public String insertByWrapper(InsertWrapper fp){
+        return fp.getSql().toString();
+    }
+
 }

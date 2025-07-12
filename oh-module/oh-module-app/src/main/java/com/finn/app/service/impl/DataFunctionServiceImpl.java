@@ -1,5 +1,6 @@
 package com.finn.app.service.impl;
 
+import com.finn.core.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.utils.PageResult;
@@ -38,9 +39,12 @@ public class DataFunctionServiceImpl implements DataFunctionService {
 
     @Override
     public PageResult<DataFunctionVO> pageByClientId(DataFunctionQuery query) {
+        if(query.getClientId() == null || query.getClientId().isEmpty()){
+            throw new ServerException("客户端ID不能为空！");
+        }
         Page<DataFunctionEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<DataFunctionEntity> list = dataFunctionMapper.pageByClientId(query.getClientId());
-        return new PageResult<>(DataFunctionConvert.INSTANCE.convertList(list), page.getTotal());
+        List<DataFunctionVO> list = dataFunctionMapper.pageByClientId(query.getClientId());
+        return new PageResult<>(list, page.getTotal());
     }
 
     @Override

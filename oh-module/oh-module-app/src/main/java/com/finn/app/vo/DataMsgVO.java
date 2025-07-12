@@ -23,20 +23,30 @@ public class DataMsgVO implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
-    // 数据字符串
+    /**
+     * 数据字符串
+     */
     private String jsonStr;
-    // 功能号
+    /**
+     * 功能号
+     */
     private String funcCode;
-    // 客户端ID
+    /**
+     * 客户端ID
+     */
     private String clientId;
-
+    /**
+     * 客户端
+     */
     private String clientName;
 
     private String funcCodeName;
 
     private String topic;
 
-    // 状态0未处理1处理2未找到对应的服务类3业务处理失败
+    /**
+     * 状态0未处理1处理2未找到对应的服务类3业务处理失败
+     */
     private String state;
 
     // 响应消息

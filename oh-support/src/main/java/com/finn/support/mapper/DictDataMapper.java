@@ -1,7 +1,5 @@
 package com.finn.support.mapper;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.support.entity.DictDataEntity;
 import com.finn.support.query.DictDataQuery;
 import com.finn.support.vo.DictDataVO;
@@ -19,7 +17,6 @@ import java.util.List;
  *
  */
 @Mapper
-@Ds(Constant.DYNAMIC_SYS_DB)
 public interface DictDataMapper {
 
     @Select("${sql}")

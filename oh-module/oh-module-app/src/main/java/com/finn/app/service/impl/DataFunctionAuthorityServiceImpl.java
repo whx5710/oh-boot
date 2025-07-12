@@ -1,5 +1,8 @@
 package com.finn.app.service.impl;
 
+import com.finn.app.mapper.DataAppMapper;
+import com.finn.core.cache.RedisCache;
+import com.finn.core.cache.RedisKeys;
 import com.finn.core.utils.PageResult;
 import com.finn.core.exception.ServerException;
 import com.finn.app.convert.DataFunctionAuthorityConvert;
@@ -8,11 +11,15 @@ import com.finn.app.mapper.DataFunctionMapper;
 import com.finn.app.query.DataFunctionAuthorityQuery;
 import com.finn.app.service.DataFunctionAuthorityService;
 import com.finn.app.vo.DataFunctionAuthorityVO;
+import com.finn.framework.entity.api.DataAppDTO;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 客户端接口授权
@@ -25,8 +32,15 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
 
     private final DataFunctionMapper dataFunctionMapper;
 
-    public DataFunctionAuthorityServiceImpl(DataFunctionMapper dataFunctionMapper){
+    private final RedisCache redisCache;
+
+    private final DataAppMapper dataAppMapper;
+
+    public DataFunctionAuthorityServiceImpl(DataFunctionMapper dataFunctionMapper, RedisCache redisCache,
+                                            DataAppMapper dataAppMapper){
         this.dataFunctionMapper = dataFunctionMapper;
+        this.redisCache = redisCache;
+        this.dataAppMapper = dataAppMapper;
     }
 
     @Override
@@ -67,25 +81,22 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
     public void make(DataFunctionAuthorityVO data) {
         // 1 新增 0 删除
         int i = data.getDbStatus();
-        if(ObjectUtils.isEmpty(data.getFuncCodes())){
+        if(ObjectUtils.isEmpty(data.getFuncCode())){
             throw new ServerException("功能号不能为空");
         }
         if(ObjectUtils.isEmpty(data.getClientId())){
             throw new ServerException("客户端不能为空");
         }
         if(i == 0){ // 删除
-            for(String funcCode: data.getFuncCodes()){
-                dataFunctionMapper.updateFuncAuthorityStatus(data.getClientId(), funcCode, 0);
-            }
+            dataFunctionMapper.updateFuncAuthorityStatus(data.getClientId(), data.getFuncCode(), 0);
         }else{
-            for(String funcCode: data.getFuncCodes()){
-                DataFunctionAuthorityEntity dae = new DataFunctionAuthorityEntity();
-                dae.setFuncCode(funcCode);
-                dae.setClientId(data.getClientId());
-                dataFunctionMapper.insertFuncAuthority(dae);
-            }
-
+            DataFunctionAuthorityEntity dae = new DataFunctionAuthorityEntity();
+            dae.setFuncCode(data.getFuncCode());
+            dae.setClientId(data.getClientId());
+            dataFunctionMapper.insertFuncAuthority(dae);
         }
+        // 刷新
+        refreshAppAuthority(data.getClientId());
     }
 
     @Override
@@ -93,4 +104,38 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
         return dataFunctionMapper.getFuncAuthorityById(id);
     }
 
+    /**
+     * 刷新缓存
+     * @param clientId 客户端ID
+     */
+    @Override
+    public void refreshAppAuthority(String clientId) {
+        DataFunctionAuthorityQuery params = new DataFunctionAuthorityQuery();
+        // 先清除
+        if(clientId == null || clientId.isEmpty()){
+            redisCache.deleteAll(RedisKeys.getClientKey(""));
+        }else{
+            redisCache.deleteAll(RedisKeys.getClientKey(clientId));
+            params.setClientId(clientId);
+        }
+        // 客户端权限信息
+        List<DataAppDTO> list = dataAppMapper.listAuthority(params);
+        if(!ObjectUtils.isEmpty(list)){
+            // 根据客户端ID+ funcCode 进行分组
+            Map<String,List<DataAppDTO>> map = list.stream().collect(
+                    Collectors.groupingBy(item -> item.getClientId() + ":" + item.getFuncCode())
+            );
+            for (Map.Entry<String, List<DataAppDTO>> entry : map.entrySet()) {
+                redisCache.set(RedisKeys.getClientKey(entry.getKey()), entry.getValue(), RedisCache.NOT_EXPIRE);
+            }
+        }
+    }
+
+    /**
+     * 启动时初始化
+     */
+    @PostConstruct
+    public void initData(){
+        this.refreshAppAuthority(null);
+    }
 }

@@ -5,7 +5,6 @@ import com.finn.app.convert.DataAppConvert;
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.mapper.DataAppMapper;
 import com.finn.app.query.DataAppQuery;
-import com.finn.app.query.DataFunctionAuthorityQuery;
 import com.finn.app.service.DataAppService;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.PageResult;
@@ -66,11 +65,6 @@ public class DataAppServiceImpl implements DataAppService {
             params.setDbStatus(0);
             dataAppMapper.updateById(params);
         });
-    }
-
-    @Override
-    public List<DataAppDTO> listAuthority(DataFunctionAuthorityQuery params) {
-        return dataAppMapper.listAuthority(params);
     }
 
     /**
