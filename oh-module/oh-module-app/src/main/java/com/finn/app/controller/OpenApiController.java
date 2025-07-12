@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,7 +93,7 @@ public class OpenApiController {
         data.put("name","王小费");
         data.put("sex","男");
 
-        System.out.println("开始请求");
+        System.out.println("开始请求" + DateUtils.format(new Date()));
 
         for(int i = 0; i< 50000; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
@@ -108,6 +109,6 @@ public class OpenApiController {
             String str = HttpUtil.post(url, data, head);
             System.out.println(str);
         }
-        System.out.println("结束");
+        System.out.println("结束" + DateUtils.format(new Date()));
     }
 }

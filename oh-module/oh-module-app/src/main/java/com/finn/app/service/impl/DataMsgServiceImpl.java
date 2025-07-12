@@ -221,14 +221,13 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @PostConstruct
     public void saveLogJob() {
-        try(ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(5);) {
-            //提交固定周期任务
-            ScheduledFuture<?> runnableFuture = scheduledThreadPoolExecutor.scheduleAtFixedRate(this::saveMsgLog, 1,10, TimeUnit.SECONDS);
-            //设置为true
-            //scheduledThreadPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(true);
-            //关闭线程池
-            //scheduledThreadPoolExecutor.shutdown();
-        }
+        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(3);
+        //提交固定周期任务
+        ScheduledFuture<?> runnableFuture = scheduledThreadPoolExecutor.scheduleAtFixedRate(this::saveMsgLog, 1,15, TimeUnit.SECONDS);
+        //设置为true
+        //scheduledThreadPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(true);
+        //关闭线程池
+        //scheduledThreadPoolExecutor.shutdown();
     }
 
 }
