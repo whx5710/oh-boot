@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.finn</groupId>
+	<artifactId>oh-boot</artifactId>
+	<version>3.0.0</version>
+	<name>oh-boot</name>
+	<description>
+		基于SpringBoot3.0、SpringSecurity6.0、Mybatis、Druid(Hikari)连接池、Kafka等框架开发的一套SpringBoot快速开发平台
+	</description>
+	<packaging>pom</packaging>
+	<url>https://gitee.com/whx233</url>
+	<!-- 开发者信息 -->
+	<developers>
+		<developer>
+			<name>王小费</name>
+			<email>whx5710@qq.com</email>
+			<timezone>8</timezone>
+		</developer>
+	</developers>
+
+	<modules>
+		<module>oh-server</module>
+		<module>oh-module</module>
+		<module>oh-support</module>
+		<module>oh-core</module>
+		<module>oh-framework</module>
+	</modules>
+
+	<properties>
+		<java.version>21</java.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<!-- 字符集 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!--springboot版本-->
+		<spring-boot-dependencies.version>3.4.2</spring-boot-dependencies.version>
+		<!-- spring security -->
+		<spring.security>6.4.2</spring.security>
+		<!-- mybatis 版本 -->
+		<mybatis.version>3.0.4</mybatis.version>
+		<!--分页插件-->
+		<pagehelper.version>2.1.0</pagehelper.version>
+		<!-- 阿里连接池 -->
+		<druid.version>1.2.24</druid.version>
+		<!-- 框架版本信息 -->
+		<finn.framework.version>3.2.0.20250409</finn.framework.version>
+		<!-- 框架版本信息 -->
+		<finn.core.version>2.1.0.20250409</finn.core.version>
+		<!-- 系统资源监控 -->
+		<oshi.version>6.4.0</oshi.version>
+		<!-- bean 拷贝 -->
+		<mapstruct.version>1.6.3</mapstruct.version>
+		<!-- camunda 工作流相关 -->
+		<camunda.version>7.20.0</camunda.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- start ================================= spring boot 相关 ================================= -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- end   ================================= spring boot 相关 ================================= -->
+
+			<!-- start ================================= 项目相关 ================================= -->
+			<!-- 系统框架 -->
+			<dependency>
+				<groupId>com.finn</groupId>
+				<artifactId>oh-framework</artifactId>
+				<version>${finn.framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.finn</groupId>
+				<artifactId>oh-core</artifactId>
+				<version>${finn.core.version}</version>
+			</dependency>
+			<!-- end   ================================= 项目相关 ================================= -->
+
+			<!-- start ================================= 其他 ================================= -->
+			<!--系统监控-->
+			<dependency>
+				<groupId>com.github.oshi</groupId>
+				<artifactId>oshi-core</artifactId>
+				<version>${oshi.version}</version>
+			</dependency>
+			<!--bean映射-->
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct-processor</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
+			<!-- 工作流 -->
+			<dependency>
+				<groupId>org.camunda.bpm.springboot</groupId>
+				<artifactId>camunda-bpm-spring-boot-starter</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<!-- 连接池 -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid-spring-boot-3-starter</artifactId>
+				<version>${druid.version}</version>
+			</dependency>
+			<!-- mybatis -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<!-- 分页插件 -->
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>${pagehelper.version}</version>
+			</dependency>
+			<!-- end   ================================= 其他 ================================= -->
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- spring boot web请求 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.security}</version>
+		</dependency>
+		<!--bean映射-->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>public</id>
+			<name>阿里云公共仓库</name>
+			<url>https://maven.aliyun.com/repository/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<name>阿里云公共仓库</name>
+			<url>https://maven.aliyun.com/repository/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.ly.smart-doc</groupId>
+				<artifactId>smart-doc-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<!--指定生成文档的使用的配置文件-->
+					<configFile>${basedir}/src/main/resources/smart-doc.json</configFile>
+					<!--指定项目名称-->
+					<projectName>oh-boot-pro</projectName>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>html</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

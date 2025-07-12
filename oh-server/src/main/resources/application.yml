@@ -1,0 +1,81 @@
+##################################################################################################
+# 1、该文件中维护基本不会改变的配置
+# 2、每个环境有对应的配置，请规范使用每个环境配置,每个环境的资源分配不一样
+# 3、如果使用nacos配置中心，建议将本地环境 “dev|test|prod” 配置屏蔽，防止使用过程中混淆;使用本地配置，屏蔽下面nacos配置即可
+#    nacos启动命令（单机模式）：
+#      linux:   sh startup.sh -m standalone 或 bash startup.sh -m standalone
+#      windows: startup.cmd -m standalone
+#    nacos关闭命令：sh shutdown.sh   或   shutdown.cmd
+# 4、如果使用异步接口（oh-module-api），请自行安装Kafka（换成其他MQ代码进行相应调整），启动并配置正确
+#    linux 启动命令
+#    nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
+#    nohup sh bin/kafka-server-start.sh config/server.properties &
+#    windows 启动命令
+#    bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+#    bin\windows\kafka-server-start.bat config\server.properties
+# https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+##################################################################################################
+spring:
+  # 环境 dev|test|prod
+  profiles.active: dev
+  application.name: oh-boot
+  main.banner-mode: "OFF"  # 关闭 banner CONSOLE、LOG、OFF
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss  # 设置 java.util.Date, Calendar 序列化、反序列化的格式
+    locale: zh                        # 当地时区
+    time-zone: GMT+8                  # 设置全局时区
+    # 设置对象或被@JsonInclude注解的属性的序列化方式。NON_NULL 表示不为空的属性才会序列化,具体属性可看JsonInclude.Include
+    # default-property-inclusion: NON_NULL
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false   # 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
+      FAIL_ON_EMPTY_BEANS: false         # 序列化时，对象为 null，是否抛异常
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
+
+# mybatis配置说明: https://mybatis.net.cn/configuration.html
+mybatis:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.finn.*.entity # 实体扫描，多个package用逗号或者分号分隔
+  # 原生配置
+  configuration:
+    map-underscore-to-camel-case: true # 是否开启驼峰命名自动映射
+    cache-enabled: false               # 全局性地开启或关闭所有映射器配置文件中已配置的任何缓存
+    call-setters-on-nulls: true        # 指定当结果集中值为 null 的时候是否调用映射对象的 setter（map 对象时为 put）方法
+    jdbc-type-for-null: 'null'         # 当没有为参数指定特定的 JDBC 类型时，空值的默认 JDBC 类型
+  configuration-properties:
+    prefix:
+    blobType: BLOB
+    boolValue: TRUE
+# 分页配置，可都用默认
+pagehelper:
+  # 设置方言，此处指定 MySQL 数据库
+  helper-dialect: mysql
+  # 是否启动合理化，默认是 false。
+  # 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages（最大页数）会查询最后一页。
+  # 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据
+  reasonable: true
+  # 是否支持接口参数来传递分页参数，默认false
+  support-methods-arguments: true
+  # 为了支持startPage(Object params)方法，增加了该参数来配置参数映射，用于从对象中根据属性名取值
+  params: count=countSql
+  # 默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 RowBounds.limit = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是 Page 类型）
+  page-size-zero: true
+
+# nacos相关配置
+#nacos:
+#  config:
+#    # nacos会根据配置怎么找到对应的配置文件规则：prefix−{spring.profile.active}.${file-extension}
+#    # spring.profiles.active 为空时，对应的连接符 - 也将不存在，，dataId 的拼接格式变成 ${prefix}.${file-extension}
+#    bootstrap:
+#      enable: true                                   #开启系统启动时预读取nacos的配置，用于满足@Value注入数据的场景
+#    namespace: 3b00ce0d-eca1-4ef0-a764-199212d930ac  # 配置所属命名空间的id,此处我们配置名称为dev的id，可以在命名空间列表查看id的值
+#    prefix: finn                                     # 配置文件的前缀,默认为 spring.application.name 的值
+#    group: ${spring.profiles.active}                 # 配置所属分组
+#    data-id: finn-dev.yaml                           # 配置ID
+#    type: yaml                                       # 配置文件类型,对应nacos配置页面的配置格式，默认是properties
+#    server-addr: localhost:8848                      # nacos服务器地址
+#    auto-refresh: true                               # 开启自动刷新nacos配置
+#    remote-first: true                               # 针对配置项同名的情况，是否允许nacos的配置覆盖本地的配置
+#    # 如果开启了鉴权，需配置用户名和密码
+#    username: nacos
+#    password: nacos

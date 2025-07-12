@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.team.mapper.OhTaskMapper">
+
+    <resultMap type="com.finn.team.entity.OhTaskEntity" id="ohTaskMap">
+        <result property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="note" column="note"/>
+        <result property="taskType" column="task_type"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="hasChild" column="has_child"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="dbStatus" column="db_status"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 获取任务列表 -->
+    <select id="getList" resultType="com.finn.team.entity.OhTaskEntity">
+        SELECT
+            t1.*,
+            group_concat(case when t2.person_type = '1' then t2.user_id else null end) as director_user_id,
+            group_concat(case when t2.person_type = '1' then t2.nick_name else null end) as director_user_name,
+            group_concat(case when t2.person_type = '2' then t2.user_id else null end) as collaborator_user_id,
+            group_concat(case when t2.person_type = '2' then t2.nick_name else null end) as collaborator_user_name
+        FROM
+            oh_task t1 LEFT JOIN oh_task_user t2 ON t1.id = t2.task_id
+        <where>
+            <if test="keyWord != null and keyWord.trim() != ''">
+                and (t1.task_title like concat('%',#{keyWord}, '%')
+                    or t1.note like concat('%',#{keyWord}, '%')
+                    or t1.remark like concat('%',#{keyWord}, '%'))
+            </if>
+            <if test="status != null and status.trim() != ''">
+                and t1.status = #{status}
+            </if>
+            <if test="taskType != null and taskType.length > 0">
+                and t1.task_type in
+                <foreach item="item" index="index" collection="taskType" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="projectId != null and projectId != 0">
+                and t1.project_id = #{projectId}
+            </if>
+        </where>
+        group by t1.id
+        order by t1.create_time desc
+    </select>
+
+    <insert id="save">
+        INSERT INTO oh_task (project_id, task_title, note, task_type, parent_id, has_child, start_time, end_time, status, remark, db_status, creator, create_time)
+        VALUES (#{projectId}, #{taskTitle}, #{note}, #{taskType}, #{parentId}, #{hasChild}, #{startTime}, #{endTime}, #{status}, #{remark}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>
+
+    <update id="updateById">
+        UPDATE oh_task
+        <set>
+            <if test="projectId != null and projectId != ''">project_id = #{projectId},</if>
+            <if test="taskTitle != null and taskTitle != ''">task_title = #{taskTitle},</if>
+            <if test="note != null and note != ''">note = #{note},</if>
+            <if test="taskType != null and taskType != ''">task_type = #{taskType},</if>
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+            <if test="hasChild != null and hasChild != ''">has_child = #{hasChild},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" resultType="com.finn.team.entity.OhTaskEntity">
+        select * from oh_task where id = #{id}
+    </select>
+</mapper>

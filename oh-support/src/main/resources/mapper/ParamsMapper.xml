@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.support.mapper.ParamsMapper">
+    <select id="getList" resultType="com.finn.support.entity.ParamsEntity">
+        select * from sys_params where db_status = 1
+        <if test="paramValue != null and paramValue != ''">and param_value = #{paramValue}</if>
+        <if test="paramKey != null and paramKey != ''">and param_key = #{paramKey}</if>
+        <if test="paramType != null">and param_type = #{paramType}</if>
+        <if test="keyWord != null and keyWord != ''">
+            and (param_name like concat('%',#{keyWord}, '%') or param_value like concat('%',#{keyWord}, '%')
+            or param_key like concat('%',#{keyWord}, '%') or remark like concat('%',#{keyWord}, '%'))
+        </if>
+        <if test="idList != null and idList.size() > 0">
+            and id in
+            <foreach item="id" index="index" collection="idList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        order by id desc
+    </select>
+
+    <update id="updateById">
+        UPDATE sys_params
+        <set>
+            <if test="paramName != null and paramName != ''">param_name = #{paramName},</if>
+            <if test="paramType != null">param_type = #{paramType},</if>
+            <if test="paramKey != null and paramKey != ''">param_key = #{paramKey},</if>
+            <if test="paramValue != null and paramValue != ''">param_value = #{paramValue},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" resultType="com.finn.support.entity.ParamsEntity">
+        select * from sys_params where id = #{id}
+    </select>
+
+    <insert id="save">
+        INSERT INTO sys_params (param_name, param_type, param_key, param_value, remark, db_status, creator, create_time)
+        VALUES (#{paramName}, #{paramType}, #{paramKey}, #{paramValue}, #{remark}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>
+</mapper>

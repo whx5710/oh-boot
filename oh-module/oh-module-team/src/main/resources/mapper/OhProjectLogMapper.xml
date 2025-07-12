@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.team.mapper.OhProjectLogMapper">
+
+    <resultMap type="com.finn.team.entity.OhProjectLogEntity" id="ohProjectLogMap">
+        <result property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="operation" column="operation"/>
+        <result property="remark" column="remark"/>
+        <result property="dbStatus" column="db_status"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <select id="getById" resultType="com.finn.team.entity.OhProjectLogEntity">
+        select * from oh_project_log where id #{id}
+    </select>
+
+</mapper>
