@@ -1,5 +1,6 @@
 package com.finn.sys.base.controller;
 
+import com.finn.core.utils.DateUtils;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
 import com.finn.framework.query.Query;
@@ -40,7 +41,11 @@ public class UserOnlineController {
         List<String> userIds = tokenStoreCache.getUserIdList(); // tokenStoreCache.getUserKeyList();
 
         // 逻辑分页
-        List<String> keyList = userIds.subList((query.getPageNum() - 1) * query.getPageSize(), query.getPageNum() * query.getPageSize());
+        int toIndex = query.getPageNum() * query.getPageSize();
+        if(toIndex > userIds.size()){
+            toIndex = userIds.size();
+        }
+        List<String> keyList = userIds.subList((query.getPageNum() - 1) * query.getPageSize(), toIndex);
 
         List<UserOnlineVO> userOnlineList = new ArrayList<>();
         keyList.forEach(key -> {
@@ -53,7 +58,7 @@ public class UserOnlineController {
                 userOnlineVO.setGender(user.getGender());
                 userOnlineVO.setEmail(user.getEmail());
 //                userOnlineVO.setAccessToken(key.replace(RedisKeys.getAccessTokenKey(""), ""));
-//                userOnlineVO.setLoginTime(DateUtil.format(user.getLoginTime(), "yyyy-MM-dd HH:mm:ss"));
+//                userOnlineVO.setLoginTime(DateUtils.format(user.getLoginTime(), "yyyy-MM-dd HH:mm:ss"));
 //                userOnlineVO.setIp(user.getIp());
                 userOnlineList.add(userOnlineVO);
             }
