@@ -8,7 +8,6 @@ import com.finn.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 认证 Cache
@@ -39,14 +38,13 @@ public class TokenStoreCache {
         if(user.getSuperAdmin() == 1){
             user.setTenantId(""); // 租户ID为空，都用空字符串
         }
-        redisCache.set(key, user, securityProperties.getAccessTokenExpire());
+        RefreshTokenInfo refreshTokenInfo = getRefreshTokenInfo(accessToken, refreshToken, user);
+        // token
+        redisCache.set(key, refreshTokenInfo, securityProperties.getAccessTokenExpire());
 
         // 刷新token，如果是重新刷新token，刷新token使用旧的有效期
-        if(refreshToken != null && !refreshToken.isEmpty()){
-            RefreshTokenInfo refreshTokenInfo = getRefreshTokenInfo(accessToken, refreshToken, user);
-            String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
-            redisCache.set(refreshKey, refreshTokenInfo, user.getRefreshTokenExpire());
-        }
+        String refreshKey = RedisKeys.getAccessRefreshTokenKey(refreshToken);
+        redisCache.set(refreshKey, refreshTokenInfo, user.getRefreshTokenExpire());
 
         // 用户信息
         redisCache.set(RedisKeys.getUserInfoKey(String.valueOf(user.getId()), accessToken), user, securityProperties.getAccessTokenExpire());
@@ -79,22 +77,33 @@ public class TokenStoreCache {
      */
     public UserDetail getUser(String accessToken) {
         String key = RedisKeys.getAccessTokenKey(accessToken);
-        return (UserDetail) redisCache.get(key);
+        RefreshTokenInfo refreshTokenInfo = (RefreshTokenInfo) redisCache.get(key);
+        // 用户ID和token
+        if(refreshTokenInfo != null){
+            key = RedisKeys.getUserInfoKey(String.valueOf(refreshTokenInfo.getId()), accessToken);
+            return (UserDetail) redisCache.get(key);
+        }else{
+            return null;
+        }
     }
 
     /**
-     * 根据token，删除redis
+     * 根据token，删除token,用户
      * @param userId 用户ID
      * @param accessToken token
      */
     public void deleteUser(Long userId, String accessToken) {
         // 删除token
         String key = RedisKeys.getAccessTokenKey(accessToken);
+        RefreshTokenInfo refreshTokenInfo = (RefreshTokenInfo) redisCache.get(key);
+        String refresh = refreshTokenInfo.getRefreshToken();
         redisCache.delete(key);
         // 删除用户
         if(userId != null){
             redisCache.delete(RedisKeys.getUserInfoKey(String.valueOf(userId), accessToken));
         }
+        // 删除刷新token
+        redisCache.delete(RedisKeys.getAccessRefreshTokenKey(refresh));
     }
 
     /**
@@ -106,6 +115,7 @@ public class TokenStoreCache {
         for(String token : tokens){
             deleteUser(userId, token);
         }
+        // 删除刷新token
         String key = RedisKeys.getUserInfoKey(String.valueOf(userId), "");
         redisCache.deleteAll(key);
     }

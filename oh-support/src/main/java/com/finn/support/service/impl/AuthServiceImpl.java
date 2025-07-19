@@ -173,19 +173,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(String accessToken, String refreshToken) {
-        // 用户信息
-        UserDetail user = tokenStoreCache.getUser(accessToken);
-
-        // 删除用户信息
-        tokenStoreCache.deleteUser(user.getId(), accessToken);
         // 删除刷新token
         if(refreshToken != null && !refreshToken.isEmpty()){
             if(redisCache.hasKey(RedisKeys.getAccessRefreshTokenKey(refreshToken))){
                 redisCache.delete(RedisKeys.getAccessRefreshTokenKey(refreshToken));
             }
         }
-        // 保存登录日志
-        logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
+        // 用户信息
+        UserDetail user = tokenStoreCache.getUser(accessToken);
+        if(user != null){
+            // 删除用户信息
+            tokenStoreCache.deleteUser(user.getId(), accessToken);
+            // 保存登录日志
+            logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
+        }
     }
 
     /**

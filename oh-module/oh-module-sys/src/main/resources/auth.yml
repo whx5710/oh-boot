@@ -6,6 +6,7 @@ auth:
     - /sys/auth/loginByKey
     - /sys/auth/send/code
     - /sys/auth/mobile
+    - /sys/auth/logout
     - /sys/params/getByKeys
     - /sys/info/latestVersion
     - /sys/user/register
