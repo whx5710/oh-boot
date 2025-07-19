@@ -177,7 +177,7 @@ public class AuthServiceImpl implements AuthService {
         UserDetail user = tokenStoreCache.getUser(accessToken);
 
         // 删除用户信息
-        tokenStoreCache.deleteUser(accessToken);
+        tokenStoreCache.deleteUser(user.getId(), accessToken);
         // 删除刷新token
         if(refreshToken != null && !refreshToken.isEmpty()){
             if(redisCache.hasKey(RedisKeys.getAccessRefreshTokenKey(refreshToken))){

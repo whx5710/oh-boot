@@ -7,10 +7,8 @@ import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 认证 Cache
@@ -86,11 +84,17 @@ public class TokenStoreCache {
 
     /**
      * 根据token，删除redis
+     * @param userId 用户ID
      * @param accessToken token
      */
-    public void deleteUser(String accessToken) {
+    public void deleteUser(Long userId, String accessToken) {
+        // 删除token
         String key = RedisKeys.getAccessTokenKey(accessToken);
         redisCache.delete(key);
+        // 删除用户
+        if(userId != null){
+            redisCache.delete(RedisKeys.getUserInfoKey(String.valueOf(userId), accessToken));
+        }
     }
 
     /**
@@ -100,7 +104,7 @@ public class TokenStoreCache {
     public void deleteUserById(Long userId) {
         List<String> tokens = this.getTokenByUserId(userId);
         for(String token : tokens){
-            deleteUser(token);
+            deleteUser(userId, token);
         }
         String key = RedisKeys.getUserInfoKey(String.valueOf(userId), "");
         redisCache.deleteAll(key);
@@ -154,6 +158,27 @@ public class TokenStoreCache {
                 tmp.add(key.substring(key.lastIndexOf(":") + 1));
             }
             list.addAll(tmp);
+        }
+        return list;
+    }
+
+    /**
+     * 根据用户ID获取用户登录情况
+     * @param userId 用户ID
+     * @return list
+     */
+    public List<UserDetail> getUserById(Long userId){
+        String pattern = RedisKeys.getUserInfoKey(String.valueOf(userId), "*");
+        Set<String> sets = redisCache.keys(pattern);
+        List<UserDetail> list = new ArrayList<>();
+        if(sets != null){
+            for(String key: sets){
+                UserDetail userDetail = (UserDetail) redisCache.get(key);
+                userDetail.setPassword(key.substring(key.lastIndexOf(":") + 1));
+                list.add(userDetail);
+            }
+            list = list.stream().sorted(Comparator.comparing(UserDetail::getLoginTime).reversed())
+                    .toList();
         }
         return list;
     }

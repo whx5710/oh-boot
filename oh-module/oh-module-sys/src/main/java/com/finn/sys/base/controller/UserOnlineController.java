@@ -5,8 +5,11 @@ import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
 import com.finn.framework.query.Query;
 import com.finn.framework.security.cache.TokenStoreCache;
+import com.finn.framework.security.user.UserDetail;
 import com.finn.support.cache.UserCache;
+import com.finn.support.convert.UserConvert;
 import com.finn.support.entity.UserEntity;
+import com.finn.support.vo.UserVO;
 import com.finn.sys.base.vo.UserOnlineVO;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +39,7 @@ public class UserOnlineController {
      */
     @GetMapping("page")
     @PreAuthorize("hasAuthority('monitor:user:all')")
-    public Result<PageResult<UserOnlineVO>> page(@Valid Query query) {
+    public Result<PageResult<UserVO>> page(@Valid Query query) {
         // 获取登录用户的全部key
         List<String> userIds = tokenStoreCache.getUserIdList(); // tokenStoreCache.getUserKeyList();
 
@@ -47,24 +50,38 @@ public class UserOnlineController {
         }
         List<String> keyList = userIds.subList((query.getPageNum() - 1) * query.getPageSize(), toIndex);
 
-        List<UserOnlineVO> userOnlineList = new ArrayList<>();
+        List<UserVO> userOnlineList = new ArrayList<>();
         keyList.forEach(key -> {
             UserEntity user = userCache.getUser(Long.valueOf(key));
             if (user != null) {
-                UserOnlineVO userOnlineVO = new UserOnlineVO();
-                userOnlineVO.setId(user.getId());
-                userOnlineVO.setUsername(user.getUsername());
-                userOnlineVO.setRealName(user.getRealName());
-                userOnlineVO.setGender(user.getGender());
-                userOnlineVO.setEmail(user.getEmail());
-//                userOnlineVO.setAccessToken(key.replace(RedisKeys.getAccessTokenKey(""), ""));
-//                userOnlineVO.setLoginTime(DateUtils.format(user.getLoginTime(), "yyyy-MM-dd HH:mm:ss"));
-//                userOnlineVO.setIp(user.getIp());
-                userOnlineList.add(userOnlineVO);
+                userOnlineList.add(UserConvert.INSTANCE.convert(user));
             }
         });
-
         return Result.ok(new PageResult<>(userOnlineList, userIds.size()));
+    }
+
+    /**
+     * token列表
+     * @param userId 用户ID
+     * @return
+     */
+    @GetMapping("/tokenList/{userId}")
+    @PreAuthorize("hasAuthority('monitor:user:all')")
+    public Result<List<UserOnlineVO>> tokenList(@PathVariable("userId")Long userId) {
+        List<UserDetail> list = tokenStoreCache.getUserById(userId);
+        List<UserOnlineVO> result = new ArrayList<>();
+        if(list != null && !list.isEmpty()){
+            for(UserDetail user: list){
+                UserOnlineVO userOnlineVO = new UserOnlineVO();
+                userOnlineVO.setId(userId);
+                userOnlineVO.setRealName(user.getRealName());
+                userOnlineVO.setUsername(user.getUsername());
+                userOnlineVO.setLoginTime(DateUtils.format(user.getLoginTime()));
+                userOnlineVO.setAccessToken(user.getPassword());
+                result.add(userOnlineVO);
+            }
+        }
+        return Result.ok(result);
     }
 
     /**
@@ -79,8 +96,13 @@ public class UserOnlineController {
         if (accessToken == null || accessToken.isEmpty()) {
             Result.error("token不能为空");
         }
+        UserDetail userDetail = tokenStoreCache.getUser(accessToken);
+        Long userId = null;
+        if(userDetail != null){
+            userId = userDetail.getId();
+        }
         // 删除用户信息
-        tokenStoreCache.deleteUser(accessToken);
+        tokenStoreCache.deleteUser(userId, accessToken);
 
         return Result.ok();
     }
