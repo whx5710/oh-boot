@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 用户在线监控，建议只提供给管理员权限
+ * @author 王小费 whx5710@qq.com
+ */
 @RestController
 @RequestMapping("monitor/user")
 public class UserOnlineController {
@@ -66,7 +70,7 @@ public class UserOnlineController {
      * @return
      */
     @GetMapping("/tokenList/{userId}")
-    @PreAuthorize("hasAuthority('monitor:user:all')")
+    @PreAuthorize("hasAuthority('monitor:user:tokens')")
     public Result<List<UserOnlineVO>> tokenList(@PathVariable("userId")Long userId) {
         List<UserDetail> list = tokenStoreCache.getUserById(userId);
         List<UserOnlineVO> result = new ArrayList<>();
@@ -90,7 +94,7 @@ public class UserOnlineController {
      * @return 提示信息
      */
     @GetMapping("/forceLogout/{accessToken}")
-    @PreAuthorize("hasAuthority('monitor:user:user')")
+    @PreAuthorize("hasAuthority('monitor:user:logout')")
     public Result<String> forceLogout(@PathVariable("accessToken") String accessToken) {
         // token不能为空
         if (accessToken == null || accessToken.isEmpty()) {
@@ -113,7 +117,7 @@ public class UserOnlineController {
      * @return 提示信息
      */
     @GetMapping("/forceLogoutAll/{userId}")
-    @PreAuthorize("hasAuthority('monitor:user:user')")
+    @PreAuthorize("hasAuthority('monitor:user:logout')")
     public Result<String> forceLogoutAll(@PathVariable("userId") String userId) {
         // token不能为空
         if (userId == null || userId.isEmpty()) {

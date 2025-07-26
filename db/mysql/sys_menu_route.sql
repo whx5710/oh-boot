@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80042 (8.0.42-0ubuntu0.24.04.1)
+ Source Server Version : 80042 (8.0.42-0ubuntu0.24.04.2)
  Source Host           : localhost:3306
  Source Schema         : oh-sys3.0
 
  Target Server Type    : MySQL
- Target Server Version : 80042 (8.0.42-0ubuntu0.24.04.1)
+ Target Server Version : 80042 (8.0.42-0ubuntu0.24.04.2)
  File Encoding         : 65001
 
- Date: 25/06/2025 21:48:30
+ Date: 26/07/2025 22:47:56
 */
 
 SET NAMES utf8mb4;
@@ -50,7 +50,7 @@ CREATE TABLE `sys_menu` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_pid` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='菜单管理';
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='菜单管理';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -106,6 +106,10 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`,
 INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (55, 54, '查询日志', '查询日志', '', NULL, 1, 0, 0, 'sys:app:page', NULL, NULL, NULL, 0, NULL, 'action', 0, NULL, 0, 0, 1, NULL, 10000, '2025-06-25 17:28:11', NULL, NULL);
 INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (56, 54, '删除日志', '删除日志', '', NULL, 1, 0, 0, 'sys:app:delete', NULL, NULL, NULL, 0, NULL, 'action', 0, NULL, 0, 0, 1, NULL, 10000, '2025-06-25 17:28:37', NULL, NULL);
 INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (57, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 0, 0, 'sys:log:login:delete', NULL, NULL, NULL, 0, NULL, 'action', 0, NULL, 0, 0, 1, NULL, 10000, '2025-06-25 19:45:26', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (58, 7, 'UserMonitor', '用户监控', '/system/userMonitor', '/system/user/monitor', 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, 'menu', 0, 'carbon:cloud-monitoring', 0, 0, 1, NULL, 10000, '2025-07-13 19:25:32', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (59, 58, '在线用户', '在线用户', '', NULL, 1, 0, 0, 'monitor:user:all', NULL, NULL, NULL, 0, NULL, 'action', 0, NULL, 0, 0, 1, NULL, 10000, '2025-07-13 19:34:04', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (60, 58, '强制退出', '强制退出', '', NULL, 1, 0, 0, 'monitor:user:logout', NULL, NULL, NULL, 0, NULL, 'action', 0, NULL, 0, 0, 1, NULL, 10000, '2025-07-13 19:34:36', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `title`, `path`, `menu_path`, `status`, `hide_in_menu`, `hide_in_tab`, `authority`, `badge`, `badge_type`, `badge_variants`, `affix_tab`, `link`, `type`, `open_style`, `icon`, `keep_alive`, `sort`, `db_status`, `mark`, `creator`, `create_time`, `updater`, `update_time`) VALUES (61, 58, '用户token列表', '用户token列表', '', NULL, 1, 0, 0, 'monitor:user:tokens', NULL, NULL, NULL, 0, NULL, 'action', 0, NULL, 0, 0, 1, NULL, 10000, '2025-07-26 22:47:10', NULL, NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
