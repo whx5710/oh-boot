@@ -1,5 +1,7 @@
 package com.finn.sys.base.vo;
 
+import com.finn.core.entity.SuperEntity;
+
 import java.util.List;
 
 /**
@@ -7,74 +9,67 @@ import java.util.List;
  * @author 王小费
  * @since 2025-04-20
  */
-public class RouteMetaVO {
+public class RouteMetaVO extends SuperEntity {
     /**
-     * 用于配置页面的标题，会在菜单和标签页中显示。一般会配合国际化使用
+     * 路由标题
      */
-    String title;
+    private String title;
+
     /**
-     * 用于配置页面的图标，会在菜单和标签页中显示。一般会配合图标库使用，如果是http链接，会自动加载图片
+     * 路由图标
      */
-    String icon;
+    private String icon;
+
+    /**
+     * 是否显示徽章
+     */
+    private Boolean showBadge = true;
+
+    /**
+     * 文本徽章
+     */
+    private String showTextBadge;
+
+    /**
+     * 是否在菜单中隐藏
+     */
+    private Boolean isHide = false;
+
+    /**
+     * 是否在标签页中隐藏
+     */
+    private Boolean isHideTab = false;
+
+    /**
+     * 外部链接
+     */
+    private String link;
+
+    /**
+     * 是否为iframe
+     */
+    private Boolean isIframe = false;
+
+    /**
+     * 是否缓存
+     */
+    private Boolean keepAlive = false;
+
+    /**
+     * 是否固定标签页
+     */
+    private Boolean fixedTab = false;
+
+    /**
+     * 类型:  catalog | menu | button
+     */
+    private String type;
+
+
     /**
      * 用于配置页面的权限，只有拥有对应权限的用户才能访问页面
      */
-    List<String> authority;
-    /**
-     * 用于配置内嵌页面的 iframe 地址，设置后会在当前页面内嵌对应的页面
-     */
-    String iframeSrc;
-    /**
-     * 用于配置外链跳转路径，会在新窗口打开
-     */
-    String link;
-    /**
-     * 用于配置页面是否开启缓存，开启后页面会缓存，不会重新加载，仅在标签页启用时有效
-     */
-    Boolean keepAlive = false;
-    /**
-     * 用于配置页面的排序，用于路由到菜单排序(sort)
-     */
-    Integer order;
-    /**
-     * 设置为 true 时，会在新窗口打开页面
-     */
-    Boolean openInNewWindow = false;
-    /**
-     * 用于配置页面是否在菜单中隐藏，隐藏后页面不会在菜单中显示
-     */
-    Boolean hideInMenu = false;
-    /**
-     * 标签是否隐藏
-     */
-    Boolean hideInTab = false;
-    /**
-     * 用于配置页面是否在面包屑中隐藏，隐藏后页面不会在面包屑中显示
-     */
-    Boolean hideInBreadcrumb = false;
-    /**
-     * 用于配置页面是否固定标签页，固定后页面不可关闭。
-     */
-    Boolean affixTab = false;
-    /**
-     * 用于配置当前路由不使用基础布局，仅在顶级时生效。默认情况下，所有的路由都会被包裹在基础布局中（包含顶部以及侧边等导航部件）
-     */
-    Boolean noBasicLayout = false;
-
-    /**
-     * 用于配置页面的徽标，会在菜单显示
-     */
-    private String badge;
-
-    /**
-     * 用于配置页面的徽标类型，dot 为小红点，normal 为文本
-     */
-    private String badgeType;
-
-    /**
-     * 用于配置页面的徽标颜色
-     */
-    private String badgeVariants;
+    List<String> authList;
 
     public String getTitle() {
         return title;
@@ -92,20 +87,36 @@ public class RouteMetaVO {
         this.icon = icon;
     }
 
-    public List<String> getAuthority() {
-        return authority;
+    public Boolean getShowBadge() {
+        return showBadge;
     }
 
-    public void setAuthority(List<String> authority) {
-        this.authority = authority;
+    public void setShowBadge(Boolean showBadge) {
+        this.showBadge = showBadge;
     }
 
-    public String getIframeSrc() {
-        return iframeSrc;
+    public String getShowTextBadge() {
+        return showTextBadge;
     }
 
-    public void setIframeSrc(String iframeSrc) {
-        this.iframeSrc = iframeSrc;
+    public void setShowTextBadge(String showTextBadge) {
+        this.showTextBadge = showTextBadge;
+    }
+
+    public Boolean getIsHide() {
+        return isHide;
+    }
+
+    public void setIsHide(Boolean hide) {
+        isHide = hide;
+    }
+
+    public Boolean getIsHideTab() {
+        return isHideTab;
+    }
+
+    public void setIsHideTab(Boolean hideTab) {
+        isHideTab = hideTab;
     }
 
     public String getLink() {
@@ -116,6 +127,14 @@ public class RouteMetaVO {
         this.link = link;
     }
 
+    public Boolean getIsIframe() {
+        return isIframe;
+    }
+
+    public void setIsIframe(Boolean iframe) {
+        isIframe = iframe;
+    }
+
     public Boolean getKeepAlive() {
         return keepAlive;
     }
@@ -124,83 +143,27 @@ public class RouteMetaVO {
         this.keepAlive = keepAlive;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Boolean getFixedTab() {
+        return fixedTab;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setFixedTab(Boolean fixedTab) {
+        this.fixedTab = fixedTab;
     }
 
-    public Boolean getOpenInNewWindow() {
-        return openInNewWindow;
+    public String getType() {
+        return type;
     }
 
-    public void setOpenInNewWindow(Boolean openInNewWindow) {
-        this.openInNewWindow = openInNewWindow;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public Boolean getHideInMenu() {
-        return hideInMenu;
+    public List<String> getAuthList() {
+        return authList;
     }
 
-    public void setHideInMenu(Boolean hideInMenu) {
-        this.hideInMenu = hideInMenu;
-    }
-
-    public Boolean getHideInBreadcrumb() {
-        return hideInBreadcrumb;
-    }
-
-    public void setHideInBreadcrumb(Boolean hideInBreadcrumb) {
-        this.hideInBreadcrumb = hideInBreadcrumb;
-    }
-
-    public Boolean getAffixTab() {
-        return affixTab;
-    }
-
-    public void setAffixTab(Boolean affixTab) {
-        this.affixTab = affixTab;
-    }
-
-    public Boolean getNoBasicLayout() {
-        return noBasicLayout;
-    }
-
-    public void setNoBasicLayout(Boolean noBasicLayout) {
-        this.noBasicLayout = noBasicLayout;
-    }
-
-    public Boolean getHideInTab() {
-        return hideInTab;
-    }
-
-    public void setHideInTab(Boolean hideInTab) {
-        this.hideInTab = hideInTab;
-    }
-
-    public String getBadge() {
-        return badge;
-    }
-
-    public void setBadge(String badge) {
-        this.badge = badge;
-    }
-
-    public String getBadgeType() {
-        return badgeType;
-    }
-
-    public void setBadgeType(String badgeType) {
-        this.badgeType = badgeType;
-    }
-
-    public String getBadgeVariants() {
-        return badgeVariants;
-    }
-
-    public void setBadgeVariants(String badgeVariants) {
-        this.badgeVariants = badgeVariants;
+    public void setAuthList(List<String> authList) {
+        this.authList = authList;
     }
 }
