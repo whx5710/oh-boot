@@ -64,7 +64,8 @@ public class RouteMetaVO extends SuperEntity {
      * 类型:  catalog | menu | button
      */
     private String type;
-
+    // 排序
+    private Integer sort;
 
     /**
      * 用于配置页面的权限，只有拥有对应权限的用户才能访问页面
@@ -165,5 +166,13 @@ public class RouteMetaVO extends SuperEntity {
 
     public void setAuthList(List<String> authList) {
         this.authList = authList;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

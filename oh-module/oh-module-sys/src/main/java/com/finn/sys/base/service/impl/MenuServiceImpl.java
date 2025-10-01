@@ -47,6 +47,10 @@ public class MenuServiceImpl implements MenuService {
     public void save(RouteVO vo) {
         MenuEntity entity = MenuConvert.INSTANCE.convert(vo.getMeta());
 
+        entity.setName(vo.getName());
+        entity.setComponent(vo.getComponent());
+        entity.setParentId(vo.getParentId());
+        entity.setPath(vo.getPath());
         // 判断显示路径是否存在
         if(entity.getPath() != null && !entity.getPath().isEmpty()){
             if(pathExists(entity.getId(), entity.getPath())){
@@ -199,6 +203,7 @@ public class MenuServiceImpl implements MenuService {
         meta.setIsIframe(item.getIsIframe());
         meta.setKeepAlive(item.getKeepAlive());
         meta.setFixedTab(item.getFixedTab());
+        meta.setSort(item.getSort());
         if(item.getAuthority() != null && !item.getAuthority().isEmpty()){
             meta.setAuthList(Arrays.asList(item.getAuthority().split(",")));
         }
