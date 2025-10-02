@@ -48,7 +48,17 @@ public class MenuServiceImpl implements MenuService {
         MenuEntity entity = MenuConvert.INSTANCE.convert(vo);
 
         if(vo.getAuthList() != null && !vo.getAuthList().isEmpty()){
+            // 权限
             entity.setAuthority(String.join(",", vo.getAuthList()));
+        }else{
+            // 菜单，判断同级是否已经有权限菜单
+            List<MenuEntity> list = menuMapper.selectListByWrapper(QueryWrapper.of(MenuEntity.class)
+                    .eq(MenuEntity::getDbStatus, 1)
+                    .eq(MenuEntity::getParentId, vo.getParentId())
+                    .eq(MenuEntity::getType, "button"));
+            if(!list.isEmpty()){
+                throw new ServerException("该菜单下已有权限菜单，请删除权限菜单后再新增菜单");
+            }
         }
 
         // 判断显示路径是否存在
@@ -205,6 +215,7 @@ public class MenuServiceImpl implements MenuService {
         meta.setFixedTab(item.getFixedTab());
         meta.setSort(item.getSort());
         meta.setMark(item.getMark());
+        meta.setCreateTime(item.getCreateTime());
         if(item.getAuthority() != null && !item.getAuthority().isEmpty()){
             meta.setAuthList(Arrays.asList(item.getAuthority().split(",")));
         }

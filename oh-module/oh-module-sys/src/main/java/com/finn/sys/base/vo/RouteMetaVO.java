@@ -1,7 +1,11 @@
 package com.finn.sys.base.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.entity.SuperEntity;
+import com.finn.core.utils.DateUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -73,6 +77,13 @@ public class RouteMetaVO extends SuperEntity {
      * 用于配置页面的权限，只有拥有对应权限的用户才能访问页面
      */
     List<String> authList;
+
+    /**
+     * 创建世界
+     */
+    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    private LocalDateTime createTime;
 
     public String getTitle() {
         return title;
@@ -184,5 +195,13 @@ public class RouteMetaVO extends SuperEntity {
 
     public void setMark(String mark) {
         this.mark = mark;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }
