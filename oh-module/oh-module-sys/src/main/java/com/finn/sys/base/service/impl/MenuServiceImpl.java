@@ -44,13 +44,9 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void save(RouteVO vo) {
-        MenuEntity entity = MenuConvert.INSTANCE.convert(vo.getMeta());
+    public void save(MenuVO vo) {
+        MenuEntity entity = MenuConvert.INSTANCE.convert(vo);
 
-        entity.setName(vo.getName());
-        entity.setComponent(vo.getComponent());
-        entity.setParentId(vo.getParentId());
-        entity.setPath(vo.getPath());
         // 判断显示路径是否存在
         if(entity.getPath() != null && !entity.getPath().isEmpty()){
             if(pathExists(entity.getId(), entity.getPath())){
@@ -62,8 +58,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void update(RouteVO vo) {
-        MenuEntity entity = MenuConvert.INSTANCE.convert(vo.getMeta());
+    public void update(MenuVO vo) {
+        MenuEntity entity = MenuConvert.INSTANCE.convert(vo);
 
         // 上级菜单不能为自己
         if (entity.getId().equals(entity.getParentId())) {

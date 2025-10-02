@@ -72,7 +72,7 @@
 	<select id="getList" resultType="com.finn.sys.base.entity.MenuEntity">
 		select * from sys_menu where db_status = 1
 		<if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
-		<if test="menuPath != null and menuPath != ''">and menu_path = #{menuPath}</if>
+		<if test="path != null and path != ''">and path = #{path}</if>
 		<if test="type != null">and type = #{type}</if>
 		order by sort
 	</select>

@@ -44,11 +44,11 @@ public class MenuController {
      * 菜单导航
      * @return
      */
-    @GetMapping("nav")
+    /*@GetMapping("nav")
     public Result<List<MenuTreeVO>> nav() {
         List<MenuTreeVO> list = menuService.getUserMenuList(new MenuQuery());
         return Result.ok(list);
-    }
+    }*/
 
     /**
      * 获取菜单
@@ -122,7 +122,7 @@ public class MenuController {
     @PostMapping
     @Log(module = "菜单管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:menu:save')")
-    public Result<String> save(@RequestBody @Valid RouteVO vo) {
+    public Result<String> save(@RequestBody @Valid MenuVO vo) {
         menuService.save(vo);
 
         return Result.ok();
@@ -136,7 +136,7 @@ public class MenuController {
     @PutMapping
     @Log(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
-    public Result<String> update(@RequestBody @Valid RouteVO vo) {
+    public Result<String> update(@RequestBody @Valid MenuVO vo) {
         menuService.update(vo);
 
         return Result.ok();

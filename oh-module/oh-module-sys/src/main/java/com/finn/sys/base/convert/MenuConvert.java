@@ -23,6 +23,8 @@ public interface MenuConvert {
 
     MenuEntity convert(RouteVO vo);
 
+    MenuEntity convert(MenuVO vo);
+
     @Mapping(target = "authority", ignore = true) // 忽略authority
     MenuEntity convert(RouteMetaVO vo);
 

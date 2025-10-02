@@ -18,9 +18,9 @@ import java.util.List;
  */
 public interface MenuService {
 
-	void save(RouteVO vo);
+	void save(MenuVO vo);
 
-	void update(RouteVO vo);
+	void update(MenuVO vo);
 
 	void delete(Long id);
 

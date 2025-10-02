@@ -1,15 +1,11 @@
 package com.finn.sys.base.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.core.entity.IDEntity;
-import com.finn.core.utils.DateUtils;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 菜单
@@ -22,85 +18,82 @@ public class MenuVO extends IDEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 菜单名称
+     * 上级ID
      */
-    @NotBlank(message = "菜单名称不能为空")
-    private String name;
-    /**
-     * 菜单名称
-     */
-    private String title;
-
-    /**
-     * 上级ID，上一级菜单
-     */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**
-     * 显示路径
+     * 路由路径
      */
     private String path;
 
     /**
-     * 页面组件路径
+     * 组件名
      */
-    private String menuPath;
+    private String name;
+
+    private String parentName;
 
     /**
-     * 类型 catalog | menu | action
+     * 组件路径
      */
-    private String type;
-    /**
-     * 状态 0停用 1有效
-     */
-    private Integer status;
+    private String component;
 
     /**
-     * 菜单是否隐藏
+     * 路由标题
      */
-    private Boolean hideInMenu = false;
+    private String title;
 
     /**
-     * 标签是否隐藏
+     * 路由图标
      */
-    private Boolean hideInTab = false;
+    private String icon;
 
     /**
-     * 用于配置页面的徽标，会在菜单显示
+     * 是否显示徽章
      */
-    private String badge;
+    private Boolean showBadge;
 
     /**
-     * 用于配置页面的徽标类型，dot 为小红点，normal 为文本
+     * 文本徽章
      */
-    private String badgeType;
+    private String showTextBadge;
 
     /**
-     * 用于配置页面的徽标颜色
+     * 是否在菜单中隐藏
      */
-    private String badgeVariants;
+    private Boolean isHide;
 
     /**
-     * 用于配置页面是否固定标签页，固定后页面不可关闭
+     * 是否在标签页中隐藏
      */
-    private Boolean affixTab;
+    private Boolean isHideTab;
 
     /**
-     * 用于配置外链跳转路径
+     * 外部链接
      */
     private String link;
 
     /**
-     * 打开方式   0：内部   1：外部
+     * 是否为iframe
      */
-    @Min(value = 0, message = "打开方式不正确")
-    @Max(value = 1, message = "打开方式不正确")
-    private Integer openStyle;
+    private Boolean isIframe;
 
     /**
-     * 菜单图标
+     * 是否缓存
      */
-    private String icon;
+    private Boolean keepAlive;
+
+    /**
+     * 是否固定标签页
+     */
+    private Boolean fixedTab;
+
+    /**
+     * 类型:  catalog | menu | button
+     */
+    private String type;
 
     /**
      * 授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)
@@ -108,39 +101,19 @@ public class MenuVO extends IDEntity implements Serializable {
     private String authority;
 
     /**
-     * 菜单缓存
-     */
-    private Boolean keepAlive = false;
-
-    /**
      * 排序
      */
-    @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
-
-    /**
-     * 创建时间
-     */
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    private LocalDateTime createTime;
-
-    /**
-     * 上级菜单名称
-     */
-    private String parentName;
 
     /**
      * 备注
      */
     private String mark;
 
-    public @NotBlank(message = "菜单名称不能为空") String getName() {
-        return name;
-    }
-
-    public void setName(@NotBlank(message = "菜单名称不能为空") String name) {
-        this.name = name;
-    }
+    /**
+     * 数据状态标识 0：已删除，1：正常
+     */
+    private Integer dbStatus;
 
     public Long getParentId() {
         return parentId;
@@ -148,87 +121,6 @@ public class MenuVO extends IDEntity implements Serializable {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
-    }
-
-    public String getMenuPath() {
-        return menuPath;
-    }
-
-    public void setMenuPath(String menuPath) {
-        this.menuPath = menuPath;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Integer getOpenStyle() {
-        return openStyle;
-    }
-
-    // @Range(min = 0, max = 1, message = "打开方式不正确")
-    public void setOpenStyle(@Min(value = 0, message = "打开方式不正确") @Max(value = 1, message = "打开方式不正确") Integer openStyle) {
-        this.openStyle = openStyle;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-    public @Min(value = 0, message = "排序值不能小于0") Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(@Min(value = 0, message = "排序值不能小于0") Integer sort) {
-        this.sort = sort;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    public String getMark() {
-        return mark;
-    }
-
-    public void setMark(String mark) {
-        this.mark = mark;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getPath() {
@@ -239,52 +131,76 @@ public class MenuVO extends IDEntity implements Serializable {
         this.path = path;
     }
 
-    public Boolean getHideInMenu() {
-        return hideInMenu;
+    public String getName() {
+        return name;
     }
 
-    public void setHideInMenu(Boolean hideInMenu) {
-        this.hideInMenu = hideInMenu;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Boolean getHideInTab() {
-        return hideInTab;
+    public String getParentName() {
+        return parentName;
     }
 
-    public void setHideInTab(Boolean hideInTab) {
-        this.hideInTab = hideInTab;
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
-    public String getBadge() {
-        return badge;
+    public String getComponent() {
+        return component;
     }
 
-    public void setBadge(String badge) {
-        this.badge = badge;
+    public void setComponent(String component) {
+        this.component = component;
     }
 
-    public String getBadgeType() {
-        return badgeType;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBadgeType(String badgeType) {
-        this.badgeType = badgeType;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getBadgeVariants() {
-        return badgeVariants;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setBadgeVariants(String badgeVariants) {
-        this.badgeVariants = badgeVariants;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public Boolean getAffixTab() {
-        return affixTab;
+    public Boolean getShowBadge() {
+        return showBadge;
     }
 
-    public void setAffixTab(Boolean affixTab) {
-        this.affixTab = affixTab;
+    public void setShowBadge(Boolean showBadge) {
+        this.showBadge = showBadge;
+    }
+
+    public String getShowTextBadge() {
+        return showTextBadge;
+    }
+
+    public void setShowTextBadge(String showTextBadge) {
+        this.showTextBadge = showTextBadge;
+    }
+
+    public Boolean getIsHide() {
+        return isHide;
+    }
+
+    public void setIsHide(Boolean hide) {
+        isHide = hide;
+    }
+
+    public Boolean getIsHideTab() {
+        return isHideTab;
+    }
+
+    public void setIsHideTab(Boolean hideTab) {
+        isHideTab = hideTab;
     }
 
     public String getLink() {
@@ -295,6 +211,14 @@ public class MenuVO extends IDEntity implements Serializable {
         this.link = link;
     }
 
+    public Boolean getIsIframe() {
+        return isIframe;
+    }
+
+    public void setIsIframe(Boolean iframe) {
+        isIframe = iframe;
+    }
+
     public Boolean getKeepAlive() {
         return keepAlive;
     }
@@ -303,11 +227,51 @@ public class MenuVO extends IDEntity implements Serializable {
         this.keepAlive = keepAlive;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Boolean getFixedTab() {
+        return fixedTab;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setFixedTab(Boolean fixedTab) {
+        this.fixedTab = fixedTab;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public Integer getDbStatus() {
+        return dbStatus;
+    }
+
+    public void setDbStatus(Integer dbStatus) {
+        this.dbStatus = dbStatus;
     }
 }
