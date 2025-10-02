@@ -67,6 +67,8 @@ public class RouteMetaVO extends SuperEntity {
     // 排序
     private Integer sort;
 
+    private String mark;
+
     /**
      * 用于配置页面的权限，只有拥有对应权限的用户才能访问页面
      */
@@ -174,5 +176,13 @@ public class RouteMetaVO extends SuperEntity {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 }

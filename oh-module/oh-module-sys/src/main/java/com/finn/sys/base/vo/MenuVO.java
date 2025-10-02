@@ -6,6 +6,7 @@ import com.finn.core.entity.IDEntity;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 菜单
@@ -109,6 +110,8 @@ public class MenuVO extends IDEntity implements Serializable {
      * 备注
      */
     private String mark;
+
+    private List<String> authList;
 
     /**
      * 数据状态标识 0：已删除，1：正常
@@ -273,5 +276,13 @@ public class MenuVO extends IDEntity implements Serializable {
 
     public void setDbStatus(Integer dbStatus) {
         this.dbStatus = dbStatus;
+    }
+
+    public List<String> getAuthList() {
+        return authList;
+    }
+
+    public void setAuthList(List<String> authList) {
+        this.authList = authList;
     }
 }
