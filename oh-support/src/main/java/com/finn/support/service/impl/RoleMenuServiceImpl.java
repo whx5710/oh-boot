@@ -1,6 +1,7 @@
 package com.finn.support.service.impl;
 
 import com.finn.core.constant.Constant;
+import com.finn.core.utils.AssertUtils;
 import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
@@ -36,13 +37,14 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 		// 数据库菜单ID列表
 		List<Long> dbMenuIdList = roleMenuMapper.getMenuIdList(roleId);
 		UserDetail user = SecurityUser.getUser();
+        AssertUtils.isNull(user, "用户信息");
 		// 需要新增的菜单ID
 		// Collection<Long> insertMenuIdList = CollUtil.subtract(menuIdList, dbMenuIdList);
 		Collection<Long> insertMenuIdList = menuIdList.stream()
 				.filter(element -> !dbMenuIdList.contains(element))
-				.collect(Collectors.toList());
+				.toList();
 
-		if (insertMenuIdList != null && insertMenuIdList.size() > 0){
+		if (!insertMenuIdList.isEmpty()){
 			List<RoleMenuEntity> menuList = insertMenuIdList.stream().map(menuId -> {
 				RoleMenuEntity entity = new RoleMenuEntity();
 				entity.setMenuId(menuId);
@@ -58,16 +60,16 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 
 		// 需要删除的菜单ID
 		// Collection<Long> deleteMenuIdList = CollUtil.subtract(dbMenuIdList, menuIdList);
-		Collection<Long> deleteMenuIdList = dbMenuIdList.stream()
+		List<Long> deleteMenuIdList = dbMenuIdList.stream()
 				.filter(element -> !menuIdList.contains(element))
 				.collect(Collectors.toList());
 
-		if (deleteMenuIdList != null && deleteMenuIdList.size() > 0){
+		if (!deleteMenuIdList.isEmpty()){
 			RoleMenuEntity param = new RoleMenuEntity();
 			param.setRoleId(roleId);
 			param.setUpdater(user.getId());
 			param.setUpdateTime(LocalDateTime.now());
-			roleMenuMapper.deleteMenuIdList((List<Long>) deleteMenuIdList, param);
+			roleMenuMapper.deleteMenuIdList(deleteMenuIdList, param);
 		}
 	}
 
