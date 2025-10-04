@@ -1,6 +1,7 @@
 package com.finn.support.service.impl;
 
 import com.finn.core.constant.Constant;
+import com.finn.core.exception.ServerException;
 import com.finn.framework.datasource.annotations.Ds;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -138,6 +139,10 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 		// 删除角色
 		// removeByIds(idList);
 		idList.forEach(id -> {
+            RoleEntity role = roleMapper.getById(id);
+            if(role != null && role.getIsSystem() == 1){
+                throw new ServerException("系统角色禁止删除");
+            }
 			RoleEntity sysRole = new RoleEntity();
 			sysRole.setId(id);
 			sysRole.setDbStatus(0);

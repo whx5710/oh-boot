@@ -35,7 +35,7 @@ public class RoleEntity extends BaseEntity {
 	 * 系统内置
 	 */
 	@TableField("is_system")
-	private Integer isSystem = 0;
+	private Integer isSystem;
 
 	/**
 	 * 租户

@@ -9,7 +9,6 @@ import com.finn.support.entity.RoleEntity;
 import com.finn.support.query.RoleQuery;
 import com.finn.support.query.RoleUserQuery;
 import com.finn.support.service.*;
-import com.finn.support.vo.RoleDataScopeVO;
 import com.finn.support.vo.RoleVO;
 import com.finn.support.vo.UserVO;
 import jakarta.validation.Valid;
@@ -123,14 +122,14 @@ public class RoleController {
      * @param vo 角色信息
      * @return 提示信息
      */
-    @PutMapping("data-scope")
-    @Log(module = "角色管理", name = "数据权限", type = OperateTypeEnum.UPDATE)
-    @PreAuthorize("hasAuthority('sys:role:update')")
-    public Result<String> dataScope(@RequestBody @Valid RoleDataScopeVO vo) {
-        roleService.dataScope(vo);
-
-        return Result.ok();
-    }
+//    @PutMapping("data-scope")
+//    @Log(module = "角色管理", name = "数据权限", type = OperateTypeEnum.UPDATE)
+//    @PreAuthorize("hasAuthority('sys:role:update')")
+//    public Result<String> dataScope(@RequestBody @Valid RoleDataScopeVO vo) {
+//        roleService.dataScope(vo);
+//
+//        return Result.ok();
+//    }
 
     /**
      * 删除
