@@ -57,13 +57,13 @@ public class RoleController {
      * 角色列表-不分页
      * @return 角色列表
      */
-    @GetMapping("list")
-    @PreAuthorize("hasAuthority('sys:role:list')")
-    public Result<List<RoleVO>> list() {
-        List<RoleVO> list = roleService.getList(new RoleQuery());
-
-        return Result.ok(list);
-    }
+//    @GetMapping("list")
+//    @PreAuthorize("hasAuthority('sys:role:list')")
+//    public Result<List<RoleVO>> list() {
+//        List<RoleVO> list = roleService.getList(new RoleQuery());
+//
+//        return Result.ok(list);
+//    }
 
     /**
      * 角色信息
