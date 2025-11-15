@@ -61,6 +61,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 			for(RoleEntity item: list){
 				RoleVO vo = new RoleVO();
 				vo.setId(item.getId());
+                vo.setCode(item.getCode());
 				vo.setName(item.getName());
 				vo.setRemark(item.getRemark());
 				vo.setDataScope(item.getDataScope());

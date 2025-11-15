@@ -17,6 +17,10 @@ public class RoleEntity extends BaseEntity {
 	 * 角色名称
 	 */
 	private String name;
+    /**
+     * 角色编码
+     */
+    private String code;
 	/**
 	 * 备注
 	 */
@@ -26,11 +30,6 @@ public class RoleEntity extends BaseEntity {
 	 */
 	@TableField("data_scope")
 	private Integer dataScope;
-	/**
-	 * 部门ID
-	 */
-//	@TableField("dept_id")
-//	private Long deptId;
 	/**
 	 * 系统内置
 	 */
@@ -54,6 +53,14 @@ public class RoleEntity extends BaseEntity {
 		this.name = name;
 	}
 
+    public String getCode(){
+        return code;
+    }
+
+    public void setCode(String code){
+        this.code = code;
+    }
+
 	public String getRemark() {
 		return remark;
 	}
@@ -69,14 +76,6 @@ public class RoleEntity extends BaseEntity {
 	public void setDataScope(Integer dataScope) {
 		this.dataScope = dataScope;
 	}
-
-//	public Long getDeptId() {
-//		return deptId;
-//	}
-
-//	public void setDeptId(Long deptId) {
-//		this.deptId = deptId;
-//	}
 
 	public Integer getIsSystem() {
 		return isSystem;

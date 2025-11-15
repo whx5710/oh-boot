@@ -837,7 +837,8 @@ COMMIT;
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '角色名称',
+  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色编码',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名称',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
   `data_scope` tinyint DEFAULT NULL COMMENT '数据范围  0：全部数据  1：本机构及子机构数据  2：本机构数据  3：本人数据  4：自定义数据',
   `db_status` tinyint DEFAULT '1' COMMENT '数据状态标识 0：已删除，1：正常',
@@ -854,7 +855,7 @@ CREATE TABLE `sys_role` (
 -- Records of sys_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_role` (`id`, `name`, `remark`, `data_scope`, `db_status`, `is_system`, `creator`, `create_time`, `updater`, `update_time`, `tenant_id`) VALUES (1, '租户角色', '系统内置', 0, 1, 1, 10000, '2025-01-01 01:23:45', 10000, '2025-06-07 21:53:07', '');
+INSERT INTO `sys_role` (`id`, `code`, `name`, `remark`, `data_scope`, `db_status`, `is_system`, `creator`, `create_time`, `updater`, `update_time`, `tenant_id`) VALUES (1, 'Tenant', '租户角色', '系统内置', 0, 1, 1, 10000, '2025-01-01 01:23:45', 10000, '2025-06-07 21:53:07', '');
 COMMIT;
 
 -- ----------------------------

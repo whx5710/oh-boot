@@ -26,6 +26,11 @@ public class RoleVO implements Serializable {
     private Long id;
 
     /**
+     * 角色编码
+     */
+    private String code;
+
+    /**
      * 角色名称
      */
     @NotBlank(message = "角色名称不能为空")
@@ -79,6 +84,14 @@ public class RoleVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode(){
+        return code;
+    }
+
+    public void setCode(String code){
+        this.code = code;
     }
 
     public String getName() {
