@@ -74,7 +74,6 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void update(MenuVO vo) {
         MenuEntity entity = MenuConvert.INSTANCE.convert(vo);
-
         // 上级菜单不能为自己
         if (entity.getId().equals(entity.getParentId())) {
             throw new ServerException("上级菜单不能为自己");
@@ -84,6 +83,11 @@ public class MenuServiceImpl implements MenuService {
             if(pathExists(entity.getId(), entity.getPath())){
                 throw new ServerException("显示路径已存在，请换一个!");
             }
+        }
+        // 如果是按钮权限
+        if(vo.getAuthList() != null && !vo.getAuthList().isEmpty()){
+            // 权限
+            entity.setAuthority(String.join(",", vo.getAuthList()));
         }
         // 更新菜单
         menuMapper.updateById(entity);
