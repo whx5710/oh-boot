@@ -44,31 +44,6 @@
 		order by t3.sort,t3.id asc
 	</select>
 
-	<!--<insert id="save">
-		INSERT INTO sys_menu (parent_id, name, url, menu_path, authority, type, open_style, icon, sort, db_status, mark, creator, create_time)
-		VALUES (#{parentId}, #{name}, #{url}, #{menuPath}, #{authority}, #{type}, #{openStyle}, #{icon}, #{sort}, #{dbStatus}, #{mark}, #{creator}, #{createTime})
-	</insert>-->
-
-	<!--<update id="updateById">
-		UPDATE sys_menu
-		<set>
-			<if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
-			<if test="name != null and name != ''">name = #{name},</if>
-			<if test="url != null and url != ''">url = #{url},</if>
-			<if test="menuPath != null and menuPath != ''">menu_path = #{menuPath},</if>
-			<if test="authority != null and authority != ''">authority = #{authority},</if>
-			<if test="type != null">type = #{type},</if>
-			<if test="openStyle != null">open_style = #{openStyle},</if>
-			<if test="icon != null and icon != ''">icon = #{icon},</if>
-			<if test="sort != null">sort = #{sort},</if>
-			<if test="dbStatus != null">db_status = #{dbStatus},</if>
-			<if test="mark != null and mark != ''">mark = #{mark},</if>
-			<if test="updater != null and updater != ''">updater = #{updater},</if>
-			update_time = #{updateTime}
-		</set>
-		WHERE id = #{id}
-	</update>-->
-
 	<select id="getList" resultType="com.finn.sys.base.entity.MenuEntity">
 		select * from sys_menu where db_status = 1
 		<if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>

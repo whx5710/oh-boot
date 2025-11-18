@@ -82,6 +82,11 @@ public class MenuVO extends IDEntity implements Serializable {
     private Boolean isIframe;
 
     /**
+     * 全屏页面
+     */
+    private Boolean isFullPage;
+
+    /**
      * 是否缓存
      */
     private Boolean keepAlive;
@@ -220,6 +225,14 @@ public class MenuVO extends IDEntity implements Serializable {
 
     public void setIsIframe(Boolean iframe) {
         isIframe = iframe;
+    }
+
+    public Boolean getIsFullPage(){
+        return isFullPage;
+    }
+
+    public void setIsFullPage(Boolean isFullPage){
+        this.isFullPage = isFullPage;
     }
 
     public Boolean getKeepAlive() {

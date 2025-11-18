@@ -51,7 +51,7 @@ public class MenuServiceImpl implements MenuService {
             // 权限
             entity.setAuthority(String.join(",", vo.getAuthList()));
         }else{
-            // 菜单，判断同级是否已经有权限菜单
+            // 菜单，判断同级是否已经有权限菜单，如果有，则不能新增菜单，只能新增权限
             List<MenuEntity> list = menuMapper.selectListByWrapper(QueryWrapper.of(MenuEntity.class)
                     .eq(MenuEntity::getDbStatus, 1)
                     .eq(MenuEntity::getParentId, vo.getParentId())
@@ -64,7 +64,7 @@ public class MenuServiceImpl implements MenuService {
         // 判断显示路径是否存在
         if(entity.getPath() != null && !entity.getPath().isEmpty()){
             if(pathExists(entity.getId(), entity.getPath())){
-                throw new ServerException("显示路径已存在，请换一个!");
+                throw new ServerException("显示路径已存在，请换一个");
             }
         }
         // 保存菜单
@@ -215,6 +215,7 @@ public class MenuServiceImpl implements MenuService {
         meta.setIsHideTab(item.getIsHideTab());
         meta.setLink(item.getLink());
         meta.setIsIframe(item.getIsIframe());
+        meta.setIsFullPage(item.getIsFullPage());
         meta.setKeepAlive(item.getKeepAlive());
         meta.setFixedTab(item.getFixedTab());
         meta.setSort(item.getSort());

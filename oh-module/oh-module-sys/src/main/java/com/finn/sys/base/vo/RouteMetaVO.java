@@ -55,6 +55,11 @@ public class RouteMetaVO extends SuperEntity {
     private Boolean isIframe = false;
 
     /**
+     * 全屏页面
+     */
+    private Boolean isFullPage = false;
+
+    /**
      * 是否缓存
      */
     private Boolean keepAlive = false;
@@ -122,7 +127,7 @@ public class RouteMetaVO extends SuperEntity {
     }
 
     public void setIsHide(Boolean hide) {
-        isHide = hide;
+        this.isHide = hide;
     }
 
     public Boolean getIsHideTab() {
@@ -130,7 +135,7 @@ public class RouteMetaVO extends SuperEntity {
     }
 
     public void setIsHideTab(Boolean hideTab) {
-        isHideTab = hideTab;
+        this.isHideTab = hideTab;
     }
 
     public String getLink() {
@@ -146,7 +151,14 @@ public class RouteMetaVO extends SuperEntity {
     }
 
     public void setIsIframe(Boolean iframe) {
-        isIframe = iframe;
+        this.isIframe = iframe;
+    }
+
+    public Boolean getIsFullPage() {
+        return isFullPage; }
+
+    public void setIsFullPage(Boolean isFullPage) {
+        this.isFullPage = isFullPage;
     }
 
     public Boolean getKeepAlive() {

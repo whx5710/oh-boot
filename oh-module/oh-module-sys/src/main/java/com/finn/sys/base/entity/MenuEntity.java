@@ -97,6 +97,11 @@ public class MenuEntity extends IDEntity {
     private Boolean isIframe;
 
     /**
+     * 全屏页面
+     */
+    @TableField("is_full_page")
+    private Boolean isFullPage;
+    /**
      * 是否缓存
      */
     @TableField("keep_alive")
@@ -270,6 +275,14 @@ public class MenuEntity extends IDEntity {
 
     public void setIsIframe(Boolean iframe) {
         isIframe = iframe;
+    }
+
+    public Boolean getIsFullPage(){
+        return isFullPage;
+    }
+
+    public void setIsFullPage(Boolean isFullPage){
+        this.isFullPage = isFullPage;
     }
 
     public Boolean getKeepAlive() {
