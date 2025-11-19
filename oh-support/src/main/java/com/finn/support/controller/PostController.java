@@ -87,7 +87,7 @@ public class PostController {
      * @param vo 岗位信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "岗位管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:post:update')")
     public Result<String> update(@RequestBody @Valid PostVO vo) {
@@ -101,7 +101,7 @@ public class PostController {
      * @param idList 岗位ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "岗位管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:post:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {

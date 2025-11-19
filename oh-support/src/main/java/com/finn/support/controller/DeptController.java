@@ -94,7 +94,7 @@ public class DeptController {
      * @param vo 部门信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "部门管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:dept:update')")
     public Result<String> update(@RequestBody @Valid DeptVO vo) {
@@ -108,7 +108,7 @@ public class DeptController {
      * @param id 部门id
      * @return 提示信息
      */
-    @DeleteMapping("{id}")
+    @PostMapping("/delById/{id}")
     @Log(module = "部门管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:dept:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {

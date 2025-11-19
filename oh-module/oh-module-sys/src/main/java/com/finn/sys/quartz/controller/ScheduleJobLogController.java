@@ -61,7 +61,7 @@ public class ScheduleJobLogController {
      * @param idList 日志ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<String> delete(@RequestBody List<Long> idList) {

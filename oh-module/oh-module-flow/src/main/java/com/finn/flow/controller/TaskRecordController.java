@@ -62,7 +62,7 @@ public class TaskRecordController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('workflow:record:update')")
     public Result<String> update(@RequestBody @Valid TaskRecordVO vo){
         taskRecordService.update(vo);
@@ -75,7 +75,7 @@ public class TaskRecordController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('workflow:record:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         taskRecordService.delete(idList);

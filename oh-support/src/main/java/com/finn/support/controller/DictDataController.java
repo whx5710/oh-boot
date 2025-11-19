@@ -75,7 +75,7 @@ public class DictDataController {
      * @param vo 字典数据
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "字典数据管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:dict:update')")
     public Result<String> update(@RequestBody @Valid DictDataVO vo) {
@@ -89,7 +89,7 @@ public class DictDataController {
      * @param idList 字典ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "字典数据管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:dict:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {

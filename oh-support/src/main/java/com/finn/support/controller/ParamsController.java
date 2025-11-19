@@ -93,7 +93,7 @@ public class ParamsController {
      * @param vo 参数信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "参数管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:params:all')")
     public Result<String> update(@RequestBody @Valid ParamsVO vo) {
@@ -106,7 +106,7 @@ public class ParamsController {
      * @param idList ID列表
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "参数管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:params:all')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -119,7 +119,7 @@ public class ParamsController {
      * @param id 参数id
      * @return 是否成功
      */
-    @DeleteMapping("{id}")
+    @PostMapping("/delById/{id}")
     @PreAuthorize("hasAuthority('sys:params:all')")
     public Result<Boolean> del(@PathVariable("id") Long id) {
         return Result.ok(paramsService.del(id));

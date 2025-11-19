@@ -72,7 +72,7 @@ public class OhTaskUserController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('team:user:update')")
     public Result<String> update(@RequestBody @Valid OhTaskUserVO vo){
         ohTaskUserService.update(vo);
@@ -85,7 +85,7 @@ public class OhTaskUserController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('team:user:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         ohTaskUserService.delete(idList);

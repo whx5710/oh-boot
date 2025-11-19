@@ -69,7 +69,7 @@ public class WorkOrderController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('workflow:order:update')")
     public Result<String> update(@RequestBody @Valid WorkOrderVO vo){
         workOrderService.update(vo);
@@ -81,7 +81,7 @@ public class WorkOrderController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('workflow:order:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         workOrderService.delete(idList);

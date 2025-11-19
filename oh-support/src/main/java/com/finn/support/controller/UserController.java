@@ -116,7 +116,7 @@ public class UserController {
      * @param vo 用户密码信息
      * @return 提示信息
      */
-    @PutMapping("password")
+    @PostMapping("/password")
     @Log(module = "用户管理", name = "修改密码", type = OperateTypeEnum.UPDATE)
     public Result<String> password(@RequestBody @Valid UserPasswordVO vo) {
         // 原密码不正确
@@ -178,7 +178,7 @@ public class UserController {
      * @param vo 用户
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "用户管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:user:update')")
     public Result<String> update(@RequestBody @Valid UserVO vo) {
@@ -191,7 +191,7 @@ public class UserController {
      * @param idList 用户ID
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "用户管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {

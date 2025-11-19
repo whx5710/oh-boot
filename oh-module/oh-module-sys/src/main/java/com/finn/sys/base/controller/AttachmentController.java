@@ -59,7 +59,7 @@ public class AttachmentController {
      * @param idList 附件ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "附件管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:attachment:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {

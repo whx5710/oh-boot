@@ -68,7 +68,7 @@ public class TenantMemberController {
      * @param vo 租户信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('tenant:member:update')")
     public Result<String> update(@RequestBody @Valid TenantMemberVO vo){
         tenantMemberService.update(vo);
@@ -80,7 +80,7 @@ public class TenantMemberController {
      * @param id 租户ID
      * @return 提示信息
      */
-    @DeleteMapping("{id}")
+    @PostMapping("/delById/{id}")
     @PreAuthorize("hasAuthority('tenant:member:update')")
     public Result<String> delete(@PathVariable("id") Long id){
         tenantMemberService.delete(id);

@@ -67,7 +67,7 @@ public class MessageController {
      * @param vo 消息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     public Result<String> update(@RequestBody @Valid MessageVO vo){
         messageService.update(vo);
         return Result.ok();
@@ -78,7 +78,7 @@ public class MessageController {
      * @param idList 消息ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     public Result<String> delete(@RequestBody List<Long> idList){
         messageService.delete(idList);
 

@@ -68,7 +68,7 @@ public class OhProjectController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('team:project:update')")
     public Result<String> update(@RequestBody @Valid OhProjectVO vo){
         ohProjectService.update(vo);
@@ -81,7 +81,7 @@ public class OhProjectController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('team:project:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         ohProjectService.delete(idList);

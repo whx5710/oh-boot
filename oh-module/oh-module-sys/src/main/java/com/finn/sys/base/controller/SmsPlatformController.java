@@ -118,7 +118,7 @@ public class SmsPlatformController {
      * @param vo 短信平台数据
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "短信平台", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sms:platform:update')")
     public Result<String> update(@RequestBody @Valid SmsPlatformVO vo) {
@@ -132,7 +132,7 @@ public class SmsPlatformController {
      * @param idList ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "短信平台", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sms:platform:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {

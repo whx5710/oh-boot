@@ -54,18 +54,6 @@ public class RoleController {
     }
 
     /**
-     * 角色列表-不分页
-     * @return 角色列表
-     */
-//    @GetMapping("list")
-//    @PreAuthorize("hasAuthority('sys:role:list')")
-//    public Result<List<RoleVO>> list() {
-//        List<RoleVO> list = roleService.getList(new RoleQuery());
-//
-//        return Result.ok(list);
-//    }
-
-    /**
      * 角色信息
      * @param id 角色ID
      * @return 角色信息
@@ -108,7 +96,7 @@ public class RoleController {
      * @param vo 角色信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "角色管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> update(@RequestBody @Valid RoleVO vo) {
@@ -118,25 +106,11 @@ public class RoleController {
     }
 
     /**
-     * 数据权限
-     * @param vo 角色信息
-     * @return 提示信息
-     */
-//    @PutMapping("data-scope")
-//    @Log(module = "角色管理", name = "数据权限", type = OperateTypeEnum.UPDATE)
-//    @PreAuthorize("hasAuthority('sys:role:update')")
-//    public Result<String> dataScope(@RequestBody @Valid RoleDataScopeVO vo) {
-//        roleService.dataScope(vo);
-//
-//        return Result.ok();
-//    }
-
-    /**
      * 删除
      * @param idList 角色ID列表
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "角色管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -164,7 +138,7 @@ public class RoleController {
      * @param userIdList 用户列表
      * @return 提示信息
      */
-    @DeleteMapping("user/{roleId}")
+    @PostMapping("/delUser/{roleId}")
     @Log(module = "角色管理", name = "删除角色用户", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> userDelete(@PathVariable("roleId") Long roleId, @RequestBody List<Long> userIdList) {

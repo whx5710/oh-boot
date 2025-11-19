@@ -87,7 +87,7 @@ public class ScheduleJobController {
      * @param vo 定时任务信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "定时任务", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('schedule:update')")
     public Result<String> update(@RequestBody @Valid ScheduleJobVO vo) {
@@ -108,7 +108,7 @@ public class ScheduleJobController {
      * @param idList 定时任务ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @Log(module = "定时任务", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('schedule:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
@@ -122,7 +122,7 @@ public class ScheduleJobController {
      * @param vo 参数
      * @return 提示信息
      */
-    @PutMapping("run")
+    @PostMapping("/run")
     @Log(module = "定时任务", name = "立即执行", type = OperateTypeEnum.OTHER)
     @PreAuthorize("hasAuthority('schedule:run')")
     public Result<String> run(@RequestBody ScheduleJobVO vo) {
@@ -136,7 +136,7 @@ public class ScheduleJobController {
      * @param vo 定时任务
      * @return 提示信息
      */
-    @PutMapping("change-status")
+    @PostMapping("/change-status")
     @Log(module = "定时任务", name = "修改状态", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('schedule:update')")
     public Result<String> changeStatus(@RequestBody ScheduleJobVO vo) {

@@ -41,18 +41,8 @@ public class MenuController {
     }
 
     /**
-     * 菜单导航
-     * @return
-     */
-    /*@GetMapping("nav")
-    public Result<List<MenuTreeVO>> nav() {
-        List<MenuTreeVO> list = menuService.getUserMenuList(new MenuQuery());
-        return Result.ok(list);
-    }*/
-
-    /**
      * 获取菜单
-     * @param query 类型 catalog | menu | action | all
+     * @param query 类型 catalog | menu | button | all
      * @return
      */
     @PostMapping("/route")
@@ -133,7 +123,7 @@ public class MenuController {
      * @param vo 菜单信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
     public Result<String> update(@RequestBody @Valid MenuVO vo) {
@@ -147,7 +137,7 @@ public class MenuController {
      * @param id 菜单ID
      * @return
      */
-    @DeleteMapping("{id}")
+    @PostMapping("/delById/{id}")
     @Log(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {

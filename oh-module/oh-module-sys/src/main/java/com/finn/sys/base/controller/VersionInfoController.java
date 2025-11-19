@@ -81,7 +81,7 @@ public class VersionInfoController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('system:info:update')")
     public Result<String> update(@RequestBody @Valid VersionInfoVO vo){
         versionInfoService.update(vo);
@@ -93,7 +93,7 @@ public class VersionInfoController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('system:info:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         versionInfoService.delete(idList);

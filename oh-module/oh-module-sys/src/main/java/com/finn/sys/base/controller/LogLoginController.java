@@ -56,7 +56,7 @@ public class LogLoginController {
      * @param idList id集合
      * @return str
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('sys:log:login:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         logLoginService.delete(idList);
