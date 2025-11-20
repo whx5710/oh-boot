@@ -94,11 +94,12 @@ public class Tools {
     /**
      * 生成length个长度随机字符串
      * @param length 长度
-     * @return str 最小返回5个长度随机数
+     * @return str 最小返回4个长度随机数
      */
     public static String getRandom(int length){
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Random random = new Random();
+        // 随机取一位大小写字母、字符和数字，长度4位
         int number = random.nextInt(LOW_LETTER.length());
         sb.append(LOW_LETTER.charAt(number));
 

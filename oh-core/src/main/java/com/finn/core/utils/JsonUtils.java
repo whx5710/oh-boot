@@ -89,7 +89,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(text, clazz);
         } catch (Exception e) {
-            log.error(text + " json字符串转化对象失败! {}", e.getMessage());
+            log.error("{} json字符串转化对象失败! {}", text, e.getMessage());
              throw new RuntimeException(e);
         }
     }
@@ -133,7 +133,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(text, typeReference);
         } catch (Exception e) {
-            log.error(text + " json字符串转化对象失败！{}", e.getMessage());
+            log.error("{} json字符串转化对象失败！{}", text, e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -149,7 +149,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(text, objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
         } catch (Exception e) {
-            log.error(text + " 转list失败！{}", e.getMessage());
+            log.error("{} 转list失败！{}", text, e.getMessage());
             throw new RuntimeException(e);
         }
     }
