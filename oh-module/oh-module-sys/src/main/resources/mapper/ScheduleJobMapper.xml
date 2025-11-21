@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.finn.sys.quartz.mapper.ScheduleJobMapper">
-    <select id="getList" resultType="com.finn.sys.quartz.entity.ScheduleJobEntity">
+<mapper namespace="com.finn.sys.mapper.ScheduleJobMapper">
+    <select id="getList" resultType="com.finn.sys.entity.ScheduleJobEntity">
         select * from schedule_job where db_status = 1
         <if test="jobName != null and jobName != ''">and job_name like concat('%',#{jobName}, '%')</if>
         <if test="jobGroup != null and jobGroup != ''">and job_group like concat('%',#{jobGroup}, '%')</if>
@@ -16,7 +16,7 @@
         </foreach>
     </delete>
 
-    <select id="getLogList" resultType="com.finn.sys.quartz.entity.ScheduleJobLogEntity">
+    <select id="getLogList" resultType="com.finn.sys.entity.ScheduleJobLogEntity">
         select * from schedule_job_log
         <where>
             <if test="jobName != null and jobName != ''">and job_name like concat('%', #{jobName}, '%')</if>
@@ -36,11 +36,11 @@
         VALUES (#{jobName}, #{jobGroup}, #{beanName}, #{method}, #{params}, #{cronExpression}, #{status}, #{concurrent}, #{remark}, #{dbStatus}, #{creator}, #{createTime})
     </insert>
 
-    <select id="getById" resultType="com.finn.sys.quartz.entity.ScheduleJobEntity">
+    <select id="getById" resultType="com.finn.sys.entity.ScheduleJobEntity">
         select * from schedule_job where id = #{id}
     </select>
 
-    <select id="getLogById" resultType="com.finn.sys.quartz.entity.ScheduleJobLogEntity">
+    <select id="getLogById" resultType="com.finn.sys.entity.ScheduleJobLogEntity">
         select * from schedule_job_log where id = #{id}
     </select>
 

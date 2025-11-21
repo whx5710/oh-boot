@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.finn.sys.base.mapper.LogOperateMapper">
+<mapper namespace="com.finn.sys.mapper.LogOperateMapper">
     <insert id="save">
         INSERT INTO sys_log_operate (module, name, req_uri, req_method, req_params, ip, address, user_agent, operate_type, duration, status, user_id, real_name, result_msg, create_time, tenant_id)
         VALUES (#{module}, #{name}, #{reqUri}, #{reqMethod}, #{reqParams}, #{ip}, #{address}, #{userAgent}, #{operateType}, #{duration}, #{status}, #{userId}, #{realName}, #{resultMsg}, #{createTime}, #{tenantId})
     </insert>
 
-    <select id="getList" resultType="com.finn.sys.base.entity.LogOperateEntity">
+    <select id="getList" resultType="com.finn.sys.entity.LogOperateEntity">
         select * from sys_log_operate
         <where>
             <if test="status != null">and status = #{status}</if>

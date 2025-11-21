@@ -35,7 +35,7 @@ public class SysDataSourceInterceptor {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.finn.sys..mapper.*Mapper.*(..))")
+    @Around("execution(* com.finn.sys.mapper.*Mapper.*(..))")
     public Object dynamicSetDataSource(ProceedingJoinPoint joinPoint) throws Throwable {
         Object target = joinPoint.getTarget();
         if(Proxy.isProxyClass(target.getClass())) {
