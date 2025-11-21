@@ -14,28 +14,17 @@ import com.finn.core.exception.ServerException;
  * 12位序列，毫秒内的计数，12位的计数顺序号支持每个节点每毫秒(同一机器，同一时间截)产生4096个ID序号<br>
  * 加起来刚好64位，为一个Long型。<br>
  * SnowFlake的优点是，整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞(由数据中心ID和机器ID作区分)，并且效率较高，经测试，SnowFlake每秒能够产生26万ID左右。
+ *
+ * @since 2025-11-22
+ * @author 王小费 whx5710@qq.com
  */
 public class SnowflakeIdWorker {
-    /** 开始时间截 (2025-01-01 00:00:00) */
-    private final long twepoch = 1735660800000L;
 
     /** 机器id所占的位数 */
     private final long workerIdBits = 5L;
 
     /** 数据标识id所占的位数 */
     private final long datacenterIdBits = 5L;
-
-    /** 序列在id中占的位数 */
-    private final long sequenceBits = 12L;
-
-    /** 机器ID向左移12位 */
-    private final long workerIdShift = sequenceBits;
-
-    /** 数据标识id向左移17位(12+5) */
-    private final long datacenterIdShift = sequenceBits + workerIdBits;
-
-    /** 时间截向左移22位(5+5+12) */
-    private final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
 
     /** 工作机器ID(0~31) */
     private final long workerId;
@@ -79,6 +68,8 @@ public class SnowflakeIdWorker {
      */
     public synchronized long nextId() {
         long sequenceTmp = sequence;
+        // 序列在id中占的位数
+        long sequenceBits = 12L;
         // 生成序列的掩码，这里为4095 (0b111111111111=0xfff=4095)
         long sequenceMask = ~(-1L << sequenceBits);
         sequence = (sequence + 1) & sequenceMask;
@@ -86,11 +77,18 @@ public class SnowflakeIdWorker {
             // sequence自增到最大了，时间戳自增1
             startTimestamp += 1;
         }
+        // 数据标识id向左移17位(12+5)
+        long datacenterIdShift = sequenceBits + workerIdBits;
+        // 时间截向左移22位(5+5+12)
+        long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+
+        // 开始时间截 (2025-01-01 00:00:00)，初始固定后请勿随意修改，谨防ID重复
+        long twepoch = 1735660800000L;
 
         // 移位并通过或运算拼到一起组成64位的ID
         return ((startTimestamp - twepoch) << timestampLeftShift)
                 | (datacenterId << datacenterIdShift)
-                | (workerId << workerIdShift)
+                | (workerId << sequenceBits) // 机器ID向左移12位
                 | sequence;
     }
 }

@@ -25,6 +25,7 @@ import java.net.NetworkInterface;
  * @author 王小费 whx5710@qq.com
  * @since 2025-03-02
  */
+@Deprecated(since="2025-11-22")
 public class IdWorker {
     // 时间起始标记点，作为基准，一般取系统的最近时间戳（一旦确定不能变动） 2025-01-01 00:00:00
     private final static long twepoch = 1735660800000L;
