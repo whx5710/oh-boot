@@ -26,8 +26,8 @@ import java.net.NetworkInterface;
  * @since 2025-03-02
  */
 public class IdWorker {
-    // 时间起始标记点，作为基准，一般取系统的最近时间（一旦确定不能变动）
-    private final static long twepoch = 1288834974657L;
+    // 时间起始标记点，作为基准，一般取系统的最近时间戳（一旦确定不能变动） 2025-01-01 00:00:00
+    private final static long twepoch = 1735660800000L;
     // 机器标识位数
     private final static long workerIdBits = 5L;
     // 数据中心标识位数
@@ -83,7 +83,7 @@ public class IdWorker {
     public synchronized long nextId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
-            throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
+            throw new ServerException(String.format("时钟倒退了，在 %d 毫秒内拒绝生成ID", lastTimestamp - timestamp));
         }
         if (lastTimestamp == timestamp) {
             // 当前毫秒内，则+1
@@ -102,6 +102,11 @@ public class IdWorker {
                 | (workerId << workerIdShift) | sequence;
     }
 
+    /**
+     * 时钟回拨问题
+     * @param lastTimestamp
+     * @return
+     */
     private long tilNextMillis(final long lastTimestamp) {
         long timestamp = this.timeGen();
         while (timestamp <= lastTimestamp) {
@@ -110,6 +115,10 @@ public class IdWorker {
         return timestamp;
     }
 
+    /**
+     * 当前时间戳
+     * @return 时间戳
+     */
     private long timeGen() {
         return System.currentTimeMillis();
     }
@@ -120,19 +129,19 @@ public class IdWorker {
      * </p>
      */
     protected static long getMaxWorkerId(long datacenterId, long maxWorkerId) {
-        StringBuffer mpid = new StringBuffer();
-        mpid.append(datacenterId);
+        StringBuilder mpId = new StringBuilder();
+        mpId.append(datacenterId);
         String name = ManagementFactory.getRuntimeMXBean().getName();
         if (!name.isEmpty()) {
             /*
              * GET jvmPid
              */
-            mpid.append(name.split("@")[0]);
+            mpId.append(name.split("@")[0]);
         }
         /*
          * MAC + PID 的 hashcode 获取16个低位
          */
-        return (mpid.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
+        return (mpId.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
     }
 
     /**
