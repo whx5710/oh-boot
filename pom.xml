@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.2</version>
+		<version>3.5.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.finn</groupId>
@@ -42,15 +42,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!--springboot版本-->
-		<spring-boot-dependencies.version>3.4.2</spring-boot-dependencies.version>
+		<spring-boot-dependencies.version>3.5.8</spring-boot-dependencies.version>
 		<!-- spring security -->
-		<spring.security>6.4.2</spring.security>
+		<spring.security>6.5.7</spring.security>
 		<!-- mybatis 版本 -->
-		<mybatis.version>3.0.4</mybatis.version>
+		<mybatis.version>3.0.5</mybatis.version>
 		<!--分页插件-->
-		<pagehelper.version>2.1.0</pagehelper.version>
+		<pagehelper.version>2.1.1</pagehelper.version>
 		<!-- 阿里连接池 -->
-		<druid.version>1.2.24</druid.version>
+		<druid.version>1.2.27</druid.version>
 		<!-- 框架版本信息 -->
 		<finn.framework.version>3.2.0.20250409</finn.framework.version>
 		<!-- 框架版本信息 -->
