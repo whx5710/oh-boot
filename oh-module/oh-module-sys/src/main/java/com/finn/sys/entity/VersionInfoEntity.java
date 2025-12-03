@@ -27,6 +27,11 @@ public class VersionInfoEntity extends IDEntity {
 	private String versionNum;
 
 	/**
+	 * 标题
+	 */
+	private String title;
+
+	/**
 	* 发布内容
 	*/
 	private String content;
@@ -45,10 +50,22 @@ public class VersionInfoEntity extends IDEntity {
 	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime releaseTime;
 
-	// 是否当前版本
+	/**
+	 * 是否当前版本
+	 */
 	@TableField("is_curr_version")
 	private Boolean isCurrVersion;
 
+	/**
+	 * 是否需要重新登录
+	 */
+	@TableField("re_login")
+	private Boolean reLogin = false;
+
+	/**
+	 * 备注
+	 */
+	private String remark;
 	/**
 	 * 创建者
 	 */
@@ -161,5 +178,29 @@ public class VersionInfoEntity extends IDEntity {
 
 	public void setDbStatus(Integer dbStatus) {
 		this.dbStatus = dbStatus;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Boolean getReLogin() {
+		return reLogin;
+	}
+
+	public void setReLogin(Boolean reLogin) {
+		this.reLogin = reLogin;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

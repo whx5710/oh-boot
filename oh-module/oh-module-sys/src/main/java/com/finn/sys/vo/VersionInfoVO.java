@@ -20,6 +20,21 @@ public class VersionInfoVO extends BaseEntity {
 	private String versionNum;
 
 	/**
+	 * 标题
+	 */
+	private String title;
+
+	/**
+	 * 是否需要重新登录
+	 */
+	private Boolean reLogin = false;
+
+	/**
+	 * 备注
+	 */
+	private String remark;
+
+	/**
 	 * 发布内容
 	 */
 	private String content;
@@ -78,5 +93,29 @@ public class VersionInfoVO extends BaseEntity {
 
 	public void setCoverPicture(String coverPicture) {
 		this.coverPicture = coverPicture;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Boolean getReLogin() {
+		return reLogin;
+	}
+
+	public void setReLogin(Boolean reLogin) {
+		this.reLogin = reLogin;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

@@ -996,25 +996,28 @@ COMMIT;
 DROP TABLE IF EXISTS `sys_version_info`;
 CREATE TABLE `sys_version_info` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `version_num` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本号',
-  `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发布内容',
-  `release_time` datetime NOT NULL COMMENT '发布时间',
-  `is_curr_version` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否当前版本',
-  `cover_picture` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '封面图片',
-  `db_status` tinyint DEFAULT '1' COMMENT '数据状态标识 0：已删除，1：正常',
-  `creator` bigint DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `updater` bigint DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_01` (`is_curr_version`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='版本信息';
+    `version_num` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本号',
+    `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
+    `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发布内容',
+    `release_time` datetime NOT NULL COMMENT '发布时间',
+    `is_curr_version` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否当前版本',
+    `cover_picture` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面图片',
+    `re_login` tinyint NULL DEFAULT NULL COMMENT '是否需要重新登录',
+    `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+    `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+    `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+    `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_01`(`is_curr_version`) USING BTREE
+  ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '版本信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_version_info
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_version_info` (`id`, `version_num`, `content`, `release_time`, `is_curr_version`, `cover_picture`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (1, '1.0.0', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 1, '', 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
+INSERT INTO `sys_version_info` (`id`, `version_num`, `title`, `content`, `release_time`, `is_curr_version`, `cover_picture`, `re_login`, `remark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 1, '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
 COMMIT;
 
 -- ----------------------------

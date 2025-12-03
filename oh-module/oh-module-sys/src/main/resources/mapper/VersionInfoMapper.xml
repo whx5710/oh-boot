@@ -3,19 +3,6 @@
 
 <mapper namespace="com.finn.sys.mapper.VersionInfoMapper">
 
-    <resultMap type="com.finn.sys.entity.VersionInfoEntity" id="sysVersionInfoMap">
-        <result property="id" column="id"/>
-        <result property="versionNum" column="version_num"/>
-        <result property="content" column="content"/>
-        <result property="releaseTime" column="release_time"/>
-        <result property="dbStatus" column="db_status"/>
-        <result property="creator" column="creator"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updater" column="updater"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="isCurrVersion" column="is_curr_version"/>
-    </resultMap>
-
     <select id="getList" resultType="com.finn.sys.entity.VersionInfoEntity">
         select * from sys_version_info where db_status = 1
         <if test="keyWord != null and keyWord != ''">
