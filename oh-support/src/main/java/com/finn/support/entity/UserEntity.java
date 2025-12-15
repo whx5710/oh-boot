@@ -1,5 +1,7 @@
 package com.finn.support.entity;
 
+import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 import com.finn.support.enums.UserStatusEnum;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  *
  */
+@TableName("sys_user")
 public class UserEntity extends BaseEntity {
     /**
      * 用户名
@@ -23,6 +26,7 @@ public class UserEntity extends BaseEntity {
     /**
      * 姓名
      */
+    @TableField("real_name")
     private String realName;
     /**
      * 头像
@@ -43,10 +47,12 @@ public class UserEntity extends BaseEntity {
     /**
      * 部门ID
      */
+    @TableField("dept_id")
     private Long deptId;
     /**
      * 超级管理员   0：否   1：是
      */
+    @TableField("super_admin")
     private Integer superAdmin;
     /**
      * 状态  {@link UserStatusEnum}
@@ -59,15 +65,18 @@ public class UserEntity extends BaseEntity {
     /**
      * 修改吗密码时间
      */
+    @TableField("pwd_modify_time")
     private LocalDateTime pwdModifyTime;
 
     /**
      * 用户密钥，用于第三方系统登录
      */
+    @TableField("user_key")
     private String userKey;
     /**
      * 部门名称
      */
+    @TableField(exists = false)
     private String deptName;
 
     public String getUsername() {

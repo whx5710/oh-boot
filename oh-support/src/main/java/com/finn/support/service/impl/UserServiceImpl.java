@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
         }
         // 保存用户
         //sysUserMapper.insertUser(entity);
-        userMapper.insertUser(entity); // 保存用户-动态sql
+        userMapper.insert(entity); // 保存用户-动态sql
 
         // 保存用户角色关系
         userRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());

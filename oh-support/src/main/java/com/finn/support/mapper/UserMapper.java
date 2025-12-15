@@ -1,6 +1,7 @@
 package com.finn.support.mapper;
 
 import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.support.entity.UserEntity;
 import com.finn.support.query.RoleUserQuery;
 import com.finn.support.query.UserQuery;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  */
 @Mapper
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<UserEntity> {
 
 	List<UserEntity> getList(@Param("params") UserQuery params);
 
@@ -32,11 +33,12 @@ public interface UserMapper {
 	UserEntity getByMobile(@Param("mobile") String mobile);
 
 	// 保存用户
-	void insertUser(UserEntity userEntity);
+//	void insertUser(UserEntity userEntity);
 
 
 	// 根据ID修改用户信息
-	boolean updateById(UserEntity userEntity);
+//	boolean updateById(UserEntity userEntity);
+
 	// 解绑租户用户
 	boolean unbindUser(UserEntity userEntity);
 

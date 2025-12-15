@@ -94,11 +94,8 @@ public class LogOperateServiceImpl implements LogOperateService {
                         return;
                     }
                     OperateLogDTO log = (OperateLogDTO) object;
-                    if (log == null) {
-                        return;
-                    }
                     LogOperateEntity entity = LogOperateConvert.INSTANCE.convert(log);
-                    logOperateMapper.save(entity);
+                    logOperateMapper.insert(entity);
                 }
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));

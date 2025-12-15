@@ -60,7 +60,7 @@
 	</select>
 
 	<!--保存用户-->
-	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+	<!--<insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_user (
 			username, password,
 			real_name, avatar,
@@ -81,9 +81,9 @@
 			#{createTime}, #{pwdModifyTime},
 			#{userKey},#{note},
 			#{tenantId})
-	</insert>
+	</insert>-->
 
-	<update id="updateById" parameterType="com.finn.support.entity.UserEntity">
+	<!--<update id="updateById" parameterType="com.finn.support.entity.UserEntity">
 		update sys_user
 		<set>
 			<if test="username != null and username != ''">username = #{username},</if>
@@ -105,7 +105,7 @@
 			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}
-	</update>
+	</update>-->
 
 	<update id="unbindUser" parameterType="com.finn.support.entity.UserEntity">
 		update sys_user

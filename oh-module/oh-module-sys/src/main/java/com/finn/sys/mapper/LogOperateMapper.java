@@ -18,6 +18,6 @@ public interface LogOperateMapper extends BaseMapper<LogOperateEntity> {
 
     List<LogOperateEntity> getList(LogOperateQuery query);
 
-    int save(LogOperateEntity param);
+//    int save(LogOperateEntity param);
 
 }
