@@ -1,12 +1,10 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ExcelUtils;
 import com.finn.core.utils.HttpContextUtils;
 import com.finn.core.utils.IpUtils;
 import com.finn.core.utils.PageResult;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.datasource.utils.DeleteWrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
@@ -31,7 +29,6 @@ import java.util.List;
  *
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class LogLoginServiceImpl implements LogLoginService {
     private final LogLoginMapper logLoginMapper;
 

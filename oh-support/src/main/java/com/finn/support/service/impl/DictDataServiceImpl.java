@@ -1,7 +1,5 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.support.mapper.DictDataMapper;
@@ -22,7 +20,6 @@ import java.util.List;
  *
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class DictDataServiceImpl implements DictDataService {
     private final DictDataMapper dictDataMapper;
     public DictDataServiceImpl(DictDataMapper dictDataMapper) {

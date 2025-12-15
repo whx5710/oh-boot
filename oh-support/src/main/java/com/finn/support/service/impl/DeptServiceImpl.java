@@ -1,7 +1,5 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -34,7 +32,6 @@ import java.util.List;
  *
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class DeptServiceImpl implements DeptService {
     private final UserMapper userMapper;
     private final DeptMapper deptMapper;

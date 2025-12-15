@@ -1,8 +1,6 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
 import com.finn.core.utils.*;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.support.enums.DataScopeEnum;
 import com.finn.support.enums.UserStatusEnum;
@@ -41,7 +39,6 @@ import java.util.*;
  * 
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class UserServiceImpl implements UserService {
     private final UserRoleService userRoleService;
     private final UserPostService userPostService;

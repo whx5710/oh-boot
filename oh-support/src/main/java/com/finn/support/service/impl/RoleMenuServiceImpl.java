@@ -1,8 +1,6 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
 import com.finn.core.utils.AssertUtils;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.support.mapper.RoleMenuMapper;
@@ -23,7 +21,6 @@ import java.util.stream.Collectors;
  * 
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class RoleMenuServiceImpl implements RoleMenuService {
 
 	private final RoleMenuMapper roleMenuMapper;

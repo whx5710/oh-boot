@@ -1,8 +1,6 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
 import com.finn.core.exception.ServerException;
-import com.finn.framework.datasource.annotations.Ds;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.framework.service.impl.BaseServiceImpl;
@@ -33,7 +31,6 @@ import java.util.List;
  *
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements RoleService {
 	private final RoleMenuService roleMenuService;
 	private final RoleDataScopeService roleDataScopeService;

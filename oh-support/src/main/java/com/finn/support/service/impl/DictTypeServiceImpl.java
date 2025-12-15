@@ -1,7 +1,5 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.framework.datasource.utils.UpdateWrapper;
 import com.finn.framework.datasource.utils.Wrapper;
@@ -36,7 +34,6 @@ import java.util.List;
  *
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class DictTypeServiceImpl implements DictTypeService {
     private final DictDataMapper dictDataMapper;
     private final DictTypeMapper dictTypeMapper;

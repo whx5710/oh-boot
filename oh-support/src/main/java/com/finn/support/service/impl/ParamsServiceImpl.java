@@ -1,7 +1,5 @@
 package com.finn.support.service.impl;
 
-import com.finn.core.constant.Constant;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.framework.datasource.utils.UpdateWrapper;
 import com.finn.framework.datasource.utils.Wrapper;
@@ -32,7 +30,6 @@ import java.util.Map;
  *
  */
 @Service
-@Ds(Constant.DYNAMIC_SYS_DB)
 public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements ParamsService {
 
     private final ParamsCache paramsCache;

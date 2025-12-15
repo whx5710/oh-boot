@@ -2,9 +2,7 @@ package com.finn.support.cache;
 
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
-import com.finn.core.constant.Constant;
 import com.finn.core.utils.JsonUtils;
-import com.finn.framework.datasource.annotations.Ds;
 import com.finn.support.entity.UserEntity;
 import com.finn.support.mapper.UserMapper;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,6 @@ public class UserCache {
      * @param userId
      * @return
      */
-    @Ds(Constant.DYNAMIC_SYS_DB)
     public UserEntity getUser(Long userId) {
         String key = RedisKeys.getUserCacheKey(userId);
         if(redisCache.hasKey(key)){
