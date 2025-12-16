@@ -1,6 +1,7 @@
 package com.finn.support.entity;
 
 import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 
@@ -10,18 +11,19 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  *
  */
+@TableName("sys_user_post")
 public class UserPostEntity extends BaseEntity {
 	/**
 	 * 用户ID
 	 */
+	@TableField("user_id")
 	private Long userId;
 	/**
 	* 岗位ID
 	*/
+	@TableField("post_id")
 	private Long postId;
 
-	@TableField(exists = false)
-	private String tenantId;
 
 	public Long getUserId() {
 		return userId;
@@ -39,13 +41,4 @@ public class UserPostEntity extends BaseEntity {
 		this.postId = postId;
 	}
 
-	@Override
-	public String getTenantId() {
-		return tenantId;
-	}
-
-	@Override
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
 }

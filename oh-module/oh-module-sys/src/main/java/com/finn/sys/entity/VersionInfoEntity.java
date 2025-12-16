@@ -1,12 +1,10 @@
 package com.finn.sys.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.finn.core.entity.IDEntity;
 import com.finn.core.utils.DateUtils;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
+import com.finn.framework.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -18,7 +16,7 @@ import java.time.LocalDateTime;
  * @since 1.0.0 2023-09-16
  */
 @TableName("sys_version_info")
-public class VersionInfoEntity extends IDEntity {
+public class VersionInfoEntity extends BaseEntity {
 
 	/**
 	* 版本号
@@ -66,39 +64,6 @@ public class VersionInfoEntity extends IDEntity {
 	 * 备注
 	 */
 	private String remark;
-	/**
-	 * 创建者
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long  creator;
-
-	/**
-	 * 创建时间
-	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@TableField("create_time")
-	private LocalDateTime createTime;
-
-	/**
-	 * 更新者
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long  updater;
-
-	/**
-	 * 更新时间
-	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@TableField("update_time")
-	private LocalDateTime updateTime;
-
-	/**
-	 * 数据状态标记，0删除1有效
-	 */
-	@TableField("db_status")
-	private Integer dbStatus = 1;
 
 	public String getVersionNum() {
 		return versionNum;
@@ -138,46 +103,6 @@ public class VersionInfoEntity extends IDEntity {
 
 	public void setCoverPicture(String coverPicture) {
 		this.coverPicture = coverPicture;
-	}
-
-	public Long getCreator() {
-		return creator;
-	}
-
-	public void setCreator(Long creator) {
-		this.creator = creator;
-	}
-
-	public LocalDateTime getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(LocalDateTime createTime) {
-		this.createTime = createTime;
-	}
-
-	public Long getUpdater() {
-		return updater;
-	}
-
-	public void setUpdater(Long updater) {
-		this.updater = updater;
-	}
-
-	public LocalDateTime getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(LocalDateTime updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public Integer getDbStatus() {
-		return dbStatus;
-	}
-
-	public void setDbStatus(Integer dbStatus) {
-		this.dbStatus = dbStatus;
 	}
 
 	public String getTitle() {

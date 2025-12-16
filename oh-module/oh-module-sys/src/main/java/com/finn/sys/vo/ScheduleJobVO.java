@@ -3,6 +3,7 @@ package com.finn.sys.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.utils.DateUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 * @author 王小费 whx5710@qq.com
 */
 public class ScheduleJobVO implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**

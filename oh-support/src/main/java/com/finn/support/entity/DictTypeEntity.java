@@ -41,9 +41,6 @@ public class DictTypeEntity extends BaseEntity {
     @TableField("dict_sql")
     private String dictSql;
 
-    @TableField(exists = false)
-    private String tenantId;
-
     public String getDictType() {
         return dictType;
     }
@@ -92,13 +89,4 @@ public class DictTypeEntity extends BaseEntity {
         this.dictSql = dictSql;
     }
 
-    @Override
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    @Override
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

@@ -2,7 +2,7 @@ package com.finn.support.entity;
 
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
-import com.finn.framework.entity.BaseEntity;
+import com.finn.framework.entity.TenantEntity;
 import com.finn.support.enums.DataScopeEnum;
 
 /**
@@ -12,7 +12,7 @@ import com.finn.support.enums.DataScopeEnum;
  * 
  */
 @TableName("sys_role")
-public class RoleEntity extends BaseEntity {
+public class RoleEntity extends TenantEntity {
 	/**
 	 * 角色名称
 	 */

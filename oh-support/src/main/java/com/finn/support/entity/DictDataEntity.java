@@ -1,6 +1,7 @@
 package com.finn.support.entity;
 
 import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 /**
@@ -9,22 +10,27 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * 
  */
+@TableName("sys_dict_data")
 public class DictDataEntity extends BaseEntity {
     /**
      * 字典类型ID
      */
+    @TableField("dict_type_id")
     private Long dictTypeId;
     /**
      * 字典标签
      */
+    @TableField("dict_label")
     private String dictLabel;
     /**
      * 字典值
      */
+    @TableField("dict_value")
     private String dictValue;
     /**
      * 标签样式
      */
+    @TableField("label_class")
     private String labelClass;
     /**
      * 备注
@@ -34,9 +40,6 @@ public class DictDataEntity extends BaseEntity {
      * 排序
      */
     private Integer sort;
-
-    @TableField(exists = false)
-    private String tenantId;
 
     public Long getDictTypeId() {
         return dictTypeId;
@@ -86,13 +89,4 @@ public class DictDataEntity extends BaseEntity {
         this.sort = sort;
     }
 
-    @Override
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    @Override
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

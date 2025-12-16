@@ -1,7 +1,6 @@
 package com.finn.support.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.finn.core.entity.IDEntity;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 
@@ -14,12 +13,7 @@ import java.time.LocalDateTime;
  * 
  */
 @TableName("sys_log_login")
-public class LogLoginEntity {
-    /**
-     * id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+public class LogLoginEntity extends IDEntity {
 
     /**
      * 用户名
@@ -61,13 +55,6 @@ public class LogLoginEntity {
     @TableField("create_time")
     private LocalDateTime createTime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;

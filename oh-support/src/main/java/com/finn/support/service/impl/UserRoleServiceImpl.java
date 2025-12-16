@@ -38,9 +38,9 @@ public class UserRoleServiceImpl implements UserRoleService {
         // Collection<Long> insertRoleIdList = CollUtil.subtract(roleIdList, dbRoleIdList);
         Collection<Long> insertRoleIdList = roleIdList.stream()
                 .filter(element -> !dbRoleIdList.contains(element))
-                .collect(Collectors.toList());
+                .toList();
 
-        if (insertRoleIdList != null && insertRoleIdList.size() > 0){
+        if (!insertRoleIdList.isEmpty()){
             UserDetail user = SecurityUser.getUser();
             List<UserRoleEntity> roleList = insertRoleIdList.stream().map(roleId -> {
                 UserRoleEntity entity = new UserRoleEntity();
@@ -62,7 +62,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         Collection<Long> deleteRoleIdList = dbRoleIdList.stream()
                 .filter(element -> !finalRoleIdList.contains(element))
                 .collect(Collectors.toList());
-        if (deleteRoleIdList != null && deleteRoleIdList.size() > 0){
+        if (!deleteRoleIdList.isEmpty()){
             UserRoleEntity param = new UserRoleEntity();
             param.setUserId(userId);
             param.setUpdater(SecurityUser.getUserId());

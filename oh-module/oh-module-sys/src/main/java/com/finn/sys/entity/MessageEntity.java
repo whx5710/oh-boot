@@ -1,6 +1,8 @@
 package com.finn.sys.entity;
 
-import com.finn.framework.entity.BaseEntity;
+import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
+import com.finn.framework.entity.TenantEntity;
 
 
 /**
@@ -9,7 +11,8 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-10-10
  */
-public class MessageEntity extends BaseEntity {
+@TableName("sys_message")
+public class MessageEntity extends TenantEntity {
 	/**
 	* 标题
 	*/
@@ -33,21 +36,25 @@ public class MessageEntity extends BaseEntity {
 	/**
 	* 来源于-用户ID
 	*/
+	@TableField("from_id")
 	private Long fromId;
 
 	/**
 	 * 发送人
 	 */
+	@TableField("from_name")
 	private String fromName;
 
 	/**
 	* 发送给-用户ID
 	*/
+	@TableField("to_id")
 	private Long toId;
 
 	/**
 	 * 接收人
 	 */
+	@TableField("to_name")
 	private String toName;
 
 	public String getTitle() {

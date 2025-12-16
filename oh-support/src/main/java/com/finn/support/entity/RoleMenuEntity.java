@@ -24,9 +24,6 @@ public class RoleMenuEntity extends BaseEntity {
 	@TableField("menu_id")
 	private Long menuId;
 
-	@TableField(exists = false)
-	private String tenantId;
-
 	public Long getRoleId() {
 		return roleId;
 	}
@@ -43,13 +40,4 @@ public class RoleMenuEntity extends BaseEntity {
 		this.menuId = menuId;
 	}
 
-	@Override
-	public String getTenantId() {
-		return tenantId;
-	}
-
-	@Override
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
 }

@@ -1,6 +1,6 @@
 package com.finn.sys.vo;
 
-import com.finn.framework.entity.BaseEntity;
+import com.finn.framework.entity.TenantEntity;
 
 /**
 * 系统消息
@@ -8,7 +8,7 @@ import com.finn.framework.entity.BaseEntity;
 * @author 王小费 whx5710@qq.com
 * @since 1.0.0 2023-10-10
 */
-public class MessageVO extends BaseEntity {
+public class MessageVO extends TenantEntity {
 
 	/**
 	 * 标题

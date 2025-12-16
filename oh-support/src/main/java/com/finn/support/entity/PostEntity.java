@@ -2,7 +2,7 @@ package com.finn.support.entity;
 
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
-import com.finn.framework.entity.BaseEntity;
+import com.finn.framework.entity.TenantEntity;
 
 /**
  * 岗位管理
@@ -11,7 +11,7 @@ import com.finn.framework.entity.BaseEntity;
  *
  */
 @TableName("sys_post")
-public class PostEntity extends BaseEntity {
+public class PostEntity extends TenantEntity {
 	/**
 	* 岗位编码
 	*/
