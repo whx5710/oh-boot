@@ -144,7 +144,7 @@ public class MenuServiceImpl implements MenuService {
         List<MenuEntity> menuList = menuList(query);
         if(menuList != null && !menuList.isEmpty()){
             // 搜索-查询级联数据
-            if(query.getKeyWords() != null && !query.getKeyWords().isEmpty()){
+            if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
                 MenuQuery tmp = new MenuQuery();
                 tmp.setType("all");
                 List<MenuEntity> menuListAll = menuList(tmp);
@@ -163,7 +163,7 @@ public class MenuServiceImpl implements MenuService {
                 }
                 // 根据id重新查询
                 query.setMenuIds(menuIds);
-                query.setKeyWords(null);
+                query.setKeyWord(null);
                 query.setType(type);
                 menuList = menuList(query);
             }

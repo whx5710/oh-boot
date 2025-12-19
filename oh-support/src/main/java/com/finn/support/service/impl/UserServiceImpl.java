@@ -157,6 +157,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UserVO vo) {
+        AssertUtils.isNull(vo.getId(), "用户ID");
         // 如果密码不为空，则进行加密处理
         if (vo.getPassword() == null || vo.getPassword().isEmpty()) {
             vo.setPassword(null);

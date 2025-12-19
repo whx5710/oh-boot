@@ -24,6 +24,9 @@
 		<if test="params.realName != null and params.realName.trim() != ''">
 			and t1.real_name like concat("%",#{params.realName},"%")
 		</if>
+		<if test="params.status != null">
+			and t1.status = #{params.status}
+		</if>
 		<if test="params.deptId != null and params.deptId != 0">
 			and t1.dept_id = #{params.deptId}
 		</if>

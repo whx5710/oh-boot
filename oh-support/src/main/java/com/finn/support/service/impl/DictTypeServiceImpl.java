@@ -155,9 +155,9 @@ public class DictTypeServiceImpl implements DictTypeService {
             return QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1)
                     .like(DictTypeEntity::getDictType, query.getDictType())
                     .like(DictTypeEntity::getDictName, query.getDictName())
-                    .jointSQL("(dict_name like concat('%',#{keyWords}, '%') " +
-                            "or dict_type like concat('%',#{keyWords}, '%') " +
-                            "or remark like concat('%',#{keyWords}, '%'))","keyWords", query.getKeyWords())
+                    .jointSQL("(dict_name like concat('%',#{keyWord}, '%') " +
+                            "or dict_type like concat('%',#{keyWord}, '%') " +
+                            "or remark like concat('%',#{keyWord}, '%'))","keyWord", query.getKeyWord())
                     .orderBy("sort").page(query.getPageNum(), query.getPageSize());
         }
     }

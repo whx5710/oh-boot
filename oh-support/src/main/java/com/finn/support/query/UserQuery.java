@@ -32,6 +32,10 @@ public class UserQuery extends Query {
     private String realName;
 
     /**
+     * 状态 0：停用    1：正常
+     */
+    private Integer status;
+    /**
      * 部门ID
      */
     private String deptId;
@@ -139,5 +143,13 @@ public class UserQuery extends Query {
 
     public void setTenantFlag(Integer tenantFlag) {
         this.tenantFlag = tenantFlag;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

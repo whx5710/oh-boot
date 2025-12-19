@@ -32,7 +32,7 @@ public class LogOperateQuery extends Query {
     /**
      * 关键字搜索
      */
-    private String keyWords;
+    private String keyWord;
     /**
      * 开始时间
      */
@@ -79,12 +79,12 @@ public class LogOperateQuery extends Query {
         this.status = status;
     }
 
-    public String getKeyWords() {
-        return keyWords;
+    public String getKeyWord() {
+        return keyWord;
     }
 
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 
     public String getStartTime() {

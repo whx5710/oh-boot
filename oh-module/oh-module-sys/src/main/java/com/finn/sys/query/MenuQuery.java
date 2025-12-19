@@ -29,7 +29,7 @@ public class MenuQuery extends Query {
     /**
      * 搜索关键字
      */
-    private String keyWords;
+    private String keyWord;
     /**
      * 菜单ID集合
      */
@@ -59,12 +59,12 @@ public class MenuQuery extends Query {
         this.type = type;
     }
 
-    public String getKeyWords() {
-        return keyWords;
+    public String getKeyWord() {
+        return keyWord;
     }
 
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 
     public List<Long> getMenuIds() {

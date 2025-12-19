@@ -11,8 +11,8 @@
 		<if test="query.parentId != null">
 			and t1.parent_id = #{query.parentId}
 		</if>
-		<if test="query.keyWords != null and query.keyWords != ''">
-			and (t1.name like concat('%', #{query.keyWords}, '%') or t1.title like concat('%', #{query.keyWords}, '%'))
+		<if test="query.keyWord != null and query.keyWord != ''">
+			and (t1.name like concat('%', #{query.keyWord}, '%') or t1.title like concat('%', #{query.keyWord}, '%'))
 		</if>
 		<if test="query.menuIds != null and query.menuIds.size() > 0">
 			and t1.id in
@@ -32,8 +32,8 @@
 		<if test="query.type != null and query.type != ''">
 			and t3.type = #{query.type}
 		</if>
-		<if test="query.keyWords != null and query.keyWords != ''">
-			and (t3.name like concat('%', #{query.keyWords}, '%') or t3.title like concat('%', #{query.keyWords}, '%'))
+		<if test="query.keyWord != null and query.keyWord != ''">
+			and (t3.name like concat('%', #{query.keyWord}, '%') or t3.title like concat('%', #{query.keyWord}, '%'))
 		</if>
 		<if test="query.menuIds != null and query.menuIds.size() > 0">
 			and t3.id in

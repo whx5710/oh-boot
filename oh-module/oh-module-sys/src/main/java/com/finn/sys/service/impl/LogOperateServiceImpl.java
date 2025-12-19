@@ -71,7 +71,7 @@ public class LogOperateServiceImpl implements LogOperateService {
                 .ge(LogOperateEntity::getCreateTime, query.getStartTime())
                 .le(LogOperateEntity::getCreateTime, query.getEndTime())
                 .eq(LogOperateEntity::getTenantId, query.getTenantId())
-                .jointSQL("(module like concat('%',#{keyWords},'%') or name like concat('%',#{keyWords},'%') or req_uri like concat('%',#{keyWords},'%') or real_name like concat('%',#{keyWords},'%'))","keyWords",query.getKeyWords())
+                .jointSQL("(module like concat('%',#{keyWord},'%') or name like concat('%',#{keyWord},'%') or req_uri like concat('%',#{keyWord},'%') or real_name like concat('%',#{keyWord},'%'))","keyWord",query.getKeyWord())
                 .orderBy("create_time desc");
     }
 

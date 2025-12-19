@@ -50,7 +50,7 @@ public class SysDsSupportInterceptor {
                     return joinPoint.proceed();
                 } finally {
                     DynamicDataSourceHolder.removeDynamicDataSourceKey();
-                    log.debug("清除数据源[{}]", sysDataSourceProperties.getSysDefault());
+                    log.debug("{} 清除数据源[{}]", className, sysDataSourceProperties.getSysDefault());
                 }
             }else{
                 log.error("数据源切面拦截解析包路径错误，解析得到类名：{}", className);

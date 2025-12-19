@@ -7,9 +7,9 @@
         select * from sys_dict_type where db_status = 1
         <if test="dictType != null and dictType != ''">and dict_type like concat('%',#{dictType}, '%')</if>
         <if test="dictName != null and dictName != ''">and dict_name like concat('%',#{dictName}, '%')</if>
-        <if test="keyWords != null and keyWords != ''">
-            and (dict_name like concat('%',#{keyWords}, '%') or dict_type like concat('%',#{keyWords}, '%')
-            or remark like concat('%',#{keyWords}, '%'))
+        <if test="keyWord != null and keyWord != ''">
+            and (dict_name like concat('%',#{keyWord}, '%') or dict_type like concat('%',#{keyWord}, '%')
+            or remark like concat('%',#{keyWord}, '%'))
         </if>
         order by sort
     </select>-->
