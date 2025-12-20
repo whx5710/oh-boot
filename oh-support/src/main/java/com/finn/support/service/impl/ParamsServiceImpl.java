@@ -90,17 +90,24 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
 
     @Override
     public void delete(List<Long> idList) {
+        // 查询列表
+        List<ParamsEntity> list = paramsMapper.selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+                .in(ParamsEntity::getId, idList));
+        if(!list.isEmpty()){
+            for(ParamsEntity entity: list){
+                if(entity.getParamType() == 1){
+                    throw new ServerException(entity.getParamName() + "是系统内置参数禁止删除");
+                }
+            }
+        }
         // 删除数据
         paramsMapper.updateByWrapper(UpdateWrapper.of(ParamsEntity.class).set(ParamsEntity::getDbStatus, 0)
                 .in(ParamsEntity::getId, idList));
-
-        // 查询列表
-        ParamsQuery query = new ParamsQuery();
-        query.setIdList(idList);
-        List<ParamsEntity> list = paramsMapper.selectListByWrapper(getQueryWrapper(query));
         // 删除缓存
         String[] keys = list.stream().map(ParamsEntity::getParamKey).toArray(String[]::new);
-        paramsCache.del(keys);
+        if(keys.length > 0){
+            paramsCache.del(keys);
+        }
     }
 
     @Override
