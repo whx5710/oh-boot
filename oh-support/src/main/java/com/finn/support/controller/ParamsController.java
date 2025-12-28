@@ -37,7 +37,7 @@ public class ParamsController {
      * @return 列表
      */
     @GetMapping("page")
-    @PreAuthorize("hasAuthority('sys:params:all')")
+    @PreAuthorize("hasAuthority('sys:params:info')")
     public Result<PageResult<ParamsVO>> page(@Valid ParamsQuery query) {
         PageResult<ParamsVO> page = paramsService.page(query);
         return Result.ok(page);
@@ -69,7 +69,7 @@ public class ParamsController {
      * @return 参数信息
      */
     @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('sys:params:all')")
+    @PreAuthorize("hasAuthority('sys:params:info')")
     public Result<ParamsVO> get(@PathVariable("id") Long id) {
         ParamsEntity entity = paramsService.getById(id);
         return Result.ok(ParamsConvert.INSTANCE.convert(entity));
@@ -82,7 +82,7 @@ public class ParamsController {
      */
     @PostMapping
     @Log(module = "参数管理", name = "保存", type = OperateTypeEnum.INSERT)
-    @PreAuthorize("hasAuthority('sys:params:all')")
+    @PreAuthorize("hasAuthority('sys:params:save')")
     public Result<String> save(@RequestBody ParamsVO vo) {
         paramsService.save(vo);
         return Result.ok();
@@ -95,7 +95,7 @@ public class ParamsController {
      */
     @PostMapping("/update")
     @Log(module = "参数管理", name = "修改", type = OperateTypeEnum.UPDATE)
-    @PreAuthorize("hasAuthority('sys:params:all')")
+    @PreAuthorize("hasAuthority('sys:params:update')")
     public Result<String> update(@RequestBody @Valid ParamsVO vo) {
         paramsService.update(vo);
         return Result.ok();
@@ -108,7 +108,7 @@ public class ParamsController {
      */
     @PostMapping("/del")
     @Log(module = "参数管理", name = "删除", type = OperateTypeEnum.DELETE)
-    @PreAuthorize("hasAuthority('sys:params:all')")
+    @PreAuthorize("hasAuthority('sys:params:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         paramsService.delete(idList);
         return Result.ok();
@@ -120,7 +120,7 @@ public class ParamsController {
      * @return 是否成功
      */
     @PostMapping("/delById/{id}")
-    @PreAuthorize("hasAuthority('sys:params:all')")
+    @PreAuthorize("hasAuthority('sys:params:delete')")
     public Result<Boolean> del(@PathVariable("id") Long id) {
         return Result.ok(paramsService.del(id));
     }
