@@ -1,6 +1,11 @@
 package com.finn.sys.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.entity.IDEntity;
+import com.finn.core.utils.DateUtils;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 /**
  * 租户信息
@@ -29,6 +34,10 @@ public class TenantMemberVO extends IDEntity {
      * 状态  0：停用   1：正常
      */
     private Integer status;
+
+    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    private LocalDateTime createTime;
 
     public String getTenantId() {
         return tenantId;
@@ -68,5 +77,13 @@ public class TenantMemberVO extends IDEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }

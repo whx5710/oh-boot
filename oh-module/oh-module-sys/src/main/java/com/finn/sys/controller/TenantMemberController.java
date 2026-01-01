@@ -56,7 +56,7 @@ public class TenantMemberController {
      * @param vo 租户信息
      * @return 提示信息
      */
-    @PostMapping
+    @PostMapping("/save")
     @PreAuthorize("hasAuthority('tenant:member:save')")
     public Result<String> save(@RequestBody TenantMemberVO vo){
         tenantMemberService.save(vo);
