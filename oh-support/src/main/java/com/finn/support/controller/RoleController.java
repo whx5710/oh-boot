@@ -54,6 +54,17 @@ public class RoleController {
     }
 
     /**
+     * 角色分页列表-不分页
+     * @param query 查询条件
+     * @return 角色列表
+     */
+    @GetMapping("/list")
+    @PreAuthorize("hasAuthority('sys:role:info')")
+    public Result<List<RoleVO>> list(@Valid RoleQuery query) {
+        return Result.ok(roleService.getList(query));
+    }
+
+    /**
      * 角色信息
      * @param id 角色ID
      * @return 角色信息
