@@ -64,6 +64,10 @@ public class UserQuery extends Query {
      * 租户标识，0所有1租户
      */
     private Integer tenantFlag = 0;
+    /**
+     * 是否租户管理员，租户默认角色
+     */
+    private Boolean tenantRole;
 
     public String getUsername() {
         return username;
@@ -151,5 +155,13 @@ public class UserQuery extends Query {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Boolean getTenantRole() {
+        return tenantRole;
+    }
+
+    public void setTenantRole(Boolean tenantRole) {
+        this.tenantRole = tenantRole;
     }
 }

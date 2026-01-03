@@ -49,7 +49,6 @@ public class UserController {
     @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<PageResult<UserVO>> page(@Valid UserQuery query) {
         PageResult<UserVO> page = userService.page(query);
-
         return Result.ok(page);
     }
 

@@ -39,6 +39,9 @@
 		<if test="params.tenantFlag != null and params.tenantFlag != 0">
 			and ifnull(t1.tenant_id, '') != ''
 		</if>
+		<if test="params.tenantRole != null and params.tenantRole">
+			and exists (select 1 from sys_user_role t3 where t1.id = t3.user_id and t3.db_status = 1 and t3.role_id = 1)
+		</if>
 		<if test="params.keyWord != null and params.keyWord.trim() != ''">
 			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%")
 			or t1.username like concat("%",#{params.keyWord},"%") or t1.mobile like concat("%",#{params.keyWord},"%")
