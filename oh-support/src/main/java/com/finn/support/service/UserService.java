@@ -69,13 +69,18 @@ public interface UserService {
      */
     void export(UserQuery query);
     /**
-     * 更新租户
+     * 解除绑定租户用户
      * @param tenantID 租户ID
      * @param userIdList 用户ID
-     * @param flag 1 绑定 2 解绑
      */
-    void updateTenantUser(String tenantID, List<Long> userIdList, Integer flag);
+    void unBindTenantUser(String tenantID, List<Long> userIdList);
 
+    /**
+     * 绑定租户用户
+     * @param tenantID 租户ID
+     * @param userIdList 用户ID
+     */
+    void bindTenantUser(String tenantID, List<Long> userIdList);
     /**
      * 重置密码
      * @param userId 用户ID

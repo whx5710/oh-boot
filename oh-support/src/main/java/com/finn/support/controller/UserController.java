@@ -78,15 +78,27 @@ public class UserController {
 
     /**
      * 绑定/解绑租户的管理用户
-     * @param tenantID 租户ID
-     * @param flag 1 绑定 2 解绑
+     * @param tenantId 租户ID
      * @param userIdList 用户列表
      * @return 提示信息
      */
-    @PostMapping("/tenantUser/{tenantID}/{flag}")
-    @PreAuthorize("hasAuthority('sys:user:update')")
-    public Result<String> tenantUser(@PathVariable("tenantID") String tenantID, @PathVariable("flag")Integer flag, @RequestBody List<Long> userIdList) {
-        userService.updateTenantUser(tenantID, userIdList, flag);
+    @PostMapping("/unBindTenantUser/{tenantId}")
+    @PreAuthorize("hasAuthority('sys:user:unBindTenantUser')")
+    public Result<String> unBindTenantUser(@PathVariable("tenantId") String tenantId, @RequestBody List<Long> userIdList) {
+        userService.unBindTenantUser(tenantId, userIdList);
+        return Result.ok("操作成功");
+    }
+
+    /**
+     * 绑定租户的管理用户
+     * @param tenantId 租户ID
+     * @param userIdList 用户列表
+     * @return 提示信息
+     */
+    @PostMapping("/bindTenantUser/{tenantId}")
+    @PreAuthorize("hasAuthority('sys:user:bindTenantUser')")
+    public Result<String> bindTenantUser(@PathVariable("tenantId") String tenantId, @RequestBody List<Long> userIdList) {
+        userService.bindTenantUser(tenantId, userIdList);
         return Result.ok("操作成功");
     }
 

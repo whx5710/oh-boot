@@ -304,13 +304,12 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 更新租户
+     * 解除绑定租户用户
      * @param tenantID 租户ID
      * @param userIdList 用户ID
-     * @param flag 1 绑定 2 解绑
      */
     @Override
-    public void updateTenantUser(String tenantID, List<Long> userIdList, Integer flag) {
+    public void unBindTenantUser(String tenantID, List<Long> userIdList) {
         AssertUtils.isNull(userIdList, "用户ID");
         AssertUtils.isNull(tenantID, "租户ID");
         for(Long userId: userIdList){
@@ -318,24 +317,36 @@ public class UserServiceImpl implements UserService {
             if(user == null || user.getId() == null){
                 throw new ServerException("用户不存在");
             }
-            if(flag == 1){
-                if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
-                    throw new ServerException("用户已存在其他租户中【" + user.getTenantId() + "】");
-                }
-                user.setTenantId(tenantID);
-                userMapper.updateById(user);
-            }else if(flag == 2){
-                if(user.getTenantId() == null || user.getTenantId().isEmpty()){
-                    throw new ServerException("用户未绑定租户，不能解绑");
-                }
-                if(!tenantID.equals(user.getTenantId())){
-                    throw new ServerException("租户ID不准确，不能解绑");
-                }
-                user.setTenantId(null);
-                userMapper.unbindUser(user);// 解绑用户
-            }else{
-                throw new ServerException("未知操作，租户用户操作失败！");
+            if(user.getTenantId() == null || user.getTenantId().isEmpty()){
+                throw new ServerException("用户未绑定租户，不能解绑");
             }
+            if(!tenantID.equals(user.getTenantId())){
+                throw new ServerException("租户ID不准确，不能解绑【" + user.getTenantId() + "】");
+            }
+            user.setTenantId(null);
+            userMapper.unbindUser(user);// 解绑用户
+        }
+    }
+
+    /**
+     * 绑定租户用户
+     * @param tenantID 租户ID
+     * @param userIdList 用户ID
+     */
+    @Override
+    public void bindTenantUser(String tenantID, List<Long> userIdList) {
+        AssertUtils.isNull(userIdList, "用户ID");
+        AssertUtils.isNull(tenantID, "租户ID");
+        for(Long userId: userIdList){
+            UserEntity user = userMapper.getById(userId);
+            if(user == null || user.getId() == null){
+                throw new ServerException("用户不存在");
+            }
+            if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
+                throw new ServerException("用户已存在其他租户中【" + user.getTenantId() + "】");
+            }
+            user.setTenantId(tenantID);
+            userMapper.updateById(user);
         }
     }
 
