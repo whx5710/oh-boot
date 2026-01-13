@@ -30,6 +30,10 @@ public interface UserService {
 
     void update(UserVO vo);
 
+    /**
+     * 逻辑删除
+     * @param idList
+     */
     void delete(List<Long> idList);
 
     UserVO getByMobile(String mobile);

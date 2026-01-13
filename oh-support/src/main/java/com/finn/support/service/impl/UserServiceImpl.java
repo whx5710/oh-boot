@@ -190,6 +190,10 @@ public class UserServiceImpl implements UserService {
         userPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
     }
 
+    /**
+     * 逻辑删除
+     * @param idList
+     */
     @Override
     public void delete(List<Long> idList) {
         // 删除用户

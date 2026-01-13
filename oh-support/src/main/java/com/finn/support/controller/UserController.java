@@ -210,9 +210,7 @@ public class UserController {
         if (idList.contains(userId)) {
             return Result.error("不能删除当前登录用户");
         }
-
         userService.delete(idList);
-
         return Result.ok("删除成功");
     }
 
