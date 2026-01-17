@@ -77,7 +77,7 @@ public class UserController {
     }
 
     /**
-     * 绑定/解绑租户的管理用户
+     * 解绑租户的管理用户
      * @param tenantId 租户ID
      * @param userIdList 用户列表
      * @return 提示信息

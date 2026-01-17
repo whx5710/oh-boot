@@ -63,7 +63,7 @@ public class UserQuery extends Query {
     /**
      * 租户标识，0所有1租户
      */
-    private Integer tenantFlag = 0;
+    private Integer tenantFlag;
     /**
      * 是否租户管理员，租户默认角色
      */
