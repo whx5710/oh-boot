@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +41,13 @@ public class DeptController {
     @PreAuthorize("hasAuthority('sys:dept:list')")
     public Result<List<DeptVO>> list(@RequestBody DeptQuery query) {
         List<DeptVO> list = deptService.getList(query);
+        if(list != null && !list.isEmpty() && list.getFirst().getParentId() == 0L){
+            DeptVO deptVO = new DeptVO();
+            deptVO.setId(0L);
+            deptVO.setName("全部");
+            deptVO.setChildren(list);
+            return Result.ok(Collections.singletonList(deptVO));
+        }
         return Result.ok(list);
     }
 

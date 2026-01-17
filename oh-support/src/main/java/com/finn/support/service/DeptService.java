@@ -23,6 +23,8 @@ public interface DeptService {
 
     void update(DeptVO vo);
 
+    void updateById(DeptEntity dept);
+
     void delete(Long id);
 
     /**

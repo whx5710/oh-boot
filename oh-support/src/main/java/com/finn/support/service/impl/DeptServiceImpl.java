@@ -131,6 +131,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
+    public void updateById(DeptEntity dept) {
+        deptMapper.updateById(dept);
+    }
+
+    @Override
     public void delete(Long id) {
         // 判断是否有子部门
         int deptCount = deptMapper.countByParentId(id);

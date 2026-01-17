@@ -3,6 +3,8 @@ package com.finn.sys.service.impl;
 import com.finn.core.exception.ServerException;
 import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.support.entity.DeptEntity;
+import com.finn.support.service.DeptService;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.AssertUtils;
@@ -32,9 +34,13 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     private final RedisCache redisCache;
 
-    public TenantMemberServiceImpl(TenantMemberMapper tenantMemberMapper, RedisCache redisCache){
+    private final DeptService deptService;
+
+    public TenantMemberServiceImpl(TenantMemberMapper tenantMemberMapper, RedisCache redisCache,
+                                   DeptService deptService){
         this.tenantMemberMapper = tenantMemberMapper;
         this.redisCache = redisCache;
+        this.deptService = deptService;
     }
 
     @Override
@@ -46,6 +52,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
     @Override
     public void save(TenantMemberVO vo) {
         AssertUtils.isBlank(vo.getTenantId(), "租户ID");
+        AssertUtils.isNull(vo.getDeptId(), "根部门");
         TenantMemberEntity entity = TenantMemberConvert.INSTANCE.convert(vo);
         // 判断租户ID是否存在
         Wrapper<TenantMemberEntity> params = QueryWrapper.of(TenantMemberEntity.class)
@@ -54,8 +61,18 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         if(list != null && !list.isEmpty()){
             throw new ServerException("租户ID已存在！[" + list.getFirst().getTenantName()+ "]");
         }
+        // 判断根部门是否被其他租户绑定
+        DeptEntity deptEntity = deptService.getById(vo.getDeptId());
+        if(deptEntity == null || deptEntity.getId() == null){
+            throw new ServerException("部门不存在");
+        }
+        if(deptEntity.getTenantId() != null && !deptEntity.getTenantId().isEmpty()){
+            throw new ServerException("该部门已绑定其他租户，不能重复绑定！【" + deptEntity.getTenantId() + "】");
+        }
+        deptEntity.setTenantId(vo.getTenantId());
         tenantMemberMapper.save(entity);
         redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
+        deptService.updateById(deptEntity);
     }
 
     @Override

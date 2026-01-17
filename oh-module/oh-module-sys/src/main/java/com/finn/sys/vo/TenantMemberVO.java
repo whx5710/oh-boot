@@ -1,6 +1,8 @@
 package com.finn.sys.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.core.entity.IDEntity;
 import com.finn.core.utils.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +24,11 @@ public class TenantMemberVO extends IDEntity {
      * 租户名称
      */
     private String tenantName;
+    /**
+     * 根部门ID
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long deptId;
     /**
      * 备注
      */
@@ -85,5 +92,13 @@ public class TenantMemberVO extends IDEntity {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 }

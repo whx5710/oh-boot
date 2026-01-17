@@ -1035,6 +1035,7 @@ CREATE TABLE `tenant_member` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '租户ID',
   `tenant_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '租户名',
+  `dept_id` bigint DEFAULT NULL COMMENT '默认根部门',
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
   `status` tinyint DEFAULT NULL COMMENT '状态  0：停用   1：正常',
   `sort` int DEFAULT NULL COMMENT '排序',
