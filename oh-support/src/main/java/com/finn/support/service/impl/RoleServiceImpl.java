@@ -50,7 +50,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	@Override
 	public PageResult<RoleVO> page(RoleQuery query) {
 		// 数据权限
-		query.setSqlFilter(getDataScopeFilter(null,null));
+//		query.setSqlFilter(getDataScopeFilter(null,null));
 		Page<RoleEntity> page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
 		List<RoleEntity> list = roleMapper.getList(query);
 		List<RoleVO> roles = new ArrayList<>();

@@ -55,7 +55,7 @@ public class DeptServiceImpl implements DeptService {
 
         List<DeptVO> voList = DeptConvert.INSTANCE.convertList(entityList);
         UserDetail user = SecurityUser.getUser();
-        if(user != null && user.getSuperAdmin() == 1){
+        if(user != null && (user.getSuperAdmin() == 1 || user.getTenantId() == null || user.getTenantId().isEmpty())){
             for(DeptVO item : voList){
                 if(item.getTenantId() != null && !item.getTenantId().isEmpty()){
                     item.setTenantName(tenantCache.getNameByTenantId(item.getTenantId()));

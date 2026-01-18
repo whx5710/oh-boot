@@ -2,6 +2,7 @@ package com.finn.support.service.impl;
 
 import com.finn.core.utils.*;
 import com.finn.framework.security.user.UserDetail;
+import com.finn.support.entity.DeptEntity;
 import com.finn.support.enums.DataScopeEnum;
 import com.finn.support.enums.UserStatusEnum;
 import com.finn.support.mapper.RoleDataScopeMapper;
@@ -167,19 +168,27 @@ public class UserServiceImpl implements UserService {
             vo.setPassword(passwordEncoder.encode(vo.getPassword()));
         }
         UserEntity entity = UserConvert.INSTANCE.convert(vo);
-
         // 判断用户名是否存在
         UserEntity user = userMapper.getByUsername(entity.getUsername());
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("用户名已经存在");
         }
-
         // 判断手机号是否存在
         user = userMapper.getByMobile(entity.getMobile());
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("手机号已经存在");
         }
-
+        user = userMapper.getById(entity.getId());
+        if(user == null || user.getId() == null){
+            throw new ServerException("用户不存在");
+        }
+        // 判断租户与部门是否有关联变化
+        if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
+            DeptEntity deptEntity = deptService.getById(entity.getDeptId());
+            if(deptEntity.getTenantId() == null || !deptEntity.getTenantId().equals(entity.getTenantId())){
+                throw new ServerException("不能切换到非本租户下的单位下");
+            }
+        }
         // 更新用户
         userMapper.updateById(entity);
 
