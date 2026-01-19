@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.RoleDataScopeMapper">
+
+    <select id="getDeptIdList" resultType="long">
+        select dept_id from sys_role_data_scope where role_id = #{roleId} and db_status = 1
+    </select>
+
+    <select id="getDataScopeList" resultType="long">
+        select t2.dept_id from sys_user_role t1, sys_role_data_scope t2
+          where t1.user_id = #{userId} and t1.role_id = t2.role_id and t1.db_status = 1 and t2.db_status = 1
+    </select>
+
+    <insert id="saveBatch">
+        INSERT INTO sys_role_data_scope (role_id, dept_id, db_status, creator, create_time, tenant_id) VALUES
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.roleId}, #{item.deptId}, #{item.dbStatus}, #{item.creator}, #{item.createTime}, #{tenantId})
+        </foreach>
+    </insert>
+
+    <update id="deleteByRoleIdList">
+        UPDATE sys_role_data_scope
+        <set>
+            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
+            db_status = 0,
+            update_time = sysdate()
+        </set>
+        WHERE role_id in
+        <foreach item="roleId" index="index" collection="list" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </update>
+
+    <update id="deleteDeptIdList">
+        UPDATE sys_role_data_scope
+        <set>
+            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
+            db_status = 0,
+            update_time = sysdate()
+        </set>
+        WHERE dept_id in
+        <foreach item="deptId" index="index" collection="list" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+        <if test="param != null and param.roleId != null">and role_id = #{param.role_id}</if>
+    </update>
+</mapper>

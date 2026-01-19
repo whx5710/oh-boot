@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.PostMapper">
+    <!--<select id="getList" resultType="com.finn.system.entity.PostEntity">
+        select * from sys_post where db_status = 1
+        <if test="postCode != null and postCode != ''">and post_code = #{postCode}</if>
+        <if test="tenantId != null and tenantId != ''">and tenant_id = #{tenantId}</if>
+        <if test="postName != null and postName != ''">and post_name like concat('%', #{postName}, '%')</if>
+        <if test="status != null">and status = #{status}</if>
+        order by sort
+    </select>-->
+</mapper>

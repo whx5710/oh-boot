@@ -27,9 +27,8 @@
 	</developers>
 
 	<modules>
-		<module>oh-server</module>
-		<module>oh-module</module>
-		<module>oh-support</module>
+		<!--<module>oh-module</module>-->
+		<module>oh-system</module>
 		<module>oh-core</module>
 		<module>oh-framework</module>
 	</modules>
