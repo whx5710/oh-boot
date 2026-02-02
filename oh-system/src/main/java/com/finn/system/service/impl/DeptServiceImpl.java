@@ -2,6 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
+import com.finn.core.entity.HashDto;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.JsonUtils;
@@ -13,6 +14,7 @@ import com.finn.framework.security.user.UserDetail;
 import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.DeptConvert;
 import com.finn.system.entity.DeptEntity;
+import com.finn.system.entity.TenantMemberEntity;
 import com.finn.system.mapper.DeptMapper;
 import com.finn.system.mapper.UserMapper;
 import com.finn.system.query.DeptQuery;
@@ -142,19 +144,31 @@ public class DeptServiceImpl implements DeptService {
         if(deptCount > 0){
             throw new ServerException("请先删除子部门");
         }
-
         // 判断部门下面是否有用户
         long userCount = userMapper.countByDeptId(id);
         if(userCount > 0){
             throw new ServerException("部门下面有用户，不能删除");
         }
-
+        DeptEntity dept = deptMapper.findById(id, DeptEntity.class);
+        if(dept == null){
+            throw new ServerException("部门不存在，请检查");
+        }
+        if(dept.getDbStatus() == 0){
+            throw new ServerException("部门已删除，不能重复操作");
+        }
+        // 判断是否绑定了租户
+        if(dept.getTenantId() != null && !dept.getTenantId().isEmpty()){
+            HashDto hashDto = tenantCache.getTenantToMap(dept.getTenantId());
+            if(hashDto != null){
+                TenantMemberEntity tenantMember = JsonUtils.convertValue(hashDto, TenantMemberEntity.class);
+                if(tenantMember != null && tenantMember.getDbStatus() == 1){
+                    throw new ServerException("已绑定租户，不能直接删除");
+                }
+            }
+        }
         // 删除
-        // removeById(id);
-        DeptEntity params = new DeptEntity();
-        params.setId(id);
-        params.setDbStatus(0);
-        deptMapper.updateById(params);
+        dept.setDbStatus(0);
+        deptMapper.updateById(dept);
     }
 
     @Override
