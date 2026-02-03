@@ -1,9 +1,12 @@
 package com.finn.system.service.impl;
 
 import com.finn.core.exception.ServerException;
+import com.finn.framework.datasource.utils.CountWrapper;
 import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.system.entity.DeptEntity;
+import com.finn.system.entity.UserEntity;
+import com.finn.system.mapper.UserMapper;
 import com.finn.system.service.DeptService;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
@@ -36,11 +39,14 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     private final DeptService deptService;
 
+    private final UserMapper userMapper;
+
     public TenantMemberServiceImpl(TenantMemberMapper tenantMemberMapper, RedisCache redisCache,
-                                   DeptService deptService){
+                                   DeptService deptService, UserMapper userMapper){
         this.tenantMemberMapper = tenantMemberMapper;
         this.redisCache = redisCache;
         this.deptService = deptService;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -96,8 +102,15 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         if(entity.getStatus() == 1){
             throw new ServerException("租户为正常状态，不能删除");
         }
+        // 如果有用户，则不能删除
+        long l = userMapper.count(CountWrapper.of(UserEntity.class).eq(UserEntity::getTenantId, entity.getTenantId())
+                .eq(UserEntity::getDbStatus, 1));
+        if(l > 0){
+            throw new ServerException("租户下有用户，不能删除");
+        }
         entity.setDbStatus(0);
         tenantMemberMapper.update(entity);
+        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
     }
 
     /**
