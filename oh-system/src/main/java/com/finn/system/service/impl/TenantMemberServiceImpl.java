@@ -6,8 +6,8 @@ import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.system.entity.DeptEntity;
 import com.finn.system.entity.UserEntity;
+import com.finn.system.mapper.DeptMapper;
 import com.finn.system.mapper.UserMapper;
-import com.finn.system.service.DeptService;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.AssertUtils;
@@ -37,15 +37,15 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     private final RedisCache redisCache;
 
-    private final DeptService deptService;
+    private final DeptMapper deptMapper;
 
     private final UserMapper userMapper;
 
     public TenantMemberServiceImpl(TenantMemberMapper tenantMemberMapper, RedisCache redisCache,
-                                   DeptService deptService, UserMapper userMapper){
+                                   DeptMapper deptMapper, UserMapper userMapper){
         this.tenantMemberMapper = tenantMemberMapper;
         this.redisCache = redisCache;
-        this.deptService = deptService;
+        this.deptMapper = deptMapper;
         this.userMapper = userMapper;
     }
 
@@ -68,7 +68,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
             throw new ServerException("租户ID已存在！[" + list.getFirst().getTenantName()+ "]");
         }
         // 判断根部门是否被其他租户绑定
-        DeptEntity deptEntity = deptService.getById(vo.getDeptId());
+        DeptEntity deptEntity = deptMapper.findById(vo.getDeptId(), DeptEntity.class);
         if(deptEntity == null || deptEntity.getId() == null){
             throw new ServerException("部门不存在");
         }
@@ -78,7 +78,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         deptEntity.setTenantId(vo.getTenantId());
         tenantMemberMapper.save(entity);
         redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
-        deptService.updateById(deptEntity);
+        deptMapper.updateById(deptEntity);
     }
 
     @Override
@@ -108,9 +108,28 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         if(l > 0){
             throw new ServerException("租户下有用户，不能删除");
         }
+        // 绑定的部门下，有其他部门，不能删除
+        List<DeptEntity> deptList = deptMapper.selectListByWrapper(QueryWrapper.of(DeptEntity.class)
+                .eq(DeptEntity::getTenantId, entity.getTenantId())
+                .eq(DeptEntity::getDbStatus, 1));
+        if(deptList != null && !deptList.isEmpty()){
+            if(deptList.size() == 1){
+                if(!deptList.getFirst().getId().equals(entity.getDeptId())){
+                    throw new ServerException("数据异常:租户绑定的根部门不一致");
+                }
+            }else{
+                throw new ServerException("租户下有多个部门，不能删除");
+            }
+        }
         entity.setDbStatus(0);
         tenantMemberMapper.update(entity);
         redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
+        // 更新部门
+        if(deptList != null){
+            DeptEntity deptEntity = deptList.getFirst();
+            deptEntity.setTenantId("");
+            deptMapper.updateById(deptEntity);
+        }
     }
 
     /**
