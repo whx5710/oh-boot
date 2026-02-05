@@ -232,38 +232,16 @@ public class AuthServiceImpl implements AuthService {
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         } catch (BadCredentialsException e) {
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0 ){
-                if((securityProperties.getAuthCount() - authCount) > 0){
-                    msg = "用户名或密码错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-                }else{
-                    msg = "用户名或密码错误，账号即将锁定";
-                }
-            }else{
-                msg = "用户名或密码错误";
-            }
-            throw new ServerException(msg);
+            throw new ServerException(countErr(login.getUsername(), "用户名或密码错误"));
         }
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();
         // 判断用户密钥
         checkKey(checkKey, user.getUserKey(), login);
         // 租户判断
-        if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
+        if(tenantProperties.isEnable() && !user.getTenantId().isEmpty()
                 && !tenantCache.valid(user.getTenantId())){
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0){
-                if((securityProperties.getAuthCount() - authCount) > 0){
-                    msg = "租户无效，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-                }else{
-                    msg = "租户无效，账号即将锁定";
-                }
-            }else{
-                msg = "租户无效，登录失败";
-            }
-            throw new ServerException(msg);
+            throw new ServerException(countErr(login.getUsername(), "租户无效"));
         }
 
         // 登录时间和token刷新时间
@@ -331,5 +309,26 @@ public class AuthServiceImpl implements AuthService {
             }
             throw new ServerException(msg);
         }
+    }
+
+    /**
+     * 统计错误次数
+     * @param userName 用户名
+     * @param errMsg 错误提示
+     */
+    private String countErr(String userName, String errMsg){
+        String msg = "";
+        // 登录失败计数
+        int authCount =loginCount(userName);
+        if(authCount > 0 ){
+            if((securityProperties.getAuthCount() - authCount) > 0){
+                msg = errMsg + "，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+            }else{
+                msg = errMsg + "，账号即将锁定";
+            }
+        }else{
+            msg = errMsg;
+        }
+        return msg;
     }
 }
