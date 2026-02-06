@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80043 (8.0.43-0ubuntu0.24.04.2)
+ Source Server Version : 80045 (8.0.45-0ubuntu0.24.04.1)
  Source Host           : localhost:3306
  Source Schema         : oh-sys-art
 
  Target Server Type    : MySQL
- Target Server Version : 80043 (8.0.43-0ubuntu0.24.04.2)
+ Target Server Version : 80045 (8.0.45-0ubuntu0.24.04.1)
  File Encoding         : 65001
 
- Date: 15/11/2025 11:07:03
+ Date: 06/02/2026 15:25:10
 */
 
 SET NAMES utf8mb4;
@@ -578,8 +578,13 @@ CREATE TABLE `sys_log_login` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '租户ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='登录日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='登录日志';
 
+-- ----------------------------
+-- Records of sys_log_login
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_log_operate
@@ -630,7 +635,7 @@ CREATE TABLE `sys_menu` (
   `is_hide_tab` tinyint(1) DEFAULT NULL COMMENT '是否在标签页中隐藏',
   `link` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '外部链接',
   `is_iframe` tinyint(1) DEFAULT NULL COMMENT '是否为iframe',
-  `is_full_page` tinyint(1) NULL DEFAULT NULL COMMENT '是否全屏页面',
+  `is_full_page` tinyint(1) DEFAULT NULL COMMENT '是否全屏页面',
   `keep_alive` tinyint(1) DEFAULT NULL COMMENT '是否缓存',
   `fixed_tab` tinyint(1) DEFAULT NULL COMMENT '是否固定标签页',
   `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'menu' COMMENT '类型:  catalog | menu | button',
@@ -643,7 +648,7 @@ CREATE TABLE `sys_menu` (
   `updater` bigint DEFAULT NULL COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -665,13 +670,16 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`,
 INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (14, 13, NULL, '查询部门', NULL, '查询部门', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:dept:list,sys:dept:info', 1, '', 1, 10000, '2025-10-04 19:47:21', NULL, NULL);
 INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (15, 13, NULL, '新增修改部门', NULL, '新增修改部门', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:dept:save,sys:dept:update,sys:dept:delete', 1, '新增修改部门', 1, 10000, '2025-10-08 16:43:14', NULL, NULL);
 INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (16, 12, NULL, '查询用户', NULL, '查询用户', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:user:page,sys:user:info', 1, '', 1, 10000, '2025-10-18 13:23:21', NULL, NULL);
-INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (17, 4,'params','Params','/system/params/index','系统参数','ri:folder-4-line',0,'',0,0,'',0,0,1,0,'menu',NULL,4,NULL,1,10000,'2025-12-20 12:38:30',10000,'2025-12-20 12:45:06');
-INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (18, 17,NULL,'查询参数',NULL,'查询参数',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'button','sys:params:info',1,'',1,10000,'2025-12-20 12:46:12',NULL,NULL);
-INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (19, 17,NULL,'新增修改参数',NULL,'新增修改参数',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'button','sys:params:save,sys:params:update,sys:params:delete',1,'',1,10000,'2025-12-20 12:46:12',NULL,NULL);
-INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (20, 4,'tenant','Tenant','/system/tenant/index','租户管理','ri:user-location-line',0,'',0,0,'',0,0,1,0,'menu',NULL,5,NULL,1,10000,'2025-12-28 12:38:30',10000,'2025-12-28 12:45:06');
-INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (21, 20,NULL,'查询租户',NULL,'查询租户',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'button','tenant:member:page,tenant:member:info',1,'',1,10000,'2025-12-20 12:46:12',NULL,NULL);
-INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (22, 20,NULL,'新增修改租户',NULL,'新增修改租户',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'button','tenant:member:save,tenant:member:update',1,'',1,10000,'2025-12-20 12:46:12',NULL,NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (17, 4, 'params', 'Params', '/system/params/index', '系统参数', 'ri:folder-4-line', 0, '', 0, 0, '', 0, 0, 1, 0, 'menu', NULL, 4, NULL, 1, 10000, '2025-12-20 12:38:30', 10000, '2025-12-20 12:45:06');
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (18, 17, NULL, '查询参数', NULL, '查询参数', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:params:info', 1, '', 1, 10000, '2025-12-20 12:46:12', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (19, 17, NULL, '新增修改参数', NULL, '新增修改参数', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:params:save,sys:params:update,sys:params:delete', 1, '', 1, 10000, '2025-12-20 12:46:12', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (20, 4, 'tenant', 'Tenant', '/system/tenant/index', '租户管理', 'ri:user-location-line', 0, '', 0, 0, '', 0, 0, 1, 0, 'menu', NULL, 5, NULL, 1, 10000, '2025-12-28 12:38:30', 10000, '2025-12-28 12:45:06');
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (21, 20, NULL, '查询租户', NULL, '查询租户', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'tenant:member:page,tenant:member:info', 1, '', 1, 10000, '2025-12-20 12:46:12', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (22, 20, NULL, '新增修改租户', NULL, '新增修改租户', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'tenant:member:save,tenant:member:update,sys:user:bindTenantUser,sys:user:unBindTenantUser', 1, '', 1, 10000, '2025-12-20 12:46:12', 10000, '2026-02-06 15:18:58');
 INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (23, 12, NULL, '新增修改用户', NULL, '新增修改用户', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:user:save,sys:user:update,sys:user:delete', 1, '', 1, 10000, '2025-10-18 13:23:21', NULL, NULL);
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (24, 4, 'dict', 'Dict', '/system/dict/index', '字典管理', 'ri:check-double-fill', 0, '', 0, 0, '', 0, 0, 0, 0, 'menu', NULL, 2, NULL, 1, 10000, '2026-02-06 15:07:23', 10000, '2026-02-06 15:22:32');
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (25, 24, NULL, '查询字典', NULL, '查询字典', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:dict:page,sys:dict:info,sys:dict:refreshTransCache', 1, '', 1, 10000, '2026-02-06 15:10:34', 10000, '2026-02-06 15:12:22');
+INSERT INTO `sys_menu` (`id`, `parent_id`, `path`, `name`, `component`, `title`, `icon`, `show_badge`, `show_text_badge`, `is_hide`, `is_hide_tab`, `link`, `is_iframe`, `is_full_page`, `keep_alive`, `fixed_tab`, `type`, `authority`, `sort`, `mark`, `db_status`, `creator`, `create_time`, `updater`, `update_time`) VALUES (26, 24, NULL, '新增修改字典', NULL, '新增修改字典', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'button', 'sys:dict:save,sys:dict:update,sys:dict:delete', 1, NULL, 1, 10000, '2026-02-06 15:12:14', NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -1003,22 +1011,22 @@ COMMIT;
 DROP TABLE IF EXISTS `sys_version_info`;
 CREATE TABLE `sys_version_info` (
   `id` int NOT NULL AUTO_INCREMENT,
-    `version_num` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本号',
-    `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-    `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发布内容',
-    `release_time` datetime NOT NULL COMMENT '发布时间',
-    `is_curr_version` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否当前版本',
-    `cover_picture` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面图片',
-    `re_login` tinyint NULL DEFAULT NULL COMMENT '是否需要重新登录',
-    `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-    `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-    `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-    `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-    `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `idx_01`(`is_curr_version`) USING BTREE
-  ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '版本信息' ROW_FORMAT = DYNAMIC;
+  `version_num` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '版本号',
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标题',
+  `content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发布内容',
+  `release_time` datetime NOT NULL COMMENT '发布时间',
+  `is_curr_version` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否当前版本',
+  `cover_picture` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '封面图片',
+  `re_login` tinyint DEFAULT NULL COMMENT '是否需要重新登录',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
+  `db_status` tinyint DEFAULT '1' COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_01` (`is_curr_version`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='版本信息';
 
 -- ----------------------------
 -- Records of sys_version_info
