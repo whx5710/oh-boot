@@ -8,6 +8,7 @@ import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.JsonUtils;
 import com.finn.core.utils.PageResult;
 import com.finn.core.utils.TreeUtils;
+import com.finn.framework.datasource.utils.CountWrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
@@ -103,6 +104,12 @@ public class DeptServiceImpl implements DeptService {
         if(entity.getParentId() == null){
             entity.setParentId(0L);
         }
+        // 判断单位名称是否重复
+        long l = deptMapper.count(CountWrapper.of(DeptEntity.class).eq(DeptEntity::getName, entity.getName())
+                .eq(DeptEntity::getDbStatus, 1).eq(DeptEntity::getParentId, entity.getParentId()));
+        if(l > 0){
+            throw new ServerException("同一部门下，名称同名");
+        }
         deptMapper.insert(entity);
     }
 
@@ -128,6 +135,13 @@ public class DeptServiceImpl implements DeptService {
         }
         if(entity.getParentId() == null){
             entity.setParentId(0L);
+        }
+        // 判断单位名称是否重复
+        long l = deptMapper.count(CountWrapper.of(DeptEntity.class).eq(DeptEntity::getName, entity.getName())
+                .eq(DeptEntity::getDbStatus, 1).eq(DeptEntity::getParentId, entity.getParentId())
+                .ne(DeptEntity::getId, entity.getId()));
+        if(l > 0){
+            throw new ServerException("同一部门下，名称同名");
         }
         deptMapper.updateById(entity);
     }
