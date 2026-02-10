@@ -87,6 +87,7 @@ public class MenuServiceImpl implements MenuService {
         entity.setMenuPath(vo.getComponent());
         entity.setType(vo.getType());
         entity.setStatus(vo.getStatus());
+        entity.setSort(vo.getSort());
 
         // 上级菜单不能为自己
         if (entity.getId().equals(entity.getParentId())) {
@@ -221,6 +222,7 @@ public class MenuServiceImpl implements MenuService {
             routeVO.setComponent(item.getMenuPath());
         }
         routeVO.setPath(item.getPath());
+        routeVO.setSort(item.getSort());
 
         // 组装meta
         RouteMetaVO metaVO = getMetaVO(item);

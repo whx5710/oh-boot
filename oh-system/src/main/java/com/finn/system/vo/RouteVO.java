@@ -58,6 +58,7 @@ public class RouteVO extends TreeNode<RouteVO> {
     Integer status;
     String authCode;
     String parentName;
+    Integer sort;
     RouteMetaVO meta;
 
     public String getName() {
@@ -130,5 +131,13 @@ public class RouteVO extends TreeNode<RouteVO> {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

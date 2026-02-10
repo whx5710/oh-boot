@@ -133,7 +133,7 @@ public class MenuController {
      * @param vo 菜单信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
     public Result<String> update(@RequestBody @Valid RouteVO vo) {
@@ -147,7 +147,7 @@ public class MenuController {
      * @param id 菜单ID
      * @return
      */
-    @DeleteMapping("{id}")
+    @PostMapping("/delById/{id}")
     @Log(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {
