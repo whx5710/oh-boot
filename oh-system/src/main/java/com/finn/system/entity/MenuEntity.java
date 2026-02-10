@@ -14,105 +14,55 @@ import com.finn.framework.entity.BaseEntity;
  */
 @TableName("sys_menu")
 public class MenuEntity extends BaseEntity {
-
     /**
-     * 上级ID
+     * 上级ID，一级菜单为0
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("parent_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
+    @TableField(exists = false)
+    private String parentName;
     /**
-     * 路由路径
-     */
-    @TableField("path")
-    private String path;
-
-    /**
-     * 组件名
+     * 菜单名称
      */
     @TableField("name")
     private String name;
 
-    @TableField(exists = false)
-    private String parentName;
-
     /**
-     * 组件路径
-     */
-    @TableField("component")
-    private String component;
-
-    /**
-     * 路由标题
+     * 标题
      */
     @TableField("title")
     private String title;
 
     /**
-     * 路由图标
+     * 显示路径
      */
-    @TableField("icon")
-    private String icon;
+    @TableField("path")
+    private String path;
 
     /**
-     * 是否显示徽章
+     * 页面组件路径
      */
-    @TableField("show_badge")
-    private Boolean showBadge;
+    @TableField("menu_path")
+    private String menuPath;
 
     /**
-     * 文本徽章
+     * 状态 0停用 1有效
      */
-    @TableField("show_text_badge")
-    private String showTextBadge;
+    private Integer status;
 
     /**
-     * 是否在菜单中隐藏
+     * 菜单是否隐藏
      */
-    @TableField("is_hide")
-    private Boolean isHide;
+    @TableField("hide_in_menu")
+    private Boolean hideInMenu = false;
 
     /**
-     * 是否在标签页中隐藏
+     * 标签是否隐藏
      */
-    @TableField("is_hide_tab")
-    private Boolean isHideTab;
-
-    /**
-     * 外部链接
-     */
-    @TableField("link")
-    private String link;
-
-    /**
-     * 是否为iframe
-     */
-    @TableField("is_iframe")
-    private Boolean isIframe;
-
-    /**
-     * 全屏页面
-     */
-    @TableField("is_full_page")
-    private Boolean isFullPage;
-    /**
-     * 是否缓存
-     */
-    @TableField("keep_alive")
-    private Boolean keepAlive;
-
-    /**
-     * 是否固定标签页
-     */
-    @TableField("fixed_tab")
-    private Boolean fixedTab;
-
-    /**
-     * 类型:  catalog | menu | button
-     */
-    @TableField("type")
-    private String type;
+    @TableField("hide_in_tab")
+    private Boolean hideInTab = false;
 
     /**
      * 授权标识(多个用逗号分隔，如：sys:menu:list,sys:menu:save)
@@ -121,10 +71,64 @@ public class MenuEntity extends BaseEntity {
     private String authority;
 
     /**
+     * 用于配置页面的徽标，会在菜单显示
+     */
+    @TableField("badge")
+    private String badge;
+
+    /**
+     * 用于配置页面的徽标类型，dot 为小红点，normal 为文本
+     */
+    @TableField("badge_type")
+    private String badgeType;
+
+    /**
+     * 用于配置页面的徽标颜色
+     */
+    @TableField("badge_variants")
+    private String badgeVariants;
+
+    /**
+     * 用于配置页面是否固定标签页，固定后页面不可关闭
+     */
+    @TableField("affix_tab")
+    private Boolean affixTab = false;
+
+    /**
+     * 用于配置外链跳转路径
+     */
+    @TableField("link")
+    private String link;
+
+    /**
+     * catalog | menu | action
+     */
+    @TableField("type")
+    private String type = "menu";
+
+    /**
+     * 打开方式   0：内部   1：外部
+     */
+    @TableField("open_style")
+    private Integer openStyle = 0;
+
+    /**
+     * 菜单图标
+     */
+    @TableField("icon")
+    private String icon;
+
+    /**
+     * 菜单缓存
+     */
+    @TableField("keep_alive")
+    private Boolean keepAlive = false;
+
+    /**
      * 排序
      */
     @TableField("sort")
-    private Integer sort;
+    private Integer sort = 0;
 
     /**
      * 备注
@@ -132,6 +136,13 @@ public class MenuEntity extends BaseEntity {
     @TableField("mark")
     private String mark;
 
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
 
     public Long getParentId() {
         return parentId;
@@ -139,14 +150,6 @@ public class MenuEntity extends BaseEntity {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getName() {
@@ -157,22 +160,6 @@ public class MenuEntity extends BaseEntity {
         this.name = name;
     }
 
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    public String getComponent() {
-        return component;
-    }
-
-    public void setComponent(String component) {
-        this.component = component;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -181,44 +168,68 @@ public class MenuEntity extends BaseEntity {
         this.title = title;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getPath() {
+        return path;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public Boolean getShowBadge() {
-        return showBadge;
+    public String getMenuPath() {
+        return menuPath;
     }
 
-    public void setShowBadge(Boolean showBadge) {
-        this.showBadge = showBadge;
+    public void setMenuPath(String menuPath) {
+        this.menuPath = menuPath;
     }
 
-    public String getShowTextBadge() {
-        return showTextBadge;
+    public Boolean getHideInMenu() {
+        return hideInMenu;
     }
 
-    public void setShowTextBadge(String showTextBadge) {
-        this.showTextBadge = showTextBadge;
+    public void setHideInMenu(Boolean hideInMenu) {
+        this.hideInMenu = hideInMenu;
     }
 
-    public Boolean getIsHide() {
-        return isHide;
+    public Boolean getHideInTab() {
+        return hideInTab;
     }
 
-    public void setIsHide(Boolean hide) {
-        isHide = hide;
+    public void setHideInTab(Boolean hideInTab) {
+        this.hideInTab = hideInTab;
     }
 
-    public Boolean getIsHideTab() {
-        return isHideTab;
+    public String getBadge() {
+        return badge;
     }
 
-    public void setIsHideTab(Boolean hideTab) {
-        isHideTab = hideTab;
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
+
+    public String getBadgeType() {
+        return badgeType;
+    }
+
+    public void setBadgeType(String badgeType) {
+        this.badgeType = badgeType;
+    }
+
+    public String getBadgeVariants() {
+        return badgeVariants;
+    }
+
+    public void setBadgeVariants(String badgeVariants) {
+        this.badgeVariants = badgeVariants;
+    }
+
+    public Boolean getAffixTab() {
+        return affixTab;
+    }
+
+    public void setAffixTab(Boolean affixTab) {
+        this.affixTab = affixTab;
     }
 
     public String getLink() {
@@ -229,38 +240,6 @@ public class MenuEntity extends BaseEntity {
         this.link = link;
     }
 
-    public Boolean getIsIframe() {
-        return isIframe;
-    }
-
-    public void setIsIframe(Boolean iframe) {
-        isIframe = iframe;
-    }
-
-    public Boolean getIsFullPage(){
-        return isFullPage;
-    }
-
-    public void setIsFullPage(Boolean isFullPage){
-        this.isFullPage = isFullPage;
-    }
-
-    public Boolean getKeepAlive() {
-        return keepAlive;
-    }
-
-    public void setKeepAlive(Boolean keepAlive) {
-        this.keepAlive = keepAlive;
-    }
-
-    public Boolean getFixedTab() {
-        return fixedTab;
-    }
-
-    public void setFixedTab(Boolean fixedTab) {
-        this.fixedTab = fixedTab;
-    }
-
     public String getType() {
         return type;
     }
@@ -269,12 +248,28 @@ public class MenuEntity extends BaseEntity {
         this.type = type;
     }
 
-    public String getAuthority() {
-        return authority;
+    public Integer getOpenStyle() {
+        return openStyle;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setOpenStyle(Integer openStyle) {
+        this.openStyle = openStyle;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public Boolean getKeepAlive() {
+        return keepAlive;
+    }
+
+    public void setKeepAlive(Boolean keepAlive) {
+        this.keepAlive = keepAlive;
     }
 
     public Integer getSort() {
@@ -291,5 +286,21 @@ public class MenuEntity extends BaseEntity {
 
     public void setMark(String mark) {
         this.mark = mark;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

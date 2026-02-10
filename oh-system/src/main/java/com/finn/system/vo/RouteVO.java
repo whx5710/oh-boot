@@ -8,53 +8,55 @@ import com.finn.core.utils.TreeNode;
  * @since 2025-04-20
  */
 public class RouteVO extends TreeNode<RouteVO> {
-//    export type MenuListType = {
-//        id: number; // id
-//        path: string; // 路由路径
-//        name: string; // 组件名
-//        component?: string; // 组件路径
-//        meta: {
-//            /** 路由标题 */
-//            title: string;
-//            /** 路由图标 */
-//            icon?: string;
-//            /** 是否显示徽章 */
-//            showBadge?: boolean;
-//            /** 文本徽章 */
-//            showTextBadge?: string;
-//            /** 是否在菜单中隐藏 */
-//            isHide?: boolean;
-//            /** 是否在标签页中隐藏 */
-//            isHideTab?: boolean;
-//            /** 外部链接 */
-//            link?: string;
-//            /** 是否为iframe */
-//            isIframe?: boolean;
-//            /** 是否缓存 */
-//            keepAlive?: boolean;
-//            /** 操作权限 */
-//            authList?: Array<{
-//                    /** 权限名称 */
-//                    title: string;
-//            /** 权限标识 */
-//            authMark: string;
-//    }>;
-//            /** 是否为一级菜单（不需要手动配置，自动识别） */
-//            isFirstLevel?: boolean;
-//            /** 角色权限 */
-//            roles?: string[];
-//            /** 是否固定标签页 */
-//            fixedTab?: boolean;
-//        };
-//        children?: MenuListType[]; // 子路由
-//    };
-
+    /**
+     * 菜单路由示例
+     * const dashboardMenus = [
+     *   {
+     *     // 这里固定写死 BasicLayout，不可更改
+     *     component: 'BasicLayout',
+     *     meta: {
+     *       order: -1,
+     *       title: 'page.dashboard.title',
+     *     },
+     *     name: 'Dashboard',
+     *     path: '/',
+     *     redirect: '/analytics',
+     *     children: [
+     *       {
+     *         name: 'Analytics',
+     *         path: '/analytics',
+     *         // 这里为页面的路径，需要去掉 views/ 和 .vue
+     *         component: '/dashboard/analytics/index',
+     *         meta: {
+     *           affixTab: true,
+     *           title: 'page.dashboard.analytics',
+     *         },
+     *       },
+     *       {
+     *         name: 'Workspace',
+     *         path: '/workspace',
+     *         component: '/dashboard/workspace/index',
+     *         meta: {
+     *           title: 'page.dashboard.workspace',
+     *         },
+     *       },
+     *     ],
+     *   }
+     * ]
+     */
     String name;
     String path;
     // 这里为页面的路径，需要去掉 views/ 和 .vue
     String component;
-    // 类型:  catalog | menu | button
+
+    String redirect;
+    // 类型:  catalog | menu | action
     String type;
+    /**
+     * 状态 0停用 1有效
+     */
+    Integer status;
+    String authCode;
     String parentName;
     RouteMetaVO meta;
 
@@ -82,20 +84,12 @@ public class RouteVO extends TreeNode<RouteVO> {
         this.component = component;
     }
 
-    public String getType() {
-        return type;
+    public String getRedirect() {
+        return redirect;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
     }
 
     public RouteMetaVO getMeta() {
@@ -104,5 +98,37 @@ public class RouteVO extends TreeNode<RouteVO> {
 
     public void setMeta(RouteMetaVO meta) {
         this.meta = meta;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

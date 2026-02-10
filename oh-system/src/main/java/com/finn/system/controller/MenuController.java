@@ -7,11 +7,11 @@ import com.finn.core.utils.PageResult;
 import com.finn.core.utils.Result;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.system.service.UserRoleService;
 import com.finn.system.convert.MenuConvert;
 import com.finn.system.entity.MenuEntity;
 import com.finn.system.query.MenuQuery;
 import com.finn.system.service.MenuService;
+import com.finn.system.service.UserRoleService;
 import com.finn.system.vo.MenuTreeVO;
 import com.finn.system.vo.MenuVO;
 import com.finn.system.vo.RouteVO;
@@ -26,7 +26,7 @@ import java.util.Set;
  * 菜单管理
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
 @RestController
 @RequestMapping("sys/menu")
@@ -41,8 +41,18 @@ public class MenuController {
     }
 
     /**
+     * 菜单导航
+     * @return
+     */
+//    @GetMapping("nav")
+//    public Result<List<MenuTreeVO>> nav() {
+//        List<MenuTreeVO> list = menuService.getUserMenuList(new MenuQuery());
+//        return Result.ok(list);
+//    }
+
+    /**
      * 获取菜单
-     * @param query 类型 catalog | menu | button | all
+     * @param query 类型 catalog | menu | action | all
      * @return
      */
     @PostMapping("/route")
@@ -112,7 +122,7 @@ public class MenuController {
     @PostMapping
     @Log(module = "菜单管理", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('sys:menu:save')")
-    public Result<String> save(@RequestBody @Valid MenuVO vo) {
+    public Result<String> save(@RequestBody @Valid RouteVO vo) {
         menuService.save(vo);
 
         return Result.ok();
@@ -123,10 +133,10 @@ public class MenuController {
      * @param vo 菜单信息
      * @return 提示信息
      */
-    @PostMapping("/update")
+    @PutMapping
     @Log(module = "菜单管理", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('sys:menu:update')")
-    public Result<String> update(@RequestBody @Valid MenuVO vo) {
+    public Result<String> update(@RequestBody @Valid RouteVO vo) {
         menuService.update(vo);
 
         return Result.ok();
@@ -137,7 +147,7 @@ public class MenuController {
      * @param id 菜单ID
      * @return
      */
-    @PostMapping("/delById/{id}")
+    @DeleteMapping("{id}")
     @Log(module = "菜单管理", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<String> delete(@PathVariable("id") Long id) {

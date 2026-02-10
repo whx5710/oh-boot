@@ -10,9 +10,9 @@ import java.util.List;
 
 /**
  * 菜单管理
- * 
+ *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
 @Mapper
 public interface MenuMapper extends BaseMapper<MenuEntity> {

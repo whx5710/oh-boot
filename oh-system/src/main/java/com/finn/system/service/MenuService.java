@@ -12,15 +12,15 @@ import java.util.List;
 
 /**
  * 菜单管理
- * 
+ *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
 public interface MenuService {
 
-	void save(MenuVO vo);
+	void save(RouteVO vo);
 
-	void update(MenuVO vo);
+	void update(RouteVO vo);
 
 	void delete(Long id);
 
@@ -83,3 +83,4 @@ public interface MenuService {
 	 */
 	Boolean pathExists(Long id, String path);
 }
+
