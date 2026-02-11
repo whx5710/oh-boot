@@ -1,6 +1,8 @@
 package com.finn.system.service.impl;
 
+import com.finn.core.exception.ServerException;
 import com.finn.core.utils.PageResult;
+import com.finn.framework.datasource.utils.CountWrapper;
 import com.finn.system.convert.DictDataConvert;
 import com.finn.system.entity.DictDataEntity;
 import com.finn.system.mapper.DictDataMapper;
@@ -35,13 +37,35 @@ public class DictDataServiceImpl implements DictDataService {
 
     @Override
     public void save(DictDataVO vo) {
+        if(vo.getDictTypeId() == null || vo.getDictValue() == null){
+            throw new ServerException("字典数据不能为空");
+        }
+        long l = dictDataMapper.count(CountWrapper.of(DictDataEntity.class).eq(DictDataEntity::getDbStatus, 1)
+                .eq(DictDataEntity::getDictTypeId, vo.getDictTypeId()).eq(DictDataEntity::getDictValue, vo.getDictValue()));
+        if(l > 0){
+            throw new ServerException("字典数据已存在");
+        }
         DictDataEntity entity = DictDataConvert.INSTANCE.convert(vo);
-
-        dictDataMapper.save(entity);
+        dictDataMapper.insert(entity);
     }
 
     @Override
     public void update(DictDataVO vo) {
+        if(vo.getId() == null){
+            throw new ServerException("字典数据ID不能为空");
+        }
+        DictDataEntity entityDb = getById(vo.getId());
+        if(entityDb == null || entityDb.getId() == null){
+            throw new ServerException("字典数据不存在，修改失败");
+        }
+        if(vo.getDictTypeId() != null && vo.getDictValue() != null){
+            long l = dictDataMapper.count(CountWrapper.of(DictDataEntity.class).eq(DictDataEntity::getDictTypeId, vo.getDictTypeId())
+                    .eq(DictDataEntity::getDbStatus, 1).eq(DictDataEntity::getDictValue, vo.getDictValue())
+                    .ne(DictDataEntity::getId, vo.getId()));
+            if(l > 0){
+                throw new ServerException("字典数据重复，修改失败");
+            }
+        }
         DictDataEntity entity = DictDataConvert.INSTANCE.convert(vo);
         dictDataMapper.updateById(entity);
     }
@@ -58,7 +82,7 @@ public class DictDataServiceImpl implements DictDataService {
 
     @Override
     public DictDataEntity getById(Long id) {
-        return dictDataMapper.getById(id);
+        return dictDataMapper.findById(id, DictDataEntity.class);
     }
 
 }

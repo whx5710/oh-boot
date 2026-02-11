@@ -82,6 +82,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
         }
 
         // 修改数据
+        vo.setParamKey(vo.getParamKey().toUpperCase());
         paramsMapper.updateById(ParamsConvert.INSTANCE.convert(vo));
 
         // 保存到缓存
@@ -96,7 +97,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
         if(!list.isEmpty()){
             for(ParamsEntity entity: list){
                 if(entity.getParamType() == 1){
-                    throw new ServerException(entity.getParamName() + "是系统内置参数禁止删除");
+                    throw new ServerException(entity.getParamName() + " 是系统内置参数禁止删除");
                 }
             }
         }
@@ -208,8 +209,11 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
     public Boolean del(Long id) {
         ParamsEntity entity = paramsMapper.getById(id);
         if(entity == null || entity.getParamKey() == null){
-            return false;
+            throw new ServerException("未找到该参数");
         }else {
+            if(entity.getParamType() == 1){
+                throw new ServerException(entity.getParamName() + " 是系统内置参数禁止删除");
+            }
             entity.setDbStatus(0);
             return paramsMapper.updateById(entity) > 0;
         }

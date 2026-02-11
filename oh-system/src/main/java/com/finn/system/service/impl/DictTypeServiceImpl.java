@@ -2,12 +2,14 @@ package com.finn.system.service.impl;
 
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.PageResult;
+import com.finn.framework.datasource.utils.CountWrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.framework.datasource.utils.UpdateWrapper;
 import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.system.cache.DictCache;
 import com.finn.system.convert.DictDataConvert;
 import com.finn.system.convert.DictTypeConvert;
+import com.finn.system.entity.DictDataEntity;
 import com.finn.system.entity.DictTypeEntity;
 import com.finn.system.enums.DictSourceEnum;
 import com.finn.system.mapper.DictDataMapper;
@@ -58,18 +60,39 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Override
     public void save(DictTypeVO vo) {
         DictTypeEntity entity = DictTypeConvert.INSTANCE.convert(vo);
-
+        // 判断类型是否存在
+        long l = dictTypeMapper.count(CountWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1)
+                .eq(DictTypeEntity::getDictType, entity.getDictType()));
+        if(l > 0){
+            throw new ServerException("字典类型已存在");
+        }
         dictTypeMapper.insert(entity);
     }
 
     @Override
     public void update(DictTypeVO vo) {
+        if(vo.getId() == null){
+            throw new ServerException("字典类型ID不能为空");
+        }
+        if(vo.getDictType() != null && !vo.getDictType().isEmpty()){
+            List<DictTypeEntity> list = dictTypeMapper.selectListByWrapper(QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1)
+                    .eq(DictTypeEntity::getDictType, vo.getDictType()).ne(DictTypeEntity::getId, vo.getId()));
+            if(list != null && !list.isEmpty()){
+                throw new ServerException("字典类型重复，请检查");
+            }
+        }
         DictTypeEntity entity = DictTypeConvert.INSTANCE.convert(vo);
         dictTypeMapper.updateById(entity);
     }
 
     @Override
     public void delete(List<Long> idList) {
+        // 判断是否有字典数据
+        long l = dictDataMapper.count(CountWrapper.of(DictDataEntity.class).eq(DictDataEntity::getDbStatus, 1)
+                .in(DictDataEntity::getDictTypeId, idList));
+        if(l > 0){
+            throw new ServerException("请先删除字典数据");
+        }
         dictTypeMapper.updateByWrapper(UpdateWrapper.of(DictTypeEntity.class).set(DictTypeEntity::getDbStatus, 0)
                 .in(DictTypeEntity::getId, idList));
     }
@@ -130,7 +153,7 @@ public class DictTypeServiceImpl implements DictTypeService {
         // 逐一单个保存
         List<DictDataVO>  dataList = dictDataMapper.getList(new DictDataQuery());
         dictCache.delSingleAll(); // 先清除
-        if(dataList != null && dataList.size() > 0){
+        if(dataList != null && !dataList.isEmpty()){
             for(DictDataVO vo: dataList){
                 DictDataSingleVO dataSingleVO = DictDataConvert.INSTANCE.convertSingle(vo);
                 dictCache.save(dataSingleVO);

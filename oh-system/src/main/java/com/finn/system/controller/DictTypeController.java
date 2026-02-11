@@ -82,7 +82,6 @@ public class DictTypeController {
     @PreAuthorize("hasAuthority('sys:dict:save')")
     public Result<String> save(@RequestBody @Valid DictTypeVO vo) {
         dictTypeService.save(vo);
-
         return Result.ok();
     }
 

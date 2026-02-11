@@ -1,5 +1,6 @@
 package com.finn.system.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.DictDataEntity;
 import com.finn.system.query.DictDataQuery;
 import com.finn.system.vo.DictDataVO;
@@ -17,16 +18,10 @@ import java.util.List;
  *
  */
 @Mapper
-public interface DictDataMapper {
+public interface DictDataMapper extends BaseMapper<DictDataEntity> {
 
     @Select("${sql}")
     List<DictVO.DictData> getListForSql(@Param("sql") String sql);
 
     List<DictDataVO> getList(DictDataQuery query);
-
-    boolean updateById(DictDataEntity param);
-
-    int save(DictDataEntity param);
-
-    DictDataEntity getById(@Param("id")Long id);
 }
