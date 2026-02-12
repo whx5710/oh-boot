@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.RoleMapper">
+
+    <select id="getList" parameterType="com.finn.system.query.RoleQuery">
+        select a.*,b.tenant_name,GROUP_CONCAT(c.menu_id) menuIds
+        from sys_role a left join tenant_member b on a.tenant_id = b.tenant_id and b.db_status = 1
+        left join sys_role_menu c on a.id = c.role_id and c.db_status = 1
+        where a.db_status != 0
+        <if test="name != null and name != ''">
+            and a.name like concat('%',#{name}, '%')
+        </if>
+        <if test="tenantId != null and tenantId != ''">and a.tenant_id = #{tenantId}</if>
+        <if test="isSystem != null">and a.is_system = #{isSystem}</if>
+        <if test="startTime != null and endTime != null">and DATE_FORMAT(a.create_time,'%Y-%m-%d') between #{startTime} and #{endTime}</if>
+        <if test="remark != null and remark !=''">and a.remark like concat('%',#{remark},'%')</if>
+        <if test="tenantName != null and tenantName !=''">and b.tenant_name like concat('%',#{tenantName},'%')</if>
+        group by a.id
+        order by a.create_time desc
+    </select>
+
+    <!--<update id="updateById">
+        UPDATE sys_role
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="dataScope != null">data_scope = #{dataScope},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null and updater != 0">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>-->
+
+    <!--<insert id="insertRole" parameterType="entity.import com.finn.system.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_role ( name, remark, data_scope, dept_id, db_status, creator, create_time)
+        VALUES
+        (#{name}, #{remark}, #{dataScope}, #{deptId}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>-->
+
+</mapper>

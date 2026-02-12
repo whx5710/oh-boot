@@ -16,8 +16,13 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 - BaseMapper接口支持单表通用操作：通过QueryWrapper构建sql，无需编写脚本【2025年3月】
 - 接口文档解决方案改用smart-doc + Torna 无侵入式，文档统一管理【2025年5月】
 - BaseMapper接口支持单表通用操作;新增插入(InsertWrapper)、修改（UpdateWrapper）、删除（DeleteWrapper）脚本构建方法，无需编写sql脚本【2025年6月】
-- 后端代码：https://gitee.com/whx233/oh-boot
-- 前端工程：https://gitee.com/whx233/oh-admin-antd
+- BaseMapper通用操作;新增汇总统计count方法(CountWrapper)【2025年2月】
+- 后端代码：
+- - Gitee https://gitee.com/whx233/oh-boot.git
+- - GitHub https://github.com/whx5710/oh-boot.git
+- 前端工程：
+- - Gitee https://gitee.com/whx233/oh-web.git
+- - GitHub https://github.com/whx5710/oh-web.git
 - 开发文档：
 - 演示环境：
 - 官网地址：
@@ -27,16 +32,13 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 ```
 oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类
 oh-framework 系统框架，包括数据库、基础实体类、鉴权
-oh-support   基础组织部门信息，如人员、角色、部门、登录等，业务模块中可按需引入
-oh-server    系统启动入口【根据实际情况，可集成到某个模块中】
+oh-system    系统管理模块，包括组织架构、鉴权、基础配置等
 oh-module    业务模块
-    - oh-module-sys    系统管理模块，包括鉴权、基础配置等
     - oh-module-app    对外服务接口
     - oh-module-flow   工作流程管理
-    - oh-module-team   协同管理【业务功能，未开发】
     - ...              扩展其他业务模块
 ```
-通过`oh-core`、`oh-framework`即可很方便、快捷的搭建开发环境；比如需将系统管理的基础功能独立成一个工程
+通过引入`oh-core`、`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
 
 ## 快速开始
 环境：JDK17+、MySQL8+、Redis、Kafka(RocketMq)
@@ -44,7 +46,8 @@ oh-module    业务模块
 - 2、创建数据库，分别创建 oh-sys 和 oh-boot数据库（可合并成一个库），并分别执行db\mysql目录下的SQL脚本
 - 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka/RocketMq（如果需要）、文件存储路径等
 - 4、启动服务 `com.finn.ServerApplication`
-- 5、API文档地址：http://localhost:8080/doc.html 数据库监控地址：http://localhost:8080/druid/login.html
+- 5、API文档地址：自行部署发布Torna
+- 6、数据库监控地址：http://localhost:8080/druid/login.html
 
 ## 配置说明
 ```yaml

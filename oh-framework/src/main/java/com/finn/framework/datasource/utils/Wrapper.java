@@ -110,17 +110,17 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
                 if (annotation.exists()) { // 剔除非数据库字段
                     if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
                             (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
-                        log.warn("{} 子类有覆盖 {} 字段，不查询该字段",clazz.getName(), annotation.value());
+                        log.warn("buildColumn: {} 子类有覆盖 {} 字段，不查询该字段",clazz.getName(), annotation.value());
                     }else{
                         colValue.put(field.getName(), annotation.value()); // 缓存列名
                     }
                 }else{
                     // 如果子类覆盖了父类的属性，存在 exists = false的情况
                     String key = annotation.value()==null?field.getName():annotation.value();
-                    if(key.equals("")){
+                    if(key.isEmpty()){
                         key = field.getName();
                     }
-                    judge.put(key, annotation.exists());
+                    judge.put(key, false);
                 }
             }else{
                 colValue.put(field.getName(), field.getName()); // 缓存列名
@@ -155,10 +155,10 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
                 }else{
                     // 如果子类覆盖了父类的属性，存在 exists = false的情况
                     String key = annotation.value()==null?field.getName():annotation.value();
-                    if(key.equals("")){
+                    if(key.isEmpty()){
                         key = field.getName();
                     }
-                    judge.put(key, annotation.exists());
+                    judge.put(key, false);
                 }
             }else{
                 sql.SELECT(field.getName());

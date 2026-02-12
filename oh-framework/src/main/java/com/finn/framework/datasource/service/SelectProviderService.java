@@ -1,5 +1,6 @@
 package com.finn.framework.datasource.service;
 
+import com.finn.framework.datasource.utils.CountWrapper;
 import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import org.apache.ibatis.jdbc.SQL;
@@ -22,6 +23,8 @@ public class SelectProviderService {
 
     public static final String FIND_BY_ID = "findById";
 
+    public static final String SELECT_COUNT_PARAM = "count";
+
     /**
      * 通用单表查询
      * @param fp 参数
@@ -39,6 +42,18 @@ public class SelectProviderService {
      * @param <T> 类
      */
     public <T> String selectListByWrapper(QueryWrapper<T> fp){
+        fp.remove(PAGE_NUM);
+        fp.remove(PAGE_SIZE);
+        return fp.getSql().toString();
+    }
+
+    /**
+     * 通用汇总计数
+     * @param fp 参数
+     * @return sql
+     * @param <T> 类
+     */
+    public <T> String count(CountWrapper<T> fp){
         fp.remove(PAGE_NUM);
         fp.remove(PAGE_SIZE);
         return fp.getSql().toString();

@@ -81,7 +81,7 @@ public class FlowController {
      * @param vo 流程信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('finn:flow:update')")
     public Result<String> update(@RequestBody @Valid FlowVO vo){
         flowService.update(vo);
@@ -94,7 +94,7 @@ public class FlowController {
      * @param idList 流程ID集合
      * @return 提示信息
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('flow:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         flowService.delete(idList);

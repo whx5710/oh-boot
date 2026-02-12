@@ -84,7 +84,7 @@ public class DataAppController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('sys:app:update')")
     public Result<String> update(@RequestBody @Valid DataAppDTO vo){
         dataAppService.update(vo);
@@ -97,7 +97,7 @@ public class DataAppController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataAppService.delete(idList);
@@ -153,7 +153,7 @@ public class DataAppController {
      * @param idList
      * @return
      */
-    @DeleteMapping("/deleteLog")
+    @PostMapping("/deleteLog")
     @PreAuthorize("hasAuthority('sys:app:delete')")
     public Result<String> deleteLog(@RequestBody List<Long> idList){
         dataMsgService.delete(idList);

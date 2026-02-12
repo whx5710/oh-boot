@@ -72,7 +72,7 @@ public class DataFunctionController {
      * @param vo
      * @return
      */
-    @PutMapping
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('sys:function:update')")
     public Result<String> update(@RequestBody @Valid DataFunctionVO vo){
         dataFunctionService.update(vo);
@@ -85,7 +85,7 @@ public class DataFunctionController {
      * @param idList
      * @return
      */
-    @DeleteMapping
+    @PostMapping("/del")
     @PreAuthorize("hasAuthority('sys:function:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         dataFunctionService.delete(idList);

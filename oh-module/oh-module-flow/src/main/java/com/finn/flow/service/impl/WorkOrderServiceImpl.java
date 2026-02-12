@@ -47,7 +47,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
 
     private final RedisCache redisCache;
 
-    IdWorker idWorker = new IdWorker(1,1);
+    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0,1, System.currentTimeMillis());
 
 
     public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,

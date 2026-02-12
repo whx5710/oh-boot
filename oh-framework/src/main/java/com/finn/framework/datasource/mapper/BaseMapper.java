@@ -25,7 +25,7 @@ public interface BaseMapper<T>{
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
     @InsertProvider(method = ModifyProviderService.INSERT, type = ModifyProviderService.class)
-    int insert(T entity);
+    long insert(T entity);
 
     /**
      * 根据ID更新
@@ -33,7 +33,7 @@ public interface BaseMapper<T>{
      * @return int
      */
     @UpdateProvider(method = ModifyProviderService.UPDATE, type = ModifyProviderService.class)
-    int updateById(T entity);
+    long updateById(T entity);
 
     /**
      * 删除数据
@@ -59,6 +59,14 @@ public interface BaseMapper<T>{
      */
     @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
     List<T> selectListByWrapper(Wrapper<T> fp);
+
+    /**
+     * 查询列表
+     * @param fp CountWrapper
+     * @return list
+     */
+    @SelectProvider(method = SelectProviderService.SELECT_COUNT_PARAM, type = SelectProviderService.class)
+    long count(Wrapper<T> fp);
 
     /**
      * 根据ID查询数据

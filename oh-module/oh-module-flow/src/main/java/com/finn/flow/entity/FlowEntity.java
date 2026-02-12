@@ -1,5 +1,7 @@
 package com.finn.flow.entity;
 
+import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 /**
  * 自定义流程表
@@ -7,10 +9,12 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-12-19
  */
+@TableName("bpmn_flow")
 public class FlowEntity extends BaseEntity {
 	/**
 	* 流程code
 	*/
+	@TableField("key_code")
 	private String keyCode;
 
 	/**
@@ -26,8 +30,10 @@ public class FlowEntity extends BaseEntity {
 	/**
 	 * svg图片字符串格式
 	 */
+	@TableField("svg_str")
 	private String svgStr;
 
+	@TableField("version_tag")
 	private String versionTag;
 	/**
 	* 说明

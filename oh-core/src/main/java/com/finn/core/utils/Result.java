@@ -10,9 +10,9 @@ import com.finn.core.exception.ErrorCode;
  */
 public class Result<T> {
     /**
-     * 编码 0表示成功，其他值表示失败
+     * 编码 200表示成功，其他值表示失败
      */
-    private int code = 0;
+    private int code = 200;
 
     /**
      * 请求是否成功

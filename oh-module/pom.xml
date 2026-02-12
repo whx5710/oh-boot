@@ -20,12 +20,8 @@
     <modules>
         <!-- 工作流 -->
         <module>oh-module-flow</module>
-        <!-- 协同任务 -->
-        <module>oh-module-team</module>
         <!-- 外部对接客户端 -->
         <module>oh-module-app</module>
-        <!-- 系统管理 -->
-        <module>oh-module-sys</module>
     </modules>
     <dependencies>
         <dependency>

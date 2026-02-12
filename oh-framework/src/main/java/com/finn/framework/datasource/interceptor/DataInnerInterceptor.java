@@ -1,6 +1,7 @@
 package com.finn.framework.datasource.interceptor;
 
 import com.finn.core.utils.ReflectUtil;
+import com.finn.core.utils.SnowflakeIdWorker;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import org.apache.ibatis.cache.CacheKey;
@@ -34,6 +35,11 @@ public class DataInnerInterceptor implements Interceptor {
 
     private final Logger log = LoggerFactory.getLogger(DataInnerInterceptor.class);
 
+    // id生成
+    private final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(31,31, System.currentTimeMillis());
+
+    // id
+    private final static String ID = "id";
     // 创建时间
     private final static String CREATE_TIME = "createTime";
     // 创建人ID
@@ -123,6 +129,15 @@ public class DataInnerInterceptor implements Interceptor {
             }
         }catch (NoSuchFieldException e){
             log.warn("无{}属性！", DB_STATUS);
+        }
+        // ID
+        try {
+            Object object = ReflectUtil.getValue(params, ID);
+            if(object == null){
+                ReflectUtil.setValue(params, ID, idWorker.nextId(), false);
+            }
+        }catch (NoSuchFieldException e){
+            log.warn("无{}属性！", ID);
         }
     }
 

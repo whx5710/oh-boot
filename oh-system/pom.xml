@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.finn</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>3.0.0</version>
+    </parent>
+    <groupId>com.finn.sys</groupId>
+    <artifactId>oh-system</artifactId>
+    <description>系统基础功能</description>
+    <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 打包的版本 -->
+        <revision>3.0.1_20250204</revision>
+    </properties>
+
+    <dependencies>
+        <!-- 系统框架 -->
+        <dependency>
+            <groupId>com.finn</groupId>
+            <artifactId>oh-framework</artifactId>
+        </dependency>
+        <!-- 定时任务 -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+        <!-- websocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build><!-- 打jar包命名-${revision} -->
+        <finalName>${project.artifactId}-${revision}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- 设置启动入口main -->
+                <configuration>
+                    <mainClass>com.finn.ServerApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.ly.smart-doc</groupId>
+                <artifactId>smart-doc-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
