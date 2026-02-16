@@ -83,6 +83,48 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     @Override
     public void update(TenantMemberVO vo) {
+        AssertUtils.isNull(vo.getId(), "ID");
+        AssertUtils.isNull(vo.getTenantId(), "租户编码");
+        TenantMemberEntity tenantMemberDb = tenantMemberMapper.findById(vo.getId(), TenantMemberEntity.class);
+        if(tenantMemberDb == null || tenantMemberDb.getId() == null){
+            throw new ServerException("未找到对应租户");
+        }
+        if(!vo.getTenantId().equals(tenantMemberDb.getTenantId())){
+            throw new ServerException("租户编码不能修改");
+        }
+        // 校验根部门
+        if(vo.getDeptId() != null && !vo.getDeptId().equals(tenantMemberDb.getDeptId())){
+            DeptEntity deptDb = deptMapper.findById(vo.getDeptId(), DeptEntity.class);
+            if(deptDb == null || deptDb.getId() == null){
+                throw new ServerException("未找到根部门");
+            }
+            if(deptDb.getTenantId() != null && !deptDb.getTenantId().isEmpty()){
+                throw new ServerException("该部门已绑定租户");
+            }
+            long l = deptMapper.count(CountWrapper.of(DeptEntity.class).eq(DeptEntity::getDbStatus, 1)
+                    .eq(DeptEntity::getTenantId, vo.getTenantId()).ne(DeptEntity::getId, tenantMemberDb.getDeptId()));
+            if(l > 0){
+                throw new ServerException("该租户下有多个部门，不能修改根部门");
+            }
+            // 判断部门下是否有用户
+            l = userMapper.count(CountWrapper.of(UserEntity.class).eq(UserEntity::getDbStatus, 1)
+                    .eq(UserEntity::getDeptId, tenantMemberDb.getDeptId()));
+            if(l > 0){
+                throw new ServerException("根部门下有用户信息，不能修改");
+            }
+            l = userMapper.count(CountWrapper.of(UserEntity.class).eq(UserEntity::getDbStatus, 1)
+                    .eq(UserEntity::getDeptId, vo.getDeptId()));
+            if(l > 0){
+                throw new ServerException("根部门下有用户信息，不能修改");
+            }
+            deptDb = deptMapper.findById(tenantMemberDb.getDeptId(), DeptEntity.class);
+            deptDb.setTenantId(""); // 清空原来的部门
+            deptMapper.updateById(deptDb);
+            // 绑定新的根部门
+            deptDb = deptMapper.findById(vo.getDeptId(), DeptEntity.class);
+            deptDb.setTenantId(vo.getTenantId());
+            deptMapper.updateById(deptDb);
+        }
         tenantMemberMapper.update(TenantMemberConvert.INSTANCE.convert(vo));
         TenantMemberEntity entity = tenantMemberMapper.findById(vo.getId(), TenantMemberEntity.class);
         redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
