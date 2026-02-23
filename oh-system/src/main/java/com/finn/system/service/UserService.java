@@ -20,6 +20,8 @@ public interface UserService {
 
     PageResult<UserVO> page(UserQuery query);
 
+    PageResult<UserVO> pageByRole(UserQuery query);
+
     // 被锁定、待锁定的用户列表（由于有次数限制，此方法不判断多少次被锁定）
     PageResult<UserVO> clockPage(UserQuery query);
 

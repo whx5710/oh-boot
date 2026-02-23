@@ -84,6 +84,16 @@ public class UserServiceImpl implements UserService {
         return new PageResult<>(voList, page.getTotal());
     }
 
+    @Override
+    public PageResult<UserVO> pageByRole(UserQuery query) {
+        if(query == null || query.getRoleId() == null){
+            throw new ServerException("角色参数不能为空");
+        }
+        List<UserEntity> list = userMapper.pageByRole(query);
+        List<UserVO> voList = UserConvert.INSTANCE.convertList(list);
+        return new PageResult<>(voList, query.getTotal());
+    }
+
     /**
      * 被锁定、待锁定的用户列表（由于有次数限制，此方法不判断多少次被锁定）
      * username 不为空，说明只查单个用户

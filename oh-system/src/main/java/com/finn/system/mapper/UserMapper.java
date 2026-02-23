@@ -22,6 +22,9 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 
 	List<UserEntity> getList(@Param("params") UserQuery params);
 
+	@Pages
+	List<UserEntity> pageByRole(@Param("params") UserQuery params);
+
 	@Select("select t1.*, (select t2.name from sys_dept t2 where t2.id = t1.dept_id) deptName from sys_user t1 where t1.db_status = 1 and t1.id = #{id}")
 	UserEntity getById(@Param("id") Long id);
 

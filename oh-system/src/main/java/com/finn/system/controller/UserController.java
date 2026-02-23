@@ -53,6 +53,18 @@ public class UserController {
     }
 
     /**
+     * 根据角色ID获取用户列表
+     * @param query 参数
+     * @return list
+     */
+    @GetMapping("/pageByRole")
+    @PreAuthorize("hasAuthority('sys:user:page')")
+    public Result<PageResult<UserVO>> pageByRole(@Valid UserQuery query) {
+        PageResult<UserVO> page = userService.pageByRole(query);
+        return Result.ok(page);
+    }
+
+    /**
      * 被锁定的用户列表
      * @param query 查询参数
      * @return 用户列表

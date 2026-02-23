@@ -69,6 +69,8 @@ public class UserQuery extends Query {
      */
     private Boolean tenantRole;
 
+    private Long roleId;
+
     public String getUsername() {
         return username;
     }
@@ -163,5 +165,13 @@ public class UserQuery extends Query {
 
     public void setTenantRole(Boolean tenantRole) {
         this.tenantRole = tenantRole;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 }
