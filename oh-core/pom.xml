@@ -4,20 +4,16 @@
         <groupId>com.finn</groupId>
         <artifactId>oh-boot</artifactId>
         <!--<artifactId>finn-parent</artifactId>-->
-        <version>3.0.0</version>
+        <version>4.0.3.260307</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>oh-core</artifactId>
     <description>系统core框架</description>
-    <!-- 框架版本 -->
-    <version>2.1.0.20250409</version>
 
     <properties>
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <!-- 面向切面 -->
-        <aspectj.version>1.9.22.1</aspectj.version>
     </properties>
 
     <dependencies>
@@ -29,14 +25,14 @@
         <!-- AOP 相关 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
         <!-- servlet -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.2.0-M1</version>
             <scope>provided</scope>
-            <version>6.1.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/cn.idev.excel/fastexcel -->
         <dependency>

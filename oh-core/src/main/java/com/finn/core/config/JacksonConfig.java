@@ -1,25 +1,20 @@
 package com.finn.core.config;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import tools.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.finn.core.utils.DateUtils;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.module.SimpleModule;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -28,29 +23,93 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class JacksonConfig {
 
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public Jackson2ObjectMapperBuilderCustomizer customJackson() {
-        return builder -> {
-            builder.serializerByType(LocalDateTime.class,
-                    new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)));
-            builder.serializerByType(LocalDate.class,
-                    new LocalDateSerializer(DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN)));
-            builder.serializerByType(LocalTime.class,
-                    new LocalTimeSerializer(DateTimeFormatter.ofPattern(DateUtils.TIME_PATTERN)));
-            builder.deserializerByType(LocalDateTime.class,
-                    new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)));
-            builder.deserializerByType(LocalDate.class,
-                    new LocalDateDeserializer(DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN)));
-            builder.deserializerByType(LocalTime.class,
-                    new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DateUtils.TIME_PATTERN)));
-            builder.serializationInclusion(JsonInclude.Include.NON_NULL);
-            builder.failOnUnknownProperties(false);
-            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
+    /** 时间格式(yyyy-MM-dd HH:mm:ss) */
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN);
+    private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN);
 
-            // 全局转化Long类型为String，解决序列化后传入前端Long类型精度丢失问题
-            builder.serializerByType(BigInteger.class, ToStringSerializer.instance);
-            builder.serializerByType(Long.class,ToStringSerializer.instance);
+    @Bean
+    public JsonMapperBuilderCustomizer jsonCustomizer() {
+        return builder -> {
+            // 添加 LocalDateTime 的序列化与反序列化
+            builder.addModule(
+                    new SimpleModule()
+                            // Long 的序列化
+                            .addSerializer(Long.class, new LongSerializer())
+                            // LocalDateTime 的序列化
+                            .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer())
+                            // LocalDateTime 的反序列化
+                            .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer())
+                            // LocalDate 的序列化
+                            .addSerializer(LocalDate.class, new LocalDateSerializer())
+                            // LocalDate 的反序列化
+                            .addDeserializer(LocalDate.class, new LocalDateDeserializer())
+            );
         };
+    }
+
+    /**
+     * Long 的序列化
+     */
+    public static class LongSerializer extends ValueSerializer<Long> {
+        @Override
+        public void serialize(Long value, JsonGenerator gen, SerializationContext ctxt) throws JacksonException {
+            if (value != null) {
+                gen.writeString(value.toString());
+            }
+        }
+    }
+
+    /**
+     * LocalDateTime 的序列化
+     */
+    public static class LocalDateTimeSerializer extends ValueSerializer<LocalDateTime> {
+        @Override
+        public void serialize(LocalDateTime value, JsonGenerator gen, SerializationContext ctxt) throws JacksonException {
+            if (value != null) {
+                gen.writeString(value.format(DATE_TIME_FORMATTER));
+            } else {
+                gen.writeNull();
+            }
+        }
+    }
+    /**
+     * LocalDate 的序列化
+     */
+    public static class LocalDateSerializer extends ValueSerializer<LocalDate> {
+        @Override
+        public void serialize(LocalDate value, JsonGenerator gen, SerializationContext ctxt) throws JacksonException {
+            if (value != null) {
+                gen.writeString(value.format(DATE_PATTERN));
+            } else {
+                gen.writeNull();
+            }
+        }
+    }
+
+    /**
+     * LocalDateTime 的反序列化
+     */
+    public static class LocalDateTimeDeserializer extends ValueDeserializer<LocalDateTime> {
+        @Override
+        public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
+            String dateString = p.getString();
+            if (dateString == null || dateString.trim().isEmpty()) {
+                return null;
+            }
+            return LocalDateTime.parse(dateString, DATE_TIME_FORMATTER);
+        }
+    }
+    /**
+     * LocalDate 的反序列化
+     */
+    public static class LocalDateDeserializer extends ValueDeserializer<LocalDate> {
+        @Override
+        public LocalDate deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
+            String dateString = p.getString();
+            if (dateString == null || dateString.trim().isEmpty()) {
+                return null;
+            }
+            return LocalDate.parse(dateString, DATE_PATTERN);
+        }
     }
 }

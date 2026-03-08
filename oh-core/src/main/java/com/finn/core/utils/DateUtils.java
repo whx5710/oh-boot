@@ -107,8 +107,7 @@ public class DateUtils {
      * @return  返回LocalDateTime
      */
     public static LocalDateTime parseLocalDateTime(String date) {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-        return LocalDateTime.parse(date, df);
+        return parseLocalDateTime(date, DATE_TIME_PATTERN);
     }
 
     /**

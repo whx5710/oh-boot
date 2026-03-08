@@ -1,28 +1,17 @@
 package com.finn.core.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.finn.core.config.JacksonConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
+import tools.jackson.core.json.JsonWriteFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,38 +21,23 @@ import java.util.List;
  *
  */
 public class JsonUtils {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = JsonMapper.builder()
+            .enable(JsonWriteFeature.ESCAPE_NON_ASCII)
+            .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+            .addModule(new SimpleModule()
+                    // Long 的序列化
+                    .addSerializer(Long.class, new JacksonConfig.LongSerializer())
+                    // LocalDateTime 的序列化
+                    .addSerializer(LocalDateTime.class, new JacksonConfig.LocalDateTimeSerializer())
+                    // LocalDateTime 的反序列化
+                    .addDeserializer(LocalDateTime.class, new JacksonConfig.LocalDateTimeDeserializer())
+                    // LocalDate 的序列化
+                    .addSerializer(LocalDate.class, new JacksonConfig.LocalDateSerializer())
+                    // LocalDate 的反序列化
+                    .addDeserializer(LocalDate.class, new JacksonConfig.LocalDateDeserializer()))
+            .build();
 
     private final static Logger log = LoggerFactory.getLogger(JsonUtils.class);
-
-    /**
-     * 日期格式化
-     * @return
-     */
-    public static JavaTimeModule getJavaTimeModule(){
-        // 日期时间处理
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        // LocalDateTime
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN)));
-        // LocalDate
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN)));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN)));
-        // LocalTime
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DateUtils.TIME_PATTERN)));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DateUtils.TIME_PATTERN)));
-        // date
-        javaTimeModule.addSerializer(Date.class,new DateSerializer(false,new SimpleDateFormat(DateUtils.DATE_TIME_PATTERN)));
-        javaTimeModule.addDeserializer(Date.class,new DateDeserializers.DateDeserializer());
-        return javaTimeModule;
-    }
-
-    static {
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // 未知的属性
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // 禁止将 java.util.Date, Calendar 序列化为数字(时间戳)
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 空beans
-        objectMapper.registerModule(getJavaTimeModule());
-    }
     /**
      * 对象转json字符串
      * @param object
@@ -126,15 +100,6 @@ public class JsonUtils {
         } catch (Exception e) {
             log.error("对象转换失败!{}", e.getMessage());
              throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> T parseObject(String text, TypeReference<T> typeReference) {
-        try {
-            return objectMapper.readValue(text, typeReference);
-        } catch (Exception e) {
-            log.error("{} json字符串转化对象失败！{}", text, e.getMessage());
-            throw new RuntimeException(e);
         }
     }
 
