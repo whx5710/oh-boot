@@ -1,7 +1,7 @@
 package com.finn.system.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.TenantEntity;

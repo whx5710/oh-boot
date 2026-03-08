@@ -1,8 +1,8 @@
 package com.finn.framework.entity.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
