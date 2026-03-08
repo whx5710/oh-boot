@@ -28,10 +28,9 @@
 
 	<modules>
 		<module>oh-system</module>
-		<!--<module>oh-app</module>-->
 		<module>oh-module</module>
-		<!--<module>oh-core</module>
-		<module>oh-framework</module>-->
+		<module>oh-core</module>
+		<module>oh-framework</module>
 	</modules>
 
 	<properties>
