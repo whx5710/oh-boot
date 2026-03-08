@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.finn</groupId>
         <artifactId>oh-boot</artifactId>
-        <version>4.0.3_20260308</version>
+        <version>4.0.3_260307</version>
     </parent>
     <groupId>com.finn.module</groupId>
     <artifactId>oh-module</artifactId>

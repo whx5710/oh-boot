@@ -52,12 +52,13 @@ public class DynamicDataSourceConfig extends HandleDataSource {
             String key = item.getKey();
             // 连接池
             log.debug("初始化 {} 数据源", key);
-            DataSource ds = null;
-            if(type.contains("HikariDataSource")){
-                ds = createHikariDS(key, dataSourceProperty);
-            }else{
-                ds = createDruidDS(key, dataSourceProperty);
+            DataSource ds = createHikariDS(key, dataSourceProperty);
+            /*if(type.contains("HikariDataSource")){
+                ds =createHikariDS(key, dataSourceProperty);
             }
+            else{
+                ds = createDruidDS(key, dataSourceProperty);
+            }*/
             // 校验数据库连接是否正常
             if(dataSourceProperty.getCheckConnection()){
                 checkDs(ds, key);
