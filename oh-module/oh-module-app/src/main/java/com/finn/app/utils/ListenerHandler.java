@@ -3,7 +3,6 @@ package com.finn.app.utils;
 import com.finn.core.exception.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.stereotype.Component;
 
@@ -30,17 +29,17 @@ public class ListenerHandler {
 
     private final Logger log = LoggerFactory.getLogger(ListenerHandler.class);
 
-    private final KafkaListenerEndpointRegistry registry;
-    public ListenerHandler(KafkaListenerEndpointRegistry registry){
-        this.registry = registry;
-    }
+//    private final KafkaListenerEndpointRegistry registry;
+//    public ListenerHandler(KafkaListenerEndpointRegistry registry){
+//        this.registry = registry;
+//    }
 
     /**
      * 暂停监听
      * @param listenerId 监听ID，对应KafkaListener注解中的id属性值
      */
     public void stop(String listenerId){
-        MessageListenerContainer messageListenerContainer = this.registry.getListenerContainer(listenerId);
+        MessageListenerContainer messageListenerContainer = null; // this.registry.getListenerContainer(listenerId);
         if(messageListenerContainer == null){
             throw new ServerException("未找到该监听服务[" + listenerId + "]");
         }
@@ -57,7 +56,7 @@ public class ListenerHandler {
      * @param listenerId 监听ID，对应KafkaListener注解中的id属性值
      */
     public void start(String listenerId){
-        MessageListenerContainer messageListenerContainer = this.registry.getListenerContainer(listenerId);
+        MessageListenerContainer messageListenerContainer = null; //this.registry.getListenerContainer(listenerId);
         if(messageListenerContainer == null){
             throw new ServerException("未找到该监听服务[" + listenerId + "]");
         }
