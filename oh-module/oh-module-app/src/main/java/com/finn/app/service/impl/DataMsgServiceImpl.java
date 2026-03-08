@@ -28,7 +28,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.KafkaException;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
@@ -55,15 +54,16 @@ public class DataMsgServiceImpl implements DataMsgService {
     private final DynamicDataSource dynamicDataSource;
     private final OpenApiProperties openApiProperties;
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+//    private final KafkaTemplate<String, String> kafkaTemplate;
     public DataMsgServiceImpl(RedisCache redisCache, DataMessageMapper dataMessageMapper,
-                              DynamicDataSource dynamicDataSource, OpenApiProperties openApiProperties,
-                              KafkaTemplate<String, String> kafkaTemplate){
+                              DynamicDataSource dynamicDataSource, OpenApiProperties openApiProperties
+//                              ,KafkaTemplate<String, String> kafkaTemplate
+    ){
         this.redisCache = redisCache;
         this.dataMessageMapper = dataMessageMapper;
         this.dynamicDataSource = dynamicDataSource;
         this.openApiProperties = openApiProperties;
-        this.kafkaTemplate = kafkaTemplate;
+//        this.kafkaTemplate = kafkaTemplate;
     }
 
     /**
@@ -194,7 +194,7 @@ public class DataMsgServiceImpl implements DataMsgService {
             }else{
                 msgEntity.setId(idWorker.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
-                    CompletableFuture<SendResult<String, String>> completableFuture =  kafkaTemplate.send(Constant.TOPIC_SUBMIT, msgEntity.toJson());
+                    CompletableFuture<SendResult<String, String>> completableFuture = null; // kafkaTemplate.send(Constant.TOPIC_SUBMIT, msgEntity.toJson());
                     //执行成功回调
                     completableFuture.thenAccept(msg -> {
                         log.debug("发送成功");

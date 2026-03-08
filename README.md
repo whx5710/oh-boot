@@ -1,6 +1,6 @@
 ## 项目说明
 
-oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-Plus请自行引入依赖包）、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
+oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-Plus请自行引入依赖包）、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
 - 采用组件模式，扩展不同的业务功能，可以很方便的实现各种业务需求，若想使用某个组件，按需引入即可。
 - 支持定时任务（分布式可使用xxl-job）、文件存储、短信对接等。
 - 前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。
@@ -16,7 +16,7 @@ oh-boot 是采用SpringBoot3.0、SpringSecurity6.0、Mybatis（如需改Mybatis-
 - BaseMapper接口支持单表通用操作：通过QueryWrapper构建sql，无需编写脚本【2025年3月】
 - 接口文档解决方案改用smart-doc + Torna 无侵入式，文档统一管理【2025年5月】
 - BaseMapper接口支持单表通用操作;新增插入(InsertWrapper)、修改（UpdateWrapper）、删除（DeleteWrapper）脚本构建方法，无需编写sql脚本【2025年6月】
-- BaseMapper通用操作;新增汇总统计count方法(CountWrapper)【2025年2月】
+- BaseMapper通用操作;新增汇总统计count方法(CountWrapper)【2026年2月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git

@@ -1,7 +1,7 @@
 package com.finn.system.vo;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.core.entity.IDEntity;
 
 import java.io.Serial;

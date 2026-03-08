@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.finn</groupId>
         <artifactId>oh-boot</artifactId>
-        <version>3.0.0</version>
+        <version>4.0.3_260307</version>
     </parent>
     <groupId>com.finn.module</groupId>
     <artifactId>oh-module</artifactId>
@@ -19,19 +19,19 @@
     </properties>
     <modules>
         <!-- 工作流 -->
-        <module>oh-module-flow</module>
+        <!--<module>oh-module-flow</module>-->
         <!-- 外部对接客户端 -->
         <module>oh-module-app</module>
     </modules>
     <dependencies>
         <dependency>
             <groupId>com.finn</groupId>
-            <artifactId>oh-core</artifactId>
+            <artifactId>oh-framework</artifactId>
         </dependency>
         <!-- 分页插件 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

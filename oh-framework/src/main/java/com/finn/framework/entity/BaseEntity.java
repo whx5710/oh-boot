@@ -1,12 +1,12 @@
 package com.finn.framework.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.core.utils.DateUtils;
 import com.finn.core.entity.IDEntity;
 import com.finn.framework.datasource.annotations.TableField;
 import org.springframework.format.annotation.DateTimeFormat;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 
 import java.time.LocalDateTime;
 

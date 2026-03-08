@@ -4,18 +4,24 @@
         <groupId>com.finn</groupId>
         <artifactId>oh-boot</artifactId>
         <!--<artifactId>finn-parent</artifactId>-->
-        <version>3.0.0</version>
+        <version>4.0.3_260307</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>oh-framework</artifactId>
     <description>系统core框架</description>
-    <!-- 框架版本 -->
-    <version>3.2.0.20250409</version>
 
     <properties>
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <!-- mybatis 版本 -->
+        <mybatis.version>4.0.1</mybatis.version>
+        <!--分页插件-->
+        <pagehelper.version>2.1.1</pagehelper.version>
+        <!-- mysql数据库连接驱动 -->
+        <mysql.jdbc.version>9.6.0</mysql.jdbc.version>
+        <!-- druid连接池 -->
+        <druid.version>1.2.27</druid.version>
     </properties>
 
     <dependencies>
@@ -43,28 +49,31 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
         </dependency>
         <!-- mysql 驱动 -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.jdbc.version}</version>
         </dependency>
         <!-- druid连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-3-starter</artifactId>
+            <version>${druid.version}</version>
         </dependency>
         <!-- 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
         </dependency>
-
         <!-- 工具集合 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.17.0</version>
+            <version>3.20.0</version>
         </dependency>
     </dependencies>
 </project>

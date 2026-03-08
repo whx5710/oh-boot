@@ -1,7 +1,6 @@
 package com.finn.core.utils;
 
 import org.springframework.http.*;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class HttpUtil {
      * @param headers 请求头
      * @return
      */
-    public static String get(String url, Map<String, Object> params, MultiValueMap<String, String> headers) {
+    public static String get(String url, Map<String, Object> params, HashMap<String, String> headers) {
         return request(url, params, headers, HttpMethod.GET);
     }
 
@@ -55,7 +54,7 @@ public class HttpUtil {
      * @param headers 请求头
      * @return
      */
-    public static String post(String url, Map<String, Object> params, MultiValueMap<String, String> headers) {
+    public static String post(String url, Map<String, Object> params, HashMap<String, String> headers) {
         return request(url, params, headers, HttpMethod.POST);
     }
 
@@ -78,7 +77,7 @@ public class HttpUtil {
      * @param headers 请求头
      * @return
      */
-    public static String put(String url, Map<String, Object> params, MultiValueMap<String, String> headers) {
+    public static String put(String url, Map<String, Object> params, HashMap<String, String> headers) {
         return request(url, params, headers, HttpMethod.PUT);
     }
 
@@ -101,7 +100,7 @@ public class HttpUtil {
      * @param headers 请求头
      * @return
      */
-    public static String delete(String url, Map<String, Object> params, MultiValueMap<String, String> headers) {
+    public static String delete(String url, Map<String, Object> params, HashMap<String, String> headers) {
         return request(url, params, headers, HttpMethod.DELETE);
     }
 
@@ -114,7 +113,7 @@ public class HttpUtil {
      * @param method  请求方式
      * @return
      */
-    public static String request(String url, Map<String, Object> params, MultiValueMap<String, String> headers, HttpMethod method) {
+    public static String request(String url, Map<String, Object> params, HashMap<String, String> headers, HttpMethod method) {
         if (params == null) {
             params = new HashMap<>();
         }
@@ -131,7 +130,7 @@ public class HttpUtil {
      * @param mediaType 参数类型
      * @return
      */
-    public static ResponseEntity<String> request(String url, Object params, MultiValueMap<String, String> headers, HttpMethod method, MediaType mediaType) {
+    public static ResponseEntity<String> request(String url, Object params, HashMap<String, String> headers, HttpMethod method, MediaType mediaType) {
         if (url == null || url.trim().isEmpty()) {
             return null;
         }
@@ -139,7 +138,9 @@ public class HttpUtil {
         // header
         HttpHeaders httpHeaders = new HttpHeaders();
         if (headers != null) {
-            httpHeaders.addAll(headers);
+            headers.keySet().forEach(key -> {
+                httpHeaders.add(key, headers.get(key));
+            });
         }
         // 提交方式：表单、json
         httpHeaders.setContentType(mediaType);

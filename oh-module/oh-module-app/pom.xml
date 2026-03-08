@@ -8,8 +8,6 @@
         <artifactId>oh-module</artifactId>
         <version>1.0.0</version>
     </parent>
-
-    <groupId>com.finn.app</groupId>
     <artifactId>oh-module-app</artifactId>
 
     <properties>
@@ -23,13 +21,13 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-            <!-- 版本需与springboot版本兼容 -->
-            <!--<version>3.2.4</version>-->
+            <version>4.0.3</version>
+            <scope>compile</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>

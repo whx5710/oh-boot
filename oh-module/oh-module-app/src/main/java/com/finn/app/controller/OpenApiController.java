@@ -1,6 +1,5 @@
 package com.finn.app.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.finn.core.constant.Constant;
 import com.finn.core.entity.HashDto;
 import com.finn.core.utils.DateUtils;
@@ -10,7 +9,6 @@ import com.finn.framework.entity.api.MsgEntity;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.utils.ListenerHandler;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -83,12 +81,12 @@ public class OpenApiController {
         return Result.ok("暂停监听");
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) {
         String url = "http://localhost:8080/openApi/submit";
-        LinkedMultiValueMap<String,String> head = new LinkedMultiValueMap<>();
-        head.set(Constant.CLIENT_ID,"C0001");
-        head.set(Constant.SECRET_KEY,"c28a8120682d4b4fa50325ed34748e0e");
-        head.set(Constant.FUNC_CODE,"F1003");
+        HashMap<String,String> head = new HashMap<>();
+        head.put(Constant.CLIENT_ID,"C0001");
+        head.put(Constant.SECRET_KEY,"c28a8120682d4b4fa50325ed34748e0e");
+        head.put(Constant.FUNC_CODE,"F1003");
         HashDto data = new HashDto();
         data.put("name","王小费");
         data.put("sex","男");
