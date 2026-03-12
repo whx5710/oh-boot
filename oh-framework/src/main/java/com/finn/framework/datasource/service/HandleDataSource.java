@@ -1,5 +1,6 @@
 package com.finn.framework.datasource.service;
 
+import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.framework.common.properties.DataSourceProperty;
@@ -116,15 +117,15 @@ public class HandleDataSource {
         hikariConfig.setPassword(dataSourceProperty.getPassword()); // 密码
         hikariConfig.setJdbcUrl(dataSourceProperty.getUrl()); // url
         hikariConfig.setDriverClassName(dataSourceProperty.getDriverClassName()); // 驱动
-        hikariConfig.setMinimumIdle(Integer.parseInt(dataSourceProperty.getMinIdle())); // 最小连接数
-        hikariConfig.setMaximumPoolSize(Integer.parseInt(dataSourceProperty.getMaxActive())); // 连接池最大连接数
-        hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
-        hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        hikariConfig.setMinimumIdle(Integer.parseInt(dataSourceProperty.getHikari().getMinIdle())); // 最小连接数
+        hikariConfig.setMaximumPoolSize(Integer.parseInt(dataSourceProperty.getHikari().getMaxActive())); // 连接池最大连接数
+        hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getHikari().getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
+        hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getHikari().getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
         hikariConfig.setPoolName(key); // 连接池名称
         try{
             HikariDataSource dataSource = new HikariDataSource(hikariConfig);
             // 打印监控日志
-            if(dataSourceProperty.getHikariLog()){
+            if(dataSourceProperty.getHikari().getHikariLog()){
                 hikariMonitor(key, dataSource);
             }
             return dataSource;
@@ -139,22 +140,22 @@ public class HandleDataSource {
      * @param dataSourceProperty ds
      * @return map
      */
-    /*public DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
+    public DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
         Map<String, String> properties = new HashMap<>();
         properties.put(DruidDataSourceFactory.PROP_URL, dataSourceProperty.getUrl()); // 地址
         properties.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, dataSourceProperty.getDriverClassName()); // 驱动名
         properties.put(DruidDataSourceFactory.PROP_USERNAME, dataSourceProperty.getUsername()); // 用户名
         properties.put(DruidDataSourceFactory.PROP_PASSWORD, dataSourceProperty.getPassword()); // 密码
-        properties.put(DruidDataSourceFactory.PROP_INITIALSIZE, dataSourceProperty.getInitialSize()); // 初始化连接数
-        properties.put(DruidDataSourceFactory.PROP_MINIDLE, dataSourceProperty.getMinIdle()); // 最小空闲连接数
-        properties.put(DruidDataSourceFactory.PROP_MAXACTIVE, dataSourceProperty.getMaxActive()); // 最大连接数
-        properties.put(DruidDataSourceFactory.PROP_MAXWAIT, dataSourceProperty.getMaxWait()); // 获取连接时的最大等待时间，单位为毫秒
-        properties.put(DruidDataSourceFactory.PROP_FILTERS, dataSourceProperty.getFilters());
+        properties.put(DruidDataSourceFactory.PROP_INITIALSIZE, dataSourceProperty.getDruid().getInitialSize()); // 初始化连接数
+        properties.put(DruidDataSourceFactory.PROP_MINIDLE, dataSourceProperty.getDruid().getMinIdle()); // 最小空闲连接数
+        properties.put(DruidDataSourceFactory.PROP_MAXACTIVE, dataSourceProperty.getDruid().getMaxActive()); // 最大连接数
+        properties.put(DruidDataSourceFactory.PROP_MAXWAIT, dataSourceProperty.getDruid().getMaxWait()); // 获取连接时的最大等待时间，单位为毫秒
+        properties.put(DruidDataSourceFactory.PROP_FILTERS, dataSourceProperty.getDruid().getFilters());
         // 连接属性，慢SQL
-        properties.put(DruidDataSourceFactory.PROP_CONNECTIONPROPERTIES, dataSourceProperty.getConnectionProperties());
+        properties.put(DruidDataSourceFactory.PROP_CONNECTIONPROPERTIES, dataSourceProperty.getDruid().getConnectionProperties());
         properties.put(DruidDataSourceFactory.PROP_NAME, name); // 名称
         return DruidDataSourceFactory.createDataSource(properties);
-    }*/
+    }
 
 
 
