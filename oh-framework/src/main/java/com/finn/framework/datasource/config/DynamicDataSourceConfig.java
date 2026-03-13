@@ -45,7 +45,6 @@ public class DynamicDataSourceConfig extends HandleDataSource {
         Map<String, DataSourceProperty> map = dynamicDataSourceProperties.getDynamic();
         Map<Object, Object> dataSourceMap = new LinkedHashMap<>(map.size());
         log.debug("初始化动态数据源，数据源总共 {} 个", map.size());
-        String type = dynamicDataSourceProperties.getType().getName(); // DruidDataSource
         // 生成数据库连接
         for(Map.Entry<String,DataSourceProperty> item: map.entrySet()){
             DataSourceProperty dataSourceProperty = item.getValue();

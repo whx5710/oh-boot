@@ -56,7 +56,7 @@ spring:
       # 是否开启 SSL
       ssl.enabled: false
   datasource:
-    #数据源的类型 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
+    #数据源的类型,对应配置相关的连接池 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
     #type: com.alibaba.druid.pool.DruidDataSource
     type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:

@@ -84,7 +84,6 @@ finn:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource #数据源的类型
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同
@@ -94,15 +93,22 @@ spring:
         url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
         password: 123456
-        # 以下与druid的配置对应
-        initialSize: 10
-        minIdle: 10
-        maxActive: 100
-        maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
-        maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
-        filters: wall,stat # druid监控
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-        checkConnection: true # 初始化时是否检查连接，默认false
+        hikari: # 默认hikari连接池
+          initialSize: 5
+          minIdle: 5
+          maxActive: 50
+          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+          maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+          checkConnection: true # 初始化时是否检查连接，默认false
+          hikariLog: true # 是否开启hikari监控日志打印，默认false
+        druid:
+          initialSize: 10
+          minIdle: 10
+          maxActive: 100
+          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
+          filters: wall,stat # druid监控
+          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+          checkConnection: true # 初始化时是否检查连接，默认false
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
     druid: # 使用Hikari连接池，监控无效

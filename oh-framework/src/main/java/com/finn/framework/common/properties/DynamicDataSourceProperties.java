@@ -1,6 +1,6 @@
 package com.finn.framework.common.properties;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
@@ -27,9 +27,9 @@ public class DynamicDataSourceProperties {
     private Map<String, DataSourceProperty> dynamic = new LinkedHashMap<>();
 
     /**
-     * 连接池类型，如果不设置自动查找 Druid > HikariCp
+     * 连接池类型，如果不设置自动查找 HikariCp > Druid
      */
-    private Class<? extends DataSource> type = DruidDataSource.class;
+    private Class<? extends DataSource> type = HikariDataSource.class;
 
     /**
      * 系统数据源基础配置

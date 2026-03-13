@@ -56,7 +56,7 @@ spring:
       # 是否开启 SSL
       ssl.enabled: false
   datasource:
-    #数据源的类型 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
+    #数据源的类型,对应配置相关的连接池 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
     #type: com.alibaba.druid.pool.DruidDataSource
     type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
@@ -96,6 +96,7 @@ spring:
           maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
           maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
           checkConnection: true # 初始化时是否检查连接，默认false
+          hikariLog: true # 是否开启hikari监控日志打印，默认false
 #        druid:
 #          initialSize: 10
 #          minIdle: 10
@@ -198,7 +199,7 @@ logging:
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
     com.finn: DEBUG
     org.springframework.web: debug # web相关的日志级别
-    # root: DEBUG
+    #root: DEBUG
 #  pattern:
 #    # 在控制台输出的日志格式
 #    # 无颜色 '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'

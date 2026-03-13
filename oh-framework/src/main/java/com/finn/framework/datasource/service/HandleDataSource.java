@@ -175,6 +175,6 @@ public class HandleDataSource {
                         hikariPoolMXBean.getIdleConnections(),
                         hikariPoolMXBean.getThreadsAwaitingConnection());
             }
-        }, 0, 30, TimeUnit.SECONDS);
+        }, 10, 30, TimeUnit.SECONDS);
     }
 }
