@@ -239,7 +239,7 @@ public class AuthServiceImpl implements AuthService {
         // 判断用户密钥
         checkKey(checkKey, user.getUserKey(), login);
         // 租户判断
-        if(tenantProperties.isEnable() && !user.getTenantId().isEmpty()
+        if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
                 && !tenantCache.valid(user.getTenantId())){
             throw new ServerException(countErr(login.getUsername(), "租户无效"));
         }
