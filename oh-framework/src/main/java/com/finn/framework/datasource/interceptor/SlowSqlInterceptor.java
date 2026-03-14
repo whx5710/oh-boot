@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.Statement;
+import java.util.Properties;
 
 @Intercepts({
         // 拦截查询方法
@@ -17,6 +18,9 @@ import java.sql.Statement;
 })
 @Component
 public class SlowSqlInterceptor implements Interceptor {
+
+    // 慢查询阈值（毫秒），可通过配置文件注入
+    private long slowThreshold = 500;
 
     private final Logger log = LoggerFactory.getLogger(SlowSqlInterceptor.class);
 
@@ -33,8 +37,6 @@ public class SlowSqlInterceptor implements Interceptor {
             long costTime = System.currentTimeMillis() - startTime;
 
             // 5. 判断是否慢查询
-            // 慢查询阈值（毫秒），可通过配置文件注入
-            long slowThreshold = 500;
             if (costTime > slowThreshold) {
                 // 4. 获取SQL语句和参数
                 StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
@@ -53,12 +55,12 @@ public class SlowSqlInterceptor implements Interceptor {
         return Interceptor.super.plugin(target);
     }
 
-//    @Override
-//    public void setProperties(Properties properties) {
-//        // 从配置文件读取阈值（如application.yml中配置）
-//        String threshold = properties.getProperty("slowThreshold");
-//        if (threshold != null) {
-//            slowThreshold = Long.parseLong(threshold);
-//        }
-//    }
+    @Override
+    public void setProperties(Properties properties) {
+        // 从配置文件读取阈值（如application.yml中配置）
+        String threshold = properties.getProperty("slowThreshold");
+        if (threshold != null) {
+            slowThreshold = Long.parseLong(threshold);
+        }
+    }
 }
