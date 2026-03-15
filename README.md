@@ -3,20 +3,23 @@
 oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-Plus请自行引入依赖包）、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
 - 采用组件模式，扩展不同的业务功能，可以很方便的实现各种业务需求，若想使用某个组件，按需引入即可。
 - 支持定时任务（分布式可使用xxl-job）、文件存储、短信对接等。
-- 前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。
+- ~~前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。~~
 - 完善的资源监控，可监控服务器资源，数据库连接等。
 - 保姆级注释，确保每行代码都能看懂，开发无忧。
 - 严格的接口角色权限控制，拒绝垂直越权。
 - 通用接口，可对接入客户端接口级别授权。加入Kafka/RocketMq，支持MQ异步接口，支持海量请求。
-- 通过Druid连接池支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源，@Pages分页 【2024年10月】
+- 支持多数据源，通过前端参数或后端AOP、@Ds注解切换数据源，@Pages分页 【2024年10月】
 - 通过@TableName、@TableField和@TableId注解，结合ProviderService动态SQL拼接，支持简单的新增、修改和删除功能，少写SQL 【2024年12月】
 - 幂等注解 @Idempotent、@RequestKeyParam 加锁防止重复提交，限制请求频率 【2024年12月】
 - 增加租户功能，隔离业务数据 【2025年1月】
-- 支持Druid、Hikari连接池【2025年2月】
+- 支持~~Druid~~、Hikari连接池【2025年2月】
 - BaseMapper接口支持单表通用操作：通过QueryWrapper构建sql，无需编写脚本【2025年3月】
 - 接口文档解决方案改用smart-doc + Torna 无侵入式，文档统一管理【2025年5月】
 - BaseMapper接口支持单表通用操作;新增插入(InsertWrapper)、修改（UpdateWrapper）、删除（DeleteWrapper）脚本构建方法，无需编写sql脚本【2025年6月】
 - BaseMapper通用操作;新增汇总统计count方法(CountWrapper)【2026年2月】
+- 升级到spring boot 4【2026年3月】
+- 租户数据拦截优化，不依赖Druid包，基于jsqlparser进行sql操作【2026年3月】
+- 去掉Druid连接池，暂不支持springboot4，Hikari连接池增加慢sql监测，后期默认使用Hikari连接池【2026年3月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git
@@ -26,6 +29,8 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 - 开发文档：
 - 演示环境：
 - 官网地址：
+
+### 后期计划支持多种数据（postgresql、国产数据库）
 
 ## 代码目录  
 `oh-core`、`oh-framework`属于系统框架类模块，分别是核心包和框架包，各自存放相关的代码；项目上可独立打成jar包引入
@@ -55,7 +60,7 @@ finn:
   multi-tenant: # 多租户配置
     dialect: mysql # 数据库方言，默认mysql
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
-    table-pattern: ^sys_.* # 需要隔离的表名称（正则表达式）
+    table-pattern: ^t_.* # 需要隔离的表名称（正则表达式）
     # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
     ignore-table: sys_dict_type,sys_dict_data
   security:
@@ -84,6 +89,8 @@ finn:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   datasource:
+    # 默认hikari连接池
+    type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，默认 sysDb，用于基础管理的库，如果合并为一个库，则与主数据库相同

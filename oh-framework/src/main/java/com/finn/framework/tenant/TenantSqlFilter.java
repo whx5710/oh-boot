@@ -15,6 +15,8 @@ import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -26,6 +28,8 @@ import java.util.*;
  */
 @Component
 public class TenantSqlFilter {
+
+    private final Logger log = LoggerFactory.getLogger(TenantSqlFilter.class);
 
     // 需要忽略租户过滤的表名集合（如系统表、配置表等）
     private final FieldConditionDecision conditionDecision;
@@ -47,14 +51,12 @@ public class TenantSqlFilter {
             return originalSql;
         }
         Statement statement = CCJSqlParserUtil.parse(originalSql);
-        if (statement instanceof Select) {
-            processSelect((Select) statement, fieldName, fieldValue);
-        } else if (statement instanceof Update) {
-            processUpdate((Update) statement, fieldName, fieldValue);
-        } else if (statement instanceof Delete) {
-            processDelete((Delete) statement, fieldName, fieldValue);
-        } else if (statement instanceof Insert) {
-            processInsert((Insert) statement, fieldName, fieldValue);
+        switch (statement) {
+            case Select select -> processSelect(select, fieldName, fieldValue);
+            case Update update -> processUpdate(update, fieldName, fieldValue);
+            case Delete delete -> processDelete(delete, fieldName, fieldValue);
+            case Insert insert -> processInsert(insert, fieldName, fieldValue);
+            default -> log.warn("未匹配的数据操作类型！ {}", statement.toString());
         }
         return statement.toString();
     }
@@ -332,9 +334,8 @@ public class TenantSqlFilter {
      * 判断表是否需要忽略租户过滤
      */
     private boolean shouldIgnoreTable(String tableName) {
-        return conditionDecision.shouldIgnoreTable(tableName.toLowerCase());
+        return conditionDecision.shouldIgnoreTable(tableName);
     }
-
 
     // ==================== 使用示例 ====================
     /*public static void main(String[] args) throws JSQLParserException {
