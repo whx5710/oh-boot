@@ -1,12 +1,7 @@
 package com.finn.framework.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
 import com.finn.core.entity.IDEntity;
 import com.finn.framework.datasource.annotations.TableField;
-import org.springframework.format.annotation.DateTimeFormat;
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
 
 import java.time.LocalDateTime;
 
@@ -19,28 +14,22 @@ public abstract class BaseEntity extends IDEntity{
     /**
      * 创建者
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long  creator;
 
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @TableField("create_time")
     private LocalDateTime createTime;
 
     /**
      * 更新者
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long  updater;
 
     /**
      * 更新时间
      */
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @TableField("update_time")
     private LocalDateTime updateTime;
 

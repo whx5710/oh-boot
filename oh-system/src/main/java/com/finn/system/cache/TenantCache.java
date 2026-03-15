@@ -1,8 +1,8 @@
 package com.finn.system.cache;
 
 import com.finn.core.cache.RedisCache;
-import com.finn.core.entity.HashDto;
 import com.finn.framework.common.constant.CommConstant;
+import com.finn.system.entity.TenantMemberEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,9 +26,9 @@ public class TenantCache {
      * @return 租户名
      */
     public String getNameByTenantId(String tenantId){
-        HashDto map = getTenantToMap(tenantId);
-        if(map != null && map.containsKey("tenantName") && map.get("tenantName") != null){
-            return map.getStr("tenantName");
+        TenantMemberEntity map = getTenant(tenantId);
+        if(map != null && map.getTenantName() != null){
+            return map.getTenantName();
         }else{
             return null;
         }
@@ -40,12 +40,12 @@ public class TenantCache {
      * @return b
      */
     public Boolean valid(String tenantId){
-        HashDto map = getTenantToMap(tenantId);
+        TenantMemberEntity map = getTenant(tenantId);
         if(map == null){
             return false;
         }
-        int status = map.getInt("status");
-        int dbStatus = map.getInt("dbStatus");
+        int status = map.getStatus();
+        int dbStatus = map.getDbStatus();
         return status == 1 && dbStatus == 1;
     }
 
@@ -54,13 +54,13 @@ public class TenantCache {
      * @param tenantId 租户ID
      * @return map
      */
-    public HashDto getTenantToMap(String tenantId){
+    public TenantMemberEntity getTenant(String tenantId){
         if(tenantId == null || tenantId.isEmpty()){
             return null;
         }
         Object obj = redisCache.get(CommConstant.TENANT_PREFIX + tenantId);
         if(obj != null){
-            return (HashDto) obj;
+            return (TenantMemberEntity) obj;
         }else{
             return null;
         }

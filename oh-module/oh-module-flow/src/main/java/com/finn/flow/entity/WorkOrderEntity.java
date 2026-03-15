@@ -1,9 +1,6 @@
 package com.finn.flow.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
 import com.finn.framework.entity.BaseEntity;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,15 +26,11 @@ public class WorkOrderEntity extends BaseEntity {
 	/**
 	* 上报时间
 	*/
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime reportTime;
 
 	/**
 	* 事发时间
 	*/
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime incidentTime;
 
 	/**

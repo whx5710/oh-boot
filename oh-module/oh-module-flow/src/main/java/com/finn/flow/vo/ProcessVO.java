@@ -1,9 +1,5 @@
 package com.finn.flow.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 
 /**
@@ -25,9 +21,6 @@ public class ProcessVO {
 
     Integer version;
 
-
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     LocalDateTime createTime;
 
     public String getId() {

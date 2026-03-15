@@ -1,8 +1,6 @@
 package com.finn.system.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.finn.core.utils.DateUtils;
 import jakarta.validation.constraints.*;
 
 import java.io.Serial;
@@ -101,7 +99,7 @@ public class UserVO implements Serializable {
     /**
      * 用户密钥，用于第三方接口登录，不校验验证码
      */
-    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 安全问题
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 安全问题
     private String userKey;
 
     /**
@@ -112,13 +110,11 @@ public class UserVO implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
     /**
      * 修改密码时间
      */
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime pwdModifyTime;
     /**
      * 租户ID

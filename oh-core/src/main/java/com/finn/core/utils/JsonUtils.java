@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 import tools.jackson.core.json.JsonWriteFeature;
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
@@ -84,6 +85,15 @@ public class JsonUtils {
         } catch (Exception e) {
             log.error("byte [] 转化对象失败! {}", e.getMessage());
              throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T parseObject(String text, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(text, typeReference);
+        } catch (Exception e) {
+            log.error(text + " json字符串转化对象失败！{}", e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

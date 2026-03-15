@@ -1,9 +1,9 @@
 package com.finn.flow.convert;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.finn.core.utils.JsonUtils;
 import com.finn.flow.entity.WorkOrderEntity;
 import com.finn.flow.vo.WorkOrderVO;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.ArrayList;
 import java.util.List;

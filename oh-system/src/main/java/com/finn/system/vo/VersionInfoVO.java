@@ -1,7 +1,5 @@
 package com.finn.system.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
 import com.finn.framework.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -47,7 +45,6 @@ public class VersionInfoVO extends BaseEntity {
 	/**
 	 * 发布时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime releaseTime;
 
 	/**

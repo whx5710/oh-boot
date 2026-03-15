@@ -4,8 +4,6 @@ import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.TenantEntity;
 import com.finn.system.enums.UserStatusEnum;
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
 
 import java.time.LocalDateTime;
 
@@ -49,7 +47,6 @@ public class UserEntity extends TenantEntity {
     /**
      * 部门ID
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("dept_id")
     private Long deptId;
     /**

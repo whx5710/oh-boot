@@ -1,8 +1,6 @@
 package com.finn.flow.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +13,8 @@ import java.util.Map;
 * @since 1.0.0 2024-02-23
 */
 public class WorkOrderVO implements Serializable {
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 
 	private Long id;
 
@@ -32,19 +31,16 @@ public class WorkOrderVO implements Serializable {
 	/**
 	 * 上报时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime reportTime;
 
 	/**
 	 * 事发时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime incidentTime;
 
 	/**
 	 * 结束时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime endTime;
 
 	/**

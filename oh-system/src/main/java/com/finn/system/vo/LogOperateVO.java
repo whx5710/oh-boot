@@ -1,8 +1,6 @@
 package com.finn.system.vo;
 
 import cn.idev.excel.annotation.ExcelProperty;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -122,7 +120,6 @@ public class LogOperateVO implements Serializable {
      * 创建时间
      */
     @ExcelProperty(value = "创建时间")
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime createTime;
 
     public Long getId() {

@@ -1,14 +1,9 @@
 package com.finn.system.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
-import com.finn.core.utils.DateUtils;
 import com.finn.core.utils.TreeNode;
 import com.finn.framework.datasource.annotations.TableField;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -23,13 +18,11 @@ public class MenuTreeVO extends TreeNode<MenuTreeVO> {
     /**
      * id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
      * 上级ID，一级菜单为0
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**
@@ -138,8 +131,6 @@ public class MenuTreeVO extends TreeNode<MenuTreeVO> {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     @TableField("create_time")
     private LocalDateTime createTime;
 

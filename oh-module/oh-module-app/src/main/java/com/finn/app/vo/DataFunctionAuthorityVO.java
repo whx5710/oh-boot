@@ -1,8 +1,5 @@
 package com.finn.app.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -38,12 +35,10 @@ public class DataFunctionAuthorityVO implements Serializable {
 
 	private String appName;
 
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime createTime;
 
 	private Long updater;
 
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime updateTime;
 
 	private Integer dbStatus;

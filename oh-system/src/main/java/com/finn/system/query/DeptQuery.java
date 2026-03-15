@@ -1,7 +1,5 @@
 package com.finn.system.query;
 
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.framework.query.Query;
 
 import java.util.List;
@@ -21,7 +19,6 @@ public class DeptQuery extends Query {
     /**
      * 父级ID
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**

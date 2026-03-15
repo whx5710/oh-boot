@@ -1,8 +1,5 @@
 package com.finn.core.entity;
 
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
-
 /**
  * id Entity基类
  *
@@ -13,7 +10,6 @@ public class IDEntity extends SuperEntity {
     /**
      * id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     public Long getId() {

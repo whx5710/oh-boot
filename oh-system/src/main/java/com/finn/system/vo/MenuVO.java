@@ -1,7 +1,5 @@
 package com.finn.system.vo;
 
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.core.entity.IDEntity;
 
 import java.io.Serial;
@@ -21,7 +19,6 @@ public class MenuVO extends IDEntity implements Serializable {
     /**
      * 上级ID
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**

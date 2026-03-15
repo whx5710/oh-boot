@@ -2,7 +2,6 @@ package com.finn.system.service.impl;
 
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
-import com.finn.core.entity.HashDto;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.JsonUtils;
@@ -172,12 +171,9 @@ public class DeptServiceImpl implements DeptService {
         }
         // 判断是否绑定了租户
         if(dept.getTenantId() != null && !dept.getTenantId().isEmpty()){
-            HashDto hashDto = tenantCache.getTenantToMap(dept.getTenantId());
-            if(hashDto != null){
-                TenantMemberEntity tenantMember = JsonUtils.convertValue(hashDto, TenantMemberEntity.class);
-                if(tenantMember != null && tenantMember.getDbStatus() == 1){
-                    throw new ServerException("已绑定租户，不能直接删除");
-                }
+            TenantMemberEntity tenantMember = tenantCache.getTenant(dept.getTenantId());
+            if(tenantMember != null && tenantMember.getDbStatus() == 1){
+                throw new ServerException("已绑定租户，不能直接删除");
             }
         }
         // 删除

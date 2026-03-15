@@ -1,7 +1,5 @@
 package com.finn.system.entity;
 
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.TenantEntity;
@@ -21,7 +19,6 @@ public class TenantMemberEntity extends TenantEntity {
     /**
      * 根部门ID
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("dept_id")
     private Long deptId;
 

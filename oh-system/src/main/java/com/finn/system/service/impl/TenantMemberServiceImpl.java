@@ -77,7 +77,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         }
         deptEntity.setTenantId(vo.getTenantId());
         tenantMemberMapper.save(entity);
-        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
+        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toJson());
         deptMapper.updateById(deptEntity);
     }
 
@@ -127,7 +127,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         }
         tenantMemberMapper.update(TenantMemberConvert.INSTANCE.convert(vo));
         TenantMemberEntity entity = tenantMemberMapper.findById(vo.getId(), TenantMemberEntity.class);
-        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
+        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toJson());
     }
 
     @Override
@@ -165,7 +165,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         }
         entity.setDbStatus(0);
         tenantMemberMapper.update(entity);
-        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toDto());
+        redisCache.set(CommConstant.TENANT_PREFIX + entity.getTenantId(), entity.toJson());
         // 更新部门
         if(deptList != null){
             DeptEntity deptEntity = deptList.getFirst();
@@ -201,7 +201,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         if(list != null){
             for(TenantMemberEntity item : list){
                 // 以json格式缓存到redis，方便直接读取
-                redisCache.set(CommConstant.TENANT_PREFIX + item.getTenantId(), item.toDto());
+                redisCache.set(CommConstant.TENANT_PREFIX + item.getTenantId(), item);
             }
         }
     }

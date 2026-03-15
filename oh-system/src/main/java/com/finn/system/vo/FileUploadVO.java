@@ -1,8 +1,5 @@
 package com.finn.system.vo;
 
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -16,7 +13,6 @@ public class FileUploadVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

@@ -11,8 +11,6 @@ import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.PageResult;
-import com.finn.support.cache.UserCache;
-import com.finn.support.entity.UserEntity;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.slf4j.Logger;

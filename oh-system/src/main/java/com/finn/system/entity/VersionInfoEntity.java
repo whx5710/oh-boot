@@ -1,11 +1,8 @@
 package com.finn.system.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finn.core.utils.DateUtils;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -44,8 +41,6 @@ public class VersionInfoEntity extends BaseEntity {
 	* 发布时间
 	*/
 	@TableField("release_time")
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime releaseTime;
 
 	/**

@@ -1,10 +1,5 @@
 package com.finn.framework.entity.api;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
-
 import java.time.LocalDateTime;
 
 /**
@@ -17,7 +12,6 @@ public class DataAppDTO {
 	/**
 	 * id
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 	/**
 	 * 客户端名称
@@ -53,14 +47,11 @@ public class DataAppDTO {
 	/**
 	 * 创建者
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
 	private Long  creator;
 
 	/**
 	 * 创建时间
 	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createTime;
 
 	/**
@@ -71,8 +62,6 @@ public class DataAppDTO {
 	/**
 	 * 更新时间
 	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateTime;
 
 	/**

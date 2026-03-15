@@ -1,7 +1,5 @@
 package com.finn.system.entity;
 
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.finn.framework.datasource.annotations.TableField;
 import com.finn.framework.datasource.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
@@ -18,7 +16,6 @@ public class MenuEntity extends BaseEntity {
      * 上级ID，一级菜单为0
      */
     @TableField("parent_id")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     @TableField(exists = false)

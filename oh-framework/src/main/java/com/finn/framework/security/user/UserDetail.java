@@ -1,10 +1,7 @@
 package com.finn.framework.security.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.finn.core.entity.BaseUserEntity;
-import com.finn.core.utils.DateUtils;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,8 +30,6 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
     private Integer status;
     private Integer superAdmin;
     // 登录时间戳
-    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    @DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private LocalDateTime loginTime;
     // token刷新时间
     private Long refreshTokenExpire;

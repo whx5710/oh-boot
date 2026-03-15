@@ -1,10 +1,5 @@
 package com.finn.app.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import tools.jackson.databind.annotation.JsonSerialize;
-import tools.jackson.databind.ser.std.ToStringSerializer;
-import com.finn.core.utils.DateUtils;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,7 +15,6 @@ public class DataMsgVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -52,7 +46,6 @@ public class DataMsgVO implements Serializable {
     // 响应消息
     private String resultMsg;
 
-    @JsonFormat(pattern = DateUtils.DATE_TIME_MIL_PATTERN)
     private LocalDateTime createTime;
 
     public Long getId() {

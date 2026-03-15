@@ -1,10 +1,7 @@
 package com.finn.flow.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.entity.IDEntity;
-import com.finn.core.utils.DateUtils;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -58,8 +55,6 @@ public class FlowVO extends IDEntity implements Serializable{
 	/**
 	 * 创建时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	@DateTimeFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime createTime;
 
 	public String getKeyCode() {

@@ -1,8 +1,6 @@
 package com.finn.flow.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finn.core.entity.IDEntity;
-import com.finn.core.utils.DateUtils;
 
 import java.time.LocalDateTime;
 
@@ -82,13 +80,11 @@ public class TaskRecordVO extends IDEntity {
 	/**
 	 * 开始时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime startTime;
 
 	/**
 	 * 结束时间
 	 */
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private LocalDateTime endTime;
 
 	/**
