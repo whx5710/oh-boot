@@ -45,9 +45,10 @@ public class LogOperateServiceImpl implements LogOperateService {
 
     @Override
     public PageResult<LogOperateVO> page(LogOperateQuery query) {
-        Page<LogOperateEntity> page = logOperateMapper.selectPageByWrapper(getParams(query)
-                .page(query.getPageNum(), query.getPageSize()));
-        return new PageResult<>(LogOperateConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        try (Page<LogOperateEntity> page = logOperateMapper.selectPageByWrapper(getParams(query)
+                .page(query.getPageNum(), query.getPageSize()))) {
+            return new PageResult<>(LogOperateConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        }
     }
 
     @Override

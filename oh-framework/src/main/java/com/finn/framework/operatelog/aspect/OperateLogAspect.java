@@ -3,15 +3,12 @@ package com.finn.framework.operatelog.aspect;
 import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.framework.operatelog.service.OperateLogService;
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
 import com.finn.core.constant.Constant;
-import com.finn.core.entity.BaseUserEntity;
 import com.finn.core.utils.HttpContextUtils;
 import com.finn.core.utils.IpUtils;
 import com.finn.core.utils.Tools;
 import com.finn.core.utils.JsonUtils;
-import com.finn.framework.security.user.SecurityUser;
+import com.finn.framework.security.cache.TokenStoreCache;
 import com.finn.framework.security.user.UserDetail;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,11 +42,11 @@ import java.util.stream.IntStream;
 public class OperateLogAspect {
     private final OperateLogService operateLogService;
 
-    private final RedisCache redisCache;
+    private final TokenStoreCache tokenStoreCache;
 
-    public OperateLogAspect(OperateLogService operateLogService, RedisCache redisCache) {
+    public OperateLogAspect(OperateLogService operateLogService, TokenStoreCache tokenStoreCache) {
         this.operateLogService = operateLogService;
-        this.redisCache = redisCache;
+        this.tokenStoreCache = tokenStoreCache;
     }
 
     @Around("@annotation(log)")
@@ -93,20 +90,11 @@ public class OperateLogAspect {
         if (request != null) {
             // 用户信息
             String accessToken = Tools.getAccessToken(request);
-            String key = RedisKeys.getAccessTokenKey(accessToken);
-            Object object = redisCache.get(key);
-            if(object != null){
-                BaseUserEntity userEntity = JsonUtils.convertValue(object, BaseUserEntity.class);
-                log.setUserId(userEntity.getId());
-                log.setRealName(userEntity.getRealName());
-                log.setTenantId(userEntity.getTenantId());
-            }else{
-                UserDetail userDetail = SecurityUser.getUser();
-                if(userDetail != null){
-                    log.setUserId(userDetail.getId());
-                    log.setRealName(userDetail.getRealName());
-                    log.setTenantId(userDetail.getTenantId());
-                }
+            UserDetail userDetail = tokenStoreCache.getUser(accessToken);
+            if(userDetail != null){
+                log.setUserId(userDetail.getId());
+                log.setRealName(userDetail.getRealName());
+                log.setTenantId(userDetail.getTenantId());
             }
 
             // 请求端信息
