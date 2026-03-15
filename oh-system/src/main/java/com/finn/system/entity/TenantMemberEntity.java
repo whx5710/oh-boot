@@ -12,7 +12,7 @@ import com.finn.framework.entity.TenantEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2025-01-18
  */
-@TableName("tenant_member")
+@TableName("sys_tenant_member")
 public class TenantMemberEntity extends TenantEntity {
 
     @TableField("tenant_name")

@@ -984,10 +984,10 @@ INSERT INTO `sys_version_info` (`id`, `version_num`, `title`, `content`, `releas
 COMMIT;
 
 -- ----------------------------
--- Table structure for tenant_member
+-- Table structure for sys_tenant_member
 -- ----------------------------
-DROP TABLE IF EXISTS `tenant_member`;
-CREATE TABLE `tenant_member` (
+DROP TABLE IF EXISTS `sys_tenant_member`;
+CREATE TABLE `sys_tenant_member` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '租户ID',
   `tenant_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '租户名',
@@ -1005,7 +1005,7 @@ CREATE TABLE `tenant_member` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='租户信息';
 
 -- ----------------------------
--- Records of tenant_member
+-- Records of sys_tenant_member
 -- ----------------------------
 BEGIN;
 COMMIT;

@@ -64,7 +64,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if(multiTenantProperties.isEnable()){
             try{
                 // 租户ID
-                log.debug("拦截请求租户: {} {}", user.getUsername(), user.getTenantId());
+                log.debug("拦截请求租户: {} {}", user.getUsername(), user.getTenantId()==null?"":user.getTenantId());
                 TenantContextHolder.setTenant(user.getTenantId());
                 chain.doFilter(request, response);
             }finally {

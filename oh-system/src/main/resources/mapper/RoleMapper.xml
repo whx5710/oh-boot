@@ -5,7 +5,7 @@
 
     <select id="getList" parameterType="com.finn.system.query.RoleQuery">
         select a.*,b.tenant_name,GROUP_CONCAT(c.menu_id) menuIds
-        from sys_role a left join tenant_member b on a.tenant_id = b.tenant_id and b.db_status = 1
+        from sys_role a left join sys_tenant_member b on a.tenant_id = b.tenant_id and b.db_status = 1
         left join sys_role_menu c on a.id = c.role_id and c.db_status = 1
         where a.db_status != 0
         <if test="name != null and name != ''">
