@@ -25,8 +25,11 @@ import com.finn.system.vo.AccountLoginVO;
 import com.finn.system.vo.MobileLoginVO;
 import com.finn.system.vo.TokenVO;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -52,6 +55,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final SecurityProperties securityProperties;
     private final MultiTenantProperties tenantProperties;
+
+    private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(CaptchaService captchaService, TokenStoreCache tokenStoreCache,
                            AuthenticationManager authenticationManager, LogLoginService logLoginService,
@@ -233,9 +238,16 @@ public class AuthServiceImpl implements AuthService {
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         } catch (BadCredentialsException e) {
             throw new ServerException(countErr(login.getUsername(), "用户名或密码错误"));
+        } catch (InternalAuthenticationServiceException e){
+            e.printStackTrace();
+            log.error("登录发生异常!{}", e.getMessage());
+            throw new ServerException("登录发生异常，请联写管理员!");
         }
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();
+        if(user == null){
+            throw new ServerException("未获取到用户信息!");
+        }
         // 判断用户密钥
         checkKey(checkKey, user.getUserKey(), login);
         // 租户判断

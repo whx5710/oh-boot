@@ -13,7 +13,7 @@ finn:
   multi-tenant: # 多租户配置
     dialect: mysql # 数据库方言，默认mysql
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
-    table-pattern: ^sys_.* # 需要隔离的表名称（正则表达式）
+    table-pattern: ^t_.* # 需要隔离的表名称（正则表达式）
     # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
     ignore-table: sys_dict_type,sys_dict_data
   security:
@@ -105,16 +105,16 @@ spring:
 #          filters: wall,stat # druid监控
 #          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 #          checkConnection: true # 初始化时是否检查连接，默认false
-    druid: # 使用Hikari连接池，监控无效
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        login-username: admin
-        login-password: admin # 正式环境需配置复杂密码
-      web-stat-filter: # Druid Web统计过滤器配置
-        enabled: true # 启用Web统计过滤器
-        session-stat-enable: true # 启用会话统计功能
-        session-stat-max-count: 1000 # 最大会话统计数量
+#    druid: # 使用Hikari连接池，监控无效
+#      stat-view-servlet:
+#        enabled: true
+#        url-pattern: /druid/*
+#        login-username: admin
+#        login-password: admin # 正式环境需配置复杂密码
+#      web-stat-filter: # Druid Web统计过滤器配置
+#        enabled: true # 启用Web统计过滤器
+#        session-stat-enable: true # 启用会话统计功能
+#        session-stat-max-count: 1000 # 最大会话统计数量
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: open-api-flow

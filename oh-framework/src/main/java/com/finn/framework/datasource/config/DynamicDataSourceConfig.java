@@ -50,8 +50,13 @@ public class DynamicDataSourceConfig extends HandleDataSource {
             DataSourceProperty dataSourceProperty = item.getValue();
             String key = item.getKey();
             // 连接池
-            DataSource ds = null;
-            if(dataSourceProperty.getHikari() != null){
+            log.debug("初始化 {} 数据源 {}连接池", key, "Hikari");
+            DataSource ds = createHikariDS(key, dataSourceProperty);
+            // 校验数据库连接是否正常
+            if(dataSourceProperty.getHikari().getCheckConnection()){
+                checkDs(ds, key);
+            }
+            /*if(dataSourceProperty.getHikari() != null){
                 log.debug("初始化 {} 数据源 {}连接池", key, "Hikari");
                 ds = createHikariDS(key, dataSourceProperty);
                 // 校验数据库连接是否正常
@@ -65,7 +70,7 @@ public class DynamicDataSourceConfig extends HandleDataSource {
                 if(dataSourceProperty.getDruid().getCheckConnection()){
                     checkDs(ds, key);
                 }
-            }
+            }*/
             dataSourceMap.put(key, ds);
         }
         // 主数据源key

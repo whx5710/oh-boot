@@ -25,18 +25,20 @@ public class FieldConditionDecision {
     public Boolean isAllowNullValue(){
         return false;
     }
+
     /**
-     * 判决某个表是否需要添加某个字段过滤
+     * 忽略某个表,统一使用小写
      *
      * @param tableName   表名称
      * @return 返回 true 则需要拼接SQL，隔离数据
      */
-    public Boolean adjudge(String tableName){
+    public Boolean shouldIgnoreTable(String tableName){
+        tableName = tableName.toLowerCase();
         // 满足匹配
         String tableRegex = multiTenantProperties.getTablePattern();
         Pattern pattern = Pattern.compile(tableRegex);
         Matcher matcher = pattern.matcher(tableName);
-        return matcher.matches() && !multiTenantProperties.getIgnoreTable().contains(tableName);
+        return matcher.matches() || multiTenantProperties.getIgnoreTable().contains(tableName);
     }
 
 }

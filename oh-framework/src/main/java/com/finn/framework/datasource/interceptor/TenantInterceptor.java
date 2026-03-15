@@ -1,12 +1,12 @@
-package com.finn.framework.tenant;
+package com.finn.framework.datasource.interceptor;
 
-import com.alibaba.druid.DbType;
-import com.alibaba.druid.sql.SQLUtils;
-import com.alibaba.druid.sql.ast.SQLStatement;
+import com.finn.core.exception.ServerException;
 import com.finn.framework.common.properties.MultiTenantProperties;
-import com.finn.framework.datasource.utils.SqlConditionHelper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
+import com.finn.framework.tenant.TenantContextHolder;
+import com.finn.framework.tenant.TenantSqlFilter;
+import net.sf.jsqlparser.JSQLParserException;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.plugin.*;
@@ -28,12 +28,12 @@ import java.util.*;
 public class TenantInterceptor implements Interceptor {
      private final Logger log = LoggerFactory.getLogger(TenantInterceptor.class);
 
-    private final SqlConditionHelper conditionHelper;
+    private final TenantSqlFilter tenantSqlFilter;
 
     private final MultiTenantProperties multiTenantProperties;
 
-    public TenantInterceptor(SqlConditionHelper conditionHelper, MultiTenantProperties multiTenantProperties){
-        this.conditionHelper = conditionHelper;
+    public TenantInterceptor(TenantSqlFilter tenantSqlFilter, MultiTenantProperties multiTenantProperties){
+        this.tenantSqlFilter = tenantSqlFilter;
         this.multiTenantProperties = multiTenantProperties;
     }
 
@@ -75,15 +75,13 @@ public class TenantInterceptor implements Interceptor {
                 || multiTenantProperties.getTenantIdField().isEmpty()){
             return sql;
         }
-        List<SQLStatement> statementList = SQLUtils.parseStatements(sql, multiTenantProperties.getDialect());
-        if (statementList == null || statementList.isEmpty()){
-            return sql;
+        try {
+            // 生成新的sql
+            return tenantSqlFilter.addTenantCondition(sql, multiTenantProperties.getTenantIdField(), tenantId);
+        } catch (JSQLParserException e) {
+            log.error("租户数据过滤失败! {}", e.getMessage());
+            throw new ServerException("租户数据过滤失败！");
         }
-        SQLStatement sqlStatement = statementList.getFirst();
-        // 拼接where条件
-        conditionHelper.addStatementCondition(sqlStatement, multiTenantProperties.getTenantIdField(), tenantId);
-        // 生成新的sql
-        return SQLUtils.toSQLString(statementList, DbType.valueOf(multiTenantProperties.getDialect()));
     }
 
     @Override

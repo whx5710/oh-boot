@@ -1,6 +1,5 @@
 package com.finn.framework.datasource.service;
 
-import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.framework.common.properties.DataSourceProperty;
@@ -140,7 +139,7 @@ public class HandleDataSource {
      * @param dataSourceProperty ds
      * @return map
      */
-    public DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
+    /*public DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
         Map<String, String> properties = new HashMap<>();
         properties.put(DruidDataSourceFactory.PROP_URL, dataSourceProperty.getUrl()); // 地址
         properties.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, dataSourceProperty.getDriverClassName()); // 驱动名
@@ -155,7 +154,7 @@ public class HandleDataSource {
         properties.put(DruidDataSourceFactory.PROP_CONNECTIONPROPERTIES, dataSourceProperty.getDruid().getConnectionProperties());
         properties.put(DruidDataSourceFactory.PROP_NAME, name); // 名称
         return DruidDataSourceFactory.createDataSource(properties);
-    }
+    }*/
 
 
 

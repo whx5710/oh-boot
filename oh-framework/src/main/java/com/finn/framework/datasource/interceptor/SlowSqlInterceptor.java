@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 import java.sql.Statement;
 import java.util.Properties;
 
+/**
+ * 慢sql
+ * @author 王小费 whx5710@qq.com
+ */
 @Intercepts({
         // 拦截查询方法
         @Signature(type = StatementHandler.class,method = "query",args = {Statement.class, ResultHandler.class}),
