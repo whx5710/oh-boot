@@ -1,5 +1,7 @@
 package com.finn.framework.tenant;
 
+import com.finn.core.exception.ServerException;
+import com.finn.framework.common.properties.MultiTenantProperties;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
@@ -20,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 基于 JSqlParser 4.9 的 SQL 租户过滤器
@@ -32,10 +36,9 @@ public class TenantSqlFilter {
     private final Logger log = LoggerFactory.getLogger(TenantSqlFilter.class);
 
     // 需要忽略租户过滤的表名集合（如系统表、配置表等）
-    private final FieldConditionDecision conditionDecision;
-
-    public TenantSqlFilter(FieldConditionDecision conditionDecision) {
-        this.conditionDecision = conditionDecision;
+    private final MultiTenantProperties multiTenantProperties;
+    public TenantSqlFilter(MultiTenantProperties multiTenantProperties){
+        this.multiTenantProperties = multiTenantProperties;
     }
 
     /**
@@ -56,7 +59,7 @@ public class TenantSqlFilter {
             case Update update -> processUpdate(update, fieldName, fieldValue);
             case Delete delete -> processDelete(delete, fieldName, fieldValue);
             case Insert insert -> processInsert(insert, fieldName, fieldValue);
-            default -> log.warn("未匹配的数据操作类型！ {}", statement.toString());
+            default -> log.warn("未匹配的数据操作类型！ {}", statement);
         }
         return statement.toString();
     }
@@ -331,16 +334,28 @@ public class TenantSqlFilter {
     }
 
     /**
+     * 忽略某个表,统一使用小写
      * 判断表是否需要忽略租户过滤
+     * @param tableName   表名称
+     * @return 返回 true 则不需要拼接过滤
      */
-    private boolean shouldIgnoreTable(String tableName) {
-        return conditionDecision.shouldIgnoreTable(tableName);
+    private boolean shouldIgnoreTable(String tableName){
+        if(tableName == null || tableName.isEmpty()){
+            log.error("表名为空，判断是否需要隔离数据失败，请检查");
+            throw new ServerException("数据过滤失败，请联系管理员");
+        }
+        tableName = tableName.toLowerCase();
+        // 满足匹配
+        String tableRegex = multiTenantProperties.getTablePattern();
+        Pattern pattern = Pattern.compile(tableRegex);
+        Matcher matcher = pattern.matcher(tableName);
+        return matcher.matches() || multiTenantProperties.getIgnoreTable().contains(tableName);
     }
 
     // ==================== 使用示例 ====================
     /*public static void main(String[] args) throws JSQLParserException {
         // 初始化过滤器
-        TenantSqlFilter filter = new TenantSqlFilter(new FieldConditionDecision(new MultiTenantProperties()));
+        TenantSqlFilter filter = new TenantSqlFilter(null);
 
         // 测试各种 SQL
         String[] testSqls = {

@@ -1,6 +1,5 @@
 package com.finn.framework.common.properties;
 
-import com.finn.framework.datasource.config.DruidProperty;
 import com.finn.framework.datasource.config.HikariProperty;
 
 /**
@@ -27,8 +26,6 @@ public class DataSourceProperty {
     private String password;
 
     private HikariProperty hikari;
-
-    private DruidProperty druid;
 
     public String getDriverClassName() {
         return driverClassName;
@@ -70,11 +67,4 @@ public class DataSourceProperty {
         this.hikari = hikari;
     }
 
-    public DruidProperty getDruid() {
-        return druid;
-    }
-
-    public void setDruid(DruidProperty druid) {
-        this.druid = druid;
-    }
 }

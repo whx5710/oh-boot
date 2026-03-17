@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
-import java.util.*;
 
 /**
  * 多租户数据隔离插件,where 条件语句后面拼接租户过滤条件

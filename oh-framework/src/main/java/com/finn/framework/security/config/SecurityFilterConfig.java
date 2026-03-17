@@ -26,6 +26,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityFilterConfig {
+    // 1、认证过滤器 2、注入用户信息 3、租户信息拦
     private final AuthenticationFilter authenticationFilter;
     private final PermitResource permitResource;
 
@@ -48,7 +49,8 @@ public class SecurityFilterConfig {
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling((authorizeHttpRequests) -> authorizeHttpRequests.authenticationEntryPoint(new SecurityAuthenticationEntryPoint()))
+                .exceptionHandling((authorizeHttpRequests) ->
+                        authorizeHttpRequests.authenticationEntryPoint(new SecurityAuthenticationEntryPoint()))
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .csrf(AbstractHttpConfigurer::disable)
         ;
