@@ -36,7 +36,7 @@ public class DataInnerInterceptor implements Interceptor {
     private final Logger log = LoggerFactory.getLogger(DataInnerInterceptor.class);
 
     // id生成
-    private final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(31,31, System.currentTimeMillis());
+    private final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
 
     // id
     private final static String ID = "id";

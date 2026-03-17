@@ -47,7 +47,7 @@ public class DataMsgServiceImpl implements DataMsgService {
 
     private final Logger log = LoggerFactory.getLogger(DataMsgServiceImpl.class);
     // ID
-    private final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1,1, System.currentTimeMillis());
+    private final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1,0);
 
     private final RedisCache redisCache;
     private final DataMessageMapper dataMessageMapper;

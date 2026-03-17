@@ -20,11 +20,38 @@ import com.finn.core.exception.ServerException;
  */
 public class SnowflakeIdWorker {
 
+    // ==================== 常量定义 ====================
+    /** 开始时间截，固定后不能修改 (2026-01-01 00:00:00) */
+    private static final long TWEPOCH = 1767196800000L;
+
     /** 机器id所占的位数 */
-    private final long workerIdBits = 5L;
+    private static final long WORKER_ID_BITS = 5L;
 
     /** 数据标识id所占的位数 */
-    private final long datacenterIdBits = 5L;
+    private static final long DATACENTER_ID_BITS = 5L;
+
+    /** 序列在id中占的位数 */
+    private static final long SEQUENCE_BITS = 12L;
+
+    /** 支持的最大机器id，结果是31 */
+    private static final long MAX_WORKER_ID = ~(-1L << WORKER_ID_BITS);
+
+    /** 支持的最大数据标识id，结果是31 */
+    private static final long MAX_DATACENTER_ID = ~(-1L << DATACENTER_ID_BITS);
+
+    /** 生成序列的掩码，这里为4095 */
+    private static final long SEQUENCE_MASK = ~(-1L << SEQUENCE_BITS);
+
+    /** 机器ID向左移12位 */
+    private static final long WORKER_ID_SHIFT = SEQUENCE_BITS;
+
+    /** 数据标识id向左移17位(12+5) */
+    private static final long DATACENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS;
+
+    /** 时间截向左移22位(5+5+12) */
+    private static final long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATACENTER_ID_BITS;
+
+    // ==================== 成员变量 ====================
 
     /** 工作机器ID(0~31) */
     private final long workerId;
@@ -35,60 +62,118 @@ public class SnowflakeIdWorker {
     /** 毫秒内序列(0~4095) */
     private long sequence = 0L;
 
-    private long startTimestamp = -1L;
+    /** 上次生成ID的时间截 */
+    private long lastTimestamp = -1L;
 
+    // ==================== 构造函数 ====================
     /**
      * 构造函数
      *
-     * @param workerId 工作ID (0~31)
+     * @param workerId     工作ID (0~31)
      * @param datacenterId 数据中心ID (0~31)
-     * @param startTimestamp 初始时间戳，在初始时间戳上累加，防止时间回退，但有可能与实际时间出现偏差
      */
-    public SnowflakeIdWorker(long workerId, long datacenterId, long startTimestamp) {
-        // 支持的最大机器id，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
-        long maxWorkerId = ~(-1L << workerIdBits);
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new ServerException(String.format("workerId不能大于%d或小于0", maxWorkerId));
+    public SnowflakeIdWorker(long workerId, long datacenterId) {
+        if (workerId > MAX_WORKER_ID || workerId < 0) {
+            throw new ServerException(String.format("workerId不能大于%d或小于0", MAX_WORKER_ID));
         }
-        // 支持的最大数据标识id，结果是31
-        long maxDatacenterId = ~(-1L << datacenterIdBits);
-        if (datacenterId > maxDatacenterId || datacenterId < 0) {
-            throw new ServerException(String.format("datacenterId不能大于%d或小于0", maxDatacenterId));
+        if (datacenterId > MAX_DATACENTER_ID || datacenterId < 0) {
+            throw new ServerException(String.format("datacenterId不能大于%d或小于0", MAX_DATACENTER_ID));
         }
         this.workerId = workerId;
         this.datacenterId = datacenterId;
-        this.startTimestamp = startTimestamp;
     }
 
-    // ==============================Methods==========================================
+    // ==================== 核心方法 ====================
+    // 允许5秒内的时钟回拨，使用序列号缓冲
+    private static final long MAX_BACKWARD_MS = 5000L;
+
     /**
      * 获得下一个ID (该方法是线程安全的)
      *
      * @return SnowflakeId
      */
     public synchronized long nextId() {
-        long sequenceTmp = sequence;
-        // 序列在id中占的位数
-        long sequenceBits = 12L;
-        // 生成序列的掩码，这里为4095 (0b111111111111=0xfff=4095)
-        long sequenceMask = ~(-1L << sequenceBits);
-        sequence = (sequence + 1) & sequenceMask;
-        if (sequence == 0 && sequenceTmp >= 0) {
-            // sequence自增到最大了，时间戳自增1
-            startTimestamp += 1;
-        }
-        // 数据标识id向左移17位(12+5)
-        long datacenterIdShift = sequenceBits + workerIdBits;
-        // 时间截向左移22位(5+5+12)
-        long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+        long timestamp = timeGen();
 
-        // 开始时间截 (2025-01-01 00:00:00)，初始固定后请勿随意修改，谨防ID重复
-        long twepoch = 1735660800000L;
+        // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过，抛出异常
+        if (timestamp < lastTimestamp) {
+//            throw new RuntimeException(String.format("时钟回拨，拒绝生成ID。上次时间戳：%d，当前时间戳：%d，差值：%dms",
+//                    lastTimestamp, timestamp, lastTimestamp - timestamp));
+            // 时钟回拨容忍策略（生产环境推荐）
+            long offset = lastTimestamp - timestamp;
+            if (offset <= MAX_BACKWARD_MS) {
+                // 尝试使用缓冲的序列号
+                timestamp = lastTimestamp;  // 继续使用上一毫秒的时间戳
+                sequence = (sequence + 1) & SEQUENCE_MASK;
+                if (sequence == 0) {
+                    // 序列也满了，只能等待
+                    timestamp = tilNextMillis(lastTimestamp);
+                }
+            } else {
+                throw new RuntimeException("时钟回拨超过" + MAX_BACKWARD_MS + "ms，拒绝生成ID");
+            }
+        }
+
+        // 如果是同一时间生成的，则进行毫秒内序列
+        if (lastTimestamp == timestamp) {
+            sequence = (sequence + 1) & SEQUENCE_MASK;
+            // 毫秒内序列溢出，等待下一毫秒
+            if (sequence == 0) {
+                timestamp = tilNextMillis(lastTimestamp);
+            }
+        } else {
+            // 时间戳改变，毫秒内序列重置
+            sequence = 0L;
+        }
+
+        // 上次生成ID的时间截
+        lastTimestamp = timestamp;
 
         // 移位并通过或运算拼到一起组成64位的ID
-        return ((startTimestamp - twepoch) << timestampLeftShift)
-                | (datacenterId << datacenterIdShift)
-                | (workerId << sequenceBits) // 机器ID向左移12位
+        return ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT)
+                | (datacenterId << DATACENTER_ID_SHIFT)
+                | (workerId << WORKER_ID_SHIFT)
                 | sequence;
     }
+
+    /**
+     * 阻塞到下一个毫秒，直到获得新的时间戳
+     *
+     * @param lastTimestamp 上次生成ID的时间截
+     * @return 当前时间戳
+     */
+    private long tilNextMillis(long lastTimestamp) {
+        long timestamp = timeGen();
+        while (timestamp <= lastTimestamp) {
+            timestamp = timeGen();
+        }
+        return timestamp;
+    }
+
+    /**
+     * 返回以毫秒为单位的当前时间
+     *
+     * @return 当前时间(毫秒)
+     */
+    private long timeGen() {
+        return System.currentTimeMillis();
+    }
+
+    // ==================== 测试方法 ====================
+    /*public static void main(String[] args) {
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+
+        // 测试生成100个ID
+        for (int i = 0; i < 100; i++) {
+            long id = idWorker.nextId();
+            System.out.println("ID: " + id + ", 二进制: " + Long.toBinaryString(id));
+        }
+
+        // 性能测试
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            idWorker.nextId();
+        }
+        System.out.println("生成100万ID耗时: " + (System.currentTimeMillis() - start) + "ms");
+    }*/
 }
