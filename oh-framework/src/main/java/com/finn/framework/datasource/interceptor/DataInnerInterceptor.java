@@ -88,20 +88,9 @@ public class DataInnerInterceptor implements Interceptor {
         Object params = args[1];
         if (user != null && user.getId() != null) {
             // 创建人ID
-            try {
-                Object object = ReflectUtil.getValue(params, CREATOR);
-                if(object == null){
-                    ReflectUtil.setValue(params, CREATOR, user.getId(), false);
-                }
-            }catch (NoSuchFieldException e){
-                log.warn("无{}属性！", CREATOR);
-            }
+            setFieldIfNull(params, CREATOR, user.getId(), false);
             // 所属组织
-            try {
-                ReflectUtil.setValue(params, ORG_ID, user.getDeptId(), false);
-            }catch (NoSuchFieldException e){
-                log.warn("无{}属性！", ORG_ID);
-            }
+            setFieldIfNull(params, ORG_ID, user.getDeptId(), false);
             // 租户ID
             try {
                 Object object = ReflectUtil.getValue(params, TENANT_ID);
@@ -113,32 +102,11 @@ public class DataInnerInterceptor implements Interceptor {
             }
         }
         // 创建时间
-        try {
-            Object object = ReflectUtil.getValue(params, CREATE_TIME);
-            if(object == null){
-                ReflectUtil.setValue(params, CREATE_TIME, date, false);
-            }
-        }catch (NoSuchFieldException e){
-            log.warn("无{}属性！", CREATE_TIME);
-        }
+        setFieldIfNull(params, CREATE_TIME, date, false);
         // 有效标识
-        try {
-            Object object = ReflectUtil.getValue(params, DB_STATUS);
-            if(object == null){
-                ReflectUtil.setValue(params, DB_STATUS, 1, false);
-            }
-        }catch (NoSuchFieldException e){
-            log.warn("无{}属性！", DB_STATUS);
-        }
+        setFieldIfNull(params, DB_STATUS, 1, false);
         // ID
-        try {
-            Object object = ReflectUtil.getValue(params, ID);
-            if(object == null){
-                ReflectUtil.setValue(params, ID, idWorker.nextId(), false);
-            }
-        }catch (NoSuchFieldException e){
-            log.warn("无{}属性！", ID);
-        }
+        setFieldIfNull(params, ID, idWorker.nextId(), false);
     }
 
     /**
@@ -153,14 +121,7 @@ public class DataInnerInterceptor implements Interceptor {
         Object params = args[1];
         if (user != null && user.getId() != null) {
             // 更新人ID
-            try {
-                Object object = ReflectUtil.getValue(params, UPDATER);
-                if(object == null){
-                    ReflectUtil.setValue(params, UPDATER, user.getId(), false);
-                }
-            }catch (NoSuchFieldException e){
-                log.warn("无{}属性！", UPDATER);
-            }
+            setFieldIfNull(params, UPDATER, user.getId(), false);
             // 租户ID
             try {
                 Object object = ReflectUtil.getValue(params, TENANT_ID);
@@ -172,23 +133,9 @@ public class DataInnerInterceptor implements Interceptor {
             }
         }
         // 更新时间
-        try {
-            Object object = ReflectUtil.getValue(params, UPDATE_TIME);
-            if(object == null){
-                ReflectUtil.setValue(params, UPDATE_TIME, date, false);
-            }
-        }catch (NoSuchFieldException e){
-            log.warn("无{}属性！", UPDATE_TIME);
-        }
+        setFieldIfNull(params, UPDATE_TIME, date, false);
         // 有效标识
-        try {
-            Object object = ReflectUtil.getValue(params, DB_STATUS);
-            if(object == null){
-                ReflectUtil.setValue(params, DB_STATUS, 1, false);
-            }
-        }catch (NoSuchFieldException e){
-            log.warn("无{}属性！", DB_STATUS);
-        }
+        setFieldIfNull(params, DB_STATUS, 1, false);
     }
 
     /**
@@ -252,4 +199,23 @@ public class DataInnerInterceptor implements Interceptor {
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
     }
+
+    /**
+     * 填充数据
+     * @param params 参数
+     * @param fieldName 字段名
+     * @param value 数值
+     * @param force 是否覆盖
+     */
+    private void setFieldIfNull(Object params, String fieldName, Object value, boolean force) {
+        try {
+            Object object = ReflectUtil.getValue(params, fieldName);
+            if(object == null){
+                ReflectUtil.setValue(params, fieldName, value, force);
+            }
+        }catch (NoSuchFieldException e){
+            log.warn("无{}属性！", fieldName);
+        }
+    }
+
 }
