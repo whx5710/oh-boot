@@ -27,63 +27,58 @@ import java.util.Properties;
 @Component
 public class SlowSqlInterceptor implements Interceptor {
 
-    // 慢查询阈值（毫秒），可通过配置文件注入
-    private long slowThreshold = 1000L;
-
     private final String primary;
-
-    private final Map<String, DataSourceProperty> map;
-
+    private final Map<String, DataSourceProperty> dataSourceMap;
     private final Logger log = LoggerFactory.getLogger(SlowSqlInterceptor.class);
 
-    public SlowSqlInterceptor(DynamicDataSourceProperties dynamicDataSourceProperties){
-        primary = dynamicDataSourceProperties.getSysDataSource().getPrimary();
-        map = dynamicDataSourceProperties.getDynamic();
+    public SlowSqlInterceptor(DynamicDataSourceProperties properties) {
+        this.primary = properties.getSysDataSource().getPrimary();
+        this.dataSourceMap = properties.getDynamic();
     }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        // 1. 记录开始时间
         long startTime = System.currentTimeMillis();
 
-        // 根据数据源，获取慢查询参数阈值
+        // 获取当前数据源的慢查询阈值（线程安全）
         String dbKey = DynamicDataSourceHolder.getDynamicDataSourceKey();
-        dbKey = dbKey==null?primary:dbKey;
-        DataSourceProperty dataSourceProperty = map.get(dbKey);
-        slowThreshold = dataSourceProperty.getHikari().getSlowThreshold();
+        dbKey = dbKey == null ? primary : dbKey;
+
+        long slowThreshold = 1000L; // 默认阈值
+        DataSourceProperty property = dataSourceMap.get(dbKey);
+        if (property != null && property.getHikari() != null) {
+            slowThreshold = property.getHikari().getSlowThreshold();
+        }
 
         try {
-            // 2. 执行原方法（继续SQL执行流程）
             return invocation.proceed();
         } finally {
-            // 3. 计算执行耗时（无论成功失败都记录）
             long costTime = System.currentTimeMillis() - startTime;
 
-            // 5. 判断是否慢查询
             if (costTime > slowThreshold) {
-                // 4. 获取SQL语句和参数
-                StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
-                String sql = statementHandler.getBoundSql().getSql();  // 获取SQL语句（带?占位符）
-                Object parameterObject = statementHandler.getBoundSql().getParameterObject();  // 获取参数
-                log.warn("[慢查询警告] 执行时间: {}ms, SQL: {}, 参数: {}",
-                        costTime, sql, parameterObject);
-            }else{
-                log.debug("[SQL监控] 执行时间: {}ms", costTime);
+                StatementHandler handler = (StatementHandler) invocation.getTarget();
+                String sql = handler.getBoundSql().getSql();
+                Object params = handler.getBoundSql().getParameterObject();
+                if(log.isWarnEnabled()){
+                    log.warn("[慢查询警告] 数据源: {}, 执行时间: {}ms, 阈值: {}ms, SQL: {}, 参数: {}",
+                            dbKey, costTime, slowThreshold, sql, params);
+                }else{
+                    log.warn("[慢查询警告] 数据源: {}, 执行时间: {}ms, 阈值: {}ms, SQL: {}",
+                            dbKey, costTime, slowThreshold, sql);
+                }
+            } else if (log.isDebugEnabled()) {
+                log.debug("[SQL监控] 数据源: {}, 执行时间: {}ms", dbKey, costTime);
             }
         }
     }
 
     @Override
     public Object plugin(Object target) {
-        return Interceptor.super.plugin(target);
+        return Plugin.wrap(target, this);
     }
 
     @Override
     public void setProperties(Properties properties) {
-        // 从配置文件读取阈值（如application.yml中配置）
-        String threshold = properties.getProperty("slowThreshold");
-        if (threshold != null) {
-            slowThreshold = Long.parseLong(threshold);
-        }
+        // 配置已从数据源读取，此方法保留为空或删除
     }
 }
