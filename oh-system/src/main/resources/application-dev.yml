@@ -76,14 +76,7 @@ spring:
           maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
-#        druid:
-#          initialSize: 10
-#          minIdle: 10
-#          maxActive: 100
-#          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
-#          filters: wall,stat # druid监控
-#          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-#          checkConnection: true # 初始化时是否检查连接，默认false
+          slowThreshold: 500 # 慢查询阈值,默认1000（毫秒）
       masterDb: # 主数据源
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
@@ -97,24 +90,7 @@ spring:
           maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
-#        druid:
-#          initialSize: 10
-#          minIdle: 10
-#          maxActive: 100
-#          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
-#          filters: wall,stat # druid监控
-#          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-#          checkConnection: true # 初始化时是否检查连接，默认false
-#    druid: # 使用Hikari连接池，监控无效
-#      stat-view-servlet:
-#        enabled: true
-#        url-pattern: /druid/*
-#        login-username: admin
-#        login-password: admin # 正式环境需配置复杂密码
-#      web-stat-filter: # Druid Web统计过滤器配置
-#        enabled: true # 启用Web统计过滤器
-#        session-stat-enable: true # 启用会话统计功能
-#        session-stat-max-count: 1000 # 最大会话统计数量
+          slowThreshold: 800 # 慢查询阈值,默认1000（毫秒）
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: open-api-flow

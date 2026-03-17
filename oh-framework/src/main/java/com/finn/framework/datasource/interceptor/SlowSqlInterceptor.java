@@ -1,5 +1,8 @@
 package com.finn.framework.datasource.interceptor;
 
+import com.finn.framework.common.properties.DataSourceProperty;
+import com.finn.framework.common.properties.DynamicDataSourceProperties;
+import com.finn.framework.datasource.utils.DynamicDataSourceHolder;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
@@ -8,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.Statement;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -24,14 +28,29 @@ import java.util.Properties;
 public class SlowSqlInterceptor implements Interceptor {
 
     // 慢查询阈值（毫秒），可通过配置文件注入
-    private long slowThreshold = 500;
+    private long slowThreshold = 1000L;
+
+    private final String primary;
+
+    private final Map<String, DataSourceProperty> map;
 
     private final Logger log = LoggerFactory.getLogger(SlowSqlInterceptor.class);
+
+    public SlowSqlInterceptor(DynamicDataSourceProperties dynamicDataSourceProperties){
+        primary = dynamicDataSourceProperties.getSysDataSource().getPrimary();
+        map = dynamicDataSourceProperties.getDynamic();
+    }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         // 1. 记录开始时间
         long startTime = System.currentTimeMillis();
+
+        // 根据数据源，获取慢查询参数阈值
+        String dbKey = DynamicDataSourceHolder.getDynamicDataSourceKey();
+        dbKey = dbKey==null?primary:dbKey;
+        DataSourceProperty dataSourceProperty = map.get(dbKey);
+        slowThreshold = dataSourceProperty.getHikari().getSlowThreshold();
 
         try {
             // 2. 执行原方法（继续SQL执行流程）

@@ -82,14 +82,7 @@ spring:
           maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
-#        druid:
-#          initialSize: 10
-#          minIdle: 10
-#          maxActive: 100
-#          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
-#          filters: wall,stat # druid监控
-#          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-#          checkConnection: true # 初始化时是否检查连接，默认false
+          slowThreshold: 1000 # 慢查询阈值,默认1000（毫秒）
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
 ```

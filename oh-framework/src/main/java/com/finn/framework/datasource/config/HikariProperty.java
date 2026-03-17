@@ -17,6 +17,10 @@ public class HikariProperty extends ConnectNumProperty {
      * Hikari 监控日志
      */
     private Boolean hikariLog = false;
+    /**
+     * 慢查询阈值（毫秒）
+     */
+    private Long slowThreshold = 1000L;
 
     public String getMaxLifetime() {
         return maxLifetime;
@@ -30,5 +34,13 @@ public class HikariProperty extends ConnectNumProperty {
     }
     public void setHikariLog(Boolean hikariLog) {
         this.hikariLog = hikariLog;
+    }
+
+    public Long getSlowThreshold() {
+        return slowThreshold;
+    }
+
+    public void setSlowThreshold(Long slowThreshold) {
+        this.slowThreshold = slowThreshold;
     }
 }
