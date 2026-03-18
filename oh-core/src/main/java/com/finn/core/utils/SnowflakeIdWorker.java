@@ -22,7 +22,7 @@ public class SnowflakeIdWorker {
 
     // ==================== 常量定义 ====================
     /** 开始时间截，固定后不能修改 (2026-01-01 00:00:00) */
-    private static final long TWEPOCH = 1767196800000L;
+    private static final long EPOCH = 1767196800000L;
 
     /** 机器id所占的位数 */
     private static final long WORKER_ID_BITS = 5L;
@@ -130,7 +130,7 @@ public class SnowflakeIdWorker {
         lastTimestamp = timestamp;
 
         // 移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT)
+        return ((timestamp - EPOCH) << TIMESTAMP_LEFT_SHIFT)
                 | (datacenterId << DATACENTER_ID_SHIFT)
                 | (workerId << WORKER_ID_SHIFT)
                 | sequence;

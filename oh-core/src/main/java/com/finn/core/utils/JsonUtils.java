@@ -5,7 +5,6 @@ import com.finn.core.config.JacksonConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
-import tools.jackson.core.json.JsonWriteFeature;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 public class JsonUtils {
     private static final ObjectMapper objectMapper = JsonMapper.builder()
-            .enable(JsonWriteFeature.ESCAPE_NON_ASCII)
+//            .enable(JsonWriteFeature.ESCAPE_NON_ASCII)
             .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
             .addModule(new SimpleModule()
                     // Long 的序列化
