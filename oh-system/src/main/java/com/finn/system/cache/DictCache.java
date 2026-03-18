@@ -35,7 +35,7 @@ public class DictCache {
      */
     public void saveList(List<DictVO> list) {
         redisCache.deleteAll(SYSTEM_DICT_KEY);
-        if(list == null || list.size() == 0){
+        if(list == null || list.isEmpty()){
             return;
         }
         for(DictVO vo: list){

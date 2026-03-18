@@ -35,7 +35,7 @@ public class ParamsCache {
      */
     public void saveList(List<ParamsEntity> list) {
         redisCache.delete(SYSTEM_PARAMS_KEY);
-        if (list == null || list.size() == 0) {
+        if (list == null || list.isEmpty()) {
             return;
         }
         
