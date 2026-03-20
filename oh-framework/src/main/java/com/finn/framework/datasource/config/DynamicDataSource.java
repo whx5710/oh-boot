@@ -12,7 +12,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 动态数据源
@@ -23,9 +25,9 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     /**
-     * 数据源集合
+     * 数据源集合，使用ConcurrentHashMap提高并发安全性
      */
-    private Map<String, DataSource> dynamicDataSources;
+    private Map<String, DataSource> dynamicDataSources = new ConcurrentHashMap<>();
     /**
      * 主数据源
      */
@@ -38,7 +40,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
     public DynamicDataSource(Map<String, DataSource> dynamicDataSources){
-        this.dynamicDataSources = dynamicDataSources;
+        this.dynamicDataSources = new ConcurrentHashMap<>(dynamicDataSources);
     }
 
     public void setMybatisProperties(MybatisProperties mybatisProperties){
@@ -55,6 +57,8 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     public void setPrimaryDb(DataSource primaryDb) {
         this.primaryDb = primaryDb;
+        // 更新默认目标数据源
+        setDefaultTargetDataSource(primaryDb);
     }
 
     @Override
@@ -67,7 +71,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
     public void setDynamicDataSources(Map<String, DataSource> defineTargetDataSources) {
-        this.dynamicDataSources = defineTargetDataSources;
+        this.dynamicDataSources = new ConcurrentHashMap<>(defineTargetDataSources);
+        // 更新目标数据源
+        setTargetDataSources(new HashMap<>(defineTargetDataSources));
+        afterPropertiesSet(); // 刷新数据源
     }
 
     /**
@@ -77,6 +84,64 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     public DataSource getDs(String key){
         return this.dynamicDataSources.get(key);
+    }
+
+    /**
+     * 动态添加数据源
+     * @param key 数据源名称
+     * @param dataSource 数据源
+     */
+    public void addDataSource(String key, DataSource dataSource) {
+        if (dynamicDataSources.containsKey(key)) {
+            log.warn("数据源[{}]已存在，将被替换", key);
+        }
+        dynamicDataSources.put(key, dataSource);
+        // 更新目标数据源
+        Map<Object, Object> targetDataSources = new HashMap<>(dynamicDataSources);
+        setTargetDataSources(targetDataSources);
+        afterPropertiesSet(); // 刷新数据源
+        log.info("数据源[{}]添加成功", key);
+    }
+
+    /**
+     * 动态移除数据源
+     * @param key 数据源名称
+     * @return 是否移除成功
+     */
+    public boolean removeDataSource(String key) {
+        if (!dynamicDataSources.containsKey(key)) {
+            log.warn("数据源[{}]不存在", key);
+            return false;
+        }
+        // 不能移除主数据源
+        if (primaryDb != null && primaryDb.equals(dynamicDataSources.get(key))) {
+            log.error("不能移除主数据源[{}]", key);
+            return false;
+        }
+        dynamicDataSources.remove(key);
+        // 更新目标数据源
+        Map<Object, Object> targetDataSources = new HashMap<>(dynamicDataSources);
+        setTargetDataSources(targetDataSources);
+        afterPropertiesSet(); // 刷新数据源
+        log.info("数据源[{}]移除成功", key);
+        return true;
+    }
+
+    /**
+     * 检查数据源是否存在
+     * @param key 数据源名称
+     * @return 是否存在
+     */
+    public boolean containsDataSource(String key) {
+        return dynamicDataSources.containsKey(key);
+    }
+
+    /**
+     * 获取数据源数量
+     * @return 数据源数量
+     */
+    public int getDataSourceCount() {
+        return dynamicDataSources.size();
     }
 
     /**

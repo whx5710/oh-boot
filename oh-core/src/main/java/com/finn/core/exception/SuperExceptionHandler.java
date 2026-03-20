@@ -28,7 +28,7 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(ServerException.class)
     public Result<String> handleException(ServerException ex) {
-        return Result.error(ex.getCode(), ex.getMsg());
+        return Result.error(ex.getCode(), ex.getMsg(), ex.getTraceId());
     }
 
     /**

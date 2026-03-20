@@ -24,19 +24,12 @@
 package com.finn;
 
 import com.finn.framework.utils.ServiceFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
-
-import java.net.InetAddress;
 
 /**
  * 项目启动入口
@@ -44,14 +37,7 @@ import java.net.InetAddress;
  */
 @EnableAsync
 @SpringBootApplication
-public class ServerApplication extends SpringBootServletInitializer implements ApplicationRunner {
-	private final Logger log = LoggerFactory.getLogger(ServerApplication.class);
-
-	private final ServerProperties serverProperties;
-
-	public ServerApplication(ServerProperties serverProperties){
-		this.serverProperties = serverProperties;
-	}
+public class ServerApplication extends SpringBootServletInitializer {
 
 	// 启动系统
 	public static void main(String[] args) {
@@ -62,22 +48,5 @@ public class ServerApplication extends SpringBootServletInitializer implements A
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(ServerApplication.class);
-	}
-
-	/**
-	 * 启动后执行
-	 * @param args
-	 * @throws Exception
-	 */
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		String hostAddress = InetAddress.getLocalHost().getHostAddress();
-		Integer port = serverProperties.getPort();
-		String contextPath = serverProperties.getServlet().getContextPath();
-		String baseUrl = String.format("%s://%s:%s%s", "http", hostAddress, port, contextPath);
-		log.info("-----------------------------------------------");
-		log.info("后台服务启动成功.");
-		log.info("API 地址：{}", baseUrl);
-		log.info("-----------------------------------------------");
 	}
 }

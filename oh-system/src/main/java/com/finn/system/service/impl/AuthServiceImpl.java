@@ -82,20 +82,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenVO loginByAccount(AccountLoginVO login) {
         AssertUtils.isBlank(login.getUsername(), "用户名");
-        String msg = "";
         // 验证码效验
         boolean flag = captchaService.validate(login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
             logLoginService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
-            // 登录失败计数
-            int authCount = loginCount(login.getUsername());
-            if(authCount > 0 && (securityProperties.getAuthCount() - authCount) > 0){
-                msg = "验证码错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-            }else{
-                msg = "验证码错误";
-            }
-            throw new ServerException(msg);
+            throw new ServerException(buildErrorMessage(login.getUsername(), "验证码错误"));
         }
         // 验证账号生成token
         return createToken(login, false);
@@ -198,8 +190,7 @@ public class AuthServiceImpl implements AuthService {
      * 登录失败计数
      * @param loginName 用户名
      */
-    private int loginCount(String loginName){
-        // 是否开启账号锁定
+    private int incrementLoginCount(String loginName) {
         boolean authLockFlag = securityProperties.getAuthCount() > 0;
         String authCountKey = RedisKeys.getAuthCountKey(loginName);
         int authCount = 0;
@@ -237,7 +228,7 @@ public class AuthServiceImpl implements AuthService {
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new ServerException(countErr(login.getUsername(), "用户名或密码错误"));
+            throw new ServerException(buildErrorMessage(login.getUsername(), "用户名或密码错误"));
         } catch (InternalAuthenticationServiceException e){
             e.printStackTrace();
             log.error("登录发生异常!{}", e.getMessage());
@@ -253,7 +244,7 @@ public class AuthServiceImpl implements AuthService {
         // 租户判断
         if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
                 && !tenantCache.valid(user.getTenantId())){
-            throw new ServerException(countErr(login.getUsername(), "租户无效"));
+            throw new ServerException(buildErrorMessage(login.getUsername(), "租户无效"));
         }
 
         // 登录时间和token刷新时间
@@ -306,20 +297,8 @@ public class AuthServiceImpl implements AuthService {
      * @param login 登录参数
      */
     private void checkKey(boolean checkKey,String userKey, AccountLoginVO login){
-        String msg = "";
         if (checkKey && !login.getUserKey().equals(userKey)) {
-            // 登录失败计数
-            int authCount =loginCount(login.getUsername());
-            if(authCount > 0){
-                if((securityProperties.getAuthCount() - authCount) > 0){
-                    msg = "用户密钥错误，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
-                }else{
-                    msg = "用户密钥错误，账号即将锁定";
-                }
-            }else{
-                msg = "用户密钥错误";
-            }
-            throw new ServerException(msg);
+            throw new ServerException(buildErrorMessage(login.getUsername(), "用户密钥错误"));
         }
     }
 
@@ -328,19 +307,15 @@ public class AuthServiceImpl implements AuthService {
      * @param userName 用户名
      * @param errMsg 错误提示
      */
-    private String countErr(String userName, String errMsg){
-        String msg = "";
-        // 登录失败计数
-        int authCount =loginCount(userName);
+    private String buildErrorMessage(String userName, String errMsg) {
+        int authCount = incrementLoginCount(userName);
         if(authCount > 0 ){
             if((securityProperties.getAuthCount() - authCount) > 0){
-                msg = errMsg + "，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
+                return errMsg + "，" + (securityProperties.getAuthCount() - authCount) + "次失败后锁定账号";
             }else{
-                msg = errMsg + "，账号即将锁定";
+                return errMsg + "，账号即将锁定";
             }
-        }else{
-            msg = errMsg;
         }
-        return msg;
+        return errMsg;
     }
 }

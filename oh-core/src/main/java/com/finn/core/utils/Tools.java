@@ -91,6 +91,9 @@ public class Tools {
         return sb.toString();
     }
 
+    // 使用ThreadLocal存储Random对象，提高并发性能
+    private static final ThreadLocal<Random> RANDOM_THREAD_LOCAL = ThreadLocal.withInitial(Random::new);
+
     /**
      * 生成length个长度随机字符串
      * @param length 长度
@@ -98,7 +101,7 @@ public class Tools {
      */
     public static String getRandom(int length){
         StringBuilder sb = new StringBuilder();
-        Random random = new Random();
+        Random random = RANDOM_THREAD_LOCAL.get();
         // 随机取一位大小写字母、字符和数字，长度4位
         int number = random.nextInt(LOW_LETTER.length());
         sb.append(LOW_LETTER.charAt(number));
@@ -120,7 +123,7 @@ public class Tools {
         String msg = sb.toString();
         String [] str = msg.split("");
         List<String> list = Arrays.asList(str);
-        Collections.shuffle(list); // 随机排序
+        Collections.shuffle(list, random); // 使用同一个随机对象，提高性能
         StringBuilder stringBuilder = new StringBuilder(list.size());
         list.forEach(stringBuilder::append);
         return stringBuilder.toString();

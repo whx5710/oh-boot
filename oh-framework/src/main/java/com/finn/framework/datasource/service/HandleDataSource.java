@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 数据源操作
@@ -29,6 +29,11 @@ import java.util.concurrent.TimeUnit;
 public class HandleDataSource {
 
     private final Logger log = LoggerFactory.getLogger(HandleDataSource.class);
+    
+    // 用于管理监控线程池
+    private final List<ScheduledExecutorService> monitorExecutors = new ArrayList<>();
+    private final AtomicBoolean isShutdown = new AtomicBoolean(false);
+
     /**
      * 组装数据源,
      * 主数据源和系统数据源都为空的情况下，默认第一个数据源
@@ -43,44 +48,57 @@ public class HandleDataSource {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         DataSource masterDataSource = null;
         DataSource sysDataSource = null;
+        
+        // 查找主数据源和系统数据源
         if(dataSourceMap.containsKey(primary)){
             masterDataSource = (DataSource) dataSourceMap.get(primary);
         }
         if(dataSourceMap.containsKey(sysDb)){
             sysDataSource = (DataSource) dataSourceMap.get(sysDb);
         }
+        
+        // 如果没有找到主数据源或系统数据源，使用第一个数据源作为默认
+        if (masterDataSource == null || sysDataSource == null) {
+            for (Map.Entry<Object, Object> entry : dataSourceMap.entrySet()) {
+                DataSource dataSource = (DataSource) entry.getValue();
+                if (masterDataSource == null) {
+                    log.warn("未找到主数据源，默认使用{}数据源", entry.getKey());
+                    masterDataSource = dataSource;
+                    // 如果primary不存在于dataSourceMap中，添加进去
+                    if (!dataSourceMap.containsKey(primary)) {
+                        dataSourceMap.put(primary, dataSource);
+                    }
+                }
+                if (sysDataSource == null) {
+                    log.warn("未找到系统内置数据源，默认使用{}数据源", entry.getKey());
+                    sysDataSource = dataSource;
+                    // 如果sysDb不存在于dataSourceMap中，添加进去
+                    if (!dataSourceMap.containsKey(sysDb)) {
+                        dataSourceMap.put(sysDb, dataSource);
+                    }
+                }
+                if (masterDataSource != null && sysDataSource != null) {
+                    break;
+                }
+            }
+        }
+        
+        // 构建数据源映射
         Map<String, DataSource> dsTmp = new HashMap<>(dataSourceMap.size());
-        for(Map.Entry<Object,Object> item: dataSourceMap.entrySet()){
-            String key = (String) item.getKey();
-            DataSource dataSource = (DataSource) item.getValue();
-            if(masterDataSource == null){
-                log.warn("未找到主数据源，默认使用{}数据源", key);
-                masterDataSource = dataSource;
-                dsTmp.put(primary, dataSource);
-            }
-            if(sysDataSource == null){
-                log.warn("未找到系统内置数据源，默认使用{}数据源", key);
-                sysDataSource = dataSource;
-                dsTmp.put(sysDb, dataSource);
-            }
-            dsTmp.put(key, dataSource);
+        for (Map.Entry<Object, Object> entry : dataSourceMap.entrySet()) {
+            dsTmp.put((String) entry.getKey(), (DataSource) entry.getValue());
         }
-        if(!dataSourceMap.containsKey(primary)){
-            dataSourceMap.put(primary, masterDataSource);
-        }
-        // 系统内置数据源
-        if(!dataSourceMap.containsKey(sysDb)){
-            dataSourceMap.put(sysDb, sysDataSource);
-        }
-        dynamicDataSource.setTargetDataSources(dataSourceMap);
-        // 主数据源
-        dynamicDataSource.setPrimaryDb(masterDataSource);
+        
+        // 验证主数据源
         AssertUtils.isNull(masterDataSource, "数据库连接对象");
+        
+        // 配置动态数据源
+        dynamicDataSource.setTargetDataSources(dataSourceMap);
+        dynamicDataSource.setPrimaryDb(masterDataSource);
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
-        // 将数据源信息备份在 DynamicDataSource 中
         dynamicDataSource.setDynamicDataSources(dsTmp);
-        // mybatis 配置
         dynamicDataSource.setMybatisProperties(mybatisProperties);
+        
         return dynamicDataSource;
     }
 
@@ -99,7 +117,11 @@ public class HandleDataSource {
             throw new ServerException("初始化数据源[" + key + "]连接失败，请检查！");
         }finally {
             if(connection != null){
-                connection.close();
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    log.error("关闭数据源[{}]连接失败！ {}", key, e.getMessage());
+                }
             }
         }
     }
@@ -116,11 +138,18 @@ public class HandleDataSource {
         hikariConfig.setPassword(dataSourceProperty.getPassword()); // 密码
         hikariConfig.setJdbcUrl(dataSourceProperty.getUrl()); // url
         hikariConfig.setDriverClassName(dataSourceProperty.getDriverClassName()); // 驱动
+        
+        // 连接池配置
         hikariConfig.setMinimumIdle(Integer.parseInt(dataSourceProperty.getHikari().getMinIdle())); // 最小连接数
         hikariConfig.setMaximumPoolSize(Integer.parseInt(dataSourceProperty.getHikari().getMaxActive())); // 连接池最大连接数
         hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getHikari().getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
-        hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getHikari().getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+        hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getHikari().getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期
         hikariConfig.setPoolName(key); // 连接池名称
+        
+        // 健康检查配置
+        hikariConfig.setConnectionTestQuery("SELECT 1"); // 连接测试语句
+        hikariConfig.setValidationTimeout(TimeUnit.SECONDS.toMillis(5)); // 验证超时时间
+        
         try{
             HikariDataSource dataSource = new HikariDataSource(hikariConfig);
             // 打印监控日志
@@ -134,46 +163,88 @@ public class HandleDataSource {
     }
 
     /**
-     * 组装Druid连接属性
-     * @param name name
-     * @param dataSourceProperty ds
-     * @return map
-     */
-    /*public DataSource createDruidDS(String name,DataSourceProperty dataSourceProperty) throws Exception {
-        Map<String, String> properties = new HashMap<>();
-        properties.put(DruidDataSourceFactory.PROP_URL, dataSourceProperty.getUrl()); // 地址
-        properties.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, dataSourceProperty.getDriverClassName()); // 驱动名
-        properties.put(DruidDataSourceFactory.PROP_USERNAME, dataSourceProperty.getUsername()); // 用户名
-        properties.put(DruidDataSourceFactory.PROP_PASSWORD, dataSourceProperty.getPassword()); // 密码
-        properties.put(DruidDataSourceFactory.PROP_INITIALSIZE, dataSourceProperty.getDruid().getInitialSize()); // 初始化连接数
-        properties.put(DruidDataSourceFactory.PROP_MINIDLE, dataSourceProperty.getDruid().getMinIdle()); // 最小空闲连接数
-        properties.put(DruidDataSourceFactory.PROP_MAXACTIVE, dataSourceProperty.getDruid().getMaxActive()); // 最大连接数
-        properties.put(DruidDataSourceFactory.PROP_MAXWAIT, dataSourceProperty.getDruid().getMaxWait()); // 获取连接时的最大等待时间，单位为毫秒
-        properties.put(DruidDataSourceFactory.PROP_FILTERS, dataSourceProperty.getDruid().getFilters());
-        // 连接属性，慢SQL
-        properties.put(DruidDataSourceFactory.PROP_CONNECTIONPROPERTIES, dataSourceProperty.getDruid().getConnectionProperties());
-        properties.put(DruidDataSourceFactory.PROP_NAME, name); // 名称
-        return DruidDataSourceFactory.createDataSource(properties);
-    }*/
-
-
-
-    /**
      * 连接池配置指标监控
      * @param dataSource 连接对象
      */
     private void hikariMonitor(String name, HikariDataSource dataSource) {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setName("hikari-monitor-" + name);
+            t.setDaemon(true);
+            return t;
+        });
+        
+        monitorExecutors.add(executor);
+        
         executor.scheduleAtFixedRate(() -> {
-            HikariPoolMXBean hikariPoolMXBean = dataSource.getHikariPoolMXBean();
-            if (null != hikariPoolMXBean) {
-                log.info("{} - 连接总数:{}, 活跃连接数:{}, 空闲连接数:{}, 等待连接数:{}",
-                        name,
-                        hikariPoolMXBean.getTotalConnections(),
-                        hikariPoolMXBean.getActiveConnections(),
-                        hikariPoolMXBean.getIdleConnections(),
-                        hikariPoolMXBean.getThreadsAwaitingConnection());
+            if (isShutdown.get()) {
+                executor.shutdown();
+                return;
+            }
+            
+            try {
+                HikariPoolMXBean hikariPoolMXBean = dataSource.getHikariPoolMXBean();
+                if (null != hikariPoolMXBean) {
+                    log.info("{} - 连接总数:{}, 活跃连接数:{}, 空闲连接数:{}, 等待连接数:{}",
+                            name,
+                            hikariPoolMXBean.getTotalConnections(),
+                            hikariPoolMXBean.getActiveConnections(),
+                            hikariPoolMXBean.getIdleConnections(),
+                            hikariPoolMXBean.getThreadsAwaitingConnection());
+                }
+            } catch (Exception e) {
+                log.error("监控数据源[{}]连接池失败！ {}", name, e.getMessage());
             }
         }, 10, 30, TimeUnit.SECONDS);
+    }
+    
+    /**
+     * 关闭所有监控线程池
+     */
+    public void shutdown() {
+        if (isShutdown.compareAndSet(false, true)) {
+            log.info("关闭数据源监控线程池...");
+            for (ScheduledExecutorService executor : monitorExecutors) {
+                try {
+                    executor.shutdown();
+                    if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                        executor.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    log.error("关闭监控线程池时发生中断: {}", e.getMessage());
+                    executor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            }
+            monitorExecutors.clear();
+            log.info("数据源监控线程池已关闭");
+        }
+    }
+    
+    /**
+     * 健康检查数据源连接
+     * @param dataSource 数据源
+     * @param key 数据源名称
+     * @return 是否健康
+     */
+    public boolean healthCheck(DataSource dataSource, String key) {
+        Connection connection = null;
+        try {
+            log.debug("健康检查数据源[{}]连接", key);
+            connection = dataSource.getConnection();
+            log.debug("数据源[{}]连接健康", key);
+            return true;
+        } catch (Exception e) {
+            log.error("数据源[{}]连接不健康: {}", key, e.getMessage());
+            return false;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    log.error("关闭健康检查连接失败: {}", e.getMessage());
+                }
+            }
+        }
     }
 }

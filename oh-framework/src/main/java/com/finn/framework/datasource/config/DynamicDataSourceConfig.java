@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.EventListener;
 
 import javax.sql.DataSource;
 import java.util.LinkedHashMap;
@@ -56,21 +59,6 @@ public class DynamicDataSourceConfig extends HandleDataSource {
             if(dataSourceProperty.getHikari().getCheckConnection()){
                 checkDs(ds, key);
             }
-            /*if(dataSourceProperty.getHikari() != null){
-                log.debug("初始化 {} 数据源 {}连接池", key, "Hikari");
-                ds = createHikariDS(key, dataSourceProperty);
-                // 校验数据库连接是否正常
-                if(dataSourceProperty.getHikari().getCheckConnection()){
-                    checkDs(ds, key);
-                }
-            }else{
-                log.debug("初始化 {} 数据源 {}连接池.", key, "Druid");
-                ds = createDruidDS(key, dataSourceProperty);
-                // 校验数据库连接是否正常
-                if(dataSourceProperty.getDruid().getCheckConnection()){
-                    checkDs(ds, key);
-                }
-            }*/
             dataSourceMap.put(key, ds);
         }
         // 主数据源key
@@ -79,5 +67,46 @@ public class DynamicDataSourceConfig extends HandleDataSource {
         String sysDb = dynamicDataSourceProperties.getSysDataSource().getSysDefault();
         // 组装数据源
         return buildDs(dataSourceMap, primary, sysDb, mybatisProperties);
+    }
+    
+    /**
+     * 应用关闭时清理资源
+     */
+    @EventListener(ContextClosedEvent.class)
+    public void onContextClosed() {
+        log.info("应用关闭，清理数据源资源...");
+        shutdown();
+        log.info("数据源资源清理完成");
+    }
+    
+    /**
+     * 健康检查组件
+     * @return 健康检查服务
+     */
+    @Bean
+    @DependsOn("dynamicDataSource")
+    public DataSourceHealthChecker dataSourceHealthChecker() {
+        return new DataSourceHealthChecker(this);
+    }
+    
+    /**
+     * 数据源健康检查服务
+     */
+    public static class DataSourceHealthChecker {
+        private final HandleDataSource handleDataSource;
+        
+        public DataSourceHealthChecker(HandleDataSource handleDataSource) {
+            this.handleDataSource = handleDataSource;
+        }
+        
+        /**
+         * 检查数据源健康状态
+         * @param dataSource 数据源
+         * @param key 数据源名称
+         * @return 是否健康
+         */
+        public boolean checkHealth(DataSource dataSource, String key) {
+            return handleDataSource.healthCheck(dataSource, key);
+        }
     }
 }

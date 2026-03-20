@@ -29,6 +29,11 @@ public class Result<T> {
      */
     private T data;
 
+    /**
+     * 异常追踪ID
+     */
+    private String traceId;
+
     public int getCode() {
         return code;
     }
@@ -61,6 +66,14 @@ public class Result<T> {
         this.data = data;
     }
 
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
+    }
+
     public static <T> Result<T> ok() {
         return ok(null);
     }
@@ -89,6 +102,15 @@ public class Result<T> {
         result.setCode(code);
         result.setMsg(msg);
         result.setSuccess(false);
+        return result;
+    }
+
+    public static <T> Result<T> error(int code, String msg, String traceId) {
+        Result<T> result = new Result<>();
+        result.setCode(code);
+        result.setMsg(msg);
+        result.setSuccess(false);
+        result.setTraceId(traceId);
         return result;
     }
 }

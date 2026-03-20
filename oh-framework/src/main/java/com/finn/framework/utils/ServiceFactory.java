@@ -20,8 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ServiceFactory {
 
-    // 上下文
-    private static ApplicationContext ac;
+    // 上下文，使用volatile保证可见性
+    private static volatile ApplicationContext ac;
 
     private final static Logger log = LoggerFactory.getLogger(ServiceFactory.class);
 
@@ -96,8 +96,13 @@ public class ServiceFactory {
      * @param <T> t
      */
     public static <T>  T getBean(String beanName, Class<T> clazz) {
+        ApplicationContext context = ac;
+        if (context == null) {
+            log.error("ApplicationContext未初始化");
+            return null;
+        }
         try {
-            return ac.getBean(beanName, clazz);
+            return context.getBean(beanName, clazz);
         }catch (NoSuchBeanDefinitionException e){
             log.error("根据名称【{}】未找到对应的Bean.{}",beanName, e.getMessage());
             return null;
@@ -110,14 +115,24 @@ public class ServiceFactory {
      * @return map
      */
     public static Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> annotationType){
-        return ac.getBeansWithAnnotation(annotationType);
+        ApplicationContext context = ac;
+        if (context == null) {
+            log.error("ApplicationContext未初始化");
+            return new ConcurrentHashMap<>();
+        }
+        return context.getBeansWithAnnotation(annotationType);
     }
 
     /**
      * 设置上下文
      * @param applicationContext a
      */
-    public static void setApplicationContext(ApplicationContext applicationContext){
-        ac = applicationContext;
+    public static synchronized void setApplicationContext(ApplicationContext applicationContext){
+        if (ac == null) {
+            ac = applicationContext;
+            log.info("ApplicationContext初始化成功");
+        } else {
+            log.warn("ApplicationContext已经初始化，忽略重复设置");
+        }
     }
 }

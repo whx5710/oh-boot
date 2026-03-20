@@ -70,7 +70,6 @@ finn:
     lock-time: 3600                 # 账号锁定时间(秒)
     ignore-urls:                    # 忽略鉴权的url
       - /doc/**
-      - /druid/**
   open-api:
     type: 2 # 1直接保存 2使用MQ异步保存，默认直接保存
     auto-start-up: false # Kafka监听是否开启,默认不开启false
@@ -108,26 +107,8 @@ spring:
           maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
-        druid:
-          initialSize: 10
-          minIdle: 10
-          maxActive: 100
-          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
-          filters: wall,stat # druid监控
-          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-          checkConnection: true # 初始化时是否检查连接，默认false
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
-    druid: # 使用Hikari连接池，监控无效
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        login-username: admin
-        login-password: admin # 正式环境需配置复杂密码
-      web-stat-filter: # Druid Web统计过滤器配置
-        enabled: true # 启用Web统计过滤器
-        session-stat-enable: true # 启用会话统计功能
-        session-stat-max-count: 1000 # 最大会话统计数量
 # 日志信息
 logging:
   # 字符集设置
