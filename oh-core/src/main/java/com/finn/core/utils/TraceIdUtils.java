@@ -1,7 +1,5 @@
 package com.finn.core.utils;
 
-import java.util.UUID;
-
 /**
  * TraceId工具类
  * 用于生成和管理全局的traceId，确保整个请求链路都有相同的traceId

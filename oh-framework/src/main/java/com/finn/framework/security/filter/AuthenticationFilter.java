@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.finn.framework.security.cache.TokenStoreCache;
 import com.finn.framework.security.user.UserDetail;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +32,7 @@ import java.io.IOException;
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
 
-    private final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
+    private final static Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
     private final TokenStoreCache tokenStoreCache;
     private final MultiTenantProperties multiTenantProperties;
 
@@ -41,7 +42,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain chain) throws ServletException, IOException {
         String accessToken = Tools.getAccessToken(request);
         // accessToken为空-未登录
         if (accessToken == null || accessToken.isEmpty()) {
