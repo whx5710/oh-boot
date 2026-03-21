@@ -6,6 +6,8 @@ import com.finn.system.generator.dto.ColumnInfo;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,11 @@ public class CodeGenerator {
 
     public static class GeneratorConfig {
         public static final String BASE_PACKAGE = "com.finn";
+        public static final String MODULE_NAME = "oh-system";
+        public static final String TABLE_PREFIX = "t_";
         public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".system";
+        public static final String AUTHOR = "王小费 whx5710@qq.com";
+
         public static final String FRAMEWORK_PACKAGE = BASE_PACKAGE + ".framework";
         public static final String CORE_PACKAGE = BASE_PACKAGE + ".core";
         
@@ -38,8 +44,7 @@ public class CodeGenerator {
         public static final String SERVICE_PACKAGE = SYSTEM_PACKAGE + ".service";
         public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";
         public static final String CONTROLLER_PACKAGE = SYSTEM_PACKAGE + ".controller";
-        
-        public static final String AUTHOR = "王小费 whx5710@qq.com";
+
         
         public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".datasource.annotations.TableName";
         public static final String TENANT_ENTITY = FRAMEWORK_PACKAGE + ".entity.TenantEntity";
@@ -61,7 +66,6 @@ public class CodeGenerator {
         public static final String VALIDATED = "org.springframework.validation.annotation.Validated";
         public static final String TRANSACTIONAL = "org.springframework.transaction.annotation.Transactional";
         
-        public static final String MODULE_NAME = "oh-system";
         public static final String JAVA_SOURCE_PATH = "/src/main/java/";
         public static final String RESOURCES_PATH = "/src/main/resources/";
         public static final String MAPPER_PATH = RESOURCES_PATH + "mapper/";
@@ -104,6 +108,10 @@ public class CodeGenerator {
         
         public static String getMapperXmlPath() {
             return MAPPER_PATH;
+        }
+        
+        public static String getGenerateDate() {
+            return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
     }
 
@@ -163,7 +171,7 @@ public class CodeGenerator {
      */
     private List<ColumnInfo> getColumnInfos(Connection connection, String tableName) throws SQLException {
         List<ColumnInfo> columnInfos = new ArrayList<>();
-        String sql = "DESCRIBE " + tableName;
+        String sql = "SHOW FULL COLUMNS FROM " + tableName;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
@@ -183,12 +191,23 @@ public class CodeGenerator {
      * 转换表名为实体名
      */
     private String convertToEntityName(String tableName) {
+        String actualTableName = tableName;
+        if (tableName.startsWith(GeneratorConfig.TABLE_PREFIX)) {
+            actualTableName = tableName.substring(GeneratorConfig.TABLE_PREFIX.length());
+        }
         StringBuilder sb = new StringBuilder();
-        String[] parts = tableName.split("_");
+        String[] parts = actualTableName.split("_");
         for (String part : parts) {
             sb.append(part.substring(0, 1).toUpperCase()).append(part.substring(1));
         }
         return sb.toString();
+    }
+
+    private String getTableNameWithoutPrefix(String tableName) {
+        if (tableName.startsWith(GeneratorConfig.TABLE_PREFIX)) {
+            return tableName.substring(GeneratorConfig.TABLE_PREFIX.length());
+        }
+        return tableName;
     }
 
     /**
@@ -251,6 +270,7 @@ public class CodeGenerator {
         sb.append(" * " + tableInfo.getTableComment() + "\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("@TableName(\"" + tableInfo.getTableName() + "\")\n");
@@ -258,7 +278,10 @@ public class CodeGenerator {
         
         // 生成字段
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
+            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") 
+                && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") 
+                && !column.getColumnName().equals("db_status") && !column.getColumnName().equals("creator")
+                && !column.getColumnName().equals("updater")) {
                 sb.append("    /**\n");
                 sb.append("     * " + (column.getColumnComment() != null ? column.getColumnComment() : column.getColumnName()) + "\n");
                 sb.append("     */\n");
@@ -268,7 +291,10 @@ public class CodeGenerator {
         
         // 生成getter和setter
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
+            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") 
+                && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") 
+                && !column.getColumnName().equals("db_status") && !column.getColumnName().equals("creator")
+                && !column.getColumnName().equals("updater")) {
                 sb.append("    public " + column.getJavaType() + " get" + column.getJavaFieldName().substring(0, 1).toUpperCase() + column.getJavaFieldName().substring(1) + "() {\n");
                 sb.append("        return " + column.getJavaFieldName() + ";\n");
                 sb.append("    }\n\n");
@@ -291,21 +317,20 @@ public class CodeGenerator {
         sb.append("import " + GeneratorConfig.PAGES_ANNOTATION + ";\n");
         sb.append("import " + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + ";\n");
         sb.append("import " + GeneratorConfig.QUERY_PACKAGE + "." + tableInfo.getQueryName() + ";\n");
+        sb.append("import com.finn.framework.datasource.mapper.BaseMapper;\n");
         sb.append("import org.apache.ibatis.annotations.Mapper;\n\n");
         sb.append("import java.util.List;\n\n");
         sb.append("/**\n");
         sb.append(" * " + tableInfo.getTableComment() + "\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" * \n");
         sb.append(" */\n");
         sb.append("@Mapper\n");
-        sb.append("public interface " + tableInfo.getMapperName() + " {\n\n");
+        sb.append("public interface " + tableInfo.getMapperName() + " extends BaseMapper<" + tableInfo.getEntityName() + "> {\n");
         sb.append("    @Pages\n");
-        sb.append("    List<" + tableInfo.getEntityName() + "> getList(" + tableInfo.getQueryName() + " query);\n\n");
-        sb.append("    boolean updateById(" + tableInfo.getEntityName() + " entity);\n\n");
-        sb.append("    // @Options(useGeneratedKeys = true, keyProperty = \"id\", keyColumn = \"id\") // 回写ID\n");
-        sb.append("    int insert(" + tableInfo.getEntityName() + " entity);\n");
+        sb.append("    List<" + tableInfo.getEntityName() + "> getList(" + tableInfo.getQueryName() + " query);\n");
         sb.append("}\n");
         return sb.toString();
     }
@@ -321,6 +346,7 @@ public class CodeGenerator {
         sb.append(" * " + tableInfo.getTableComment() + "查询\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("public class " + tableInfo.getQueryName() + " extends Query {\n");
@@ -370,6 +396,7 @@ public class CodeGenerator {
         sb.append(" * " + tableInfo.getTableComment() + "\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("public class " + tableInfo.getVoName() + " implements Serializable {\n");
@@ -433,18 +460,18 @@ public class CodeGenerator {
         sb.append("package " + GeneratorConfig.CONVERT_PACKAGE + ";\n\n");
         sb.append("import " + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + ";\n");
         sb.append("import " + GeneratorConfig.VO_PACKAGE + "." + tableInfo.getVoName() + ";\n");
-        sb.append("import org.mapstruct.DecoratedWith;\n");
+        // sb.append("import org.mapstruct.DecoratedWith;\n");
         sb.append("import org.mapstruct.Mapper;\n");
         sb.append("import org.mapstruct.factory.Mappers;\n\n");
         sb.append("import java.util.List;\n\n");
         sb.append("/**\n");
         sb.append(" * " + tableInfo.getTableComment() + "\n");
-        sb.append(" * @since 1.0.0 2023-10-03\n");
+        sb.append(" * @since 1.0.0 " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("@Mapper\n");
-        sb.append("@DecoratedWith(" + tableInfo.getExtConvertName() + ".class) // 指定实现类\n");
+        // sb.append("@DecoratedWith(" + tableInfo.getExtConvertName() + ".class) // 指定实现类\n");
         sb.append("public interface " + tableInfo.getConvertName() + " {\n\n");
         sb.append("    " + tableInfo.getConvertName() + " INSTANCE = Mappers.getMapper(" + tableInfo.getConvertName() + ".class);\n\n");
         sb.append("    " + tableInfo.getEntityName() + " convert(" + tableInfo.getVoName() + " vo);\n\n");
@@ -457,34 +484,35 @@ public class CodeGenerator {
     /**
      * 生成ExtConvert装饰器类代码
      */
-    public String generateExtConvert(TableInfo tableInfo) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("package " + GeneratorConfig.CONVERT_PACKAGE + ";\n\n");
-        sb.append("import " + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + ";\n");
-        sb.append("import " + GeneratorConfig.VO_PACKAGE + "." + tableInfo.getVoName() + ";\n\n");
-        sb.append("import java.util.List;\n\n");
-        sb.append("/**\n");
-        sb.append(" * " + tableInfo.getTableComment() + "扩展转换\n");
-        sb.append(" *\n");
-        sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
-        sb.append(" *\n");
-        sb.append(" */\n");
-        sb.append("public abstract class " + tableInfo.getExtConvertName() + " implements " + tableInfo.getConvertName() + " {\n\n");
-        sb.append("    @Override\n");
-        sb.append("    public " + tableInfo.getVoName() + " convert(" + tableInfo.getEntityName() + " entity) {\n");
-        sb.append("        " + tableInfo.getVoName() + " vo = " + tableInfo.getConvertName() + ".INSTANCE.convert(entity);\n");
-        sb.append("        // 扩展转换逻辑\n");
-        sb.append("        return vo;\n");
-        sb.append("    }\n\n");
-        sb.append("    @Override\n");
-        sb.append("    public List<" + tableInfo.getVoName() + "> convertList(List<" + tableInfo.getEntityName() + "> list) {\n");
-        sb.append("        List<" + tableInfo.getVoName() + "> voList = " + tableInfo.getConvertName() + ".INSTANCE.convertList(list);\n");
-        sb.append("        // 扩展转换逻辑\n");
-        sb.append("        return voList;\n");
-        sb.append("    }\n\n");
-        sb.append("}\n");
-        return sb.toString();
-    }
+    // public String generateExtConvert(TableInfo tableInfo) {
+    //     StringBuilder sb = new StringBuilder();
+    //     sb.append("package " + GeneratorConfig.CONVERT_PACKAGE + ";\n\n");
+    //     sb.append("import " + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + ";\n");
+    //     sb.append("import " + GeneratorConfig.VO_PACKAGE + "." + tableInfo.getVoName() + ";\n\n");
+    //     sb.append("import java.util.List;\n\n");
+    //     sb.append("/**\n");
+    //     sb.append(" * " + tableInfo.getTableComment() + "扩展转换\n");
+    //     sb.append(" *\n");
+    //     sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+    //     sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
+    //     sb.append(" *\n");
+    //     sb.append(" */\n");
+    //     sb.append("public abstract class " + tableInfo.getExtConvertName() + " implements " + tableInfo.getConvertName() + " {\n\n");
+    //     sb.append("    @Override\n");
+    //     sb.append("    public " + tableInfo.getVoName() + " convert(" + tableInfo.getEntityName() + " entity) {\n");
+    //     sb.append("        " + tableInfo.getVoName() + " vo = " + tableInfo.getConvertName() + ".INSTANCE.convert(entity);\n");
+    //     sb.append("        // 扩展转换逻辑\n");
+    //     sb.append("        return vo;\n");
+    //     sb.append("    }\n\n");
+    //     sb.append("    @Override\n");
+    //     sb.append("    public List<" + tableInfo.getVoName() + "> convertList(List<" + tableInfo.getEntityName() + "> list) {\n");
+    //     sb.append("        List<" + tableInfo.getVoName() + "> voList = " + tableInfo.getConvertName() + ".INSTANCE.convertList(list);\n");
+    //     sb.append("        // 扩展转换逻辑\n");
+    //     sb.append("        return voList;\n");
+    //     sb.append("    }\n\n");
+    //     sb.append("}\n");
+    //     return sb.toString();
+    // }
 
     /**
      * 生成Service接口代码
@@ -500,6 +528,7 @@ public class CodeGenerator {
         sb.append(" * " + tableInfo.getTableComment() + "\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("public interface " + tableInfo.getServiceName() + " {\n\n");
@@ -530,6 +559,7 @@ public class CodeGenerator {
         sb.append(" * " + tableInfo.getTableComment() + "\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("@Service\n");
@@ -588,10 +618,15 @@ public class CodeGenerator {
         sb.append(" * " + tableInfo.getTableComment() + "\n");
         sb.append(" *\n");
         sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
+        sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
         sb.append(" * \n");
         sb.append(" */\n");
         sb.append("@RestController\n");
-        sb.append("@RequestMapping(\"sys/" + tableInfo.getTableName().replace("sys_", "") + ")\n");
+        String requestMappingPath = tableInfo.getTableName();
+        if (requestMappingPath.startsWith(GeneratorConfig.TABLE_PREFIX)) {
+            requestMappingPath = requestMappingPath.substring(GeneratorConfig.TABLE_PREFIX.length());
+        }
+        sb.append("@RequestMapping(\"sys/" + requestMappingPath + "\")\n");
         sb.append("public class " + tableInfo.getControllerName() + " {\n");
         sb.append("    private final " + tableInfo.getServiceName() + " " + tableInfo.getServiceName().substring(0, 1).toLowerCase() + tableInfo.getServiceName().substring(1) + ";\n\n");
         sb.append("    public " + tableInfo.getControllerName() + "(" + tableInfo.getServiceName() + " " + tableInfo.getServiceName().substring(0, 1).toLowerCase() + tableInfo.getServiceName().substring(1) + ") {\n");
@@ -603,7 +638,7 @@ public class CodeGenerator {
         sb.append("     * @return 列表\n");
         sb.append("     */\n");
         sb.append("    @GetMapping(\"page\")\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + tableInfo.getTableName().replace("sys_", "") + ":page')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + getTableNameWithoutPrefix(tableInfo.getTableName()) + ":page')\")\n");
         sb.append("    public Result<PageResult<" + tableInfo.getVoName() + ">> page(@Valid " + tableInfo.getQueryName() + " query) {\n");
         sb.append("        PageResult<" + tableInfo.getVoName() + "> page = " + tableInfo.getServiceName().substring(0, 1).toLowerCase() + tableInfo.getServiceName().substring(1) + ".page(query);\n\n");
         sb.append("        return Result.ok(page);\n");
@@ -615,7 +650,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PostMapping\n");
         sb.append("    @Log(module = \"" + tableInfo.getTableComment() + "\", name = \"保存\", type = OperateTypeEnum.INSERT)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + tableInfo.getTableName().replace("sys_", "") + ":save')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + getTableNameWithoutPrefix(tableInfo.getTableName()) + ":save')\")\n");
         sb.append("    public Result<String> save(@RequestBody " + tableInfo.getVoName() + " vo) {\n");
         sb.append("        Long id = " + tableInfo.getServiceName().substring(0, 1).toLowerCase() + tableInfo.getServiceName().substring(1) + ".save(vo);\n");
         sb.append("        return Result.ok(String.valueOf(id));\n");
@@ -627,7 +662,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PutMapping\n");
         sb.append("    @Log(module = \"" + tableInfo.getTableComment() + "\", name = \"修改\", type = OperateTypeEnum.UPDATE)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + tableInfo.getTableName().replace("sys_", "") + ":update')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + getTableNameWithoutPrefix(tableInfo.getTableName()) + ":update')\")\n");
         sb.append("    public Result<String> update(@RequestBody " + tableInfo.getVoName() + " vo) {\n");
         sb.append("        " + tableInfo.getServiceName().substring(0, 1).toLowerCase() + tableInfo.getServiceName().substring(1) + ".update(vo);\n");
         sb.append("        return Result.ok();\n");
@@ -639,7 +674,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PostMapping(\"/del\")\n");
         sb.append("    @Log(module = \"" + tableInfo.getTableComment() + "\", name = \"删除\", type = OperateTypeEnum.DELETE)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + tableInfo.getTableName().replace("sys_", "") + ":delete')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('sys:" + getTableNameWithoutPrefix(tableInfo.getTableName()) + ":delete')\")\n");
         sb.append("    public Result<String> delete(@RequestBody List<Long> idList) {\n");
         sb.append("        " + tableInfo.getServiceName().substring(0, 1).toLowerCase() + tableInfo.getServiceName().substring(1) + ".delete(idList);\n\n");
         sb.append("        return Result.ok();\n");
@@ -653,84 +688,43 @@ public class CodeGenerator {
      */
     public String generateMapperXml(TableInfo tableInfo) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
-        sb.append("<mapper namespace=\"" + GeneratorConfig.MAPPER_PACKAGE + "." + tableInfo.getMapperName() + "\">");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n");
+        sb.append("<mapper namespace=\"" + GeneratorConfig.MAPPER_PACKAGE + "." + tableInfo.getMapperName() + "\">\n");
         sb.append("    <resultMap id=\"BaseResultMap\" type=\"" + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + "\">");
-        sb.append("        <id property=\"id\" column=\"id\" />");
+        sb.append("        <id property=\"id\" column=\"id\" />\n");
         for (ColumnInfo column : tableInfo.getColumns()) {
             if (!column.getColumnName().equals("id")) {
-                sb.append("        <result property=\"").append(column.getJavaFieldName()).append("\" column=\"").append(column.getColumnName()).append("\" />");
+                sb.append("        <result property=\"").append(column.getJavaFieldName()).append("\" column=\"").append(column.getColumnName()).append("\" />\n");
             }
         }
-        sb.append("    </resultMap>");
-        sb.append("    <sql id=\"Base_Column_List\">");
-        sb.append("        id");
+        sb.append("    </resultMap>\n");
+        sb.append("    <sql id=\"Base_Column_List\">\n");
+        sb.append("        id\n");
         for (ColumnInfo column : tableInfo.getColumns()) {
             if (!column.getColumnName().equals("id")) {
-                sb.append(", " + column.getColumnName());
+                sb.append("        , ").append(column.getColumnName()).append("\n");
             }
         }
-        sb.append("    </sql>");
-        sb.append("    <select id=\"getList\" resultMap=\"BaseResultMap\">");
-        sb.append("        select");
-        sb.append("        <include refid=\"Base_Column_List\" />");
-        sb.append("        from " + tableInfo.getTableName());
-        sb.append("        where db_status = 1");
+        sb.append("    </sql>\n");
+        sb.append("    <select id=\"getList\" resultMap=\"BaseResultMap\">\n");
+        sb.append("        select\n");
+        sb.append("        <include refid=\"Base_Column_List\" />\n");
+        sb.append("        from ").append(tableInfo.getTableName()).append("\n");
+        sb.append("        where db_status = 1\n");
         for (ColumnInfo column : tableInfo.getColumns()) {
             if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
-                sb.append("        <if test=\"" + column.getJavaFieldName() + " != null");
+                sb.append("        <if test=\"").append(column.getJavaFieldName()).append(" != null");
                 if (column.getJavaType().equals("String")) {
-                    sb.append(" and " + column.getJavaFieldName() + " != ''");
+                    sb.append(" and ").append(column.getJavaFieldName()).append(" != ''");
                 }
-                sb.append("\">");
-                sb.append("            and " + column.getColumnName() + " = #{");
-                sb.append(column.getJavaFieldName());
-                sb.append("}");
-                sb.append("        </if>");
+                sb.append("\">\n");
+                sb.append("            and ").append(column.getColumnName()).append(" = #{").append(column.getJavaFieldName()).append("}\n");
+                sb.append("        </if>\n");
             }
         }
-        sb.append("        order by create_time desc");
-        sb.append("    </select>");
-        sb.append("    <insert id=\"insert\" parameterType=\"" + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + "\">");
-        sb.append("        insert into " + tableInfo.getTableName());
-        sb.append("        <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
-        for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
-                sb.append("            <if test=\"" + column.getJavaFieldName() + " != null\">" + column.getColumnName() + ",</if>");
-            }
-        }
-        sb.append("            create_time,");
-        sb.append("            update_time,");
-        sb.append("            db_status");
-        sb.append("        </trim>");
-        sb.append("        <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">");
-        for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
-                sb.append("            <if test=\"" + column.getJavaFieldName() + " != null\">#{");
-                sb.append(column.getJavaFieldName());
-                sb.append("},</if>");
-            }
-        }
-        sb.append("            now(),");
-        sb.append("            now(),");
-        sb.append("            1");
-        sb.append("        </trim>");
-        sb.append("    </insert>");
-        sb.append("    <update id=\"updateById\" parameterType=\"" + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + "\">");
-        sb.append("        update " + tableInfo.getTableName());
-        sb.append("        <set>");
-        for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time")) {
-                sb.append("            <if test=\"" + column.getJavaFieldName() + " != null\">" + column.getColumnName() + " = #{");
-                sb.append(column.getJavaFieldName());
-                sb.append("},</if>");
-            }
-        }
-        sb.append("            update_time = now()");
-        sb.append("        </set>");
-        sb.append("        where id = #{id}");
-        sb.append("    </update>");
+        sb.append("        order by create_time desc\n");
+        sb.append("    </select>\n");
         sb.append("</mapper>");
         return sb.toString();
     }

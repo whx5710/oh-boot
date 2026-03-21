@@ -3,10 +3,7 @@ package com.finn.system.controller;
 import com.finn.core.utils.Result;
 import com.finn.system.generator.CodeGenerator;
 import com.finn.system.generator.dto.TableInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +17,7 @@ import java.sql.SQLException;
  * 
  */
 @RestController
-@RequestMapping("sys/code-generator")
+@RequestMapping("sys/code")
 public class CodeGeneratorController {
 
     private final CodeGenerator codeGenerator;
@@ -36,8 +33,8 @@ public class CodeGeneratorController {
      * @param tableName 表名
      * @return 提示信息
      */
-    @PostMapping("generate")
-    public Result<String> generate(@RequestBody String tableName) {
+    @GetMapping("/generate/{tableName}")
+    public Result<String> generate(@PathVariable String tableName) {
         try {
             TableInfo tableInfo = codeGenerator.getTableInfo(tableName);
             
@@ -55,9 +52,6 @@ public class CodeGeneratorController {
             
             generateFile(basePath + CodeGenerator.GeneratorConfig.getConvertPath() + "/" + tableInfo.getConvertName() + ".java",
                     codeGenerator.generateConvert(tableInfo));
-            
-            generateFile(basePath + CodeGenerator.GeneratorConfig.getConvertPath() + "/" + tableInfo.getExtConvertName() + ".java",
-                    codeGenerator.generateExtConvert(tableInfo));
             
             generateFile(basePath + CodeGenerator.GeneratorConfig.getServicePath() + "/" + tableInfo.getServiceName() + ".java",
                     codeGenerator.generateService(tableInfo));
