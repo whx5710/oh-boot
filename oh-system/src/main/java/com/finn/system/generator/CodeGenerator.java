@@ -1,13 +1,13 @@
 package com.finn.system.generator;
 
+import com.finn.core.utils.DateUtils;
 import com.finn.framework.datasource.config.DynamicDataSource;
 import com.finn.system.generator.dto.TableInfo;
 import com.finn.system.generator.dto.ColumnInfo;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,6 @@ public class CodeGenerator {
         public static final String SERVICE_PACKAGE = SYSTEM_PACKAGE + ".service";
         public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";
         public static final String CONTROLLER_PACKAGE = SYSTEM_PACKAGE + ".controller";
-
         
         public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".datasource.annotations.TableName";
         public static final String TENANT_ENTITY = FRAMEWORK_PACKAGE + ".entity.TenantEntity";
@@ -99,7 +98,7 @@ public class CodeGenerator {
         }
         
         public static String getGenerateDate() {
-            return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return DateUtils.format(LocalDateTime.now());
         }
     }
 
@@ -464,39 +463,6 @@ public class CodeGenerator {
                 "    List<" + tableInfo.getVoName() + "> convertList(List<" + tableInfo.getEntityName() + "> list);\n\n" +
                 "}\n";
     }
-
-    /**
-     * 生成ExtConvert装饰器类代码
-     */
-    // public String generateExtConvert(TableInfo tableInfo) {
-    //     StringBuilder sb = new StringBuilder();
-    //     sb.append("package " + GeneratorConfig.CONVERT_PACKAGE + ";\n\n");
-    //     sb.append("import " + GeneratorConfig.ENTITY_PACKAGE + "." + tableInfo.getEntityName() + ";\n");
-    //     sb.append("import " + GeneratorConfig.VO_PACKAGE + "." + tableInfo.getVoName() + ";\n\n");
-    //     sb.append("import java.util.List;\n\n");
-    //     sb.append("/**\n");
-    //     sb.append(" * " + tableInfo.getTableComment() + "扩展转换\n");
-    //     sb.append(" *\n");
-    //     sb.append(" * @author " + GeneratorConfig.AUTHOR + "\n");
-    //     sb.append(" * @since " + GeneratorConfig.getGenerateDate() + "\n");
-    //     sb.append(" *\n");
-    //     sb.append(" */\n");
-    //     sb.append("public abstract class " + tableInfo.getExtConvertName() + " implements " + tableInfo.getConvertName() + " {\n\n");
-    //     sb.append("    @Override\n");
-    //     sb.append("    public " + tableInfo.getVoName() + " convert(" + tableInfo.getEntityName() + " entity) {\n");
-    //     sb.append("        " + tableInfo.getVoName() + " vo = " + tableInfo.getConvertName() + ".INSTANCE.convert(entity);\n");
-    //     sb.append("        // 扩展转换逻辑\n");
-    //     sb.append("        return vo;\n");
-    //     sb.append("    }\n\n");
-    //     sb.append("    @Override\n");
-    //     sb.append("    public List<" + tableInfo.getVoName() + "> convertList(List<" + tableInfo.getEntityName() + "> list) {\n");
-    //     sb.append("        List<" + tableInfo.getVoName() + "> voList = " + tableInfo.getConvertName() + ".INSTANCE.convertList(list);\n");
-    //     sb.append("        // 扩展转换逻辑\n");
-    //     sb.append("        return voList;\n");
-    //     sb.append("    }\n\n");
-    //     sb.append("}\n");
-    //     return sb.toString();
-    // }
 
     /**
      * 生成Service接口代码
