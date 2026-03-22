@@ -1,4 +1,4 @@
-package com.finn.core.utils;
+package com.finn.core.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.util.List;
  * 分页工具类
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
 public class PageResult<T> implements Serializable {
     @Serial

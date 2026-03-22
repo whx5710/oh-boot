@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.system.entity.ScheduleJobLogEntity;
 import com.finn.system.query.ScheduleJobLogQuery;
 import com.finn.system.vo.ScheduleJobLogVO;

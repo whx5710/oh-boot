@@ -1,6 +1,6 @@
 package com.finn.system.controller;
 
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import com.finn.system.generator.CodeGenerator;
 import com.finn.system.generator.dto.TableInfo;
 import org.springframework.web.bind.annotation.*;

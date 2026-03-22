@@ -4,7 +4,7 @@ import com.finn.core.constant.Constant;
 import com.finn.core.entity.HashDto;
 import com.finn.core.utils.DateUtils;
 import com.finn.core.utils.HttpUtil;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.utils.ListenerHandler;

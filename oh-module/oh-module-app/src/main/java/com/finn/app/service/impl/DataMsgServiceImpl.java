@@ -2,6 +2,8 @@ package com.finn.app.service.impl;
 
 import com.finn.app.convert.DataMsgConvert;
 import com.finn.core.entity.HashDto;
+import com.finn.core.entity.PageResult;
+import com.finn.core.entity.Result;
 import com.finn.core.utils.*;
 import com.finn.framework.datasource.utils.UpdateWrapper;
 import com.github.pagehelper.Page;

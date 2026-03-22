@@ -3,7 +3,7 @@ package com.finn.system.controller;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.Tools;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import com.finn.framework.utils.annotations.Idempotent;
 import com.finn.framework.utils.annotations.RequestKeyParam;
 import com.finn.system.service.AuthService;

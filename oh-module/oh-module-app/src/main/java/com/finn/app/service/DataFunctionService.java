@@ -3,7 +3,7 @@ package com.finn.app.service;
 import com.finn.app.entity.DataFunctionEntity;
 import com.finn.app.query.DataFunctionQuery;
 import com.finn.app.vo.DataFunctionVO;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 
 import java.util.List;
 

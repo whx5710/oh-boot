@@ -1,6 +1,6 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.system.convert.MessageConvert;
 import com.finn.system.entity.MessageEntity;

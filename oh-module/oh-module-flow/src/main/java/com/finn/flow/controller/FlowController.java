@@ -1,7 +1,7 @@
 package com.finn.flow.controller;
 
 import com.finn.core.utils.DateUtils;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import com.finn.flow.convert.FlowConvert;
 import com.finn.flow.entity.FlowEntity;
 import com.finn.flow.query.FlowQuery;
@@ -9,7 +9,7 @@ import com.finn.flow.service.FlowService;
 import com.finn.flow.service.ProcessHandlerService;
 import com.finn.flow.vo.FlowVO;
 import com.finn.flow.vo.ProcessVO;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import jakarta.validation.Valid;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;

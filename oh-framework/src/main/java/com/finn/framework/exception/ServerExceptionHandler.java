@@ -2,7 +2,7 @@ package com.finn.framework.exception;
 
 import com.finn.core.exception.ErrorCode;
 import com.finn.core.exception.SuperExceptionHandler;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,7 +29,7 @@ public class ServerExceptionHandler extends SuperExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public Result<String> handleAccessDeniedException(Exception ex) {
         log.error("没有权限，禁止访问！{}",ex.getMessage());
-        return Result.error(ErrorCode.FORBIDDEN);
+        return Result.error(ErrorCode.FORBIDDEN.getCode(), ErrorCode.FORBIDDEN.getMsg());
     }
 
 }

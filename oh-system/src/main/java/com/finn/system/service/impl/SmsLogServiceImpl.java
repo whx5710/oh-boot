@@ -1,6 +1,6 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.system.convert.SmsLogConvert;
 import com.finn.system.entity.SmsLogEntity;
 import com.finn.system.mapper.SmsLogMapper;

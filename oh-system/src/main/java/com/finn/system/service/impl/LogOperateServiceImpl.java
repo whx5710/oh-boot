@@ -8,7 +8,7 @@ import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.cache.RedisKeys;
 import com.finn.core.utils.ExceptionUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.system.convert.LogOperateConvert;
 import com.finn.system.entity.LogOperateEntity;
 import com.finn.system.mapper.LogOperateMapper;

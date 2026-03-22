@@ -8,7 +8,7 @@ import com.finn.flow.query.FlowQuery;
 import com.finn.flow.service.FlowService;
 import com.finn.flow.vo.FlowVO;
 import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

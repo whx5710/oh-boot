@@ -4,7 +4,7 @@ import com.finn.system.entity.Sms;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.constant.Constant;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.system.cache.SmsPlatformCache;
 import com.finn.system.convert.SmsPlatformConvert;
 import com.finn.system.entity.SmsPlatformEntity;

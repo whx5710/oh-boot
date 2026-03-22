@@ -10,7 +10,7 @@ import com.finn.flow.query.TaskRecordQuery;
 import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.slf4j.Logger;

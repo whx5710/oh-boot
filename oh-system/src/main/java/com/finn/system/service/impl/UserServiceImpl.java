@@ -6,7 +6,7 @@ import com.finn.core.constant.CommonEnum;
 import com.finn.core.exception.ServerException;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.utils.ExcelUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.core.utils.Tools;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;

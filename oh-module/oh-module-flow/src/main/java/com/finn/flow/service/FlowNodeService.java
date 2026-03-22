@@ -3,7 +3,7 @@ package com.finn.flow.service;
 import com.finn.flow.entity.FlowNodeEntity;
 import com.finn.flow.query.FlowNodeQuery;
 import com.finn.flow.vo.FlowNodeVO;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 
 import java.util.List;
 

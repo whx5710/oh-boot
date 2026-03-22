@@ -4,7 +4,7 @@ import com.finn.core.exception.ErrorCode;
 import com.finn.core.utils.HttpContextUtils;
 import com.finn.core.utils.IpUtils;
 import com.finn.core.utils.JsonUtils;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class SecurityAuthenticationEntryPoint implements AuthenticationEntryPoin
             response.setHeader("Access-Control-Allow-Origin", HttpContextUtils.getOrigin());
         }
         // authException.printStackTrace();
-        Result<Object> result = Result.error(ErrorCode.UNAUTHORIZED);
+        Result<Object> result = Result.error(ErrorCode.UNAUTHORIZED.getCode(), ErrorCode.UNAUTHORIZED.getMsg());
         String ip = IpUtils.getIpAddress(request);
         log.warn("IP:{} 请求方法:{} 请求路径:{} {}", ip, request.getMethod(), request.getRequestURI(), result.getMsg());
         response.getWriter().print(JsonUtils.toJsonString(result));

@@ -11,7 +11,7 @@ import com.finn.system.mapper.UserMapper;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
 import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.framework.common.constant.CommConstant;
 import com.finn.system.convert.TenantMemberConvert;
 import com.finn.system.entity.TenantMemberEntity;

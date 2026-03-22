@@ -129,7 +129,7 @@ public class ServerException extends RuntimeException {
         buildContextInfo();
         this.code = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
-        this.stackInfo = msg;
+        this.stackInfo = null;
         this.success = false;
         log.error("【{}】[{}] {} {}: {}", code, traceId, requestMethod, requestUrl, msg);
     }

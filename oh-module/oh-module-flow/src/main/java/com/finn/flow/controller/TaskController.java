@@ -4,7 +4,7 @@ import com.finn.flow.service.ProcessHandlerService;
 import com.finn.flow.service.TaskHandlerService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.security.access.prepost.PreAuthorize;

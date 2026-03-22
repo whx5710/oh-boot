@@ -2,8 +2,8 @@ package com.finn.system.controller;
 
 import com.finn.framework.operatelog.annotations.Log;
 import com.finn.framework.operatelog.enums.OperateTypeEnum;
-import com.finn.core.utils.PageResult;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.PageResult;
+import com.finn.core.entity.Result;
 import com.finn.system.query.AttachmentQuery;
 import com.finn.system.service.AttachmentService;
 import com.finn.system.vo.AttachmentVO;

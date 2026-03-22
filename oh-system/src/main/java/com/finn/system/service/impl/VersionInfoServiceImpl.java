@@ -1,6 +1,6 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.framework.datasource.utils.Wrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.system.convert.VersionInfoConvert;

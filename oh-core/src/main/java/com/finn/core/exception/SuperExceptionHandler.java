@@ -1,6 +1,7 @@
 package com.finn.core.exception;
 
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
+import com.finn.core.utils.TraceIdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -28,7 +29,8 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(ServerException.class)
     public Result<String> handleException(ServerException ex) {
-        return Result.error(ex.getCode(), ex.getMsg(), ex.getTraceId());
+        log.error("系统异常！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
+        return Result.error(ex.getCode(), ex.getMsg(), ex.getStackInfo());
     }
 
     /**
@@ -38,7 +40,7 @@ public class SuperExceptionHandler {
     public Result<String> bindException(BindException ex) {
         FieldError fieldError = ex.getFieldError();
         assert fieldError != null;
-        log.error("Validator校验不正确! {}", fieldError.getDefaultMessage());
+        log.error("Validator校验不正确![{}]  {}", TraceIdUtils.getTraceId(), fieldError.getDefaultMessage());
         return Result.error(fieldError.getDefaultMessage());
     }
 
@@ -49,8 +51,8 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(NoResourceFoundException.class)
     public Result<String> handleNotFoundException(Exception ex) {
-        log.error("找不到资源！{}", ex.getMessage(), ex);
-        return Result.error(ErrorCode.NOT_FOUND);
+        log.error("找不到资源！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
+        return Result.error(ErrorCode.NOT_FOUND, ex.getMessage());
     }
 
     /**
@@ -60,8 +62,8 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Result<String> handleMissingException(Exception ex) {
-        log.error("请求参数异常！{}", ex.getMessage(), ex);
-        return Result.error(ErrorCode.MISSING_PARAMETER_ERROR);
+        log.error("请求参数异常！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
+        return Result.error(ErrorCode.MISSING_PARAMETER_ERROR, ex.getMessage());
     }
 
     /**
@@ -71,13 +73,18 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<String> handleNotReadableException(Exception ex) {
-        log.error("消息不可读！{}", ex.getMessage(), ex);
-        return Result.error(ErrorCode.HTTP_MSG_NOT_READABLE);
+        log.error("消息不可读！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
+        return Result.error(ErrorCode.HTTP_MSG_NOT_READABLE, ex.getMessage());
     }
 
+    /**
+     * 异常处理
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception ex) {
-        log.error("系统出现异常！{}", ex.getMessage(), ex);
-        return Result.error(ErrorCode.INTERNAL_SERVER_ERROR);
+        log.error("系统出现异常！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
+        return Result.error(ErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 }

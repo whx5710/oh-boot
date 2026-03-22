@@ -1,7 +1,7 @@
 package com.finn.framework.service;
 
 import com.finn.core.entity.HashDto;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.Result;
 import com.finn.framework.entity.MetaEntity;
 
 /**

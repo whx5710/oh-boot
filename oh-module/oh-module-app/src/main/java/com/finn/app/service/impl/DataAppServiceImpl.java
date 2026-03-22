@@ -7,7 +7,7 @@ import com.finn.app.mapper.DataAppMapper;
 import com.finn.app.query.DataAppQuery;
 import com.finn.app.service.DataAppService;
 import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.framework.entity.api.DataAppDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

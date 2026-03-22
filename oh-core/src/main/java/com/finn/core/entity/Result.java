@@ -1,4 +1,4 @@
-package com.finn.core.utils;
+package com.finn.core.entity;
 
 import com.finn.core.exception.ErrorCode;
 
@@ -28,11 +28,6 @@ public class Result<T> {
      * 响应数据
      */
     private T data;
-
-    /**
-     * 异常追踪ID
-     */
-    private String traceId;
 
     public int getCode() {
         return code;
@@ -66,14 +61,6 @@ public class Result<T> {
         this.data = data;
     }
 
-    public String getTraceId() {
-        return traceId;
-    }
-
-    public void setTraceId(String traceId) {
-        this.traceId = traceId;
-    }
-
     public static <T> Result<T> ok() {
         return ok(null);
     }
@@ -86,17 +73,31 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error() {
-        return error(ErrorCode.INTERNAL_SERVER_ERROR);
+        return error(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), ErrorCode.INTERNAL_SERVER_ERROR.getMsg());
     }
 
     public static <T> Result<T> error(String msg) {
         return error(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), msg);
     }
 
-    public static <T> Result<T> error(ErrorCode errorCode) {
-        return error(errorCode.getCode(), errorCode.getMsg());
+    /**
+     *
+     * @param errorCode 错误编码和信息
+     * @param stackInfo 堆栈信息
+     * @return
+     * @param <T>
+     */
+    public static <T> Result<T> error(ErrorCode errorCode, String stackInfo) {
+        return error(errorCode.getCode(), errorCode.getMsg(), stackInfo);
     }
 
+    /**
+     *
+     * @param code 错误编码
+     * @param msg 信息
+     * @return
+     * @param <T>
+     */
     public static <T> Result<T> error(int code, String msg) {
         Result<T> result = new Result<>();
         result.setCode(code);
@@ -105,12 +106,37 @@ public class Result<T> {
         return result;
     }
 
-    public static <T> Result<T> error(int code, String msg, String traceId) {
-        Result<T> result = new Result<>();
+    /**
+     * 构建异常信息
+     * @param code 异常编码
+     * @param msg 错误信息
+     * @param stackInfo 堆栈信息
+     * @return re
+     * @param <T>
+     */
+    public static <T> ResultError<T> error(int code, String msg, String stackInfo) {
+        ResultError<T> result = new ResultError<>();
         result.setCode(code);
         result.setMsg(msg);
         result.setSuccess(false);
-        result.setTraceId(traceId);
+        result.setStackInfo(stackInfo);
         return result;
     }
+
+    /**
+     *
+     * @param e 异常信息
+     * @return
+     * @param <T>
+     */
+    public static <T> ResultError<T> error(RuntimeException e) {
+        ResultError<T> result = new ResultError<>();
+        result.setCode(ErrorCode.INTERNAL_SERVER_ERROR.getCode());
+        result.setMsg(ErrorCode.INTERNAL_SERVER_ERROR.getMsg());
+        result.setSuccess(false);
+        result.setStackInfo(e.getMessage());
+        return result;
+    }
+
+
 }

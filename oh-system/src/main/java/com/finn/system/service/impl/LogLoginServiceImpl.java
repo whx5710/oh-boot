@@ -4,7 +4,7 @@ import com.finn.core.exception.ServerException;
 import com.finn.core.utils.ExcelUtils;
 import com.finn.core.utils.HttpContextUtils;
 import com.finn.core.utils.IpUtils;
-import com.finn.core.utils.PageResult;
+import com.finn.core.entity.PageResult;
 import com.finn.framework.datasource.utils.DeleteWrapper;
 import com.finn.framework.datasource.utils.QueryWrapper;
 import com.finn.framework.datasource.utils.Wrapper;

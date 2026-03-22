@@ -1,7 +1,7 @@
 package com.finn.system.controller;
 
-import com.finn.core.utils.PageResult;
-import com.finn.core.utils.Result;
+import com.finn.core.entity.PageResult;
+import com.finn.core.entity.Result;
 import com.finn.system.convert.TenantMemberConvert;
 import com.finn.system.entity.TenantMemberEntity;
 import com.finn.system.query.TenantMemberQuery;
