@@ -63,9 +63,10 @@ spring:
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
     dynamic:
       sysDb: # 系统管理数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
+        driver-class-name: org.postgresql.Driver
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping-stone?currentSchema=oh_sys
+        username: postgres
         password: 123456
         hikari:
           initialSize: 10
@@ -77,9 +78,10 @@ spring:
           hikariLog: true # 是否开启hikari监控日志打印，默认false
           slowThreshold: 500 # 慢查询阈值,默认1000（毫秒）
       masterDb: # 主数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
+        driver-class-name: org.postgresql.Driver
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping-stone?currentSchema=oh_boot
+        username: postgres
         password: 123456
         hikari:
           initialSize: 10
