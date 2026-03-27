@@ -55,8 +55,7 @@ spring:
       # 是否开启 SSL
       ssl.enabled: false
   datasource:
-    #数据源的类型,对应配置相关的连接池 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
-    #type: com.alibaba.druid.pool.DruidDataSource
+    #数据源的类型,对应配置相关的连接池  com.zaxxer.hikari.HikariDataSource
     type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb

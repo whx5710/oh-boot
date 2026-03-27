@@ -20,6 +20,7 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 - 升级到spring boot 4【2026年3月】
 - 租户数据拦截优化，不依赖Druid包，基于jsqlparser进行sql操作【2026年3月】
 - 去掉Druid连接池，暂不支持springboot4，Hikari连接池增加慢sql监测，后期默认使用Hikari连接池【2026年3月】
+- 支持postgres，增加建表sql，划分mysql、pg脚本目录，根据项目需求选择对应的数据库【2026年3月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git

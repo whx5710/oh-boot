@@ -13,7 +13,7 @@
 	<version>4.0.3_260307</version>
 	<name>oh-boot</name>
 	<description>
-		基于SpringBoot4.0、SpringSecurity7.0、Mybatis、Druid(Hikari)连接池、Kafka等框架开发的一套SpringBoot快速开发平台
+		基于SpringBoot4.0、SpringSecurity7.0、Mybatis、Hikari(Druid)连接池、Kafka等框架开发的一套SpringBoot快速开发平台，数据库支持mysql、postgres
 	</description>
 	<packaging>pom</packaging>
 	<url>https://gitee.com/whx233</url>
