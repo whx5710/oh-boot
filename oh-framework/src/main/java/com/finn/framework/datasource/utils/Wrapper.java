@@ -577,7 +577,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> in(FuncUtils<T> function, List<?> value){
-        if(value != null && value.size() > 0){
+        if(value != null && !value.isEmpty()){
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
             StringBuilder stringBuilder = new StringBuilder();
