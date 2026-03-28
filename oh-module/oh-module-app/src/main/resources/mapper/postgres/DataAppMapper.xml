@@ -40,7 +40,7 @@
         VALUES ( #{name}, #{clientId}, #{secretKey}, #{remark}, #{creator}, #{createTime}, 1 )
     </insert>
 
-    <update id="updateById">
+    <!--<update id="updateById">
         UPDATE data_app
         <set>
             <if test="name != null and name != ''">name = #{name},</if>
@@ -52,7 +52,7 @@
             update_time = #{updateTime}
         </set>
         WHERE id = #{id}
-    </update>
+    </update>-->
 
     <select id="getById" resultType="com.finn.app.entity.DataAppEntity">
         select * from data_app where id = #{id}

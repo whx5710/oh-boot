@@ -1,6 +1,7 @@
 package com.finn.app.mapper;
 
 import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.framework.entity.api.DataAppDTO;
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.query.DataAppQuery;
@@ -17,7 +18,7 @@ import java.util.List;
 * @since 1.0.0 2023-07-29
 */
 @Mapper
-public interface DataAppMapper {
+public interface DataAppMapper extends BaseMapper<DataAppEntity> {
     List<DataAppDTO> listAuthority(@Param("params") DataFunctionAuthorityQuery params);
 
     @Pages
@@ -25,7 +26,7 @@ public interface DataAppMapper {
 
     int insertDataApp(DataAppEntity dataAppEntity);
 
-    boolean updateById(DataAppEntity dataAppEntity);
+//    boolean updateById(DataAppEntity dataAppEntity);
 
     DataAppEntity getById(@Param("id")Long id);
 }
