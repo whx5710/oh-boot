@@ -3,6 +3,7 @@ package com.finn.framework.datasource.utils;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SQL 查询语句构建器<br/>
@@ -13,15 +14,15 @@ import java.util.HashMap;
 public class QueryWrapper<T> extends Wrapper<T> {
     /**
      * 初始化,构建SQL：select 列名 from tableName
-     * @param clazz
-     * @return
+     * @param clazz 实体类
+     * @return QueryWrapper实例
      * @param <T>
      */
     public static <T> QueryWrapper<T> of(Class<T> clazz) {
         QueryWrapper<T> params = new QueryWrapper<>();
         SQL tmpSQL = new SQL();
         // 拼接列名
-        HashMap<String, String> colValue = buildQueryColumn(tmpSQL, clazz);
+        Map<String, String> colValue = buildQueryColumn(tmpSQL, clazz);
         params.setSql(tmpSQL);
         params.setColValue(colValue); // 列名
         String tableName = getTableName(clazz);

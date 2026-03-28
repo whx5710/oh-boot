@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.finn.core.constant.Constant.PAGE_NUM;
 import static com.finn.core.constant.Constant.PAGE_SIZE;
@@ -25,6 +25,10 @@ import static com.finn.core.constant.Constant.PAGE_SIZE;
  */
 public abstract class Wrapper<T>  extends HashMap<String, Object> {
     private final static Logger log = LoggerFactory.getLogger(Wrapper.class);
+    // 字段缓存，减少反射开销
+    private static final Map<Class<?>, List<Field>> FIELD_CACHE = new ConcurrentHashMap<>();
+    // 表名缓存
+    private static final Map<Class<?>, String> TABLE_NAME_CACHE = new ConcurrentHashMap<>();
 
     // sql构建器
     private SQL sql;
@@ -37,12 +41,12 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
         this.sql = sql;
     }
 
-    // 列名
-    protected HashMap<String, String> colValue;
+    // 列名，使用线程安全的ConcurrentHashMap
+    protected ConcurrentHashMap<String, String> colValue;
 
     // 缓存列名
-    public void setColValue(HashMap<String, String> colValue){
-        this.colValue = colValue;
+    public void setColValue(Map<String, String> colValue){
+        this.colValue = new ConcurrentHashMap<>(colValue);
     }
 
     /**
@@ -60,33 +64,35 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
 
     /**
      * 获取表名
-     * @param clazz c
+     * @param clazz 实体类
      * @return 表名
      */
     public static String getTableName(Class<?> clazz){
-        // 获取表名
-        TableName apoTable = clazz.getAnnotation(TableName.class);
-        if(apoTable == null){
-            String s = clazz.getName();
-            int i = s.lastIndexOf(".");
-            return Tools.humpToLine(s.substring(i + 1));
-        }else{
-            String tableName = apoTable.value();
-            if(tableName == null || tableName.isEmpty()){
-                throw new ServerException("未指定表名，执行失败");
+        return TABLE_NAME_CACHE.computeIfAbsent(clazz, c -> {
+            // 获取表名
+            TableName apoTable = c.getAnnotation(TableName.class);
+            if(apoTable == null){
+                String s = c.getName();
+                int i = s.lastIndexOf(".");
+                return Tools.humpToLine(s.substring(i + 1));
             }else{
-                return tableName;
+                String tableName = apoTable.value();
+                if(tableName == null || tableName.isEmpty()){
+                    throw new ServerException("未指定表名，执行失败");
+                }else{
+                    return tableName;
+                }
             }
-        }
+        });
     }
 
     /**
      * 获取主键
-     * @param clazz class
-     * @return str
+     * @param clazz 实体类
+     * @return 主键名
      */
     public static String getPriKey(Class<?> clazz){
-        List<Field> fields = ReflectUtil.getFields(clazz);
+        List<Field> fields = getCachedFields(clazz);
         for(Field field: fields){
             if (field.isAnnotationPresent(TableId.class)) { // 判断是否有该注解
                 TableId annotation = field.getAnnotation(TableId.class);
@@ -95,61 +101,59 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
         }
         return "id";
     }
+    
+    /**
+     * 获取缓存的字段列表
+     * @param clazz 实体类
+     * @return 字段列表
+     */
+    protected static List<Field> getCachedFields(Class<?> clazz) {
+        return FIELD_CACHE.computeIfAbsent(clazz, ReflectUtil::getFields);
+    }
+    
     /**
      * 组装列名，缓存列名
      *
-     * @return colValue
+     * @param clazz 实体类
+     * @return 列名映射
      */
-    protected static HashMap<String, String> buildColumn(Class<?> clazz){
-        HashMap<String, String> colValue = new HashMap<>();
-        List<Field> fields = ReflectUtil.getFields(clazz);
-        HashMap<String, Boolean> judge = new HashMap<>();
-        for(Field field: fields){
-            if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
-                TableField annotation = field.getAnnotation(TableField.class);
-                if (annotation.exists()) { // 剔除非数据库字段
-                    if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
-                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
-                        log.warn("buildColumn: {} 子类有覆盖 {} 字段，不查询该字段",clazz.getName(), annotation.value());
-                    }else{
-                        colValue.put(field.getName(), annotation.value()); // 缓存列名
-                    }
-                }else{
-                    // 如果子类覆盖了父类的属性，存在 exists = false的情况
-                    String key = annotation.value()==null?field.getName():annotation.value();
-                    if(key.isEmpty()){
-                        key = field.getName();
-                    }
-                    judge.put(key, false);
-                }
-            }else{
-                colValue.put(field.getName(), field.getName()); // 缓存列名
-            }
-        }
-        return colValue;
+    protected static Map<String, String> buildColumn(Class<?> clazz){
+        return buildColumn(clazz, null);
     }
 
-
     /**
      * 组装列名，缓存列名
      *
-     * @param sql sql
-     * @return colValue
+     * @param sql SQL构建器
+     * @param clazz 实体类
+     * @return 列名映射
      */
-    protected static HashMap<String, String> buildQueryColumn(SQL sql, Class<?> clazz){
-        HashMap<String, String> colValue = new HashMap<>();
-        List<Field> fields = ReflectUtil.getFields(clazz);
-        HashMap<String, Boolean> judge = new HashMap<>();
+    protected static Map<String, String> buildQueryColumn(SQL sql, Class<?> clazz){
+        return buildColumn(clazz, sql);
+    }
+    
+    /**
+     * 组装列名，缓存列名
+     *
+     * @param clazz 实体类
+     * @param sql SQL构建器
+     * @return 列名映射
+     */
+    private static Map<String, String> buildColumn(Class<?> clazz, SQL sql){
+        Map<String, String> colValue = new HashMap<>();
+        List<Field> fields = getCachedFields(clazz);
+        Map<String, Boolean> judge = new HashMap<>();
         for(Field field: fields){
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
                     if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
-                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
-                        log.warn("{} 子类有覆盖 {} 字段，不查询该字段",clazz.getName(), annotation.value());
+                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){ 
+                        log.warn("{} 子类有覆盖 {} 字段，不查询该字段", clazz.getName(), annotation.value());
                     }else{
-                        // sql.SELECT(annotation.value() + " AS " + field.getName());
-                        sql.SELECT(annotation.value());
+                        if(sql != null) {
+                            sql.SELECT(annotation.value());
+                        }
                         colValue.put(field.getName(), annotation.value()); // 缓存列名
                     }
                 }else{
@@ -161,7 +165,9 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
                     judge.put(key, false);
                 }
             }else{
-                sql.SELECT(field.getName());
+                if(sql != null) {
+                    sql.SELECT(field.getName());
+                }
                 colValue.put(field.getName(), field.getName()); // 缓存列名
             }
         }

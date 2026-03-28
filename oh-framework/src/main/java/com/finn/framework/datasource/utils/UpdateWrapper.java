@@ -7,7 +7,7 @@ import com.finn.framework.security.user.UserDetail;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SQL 修改语句构建器
@@ -39,7 +39,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
         tmpSQL.UPDATE(tableName);
 
         // 拼接列名
-        HashMap<String, String> colValue = buildColumn(clazz);
+        Map<String, String> colValue = buildColumn(clazz);
         params.setColValue(colValue); // 列名
 
         // 是否更新用户ID和时间

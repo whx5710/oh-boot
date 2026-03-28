@@ -3,6 +3,7 @@ package com.finn.framework.datasource.utils;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SQL 删除语句构建器<br/>
@@ -23,7 +24,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
         tmpSQL.DELETE_FROM(tableName);
         params.setSql(tmpSQL);
         // 拼接列名
-        HashMap<String, String> colValue = buildColumn(clazz);
+        Map<String, String> colValue = buildColumn(clazz);
         params.setColValue(colValue); // 列名
         return params;
     }
