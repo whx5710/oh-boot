@@ -7,6 +7,8 @@ import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 用户 Cache
  * 2024-12-27 18:59:41
@@ -32,7 +34,7 @@ public class UserCache {
     public UserEntity getUser(Long userId) {
         String key = RedisKeys.getUserCacheKey(userId);
         if(redisCache.hasKey(key)){
-            return JsonUtils.convertValue(redisCache.get(key), UserEntity.class);
+            return JsonUtils.parseObject(redisCache.get(key).toString(), UserEntity.class);
         }else{
             UserEntity user = userMapper.getById(userId);
             if(user != null && user.getId() != null){
@@ -41,6 +43,23 @@ public class UserCache {
             }else{
                 return new UserEntity();
             }
+        }
+    }
+
+    /**
+     * 缓存所有用户
+     * @param list
+     */
+    public void saveList(List<UserEntity> list){
+        if(list != null){
+            list.forEach(item -> {
+                String key = RedisKeys.getUserCacheKey(item.getId());
+                if(redisCache.hasKey(key)){
+                    redisCache.delete(key);
+                }
+                // 缓存数据
+                redisCache.set(key, item.toJson());
+            });
         }
     }
 

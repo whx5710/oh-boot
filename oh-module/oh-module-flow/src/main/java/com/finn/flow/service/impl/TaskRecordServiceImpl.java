@@ -1,5 +1,9 @@
 package com.finn.flow.service.impl;
 
+import com.finn.core.cache.RedisCache;
+import com.finn.core.cache.RedisKeys;
+import com.finn.core.entity.HashDto;
+import com.finn.core.utils.JsonUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.finn.core.utils.DateUtils;
@@ -37,15 +41,13 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     private final TaskRecordMapper taskRecordMapper;
 
-
-    private final UserCache userCache;
-
+    private final RedisCache redisCache;
 
     public TaskRecordServiceImpl(HistoryService historyService, TaskRecordMapper taskRecordMapper,
-                                 UserCache userCache){
+                                 RedisCache redisCache){
         this.historyService = historyService;
         this.taskRecordMapper = taskRecordMapper;
-        this.userCache = userCache;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -130,9 +132,13 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                     String assignee = his.getAssignee();
                     try{
                         Long userId = Long.valueOf(assignee);
-                        UserEntity userEntity = userCache.getUser(userId);
-                        if(userEntity != null){
-                            taskRecord.setAssigneeName(userEntity.getRealName());
+//                        UserEntity userEntity = userCache.getUser(userId);
+                        String userKey = RedisKeys.getUserCacheKey(userId);
+                        if(redisCache.hasKey(userKey)){
+                            HashDto hashDto = JsonUtils.parseObject(redisCache.get(userKey).toString(), HashDto.class);
+                            if(hashDto != null){
+                                taskRecord.setAssigneeName(hashDto.getStr("realName"));
+                            }
                         }
                     }catch (Exception e){
                         log.error("获取用户信息错误！{}", e.getMessage());

@@ -475,20 +475,4 @@ public class UserServiceImpl implements UserService {
 
         return new ArrayList<>();
     }
-
-    // 缓存用户信息
-    /*
-    public void init() {
-        // 查询列表
-        List<SysUserEntity> list = sysUserMapper.getList(new SysUserQuery());
-        list.forEach(item -> {
-            BaseUserEntity baseUser = SysUserConvert.INSTANCE.convertSimpleVO(item);
-            String key = userCacheKey + baseUser.getId();
-            if(redisCache.hasKey(key)){
-                redisCache.delete(key);
-            }
-            // 缓存数据
-            redisCache.set(key, baseUser);
-        });
-    }*/
 }

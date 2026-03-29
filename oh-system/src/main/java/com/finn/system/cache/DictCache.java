@@ -18,11 +18,6 @@ import java.util.List;
 public class DictCache {
     private final RedisCache redisCache;
 
-    /**
-     * 字典管理 KEY
-     */
-    private final String SYSTEM_DICT_KEY = RedisKeys.PREFIX +  "dict:list:";
-
     private final String SYSTEM_DICT_SINGLE_KEY = RedisKeys.PREFIX + "dict:key:";
 
     public DictCache(RedisCache redisCache){
@@ -34,6 +29,10 @@ public class DictCache {
      * @param list
      */
     public void saveList(List<DictVO> list) {
+        /**
+         * 字典管理 KEY
+         */
+        String SYSTEM_DICT_KEY = RedisKeys.PREFIX + "dict:list:";
         redisCache.deleteAll(SYSTEM_DICT_KEY);
         if(list == null || list.isEmpty()){
             return;

@@ -19,7 +19,7 @@ public class CustomUuidGenerator implements IdGenerator {
     public CustomUuidGenerator(RedisCache redisCache) {
         this.redisCache = redisCache;
     }*/
-    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1, System.currentTimeMillis());
+    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 3);
 
     @Override
     public String getNextId() {

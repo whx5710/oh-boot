@@ -1,6 +1,8 @@
 package com.finn.flow.service.impl;
 
 import com.finn.core.entity.HashDto;
+import com.finn.core.entity.PageResult;
+import com.finn.core.entity.Result;
 import com.finn.core.utils.*;
 import com.github.pagehelper.Page;
 import com.finn.core.cache.RedisCache;
@@ -47,8 +49,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
 
     private final RedisCache redisCache;
 
-    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0,1, System.currentTimeMillis());
-
+    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0,1);
 
     public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,
                                 WorkOrderMapper workOrderMapper, RedisCache redisCache){
