@@ -5,8 +5,8 @@ import com.finn.flow.service.TaskHandlerService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
 import com.finn.core.entity.Result;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.task.Task;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.task.api.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +49,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deployByKey/{key}")
-    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
+//    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
     public Result<String> deployByKey(@PathVariable String key){
         return Result.ok(processHandlerService.deployByKey(key));
     }

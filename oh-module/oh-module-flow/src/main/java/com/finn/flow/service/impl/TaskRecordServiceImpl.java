@@ -15,8 +15,8 @@ import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.core.utils.AssertUtils;
 import com.finn.core.entity.PageResult;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
+import org.flowable.engine.HistoryService;
+import org.flowable.task.api.history.HistoricTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -111,7 +111,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         // 正在运行的环节列表（未完成的任务）
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceId(proInsId).unfinished()
-                .orderByHistoricActivityInstanceStartTime().asc()
+                .orderByHistoricTaskInstanceStartTime().asc()
                 .orderByHistoricTaskInstanceEndTime().asc().list();
         List<TaskRecordVO> data = new ArrayList<>();
         if(!ObjectUtils.isEmpty(list)){ // 未完成的
@@ -119,7 +119,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 TaskRecordEntity taskRecord = new TaskRecordEntity();
                 taskRecord.setProcDefId(his.getProcessDefinitionId());
                 taskRecord.setProcInstId(his.getProcessInstanceId());
-                taskRecord.setActInstId(his.getActivityInstanceId());
+                taskRecord.setActInstId(his.getProcessInstanceId());
                 taskRecord.setTaskId(his.getId());
                 taskRecord.setTaskDefId(his.getTaskDefinitionKey());
                 taskRecord.setTaskName(his.getName());
@@ -151,11 +151,12 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 if(!ObjectUtils.isEmpty(taskId) && !taskId.equals(his.getId())){
                     // 处理上一任务，更新相关信息
                     List<HistoricTaskInstance> parentList = historyService.createHistoricTaskInstanceQuery()
-                            .processInstanceId(proInsId).taskId(taskId).orderByHistoricActivityInstanceStartTime().desc()
+                            .processInstanceId(proInsId).taskId(taskId)
+                            .orderByHistoricTaskInstanceStartTime().desc()
                             .orderByHistoricTaskInstanceEndTime().desc().list();
                     if(!ObjectUtils.isEmpty(parentList)){
                         for(HistoricTaskInstance hisParent: parentList){
-                            taskRecord.setFromActInstId(hisParent.getActivityInstanceId());
+                            taskRecord.setFromActInstId(hisParent.getProcessInstanceId());
                             taskRecord.setFromTaskDefId(hisParent.getTaskDefinitionKey());
                             taskRecord.setFromTaskId(hisParent.getId());
                             taskRecord.setFromTaskName(hisParent.getName());
@@ -179,11 +180,11 @@ public class TaskRecordServiceImpl implements TaskRecordService {
             TaskRecordEntity taskRecord = new TaskRecordEntity();
             // 处理上一任务，更新相关信息
             List<HistoricTaskInstance> parentList = historyService.createHistoricTaskInstanceQuery()
-                    .processInstanceId(proInsId).taskId(taskId).orderByHistoricActivityInstanceStartTime().desc()
+                    .processInstanceId(proInsId).taskId(taskId).orderByHistoricTaskInstanceStartTime().desc()
                     .orderByHistoricTaskInstanceEndTime().desc().list();
             if(!ObjectUtils.isEmpty(parentList)){
                 for(HistoricTaskInstance hisParent: parentList){
-                    taskRecord.setFromActInstId(hisParent.getActivityInstanceId());
+                    taskRecord.setFromActInstId(hisParent.getProcessInstanceId());
                     taskRecord.setFromTaskDefId(hisParent.getTaskDefinitionKey());
                     taskRecord.setFromTaskId(hisParent.getId());
                     taskRecord.setFromTaskName(hisParent.getName());

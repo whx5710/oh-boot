@@ -19,7 +19,7 @@
     </properties>
     <modules>
         <!-- 工作流 -->
-        <!--<module>oh-module-flow</module>-->
+        <module>oh-module-flow</module>
         <!-- 外部对接客户端 -->
         <module>oh-module-app</module>
     </modules>

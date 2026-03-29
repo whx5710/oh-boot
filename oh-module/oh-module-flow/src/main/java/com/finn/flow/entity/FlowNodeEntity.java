@@ -32,6 +32,12 @@ public class FlowNodeEntity extends BaseEntity {
 	private String nodeName;
 
 	/**
+	 * 环节类型,UserTask、ExclusiveGateway等
+	 */
+	@TableField("element_type")
+	private String elementType;
+
+	/**
 	* 备注
 	*/
 	private String note;
@@ -66,5 +72,13 @@ public class FlowNodeEntity extends BaseEntity {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getElementType() {
+		return elementType;
+	}
+
+	public void setElementType(String elementType) {
+		this.elementType = elementType;
 	}
 }

@@ -109,7 +109,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
     @Override
     public void check(HashDto data) {
         // 判断流程是否部署
-        if(!processHandlerService.isPeploy(processKey)){
+        if(!processHandlerService.isDeploy(processKey)){
             throw new ServerException("流程还未部署，请部署");
         }
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data, WorkOrderVO.class);

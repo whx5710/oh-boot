@@ -35,11 +35,11 @@
             <artifactId>oh-module-app</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>com.finn.module</groupId>
             <artifactId>oh-module-flow</artifactId>
             <version>1.0.0</version>
-        </dependency>-->
+        </dependency>
         <!-- 定时任务 -->
         <!--<dependency>
             <groupId>org.quartz-scheduler</groupId>

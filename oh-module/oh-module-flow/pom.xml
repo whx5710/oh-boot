@@ -19,9 +19,12 @@
 
     <dependencies>
         <!-- 工作流程 -->
+        <!-- Source: https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter -->
         <dependency>
-            <groupId>org.camunda.bpm.springboot</groupId>
-            <artifactId>camunda-bpm-spring-boot-starter</artifactId>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter</artifactId>
+            <version>8.0.0</version>
+            <scope>compile</scope>
         </dependency>
         <!--<dependency>
             <groupId>com.finn</groupId>

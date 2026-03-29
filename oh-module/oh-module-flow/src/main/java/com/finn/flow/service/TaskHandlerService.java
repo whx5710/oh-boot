@@ -5,17 +5,14 @@ import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
 import com.finn.core.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessInstanceWithVariablesImpl;
-import org.camunda.bpm.engine.task.Task;
+import org.flowable.engine.HistoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
+import org.flowable.engine.history.HistoricActivityInstance;
+import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
+import org.flowable.task.api.history.HistoricTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -88,8 +85,27 @@ public class TaskHandlerService {
     @Transactional(rollbackFor = Exception.class)
     public List<TaskRecordVO> startByProcessKey(String processKey, String businessKey, Map<String,Object> params){
         AssertUtils.isBlank(processKey, "流程定义编码");
-        ProcessInstanceWithVariablesImpl processInstance;
-        try {
+        ProcessInstance processInstance;
+
+        if(ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
+            processInstance = runtimeService.startProcessInstanceByKey(processKey);
+        }else if(ObjectUtils.isEmpty(businessKey) && !ObjectUtils.isEmpty(params)){
+            processInstance = runtimeService.startProcessInstanceByKey(processKey, params);
+        }else if(!ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
+            processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey);
+        }else{
+            processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, params);
+        }
+        // 正在运行的任务
+        List<HistoricTaskInstance> list = getTaskInstByProInsId(processInstance.getProcessInstanceId());
+        if(!ObjectUtils.isEmpty(list)){
+            for (HistoricTaskInstance his : list) {
+                taskRecordService.saveTaskRecord(processInstance.getProcessInstanceId(), his.getId());
+            }
+        }
+        return taskRecordService.getRunRecord(processInstance.getProcessInstanceId());
+
+        /*try {
             if(ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
                 processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey);
             }else if(ObjectUtils.isEmpty(businessKey) && !ObjectUtils.isEmpty(params)){
@@ -112,7 +128,7 @@ public class TaskHandlerService {
             throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败，请确认是否部署！", e1.getMessage());
         }catch (NullValueException e2){
             throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败，请确认是否部署。", e2.getMessage());
-        }
+        }*/
     }
 
     /**
@@ -129,18 +145,22 @@ public class TaskHandlerService {
         if(ObjectUtils.isEmpty(list)){
             throw new ServerException("没有找到待操作的流程，请检查！");
         }
-        try {
-            // 完成任务
-            taskService.complete(taskVO.getTaskId(), taskVO.getParams());
-            // 保存环节
-            taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
-        }catch (NullValueException e1){
-            log.error("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】 {}", e1.getMessage());
-            throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
-        }catch (ProcessEngineException e2){
-            log.error("完成环节发生异常，请联系管理员！{}", e2.getMessage());
-            throw new ServerException("完成环节发生异常，请联系管理员！");
-        }
+//        try {
+//            // 完成任务
+//            taskService.complete(taskVO.getTaskId(), taskVO.getParams());
+//            // 保存环节
+//            taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
+//        }catch (NullValueException e1){
+//            log.error("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】 {}", e1.getMessage());
+//            throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
+//        }catch (ProcessEngineException e2){
+//            log.error("完成环节发生异常，请联系管理员！{}", e2.getMessage());
+//            throw new ServerException("完成环节发生异常，请联系管理员！");
+//        }
+        // 完成任务
+        taskService.complete(taskVO.getTaskId(), taskVO.getParams());
+        // 保存环节
+        taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
         return taskRecordService.getRunRecord(taskVO.getProInstId());
     }
 
@@ -178,7 +198,7 @@ public class TaskHandlerService {
      */
     public List<HistoricTaskInstance> getHisTaskInstByProInsId(String proInsId){
         return historyService.createHistoricTaskInstanceQuery().processInstanceId(proInsId)
-                .orderByHistoricActivityInstanceStartTime().asc().orderByHistoricTaskInstanceEndTime().asc().list();
+                .orderByHistoricTaskInstanceStartTime().asc().orderByHistoricTaskInstanceEndTime().asc().list();
     }
 
     /**

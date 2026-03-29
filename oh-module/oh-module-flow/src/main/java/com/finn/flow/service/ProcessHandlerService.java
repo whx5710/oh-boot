@@ -1,16 +1,14 @@
 package com.finn.flow.service;
 
 import com.finn.flow.entity.FlowEntity;
-import com.finn.flow.utils.BpmnUtils;
-import com.finn.flow.vo.FlowNodeVO;
 import com.finn.core.exception.ServerException;
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.xml.instance.DomElement;
+import com.finn.flow.vo.FlowNodeVO;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.FlowElement;
+import org.flowable.bpmn.model.Process;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -44,18 +42,21 @@ public class ProcessHandlerService {
      * @return 部署对象
      */
     public Deployment deploy(String path, String name){
-        Deployment deployment = null;
-        try{
-            deployment = repositoryService.createDeployment()
-                    .name(name) // 定义部署文件的名称
-                    .addClasspathResource(path) // 绑定需要部署的流程文件
-                    .deploy();// 部署流程
-        }catch(ParseException e1){
-            throw new ServerException("流程定义格式异常，请检查！");
-        }catch (NullValueException e2){
-            throw new ServerException("未找到流程文件，请检查是否存在！【" + path + "】");
-        }
-        return deployment;
+//        Deployment deployment = null;
+//        try{
+//            deployment = repositoryService.createDeployment()
+//                    .name(name) // 定义部署文件的名称
+//                    .addClasspathResource(path) // 绑定需要部署的流程文件
+//                    .deploy();// 部署流程
+//        }catch(ParseException e1){
+//            throw new ServerException("流程定义格式异常，请检查！");
+//        }catch (NullValueException e2){
+//            throw new ServerException("未找到流程文件，请检查是否存在！【" + path + "】");
+//        }
+        return repositoryService.createDeployment()
+                .name(name) // 定义部署文件的名称
+                .addClasspathResource(path) // 绑定需要部署的流程文件
+                .deploy();// 部署流程
     }
 
     /**
@@ -71,31 +72,26 @@ public class ProcessHandlerService {
         String dbXml = flow.getXml();
         // svg图片
         String svgStr = flow.getSvgStr();
-        Deployment deployment = null;
         String name = key.endsWith(".bpmn")?key:key + ".bpmn";
         String svgName = key + ".svg";
-        try{
-            deployment = repositoryService.createDeployment()
-                    .name(name)                 // 定义部署文件的名称
-                    .addString(name, dbXml)     // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
-                    .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
-                    .deploy();                  // 部署流程
-        }catch(ParseException e1){
-            throw new ServerException("流程定义格式异常，请检查！", e1.getMessage());
-        }catch (NullValueException e2){
-            throw new ServerException("未找到流程文件，请检查是否存在！", e2.getMessage());
-        }
+        Deployment deployment = repositoryService.createDeployment()
+                .name(name)                 // 定义部署文件的名称
+                .addString(name, dbXml)     // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
+                .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
+                .deploy();                  // 部署流程
         // 保存环节
         String procDefId = getProcessDefID(deployment);
-        BpmnModelInstance bpmnModelInstance = repositoryService.getBpmnModelInstance(procDefId);
-        List<DomElement> domElementList = bpmnModelInstance.getDocument().getRootElement().getChildElements();
-        if(!ObjectUtils.isEmpty(domElementList)){
-            DomElement domElement = domElementList.stream().filter(it -> "process".equals(it.getLocalName())).findFirst().orElse(null);
-            List<FlowNodeVO> nodes = BpmnUtils.getNodeList(domElement);
-            for(FlowNodeVO f: nodes){
-                f.setProcDefId(procDefId);
-                flowNodeService.save(f);
-            }
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
+
+        Process process = bpmnModel.getMainProcess();
+        for(FlowElement element: process.getFlowElements()){
+            FlowNodeVO flowNodeVO = new FlowNodeVO();
+            flowNodeVO.setProcDefId(procDefId);
+            flowNodeVO.setActDefId(element.getId());
+            flowNodeVO.setNodeName(element.getName());
+            flowNodeVO.setElementType(element.getClass().getSimpleName());
+            flowNodeVO.setNote(element.getDocumentation());
+            flowNodeService.save(flowNodeVO);
         }
         return procDefId;
     }
@@ -198,7 +194,7 @@ public class ProcessHandlerService {
      * @param processKey
      * @return 是否
      */
-    public Boolean isPeploy(String processKey){
+    public Boolean isDeploy(String processKey){
         return !ObjectUtils.isEmpty(repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).active().list());
     }
 

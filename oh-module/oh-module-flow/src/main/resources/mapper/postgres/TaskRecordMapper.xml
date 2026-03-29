@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.flow.mapper.TaskRecordMapper">
+
+    <!-- 修改当前运行标志 -->
+    <update id="updateRunMark">
+        update bpmn_task_record set run_mark = 0
+        where proc_inst_id = #{procInstId}
+        and run_mark = 1
+    </update>
+
+    <select id="getTaskList" resultType="com.finn.flow.entity.TaskRecordEntity">
+        select * from bpmn_task_record where db_status = 1
+        <if test="procInstId != null and procInstId != ''">and proc_inst_id = #{procInstId}</if>
+        <if test="runMark != null">and run_mark = #{runMark}</if>
+        <if test="taskId != null and taskId != ''">and task_id = #{taskId}</if>
+        <if test="actInstId != null and actInstId != ''">and act_inst_id = #{actInstId}</if>
+
+    </select>
+
+    <insert id="saveTaskRecord">
+        INSERT INTO bpmn_task_record (proc_def_id, proc_inst_id, act_inst_id, task_id, task_def_id, task_name, from_act_inst_id, from_task_id, from_task_def_id, from_task_name, run_mark, assignee, assignee_name, start_time, end_time, duration, db_status, creator, create_time)
+        VALUES (#{procDefId}, #{procInstId}, #{actInstId}, #{taskId}, #{taskDefId}, #{taskName}, #{fromActInstId}, #{fromTaskId}, #{fromTaskDefId}, #{fromTaskName}, #{runMark}, #{assignee}, #{assigneeName}, #{startTime}, #{endTime}, #{duration}, #{dbStatus}, #{creator}, #{createTime})
+    </insert>
+
+    <update id="updateTaskRecordById">
+        UPDATE bpmn_task_record
+        <set>
+            <if test="procDefId != null and procDefId != ''">proc_def_id = #{procDefId},</if>
+            <if test="procInstId != null and procInstId != ''">proc_inst_id = #{procInstId},</if>
+            <if test="actInstId != null and actInstId != ''">act_inst_id = #{actInstId},</if>
+            <if test="taskId != null and taskId != ''">task_id = #{taskId},</if>
+            <if test="taskDefId != null and taskDefId != ''">task_def_id = #{taskDefId},</if>
+            <if test="taskName != null and taskName != ''">task_name = #{taskName},</if>
+            <if test="fromActInstId != null and fromActInstId != ''">from_act_inst_id = #{fromActInstId},</if>
+            <if test="fromTaskId != null and fromTaskId != ''">from_task_id = #{fromTaskId},</if>
+            <if test="fromTaskDefId != null and fromTaskDefId != ''">from_task_def_id = #{fromTaskDefId},</if>
+            <if test="fromTaskName != null and fromTaskName != ''">from_task_name = #{fromTaskName},</if>
+            <if test="runMark != null">run_mark = #{runMark},</if>
+            <if test="assignee != null and assignee != ''">assignee = #{assignee},</if>
+            <if test="assigneeName != null and assigneeName != ''">assignee_name = #{assigneeName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="duration != null and duration != ''">duration = #{duration},</if>
+            <if test="dbStatus != null">db_status = #{dbStatus},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getTaskRecordById" resultType="com.finn.flow.entity.TaskRecordEntity">
+        select * from bpmn_task_record where id = #{id}
+    </select>
+
+</mapper>

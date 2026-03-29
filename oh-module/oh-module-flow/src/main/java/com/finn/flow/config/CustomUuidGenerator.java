@@ -1,7 +1,7 @@
 package com.finn.flow.config;
 
 import com.finn.core.utils.SnowflakeIdWorker;
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
+import org.flowable.common.engine.impl.cfg.IdGenerator;
 import org.springframework.stereotype.Component;
 
 /**
