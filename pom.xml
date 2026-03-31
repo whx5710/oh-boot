@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.3</version>
+		<version>4.0.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.finn</groupId>
@@ -41,7 +41,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!--springboot版本-->
-		<spring-boot-dependencies.version>4.0.3</spring-boot-dependencies.version>
+		<spring-boot-dependencies.version>4.0.5</spring-boot-dependencies.version>
 		<!-- spring security -->
 		<spring.security>7.1.0-M2</spring.security>
 		<!-- 框架版本信息 -->
