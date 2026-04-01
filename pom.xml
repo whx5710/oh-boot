@@ -84,13 +84,6 @@
 				<artifactId>mapstruct-processor</artifactId>
 				<version>${mapstruct.version}</version>
 			</dependency>
-			<!-- 工作流 -->
-			<!--<dependency>
-				<groupId>org.flowable</groupId>
-				<artifactId>flowable-spring-boot-starter</artifactId>
-				<version>${flowable.version}}</version>
-				<scope>compile</scope>
-			</dependency>-->
 			<!-- end   ================================= 其他 ================================= -->
 		</dependencies>
 	</dependencyManagement>

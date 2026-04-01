@@ -40,11 +40,7 @@
             <artifactId>oh-module-flow</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!-- 定时任务 -->
-        <!--<dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>-->
+
         <!-- websocket -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
