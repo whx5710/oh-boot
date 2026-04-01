@@ -1,6 +1,6 @@
 package com.finn.system.convert;
 
-import com.finn.core.entity.BaseUserEntity;
+import com.finn.framework.entity.BaseUserEntity;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.TenantCache;

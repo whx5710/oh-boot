@@ -1,6 +1,6 @@
 package com.finn.system.entity;
 
-import com.finn.framework.datasource.annotations.TableName;
+import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.TenantEntity;
 
 /**

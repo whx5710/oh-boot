@@ -1,13 +1,13 @@
 package com.finn.framework.datasource.service;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.ReflectUtil;
-import com.finn.framework.datasource.annotations.TableField;
-import com.finn.framework.datasource.annotations.TableId;
-import com.finn.framework.datasource.utils.InsertWrapper;
-import com.finn.framework.datasource.utils.Wrapper;
-import com.finn.framework.datasource.utils.DeleteWrapper;
-import com.finn.framework.datasource.utils.UpdateWrapper;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.ReflectUtil;
+import com.finn.framework.aop.annotations.TableField;
+import com.finn.framework.aop.annotations.TableId;
+import com.finn.framework.datasource.wrapper.InsertWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
+import com.finn.framework.datasource.wrapper.DeleteWrapper;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

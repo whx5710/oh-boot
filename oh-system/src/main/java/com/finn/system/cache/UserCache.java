@@ -1,8 +1,8 @@
 package com.finn.system.cache;
 
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
-import com.finn.core.utils.JsonUtils;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.utils.JsonUtils;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.UserMapper;
 import org.springframework.stereotype.Service;

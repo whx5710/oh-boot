@@ -1,10 +1,10 @@
 package com.finn.framework.datasource.mapper;
 
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
-import com.finn.framework.datasource.service.SelectProviderService;
-import com.finn.framework.datasource.utils.InsertWrapper;
-import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.service.QueryProviderService;
+import com.finn.framework.datasource.wrapper.InsertWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -49,7 +49,7 @@ public interface BaseMapper<T>{
      * @return page
      */
     @Pages
-    @SelectProvider(method = SelectProviderService.SELECT_PAGE_PARAM, type = SelectProviderService.class)
+    @SelectProvider(method = QueryProviderService.SELECT_PAGE_PARAM, type = QueryProviderService.class)
     Page<T>  selectPageByWrapper(Wrapper<T> fp);
 
     /**
@@ -57,7 +57,7 @@ public interface BaseMapper<T>{
      * @param fp QueryWrapper
      * @return list
      */
-    @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
+    @SelectProvider(method = QueryProviderService.SELECT_LIST_PARAM, type = QueryProviderService.class)
     List<T> selectListByWrapper(Wrapper<T> fp);
 
     /**
@@ -65,7 +65,7 @@ public interface BaseMapper<T>{
      * @param fp CountWrapper
      * @return list
      */
-    @SelectProvider(method = SelectProviderService.SELECT_COUNT_PARAM, type = SelectProviderService.class)
+    @SelectProvider(method = QueryProviderService.SELECT_COUNT_PARAM, type = QueryProviderService.class)
     long count(Wrapper<T> fp);
 
     /**
@@ -74,7 +74,7 @@ public interface BaseMapper<T>{
      * @param clazz 类名，用于获取表名
      * @return 实体对象
      */
-    @SelectProvider(method = SelectProviderService.FIND_BY_ID, type = SelectProviderService.class)
+    @SelectProvider(method = QueryProviderService.FIND_BY_ID, type = QueryProviderService.class)
     T findById(@Param("id")Long id,Class<T> clazz);
 
     /**

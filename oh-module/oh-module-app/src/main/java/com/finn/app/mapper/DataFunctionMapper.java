@@ -5,7 +5,7 @@ import com.finn.app.entity.DataFunctionEntity;
 import com.finn.app.query.DataFunctionAuthorityQuery;
 import com.finn.app.query.DataFunctionQuery;
 import com.finn.app.vo.DataFunctionVO;
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

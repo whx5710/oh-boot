@@ -1,6 +1,6 @@
 package com.finn.app.utils;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.MessageListenerContainer;

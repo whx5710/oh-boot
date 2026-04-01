@@ -1,11 +1,12 @@
 package com.finn.flow.service.impl;
 
-import com.finn.core.entity.HashDto;
-import com.finn.core.entity.PageResult;
-import com.finn.core.entity.Result;
-import com.finn.core.utils.*;
+import com.finn.framework.entity.HashDto;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.entity.Result;
+import com.finn.framework.utils.JsonUtils;
+import com.finn.framework.utils.SnowflakeIdWorker;
 import com.github.pagehelper.Page;
-import com.finn.core.cache.RedisCache;
+import com.finn.framework.cache.RedisCache;
 import com.finn.flow.convert.WorkOrderConvert;
 import com.finn.flow.entity.WorkOrderEntity;
 import com.finn.flow.mapper.WorkOrderMapper;
@@ -16,10 +17,10 @@ import com.finn.flow.service.WorkOrderService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.WorkOrderVO;
 import com.finn.framework.entity.MetaEntity;
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.service.JobService;
-import com.finn.framework.utils.annotations.Idempotent;
-import com.finn.framework.utils.annotations.RequestKeyParam;
+import com.finn.framework.aop.annotations.Idempotent;
+import com.finn.framework.aop.annotations.RequestKeyParam;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

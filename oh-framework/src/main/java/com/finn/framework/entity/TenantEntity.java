@@ -1,6 +1,6 @@
 package com.finn.framework.entity;
 
-import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.aop.annotations.TableField;
 
 /**
  * 租户基类

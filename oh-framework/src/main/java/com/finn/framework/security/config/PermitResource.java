@@ -1,6 +1,6 @@
 package com.finn.framework.security.config;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.common.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

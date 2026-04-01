@@ -3,7 +3,7 @@ package com.finn.flow.mapper;
 import com.github.pagehelper.Page;
 import com.finn.flow.entity.FlowEntity;
 import com.finn.flow.query.FlowQuery;
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

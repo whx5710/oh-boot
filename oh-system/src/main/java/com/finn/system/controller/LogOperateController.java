@@ -1,9 +1,9 @@
 package com.finn.system.controller;
 
-import com.finn.core.entity.PageResult;
-import com.finn.core.entity.Result;
-import com.finn.framework.operatelog.annotations.Log;
-import com.finn.framework.operatelog.enums.OperateTypeEnum;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.entity.Result;
+import com.finn.framework.aop.annotations.Log;
+import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.system.query.LogOperateQuery;
 import com.finn.system.service.LogOperateService;
 import com.finn.system.vo.LogOperateVO;

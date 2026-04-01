@@ -1,8 +1,8 @@
 package com.finn.app.service;
 
-import com.finn.core.entity.HashDto;
-import com.finn.core.entity.PageResult;
-import com.finn.core.entity.Result;
+import com.finn.framework.entity.HashDto;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.entity.Result;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.app.query.DataMsgQuery;
 import com.finn.app.vo.DataMsgVO;

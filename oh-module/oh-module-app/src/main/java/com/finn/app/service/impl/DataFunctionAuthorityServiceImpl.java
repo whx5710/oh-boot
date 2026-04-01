@@ -1,10 +1,10 @@
 package com.finn.app.service.impl;
 
 import com.finn.app.mapper.DataAppMapper;
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
-import com.finn.core.entity.PageResult;
-import com.finn.core.exception.ServerException;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.exception.ServerException;
 import com.finn.app.convert.DataFunctionAuthorityConvert;
 import com.finn.app.entity.DataFunctionAuthorityEntity;
 import com.finn.app.mapper.DataFunctionMapper;

@@ -1,6 +1,6 @@
 package com.finn.framework.common.properties;
 
-import com.finn.core.constant.Constant;
+import com.finn.framework.common.constant.Constant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 

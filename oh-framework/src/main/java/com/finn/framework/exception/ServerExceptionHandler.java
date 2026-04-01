@@ -1,9 +1,7 @@
 package com.finn.framework.exception;
 
-import com.finn.core.exception.ErrorCode;
-import com.finn.core.exception.SuperExceptionHandler;
-import com.finn.core.entity.Result;
-import com.finn.core.utils.TraceIdUtils;
+import com.finn.framework.common.enums.ErrorCode;
+import com.finn.framework.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;

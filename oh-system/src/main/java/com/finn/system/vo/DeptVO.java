@@ -1,6 +1,6 @@
 package com.finn.system.vo;
 
-import com.finn.core.utils.TreeNode;
+import com.finn.framework.entity.TreeNode;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 

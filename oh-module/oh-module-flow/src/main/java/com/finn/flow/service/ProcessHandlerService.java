@@ -1,7 +1,7 @@
 package com.finn.flow.service;
 
 import com.finn.flow.entity.FlowEntity;
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.flow.vo.FlowNodeVO;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.FlowElement;

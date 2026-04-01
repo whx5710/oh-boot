@@ -1,10 +1,10 @@
 package com.finn.framework.security.exception;
 
-import com.finn.core.exception.ErrorCode;
-import com.finn.core.utils.HttpContextUtils;
-import com.finn.core.utils.IpUtils;
-import com.finn.core.utils.JsonUtils;
-import com.finn.core.entity.Result;
+import com.finn.framework.common.enums.ErrorCode;
+import com.finn.framework.utils.HttpContextUtils;
+import com.finn.framework.utils.IpUtils;
+import com.finn.framework.utils.JsonUtils;
+import com.finn.framework.entity.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;

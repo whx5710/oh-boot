@@ -1,0 +1,44 @@
+package com.finn.framework.common.properties;
+
+/**
+ * hikari配置
+ * @author 王小费 whx5710@qq.com
+ * @since 2026-03-12
+ */
+public class HikariProperty extends ConnectNumProperty {
+    /**
+     * Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+     */
+    private String maxLifetime = "1800000";
+
+    /**
+     * Hikari 监控日志
+     */
+    private Boolean hikariLog = false;
+    /**
+     * 慢查询阈值（毫秒）
+     */
+    private Long slowThreshold = 1000L;
+
+    public String getMaxLifetime() {
+        return maxLifetime;
+    }
+
+    public void setMaxLifetime(String maxLifetime) {
+        this.maxLifetime = maxLifetime;
+    }
+    public Boolean getHikariLog() {
+        return hikariLog;
+    }
+    public void setHikariLog(Boolean hikariLog) {
+        this.hikariLog = hikariLog;
+    }
+
+    public Long getSlowThreshold() {
+        return slowThreshold;
+    }
+
+    public void setSlowThreshold(Long slowThreshold) {
+        this.slowThreshold = slowThreshold;
+    }
+}

@@ -7,7 +7,7 @@ import com.finn.flow.mapper.FlowNodeMapper;
 import com.finn.flow.query.FlowNodeQuery;
 import com.finn.flow.service.FlowNodeService;
 import com.finn.flow.vo.FlowNodeVO;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

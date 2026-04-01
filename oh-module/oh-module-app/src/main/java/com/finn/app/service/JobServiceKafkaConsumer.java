@@ -1,7 +1,7 @@
 package com.finn.app.service;
 
-import com.finn.core.constant.Constant;
-import com.finn.core.utils.JsonUtils;
+import com.finn.framework.common.constant.Constant;
+import com.finn.framework.utils.JsonUtils;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.framework.service.JobServiceConsumer;
 import org.springframework.kafka.annotation.KafkaListener;

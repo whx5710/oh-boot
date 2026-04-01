@@ -4,7 +4,7 @@ import com.finn.flow.service.ProcessHandlerService;
 import com.finn.flow.service.TaskHandlerService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
-import com.finn.core.entity.Result;
+import com.finn.framework.entity.Result;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.Task;
 import org.springframework.security.access.prepost.PreAuthorize;

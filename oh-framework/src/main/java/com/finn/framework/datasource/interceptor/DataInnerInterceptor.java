@@ -1,7 +1,7 @@
 package com.finn.framework.datasource.interceptor;
 
-import com.finn.core.utils.ReflectUtil;
-import com.finn.core.utils.SnowflakeIdWorker;
+import com.finn.framework.utils.ReflectUtil;
+import com.finn.framework.utils.SnowflakeIdWorker;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import org.apache.ibatis.cache.CacheKey;

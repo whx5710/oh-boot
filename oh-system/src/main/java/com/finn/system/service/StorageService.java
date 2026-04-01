@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.core.utils.DateUtils;
+import com.finn.framework.utils.DateUtils;
 import com.finn.system.config.StorageProperties;
 import org.springframework.util.StringUtils;
 

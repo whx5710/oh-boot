@@ -1,7 +1,7 @@
 package com.finn.system.cache;
 
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
 import com.finn.system.vo.DictDataSingleVO;
 import com.finn.system.vo.DictVO;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.finn.system.mapper;
 
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import com.finn.system.entity.SmsLogEntity;
 import com.finn.system.query.SmsLogQuery;
 import org.apache.ibatis.annotations.Mapper;

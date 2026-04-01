@@ -1,7 +1,7 @@
 package com.finn.system.mapper;
 
 import com.finn.framework.datasource.mapper.BaseMapper;
-import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.entity.ParamsEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

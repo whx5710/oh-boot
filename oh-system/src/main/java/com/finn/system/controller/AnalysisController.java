@@ -1,6 +1,6 @@
 package com.finn.system.controller;
 
-import com.finn.core.entity.Result;
+import com.finn.framework.entity.Result;
 import com.finn.system.service.LogLoginService;
 import com.finn.system.vo.AnalysisVO;
 import org.springframework.web.bind.annotation.GetMapping;

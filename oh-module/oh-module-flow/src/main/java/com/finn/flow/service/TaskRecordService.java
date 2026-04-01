@@ -3,7 +3,7 @@ package com.finn.flow.service;
 import com.finn.flow.entity.TaskRecordEntity;
 import com.finn.flow.query.TaskRecordQuery;
 import com.finn.flow.vo.TaskRecordVO;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 
 import java.util.List;
 

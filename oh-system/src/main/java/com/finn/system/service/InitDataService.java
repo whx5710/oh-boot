@@ -1,8 +1,8 @@
 package com.finn.system.service;
 
 import com.finn.framework.common.properties.SysDataSourceProperties;
-import com.finn.framework.datasource.config.DynamicDataSource;
-import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.DynamicDataSource;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.cache.DictCache;
 import com.finn.system.cache.ParamsCache;
 import com.finn.system.cache.UserCache;

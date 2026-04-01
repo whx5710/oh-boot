@@ -1,6 +1,6 @@
 package com.finn.app.mapper;
 
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.framework.entity.api.DataAppDTO;
 import com.finn.app.entity.DataAppEntity;

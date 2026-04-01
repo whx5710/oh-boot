@@ -1,6 +1,6 @@
 package com.finn.flow.vo;
 
-import com.finn.core.entity.IDEntity;
+import com.finn.framework.entity.IDEntity;
 import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serial;

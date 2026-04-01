@@ -1,8 +1,8 @@
 package com.finn.system.entity;
 
-import com.finn.core.entity.IDEntity;
-import com.finn.framework.datasource.annotations.TableField;
-import com.finn.framework.datasource.annotations.TableName;
+import com.finn.framework.entity.IDEntity;
+import com.finn.framework.aop.annotations.TableField;
+import com.finn.framework.aop.annotations.TableName;
 
 import java.time.LocalDateTime;
 

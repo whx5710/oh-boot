@@ -1,7 +1,7 @@
 {
   "outPath": "target/doc",
   "projectName": "oh-boot基础框架",
-  "packageFilters": "com.finn.support.controller.*,com.finn.sys.base.controller.*",
+  "packageFilters": "com.finn.system.controller.*,com.finn.app.controller.*,com.finn.flow.controller.*",
   "openUrl": "http://localhost:7700/api",
   "appToken": "0372881510384f1b901b7e886c92cd33",
   "debugEnvName":"本地环境",

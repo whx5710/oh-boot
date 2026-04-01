@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.system.config.StorageProperties;
 import org.springframework.util.FileCopyUtils;
 

@@ -1,6 +1,6 @@
 package com.finn.system.mapper;
 
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.VersionInfoEntity;
 import com.finn.system.query.VersionInfoQuery;

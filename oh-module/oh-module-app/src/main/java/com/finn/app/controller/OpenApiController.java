@@ -1,10 +1,10 @@
 package com.finn.app.controller;
 
-import com.finn.core.constant.Constant;
-import com.finn.core.entity.HashDto;
-import com.finn.core.utils.DateUtils;
-import com.finn.core.utils.HttpUtil;
-import com.finn.core.entity.Result;
+import com.finn.framework.common.constant.Constant;
+import com.finn.framework.entity.HashDto;
+import com.finn.framework.utils.DateUtils;
+import com.finn.framework.utils.HttpUtil;
+import com.finn.framework.entity.Result;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.utils.ListenerHandler;

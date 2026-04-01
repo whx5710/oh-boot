@@ -1,6 +1,6 @@
 package com.finn.framework.datasource.interceptor;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;

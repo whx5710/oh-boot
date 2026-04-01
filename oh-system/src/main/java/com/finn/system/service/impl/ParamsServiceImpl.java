@@ -1,12 +1,12 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.JsonUtils;
-import com.finn.core.entity.PageResult;
-import com.finn.framework.datasource.utils.QueryWrapper;
-import com.finn.framework.datasource.utils.UpdateWrapper;
-import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.AssertUtils;
+import com.finn.framework.utils.JsonUtils;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.system.cache.ParamsCache;
 import com.finn.system.convert.ParamsConvert;

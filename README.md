@@ -21,6 +21,7 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 - 租户数据拦截优化，不依赖Druid包，基于jsqlparser进行sql操作【2026年3月】
 - 去掉Druid连接池，暂不支持springboot4，Hikari连接池增加慢sql监测，后期默认使用Hikari连接池【2026年3月】
 - 支持postgres，增加建表sql，划分mysql、pg脚本目录，根据项目需求选择对应的数据库【2026年3月】
+- oh-core模块合并到oh-framework，简化框架【2026年4月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git
@@ -34,9 +35,11 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 ### 后期计划支持多种数据（postgresql、国产数据库）
 
 ## 代码目录  
-`oh-core`、`oh-framework`属于系统框架类模块，分别是核心包和框架包，各自存放相关的代码；项目上可独立打成jar包引入
+`oh-framework`属于系统框架类模块，项目上可独立打成jar包引入
+
+~~oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类~~ 【2026年4月合并到oh-framework】
 ```
-oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类
+
 oh-framework 系统框架，包括数据库、基础实体类、鉴权
 oh-system    系统管理模块，包括组织架构、鉴权、基础配置等
 oh-module    业务模块
@@ -44,7 +47,7 @@ oh-module    业务模块
     - oh-module-flow   工作流程管理
     - ...              扩展其他业务模块
 ```
-通过引入`oh-core`、`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
+通过引入`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
 
 ## 快速开始
 环境：JDK17+、MySQL8+、Redis、Kafka(RocketMq)

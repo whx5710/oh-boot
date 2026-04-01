@@ -1,8 +1,8 @@
 package com.finn.system.config;
 
-import com.finn.core.constant.Constant;
+import com.finn.framework.common.constant.Constant;
 import com.finn.framework.common.properties.SysDataSourceProperties;
-import com.finn.framework.datasource.config.DynamicDataSource;
+import com.finn.framework.datasource.DynamicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
