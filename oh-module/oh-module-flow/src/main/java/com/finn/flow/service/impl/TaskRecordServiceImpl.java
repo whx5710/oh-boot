@@ -144,7 +144,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                         log.error("获取用户信息错误！{}", e.getMessage());
                     }
                 }
-                taskRecord.setStartTime(DateUtils.dateToLocalDate(his.getStartTime()));
+                taskRecord.setStartTime(DateUtils.dateToLocalDate(his.getCreateTime()));
                 taskRecord.setEndTime(DateUtils.dateToLocalDate(his.getEndTime()));
                 taskRecord.setDuration(his.getDurationInMillis());
 

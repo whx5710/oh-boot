@@ -24,8 +24,8 @@
     </select>
 
     <insert id="save">
-        INSERT INTO bpmn_flow_node ( proc_def_id, act_def_id, node_name, note, db_status, creator, create_time )
-        VALUES ( #{procDefId}, #{actDefId}, #{nodeName}, #{note}, #{dbStatus}, #{creator}, #{createTime} )
+        INSERT INTO bpmn_flow_node ( proc_def_id, act_def_id, node_name, element_type, note, db_status, creator, create_time )
+        VALUES ( #{procDefId}, #{actDefId}, #{nodeName}, #{elementType}, #{note}, #{dbStatus}, #{creator}, #{createTime} )
     </insert>
 
     <update id="updateById">

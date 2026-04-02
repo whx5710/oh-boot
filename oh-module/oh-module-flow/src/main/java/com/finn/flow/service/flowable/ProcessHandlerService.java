@@ -1,11 +1,15 @@
-package com.finn.flow.service;
+package com.finn.flow.service.flowable;
 
 import com.finn.flow.entity.FlowEntity;
+import com.finn.flow.service.FlowNodeService;
+import com.finn.flow.service.FlowService;
 import com.finn.framework.exception.ServerException;
 import com.finn.flow.vo.FlowNodeVO;
+import org.flowable.bpmn.exceptions.XMLException;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.Process;
+import org.flowable.common.engine.api.FlowableIllegalArgumentException;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
@@ -42,21 +46,14 @@ public class ProcessHandlerService {
      * @return 部署对象
      */
     public Deployment deploy(String path, String name){
-//        Deployment deployment = null;
-//        try{
-//            deployment = repositoryService.createDeployment()
-//                    .name(name) // 定义部署文件的名称
-//                    .addClasspathResource(path) // 绑定需要部署的流程文件
-//                    .deploy();// 部署流程
-//        }catch(ParseException e1){
-//            throw new ServerException("流程定义格式异常，请检查！");
-//        }catch (NullValueException e2){
-//            throw new ServerException("未找到流程文件，请检查是否存在！【" + path + "】");
-//        }
-        return repositoryService.createDeployment()
-                .name(name) // 定义部署文件的名称
-                .addClasspathResource(path) // 绑定需要部署的流程文件
-                .deploy();// 部署流程
+        try {
+            return repositoryService.createDeployment()
+                    .name(name) // 定义部署文件的名称
+                    .addClasspathResource(path) // 绑定需要部署的流程文件
+                    .deploy();// 部署流程
+        }catch (FlowableIllegalArgumentException e){
+            throw new ServerException("流程部署失败！", e.getMessage());
+        }
     }
 
     /**
@@ -74,11 +71,17 @@ public class ProcessHandlerService {
         String svgStr = flow.getSvgStr();
         String name = key.endsWith(".bpmn")?key:key + ".bpmn";
         String svgName = key + ".svg";
-        Deployment deployment = repositoryService.createDeployment()
-                .name(name)                 // 定义部署文件的名称
-                .addString(name, dbXml)     // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
-                .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
-                .deploy();                  // 部署流程
+        Deployment deployment;
+        try{
+            deployment = repositoryService.createDeployment()
+                    .name(name)                 // 定义部署文件的名称
+                    .addString(name, dbXml)     // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
+                    .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
+                    .deploy();                  // 部署流程
+        }catch (XMLException e){
+            throw new ServerException("流程部署失败！", e.getMessage());
+        }
+
         // 保存环节
         String procDefId = getProcessDefID(deployment);
         BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);

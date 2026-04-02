@@ -1,5 +1,6 @@
-package com.finn.flow.service;
+package com.finn.flow.service.flowable;
 
+import com.finn.flow.service.TaskRecordService;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
@@ -104,31 +105,6 @@ public class TaskHandlerService {
             }
         }
         return taskRecordService.getRunRecord(processInstance.getProcessInstanceId());
-
-        /*try {
-            if(ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
-                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey);
-            }else if(ObjectUtils.isEmpty(businessKey) && !ObjectUtils.isEmpty(params)){
-                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey, params);
-            }else if(!ObjectUtils.isEmpty(businessKey) && ObjectUtils.isEmpty(params)){
-                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey, businessKey);
-            }else{
-                processInstance = (ProcessInstanceWithVariablesImpl) runtimeService.startProcessInstanceByKey(processKey, businessKey, params);
-            }
-            // 正在运行的任务
-            List<HistoricTaskInstance> list = getTaskInstByProInsId(processInstance.getProcessInstanceId());
-            if(!ObjectUtils.isEmpty(list)){
-                for(int i = 0; i < list.size(); i++){
-                    HistoricTaskInstance his = list.get(i);
-                    taskRecordService.saveTaskRecord(processInstance.getProcessInstanceId(), his.getId());
-                }
-            }
-            return taskRecordService.getRunRecord(processInstance.getProcessInstanceId());
-        }catch (NotFoundException e1){
-            throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败，请确认是否部署！", e1.getMessage());
-        }catch (NullValueException e2){
-            throw new ServerException("根据流程KEY未找到对应的流程，启动流程失败，请确认是否部署。", e2.getMessage());
-        }*/
     }
 
     /**
@@ -145,18 +121,6 @@ public class TaskHandlerService {
         if(ObjectUtils.isEmpty(list)){
             throw new ServerException("没有找到待操作的流程，请检查！");
         }
-//        try {
-//            // 完成任务
-//            taskService.complete(taskVO.getTaskId(), taskVO.getParams());
-//            // 保存环节
-//            taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
-//        }catch (NullValueException e1){
-//            log.error("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】 {}", e1.getMessage());
-//            throw new ServerException("任务ID错误，环节未完成！【" + taskVO.getTaskId() + "】");
-//        }catch (ProcessEngineException e2){
-//            log.error("完成环节发生异常，请联系管理员！{}", e2.getMessage());
-//            throw new ServerException("完成环节发生异常，请联系管理员！");
-//        }
         // 完成任务
         taskService.complete(taskVO.getTaskId(), taskVO.getParams());
         // 保存环节
