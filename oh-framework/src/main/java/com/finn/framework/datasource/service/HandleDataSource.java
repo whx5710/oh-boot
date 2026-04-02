@@ -147,8 +147,8 @@ public class HandleDataSource {
         hikariConfig.setPoolName(key); // 连接池名称
         
         // 健康检查配置
-        hikariConfig.setConnectionTestQuery("SELECT 1"); // 连接测试语句
-        hikariConfig.setValidationTimeout(TimeUnit.SECONDS.toMillis(5)); // 验证超时时间
+        hikariConfig.setConnectionTestQuery(dataSourceProperty.getHikari().getConnectionTestQuery()); // 连接测试语句
+        hikariConfig.setValidationTimeout(dataSourceProperty.getHikari().getValidationTimeout()); // 验证超时时间
         
         try{
             HikariDataSource dataSource = new HikariDataSource(hikariConfig);

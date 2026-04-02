@@ -26,8 +26,20 @@ public class ConnectNumProperty {
      */
     private String maxWait = "30000";
 
-    // 检查连接
+    /**
+     * 检查连接
+     */
     private Boolean checkConnection = false;
+    /**
+     * 连接测试查询语句
+     * 默认SELECT 1
+     */
+    private String connectionTestQuery = "SELECT 1";
+
+    /**
+     * 验证超时时间，默认5秒
+     */
+    private long validationTimeout = 5000;
 
     public String getInitialSize() {
         return initialSize;
@@ -67,5 +79,21 @@ public class ConnectNumProperty {
 
     public void setCheckConnection(Boolean checkConnection) {
         this.checkConnection = checkConnection;
+    }
+
+    public String getConnectionTestQuery() {
+        return connectionTestQuery;
+    }
+
+    public void setConnectionTestQuery(String connectionTestQuery) {
+        this.connectionTestQuery = connectionTestQuery;
+    }
+
+    public long getValidationTimeout() {
+        return validationTimeout;
+    }
+
+    public void setValidationTimeout(long validationTimeout) {
+        this.validationTimeout = validationTimeout;
     }
 }

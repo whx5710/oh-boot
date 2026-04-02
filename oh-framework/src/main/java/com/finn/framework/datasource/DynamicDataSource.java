@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(DynamicDataSource.class);
     /**
      * 数据源集合，使用ConcurrentHashMap提高并发安全性
      */
@@ -31,7 +31,9 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * 主数据源
      */
     private DataSource primaryDb;
-
+    /**
+     * mybatis配置属性
+     */
     private MybatisProperties mybatisProperties;
 
     public DynamicDataSource(){

@@ -50,13 +50,14 @@ oh-module    业务模块
 通过引入`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
 
 ## 快速开始
-环境：JDK17+、MySQL8+、Redis、Kafka(RocketMq)
+环境：JDK17+、MySQL8+（Postgresql）、Redis、Kafka（如果需要）
 - 1、克隆项目 `git clone https://gitee.com/whx233/oh-boot.git`
-- 2、创建数据库，分别创建 oh-sys 和 oh-boot数据库（可合并成一个库），并分别执行db\mysql目录下的SQL脚本
-- 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka/RocketMq（如果需要）、文件存储路径等
+- 2、创建数据库，分别创建 oh_sys 和 oh_boot数据库（可合并成一个库），并执行db\mysql目录下的SQL脚本（根据实际数据库执行）
+- 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka、文件存储路径等
 - 4、启动服务 `com.finn.ServerApplication`
 - 5、API文档地址：自行部署发布Torna
-- 6、数据库监控地址：http://localhost:8080/druid/login.html
+
+注：切换数据库只需调整jdbc驱动配置（引入驱动依赖`oh-framework/pom.xml`） 和`mybatis.mapper-locations`路径配置
 
 ## 配置说明
 ```yaml
@@ -104,13 +105,14 @@ spring:
         username: root
         password: 123456
         hikari: # 默认hikari连接池
-          initialSize: 5
-          minIdle: 5
-          maxActive: 50
+          initialSize: 10
+          minIdle: 10
+          maxActive: 100
           maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
           maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
+          slowThreshold: 500 # 慢查询阈值,默认1000（毫秒）
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
 # 日志信息

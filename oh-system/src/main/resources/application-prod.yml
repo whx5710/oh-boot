@@ -63,7 +63,7 @@ spring:
     dynamic:
       sysDb: # 系统管理数据源
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        url: jdbc:mysql://127.0.0.1:3306/oh_sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
         password: 123456
         hikari:
@@ -76,7 +76,7 @@ spring:
           slowThreshold: 1000 # 慢查询阈值,默认1000（毫秒）
       masterDb: # 主数据源
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        url: jdbc:mysql://127.0.0.1:3306/oh_boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         username: root
         password: 123456
         hikari:

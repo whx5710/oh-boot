@@ -76,6 +76,8 @@ spring:
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
           slowThreshold: 500 # 慢查询阈值,默认1000（毫秒）
+          connectionTestQuery: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          validationTimeout: 5000 # 验证超时时间，默认5秒
       masterDb: # 主数据源
         driver-class-name: org.postgresql.Driver
         #driver-class-name: com.mysql.cj.jdbc.Driver
@@ -91,6 +93,8 @@ spring:
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
           slowThreshold: 800 # 慢查询阈值,默认1000（毫秒）
+          connectionTestQuery: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          validationTimeout: 5000 # 验证超时时间，默认5秒
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: open-api-flow
