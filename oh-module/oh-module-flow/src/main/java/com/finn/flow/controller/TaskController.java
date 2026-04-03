@@ -2,15 +2,16 @@ package com.finn.flow.controller;
 
 import com.finn.flow.service.flowable.ProcessHandlerService;
 import com.finn.flow.service.flowable.TaskHandlerService;
+import com.finn.flow.vo.FlowNodeVO;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
 import com.finn.framework.entity.Result;
+import com.finn.framework.exception.ServerException;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -62,6 +63,9 @@ public class TaskController {
     @GetMapping("/getProcessByKey/{key}")
     public Result<String> getProcessByKey(@PathVariable String key){
         ProcessDefinition processDefinition = this.processHandlerService.getProcessByKey(key);
+        if(processDefinition == null){
+            throw new ServerException("未找到对应的流程");
+        }
         return Result.ok(processDefinition.getId());
     }
 
@@ -72,7 +76,7 @@ public class TaskController {
      */
     @PostMapping("/startFlow")
     public Result<List<TaskRecordVO>> startFlow(@RequestBody TaskVO taskVO){
-        return Result.ok(taskHandlerService.startByProcessKey(taskVO.getProDefKey(), taskVO.getBusinessKey(), taskVO.getParams()));
+        return Result.ok(taskHandlerService.startByProcessId(taskVO.getProDefId(), taskVO.getBusinessKey(), taskVO.getParams()));
     }
 
     /**
@@ -80,9 +84,9 @@ public class TaskController {
      * @param processKey 流程KEY
      * @return
      */
-    @GetMapping("/startByProcessKey/{processKey}")
-    public Result<List<TaskRecordVO>> startByProcessKey(@PathVariable String processKey){
-        return Result.ok(taskHandlerService.startByProcessKey(processKey));
+    @GetMapping("/startByProcessId/{processKey}")
+    public Result<List<TaskRecordVO>> startByProcessId(@PathVariable String processKey){
+        return Result.ok(taskHandlerService.startByProcessId(processKey));
     }
 
     /**
@@ -111,10 +115,13 @@ public class TaskController {
         return Result.ok("");
     }
 
-
-    @GetMapping("/foo/{processKey}")
-    public Result<String> foo(@PathVariable String processKey) throws IOException {
-        taskHandlerService.getHighlightNode(processKey);
-        return Result.ok();
+    /**
+     * 获取当前任务的下一环节节点
+     * @param taskId t
+     * @return r
+     */
+    @GetMapping("/getNextNodes/{taskId}")
+    public Result<List<FlowNodeVO>> getNextNodes(@PathVariable String taskId) {
+        return Result.ok(taskHandlerService.getNextNodes(taskId));
     }
 }

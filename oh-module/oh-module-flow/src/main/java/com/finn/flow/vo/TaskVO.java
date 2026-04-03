@@ -11,11 +11,6 @@ import java.util.HashMap;
 public class TaskVO {
 
     /**
-     * 流程定义KEY
-     * Process_demo20231222
-     */
-    private String proDefKey;
-    /**
      * 流程定义ID
      * Process_demo20231222:13:0a229e0e-c03e-11ee-80d0-b48c9dca078f
      */
@@ -38,14 +33,6 @@ public class TaskVO {
      * 环节执行参数
      */
     private HashMap<String, Object> params;
-
-    public String getProDefKey() {
-        return proDefKey;
-    }
-
-    public void setProDefKey(String proDefKey) {
-        this.proDefKey = proDefKey;
-    }
 
     public String getProDefId() {
         return proDefId;

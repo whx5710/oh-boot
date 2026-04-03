@@ -23,25 +23,6 @@
         order by create_time desc
     </select>
 
-    <insert id="save">
-        INSERT INTO bpmn_flow_node ( proc_def_id, act_def_id, node_name, element_type, note, db_status, creator, create_time )
-        VALUES ( #{procDefId}, #{actDefId}, #{nodeName}, #{elementType}, #{note}, #{dbStatus}, #{creator}, #{createTime} )
-    </insert>
-
-    <update id="updateById">
-        UPDATE bpmn_flow_node
-        <set>
-            <if test="procDefId != null and procDefId != ''">proc_def_id = #{procDefId},</if>
-            <if test="actDefId != null and actDefId != ''">act_def_id = #{actDefId},</if>
-            <if test="nodeName != null and nodeName != ''">node_name = #{nodeName},</if>
-            <if test="note != null and note != ''">note = #{note},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null">updater = #{updater},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-        </set>
-        WHERE id = #{id}
-    </update>
-
     <select id="getById" resultType="com.finn.flow.entity.FlowNodeEntity">
         select * from bpmn_flow_node where id = #{id}
     </select>

@@ -37,7 +37,7 @@ public class FlowNodeServiceImpl implements FlowNodeService {
     @Override
     public void save(FlowNodeVO vo) {
         FlowNodeEntity entity = FlowNodeConvert.INSTANCE.convert(vo);
-        flowNodeMapper.save(entity);
+        flowNodeMapper.insert(entity);
     }
 
     @Override

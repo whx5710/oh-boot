@@ -184,7 +184,7 @@ public class ProcessHandlerService {
         }
         Reader reader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(reader);
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         String svgStr = "";
         while ((svgStr = bufferedReader.readLine()) != null){
             stringBuffer.append(svgStr);
@@ -199,14 +199,5 @@ public class ProcessHandlerService {
      */
     public Boolean isDeploy(String processKey){
         return !ObjectUtils.isEmpty(repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).active().list());
-    }
-
-
-    /**
-     * 测试方法
-     * @param p
-     */
-    public void test(String p){
-
     }
 }

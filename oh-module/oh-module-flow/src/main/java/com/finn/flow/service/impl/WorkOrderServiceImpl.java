@@ -132,7 +132,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
             workOrderVO.setId(idWorker.nextId());
         }
         // 启动流程
-        List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
+        List<TaskRecordVO> list = taskHandlerService.startByProcessId(processKey, String.valueOf(workOrderVO.getId()), null);
         if(list != null && !list.isEmpty()){
             List<String> flowInfo = new ArrayList<>(list.size());
             list.forEach(item ->{
