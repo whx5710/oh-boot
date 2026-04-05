@@ -64,7 +64,7 @@ spring:
       sysDb: # 系统管理数据源
         driver-class-name: org.postgresql.Driver
         #driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:postgresql://127.0.0.1:5432/stepping-stone?currentSchema=oh_sys
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
         username: postgres
         password: 123456
         hikari:
@@ -81,7 +81,7 @@ spring:
       masterDb: # 主数据源
         driver-class-name: org.postgresql.Driver
         #driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:postgresql://127.0.0.1:5432/stepping-stone?currentSchema=oh_boot
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot
         username: postgres
         password: 123456
         hikari:
