@@ -51,7 +51,7 @@ public class FlowServiceImpl implements FlowService {
             entity.setSvgStr(unescapeXml(entity.getSvgStr()));
         }
         if(flowEntity == null){
-            flowMapper.save(entity);
+            flowMapper.insert(entity);
         }else{
             entity.setId(flowEntity.getId());
             entity.setDbStatus(1);

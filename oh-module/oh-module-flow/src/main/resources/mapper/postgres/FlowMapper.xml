@@ -16,27 +16,6 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-    <insert id="save" parameterType="com.finn.flow.entity.FlowEntity">
-        INSERT INTO bpmn_flow (key_code, name, xml, svg_str, version_tag, note, db_status, creator, create_time)
-        VALUES (#{keyCode}, #{name}, #{xml}, #{svgStr}, #{versionTag}, #{note}, #{dbStatus}, #{creator}, #{createTime})
-    </insert>
-
-    <update id="updateById" parameterType="com.finn.flow.entity.FlowEntity">
-        UPDATE bpmn_flow
-        <set>
-            <if test="keyCode != null and keyCode != ''">key_code = #{keyCode},</if>
-            <if test="name != null and name != ''">name = #{name},</if>
-            <if test="xml != null and xml != ''">xml = #{xml},</if>
-            <if test="svgStr != null and svgStr != ''">svg_str = #{svgStr},</if>
-            <if test="versionTag != null and versionTag != ''">version_tag = #{versionTag},</if>
-            <if test="note != null and note != ''">note = #{note},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null">updater = #{updater},</if>
-            update_time = #{updateTime}
-        </set>
-        WHERE id = #{id}
-    </update>
-
     <select id="getById" resultType="com.finn.flow.entity.FlowEntity">
         select * from bpmn_flow where id = #{id}
     </select>
@@ -45,6 +24,9 @@
         select * from bpmn_flow where db_status = 1
         <if test="name != null and name != ''">
             and (name like concat('%', #{name}, '%') or key_code like concat('%', #{name}, '%'))
+        </if>
+        <if test="keyCode != null and keyCode != ''">
+            and key_code = #{keyCode}
         </if>
         order by create_time desc
     </select>

@@ -24,7 +24,7 @@ public class FlowQuery extends Query {
         return keyCode;
     }
 
-    public void setKeyCode(String key) {
+    public void setKeyCode(String keyCode) {
         this.keyCode = keyCode;
     }
 
