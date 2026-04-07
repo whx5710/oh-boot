@@ -1,5 +1,7 @@
 package com.finn.flow.entity;
 
+import com.finn.framework.aop.annotations.TableField;
+import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -10,60 +12,72 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2024-02-06
  */
+@TableName("bpmn_task_record")
 public class TaskRecordEntity extends BaseEntity {
 	/**
 	* 流程定义ID
 	*/
+	@TableField("proc_def_id")
 	private String procDefId;
 
 	/**
 	* 环节实例ID
 	*/
+	@TableField("proc_inst_id")
 	private String procInstId;
 
 	/**
 	* 环节实例ID
 	*/
+	@TableField("act_inst_id")
 	private String actInstId;
 
 	/**
 	* 任务ID
 	*/
+	@TableField("task_id")
 	private String taskId;
 
 	/**
 	* 环节key
 	*/
+	@TableField("task_def_id")
 	private String taskDefId;
 
 	/**
 	* 环节名称
 	*/
+	@TableField("task_name")
 	private String taskName;
 
 	/**
 	* 来自于环节实例ID
 	*/
+	@TableField("from_act_inst_id")
 	private String fromActInstId;
 
 	/**
 	* 来自于任务ID
 	*/
+	@TableField("from_task_id")
 	private String fromTaskId;
 
 	/**
 	* 来自于环节ID
 	*/
+	@TableField("from_task_def_id")
 	private String fromTaskDefId;
 
 	/**
 	* 来自于环节名称
 	*/
+	@TableField("from_task_name")
 	private String fromTaskName;
 
 	/**
 	* 当前标识，默认0，1标识当前环节
 	*/
+	@TableField("run_mark")
 	private Integer runMark;
 
 	/**
@@ -74,16 +88,19 @@ public class TaskRecordEntity extends BaseEntity {
 	/**
 	* 受理人
 	*/
+	@TableField("assignee_name")
 	private String assigneeName;
 
 	/**
 	* 开始时间
 	*/
+	@TableField("start_time")
 	private LocalDateTime startTime;
 
 	/**
 	* 结束时间
 	*/
+	@TableField("end_time")
 	private LocalDateTime endTime;
 
 	/**

@@ -21,7 +21,7 @@
         <!--分页插件-->
         <pagehelper.version>2.1.1</pagehelper.version>
         <!-- mysql数据库连接驱动 -->
-        <!--<mysql.jdbc.version>9.6.0</mysql.jdbc.version>-->
+        <mysql.jdbc.version>9.6.0</mysql.jdbc.version>
         <!--postgresql-->
         <postgresql.version>42.7.10</postgresql.version>
     </properties>
@@ -74,11 +74,11 @@
         </dependency>
 
         <!-- mysql 驱动 -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.jdbc.version}</version>
-        </dependency>-->
+        </dependency>
 
         <!-- postgresql驱动: https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>

@@ -59,13 +59,13 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Override
     public boolean save(TaskRecordEntity vo) {
-        taskRecordMapper.saveTaskRecord(vo);
+        taskRecordMapper.insert(vo);
         return true;
     }
 
     @Override
     public void update(TaskRecordVO vo) {
-        taskRecordMapper.updateTaskRecordById(TaskRecordConvert.INSTANCE.convert(vo));
+        taskRecordMapper.updateById(TaskRecordConvert.INSTANCE.convert(vo));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
             TaskRecordEntity param = new TaskRecordEntity();
             param.setId(id);
             param.setDbStatus(0);
-            taskRecordMapper.updateTaskRecordById(param);
+            taskRecordMapper.updateById(param);
         });
     }
 
@@ -212,7 +212,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Override
     public TaskRecordEntity getTaskRecordById(Long id) {
-        return taskRecordMapper.getTaskRecordById(id);
+        return taskRecordMapper.findById(id, TaskRecordEntity.class);
     }
 
     /**
