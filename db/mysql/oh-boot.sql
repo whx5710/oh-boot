@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 25/10/2024 11:10:03
+ Date: 07/04/2026 15:15:45
 */
 
 SET NAMES utf8mb4;
@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `bpmn_flow`;
 CREATE TABLE `bpmn_flow`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `key_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '流程code',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程名称',
   `xml` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'bpmn的xml字符串',
@@ -36,7 +36,7 @@ CREATE TABLE `bpmn_flow`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_01`(`key_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '自定义流程表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '自定义流程表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of bpmn_flow
@@ -48,7 +48,7 @@ INSERT INTO `bpmn_flow` VALUES (1, 'Process_demo20231222', '流程例子', '<?xm
 -- ----------------------------
 DROP TABLE IF EXISTS `bpmn_flow_node`;
 CREATE TABLE `bpmn_flow_node`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `proc_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
   `act_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '环节ID',
   `node_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节名称',
@@ -72,7 +72,7 @@ CREATE TABLE `bpmn_flow_node`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `bpmn_task_record`;
 CREATE TABLE `bpmn_task_record`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `proc_def_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '流程定义ID',
   `proc_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节实例ID',
   `act_inst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环节实例ID',
@@ -96,7 +96,7 @@ CREATE TABLE `bpmn_task_record`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `bpmn_task_record_proc_inst_id_IDX`(`proc_inst_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节运行记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '环节运行记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of bpmn_task_record
@@ -107,7 +107,7 @@ CREATE TABLE `bpmn_task_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `data_app`;
 CREATE TABLE `data_app`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端名称',
   `client_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端ID',
   `secret_key` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密钥',
@@ -119,7 +119,7 @@ CREATE TABLE `data_app`  (
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_01`(`client_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_app
@@ -133,7 +133,7 @@ INSERT INTO `data_app` VALUES (3, '支付包', 'C003', '8a8120682d4b4fa50325ed',
 -- ----------------------------
 DROP TABLE IF EXISTS `data_function`;
 CREATE TABLE `data_function`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能名称',
   `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
   `is_async` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否异步0否1是',
@@ -145,7 +145,7 @@ CREATE TABLE `data_function`  (
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `index2`(`func_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能列表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能列表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_function
@@ -159,7 +159,7 @@ INSERT INTO `data_function` VALUES (3, '新增工单', 'F1003', 1, '', 10000, '2
 -- ----------------------------
 DROP TABLE IF EXISTS `data_function_authority`;
 CREATE TABLE `data_function_authority`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `client_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端ID',
   `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
@@ -170,7 +170,7 @@ CREATE TABLE `data_function_authority`  (
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `index2`(`client_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端接口授权' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端接口授权' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_function_authority
@@ -185,7 +185,7 @@ INSERT INTO `data_function_authority` VALUES (4, 'C0001', 'F1003', NULL, 10000, 
 -- ----------------------------
 DROP TABLE IF EXISTS `data_message`;
 CREATE TABLE `data_message`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `client_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端ID',
   `func_code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
   `topic` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '主题',
@@ -200,7 +200,7 @@ CREATE TABLE `data_message`  (
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_01`(`topic`, `client_id`, `func_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '接口参数数据' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '接口参数数据' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_message
@@ -211,7 +211,7 @@ CREATE TABLE `data_message`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `oh_project`;
 CREATE TABLE `oh_project`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` bigint NOT NULL COMMENT 'ID',
   `project_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目编码',
   `project_name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目名称',
   `project_alias` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '别名',
@@ -226,7 +226,7 @@ CREATE TABLE `oh_project`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of oh_project
@@ -260,7 +260,7 @@ CREATE TABLE `oh_project_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `oh_task`;
 CREATE TABLE `oh_task`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `id` bigint NOT NULL COMMENT '序号',
   `project_id` int NOT NULL COMMENT '所属项目',
   `task_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务标题',
   `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务描述',
@@ -277,7 +277,7 @@ CREATE TABLE `oh_task`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '任务表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of oh_task
@@ -312,7 +312,7 @@ CREATE TABLE `oh_task_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `oh_work_order`;
 CREATE TABLE `oh_work_order`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL,
   `order_code` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '工单编码',
   `order_source` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '工单来源',
   `report_time` datetime NULL DEFAULT NULL COMMENT '上报时间',
