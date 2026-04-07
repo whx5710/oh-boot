@@ -36,6 +36,11 @@ public class FlowNodeEntity extends BaseEntity {
 	 */
 	@TableField("element_type")
 	private String elementType;
+	/**
+	 * 条件表达式
+	 */
+	@TableField("condition_expression")
+	private String conditionExpression;
 
 	/**
 	* 备注
@@ -80,5 +85,13 @@ public class FlowNodeEntity extends BaseEntity {
 
 	public void setElementType(String elementType) {
 		this.elementType = elementType;
+	}
+
+	public String getConditionExpression() {
+		return conditionExpression;
+	}
+
+	public void setConditionExpression(String conditionExpression) {
+		this.conditionExpression = conditionExpression;
 	}
 }

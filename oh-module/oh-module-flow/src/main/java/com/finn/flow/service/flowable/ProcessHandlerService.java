@@ -9,6 +9,7 @@ import org.flowable.bpmn.exceptions.XMLException;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.Process;
+import org.flowable.bpmn.model.SequenceFlow;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.Deployment;
@@ -94,6 +95,9 @@ public class ProcessHandlerService {
             flowNodeVO.setNodeName(element.getName());
             flowNodeVO.setElementType(element.getClass().getSimpleName());
             flowNodeVO.setNote(element.getDocumentation());
+            if(element instanceof SequenceFlow sequenceFlow){
+                flowNodeVO.setConditionExpression(sequenceFlow.getConditionExpression());
+            }
             flowNodeService.save(flowNodeVO);
         }
         return procDefId;

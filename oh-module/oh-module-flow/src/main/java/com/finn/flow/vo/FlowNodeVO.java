@@ -39,6 +39,11 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 	private String elementType;
 
 	/**
+	 * 条件表达式
+	 */
+	private String conditionExpression;
+
+	/**
 	 * 备注
 	 */
 	private String note;
@@ -81,5 +86,13 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 
 	public void setElementType(String elementType) {
 		this.elementType = elementType;
+	}
+
+	public String getConditionExpression() {
+		return conditionExpression;
+	}
+
+	public void setConditionExpression(String conditionExpression) {
+		this.conditionExpression = conditionExpression;
 	}
 }

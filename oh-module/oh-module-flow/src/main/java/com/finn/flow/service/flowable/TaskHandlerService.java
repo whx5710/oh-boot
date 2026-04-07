@@ -216,7 +216,6 @@ public class TaskHandlerService {
         // 5. 获取出口连线
         List<SequenceFlow> outgoingFlows = currentNode.getOutgoingFlows();
         // 6. 解析目标节点
-        List<FlowNode> nextNodes = new ArrayList<>();
         List<String> actDefIds = new ArrayList<>();
         for (SequenceFlow sequenceFlow : outgoingFlows) {
             FlowElement targetFlowElement = sequenceFlow.getTargetFlowElement();

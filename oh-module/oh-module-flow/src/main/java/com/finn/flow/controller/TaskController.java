@@ -81,12 +81,12 @@ public class TaskController {
 
     /**
      * 根据自定义流程key启动流程
-     * @param processKey 流程KEY
+     * @param procDefId 流程ID
      * @return
      */
-    @GetMapping("/startByProcessId/{processKey}")
-    public Result<List<TaskRecordVO>> startByProcessId(@PathVariable String processKey){
-        return Result.ok(taskHandlerService.startByProcessId(processKey));
+    @GetMapping("/startByProcessId/{procDefId}")
+    public Result<List<TaskRecordVO>> startByProcessId(@PathVariable String procDefId){
+        return Result.ok(taskHandlerService.startByProcessId(procDefId));
     }
 
     /**
