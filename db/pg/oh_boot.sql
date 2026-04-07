@@ -1,4 +1,4 @@
-/*
+﻿/*
  Navicat Premium Data Transfer
 
  Source Server         : localhost
@@ -20,22 +20,33 @@
 -- Table structure for bpmn_flow
 -- ----------------------------
 DROP TABLE IF EXISTS bpmn_flow;
-CREATE TABLE bpmn_flow  (
+CREATE TABLE bpmn_flow (
   id bigint NOT NULL,
-  key_code varchar(30) NULL DEFAULT NULL COMMENT '流程code',
-  name varchar(50) NOT NULL COMMENT '流程名称',
-  xml text NOT NULL COMMENT 'bpmn的xml字符串',
-  svg_str text NULL COMMENT 'svg图片字符串',
-  version_tag varchar(50) NULL DEFAULT NULL COMMENT '标签',
-  note varchar(500) NULL DEFAULT NULL COMMENT '说明',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (id),
-  UNIQUE INDEX idx_01(key_code)
-) COMMENT = '自定义流程表';
+  key_code varchar(30) NULL DEFAULT NULL,
+  name varchar(50) NOT NULL,
+  "xml" text NOT NULL,
+  svg_str text NULL,
+  version_tag varchar(50) NULL DEFAULT NULL,
+  note varchar(500) NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+COMMENT ON TABLE bpmn_flow IS '自定义流程表';
+COMMENT ON COLUMN bpmn_flow.key_code IS '流程code';
+COMMENT ON COLUMN bpmn_flow.name IS '流程名称';
+COMMENT ON COLUMN bpmn_flow."xml" IS 'bpmn的xml字符串';
+COMMENT ON COLUMN bpmn_flow.svg_str IS 'svg图片字符串';
+COMMENT ON COLUMN bpmn_flow.version_tag IS '标签';
+COMMENT ON COLUMN bpmn_flow.note IS '说明';
+COMMENT ON COLUMN bpmn_flow.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN bpmn_flow.creator IS '创建者';
+COMMENT ON COLUMN bpmn_flow.create_time IS '创建时间';
+COMMENT ON COLUMN bpmn_flow.updater IS '更新者';
+COMMENT ON COLUMN bpmn_flow.update_time IS '更新时间';
 
 -- ----------------------------
 -- Records of bpmn_flow
@@ -46,22 +57,23 @@ INSERT INTO bpmn_flow VALUES (1, 'Process_demo20231222', '流程例子', '<?xml 
 -- Table structure for bpmn_flow_node
 -- ----------------------------
 DROP TABLE IF EXISTS bpmn_flow_node;
-CREATE TABLE bpmn_flow_node  (
+CREATE TABLE bpmn_flow_node (
   id bigint NOT NULL,
-  proc_def_id varchar(100) NOT NULL COMMENT '流程定义ID',
-  act_def_id varchar(100) NOT NULL COMMENT '环节ID',
-  node_name varchar(255) NULL DEFAULT NULL COMMENT '环节名称',
-  element_type varchar(50) NULL DEFAULT NULL COMMENT '环节类型,UserTask、ExclusiveGateway等',
-  condition_expression varchar(500) NULL DEFAULT NULL COMMENT '表达式',
-  note varchar(300) NULL DEFAULT NULL COMMENT '备注',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  proc_def_id varchar(100) NOT NULL,
+  act_def_id varchar(100) NOT NULL,
+  node_name varchar(255) NULL DEFAULT NULL,
+  element_type varchar(50) NULL DEFAULT NULL,
+  condition_expression varchar(500) NULL DEFAULT NULL,
+  note varchar(300) NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id),
-  INDEX idx_01(proc_def_id)
-) COMMENT = '环节定义表';
+  
+);
+COMMENT ON TABLE bpmn_flow_node IS '环节定义表';
 
 -- ----------------------------
 -- Records of bpmn_flow_node
@@ -71,32 +83,33 @@ CREATE TABLE bpmn_flow_node  (
 -- Table structure for bpmn_task_record
 -- ----------------------------
 DROP TABLE IF EXISTS bpmn_task_record;
-CREATE TABLE bpmn_task_record  (
+CREATE TABLE bpmn_task_record (
   id bigint NOT NULL,
-  proc_def_id varchar(100) NOT NULL COMMENT '流程定义ID',
-  proc_inst_id varchar(100) NULL DEFAULT NULL COMMENT '环节实例ID',
-  act_inst_id varchar(100) NULL DEFAULT NULL COMMENT '环节实例ID',
-  task_id varchar(100) NULL DEFAULT NULL COMMENT '任务ID',
-  task_def_id varchar(100) NULL DEFAULT NULL COMMENT '环节key',
-  task_name varchar(255) NULL DEFAULT NULL COMMENT '环节名称',
-  from_act_inst_id varchar(100) NULL DEFAULT NULL COMMENT '来自于环节实例ID',
-  from_task_id varchar(100) NULL DEFAULT NULL COMMENT '来自于任务key',
-  from_task_def_id varchar(100) NULL DEFAULT NULL COMMENT '来自于环节ID',
-  from_task_name varchar(100) NULL DEFAULT NULL COMMENT '来自于环节名称',
-  run_mark int NULL DEFAULT 0 COMMENT '当前标识，默认0，1标识当前环节',
-  assignee varchar(100) NULL DEFAULT NULL COMMENT '受理人ID',
-  assignee_name varchar(100) NULL DEFAULT NULL COMMENT '受理人',
-  start_time timestamp NULL DEFAULT NULL COMMENT '开始时间',
-  end_time timestamp NULL DEFAULT NULL COMMENT '结束时间',
-  duration bigint NULL DEFAULT NULL COMMENT '时长',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  proc_def_id varchar(100) NOT NULL,
+  proc_inst_id varchar(100) NULL DEFAULT NULL,
+  act_inst_id varchar(100) NULL DEFAULT NULL,
+  task_id varchar(100) NULL DEFAULT NULL,
+  task_def_id varchar(100) NULL DEFAULT NULL,
+  task_name varchar(255) NULL DEFAULT NULL,
+  from_act_inst_id varchar(100) NULL DEFAULT NULL,
+  from_task_id varchar(100) NULL DEFAULT NULL,
+  from_task_def_id varchar(100) NULL DEFAULT NULL,
+  from_task_name varchar(100) NULL DEFAULT NULL,
+  run_mark int NULL DEFAULT 0,
+  assignee varchar(100) NULL DEFAULT NULL,
+  assignee_name varchar(100) NULL DEFAULT NULL,
+  start_time timestamp NULL DEFAULT NULL,
+  end_time timestamp NULL DEFAULT NULL,
+  duration bigint NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id),
-  INDEX bpmn_task_record_proc_inst_id_IDX(proc_inst_id)
-) COMMENT = '环节运行记录表';
+  
+);
+COMMENT ON TABLE bpmn_task_record IS '环节运行记录表';
 
 -- ----------------------------
 -- Records of bpmn_task_record
@@ -106,20 +119,21 @@ CREATE TABLE bpmn_task_record  (
 -- Table structure for data_app
 -- ----------------------------
 DROP TABLE IF EXISTS data_app;
-CREATE TABLE data_app  (
+CREATE TABLE data_app (
   id bigint NOT NULL,
-  name varchar(50) NOT NULL COMMENT '客户端名称',
-  client_id varchar(45) NOT NULL COMMENT '客户端ID',
-  secret_key varchar(45) NOT NULL COMMENT '密钥',
-  remark varchar(100) NULL DEFAULT NULL COMMENT '备注',
+  name varchar(50) NOT NULL,
+  client_id varchar(45) NOT NULL,
+  secret_key varchar(45) NOT NULL,
+  remark varchar(100) NULL DEFAULT NULL,
   creator bigint NULL DEFAULT NULL,
   create_time timestamp NULL DEFAULT NULL,
   updater bigint NULL DEFAULT NULL,
   update_time timestamp NULL DEFAULT NULL,
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  db_status smallint NULL DEFAULT 1,
   PRIMARY KEY (id),
-  UNIQUE INDEX idx_01(client_id)
-) COMMENT = '客户端';
+  
+);
+COMMENT ON TABLE data_app IS '客户端';
 
 -- ----------------------------
 -- Records of data_app
@@ -132,20 +146,21 @@ INSERT INTO data_app VALUES (3, '支付包', 'C003', '8a8120682d4b4fa50325ed', '
 -- Table structure for data_function
 -- ----------------------------
 DROP TABLE IF EXISTS data_function;
-CREATE TABLE data_function  (
+CREATE TABLE data_function (
   id bigint NOT NULL,
-  name varchar(50) NOT NULL COMMENT '功能名称',
-  func_code varchar(50) NOT NULL COMMENT '功能号',
-  is_async smallint NOT NULL DEFAULT 0 COMMENT '是否异步0否1是',
-  remark varchar(100) NULL DEFAULT NULL COMMENT '备注',
+  name varchar(50) NOT NULL,
+  func_code varchar(50) NOT NULL,
+  is_async smallint NOT NULL DEFAULT 0,
+  remark varchar(100) NULL DEFAULT NULL,
   creator bigint NULL DEFAULT NULL,
   create_time timestamp NULL DEFAULT NULL,
   updater bigint NULL DEFAULT NULL,
   update_time timestamp NULL DEFAULT NULL,
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  db_status smallint NULL DEFAULT 1,
   PRIMARY KEY (id),
-  INDEX index2(func_code)
-) COMMENT = '功能列表';
+  
+);
+COMMENT ON TABLE data_function IS '功能列表';
 
 -- ----------------------------
 -- Records of data_function
@@ -158,19 +173,20 @@ INSERT INTO data_function VALUES (3, '新增工单', 'F1003', 1, '', 10000, '202
 -- Table structure for data_function_authority
 -- ----------------------------
 DROP TABLE IF EXISTS data_function_authority;
-CREATE TABLE data_function_authority  (
+CREATE TABLE data_function_authority (
   id bigint NOT NULL,
-  client_id varchar(50) NOT NULL COMMENT '客户端ID',
-  func_code varchar(50) NOT NULL COMMENT '功能号',
-  remark varchar(100) NULL DEFAULT NULL COMMENT '备注',
+  client_id varchar(50) NOT NULL,
+  func_code varchar(50) NOT NULL,
+  remark varchar(100) NULL DEFAULT NULL,
   creator bigint NULL DEFAULT NULL,
   create_time timestamp NULL DEFAULT NULL,
   updater bigint NULL DEFAULT NULL,
   update_time timestamp NULL DEFAULT NULL,
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  db_status smallint NULL DEFAULT 1,
   PRIMARY KEY (id),
-  INDEX index2(client_id)
-) COMMENT = '客户端接口授权';
+  
+);
+COMMENT ON TABLE data_function_authority IS '客户端接口授权';
 
 -- ----------------------------
 -- Records of data_function_authority
@@ -184,23 +200,24 @@ INSERT INTO data_function_authority VALUES (4, 'C0001', 'F1003', NULL, 10000, '2
 -- Table structure for data_message
 -- ----------------------------
 DROP TABLE IF EXISTS data_message;
-CREATE TABLE data_message  (
+CREATE TABLE data_message (
   id bigint NOT NULL,
-  client_id varchar(50) NULL DEFAULT NULL COMMENT '客户端ID',
-  func_code varchar(200) NOT NULL COMMENT '功能号',
-  topic varchar(50) NULL DEFAULT NULL COMMENT '主题',
-  json_str varchar(3000) NULL DEFAULT NULL COMMENT '请求参数',
-  state varchar(1) NULL DEFAULT '0' COMMENT '状态0未处理1处理2未找到对应的服务类3业务处理失败',
-  result_msg varchar(3000) NULL DEFAULT NULL COMMENT '响应消息',
-  note varchar(500) NULL DEFAULT NULL COMMENT '备注',
+  client_id varchar(50) NULL DEFAULT NULL,
+  func_code varchar(200) NOT NULL,
+  topic varchar(50) NULL DEFAULT NULL,
+  json_str varchar(3000) NULL DEFAULT NULL,
+  state varchar(1) NULL DEFAULT '0',
+  result_msg varchar(3000) NULL DEFAULT NULL,
+  note varchar(500) NULL DEFAULT NULL,
   creator bigint NULL DEFAULT NULL,
   create_time timestamp(3) NULL DEFAULT NULL,
   updater bigint NULL DEFAULT NULL,
   update_time timestamp NULL DEFAULT NULL,
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  db_status smallint NULL DEFAULT 1,
   PRIMARY KEY (id),
-  INDEX idx_01(topic, client_id, func_code)
-) COMMENT = '接口参数数据';
+  
+);
+COMMENT ON TABLE data_message IS '接口参数数据';
 
 -- ----------------------------
 -- Records of data_message
@@ -210,23 +227,24 @@ CREATE TABLE data_message  (
 -- Table structure for oh_project
 -- ----------------------------
 DROP TABLE IF EXISTS oh_project;
-CREATE TABLE oh_project  (
-  id bigint NOT NULL COMMENT 'ID',
-  project_code varchar(50) NULL DEFAULT NULL COMMENT '项目编码',
-  project_name varchar(80) NULL DEFAULT NULL COMMENT '项目名称',
-  project_alias varchar(50) NULL DEFAULT NULL COMMENT '别名',
-  start_time date NULL DEFAULT NULL COMMENT '开始时间',
-  end_time date NULL DEFAULT NULL COMMENT '结束时间',
-  director bigint NULL DEFAULT NULL COMMENT '负责人ID',
-  director_name varchar(60) NULL DEFAULT NULL COMMENT '负责人姓名',
-  status smallint NULL DEFAULT NULL COMMENT '状态（1开始2暂停3关闭）',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+CREATE TABLE oh_project (
+  id bigint NOT NULL,
+  project_code varchar(50) NULL DEFAULT NULL,
+  project_name varchar(80) NULL DEFAULT NULL,
+  project_alias varchar(50) NULL DEFAULT NULL,
+  start_time date NULL DEFAULT NULL,
+  end_time date NULL DEFAULT NULL,
+  director bigint NULL DEFAULT NULL,
+  director_name varchar(60) NULL DEFAULT NULL,
+  status smallint NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id)
-) COMMENT = '项目信息表';
+);
+COMMENT ON TABLE oh_project IS '项目信息表';
 
 -- ----------------------------
 -- Records of oh_project
@@ -237,19 +255,20 @@ INSERT INTO oh_project VALUES (2, 'P1001', '垫脚石计划', '垫脚石', '2022
 -- Table structure for oh_project_log
 -- ----------------------------
 DROP TABLE IF EXISTS oh_project_log;
-CREATE TABLE oh_project_log  (
+CREATE TABLE oh_project_log (
   id bigint NOT NULL,
-  project_id int NULL DEFAULT NULL COMMENT '项目ID',
-  task_id bigint NULL DEFAULT NULL COMMENT '任务ID',
-  operation varchar(255) NULL DEFAULT NULL COMMENT '操作类型',
-  remark varchar(500) NULL DEFAULT NULL COMMENT '备注',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  project_id int NULL DEFAULT NULL,
+  task_id bigint NULL DEFAULT NULL,
+  operation varchar(255) NULL DEFAULT NULL,
+  remark varchar(500) NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id)
-) COMMENT = '项目、任务操作日志';
+);
+COMMENT ON TABLE oh_project_log IS '项目、任务操作日志';
 
 -- ----------------------------
 -- Records of oh_project_log
@@ -259,25 +278,26 @@ CREATE TABLE oh_project_log  (
 -- Table structure for oh_task
 -- ----------------------------
 DROP TABLE IF EXISTS oh_task;
-CREATE TABLE oh_task  (
-  id bigint NOT NULL COMMENT '序号',
-  project_id int NOT NULL COMMENT '所属项目',
-  task_title varchar(255) NOT NULL COMMENT '任务标题',
-  note varchar(500) NULL DEFAULT NULL COMMENT '任务描述',
-  task_type char(1) NOT NULL COMMENT '1任务2需求3设计4缺陷9其他',
-  parent_id bigint NOT NULL DEFAULT 0 COMMENT '父级任务ID',
-  has_child smallint NULL DEFAULT NULL COMMENT '是否有子任务',
-  start_time timestamp NULL DEFAULT NULL COMMENT '计划开始时间',
-  end_time timestamp NULL DEFAULT NULL COMMENT '计划结束时间',
-  status char(1) NULL DEFAULT '1' COMMENT '状态（1待办项2进行中3已完成）',
-  remark varchar(500) NULL DEFAULT NULL COMMENT '备注',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+CREATE TABLE oh_task (
+  id bigint NOT NULL,
+  project_id int NOT NULL,
+  task_title varchar(255) NOT NULL,
+  note varchar(500) NULL DEFAULT NULL,
+  task_type char(1) NOT NULL,
+  parent_id bigint NOT NULL DEFAULT 0,
+  has_child smallint NULL DEFAULT NULL,
+  start_time timestamp NULL DEFAULT NULL,
+  end_time timestamp NULL DEFAULT NULL,
+  status char(1) NULL DEFAULT '1',
+  remark varchar(500) NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id)
-) COMMENT = '任务表';
+);
+COMMENT ON TABLE oh_task IS '任务表';
 
 -- ----------------------------
 -- Records of oh_task
@@ -287,21 +307,21 @@ CREATE TABLE oh_task  (
 -- Table structure for oh_task_user
 -- ----------------------------
 DROP TABLE IF EXISTS oh_task_user;
-CREATE TABLE oh_task_user  (
+CREATE TABLE oh_task_user (
   id bigint NOT NULL,
-  task_id bigint NOT NULL COMMENT '任务ID',
-  user_id bigint NOT NULL COMMENT '人员ID',
-  nick_name varchar(30) NULL DEFAULT NULL COMMENT '用户昵称',
-  person_type char(1) NOT NULL COMMENT '人员类型1负责人2协作人',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  task_id bigint NOT NULL,
+  user_id bigint NOT NULL,
+  nick_name varchar(30) NULL DEFAULT NULL,
+  person_type char(1) NOT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id),
-  UNIQUE INDEX idx_01(task_id, user_id),
-  INDEX idx_02(task_id)
-) COMMENT = '任务人员表';
+  
+);
+COMMENT ON TABLE oh_task_user IS '任务人员表';
 
 -- ----------------------------
 -- Records of oh_task_user
@@ -311,30 +331,171 @@ CREATE TABLE oh_task_user  (
 -- Table structure for oh_work_order
 -- ----------------------------
 DROP TABLE IF EXISTS oh_work_order;
-CREATE TABLE oh_work_order  (
+CREATE TABLE oh_work_order (
   id bigint NOT NULL,
-  order_code varchar(40) NOT NULL COMMENT '工单编码',
-  order_source varchar(2) NULL DEFAULT NULL COMMENT '工单来源',
-  report_time timestamp NULL DEFAULT NULL COMMENT '上报时间',
-  incident_time timestamp NULL DEFAULT NULL COMMENT '事发时间',
-  end_time timestamp NULL DEFAULT NULL COMMENT '结束时间',
-  title varchar(50) NULL DEFAULT NULL COMMENT '标题',
-  comment varchar(2000) NULL DEFAULT NULL COMMENT '内容',
-  address varchar(255) NULL DEFAULT NULL COMMENT '位置',
-  geo_x decimal(12, 9) NULL DEFAULT NULL COMMENT '经度',
-  geo_y decimal(12, 9) NULL DEFAULT NULL COMMENT '纬度',
-  category int NULL DEFAULT NULL COMMENT '类别',
-  extend_json varchar(300) NULL DEFAULT NULL COMMENT 'json扩展字段',
-  note varchar(255) NULL DEFAULT NULL COMMENT '备注',
-  db_status smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  creator bigint NULL DEFAULT NULL COMMENT '创建者',
-  create_time timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  updater bigint NULL DEFAULT NULL COMMENT '更新者',
-  update_time timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  order_code varchar(40) NOT NULL,
+  order_source varchar(2) NULL DEFAULT NULL,
+  report_time timestamp NULL DEFAULT NULL,
+  incident_time timestamp NULL DEFAULT NULL,
+  end_time timestamp NULL DEFAULT NULL,
+  title varchar(50) NULL DEFAULT NULL,
+  "comment" varchar(2000) NULL DEFAULT NULL,
+  address varchar(255) NULL DEFAULT NULL,
+  geo_x decimal(12, 9) NULL DEFAULT NULL,
+  geo_y decimal(12, 9) NULL DEFAULT NULL,
+  category int NULL DEFAULT NULL,
+  extend_json varchar(300) NULL DEFAULT NULL,
+  note varchar(255) NULL DEFAULT NULL,
+  db_status smallint NULL DEFAULT 1,
+  creator bigint NULL DEFAULT NULL,
+  create_time timestamp NULL DEFAULT NULL,
+  updater bigint NULL DEFAULT NULL,
+  update_time timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id),
-  UNIQUE INDEX idx_order_code(order_code)
-) COMMENT = '工单表';
+  
+);
+COMMENT ON TABLE oh_work_order IS '工单表';
 
 -- ----------------------------
 -- Records of oh_work_order
 -- ----------------------------
+
+
+-- ----------------------------
+-- Field Comments
+-- ----------------------------
+COMMENT ON COLUMN bpmn_flow_node.proc_def_id IS '流程定义ID';
+COMMENT ON COLUMN bpmn_flow_node.act_def_id IS '环节ID';
+COMMENT ON COLUMN bpmn_flow_node.node_name IS '环节名称';
+COMMENT ON COLUMN bpmn_flow_node.element_type IS '环节类型,UserTask、ExclusiveGateway等';
+COMMENT ON COLUMN bpmn_flow_node.condition_expression IS '表达式';
+COMMENT ON COLUMN bpmn_flow_node.note IS '备注';
+COMMENT ON COLUMN bpmn_flow_node.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN bpmn_flow_node.creator IS '创建者';
+COMMENT ON COLUMN bpmn_flow_node.create_time IS '创建时间';
+COMMENT ON COLUMN bpmn_flow_node.updater IS '更新者';
+COMMENT ON COLUMN bpmn_flow_node.update_time IS '更新时间';
+COMMENT ON COLUMN bpmn_task_record.proc_def_id IS '流程定义ID';
+COMMENT ON COLUMN bpmn_task_record.proc_inst_id IS '环节实例ID';
+COMMENT ON COLUMN bpmn_task_record.act_inst_id IS '环节实例ID';
+COMMENT ON COLUMN bpmn_task_record.task_id IS '任务ID';
+COMMENT ON COLUMN bpmn_task_record.task_def_id IS '环节key';
+COMMENT ON COLUMN bpmn_task_record.task_name IS '环节名称';
+COMMENT ON COLUMN bpmn_task_record.from_act_inst_id IS '来自于环节实例ID';
+COMMENT ON COLUMN bpmn_task_record.from_task_id IS '来自于任务key';
+COMMENT ON COLUMN bpmn_task_record.from_task_def_id IS '来自于环节ID';
+COMMENT ON COLUMN bpmn_task_record.from_task_name IS '来自于环节名称';
+COMMENT ON COLUMN bpmn_task_record.run_mark IS '当前标识，默认0，1标识当前环节';
+COMMENT ON COLUMN bpmn_task_record.assignee IS '受理人ID';
+COMMENT ON COLUMN bpmn_task_record.assignee_name IS '受理人';
+COMMENT ON COLUMN bpmn_task_record.start_time IS '开始时间';
+COMMENT ON COLUMN bpmn_task_record.end_time IS '结束时间';
+COMMENT ON COLUMN bpmn_task_record.duration IS '时长';
+COMMENT ON COLUMN bpmn_task_record.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN bpmn_task_record.creator IS '创建者';
+COMMENT ON COLUMN bpmn_task_record.create_time IS '创建时间';
+COMMENT ON COLUMN bpmn_task_record.updater IS '更新者';
+COMMENT ON COLUMN bpmn_task_record.update_time IS '更新时间';
+COMMENT ON COLUMN data_app.name IS '客户端名称';
+COMMENT ON COLUMN data_app.client_id IS '客户端ID';
+COMMENT ON COLUMN data_app.secret_key IS '密钥';
+COMMENT ON COLUMN data_app.remark IS '备注';
+COMMENT ON COLUMN data_app.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN data_function.name IS '功能名称';
+COMMENT ON COLUMN data_function.func_code IS '功能号';
+COMMENT ON COLUMN data_function.is_async IS '是否异步0否1是';
+COMMENT ON COLUMN data_function.remark IS '备注';
+COMMENT ON COLUMN data_function.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN data_function_authority.client_id IS '客户端ID';
+COMMENT ON COLUMN data_function_authority.func_code IS '功能号';
+COMMENT ON COLUMN data_function_authority.remark IS '备注';
+COMMENT ON COLUMN data_function_authority.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN data_message.client_id IS '客户端ID';
+COMMENT ON COLUMN data_message.func_code IS '功能号';
+COMMENT ON COLUMN data_message.topic IS '主题';
+COMMENT ON COLUMN data_message.json_str IS '请求参数';
+COMMENT ON COLUMN data_message.state IS '状态0未处理1处理2未找到对应的服务类3业务处理失败';
+COMMENT ON COLUMN data_message.result_msg IS '响应消息';
+COMMENT ON COLUMN data_message.note IS '备注';
+COMMENT ON COLUMN data_message.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN oh_project.oh_project IS 'ID';
+COMMENT ON COLUMN oh_project.project_code IS '项目编码';
+COMMENT ON COLUMN oh_project.project_name IS '项目名称';
+COMMENT ON COLUMN oh_project.project_alias IS '别名';
+COMMENT ON COLUMN oh_project.start_time IS '开始时间';
+COMMENT ON COLUMN oh_project.end_time IS '结束时间';
+COMMENT ON COLUMN oh_project.director IS '负责人ID';
+COMMENT ON COLUMN oh_project.director_name IS '负责人姓名';
+COMMENT ON COLUMN oh_project.status IS '状态（1开始2暂停3关闭）';
+COMMENT ON COLUMN oh_project.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN oh_project.creator IS '创建者';
+COMMENT ON COLUMN oh_project.create_time IS '创建时间';
+COMMENT ON COLUMN oh_project.updater IS '更新者';
+COMMENT ON COLUMN oh_project.update_time IS '更新时间';
+COMMENT ON COLUMN oh_project_log.project_id IS '项目ID';
+COMMENT ON COLUMN oh_project_log.task_id IS '任务ID';
+COMMENT ON COLUMN oh_project_log.operation IS '操作类型';
+COMMENT ON COLUMN oh_project_log.remark IS '备注';
+COMMENT ON COLUMN oh_project_log.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN oh_project_log.creator IS '创建者';
+COMMENT ON COLUMN oh_project_log.create_time IS '创建时间';
+COMMENT ON COLUMN oh_project_log.updater IS '更新者';
+COMMENT ON COLUMN oh_project_log.update_time IS '更新时间';
+COMMENT ON COLUMN oh_task.oh_task IS '序号';
+COMMENT ON COLUMN oh_task.project_id IS '所属项目';
+COMMENT ON COLUMN oh_task.task_title IS '任务标题';
+COMMENT ON COLUMN oh_task.note IS '任务描述';
+COMMENT ON COLUMN oh_task.task_type IS '1任务2需求3设计4缺陷9其他';
+COMMENT ON COLUMN oh_task.parent_id IS '父级任务ID';
+COMMENT ON COLUMN oh_task.has_child IS '是否有子任务';
+COMMENT ON COLUMN oh_task.start_time IS '计划开始时间';
+COMMENT ON COLUMN oh_task.end_time IS '计划结束时间';
+COMMENT ON COLUMN oh_task.status IS '状态（1待办项2进行中3已完成）';
+COMMENT ON COLUMN oh_task.remark IS '备注';
+COMMENT ON COLUMN oh_task.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN oh_task.creator IS '创建者';
+COMMENT ON COLUMN oh_task.create_time IS '创建时间';
+COMMENT ON COLUMN oh_task.updater IS '更新者';
+COMMENT ON COLUMN oh_task.update_time IS '更新时间';
+COMMENT ON COLUMN oh_task_user.task_id IS '任务ID';
+COMMENT ON COLUMN oh_task_user.user_id IS '人员ID';
+COMMENT ON COLUMN oh_task_user.nick_name IS '用户昵称';
+COMMENT ON COLUMN oh_task_user.person_type IS '人员类型1负责人2协作人';
+COMMENT ON COLUMN oh_task_user.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN oh_task_user.creator IS '创建者';
+COMMENT ON COLUMN oh_task_user.create_time IS '创建时间';
+COMMENT ON COLUMN oh_task_user.updater IS '更新者';
+COMMENT ON COLUMN oh_task_user.update_time IS '更新时间';
+COMMENT ON COLUMN oh_work_order.order_code IS '工单编码';
+COMMENT ON COLUMN oh_work_order.order_source IS '工单来源';
+COMMENT ON COLUMN oh_work_order.report_time IS '上报时间';
+COMMENT ON COLUMN oh_work_order.incident_time IS '事发时间';
+COMMENT ON COLUMN oh_work_order.end_time IS '结束时间';
+COMMENT ON COLUMN oh_work_order.title IS '标题';
+COMMENT ON COLUMN oh_work_order.NULL IS '内容';
+COMMENT ON COLUMN oh_work_order.address IS '位置';
+COMMENT ON COLUMN oh_work_order.NULL IS '经度';
+COMMENT ON COLUMN oh_work_order.NULL IS '纬度';
+COMMENT ON COLUMN oh_work_order.category IS '类别';
+COMMENT ON COLUMN oh_work_order.extend_json IS 'json扩展字段';
+COMMENT ON COLUMN oh_work_order.note IS '备注';
+COMMENT ON COLUMN oh_work_order.db_status IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN oh_work_order.creator IS '创建者';
+COMMENT ON COLUMN oh_work_order.create_time IS '创建时间';
+COMMENT ON COLUMN oh_work_order.updater IS '更新者';
+COMMENT ON COLUMN oh_work_order.update_time IS '更新时间';
+
+
+-- ----------------------------
+-- Indexes
+-- ----------------------------
+CREATE UNIQUE INDEX idx_01 ON bpmn_flow(key_code);
+CREATE INDEX idx_01 ON bpmn_flow_node(proc_def_id);
+CREATE INDEX bpmn_task_record_proc_inst_id_IDX ON bpmn_task_record(proc_inst_id);
+CREATE UNIQUE INDEX idx_01 ON data_app(client_id);
+CREATE INDEX index2 ON data_function(func_code);
+CREATE INDEX index2 ON data_function_authority(client_id);
+CREATE INDEX idx_01 ON data_message(topic, client_id, func_code);
+CREATE UNIQUE INDEX idx_01 ON oh_task_user(task_id, user_id);
+CREATE INDEX idx_02 ON oh_task_user(task_id);
+CREATE UNIQUE INDEX idx_order_code ON oh_work_order(order_code);
