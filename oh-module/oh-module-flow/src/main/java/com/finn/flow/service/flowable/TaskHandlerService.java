@@ -67,7 +67,7 @@ public class TaskHandlerService {
     /**
      * 启动流程
      * @param procDefId 流程定义编码
-     * @return
+     * @return list
      */
     public List<TaskRecordVO> startByProcessId(String procDefId){
         return startByProcessId(procDefId, null, null);
@@ -77,7 +77,7 @@ public class TaskHandlerService {
      * 启动流程
      * @param procDefId 流程定义编码
      * @param params 参数
-     * @return
+     * @return list
      */
     public List<TaskRecordVO> startByProcessId(String procDefId, Map<String,Object> params){
         return startByProcessId(procDefId, null, params);
@@ -87,7 +87,7 @@ public class TaskHandlerService {
      * 启动流程
      * @param procDefId 流程定义编码
      * @param businessKey 业务ID
-     * @return
+     * @return list
      */
     public List<TaskRecordVO> startByProcessId(String procDefId, String businessKey){
         return startByProcessId(procDefId, businessKey, null);
@@ -98,7 +98,7 @@ public class TaskHandlerService {
      * @param procDefId 流程定义ID
      * @param businessKey 业务ID
      * @param params 参数
-     * @return
+     * @return list
      */
     @Transactional(rollbackFor = Exception.class)
     public List<TaskRecordVO> startByProcessId(String procDefId, String businessKey, Map<String,Object> params){
@@ -130,7 +130,7 @@ public class TaskHandlerService {
     /**
      * 完成任务
      * 完成任务前，先保存前后任务信息
-     * @param taskVO
+     * @param taskVO t
      */
     //@Transactional(rollbackFor = Exception.class)
     public List<TaskRecordVO> completeTask(TaskVO taskVO){
@@ -154,8 +154,8 @@ public class TaskHandlerService {
 
     /**
      * 根据流程实例ID获取待办任务(正在运行的)
-     * @param proInsId
-     * @return
+     * @param proInsId 流程实例ID
+     * @return list
      */
     public List<Task> getTaskByProInsId(String proInsId){
         return taskService.createTaskQuery().processInstanceId(proInsId).orderByTaskCreateTime().desc().list();
@@ -164,8 +164,8 @@ public class TaskHandlerService {
 
     /**
      * 根据流程实例ID获取待办任务(正在运行的)
-     * @param proInsId
-     * @return
+     * @param proInsId 流程实例ID
+     * @return list
      */
     public List<HistoricTaskInstance> getTaskInstByProInsId(String proInsId){
         List<Task> list = taskService.createTaskQuery().processInstanceId(proInsId).orderByTaskCreateTime().desc().list();
@@ -181,8 +181,8 @@ public class TaskHandlerService {
 
     /**
      * 根据流程实例ID获取历史任务
-     * @param proInsId
-     * @return
+     * @param proInsId 流程实例ID
+     * @return list
      */
     public List<HistoricTaskInstance> getHisTaskInstByProInsId(String proInsId){
         return historyService.createHistoricTaskInstanceQuery().processInstanceId(proInsId)
@@ -238,6 +238,71 @@ public class TaskHandlerService {
     }
 
     /**
+     * 驳回任务 - 退回到上一个任务节点
+     * @param taskVO 参数
+     * taskVO.proInstId
+     * taskVO.taskId currentTaskId 当前任务ID
+     * taskVO.params.targetTaskId 目标历史任务ID（要退回到的节点）
+     */
+    @Transactional
+    public List<TaskRecordVO> rollbackToPreviousNode(TaskVO taskVO) {
+        // 校验参数
+        AssertUtils.isBlank(taskVO.getProInstId(), "流程实例ID");
+        AssertUtils.isBlank(taskVO.getTaskId(), "当前任务ID");
+        AssertUtils.isNull(taskVO.getParams(), "目标历史任务ID");
+        AssertUtils.isNull(taskVO.getParams().get("targetTaskId"), "目标历史任务ID（要退回到的节点）");
+        // 当前任务ID
+        String currentTaskId = taskVO.getTaskId();
+        // 目标历史任务ID（要退回到的节点）
+        String targetTaskId = taskVO.getParams().get("targetTaskId").toString();
+        // 1. 查询目标历史任务（要退回到的节点）
+        HistoricTaskInstance targetTask = historyService
+                .createHistoricTaskInstanceQuery()
+                .taskId(targetTaskId)
+                .singleResult();
+
+        if (targetTask == null) {
+            throw new ServerException("目标节点不存在");
+        }
+
+        // 2. 获取当前任务
+        Task currentTask = taskService.createTaskQuery()
+                .taskId(currentTaskId)
+                .singleResult();
+
+        if (currentTask == null) {
+            throw new ServerException("当前任务不存在");
+        }
+
+        // 3. 不能驳回到自己
+        if (currentTaskId.equals(targetTaskId)) {
+            throw new ServerException("不能驳回到当前节点");
+        }
+
+        // 4. 执行回退操作（核心API）
+        runtimeService.createChangeActivityStateBuilder()
+                .processInstanceId(currentTask.getProcessInstanceId())
+                // 从当前节点移动到目标节点
+                .moveActivityIdTo(currentTask.getTaskDefinitionKey(), targetTask.getTaskDefinitionKey())
+                .changeState();
+
+        // 5. 清理历史脏数据（可选，根据业务需求）
+        clearHistoryData(currentTask.getProcessInstanceId(), currentTaskId);
+
+        // 6. 返回新的任务
+        return taskRecordService.getRunRecord(taskVO.getProInstId());
+    }
+
+    /**
+     * 清理回退产生的历史脏数据
+     */
+    private void clearHistoryData(String processInstanceId, String taskId) {
+        // 更新当前标识，默认0，1标识当前环节run_mark
+        // 保存环节
+        taskRecordService.saveTaskRecord(processInstanceId, taskId);
+    }
+
+    /**
      * 获取网关后的节点
      * @param gateway 网关
      * @return list
@@ -257,7 +322,7 @@ public class TaskHandlerService {
 
     /**
      * 高亮已执行的环节
-     * @param proInsId
+     * @param proInsId 流程实例ID
      */
     public void getHighlightNode(String proInsId){
         HistoricProcessInstance hisProIns = historyService.createHistoricProcessInstanceQuery()

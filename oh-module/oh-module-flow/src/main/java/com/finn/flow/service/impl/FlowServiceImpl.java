@@ -1,5 +1,7 @@
 package com.finn.flow.service.impl;
 
+import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.github.pagehelper.Page;
 import com.finn.flow.convert.FlowConvert;
 import com.finn.flow.entity.FlowEntity;
@@ -31,8 +33,15 @@ public class FlowServiceImpl implements FlowService {
 
     @Override
     public PageResult<FlowVO> page(FlowQuery query) {
-        Page<FlowEntity> page = flowMapper.getList(query);
-        return new PageResult<>(FlowConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        Wrapper<FlowEntity> queryWrapper = QueryWrapper.of(FlowEntity.class).eq(FlowEntity::getDbStatus, 1)
+                .eq(FlowEntity::getKeyCode, query.getKeyCode()).like(FlowEntity::getName, query.getName());
+        if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
+            queryWrapper.jointSQL("(name like concat('%', #{keyWord}, '%') or key_code like concat('%', #{keyWord}, '%'))", "keyWord", query.getKeyWord());
+        }
+        queryWrapper.page(query.getPageNum(), query.getPageSize());
+        try (Page<FlowEntity> page = flowMapper.selectPageByWrapper(queryWrapper)) {
+            return new PageResult<>(FlowConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        }
     }
 
     /**
@@ -61,6 +70,15 @@ public class FlowServiceImpl implements FlowService {
 
     @Override
     public void update(FlowVO vo) {
+        AssertUtils.isNull(vo.getId(), "ID不能为空");
+        if(vo.getXml() != null){
+            String xml = unescapeXml(vo.getXml());
+            vo.setXml(xml);
+        }
+        if(vo.getSvgStr() != null){
+            String svg = unescapeXml(vo.getSvgStr());
+            vo.setSvgStr(svg);
+        }
         FlowEntity entity = FlowConvert.INSTANCE.convert(vo);
         flowMapper.updateById(entity);
     }

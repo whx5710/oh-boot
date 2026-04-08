@@ -20,17 +20,6 @@
         select * from bpmn_flow where id = #{id}
     </select>
 
-    <select id="getList" resultType="com.finn.flow.entity.FlowEntity">
-        select * from bpmn_flow where db_status = 1
-        <if test="name != null and name != ''">
-            and (name like concat('%', #{name}, '%') or key_code like concat('%', #{name}, '%'))
-        </if>
-        <if test="keyCode != null and keyCode != ''">
-            and key_code = #{keyCode}
-        </if>
-        order by create_time desc
-    </select>
-
     <select id="getByKey" resultType="com.finn.flow.entity.FlowEntity">
         select * from bpmn_flow where key_code = #{key}
     </select>

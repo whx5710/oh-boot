@@ -19,6 +19,10 @@ public class FlowQuery extends Query {
      * 流程名称
      */
     private String name;
+    /**
+     *
+     */
+    private String keyWord;
 
     public String getKeyCode() {
         return keyCode;
@@ -34,5 +38,13 @@ public class FlowQuery extends Query {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }

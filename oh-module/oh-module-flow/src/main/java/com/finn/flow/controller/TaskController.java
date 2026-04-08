@@ -39,7 +39,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deploy/{path}")
-    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
+    @PreAuthorize("hasAuthority('flow:task:saveOrUpdate')")
     public Result<String> deploy(@PathVariable String path){
         return Result.ok(processHandlerService.getProcessDefIdByDeploy(path, "流程"+System.currentTimeMillis()));
     }
@@ -50,7 +50,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deployByKey/{key}")
-//    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
+    @PreAuthorize("hasAuthority('flow:task:saveOrUpdate')")
     public Result<String> deployByKey(@PathVariable String key){
         return Result.ok(processHandlerService.deployByKey(key));
     }
@@ -75,6 +75,7 @@ public class TaskController {
      * @return
      */
     @PostMapping("/startFlow")
+    @PreAuthorize("hasAuthority('flow:task:start')")
     public Result<List<TaskRecordVO>> startFlow(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.startByProcessId(taskVO.getProDefId(), taskVO.getBusinessKey(), taskVO.getParams()));
     }
@@ -85,6 +86,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/startByProcessId/{procDefId}")
+    @PreAuthorize("hasAuthority('flow:task:start')")
     public Result<List<TaskRecordVO>> startByProcessId(@PathVariable String procDefId){
         return Result.ok(taskHandlerService.startByProcessId(procDefId));
     }
@@ -95,8 +97,20 @@ public class TaskController {
      * @return
      */
     @PostMapping("/completeTask")
+    @PreAuthorize("hasAuthority('flow:task:complete')")
     public Result<List<TaskRecordVO>> completeTask(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.completeTask(taskVO));
+    }
+
+    /**
+     * 驳回任务 - 退回到上一个任务节点
+     * @param taskVO
+     * @return
+     */
+    @PostMapping("/rollbackToPreviousNode")
+    @PreAuthorize("hasAuthority('flow:task:rollback')")
+    public Result<List<TaskRecordVO>> rollbackToPreviousNode(@RequestBody TaskVO taskVO){
+        return Result.ok(taskHandlerService.rollbackToPreviousNode(taskVO));
     }
 
     /**
@@ -121,6 +135,7 @@ public class TaskController {
      * @return r
      */
     @GetMapping("/getNextNodes/{taskId}")
+    @PreAuthorize("hasAuthority('flow:task:info')")
     public Result<List<FlowNodeVO>> getNextNodes(@PathVariable String taskId) {
         return Result.ok(taskHandlerService.getNextNodes(taskId));
     }
