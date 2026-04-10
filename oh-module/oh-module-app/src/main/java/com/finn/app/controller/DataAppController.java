@@ -1,12 +1,12 @@
 package com.finn.app.controller;
 
 import com.finn.app.service.DataFunctionAuthorityService;
-import com.finn.core.constant.Constant;
-import com.finn.core.utils.AssertUtils;
-import com.finn.core.entity.PageResult;
-import com.finn.core.entity.Result;
+import com.finn.framework.common.constant.Constant;
+import com.finn.framework.utils.AssertUtils;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.entity.Result;
 import com.finn.framework.entity.api.DataAppDTO;
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.app.convert.DataAppConvert;
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.query.DataAppQuery;

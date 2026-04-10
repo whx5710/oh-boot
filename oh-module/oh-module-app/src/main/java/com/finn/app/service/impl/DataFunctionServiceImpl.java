@@ -1,9 +1,9 @@
 package com.finn.app.service.impl;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 import com.finn.app.convert.DataFunctionConvert;
 import com.finn.app.entity.DataFunctionEntity;
 import com.finn.app.mapper.DataFunctionMapper;

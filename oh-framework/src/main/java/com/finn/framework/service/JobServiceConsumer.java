@@ -1,11 +1,11 @@
 package com.finn.framework.service;
 
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
-import com.finn.core.constant.Constant;
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.JsonUtils;
-import com.finn.core.entity.Result;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.common.constant.Constant;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.JsonUtils;
+import com.finn.framework.entity.Result;
 import com.finn.framework.common.properties.OpenApiProperties;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.framework.entity.api.MsgEntity;

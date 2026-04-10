@@ -1,6 +1,6 @@
 package com.finn.system.vo;
 
-import com.finn.framework.utils.annotations.RequestKeyParam;
+import com.finn.framework.aop.annotations.RequestKeyParam;
 
 import java.io.Serial;
 import java.io.Serializable;

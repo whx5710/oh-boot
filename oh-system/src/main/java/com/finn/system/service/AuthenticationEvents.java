@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.core.constant.Constant;
+import com.finn.framework.common.constant.Constant;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.enums.LoginOperationEnum;
 import org.springframework.context.event.EventListener;

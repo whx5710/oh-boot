@@ -1,6 +1,6 @@
 package com.finn.framework.security.user;
 
-import com.finn.core.entity.SuperEntity;
+import com.finn.framework.entity.SuperEntity;
 
 import java.io.Serial;
 import java.io.Serializable;

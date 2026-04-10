@@ -1,6 +1,6 @@
 package com.finn.system.cache;
 
-import com.finn.core.cache.RedisCache;
+import com.finn.framework.cache.RedisCache;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,9 +1,10 @@
 package com.finn.flow.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.github.pagehelper.Page;
 import com.finn.flow.entity.FlowNodeEntity;
 import com.finn.flow.query.FlowNodeQuery;
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,14 +15,10 @@ import org.apache.ibatis.annotations.Param;
 * @since 1.0.0 2024-01-31
 */
 @Mapper
-public interface FlowNodeMapper {
+public interface FlowNodeMapper extends BaseMapper<FlowNodeEntity> {
 
     @Pages
     Page<FlowNodeEntity> getList(FlowNodeQuery query);
-
-    int save(FlowNodeEntity param);
-
-    boolean updateById(FlowNodeEntity param);
 
     FlowNodeEntity getById(@Param("id")Long id);
 }

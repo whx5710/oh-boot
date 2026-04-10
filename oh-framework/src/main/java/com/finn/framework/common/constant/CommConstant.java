@@ -1,6 +1,6 @@
 package com.finn.framework.common.constant;
 
-import com.finn.core.cache.RedisKeys;
+import com.finn.framework.cache.RedisKeys;
 
 /**
  * 常量

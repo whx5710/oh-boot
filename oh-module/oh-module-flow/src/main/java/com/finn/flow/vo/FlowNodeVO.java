@@ -1,8 +1,9 @@
 package com.finn.flow.vo;
 
-import com.finn.core.entity.IDEntity;
+import com.finn.framework.entity.IDEntity;
 import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,8 +13,8 @@ import java.io.Serializable;
 * @since 1.0.0 2024-01-31
 */
 public class FlowNodeVO extends IDEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+	@Serial
+    private static final long serialVersionUID = 1L;
 	/**
 	 * 流程定义ID
 	 */
@@ -31,6 +32,20 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 	 */
 	private String nodeName;
 
+	/**
+	 * 环节类型,UserTask、ExclusiveGateway等
+	 */
+	private String elementType;
+
+	/**
+	 * 条件表达式
+	 */
+	private String conditionExpression;
+
+	/**
+	 * 自定义json参数配置
+	 */
+	private String jsonParams;
 	/**
 	 * 备注
 	 */
@@ -66,5 +81,29 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getElementType() {
+		return elementType;
+	}
+
+	public void setElementType(String elementType) {
+		this.elementType = elementType;
+	}
+
+	public String getConditionExpression() {
+		return conditionExpression;
+	}
+
+	public void setConditionExpression(String conditionExpression) {
+		this.conditionExpression = conditionExpression;
+	}
+
+	public String getJsonParams() {
+		return jsonParams;
+	}
+
+	public void setJsonParams(String jsonParams) {
+		this.jsonParams = jsonParams;
 	}
 }

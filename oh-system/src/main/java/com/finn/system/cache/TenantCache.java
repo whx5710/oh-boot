@@ -1,6 +1,6 @@
 package com.finn.system.cache;
 
-import com.finn.core.cache.RedisCache;
+import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.constant.CommConstant;
 import com.finn.system.entity.TenantMemberEntity;
 import org.springframework.stereotype.Service;

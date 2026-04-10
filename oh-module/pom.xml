@@ -19,7 +19,7 @@
     </properties>
     <modules>
         <!-- 工作流 -->
-        <!--<module>oh-module-flow</module>-->
+        <module>oh-module-flow</module>
         <!-- 外部对接客户端 -->
         <module>oh-module-app</module>
     </modules>
@@ -28,10 +28,5 @@
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
-        <!-- 分页插件 -->
-        <!--<dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>-->
     </dependencies>
 </project>

@@ -55,17 +55,17 @@ spring:
       # 是否开启 SSL
       ssl.enabled: false
   datasource:
-    #数据源的类型,对应配置相关的连接池 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
-    #type: com.alibaba.druid.pool.DruidDataSource
+    #数据源的类型,对应配置相关的连接池 com.zaxxer.hikari.HikariDataSource
     type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
     dynamic:
       sysDb: # 系统管理数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
+        driver-class-name: org.postgresql.Driver
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
+        username: postgres
         password: 123456
         hikari:
           initialSize: 10
@@ -76,10 +76,13 @@ spring:
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
           slowThreshold: 500 # 慢查询阈值,默认1000（毫秒）
+          connectionTestQuery: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          validationTimeout: 5000 # 验证超时时间，默认5秒
       masterDb: # 主数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
+        driver-class-name: org.postgresql.Driver
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot
+        username: postgres
         password: 123456
         hikari:
           initialSize: 10
@@ -90,6 +93,8 @@ spring:
           checkConnection: true # 初始化时是否检查连接，默认false
           hikariLog: true # 是否开启hikari监控日志打印，默认false
           slowThreshold: 800 # 慢查询阈值,默认1000（毫秒）
+          connectionTestQuery: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          validationTimeout: 5000 # 验证超时时间，默认5秒
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: open-api-flow
@@ -132,39 +137,7 @@ spring:
 #    retryNextServer: false # 是否在内部发送失败时重试另一个broker，默认false
 #    maxMessageSize: 4096 # 消息最大长度，默认1024 * 1024 * 4(默认4M)
 #    compressMessageBodyThreshold: 4096 # 压缩消息阈值，默认4k(1024 * 4)
-# 工作流配置 https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/
-camunda.bpm:
-  #enabled: false # Switch to disable the Camunda auto-configuration. Use to exclude Camunda in integration tests.
-  process-engine-name: OH工作流   # Name of the process engine
-  auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
-  database:
-    type: mysql
-    schema-update: true
-  generic-properties.properties:
-    javaSerializationFormatEnabled: true
-    history: full # 历史记录级别设置
-    historyTimeToLive: P1000D # 历史数据保存时间 1000天
-    # 批量清理运行时间窗口：设置在每天20：00-22：00
-    # historyCleanupBatchWindowStartTime: "20:00"
-    # historyCleanupBatchWindowEndTime: "22:00"
-    # 批量清理运行时间窗口：设置在周日19：00-23：00
-    sundayHistoryCleanupBatchWindowStartTime: "19:00"
-    sundayHistoryCleanupBatchWindowEndTime: "23:00"
-    historyCleanupDegreeOfParallelism: 4 # 用于历史清理的并行作业数
-    historyCleanupBatchSize: 100 # 单次批量处理实例数
-  admin-user:
-    id: admin
-    password: 123456
-  # 定时任务
-  job-execution:
-    enabled: true # 如果设置为 false，则根本不会创建任何 JobExecutor bean。可以用于测试目的
-  run:
-    # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
-    cors:
-      enabled: true
-      allowed-origins: "*"
-  filter:
-    create: 所有任务
+
 # 日志信息
 logging:
   # 字符集设置

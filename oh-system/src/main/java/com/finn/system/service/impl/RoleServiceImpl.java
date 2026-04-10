@@ -1,7 +1,7 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.entity.PageResult;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.RoleConvert;

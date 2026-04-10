@@ -1,6 +1,6 @@
 package com.finn.system.mapper;
 
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.query.AttachmentQuery;
 import org.apache.ibatis.annotations.Mapper;

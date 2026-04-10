@@ -1,6 +1,6 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 import com.finn.system.convert.ScheduleJobLogConvert;
 import com.finn.system.entity.ScheduleJobLogEntity;
 import com.finn.system.mapper.ScheduleJobMapper;

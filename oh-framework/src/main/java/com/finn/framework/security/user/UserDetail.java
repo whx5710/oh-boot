@@ -1,7 +1,7 @@
 package com.finn.framework.security.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.finn.core.entity.BaseUserEntity;
+import com.finn.framework.entity.BaseUserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

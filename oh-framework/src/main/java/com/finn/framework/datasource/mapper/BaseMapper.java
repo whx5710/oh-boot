@@ -1,10 +1,9 @@
 package com.finn.framework.datasource.mapper;
 
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
-import com.finn.framework.datasource.service.SelectProviderService;
-import com.finn.framework.datasource.utils.InsertWrapper;
-import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.datasource.service.QueryProviderService;
+import com.finn.framework.datasource.wrapper.*;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -49,24 +48,24 @@ public interface BaseMapper<T>{
      * @return page
      */
     @Pages
-    @SelectProvider(method = SelectProviderService.SELECT_PAGE_PARAM, type = SelectProviderService.class)
-    Page<T>  selectPageByWrapper(Wrapper<T> fp);
+    @SelectProvider(method = QueryProviderService.SELECT_PAGE_PARAM, type = QueryProviderService.class)
+    Page<T>  selectPageByWrapper(QueryWrapper<T> fp);
 
     /**
      * 查询列表
      * @param fp QueryWrapper
      * @return list
      */
-    @SelectProvider(method = SelectProviderService.SELECT_LIST_PARAM, type = SelectProviderService.class)
-    List<T> selectListByWrapper(Wrapper<T> fp);
+    @SelectProvider(method = QueryProviderService.SELECT_LIST_PARAM, type = QueryProviderService.class)
+    List<T> selectListByWrapper(QueryWrapper<T> fp);
 
     /**
      * 查询列表
      * @param fp CountWrapper
      * @return list
      */
-    @SelectProvider(method = SelectProviderService.SELECT_COUNT_PARAM, type = SelectProviderService.class)
-    long count(Wrapper<T> fp);
+    @SelectProvider(method = QueryProviderService.SELECT_COUNT_PARAM, type = QueryProviderService.class)
+    long count(CountWrapper<T> fp);
 
     /**
      * 根据ID查询数据
@@ -74,7 +73,7 @@ public interface BaseMapper<T>{
      * @param clazz 类名，用于获取表名
      * @return 实体对象
      */
-    @SelectProvider(method = SelectProviderService.FIND_BY_ID, type = SelectProviderService.class)
+    @SelectProvider(method = QueryProviderService.FIND_BY_ID, type = QueryProviderService.class)
     T findById(@Param("id")Long id,Class<T> clazz);
 
     /**
@@ -83,7 +82,7 @@ public interface BaseMapper<T>{
      * @return 删除数量
      */
     @DeleteProvider(method = ModifyProviderService.DELETE_PARAM, type = ModifyProviderService.class)
-    Integer deleteByWrapper(Wrapper<T> fp);
+    Integer deleteByWrapper(DeleteWrapper<T> fp);
 
     /**
      * 修改数据
@@ -91,7 +90,7 @@ public interface BaseMapper<T>{
      * @return 更新数量
      */
     @UpdateProvider(method = ModifyProviderService.UPDATE_PARAM, type = ModifyProviderService.class)
-    Integer updateByWrapper(Wrapper<T> fp);
+    Integer updateByWrapper(UpdateWrapper<T> fp);
 
     /**
      * 新增

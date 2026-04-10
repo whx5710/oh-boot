@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.3</version>
+		<version>4.0.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.finn</groupId>
@@ -13,7 +13,7 @@
 	<version>4.0.3_260307</version>
 	<name>oh-boot</name>
 	<description>
-		基于SpringBoot4.0、SpringSecurity7.0、Mybatis、Druid(Hikari)连接池、Kafka等框架开发的一套SpringBoot快速开发平台
+		基于SpringBoot4.x、SpringSecurity7.x、Mybatis、Hikari连接池、Kafka等框架开发的一套SpringBoot快速开发平台，数据库支持mysql、postgres
 	</description>
 	<packaging>pom</packaging>
 	<url>https://gitee.com/whx233</url>
@@ -29,7 +29,6 @@
 	<modules>
 		<module>oh-system</module>
 		<module>oh-module</module>
-		<module>oh-core</module>
 		<module>oh-framework</module>
 	</modules>
 
@@ -41,17 +40,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!--springboot版本-->
-		<spring-boot-dependencies.version>4.0.3</spring-boot-dependencies.version>
+		<spring-boot-dependencies.version>4.0.5</spring-boot-dependencies.version>
 		<!-- spring security -->
 		<spring.security>7.1.0-M2</spring.security>
 		<!-- 框架版本信息 -->
-		<finn.framework.version>4.0.3_260307</finn.framework.version>
-		<!-- 框架版本信息 -->
-		<finn.core.version>4.0.3_260307</finn.core.version>
+		<finn.framework.version>4.0.5_260401</finn.framework.version>
 		<!-- bean 拷贝 -->
 		<mapstruct.version>1.6.3</mapstruct.version>
-		<!-- camunda 工作流相关 -->
-		<camunda.version>7.20.0</camunda.version>
+		<!-- flowable 工作流相关 -->
+		<flowable.version>8.0.0</flowable.version>
 	</properties>
 
 	<dependencyManagement>
@@ -70,11 +67,6 @@
 			<!-- 系统框架 -->
 			<dependency>
 				<groupId>com.finn</groupId>
-				<artifactId>oh-core</artifactId>
-				<version>${finn.core.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.finn</groupId>
 				<artifactId>oh-framework</artifactId>
 				<version>${finn.framework.version}</version>
 			</dependency>
@@ -91,12 +83,6 @@
 				<groupId>org.mapstruct</groupId>
 				<artifactId>mapstruct-processor</artifactId>
 				<version>${mapstruct.version}</version>
-			</dependency>
-			<!-- 工作流 -->
-			<dependency>
-				<groupId>org.camunda.bpm.springboot</groupId>
-				<artifactId>camunda-bpm-spring-boot-starter</artifactId>
-				<version>${camunda.version}</version>
 			</dependency>
 			<!-- end   ================================= 其他 ================================= -->
 		</dependencies>

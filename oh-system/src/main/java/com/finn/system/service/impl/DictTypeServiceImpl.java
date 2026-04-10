@@ -1,11 +1,10 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.entity.PageResult;
-import com.finn.framework.datasource.utils.CountWrapper;
-import com.finn.framework.datasource.utils.QueryWrapper;
-import com.finn.framework.datasource.utils.UpdateWrapper;
-import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.datasource.wrapper.CountWrapper;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.system.cache.DictCache;
 import com.finn.system.convert.DictDataConvert;
 import com.finn.system.convert.DictTypeConvert;
@@ -171,7 +170,7 @@ public class DictTypeServiceImpl implements DictTypeService {
      * @param query
      * @return
      */
-    private Wrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
+    private QueryWrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
         if(query == null){
             return QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1);
         }else{

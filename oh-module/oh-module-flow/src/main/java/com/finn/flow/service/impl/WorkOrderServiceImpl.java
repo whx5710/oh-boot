@@ -1,23 +1,26 @@
 package com.finn.flow.service.impl;
 
-import com.finn.core.entity.HashDto;
-import com.finn.core.utils.*;
+import com.finn.framework.entity.HashDto;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.entity.Result;
+import com.finn.framework.utils.JsonUtils;
+import com.finn.framework.utils.SnowflakeIdWorker;
 import com.github.pagehelper.Page;
-import com.finn.core.cache.RedisCache;
+import com.finn.framework.cache.RedisCache;
 import com.finn.flow.convert.WorkOrderConvert;
 import com.finn.flow.entity.WorkOrderEntity;
 import com.finn.flow.mapper.WorkOrderMapper;
 import com.finn.flow.query.WorkOrderQuery;
-import com.finn.flow.service.ProcessHandlerService;
-import com.finn.flow.service.TaskHandlerService;
+import com.finn.flow.service.flowable.ProcessHandlerService;
+import com.finn.flow.service.flowable.TaskHandlerService;
 import com.finn.flow.service.WorkOrderService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.WorkOrderVO;
 import com.finn.framework.entity.MetaEntity;
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.service.JobService;
-import com.finn.framework.utils.annotations.Idempotent;
-import com.finn.framework.utils.annotations.RequestKeyParam;
+import com.finn.framework.aop.annotations.Idempotent;
+import com.finn.framework.aop.annotations.RequestKeyParam;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +50,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
 
     private final RedisCache redisCache;
 
-    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0,1, System.currentTimeMillis());
-
+    SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0,1);
 
     public WorkOrderServiceImpl(TaskHandlerService taskHandlerService, ProcessHandlerService processHandlerService,
                                 WorkOrderMapper workOrderMapper, RedisCache redisCache){
@@ -108,7 +110,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
     @Override
     public void check(HashDto data) {
         // 判断流程是否部署
-        if(!processHandlerService.isPeploy(processKey)){
+        if(!processHandlerService.isDeploy(processKey)){
             throw new ServerException("流程还未部署，请部署");
         }
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data, WorkOrderVO.class);
@@ -130,7 +132,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
             workOrderVO.setId(idWorker.nextId());
         }
         // 启动流程
-        List<TaskRecordVO> list = taskHandlerService.startByProcessKey(processKey, String.valueOf(workOrderVO.getId()), null);
+        List<TaskRecordVO> list = taskHandlerService.startByProcessId(processKey, String.valueOf(workOrderVO.getId()), null);
         if(list != null && !list.isEmpty()){
             List<String> flowInfo = new ArrayList<>(list.size());
             list.forEach(item ->{

@@ -1,14 +1,13 @@
 package com.finn.framework.exception;
 
-import com.finn.core.exception.ErrorCode;
-import com.finn.core.exception.SuperExceptionHandler;
-import com.finn.core.entity.Result;
+import com.finn.framework.common.enums.ErrorCode;
+import com.finn.framework.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 
 /**
  * 异常处理器
@@ -28,7 +27,11 @@ public class ServerExceptionHandler extends SuperExceptionHandler {
      */
     @ExceptionHandler(AccessDeniedException.class)
     public Result<String> handleAccessDeniedException(Exception ex) {
-        log.error("没有权限，禁止访问！{}",ex.getMessage());
+        String traceId = TraceIdUtils.getTraceId();
+        log.error("没有权限，禁止访问！{} [{}]", ex.getMessage(), traceId);
+        if(ex instanceof AuthorizationDeniedException ade){
+            log.error("未授权标识 {} [{}]", ade.getAuthorizationResult(), traceId);
+        }
         return Result.error(ErrorCode.FORBIDDEN.getCode(), ErrorCode.FORBIDDEN.getMsg());
     }
 

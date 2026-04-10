@@ -1,8 +1,8 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
-import com.finn.core.utils.Tools;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.utils.Tools;
 import com.finn.framework.utils.VerifyUtil;
 import com.finn.system.enums.ParamsEnum;
 import com.finn.system.service.CaptchaService;

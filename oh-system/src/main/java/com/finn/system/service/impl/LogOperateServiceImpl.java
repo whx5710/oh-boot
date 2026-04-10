@@ -1,14 +1,13 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.utils.ExcelUtils;
-import com.finn.framework.datasource.utils.Wrapper;
-import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.utils.excel.ExcelUtils;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
-import com.finn.core.utils.ExceptionUtils;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.utils.ExceptionUtils;
+import com.finn.framework.entity.PageResult;
 import com.finn.system.convert.LogOperateConvert;
 import com.finn.system.entity.LogOperateEntity;
 import com.finn.system.mapper.LogOperateMapper;
@@ -63,7 +62,7 @@ public class LogOperateServiceImpl implements LogOperateService {
      * @param query
      * @return
      */
-    private Wrapper<LogOperateEntity> getParams(LogOperateQuery query){
+    private QueryWrapper<LogOperateEntity> getParams(LogOperateQuery query){
         return QueryWrapper.of(LogOperateEntity.class)
                 .eq(LogOperateEntity::getStatus, query.getStatus())
                 .like(LogOperateEntity::getRealName, query.getRealName())

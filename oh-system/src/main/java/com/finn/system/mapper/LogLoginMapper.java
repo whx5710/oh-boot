@@ -27,6 +27,4 @@ public interface LogLoginMapper extends BaseMapper<LogLoginEntity> {
     List<AnalysisVO> latestDateCount(@Param("day")int day, @Param("operation")int operation);
 
     List<LogLoginEntity> getList(LogLoginQuery query);
-
-    int save(LogLoginEntity param);
 }

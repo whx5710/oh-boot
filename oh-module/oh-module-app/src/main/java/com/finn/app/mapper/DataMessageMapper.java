@@ -5,7 +5,7 @@ import com.github.pagehelper.Page;
 import com.finn.app.entity.DataMsgEntity;
 import com.finn.app.query.DataMsgQuery;
 import com.finn.app.vo.DataMsgVO;
-import com.finn.framework.datasource.annotations.Pages;
+import com.finn.framework.aop.annotations.Pages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

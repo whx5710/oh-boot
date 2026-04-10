@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.flow.mapper.TaskRecordMapper">
+
+    <!-- 修改当前运行标志 -->
+    <update id="updateRunMark">
+        update bpmn_task_record set run_mark = 0
+        where proc_inst_id = #{procInstId}
+        and run_mark = 1
+    </update>
+
+    <select id="getTaskList" resultType="com.finn.flow.entity.TaskRecordEntity">
+        select * from bpmn_task_record where db_status = 1
+        <if test="procInstId != null and procInstId != ''">and proc_inst_id = #{procInstId}</if>
+        <if test="runMark != null">and run_mark = #{runMark}</if>
+        <if test="taskId != null and taskId != ''">and task_id = #{taskId}</if>
+        <if test="actInstId != null and actInstId != ''">and act_inst_id = #{actInstId}</if>
+
+    </select>
+
+</mapper>

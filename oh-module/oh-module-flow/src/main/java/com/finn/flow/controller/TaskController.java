@@ -1,16 +1,17 @@
 package com.finn.flow.controller;
 
-import com.finn.flow.service.ProcessHandlerService;
-import com.finn.flow.service.TaskHandlerService;
+import com.finn.flow.service.flowable.ProcessHandlerService;
+import com.finn.flow.service.flowable.TaskHandlerService;
+import com.finn.flow.vo.FlowNodeVO;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
-import com.finn.core.entity.Result;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.task.Task;
+import com.finn.framework.entity.Result;
+import com.finn.framework.exception.ServerException;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.task.api.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deploy/{path}")
-    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
+    @PreAuthorize("hasAuthority('flow:task:saveOrUpdate')")
     public Result<String> deploy(@PathVariable String path){
         return Result.ok(processHandlerService.getProcessDefIdByDeploy(path, "流程"+System.currentTimeMillis()));
     }
@@ -49,7 +50,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/deployByKey/{key}")
-    @PreAuthorize("hasAuthority('flow:saveOrUpdate')")
+    @PreAuthorize("hasAuthority('flow:task:saveOrUpdate')")
     public Result<String> deployByKey(@PathVariable String key){
         return Result.ok(processHandlerService.deployByKey(key));
     }
@@ -62,6 +63,9 @@ public class TaskController {
     @GetMapping("/getProcessByKey/{key}")
     public Result<String> getProcessByKey(@PathVariable String key){
         ProcessDefinition processDefinition = this.processHandlerService.getProcessByKey(key);
+        if(processDefinition == null){
+            throw new ServerException("未找到对应的流程");
+        }
         return Result.ok(processDefinition.getId());
     }
 
@@ -71,18 +75,20 @@ public class TaskController {
      * @return
      */
     @PostMapping("/startFlow")
+    @PreAuthorize("hasAuthority('flow:task:start')")
     public Result<List<TaskRecordVO>> startFlow(@RequestBody TaskVO taskVO){
-        return Result.ok(taskHandlerService.startByProcessKey(taskVO.getProDefKey(), taskVO.getBusinessKey(), taskVO.getParams()));
+        return Result.ok(taskHandlerService.startByProcessId(taskVO.getProDefId(), taskVO.getBusinessKey(), taskVO.getParams()));
     }
 
     /**
      * 根据自定义流程key启动流程
-     * @param processKey 流程KEY
+     * @param procDefId 流程ID
      * @return
      */
-    @GetMapping("/startByProcessKey/{processKey}")
-    public Result<List<TaskRecordVO>> startByProcessKey(@PathVariable String processKey){
-        return Result.ok(taskHandlerService.startByProcessKey(processKey));
+    @GetMapping("/startByProcessId/{procDefId}")
+    @PreAuthorize("hasAuthority('flow:task:start')")
+    public Result<List<TaskRecordVO>> startByProcessId(@PathVariable String procDefId){
+        return Result.ok(taskHandlerService.startByProcessId(procDefId));
     }
 
     /**
@@ -91,8 +97,20 @@ public class TaskController {
      * @return
      */
     @PostMapping("/completeTask")
+    @PreAuthorize("hasAuthority('flow:task:complete')")
     public Result<List<TaskRecordVO>> completeTask(@RequestBody TaskVO taskVO){
         return Result.ok(taskHandlerService.completeTask(taskVO));
+    }
+
+    /**
+     * 驳回任务 - 退回到上一个任务节点
+     * @param taskVO
+     * @return
+     */
+    @PostMapping("/rollbackToPreviousNode")
+    @PreAuthorize("hasAuthority('flow:task:rollback')")
+    public Result<List<TaskRecordVO>> rollbackToPreviousNode(@RequestBody TaskVO taskVO){
+        return Result.ok(taskHandlerService.rollbackToPreviousNode(taskVO));
     }
 
     /**
@@ -111,10 +129,14 @@ public class TaskController {
         return Result.ok("");
     }
 
-
-    @GetMapping("/foo/{processKey}")
-    public Result<String> foo(@PathVariable String processKey) throws IOException {
-        taskHandlerService.getHighlightNode(processKey);
-        return Result.ok();
+    /**
+     * 获取当前任务的下一环节节点
+     * @param taskId t
+     * @return r
+     */
+    @GetMapping("/getNextNodes/{taskId}")
+    @PreAuthorize("hasAuthority('flow:task:info')")
+    public Result<List<FlowNodeVO>> getNextNodes(@PathVariable String taskId) {
+        return Result.ok(taskHandlerService.getNextNodes(taskId));
     }
 }

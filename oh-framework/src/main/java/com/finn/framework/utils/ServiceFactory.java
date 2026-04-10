@@ -1,7 +1,6 @@
 package com.finn.framework.utils;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.AssertUtils;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

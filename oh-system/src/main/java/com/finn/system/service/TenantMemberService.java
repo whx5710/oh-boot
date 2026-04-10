@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 import com.finn.system.entity.TenantMemberEntity;
 import com.finn.system.query.TenantMemberQuery;
 import com.finn.system.vo.TenantMemberVO;

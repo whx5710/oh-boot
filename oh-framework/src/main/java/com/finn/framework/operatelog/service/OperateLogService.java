@@ -1,8 +1,8 @@
 package com.finn.framework.operatelog.service;
 
 import com.finn.framework.operatelog.dto.OperateLogDTO;
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 

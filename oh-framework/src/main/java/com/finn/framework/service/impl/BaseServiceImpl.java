@@ -1,6 +1,6 @@
 package com.finn.framework.service.impl;
 
-import com.finn.core.constant.Constant;
+import com.finn.framework.common.constant.Constant;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;

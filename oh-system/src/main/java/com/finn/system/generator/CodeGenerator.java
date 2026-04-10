@@ -1,7 +1,7 @@
 package com.finn.system.generator;
 
-import com.finn.core.utils.DateUtils;
-import com.finn.framework.datasource.config.DynamicDataSource;
+import com.finn.framework.utils.DateUtils;
+import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.system.generator.dto.TableInfo;
 import com.finn.system.generator.dto.ColumnInfo;
 import org.springframework.stereotype.Component;

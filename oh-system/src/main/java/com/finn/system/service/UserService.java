@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.query.RoleUserQuery;
 import com.finn.system.query.UserQuery;

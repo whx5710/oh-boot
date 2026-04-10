@@ -1,7 +1,7 @@
 package com.finn.system;
 
 import com.finn.framework.common.properties.SysDataSourceProperties;
-import com.finn.framework.datasource.utils.DynamicDataSourceHolder;
+import com.finn.framework.datasource.DynamicDataSourceHolder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

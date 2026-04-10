@@ -1,13 +1,13 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.ExcelUtils;
-import com.finn.core.utils.HttpContextUtils;
-import com.finn.core.utils.IpUtils;
-import com.finn.core.entity.PageResult;
-import com.finn.framework.datasource.utils.DeleteWrapper;
-import com.finn.framework.datasource.utils.QueryWrapper;
-import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.DateUtils;
+import com.finn.framework.utils.excel.ExcelUtils;
+import com.finn.framework.utils.HttpContextUtils;
+import com.finn.framework.utils.IpUtils;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.datasource.wrapper.DeleteWrapper;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.convert.LogLoginConvert;
 import com.finn.system.entity.LogLoginEntity;
 import com.finn.system.mapper.LogLoginMapper;
@@ -17,6 +17,8 @@ import com.finn.system.vo.AnalysisVO;
 import com.finn.system.vo.LogLoginVO;
 import com.github.pagehelper.Page;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ import java.util.List;
  */
 @Service
 public class LogLoginServiceImpl implements LogLoginService {
+    private static final Logger log = LoggerFactory.getLogger(LogLoginServiceImpl.class);
     private final LogLoginMapper logLoginMapper;
 
     public LogLoginServiceImpl(LogLoginMapper logLoginMapper) {
@@ -59,8 +62,7 @@ public class LogLoginServiceImpl implements LogLoginService {
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
         entity.setTenantId(tenantId);
-        logLoginMapper.save(entity);
-//        logLoginMapper.insert(entity);
+        logLoginMapper.insert(entity);
     }
 
     @Override
@@ -99,10 +101,12 @@ public class LogLoginServiceImpl implements LogLoginService {
      */
     @Override
     public void deleteByDate(String date) {
-        logLoginMapper.deleteByWrapper(DeleteWrapper.of(LogLoginEntity.class).le(LogLoginEntity::getCreateTime, date));
+        int i = logLoginMapper.deleteByWrapper(DeleteWrapper.of(LogLoginEntity.class)
+                .le(LogLoginEntity::getCreateTime, DateUtils.parseLocalDateTime(date)));
+        log.debug("删除{}条记录", i);
     }
 
-    private Wrapper<LogLoginEntity> buildParams(LogLoginQuery query){
+    private QueryWrapper<LogLoginEntity> buildParams(LogLoginQuery query){
         return QueryWrapper.of(LogLoginEntity.class)
                 .like(LogLoginEntity::getUsername, query.getUsername())
                 .like(LogLoginEntity::getAddress, query.getAddress())

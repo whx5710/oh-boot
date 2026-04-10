@@ -1,7 +1,5 @@
 package com.finn.framework.common.properties;
 
-import com.finn.framework.datasource.config.HikariProperty;
-
 /**
  * 数据库连接属性
  * @author 王小费 whx5710@qq.com

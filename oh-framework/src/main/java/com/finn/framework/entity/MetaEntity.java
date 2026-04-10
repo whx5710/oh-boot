@@ -1,8 +1,5 @@
 package com.finn.framework.entity;
 
-import com.finn.core.entity.HashDto;
-import com.finn.core.entity.IDEntity;
-
 /**
  * 元素 Entity基类
  * 数据传输

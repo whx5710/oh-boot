@@ -1,6 +1,6 @@
 package com.finn.framework.tenant;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.common.properties.MultiTenantProperties;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.*;

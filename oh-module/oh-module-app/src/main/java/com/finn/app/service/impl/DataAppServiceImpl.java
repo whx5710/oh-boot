@@ -1,13 +1,13 @@
 package com.finn.app.service.impl;
 
-import com.finn.core.exception.ServerException;
+import com.finn.framework.exception.ServerException;
 import com.finn.app.convert.DataAppConvert;
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.mapper.DataAppMapper;
 import com.finn.app.query.DataAppQuery;
 import com.finn.app.service.DataAppService;
-import com.finn.core.utils.AssertUtils;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.utils.AssertUtils;
+import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.api.DataAppDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

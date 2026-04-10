@@ -1,9 +1,9 @@
 package com.finn.framework.datasource.service;
 
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.AssertUtils;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.common.properties.DataSourceProperty;
-import com.finn.framework.datasource.config.DynamicDataSource;
+import com.finn.framework.datasource.DynamicDataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
@@ -147,8 +147,8 @@ public class HandleDataSource {
         hikariConfig.setPoolName(key); // 连接池名称
         
         // 健康检查配置
-        hikariConfig.setConnectionTestQuery("SELECT 1"); // 连接测试语句
-        hikariConfig.setValidationTimeout(TimeUnit.SECONDS.toMillis(5)); // 验证超时时间
+        hikariConfig.setConnectionTestQuery(dataSourceProperty.getHikari().getConnectionTestQuery()); // 连接测试语句
+        hikariConfig.setValidationTimeout(dataSourceProperty.getHikari().getValidationTimeout()); // 验证超时时间
         
         try{
             HikariDataSource dataSource = new HikariDataSource(hikariConfig);

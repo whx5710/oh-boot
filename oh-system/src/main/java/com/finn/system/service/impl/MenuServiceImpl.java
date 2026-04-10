@@ -1,10 +1,9 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.TreeNode;
-import com.finn.framework.datasource.utils.Wrapper;
+import com.finn.framework.utils.AssertUtils;
+import com.finn.framework.entity.TreeNode;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.convert.MenuConvert;
 import com.finn.system.entity.MenuEntity;
 import com.finn.system.enums.SuperAdminEnum;
@@ -18,10 +17,10 @@ import com.finn.system.vo.RouteMetaVO;
 import com.finn.system.vo.RouteVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.finn.core.constant.Constant;
-import com.finn.core.exception.ServerException;
-import com.finn.core.entity.PageResult;
-import com.finn.core.utils.TreeUtils;
+import com.finn.framework.common.constant.Constant;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.utils.TreeUtils;
 import com.finn.framework.security.user.UserDetail;
 import org.springframework.stereotype.Service;
 
@@ -284,7 +283,7 @@ public class MenuServiceImpl implements MenuService {
         if(name == null || name.isEmpty()){
             return false;
         }else {
-            Wrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
+            QueryWrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }
@@ -297,7 +296,7 @@ public class MenuServiceImpl implements MenuService {
         if(path == null || path.isEmpty()){
             return false;
         }else {
-            Wrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
+            QueryWrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }

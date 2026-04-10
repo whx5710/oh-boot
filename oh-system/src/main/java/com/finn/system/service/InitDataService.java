@@ -1,14 +1,17 @@
 package com.finn.system.service;
 
 import com.finn.framework.common.properties.SysDataSourceProperties;
-import com.finn.framework.datasource.config.DynamicDataSource;
-import com.finn.framework.datasource.utils.QueryWrapper;
+import com.finn.framework.datasource.DynamicDataSource;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.cache.DictCache;
 import com.finn.system.cache.ParamsCache;
+import com.finn.system.cache.UserCache;
 import com.finn.system.entity.ParamsEntity;
+import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.DictDataMapper;
 import com.finn.system.mapper.DictTypeMapper;
 import com.finn.system.mapper.ParamsMapper;
+import com.finn.system.mapper.UserMapper;
 import com.finn.system.service.impl.DictTypeServiceImpl;
 import jakarta.annotation.PostConstruct;
 import org.apache.ibatis.session.SqlSession;
@@ -32,13 +35,16 @@ public class InitDataService {
     private final SysDataSourceProperties sysDataSourceProperties;
     private final ParamsCache paramsCache;
     private final DictCache dictCache;
+    private final UserCache userCache;
 
     public InitDataService(DynamicDataSource dynamicDataSource, SysDataSourceProperties sysDataSourceProperties,
-                           ParamsCache paramsCache, DictCache dictCache){
+                           ParamsCache paramsCache, DictCache dictCache,
+                           UserCache userCache){
         this.dynamicDataSource = dynamicDataSource;
         this.sysDataSourceProperties = sysDataSourceProperties;
         this.paramsCache = paramsCache;
         this.dictCache = dictCache;
+        this.userCache = userCache;
     }
 
     @PostConstruct
@@ -62,6 +68,12 @@ public class InitDataService {
             dictTypeService.refreshTransCache();
             log.debug("缓存数据字典");
 
+            // 缓存用户
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            List<UserEntity> list = userMapper.selectListByWrapper(QueryWrapper.of(UserEntity.class)
+                    .eq(UserEntity::getDbStatus, 1));
+            userCache.saveList(list);
+            log.debug("缓存用户信息！{}", list.size());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }finally {

@@ -2,7 +2,7 @@ package com.finn.app.service;
 
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.query.DataAppQuery;
-import com.finn.core.entity.PageResult;
+import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.api.DataAppDTO;
 import org.apache.ibatis.annotations.Param;
 

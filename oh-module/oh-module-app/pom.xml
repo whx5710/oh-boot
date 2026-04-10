@@ -21,13 +21,9 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-            <version>4.0.3</version>
+            <version>4.0.4</version>
             <scope>compile</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>com.finn</groupId>
-            <artifactId>oh-framework</artifactId>
-        </dependency>-->
     </dependencies>
 
 </project>

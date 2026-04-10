@@ -27,7 +27,7 @@ public class DynamicDataSourceProperties {
     private Map<String, DataSourceProperty> dynamic = new LinkedHashMap<>();
 
     /**
-     * 连接池类型，如果不设置自动查找 HikariCp > Druid
+     * 连接池类型，如果不设置自动查找 HikariCp
      */
     private Class<? extends DataSource> type = HikariDataSource.class;
 

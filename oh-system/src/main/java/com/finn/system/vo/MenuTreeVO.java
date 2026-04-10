@@ -1,7 +1,7 @@
 package com.finn.system.vo;
 
-import com.finn.core.utils.TreeNode;
-import com.finn.framework.datasource.annotations.TableField;
+import com.finn.framework.entity.TreeNode;
+import com.finn.framework.aop.annotations.TableField;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 

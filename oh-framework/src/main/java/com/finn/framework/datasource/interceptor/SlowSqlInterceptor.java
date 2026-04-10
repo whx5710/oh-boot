@@ -2,7 +2,7 @@ package com.finn.framework.datasource.interceptor;
 
 import com.finn.framework.common.properties.DataSourceProperty;
 import com.finn.framework.common.properties.DynamicDataSourceProperties;
-import com.finn.framework.datasource.utils.DynamicDataSourceHolder;
+import com.finn.framework.datasource.DynamicDataSourceHolder;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;

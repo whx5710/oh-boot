@@ -1,16 +1,16 @@
 package com.finn.system.service.impl;
 
-import com.finn.core.cache.RedisCache;
-import com.finn.core.cache.RedisKeys;
-import com.finn.core.constant.Constant;
-import com.finn.core.exception.ServerException;
-import com.finn.core.utils.AssertUtils;
-import com.finn.core.utils.HttpContextUtils;
-import com.finn.core.utils.IpUtils;
-import com.finn.core.utils.Tools;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.common.constant.Constant;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.AssertUtils;
+import com.finn.framework.utils.HttpContextUtils;
+import com.finn.framework.utils.IpUtils;
+import com.finn.framework.utils.Tools;
 import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.common.properties.SecurityProperties;
-import com.finn.framework.security.cache.TokenStoreCache;
+import com.finn.framework.cache.TokenStoreCache;
 import com.finn.framework.security.mobile.MobileAuthenticationToken;
 import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
