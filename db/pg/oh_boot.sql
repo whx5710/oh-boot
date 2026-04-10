@@ -181,7 +181,9 @@ CREATE TABLE "oh_boot"."bpmn_flow_node" (
   "proc_def_id" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "act_def_id" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "node_name" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "element_type" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "element_type" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "condition_expression" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "json_params" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "note" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "db_status" int2 DEFAULT 1,
   "creator" int8,
@@ -196,6 +198,8 @@ COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."proc_def_id" IS '流程定义ID';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."act_def_id" IS '环节ID';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."node_name" IS '环节名称';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."element_type" IS '环节类型,UserTask、ExclusiveGateway等';
+COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."condition_expression" IS '表达式';
+COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."json_params" IS '自定义json参数';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."note" IS '备注';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."creator" IS '创建者';
