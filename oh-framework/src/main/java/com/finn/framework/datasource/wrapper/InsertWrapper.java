@@ -2,16 +2,13 @@ package com.finn.framework.datasource.wrapper;
 
 import org.apache.ibatis.jdbc.SQL;
 
-import java.util.HashMap;
-
 /**
  * SQL 新增语句构建器<br/>
  * @author 王小费
  * @since 2025-06-29
  */
-public class InsertWrapper extends HashMap<String, Object>{
+public class InsertWrapper extends Wrapper<Object> {
 
-    private SQL sql;
     /**
      * 初始化，构建SQL：insert into tableName
      * @param tableName 表名
@@ -32,16 +29,9 @@ public class InsertWrapper extends HashMap<String, Object>{
      * @return
      */
     public InsertWrapper values(String columns, Object values){
-        sql.VALUES(columns, "#{" + columns + "}");
+        getSql().VALUES(columns, "#{" + columns + "}");
         this.put(columns, values);
         return this;
     }
 
-    public SQL getSql() {
-        return sql;
-    }
-
-    public void setSql(SQL sql) {
-        this.sql = sql;
-    }
 }

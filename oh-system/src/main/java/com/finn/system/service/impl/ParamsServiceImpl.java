@@ -224,7 +224,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
      * @param query
      * @return
      */
-    private Wrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
+    private QueryWrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
         if(query == null){
             return QueryWrapper.of(ParamsEntity.class);
         }else{

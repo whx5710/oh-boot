@@ -3,8 +3,7 @@ package com.finn.framework.datasource.mapper;
 import com.finn.framework.aop.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.framework.datasource.service.QueryProviderService;
-import com.finn.framework.datasource.wrapper.InsertWrapper;
-import com.finn.framework.datasource.wrapper.Wrapper;
+import com.finn.framework.datasource.wrapper.*;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -50,7 +49,7 @@ public interface BaseMapper<T>{
      */
     @Pages
     @SelectProvider(method = QueryProviderService.SELECT_PAGE_PARAM, type = QueryProviderService.class)
-    Page<T>  selectPageByWrapper(Wrapper<T> fp);
+    Page<T>  selectPageByWrapper(QueryWrapper<T> fp);
 
     /**
      * 查询列表
@@ -58,7 +57,7 @@ public interface BaseMapper<T>{
      * @return list
      */
     @SelectProvider(method = QueryProviderService.SELECT_LIST_PARAM, type = QueryProviderService.class)
-    List<T> selectListByWrapper(Wrapper<T> fp);
+    List<T> selectListByWrapper(QueryWrapper<T> fp);
 
     /**
      * 查询列表
@@ -66,7 +65,7 @@ public interface BaseMapper<T>{
      * @return list
      */
     @SelectProvider(method = QueryProviderService.SELECT_COUNT_PARAM, type = QueryProviderService.class)
-    long count(Wrapper<T> fp);
+    long count(CountWrapper<T> fp);
 
     /**
      * 根据ID查询数据
@@ -83,7 +82,7 @@ public interface BaseMapper<T>{
      * @return 删除数量
      */
     @DeleteProvider(method = ModifyProviderService.DELETE_PARAM, type = ModifyProviderService.class)
-    Integer deleteByWrapper(Wrapper<T> fp);
+    Integer deleteByWrapper(DeleteWrapper<T> fp);
 
     /**
      * 修改数据
@@ -91,7 +90,7 @@ public interface BaseMapper<T>{
      * @return 更新数量
      */
     @UpdateProvider(method = ModifyProviderService.UPDATE_PARAM, type = ModifyProviderService.class)
-    Integer updateByWrapper(Wrapper<T> fp);
+    Integer updateByWrapper(UpdateWrapper<T> fp);
 
     /**
      * 新增

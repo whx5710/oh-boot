@@ -175,6 +175,44 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
     }
 
     /**
+     * 处理条件值，判断是否为空字符串
+     * @param value 值
+     * @param isEmpty 是否允许为空字符串
+     * @return 是否处理
+     */
+    private boolean shouldProcessValue(Object value, Boolean isEmpty) {
+        if (value == null) {
+            return false;
+        }
+        if (value instanceof String str) {
+            return !str.isEmpty() || isEmpty;
+        }
+        return true;
+    }
+
+    /**
+     * 构建条件SQL
+     * @param function 函数
+     * @param value 值
+     * @param isEmpty 是否允许为空字符串
+     * @param conditionSQL 条件SQL模板
+     * @param fieldNamePrefix 字段名前缀
+     * @return 处理后的字段名
+     */
+    private String buildCondition(FuncUtils<T> function, Object value, Boolean isEmpty, String conditionSQL, String fieldNamePrefix) {
+        if (!shouldProcessValue(value, isEmpty)) {
+            return null;
+        }
+        String fieldName = ReflectUtil.getFieldName(function);
+        String colName = getColName(fieldName);
+        String paramName = fieldNamePrefix != null ? fieldNamePrefix + fieldName : fieldName;
+        String sql = String.format(conditionSQL, colName, paramName);
+        this.sql.WHERE(sql);
+        this.put(paramName, value);
+        return paramName;
+    }
+
+    /**
      * 等于
      * @param function f
      * @param value 值
@@ -192,22 +230,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> eq(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " = #{" + fieldName + "}");
-                    }
-                }else{
-                    sql.WHERE(colName + " = #{" + fieldName + "}");
-                }
-            }else{
-                sql.WHERE(colName + " = #{" + fieldName + "}");
-            }
-            this.put(fieldName, value);
-        }
+        buildCondition(function, value, isEmpty, "%s = #{%s}", null);
         return this;
     }
 
@@ -229,22 +252,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> ne(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " <> #{" + fieldName + "}");
-                    }
-                }else{
-                    sql.WHERE(colName + " <> #{" + fieldName + "}");
-                }
-            }else{
-                sql.WHERE(colName + " <> #{" + fieldName + "}");
-            }
-            this.put(fieldName, value);
-        }
+        buildCondition(function, value, isEmpty, "%s <> #{%s}", null);
         return this;
     }
 
@@ -266,20 +274,10 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> like(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
+        if (shouldProcessValue(value, isEmpty)) {
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
-                    }
-                }else{
-                    sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
-                }
-            }else{
-                sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
-            }
+            this.sql.WHERE(colName + " like concat('%',#{", fieldName, "},'%')");
             this.put(fieldName, value);
         }
         return this;
@@ -303,20 +301,10 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> likeRight(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
+        if (shouldProcessValue(value, isEmpty)) {
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
-                    }
-                }else{
-                    sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
-                }
-            }else{
-                sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
-            }
+            this.sql.WHERE(colName + " like concat(#{", fieldName, "},'%')");
             this.put(fieldName, value);
         }
         return this;
@@ -340,20 +328,10 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> likeLeft(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
+        if (shouldProcessValue(value, isEmpty)) {
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
-                    }
-                }else{
-                    sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
-                }
-            }else{
-                sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
-            }
+            this.sql.WHERE(colName + " like concat('%',#{", fieldName, "})");
             this.put(fieldName, value);
         }
         return this;
@@ -377,20 +355,10 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> notLike(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
+        if (shouldProcessValue(value, isEmpty)) {
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
-                    }
-                }else{
-                    sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
-                }
-            }else{
-                sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
-            }
+            this.sql.WHERE(colName + " not like concat('%',#{", fieldName, "},'%')");
             this.put(fieldName, value);
         }
         return this;
@@ -414,23 +382,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> gt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
-            String prefix = "__GT";
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " > #{" + prefix + fieldName + "}");
-                    }
-                }else{
-                    sql.WHERE(colName + " > #{" + prefix + fieldName + "}");
-                }
-            }else{
-                sql.WHERE(colName + " > #{" + prefix + fieldName + "}");
-            }
-            this.put(prefix + fieldName, value);
-        }
+        buildCondition(function, value, isEmpty, "%s > #{%s}", "__GT");
         return this;
     }
 
@@ -452,23 +404,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> ge(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
-            String prefix = "Ge";
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " >= #{" + prefix + fieldName + "}");
-                    }
-                }else{
-                    sql.WHERE(colName + " >= #{" + prefix + fieldName + "}");
-                }
-            }else{
-                sql.WHERE(colName + " >= #{" + prefix + fieldName + "}");
-            }
-            this.put(prefix + fieldName, value);
-        }
+        buildCondition(function, value, isEmpty, "%s >= #{%s}", "Ge");
         return this;
     }
 
@@ -490,22 +426,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> lt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " < #{" + fieldName + "}");
-                    }
-                }else{
-                    sql.WHERE(colName + " < #{" + fieldName + "}");
-                }
-            }else{
-                sql.WHERE(colName + " < #{" + fieldName + "}");
-            }
-            this.put(fieldName, value);
-        }
+        buildCondition(function, value, isEmpty, "%s < #{%s}", null);
         return this;
     }
 
@@ -527,22 +448,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> le(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if(value != null){
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            if(value instanceof String str){
-                if(str.isEmpty()){
-                    if(isEmpty){
-                        sql.WHERE(colName + " <= #{" + fieldName + "}");
-                    }
-                }else{
-                    sql.WHERE(colName + " <= #{" + fieldName + "}");
-                }
-            }else{
-                sql.WHERE(colName + " <= #{" + fieldName + "}");
-            }
-            this.put(fieldName, value);
-        }
+        buildCondition(function, value, isEmpty, "%s <= #{%s}", null);
         return this;
     }
 

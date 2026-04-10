@@ -63,7 +63,7 @@ public class LogOperateServiceImpl implements LogOperateService {
      * @param query
      * @return
      */
-    private Wrapper<LogOperateEntity> getParams(LogOperateQuery query){
+    private QueryWrapper<LogOperateEntity> getParams(LogOperateQuery query){
         return QueryWrapper.of(LogOperateEntity.class)
                 .eq(LogOperateEntity::getStatus, query.getStatus())
                 .like(LogOperateEntity::getRealName, query.getRealName())

@@ -8,7 +8,6 @@ import com.finn.framework.utils.IpUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
-import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.system.convert.LogLoginConvert;
 import com.finn.system.entity.LogLoginEntity;
 import com.finn.system.mapper.LogLoginMapper;
@@ -107,7 +106,7 @@ public class LogLoginServiceImpl implements LogLoginService {
         log.debug("删除{}条记录", i);
     }
 
-    private Wrapper<LogLoginEntity> buildParams(LogLoginQuery query){
+    private QueryWrapper<LogLoginEntity> buildParams(LogLoginQuery query){
         return QueryWrapper.of(LogLoginEntity.class)
                 .like(LogLoginEntity::getUsername, query.getUsername())
                 .like(LogLoginEntity::getAddress, query.getAddress())

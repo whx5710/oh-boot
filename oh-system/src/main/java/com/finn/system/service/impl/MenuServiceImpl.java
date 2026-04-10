@@ -284,7 +284,7 @@ public class MenuServiceImpl implements MenuService {
         if(name == null || name.isEmpty()){
             return false;
         }else {
-            Wrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
+            QueryWrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getName, name);
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }
@@ -297,7 +297,7 @@ public class MenuServiceImpl implements MenuService {
         if(path == null || path.isEmpty()){
             return false;
         }else {
-            Wrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
+            QueryWrapper<MenuEntity> params = QueryWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1).eq(MenuEntity::getPath, path);
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }

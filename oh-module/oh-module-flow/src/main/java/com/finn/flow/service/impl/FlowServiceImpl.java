@@ -33,7 +33,7 @@ public class FlowServiceImpl implements FlowService {
 
     @Override
     public PageResult<FlowVO> page(FlowQuery query) {
-        Wrapper<FlowEntity> queryWrapper = QueryWrapper.of(FlowEntity.class).eq(FlowEntity::getDbStatus, 1)
+        QueryWrapper<FlowEntity> queryWrapper = QueryWrapper.of(FlowEntity.class).eq(FlowEntity::getDbStatus, 1)
                 .eq(FlowEntity::getKeyCode, query.getKeyCode()).like(FlowEntity::getName, query.getName());
         if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
             queryWrapper.jointSQL("(name like concat('%', #{keyWord}, '%') or key_code like concat('%', #{keyWord}, '%'))", "keyWord", query.getKeyWord());

@@ -106,7 +106,7 @@ public class PostServiceImpl implements PostService {
      * @param query
      * @return
      */
-    private Wrapper<PostEntity> getQueryWrapper(PostQuery query){
+    private QueryWrapper<PostEntity> getQueryWrapper(PostQuery query){
         if(query == null){
             return QueryWrapper.of(PostEntity.class).eq(PostEntity::getDbStatus, 1).orderBy("sort");
         }else{

@@ -171,7 +171,7 @@ public class DictTypeServiceImpl implements DictTypeService {
      * @param query
      * @return
      */
-    private Wrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
+    private QueryWrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
         if(query == null){
             return QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1);
         }else{

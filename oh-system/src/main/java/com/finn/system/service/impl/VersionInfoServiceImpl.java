@@ -31,7 +31,7 @@ public class VersionInfoServiceImpl implements VersionInfoService {
 
     @Override
     public PageResult<VersionInfoVO> page(VersionInfoQuery query) {
-        Wrapper<VersionInfoEntity> param = QueryWrapper.of(VersionInfoEntity.class)
+        QueryWrapper<VersionInfoEntity> param = QueryWrapper.of(VersionInfoEntity.class)
                 .eq(VersionInfoEntity::getIsCurrVersion, query.getCurrVersion())
                 .eq(VersionInfoEntity::getDbStatus, 1)
                 .pageNum(query.getPageNum()).pageSize(query.getPageSize())
