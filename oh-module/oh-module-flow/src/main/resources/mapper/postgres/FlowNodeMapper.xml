@@ -3,19 +3,6 @@
 
 <mapper namespace="com.finn.flow.mapper.FlowNodeMapper">
 
-    <resultMap type="com.finn.flow.entity.FlowNodeEntity" id="bpmnFlowNodeMap">
-        <result property="id" column="id"/>
-        <result property="procDefId" column="proc_def_id"/>
-        <result property="actDefId" column="act_def_id"/>
-        <result property="nodeName" column="node_name"/>
-        <result property="note" column="note"/>
-        <result property="dbStatus" column="db_status"/>
-        <result property="creator" column="creator"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updater" column="updater"/>
-        <result property="updateTime" column="update_time"/>
-    </resultMap>
-
     <select id="getList" resultType="com.finn.flow.entity.FlowNodeEntity">
         select * from bpmn_flow_node where db_status = 1
         <if test="procDefId != null and procDefId != ''">and proc_def_id = #{procDefId}</if>

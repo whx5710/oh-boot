@@ -3,6 +3,7 @@ package com.finn.flow.vo;
 import com.finn.framework.entity.IDEntity;
 import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 * @since 1.0.0 2023-12-19
 */
 public class FlowVO extends IDEntity implements Serializable{
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**

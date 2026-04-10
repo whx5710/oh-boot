@@ -3,6 +3,10 @@ package com.finn.flow.entity;
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.utils.JsonUtils;
+
+import java.util.HashMap;
 
 /**
  * 环节定义表
@@ -12,7 +16,6 @@ import com.finn.framework.entity.BaseEntity;
  */
 @TableName("bpmn_flow_node")
 public class FlowNodeEntity extends BaseEntity {
-
 	/**
 	* 流程定义ID
 	*/
@@ -42,6 +45,17 @@ public class FlowNodeEntity extends BaseEntity {
 	@TableField("condition_expression")
 	private String conditionExpression;
 
+	/**
+	 * 自定义json参数配置
+	 */
+	@TableField("json_params")
+	private String jsonParams;
+
+	/**
+	 * json字符串转换成map
+	 */
+	@TableField(exists = false)
+	private HashMap<String, Object> jsonParamsObj;
 	/**
 	* 备注
 	*/
@@ -93,5 +107,28 @@ public class FlowNodeEntity extends BaseEntity {
 
 	public void setConditionExpression(String conditionExpression) {
 		this.conditionExpression = conditionExpression;
+	}
+
+	public String getJsonParams() {
+		return jsonParams;
+	}
+
+	public void setJsonParams(String jsonParams) {
+		this.jsonParams = jsonParams;
+		if(jsonParams != null && !jsonParams.isEmpty()){
+			try{
+				jsonParamsObj = JsonUtils.parseObject(jsonParams, HashMap.class);
+			}catch (RuntimeException e){
+				throw new ServerException("json格式异常，请检查！");
+			}
+		}
+	}
+
+	public HashMap<String, Object> getJsonParamsObj() {
+		return jsonParamsObj;
+	}
+
+	public void setJsonParamsObj(HashMap<String, Object> jsonParamsObj) {
+		this.jsonParamsObj = jsonParamsObj;
 	}
 }

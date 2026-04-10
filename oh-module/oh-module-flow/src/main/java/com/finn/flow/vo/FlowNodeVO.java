@@ -15,7 +15,6 @@ import java.io.Serializable;
 public class FlowNodeVO extends IDEntity implements Serializable {
 	@Serial
     private static final long serialVersionUID = 1L;
-
 	/**
 	 * 流程定义ID
 	 */
@@ -43,6 +42,10 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 	 */
 	private String conditionExpression;
 
+	/**
+	 * 自定义json参数配置
+	 */
+	private String jsonParams;
 	/**
 	 * 备注
 	 */
@@ -94,5 +97,13 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 
 	public void setConditionExpression(String conditionExpression) {
 		this.conditionExpression = conditionExpression;
+	}
+
+	public String getJsonParams() {
+		return jsonParams;
+	}
+
+	public void setJsonParams(String jsonParams) {
+		this.jsonParams = jsonParams;
 	}
 }
