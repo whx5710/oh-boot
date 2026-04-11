@@ -54,7 +54,7 @@ public class ModifyProviderService {
                 if (annotation.exists()) { // 剔除非数据库字段
                     if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
                             (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){ 
-                        log.warn("子类有覆盖 {} 字段，不新增该字段", annotation.value());
+                        log.warn("子类有覆盖 {} 字段，不新增该字段.", annotation.value());
                     }else{
                         sql.VALUES(annotation.value(), "#{" + field.getName() + "}");
                     }
@@ -149,8 +149,6 @@ public class ModifyProviderService {
                             }
                             valuesBuilder.append("#{entities[").append(i).append("].").append(field.getName()).append("}");
                         }
-                    }else{
-                        // 跳过该字段
                     }
                 } else {
                     // 无注解的字段默认成与数据库字段一致

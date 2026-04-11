@@ -52,7 +52,8 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 			}).collect(Collectors.toList());
 
 			// 批量新增
-			roleMenuMapper.insertBatch(menuList);
+			long l = roleMenuMapper.insertBatch(menuList);
+			System.out.println("总计插入：" + l);
 		}
 
 		// 需要删除的菜单ID
