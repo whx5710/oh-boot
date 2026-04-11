@@ -36,7 +36,7 @@ public class VersionInfoServiceImpl implements VersionInfoService {
                 .pageNum(query.getPageNum()).pageSize(query.getPageSize())
                 .jointSQL("(content like concat('%',#{keyWord}, '%') or version_num like concat('%', #{keyWord},'%'))",
                         "keyWord", query.getKeyWord());
-        try (Page<VersionInfoEntity> page = versionInfoMapper.selectPageByWrapper(param)) {
+        try (Page<VersionInfoEntity> page = versionInfoMapper.listByWrapper(param)) {
             return new PageResult<>(VersionInfoConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }

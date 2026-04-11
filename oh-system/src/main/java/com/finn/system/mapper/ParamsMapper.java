@@ -18,7 +18,7 @@ import java.util.List;
 public interface ParamsMapper extends BaseMapper<ParamsEntity> {
 
     default boolean isExist(String paramKey) {
-        List<ParamsEntity> list = selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+        List<ParamsEntity> list = listByWrapper(QueryWrapper.of(ParamsEntity.class)
                 .eq(ParamsEntity::getDbStatus, 1).eq(ParamsEntity::getParamKey, paramKey));
         return list != null && !list.isEmpty();
     }

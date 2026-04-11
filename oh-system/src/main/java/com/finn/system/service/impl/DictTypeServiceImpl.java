@@ -53,7 +53,7 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Override
     public PageResult<DictTypeVO> page(DictTypeQuery query) {
-        Page<DictTypeEntity> page = dictTypeMapper.selectPageByWrapper(getDictTypeQuery(query));
+        Page<DictTypeEntity> page = dictTypeMapper.listByWrapper(getDictTypeQuery(query));
         return new PageResult<>(DictTypeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
     @Override
@@ -74,7 +74,7 @@ public class DictTypeServiceImpl implements DictTypeService {
             throw new ServerException("字典类型ID不能为空");
         }
         if(vo.getDictType() != null && !vo.getDictType().isEmpty()){
-            List<DictTypeEntity> list = dictTypeMapper.selectListByWrapper(QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1)
+            List<DictTypeEntity> list = dictTypeMapper.listByWrapper(QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1)
                     .eq(DictTypeEntity::getDictType, vo.getDictType()).ne(DictTypeEntity::getId, vo.getId()));
             if(list != null && !list.isEmpty()){
                 throw new ServerException("字典类型重复，请检查");
@@ -109,7 +109,7 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Override
     public List<DictVO> getDictList() {
         // 全部字典类型列表
-        List<DictTypeEntity> typeList = dictTypeMapper.selectListByWrapper(getDictTypeQuery(null));
+        List<DictTypeEntity> typeList = dictTypeMapper.listByWrapper(getDictTypeQuery(null));
 
         // 全部字典数据列表
         DictDataQuery query = new DictDataQuery();

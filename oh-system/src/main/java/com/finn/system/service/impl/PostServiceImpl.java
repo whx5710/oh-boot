@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageResult<PostVO> page(PostQuery query) {
-        Page<PostEntity> page = postMapper.selectPageByWrapper(getQueryWrapper(query));
+        Page<PostEntity> page = postMapper.listByWrapper(getQueryWrapper(query));
         List<PostVO> list = PostConvert.INSTANCE.convertList(page.getResult());
         for(PostVO vo: list){
             vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
@@ -51,7 +51,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostVO> getList() {
-        List<PostEntity> entityList = postMapper.selectListByWrapper(QueryWrapper.of(PostEntity.class)
+        List<PostEntity> entityList = postMapper.listByWrapper(QueryWrapper.of(PostEntity.class)
                 .eq(PostEntity::getDbStatus, 1).orderBy("sort"));
         return PostConvert.INSTANCE.convertList(entityList);
     }
@@ -60,7 +60,7 @@ public class PostServiceImpl implements PostService {
     public void save(PostVO vo) {
         PostEntity entity = PostConvert.INSTANCE.convert(vo);
         AssertUtils.isBlank(entity.getPostCode(), "岗位编码");
-        List<PostEntity> list = postMapper.selectListByWrapper(QueryWrapper.of(PostEntity.class)
+        List<PostEntity> list = postMapper.listByWrapper(QueryWrapper.of(PostEntity.class)
                 .eq(PostEntity::getDbStatus, 1).eq(PostEntity::getPostCode, entity.getPostCode()));
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("岗位编码已存在");
@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService {
         PostEntity entity = PostConvert.INSTANCE.convert(vo);
         String postCode = entity.getPostCode();
         if(postCode != null && !postCode.isEmpty()){
-            List<PostEntity> list = postMapper.selectListByWrapper(QueryWrapper.of(PostEntity.class)
+            List<PostEntity> list = postMapper.listByWrapper(QueryWrapper.of(PostEntity.class)
                     .eq(PostEntity::getDbStatus, 1).eq(PostEntity::getPostCode, postCode));
             if(!ObjectUtils.isEmpty(list)){
                 for(PostEntity item : list){

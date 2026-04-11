@@ -230,7 +230,7 @@ public class TaskHandlerService {
                 actDefIds.add(targetFlowElement.getId());
             }
         }
-        List<FlowNodeEntity> flowNodeEntities = flowNodeMapper.selectListByWrapper(QueryWrapper.of(FlowNodeEntity.class)
+        List<FlowNodeEntity> flowNodeEntities = flowNodeMapper.listByWrapper(QueryWrapper.of(FlowNodeEntity.class)
                 .eq(FlowNodeEntity::getDbStatus, 1)
                 .eq(FlowNodeEntity::getProcDefId, procDefId)
                 .in(FlowNodeEntity::getActDefId, actDefIds));

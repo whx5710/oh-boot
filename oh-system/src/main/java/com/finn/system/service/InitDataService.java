@@ -56,7 +56,7 @@ public class InitDataService {
 
             // 缓存参数
             ParamsMapper paramsMapper = sqlSession.getMapper(ParamsMapper.class);
-            List<ParamsEntity> paramsList = paramsMapper.selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+            List<ParamsEntity> paramsList = paramsMapper.listByWrapper(QueryWrapper.of(ParamsEntity.class)
                     .eq(ParamsEntity::getDbStatus, 1));
             paramsCache.saveList(paramsList);
             log.debug("缓存参数{}条", paramsList.size());
@@ -70,7 +70,7 @@ public class InitDataService {
 
             // 缓存用户
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-            List<UserEntity> list = userMapper.selectListByWrapper(QueryWrapper.of(UserEntity.class)
+            List<UserEntity> list = userMapper.listByWrapper(QueryWrapper.of(UserEntity.class)
                     .eq(UserEntity::getDbStatus, 1));
             userCache.saveList(list);
             log.debug("缓存用户信息！{}", list.size());

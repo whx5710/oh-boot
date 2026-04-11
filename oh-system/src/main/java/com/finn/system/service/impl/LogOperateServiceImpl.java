@@ -44,7 +44,7 @@ public class LogOperateServiceImpl implements LogOperateService {
 
     @Override
     public PageResult<LogOperateVO> page(LogOperateQuery query) {
-        try (Page<LogOperateEntity> page = logOperateMapper.selectPageByWrapper(getParams(query)
+        try (Page<LogOperateEntity> page = logOperateMapper.listByWrapper(getParams(query)
                 .page(query.getPageNum(), query.getPageSize()))) {
             return new PageResult<>(LogOperateConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
@@ -52,7 +52,7 @@ public class LogOperateServiceImpl implements LogOperateService {
 
     @Override
     public void export(LogOperateQuery query) {
-        List<LogOperateEntity> list = logOperateMapper.selectListByWrapper(getParams(query));
+        List<LogOperateEntity> list = logOperateMapper.listByWrapper(getParams(query));
         List<LogOperateVO> vo = LogOperateConvert.INSTANCE.convertList(list);
         ExcelUtils.excelExport(LogOperateVO.class, "操作日志", "日志", vo);
     }

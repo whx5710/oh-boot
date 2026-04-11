@@ -41,7 +41,7 @@ public class LogLoginServiceImpl implements LogLoginService {
 
     @Override
     public PageResult<LogLoginVO> page(LogLoginQuery query) {
-        try (Page<LogLoginEntity> page = logLoginMapper.selectPageByWrapper(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
+        try (Page<LogLoginEntity> page = logLoginMapper.listByWrapper(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
             return new PageResult<>(LogLoginConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
@@ -67,7 +67,7 @@ public class LogLoginServiceImpl implements LogLoginService {
 
     @Override
     public void export(LogLoginQuery query) {
-        List<LogLoginEntity> list = logLoginMapper.selectListByWrapper(buildParams(query));
+        List<LogLoginEntity> list = logLoginMapper.listByWrapper(buildParams(query));
         List<LogLoginVO> logLoginVOS = LogLoginConvert.INSTANCE.convertList(list);
         ExcelUtils.excelExport(LogLoginVO.class, "登录日志", "日志", logLoginVOS);
     }

@@ -50,7 +50,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
 
     @Override
     public PageResult<TenantMemberVO> page(TenantMemberQuery query) {
-        Page<TenantMemberEntity> page = tenantMemberMapper.selectPageByWrapper(getQueryWrapper(query));
+        Page<TenantMemberEntity> page = tenantMemberMapper.listByWrapper(getQueryWrapper(query));
         return new PageResult<>(TenantMemberConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
@@ -62,7 +62,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         // 判断租户ID是否存在
         QueryWrapper<TenantMemberEntity> params = QueryWrapper.of(TenantMemberEntity.class)
                 .eq(TenantMemberEntity::getTenantId, entity.getTenantId()).eq(TenantMemberEntity::getDbStatus, 1);
-        List<TenantMemberEntity> list = tenantMemberMapper.selectListByWrapper(params);
+        List<TenantMemberEntity> list = tenantMemberMapper.listByWrapper(params);
         if(list != null && !list.isEmpty()){
             throw new ServerException("租户ID已存在！[" + list.getFirst().getTenantName()+ "]");
         }
@@ -150,7 +150,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
             throw new ServerException("租户下有用户，不能删除");
         }
         // 绑定的部门下，有其他部门，不能删除
-        List<DeptEntity> deptList = deptMapper.selectListByWrapper(QueryWrapper.of(DeptEntity.class)
+        List<DeptEntity> deptList = deptMapper.listByWrapper(QueryWrapper.of(DeptEntity.class)
                 .eq(DeptEntity::getTenantId, entity.getTenantId())
                 .eq(DeptEntity::getDbStatus, 1));
         if(deptList != null && !deptList.isEmpty()){
@@ -194,7 +194,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
      */
     @PostConstruct
     private void init(){
-        List<TenantMemberEntity> list = tenantMemberMapper.selectListByWrapper(QueryWrapper.of(TenantMemberEntity.class)
+        List<TenantMemberEntity> list = tenantMemberMapper.listByWrapper(QueryWrapper.of(TenantMemberEntity.class)
                 .eq(TenantMemberEntity::getDbStatus, 1).orderBy("sort"));
         redisCache.deleteAll(CommConstant.TENANT_PREFIX + "*");
         if(list != null){

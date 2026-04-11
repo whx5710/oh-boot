@@ -38,7 +38,7 @@ public class FlowServiceImpl implements FlowService {
             queryWrapper.jointSQL("(name like concat('%', #{keyWord}, '%') or key_code like concat('%', #{keyWord}, '%'))", "keyWord", query.getKeyWord());
         }
         queryWrapper.page(query.getPageNum(), query.getPageSize());
-        try (Page<FlowEntity> page = flowMapper.selectPageByWrapper(queryWrapper)) {
+        try (Page<FlowEntity> page = flowMapper.listByWrapper(queryWrapper)) {
             return new PageResult<>(FlowConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }

@@ -27,14 +27,13 @@ public class RunHandle {
         this.redisCache = redisCache;
     }
 
-    private final String key = RedisKeys.PREFIX + "flow:";
-
     @PostConstruct
     public void run(){
-        List<FlowNodeEntity> list = flowNodeMapper.selectListByWrapper(QueryWrapper.of(FlowNodeEntity.class).eq(FlowNodeEntity::getDbStatus, 1));
+        List<FlowNodeEntity> list = flowNodeMapper.listByWrapper(QueryWrapper.of(FlowNodeEntity.class).eq(FlowNodeEntity::getDbStatus, 1));
         if(list != null && !list.isEmpty()){
             for(FlowNodeEntity item: list){
                 FlowNodeVO vo = FlowNodeConvert.INSTANCE.convert(item);
+                String key = RedisKeys.PREFIX + "flow:";
                 redisCache.set(key + vo.getProcDefId() + ":" + vo.getActDefId(), vo);
             }
         }

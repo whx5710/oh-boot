@@ -184,7 +184,7 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public List<Long> getSubDeptIdList(Long id) {
         // 所有部门的id、pid列表
-        List<DeptEntity> deptList = deptMapper.selectListByWrapper(QueryWrapper.of(DeptEntity.class)
+        List<DeptEntity> deptList = deptMapper.listByWrapper(QueryWrapper.of(DeptEntity.class)
                 .eq(DeptEntity::getDbStatus, 1));
 
         // 递归查询所有子部门ID列表

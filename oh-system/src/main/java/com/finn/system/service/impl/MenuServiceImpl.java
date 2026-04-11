@@ -287,7 +287,7 @@ public class MenuServiceImpl implements MenuService {
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }
-            return !menuMapper.selectListByWrapper(params).isEmpty();
+            return !menuMapper.listByWrapper(params).isEmpty();
         }
     }
 
@@ -300,7 +300,7 @@ public class MenuServiceImpl implements MenuService {
             if(id != null && id != 0L){
                 params.ne(MenuEntity::getId, id);
             }
-            return !menuMapper.selectListByWrapper(params).isEmpty();
+            return !menuMapper.listByWrapper(params).isEmpty();
         }
     }
 

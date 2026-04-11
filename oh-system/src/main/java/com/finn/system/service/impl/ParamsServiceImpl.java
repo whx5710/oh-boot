@@ -42,7 +42,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
 
     @Override
     public PageResult<ParamsVO> page(ParamsQuery query) {
-        Page<ParamsEntity> page = paramsMapper.selectPageByWrapper(getQueryWrapper(query));
+        Page<ParamsEntity> page = paramsMapper.listByWrapper(getQueryWrapper(query));
         return new PageResult<>(ParamsConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
@@ -91,7 +91,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
     @Override
     public void delete(List<Long> idList) {
         // 查询列表
-        List<ParamsEntity> list = paramsMapper.selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+        List<ParamsEntity> list = paramsMapper.listByWrapper(QueryWrapper.of(ParamsEntity.class)
                 .in(ParamsEntity::getId, idList));
         if(!list.isEmpty()){
             for(ParamsEntity entity: list){
@@ -174,7 +174,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
      */
     @Override
     public ParamsEntity getByKey(String key) {
-        List<ParamsEntity> list = paramsMapper.selectListByWrapper(QueryWrapper.of(ParamsEntity.class)
+        List<ParamsEntity> list = paramsMapper.listByWrapper(QueryWrapper.of(ParamsEntity.class)
                 .eq(ParamsEntity::getDbStatus,1).eq(ParamsEntity::getParamKey, key));
         if(!list.isEmpty()){
             return list.getFirst();

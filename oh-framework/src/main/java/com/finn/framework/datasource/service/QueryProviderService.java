@@ -21,6 +21,8 @@ public class QueryProviderService {
 
     public static final String SELECT_LIST_PARAM = "selectListByWrapper";
 
+    public static final String LIST_PARAM = "listByWrapper";
+
     public static final String FIND_BY_ID = "findById";
 
     public static final String SELECT_COUNT_PARAM = "count";
@@ -44,6 +46,16 @@ public class QueryProviderService {
     public <T> String selectListByWrapper(QueryWrapper<T> fp){
         fp.remove(PAGE_NUM);
         fp.remove(PAGE_SIZE);
+        return fp.getSql().toString();
+    }
+
+    /**
+     * 通用单表查询，如果传入了分页参数，进行分页查询
+     * @param fp 参数
+     * @return sql
+     * @param <T> 类
+     */
+    public <T> String listByWrapper(QueryWrapper<T> fp){
         return fp.getSql().toString();
     }
 

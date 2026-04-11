@@ -48,6 +48,7 @@ public interface BaseMapper<T>{
      * @param fp 使用QueryWrapper构建
      * @return page
      */
+    @Deprecated
     @Pages
     @SelectProvider(method = QueryProviderService.SELECT_PAGE_PARAM, type = QueryProviderService.class)
     Page<T>  selectPageByWrapper(QueryWrapper<T> fp);
@@ -57,8 +58,17 @@ public interface BaseMapper<T>{
      * @param fp QueryWrapper
      * @return list
      */
+    @Deprecated
     @SelectProvider(method = QueryProviderService.SELECT_LIST_PARAM, type = QueryProviderService.class)
     List<T> selectListByWrapper(QueryWrapper<T> fp);
+
+    /**
+     * 通用单表查询，如果传入了分页参数，进行分页查询
+     * @param fp SQL构建
+     * @return list/page
+     */
+    @SelectProvider(method = QueryProviderService.LIST_PARAM, type = QueryProviderService.class)
+    Page<T> listByWrapper(QueryWrapper<T> fp);
 
     /**
      * 查询列表
