@@ -52,7 +52,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 			}).collect(Collectors.toList());
 
 			// 批量新增
-			roleMenuMapper.saveBatch(menuList);
+			roleMenuMapper.insertBatch(menuList);
 		}
 
 		// 需要删除的菜单ID

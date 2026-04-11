@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 数据拦截器
@@ -61,6 +62,7 @@ public class DataInnerInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement) args[0];
+
         if (ms.getSqlCommandType().equals(SqlCommandType.INSERT)) { // 新增
             autoInsertFill(invocation);
             return invocation.proceed();
@@ -73,6 +75,7 @@ public class DataInnerInterceptor implements Interceptor {
             dataFilter(args);
             return invocation.proceed();
         }
+        log.info("No processing for SQL command type: {}", ms.getSqlCommandType());
         return invocation.proceed();
     }
 
@@ -86,27 +89,59 @@ public class DataInnerInterceptor implements Interceptor {
 
         Object[] args = invocation.getArgs();
         Object params = args[1];
+        
+        // 处理List类型的参数（批量插入）
+        if (params instanceof List<?> list) {
+            for (Object item : list) {
+                fillInsertFields(item, user, date);
+            }
+        } else if (params instanceof java.util.Map<?, ?> map) {
+            // 处理Map类型的参数（MyBatis会将批量插入的参数包装成Map）
+            log.info("Processing Map parameter with keys: {}", map.keySet());
+            
+            // 检查Map中是否包含"entities"键（对应insertBatch方法的参数名）
+            if (map.containsKey("entities")) {
+                Object entitiesObj = map.get("entities");
+                if (entitiesObj instanceof List<?> list) {
+                    for (Object item : list) {
+                        fillInsertFields(item, user, date);
+                    }
+                }
+            }
+        } else {
+            // 处理单个对象的情况
+            fillInsertFields(params, user, date);
+        }
+    }
+    
+    /**
+     * 填充插入字段
+     * @param entity 实体对象
+     * @param user 用户信息
+     * @param date 当前时间
+     */
+    private void fillInsertFields(Object entity, UserDetail user, LocalDateTime date) {
         if (user != null && user.getId() != null) {
             // 创建人ID
-            setFieldIfNull(params, CREATOR, user.getId(), false);
+            setFieldIfNull(entity, CREATOR, user.getId(), false);
             // 所属组织
-            setFieldIfNull(params, ORG_ID, user.getDeptId(), false);
+            setFieldIfNull(entity, ORG_ID, user.getDeptId(), false);
             // 租户ID
             try {
-                Object object = ReflectUtil.getValue(params, TENANT_ID);
+                Object object = ReflectUtil.getValue(entity, TENANT_ID);
                 if(object == null || object.equals("")){
-                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
+                    ReflectUtil.setValue(entity, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
                 }
             }catch (NoSuchFieldException e){
-                log.warn("无{}属性！", TENANT_ID);
+                log.debug("无{}属性！", TENANT_ID);
             }
         }
         // 创建时间
-        setFieldIfNull(params, CREATE_TIME, date, false);
+        setFieldIfNull(entity, CREATE_TIME, date, false);
         // 有效标识
-        setFieldIfNull(params, DB_STATUS, 1, false);
+        setFieldIfNull(entity, DB_STATUS, 1, false);
         // ID
-        setFieldIfNull(params, ID, idWorker.nextId(), false);
+        setFieldIfNull(entity, ID, idWorker.nextId(), false);
     }
 
     /**
@@ -129,7 +164,7 @@ public class DataInnerInterceptor implements Interceptor {
                     ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
                 }
             }catch (NoSuchFieldException e){
-                log.warn("无{}属性！", TENANT_ID);
+                log.debug("无{}属性！", TENANT_ID);
             }
         }
         // 更新时间
@@ -159,7 +194,7 @@ public class DataInnerInterceptor implements Interceptor {
                         sqlFilter = (String) object;
                     }
                 }catch (NoSuchFieldException e){
-                    log.warn("无{}属性！", SQL_FILTER);
+                    log.debug("无{}属性！", SQL_FILTER);
                 }
             }
             if(sqlFilter != null){
@@ -167,7 +202,7 @@ public class DataInnerInterceptor implements Interceptor {
                 try {
                     ReflectUtil.setValue(boundSql, "sql", getSelect(boundSql.getSql(), sqlFilter));
                 }catch (NoSuchFieldException e){
-                    log.warn("无{}属性！", "sql");
+                    log.debug("无{}属性！", "sql");
                 }
             }
         }
@@ -214,7 +249,7 @@ public class DataInnerInterceptor implements Interceptor {
                 ReflectUtil.setValue(params, fieldName, value, force);
             }
         }catch (NoSuchFieldException e){
-            log.warn("无{}属性！", fieldName);
+            log.debug("无{}属性！", fieldName);
         }
     }
 

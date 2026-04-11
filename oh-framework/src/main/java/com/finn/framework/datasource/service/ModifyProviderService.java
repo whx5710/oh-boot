@@ -26,6 +26,7 @@ import java.util.List;
 public class ModifyProviderService {
 
     public static final String INSERT = "insert";
+    public static final String INSERT_BATCH = "insertBatch";
     public static final String INSERT_PARAM = "insertByWrapper";
     public static final String UPDATE = "updateById";
     public static final String DELETE = "delete";
@@ -52,7 +53,7 @@ public class ModifyProviderService {
                 TableField annotation = field.getAnnotation(TableField.class);
                 if (annotation.exists()) { // 剔除非数据库字段
                     if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
-                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){
+                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){ 
                         log.warn("子类有覆盖 {} 字段，不新增该字段", annotation.value());
                     }else{
                         sql.VALUES(annotation.value(), "#{" + field.getName() + "}");
@@ -72,6 +73,99 @@ public class ModifyProviderService {
         }
         log.debug("生成插入SQL: {}", sql);
         return  sql.toString();
+    }
+
+    /**
+     * 批量插入数据
+     * @param entities 实体列表
+     * @return sql
+     * @param <T> t
+     */
+    public <T> String insertBatch(List<T> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return "";
+        }
+        
+        T entity = entities.getFirst();
+        HashMap<String, Boolean> judge = new HashMap<>(); // 判断字段是否存在
+        Class<?> clazz = entity.getClass();
+        String tableName = Wrapper.getTableName(clazz);
+        List<Field> fields = ReflectUtil.getFields(clazz);
+        
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("INSERT INTO ").append(tableName).append(" (");
+        
+        // 构建字段列表
+        StringBuilder columnsBuilder = new StringBuilder();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
+                TableField annotation = field.getAnnotation(TableField.class);
+                if (annotation.exists()) { // 剔除非数据库字段
+                    if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
+                            (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){ 
+                        log.warn("子类有覆盖 {} 字段，不新增该字段", annotation.value());
+                    }else{
+                        if (!columnsBuilder.isEmpty()) {
+                            columnsBuilder.append(", ");
+                        }
+                        columnsBuilder.append(annotation.value());
+                    }
+                }else{
+                    // 如果子类覆盖了父类的属性，存在 exists = false的情况
+                    String key = annotation.value()==null?field.getName():annotation.value();
+                    if(key.isEmpty()){
+                        key = field.getName();
+                    }
+                    judge.put(key, false);
+                }
+            } else {
+                // 无注解的字段默认成与数据库字段一致
+                if (!columnsBuilder.isEmpty()) {
+                    columnsBuilder.append(", ");
+                }
+                columnsBuilder.append(field.getName());
+            }
+        }
+        sqlBuilder.append(columnsBuilder).append(") VALUES ");
+        
+        // 构建值列表
+        for (int i = 0; i < entities.size(); i++) {
+            if (i > 0) {
+                sqlBuilder.append(", ");
+            }
+            sqlBuilder.append("(");
+            
+            StringBuilder valuesBuilder = new StringBuilder();
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
+                    TableField annotation = field.getAnnotation(TableField.class);
+                    if (annotation.exists()) { // 剔除非数据库字段
+                        if((judge.containsKey(field.getName()) && !judge.get(field.getName())) ||
+                                (judge.containsKey(annotation.value()) && !judge.get(annotation.value()))){ 
+                            // 跳过该字段
+                        }else{
+                            if (!valuesBuilder.isEmpty()) {
+                                valuesBuilder.append(", ");
+                            }
+                            valuesBuilder.append("#{entities[").append(i).append("].").append(field.getName()).append("}");
+                        }
+                    }else{
+                        // 跳过该字段
+                    }
+                } else {
+                    // 无注解的字段默认成与数据库字段一致
+                    if (!valuesBuilder.isEmpty()) {
+                        valuesBuilder.append(", ");
+                    }
+                    valuesBuilder.append("#{entities[").append(i).append("].").append(field.getName()).append("}");
+                }
+            }
+            sqlBuilder.append(valuesBuilder).append(")");
+        }
+        
+        String sql = sqlBuilder.toString();
+        log.debug("生成批量插入SQL: {}", sql);
+        return sql;
     }
 
     /**

@@ -28,7 +28,9 @@ public class AuthenticationEvents {
         UserDetail user = (UserDetail) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
+        if(user != null){
+            logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
+        }
     }
 
     @EventListener

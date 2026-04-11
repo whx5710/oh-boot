@@ -28,6 +28,14 @@ public interface BaseMapper<T>{
     long insert(T entity);
 
     /**
+     * 批量插入记录
+     * @param entities 实体类列表
+     * @return int
+     */
+    @InsertProvider(method = ModifyProviderService.INSERT_BATCH, type = ModifyProviderService.class)
+    long insertBatch(List<T> entities);
+
+    /**
      * 根据ID更新
      * @param entity 实体类
      * @return int
