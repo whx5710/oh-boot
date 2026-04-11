@@ -3,7 +3,7 @@
 oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-Plus请自行引入依赖包）、Druid连接池、Kafka等框架开发的一套SpringBoot快速开发平台。
 - 采用组件模式，扩展不同的业务功能，可以很方便的实现各种业务需求，若想使用某个组件，按需引入即可。
 - 支持定时任务（分布式可使用xxl-job）、文件存储、短信对接等。
-- ~~前端集成bpmn.js，使用camunda流程引擎，画流程如此简单。~~
+- 前端集成bpmn.js，使用~~camunda~~ Flowable流程引擎，画流程如此简单。
 - 完善的资源监控，可监控服务器资源，数据库连接等。
 - 保姆级注释，确保每行代码都能看懂，开发无忧。
 - 严格的接口角色权限控制，拒绝垂直越权。
@@ -21,7 +21,8 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 - 租户数据拦截优化，不依赖Druid包，基于jsqlparser进行sql操作【2026年3月】
 - 去掉Druid连接池，暂不支持springboot4，Hikari连接池增加慢sql监测，后期默认使用Hikari连接池【2026年3月】
 - 支持postgres，增加建表sql，划分mysql、pg脚本目录，根据项目需求选择对应的数据库【2026年3月】
-- oh-core模块合并到oh-framework，简化框架【2026年4月】
+- oh-core模块合并到oh-framework，简化框架,升级spring-boot 4.0.5【2026年4月】
+- 增加批量插入insertBatch(List<T>)通用方法【2026年4月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git
@@ -63,7 +64,6 @@ oh-module    业务模块
 ```yaml
 finn:
   multi-tenant: # 多租户配置
-    dialect: mysql # 数据库方言，默认mysql
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
     table-pattern: ^t_.* # 需要隔离的表名称（正则表达式）
     # 排除隔离的表（逗号分隔） sys_params,sys_version_info,sys_menu,sys_role_menu,sys_user_role,sys_user_post 已写到代码中
