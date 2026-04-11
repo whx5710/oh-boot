@@ -7,6 +7,7 @@ import com.finn.framework.datasource.wrapper.*;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -74,7 +75,7 @@ public interface BaseMapper<T>{
      * @return 实体对象
      */
     @SelectProvider(method = QueryProviderService.FIND_BY_ID, type = QueryProviderService.class)
-    T findById(@Param("id")Long id,Class<T> clazz);
+    T findById(@Param("id") Serializable id, Class<T> clazz);
 
     /**
      * 删除接口
