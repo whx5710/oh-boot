@@ -92,8 +92,9 @@ public class DictTypeServiceImpl implements DictTypeService {
         if(l > 0){
             throw new ServerException("请先删除字典数据");
         }
-        dictTypeMapper.updateByWrapper(UpdateWrapper.of(DictTypeEntity.class).set(DictTypeEntity::getDbStatus, 0)
+        int i = dictTypeMapper.updateByWrapper(UpdateWrapper.of(DictTypeEntity.class).set(DictTypeEntity::getDbStatus, 0)
                 .in(DictTypeEntity::getId, idList));
+        log.info("更新{}条记录", i);
     }
 
     @Override

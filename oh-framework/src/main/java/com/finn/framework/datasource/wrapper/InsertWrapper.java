@@ -22,6 +22,22 @@ public class InsertWrapper extends Wrapper<Object> {
         return params;
     }
 
+
+    /**
+     * 初始化，构建SQL：insert into tableName
+     * @param clazz 类
+     * @return
+     */
+    public static <T> InsertWrapper of(Class<T> clazz) {
+        InsertWrapper params = new InsertWrapper();
+        SQL tmpSQL = new SQL();
+        tmpSQL.INSERT_INTO(getTableName(clazz));
+        params.setSql(tmpSQL);
+        return params;
+    }
+
+
+
     /**
      * 插入数值
      * @param columns 数据库列名
