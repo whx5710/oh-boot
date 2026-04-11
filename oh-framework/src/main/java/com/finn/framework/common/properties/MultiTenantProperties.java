@@ -23,8 +23,6 @@ public class MultiTenantProperties {
     public static final Set<String> tables = new HashSet<>(Arrays.asList("sys_params", "sys_version_info", "sys_menu", "sys_role_menu", "sys_user_role", "sys_user_post"));
 
     private boolean enable = true;
-    // 当前数据库的方言，默认mysql
-    private String dialect = "mysql";
     // 多租户字段名称
     private String tenantIdField = "tenant_id";
     // 需要识别多租户字段的表名称的正则表达式
@@ -38,18 +36,6 @@ public class MultiTenantProperties {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    /**
-     * 当前数据库的方言,默认mysql
-     * @return
-     */
-    public String getDialect() {
-        return dialect;
-    }
-
-    public void setDialect(String dialect) {
-        this.dialect = dialect;
     }
 
     /**
