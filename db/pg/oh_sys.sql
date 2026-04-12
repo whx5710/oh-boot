@@ -12,7 +12,7 @@
  Target Server Version : 180003 (180003)
  File Encoding         : 65001
 
- Date: 07/04/2026 20:22:29
+ Date: 12/04/2026 11:19:23
 */
 
 
@@ -991,6 +991,9 @@ INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "me
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (57, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'menu', 0, NULL, 'f', 0, 0, NULL, 10000, '2025-06-25 19:45:26', 10000, '2025-09-18 13:32:58');
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (33304128612466688, 7, 'Flow', '绘制流程', '/system/flow', '/system/flow/draw', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:flow-logs-vpc', 'f', 0, 1, NULL, 10000, '2026-04-02 21:38:43.022556', 10000, '2026-04-06 18:10:42.981877');
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (34701521023139840, 33304128612466688, '流程新增修改', '流程新增修改', '', NULL, 1, 'f', 'f', 'flow:saveOrUpdate', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-06 18:11:27.33507', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36768990499962880, 33304128612466688, '流程查询', '流程查询', '', NULL, 1, 'f', 'f', 'flow:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-12 11:06:50.469297', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36769889070874624, 7, 'FlowManage', '流程管理', '/system/flow-manage', '/system/flow/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:workflow-automation', 'f', 0, 1, NULL, 10000, '2026-04-12 11:10:24.706571', 10000, '2026-04-12 11:15:00.57417');
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36770623787106304, 36769889070874624, '流程管理新增修改', '流程管理新增修改', '', NULL, 1, 'f', 'f', 'flow:task:saveOrUpdate,flow:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-12 11:13:19.876445', 10000, '2026-04-12 11:17:29.143403');
 COMMIT;
 
 -- ----------------------------
