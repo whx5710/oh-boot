@@ -12,11 +12,13 @@ import com.finn.framework.query.Query;
 public class FlowNodeQuery extends Query {
     /**
      * 流程定义ID
+     * Process_demo20231222:2:35032948206342144
      */
     private String procDefId;
 
     /**
      * 环节ID
+     * StartEvent_begin_a
      */
     private String actDefId;
 

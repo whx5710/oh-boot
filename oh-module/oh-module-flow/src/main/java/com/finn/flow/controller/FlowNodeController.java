@@ -20,7 +20,7 @@ import java.util.List;
 * @since 1.0.0 2024-01-31
 */
 @RestController
-@RequestMapping("finn/node")
+@RequestMapping("/flow/node")
 public class FlowNodeController {
     
     private final FlowNodeService flowNodeService;
@@ -35,7 +35,7 @@ public class FlowNodeController {
      * @return 列表
      */
     @GetMapping("page")
-    @PreAuthorize("hasAuthority('finn:node:page')")
+    @PreAuthorize("hasAuthority('flow:node:page')")
     public Result<PageResult<FlowNodeVO>> page(@Valid FlowNodeQuery query){
         PageResult<FlowNodeVO> page = flowNodeService.page(query);
 
@@ -48,7 +48,7 @@ public class FlowNodeController {
      * @return
      */
     @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('finn:node:info')")
+    @PreAuthorize("hasAuthority('flow:node:info')")
     public Result<FlowNodeVO> get(@PathVariable("id") Long id){
         FlowNodeEntity entity = flowNodeService.getById(id);
 
@@ -61,7 +61,7 @@ public class FlowNodeController {
      * @return 提示信息
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('finn:node:save')")
+    @PreAuthorize("hasAuthority('flow:node:save')")
     public Result<String> save(@RequestBody FlowNodeVO vo){
         flowNodeService.save(vo);
 
@@ -74,7 +74,7 @@ public class FlowNodeController {
      * @return 提示信息
      */
     @PostMapping("/update")
-    @PreAuthorize("hasAuthority('finn:node:update')")
+    @PreAuthorize("hasAuthority('flow:node:update')")
     public Result<String> update(@RequestBody @Valid FlowNodeVO vo){
         flowNodeService.update(vo);
 
@@ -87,7 +87,7 @@ public class FlowNodeController {
      * @return 提示信息
      */
     @PostMapping("/del")
-    @PreAuthorize("hasAuthority('finn:node:delete')")
+    @PreAuthorize("hasAuthority('flow:node:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
         flowNodeService.delete(idList);
         return Result.ok();
