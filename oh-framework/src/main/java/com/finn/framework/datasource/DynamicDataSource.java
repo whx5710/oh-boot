@@ -148,26 +148,36 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     /**
      * 获取SqlSessionFactory
      * @param key 数据源
-     * @return
-     * @throws Exception
+     * @return s
+     * @throws Exception e
      */
     public SqlSessionFactory getSqlSessionFactory(String key) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         if(key == null || key.isEmpty()){
-            sqlSessionFactoryBean.setDataSource(primaryDb);
+            return getSqlSessionFactory(primaryDb);
         }else{
             if(this.dynamicDataSources.containsKey(key)){
-                sqlSessionFactoryBean.setDataSource(this.dynamicDataSources.get(key));
+                return getSqlSessionFactory(this.dynamicDataSources.get(key));
             }else{
                 throw new ServerException("未找到对应的数据源【" + key + "】");
             }
         }
+    }
+
+    /**
+     * 获取SqlSessionFactory
+     * @param dataSource 数据源
+     * @return s
+     * @throws Exception e
+     */
+    public SqlSessionFactory getSqlSessionFactory(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
         // 对应mybatis的xml路径
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(String.join(",", mybatisProperties.getMapperLocations())));
         SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBean.getObject();
         if(sqlSessionFactory == null){
-            throw new ServerException("未找到对应的SqlSessionFactory，请检查！【" + key + "】");
+            throw new ServerException("未找到对应的SqlSessionFactory，请检查！");
         }
         MybatisProperties.CoreConfiguration mybatisPropertiesConfiguration = mybatisProperties.getConfiguration();
         if(mybatisPropertiesConfiguration == null){
@@ -201,6 +211,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * @throws Exception
      */
     public SqlSessionFactory getSqlSessionFactory() throws Exception {
-        return getSqlSessionFactory(null);
+        return getSqlSessionFactory(primaryDb);
     }
 }

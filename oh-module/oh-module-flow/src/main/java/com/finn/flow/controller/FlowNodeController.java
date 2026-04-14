@@ -82,6 +82,18 @@ public class FlowNodeController {
     }
 
     /**
+     * 修改
+     * @param vo 流程信息
+     * @return 提示信息
+     */
+    @PostMapping("/updateBatch")
+    @PreAuthorize("hasAuthority('flow:node:update')")
+    public Result<String> updateBatch(@RequestBody @Valid List<FlowNodeVO> vo){
+        flowNodeService.updateBatch(vo);
+
+        return Result.ok();
+    }
+    /**
      * 删除
      * @param idList 流程ID集合
      * @return 提示信息

@@ -1,6 +1,6 @@
 package com.finn.flow.service.impl;
 
-import com.finn.framework.datasource.DynamicDataSourceHolder;
+import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.finn.flow.convert.FlowNodeConvert;
@@ -10,9 +10,13 @@ import com.finn.flow.query.FlowNodeQuery;
 import com.finn.flow.service.FlowNodeService;
 import com.finn.flow.vo.FlowNodeVO;
 import com.finn.framework.entity.PageResult;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -26,8 +30,11 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     private final FlowNodeMapper flowNodeMapper;
 
-    public FlowNodeServiceImpl(FlowNodeMapper flowNodeMapper){
+    private final DynamicDataSource dynamicDataSource;
+
+    public FlowNodeServiceImpl(FlowNodeMapper flowNodeMapper, DynamicDataSource dynamicDataSource){
         this.flowNodeMapper = flowNodeMapper;
+        this.dynamicDataSource = dynamicDataSource;
     }
 
     @Override
@@ -48,6 +55,7 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public void update(FlowNodeVO vo) {
+        vo.setConditionExpression(null); // 防止表达式特殊字符被转换
         FlowNodeEntity entity = FlowNodeConvert.INSTANCE.convert(vo);
         flowNodeMapper.updateById(entity);
     }
@@ -74,8 +82,25 @@ public class FlowNodeServiceImpl implements FlowNodeService {
      */
     @Override
     public void updateBatch(List<FlowNodeVO> list) {
-        String ds = DynamicDataSourceHolder.getDynamicDataSourceKey();
-        System.out.println("数据源 " + ds);
+        SqlSession sqlSession = null;
+        try {
+            DataSource dataSource = dynamicDataSource.getResolvedDefaultDataSource();
+            SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(dataSource);
+            sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
+            FlowNodeMapper mapper = sqlSession.getMapper(FlowNodeMapper.class);
+            for(FlowNodeVO vo: list){
+                vo.setConditionExpression(null); // 防止表达式特殊字符被转换
+                mapper.updateById(FlowNodeConvert.INSTANCE.convert(vo));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }finally {
+            if(sqlSession != null){
+                sqlSession.commit();
+                sqlSession.clearCache();
+                sqlSession.close();// 用完关闭
+            }
+        }
     }
 
 }
