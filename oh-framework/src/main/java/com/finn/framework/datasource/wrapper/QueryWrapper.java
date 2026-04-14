@@ -347,6 +347,28 @@ public class QueryWrapper<T> extends Wrapper<T> {
         return (QueryWrapper<T>) super.orderBy(columns);
     }
 
+
+    /**
+     * 排序
+     * @param function User::getCreateTime
+     * @param index asc or desc
+     * @return w
+     */
+    @Override
+    public QueryWrapper<T> orderBy(FuncUtils<T> function, String index) {
+        return (QueryWrapper<T>) super.orderBy(function, index);
+    }
+
+    /**
+     * 排序，默认顺序 asc
+     * @param function User::getCreateTime
+     * @return w
+     */
+    @Override
+    public QueryWrapper<T> orderBy(FuncUtils<T> function) {
+        return (QueryWrapper<T>) super.orderBy(function);
+    }
+
     /**
      * 设置页数
      * @param pageNum i

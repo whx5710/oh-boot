@@ -1,6 +1,7 @@
 package com.finn.framework.datasource.wrapper;
 
 import com.finn.framework.aop.annotations.FuncUtils;
+import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.ReflectUtil;
 import com.finn.framework.utils.Tools;
@@ -15,8 +16,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.finn.framework.common.constant.Constant.PAGE_NUM;
-import static com.finn.framework.common.constant.Constant.PAGE_SIZE;
+import static com.finn.framework.common.constant.Constant.*;
 
 /**
  * SQL where 条件构建类
@@ -589,6 +589,30 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
             sql.ORDER_BY(columns);
         }
         return this;
+    }
+
+    /**
+     * 排序
+     * @param function User::getCreateTime
+     * @param index asc or desc
+     * @return w
+     */
+    public Wrapper<T> orderBy(FuncUtils<T> function, String index) {
+        if(index == null || index.isEmpty()){
+            index = ASC;
+        }
+        String fieldName = ReflectUtil.getFieldName(function);
+        String colName = getColName(fieldName);
+        return orderBy(colName + " " + index);
+    }
+
+    /**
+     * 排序
+     * @param function User::getCreateTime
+     * @return w
+     */
+    public Wrapper<T> orderBy(FuncUtils<T> function) {
+        return orderBy(function, ASC);
     }
 
     /**
