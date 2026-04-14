@@ -15,8 +15,18 @@ public interface Constant {
      * 当前页码
      */
     String PAGE_NUM = "pageNum";
-
+    /**
+     * 每页数量
+     */
     String PAGE_SIZE = "pageSize";
+    /**
+     * 顺序排序
+     */
+    String ASC = "asc";
+    /**
+     * 倒序
+     */
+    String DESC = "desc";
     /**
      * 数据权限
      */

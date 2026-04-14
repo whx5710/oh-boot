@@ -233,7 +233,8 @@ public class TaskHandlerService {
         List<FlowNodeEntity> flowNodeEntities = flowNodeMapper.listByWrapper(QueryWrapper.of(FlowNodeEntity.class)
                 .eq(FlowNodeEntity::getDbStatus, 1)
                 .eq(FlowNodeEntity::getProcDefId, procDefId)
-                .in(FlowNodeEntity::getActDefId, actDefIds));
+                .in(FlowNodeEntity::getActDefId, actDefIds)
+                .orderBy("sort"));
         return FlowNodeConvert.INSTANCE.convertList(flowNodeEntities);
     }
 

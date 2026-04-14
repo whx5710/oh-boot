@@ -1,5 +1,7 @@
 package com.finn.flow.service.impl;
 
+import com.finn.framework.datasource.DynamicDataSourceHolder;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.finn.flow.convert.FlowNodeConvert;
 import com.finn.flow.entity.FlowNodeEntity;
@@ -30,8 +32,12 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
-        Page<FlowNodeEntity> page = flowNodeMapper.getList(query);
-        return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        try (Page<FlowNodeEntity> page = flowNodeMapper.listByWrapper(QueryWrapper.of(FlowNodeEntity.class)
+                .eq(FlowNodeEntity::getDbStatus, 1).eq(FlowNodeEntity::getProcDefId, query.getProcDefId())
+                .eq(FlowNodeEntity::getActDefId, query.getActDefId())
+                .orderBy(FlowNodeEntity::getSort).page(query.getPageNum(), query.getPageSize()))) {
+            return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        }
     }
 
     @Override
@@ -60,6 +66,16 @@ public class FlowNodeServiceImpl implements FlowNodeService {
     @Override
     public FlowNodeEntity getById(Long id) {
         return flowNodeMapper.getById(id);
+    }
+
+    /**
+     * 批量更新
+     * @param list
+     */
+    @Override
+    public void updateBatch(List<FlowNodeVO> list) {
+        String ds = DynamicDataSourceHolder.getDynamicDataSourceKey();
+        System.out.println("数据源 " + ds);
     }
 
 }

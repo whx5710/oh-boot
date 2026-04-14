@@ -185,6 +185,7 @@ CREATE TABLE "oh_boot"."bpmn_flow_node" (
   "condition_expression" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "json_params" varchar(800) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "note" varchar(1500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "sort" int2 DEFAULT 1,
   "db_status" int2 DEFAULT 1,
   "creator" int8,
   "create_time" timestamp(6),
@@ -201,6 +202,7 @@ COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."element_type" IS '环节类型,Use
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."condition_expression" IS '表达式';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."json_params" IS '自定义json参数';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."note" IS '备注';
+COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."sort" IS '排序';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."create_time" IS '创建时间';

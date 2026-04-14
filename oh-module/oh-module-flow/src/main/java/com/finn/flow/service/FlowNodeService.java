@@ -24,4 +24,6 @@ public interface FlowNodeService {
     void delete(List<Long> idList);
 
     FlowNodeEntity getById(Long id);
+
+    void updateBatch(List<FlowNodeVO> list);
 }

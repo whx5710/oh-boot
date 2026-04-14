@@ -51,6 +51,11 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 	 */
 	private String note;
 
+	/**
+	 * 排序
+	 */
+	private Integer sort;
+
 	public String getProcDefId() {
 		return procDefId;
 	}
@@ -105,5 +110,13 @@ public class FlowNodeVO extends IDEntity implements Serializable {
 
 	public void setJsonParams(String jsonParams) {
 		this.jsonParams = jsonParams;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 }

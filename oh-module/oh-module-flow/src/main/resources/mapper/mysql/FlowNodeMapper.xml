@@ -3,13 +3,6 @@
 
 <mapper namespace="com.finn.flow.mapper.FlowNodeMapper">
 
-    <select id="getList" resultType="com.finn.flow.entity.FlowNodeEntity">
-        select * from bpmn_flow_node where db_status = 1
-        <if test="procDefId != null and procDefId != ''">and proc_def_id = #{procDefId}</if>
-        <if test="actDefId != null and actDefId != ''">and act_def_id = #{actDefId}</if>
-        order by create_time desc
-    </select>
-
     <select id="getById" resultType="com.finn.flow.entity.FlowNodeEntity">
         select * from bpmn_flow_node where id = #{id}
     </select>

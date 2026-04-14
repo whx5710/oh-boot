@@ -5,6 +5,7 @@ import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.JsonUtils;
+import jakarta.validation.constraints.Min;
 
 import java.util.HashMap;
 
@@ -50,6 +51,12 @@ public class FlowNodeEntity extends BaseEntity {
 	 */
 	@TableField("json_params")
 	private String jsonParams;
+
+	/**
+	 * 排序
+	 */
+	@Min(value = 0, message = "排序值不能小于0")
+	private Integer sort;
 
 	/**
 	 * json字符串转换成map
@@ -130,5 +137,13 @@ public class FlowNodeEntity extends BaseEntity {
 
 	public void setJsonParamsObj(HashMap<String, Object> jsonParamsObj) {
 		this.jsonParamsObj = jsonParamsObj;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 }

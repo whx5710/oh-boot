@@ -10,6 +10,7 @@ import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.Process;
 import org.flowable.bpmn.model.SequenceFlow;
+import org.flowable.common.engine.api.FlowableException;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.Deployment;
@@ -79,7 +80,7 @@ public class ProcessHandlerService {
                     .addString(name, dbXml)     // bpmn流程数据(ACT_GE_BYTEARRAY)  名称对应ACT_RE_PROCDEF.RESOURCE_NAME_
                     .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
                     .deploy();                  // 部署流程
-        }catch (XMLException e){
+        }catch (XMLException | FlowableException | NoClassDefFoundError e){
             throw new ServerException("流程部署失败！", e.getMessage());
         }
 
