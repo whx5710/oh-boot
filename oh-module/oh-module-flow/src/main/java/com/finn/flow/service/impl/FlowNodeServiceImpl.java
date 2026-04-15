@@ -73,7 +73,7 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public FlowNodeEntity getById(Long id) {
-        return flowNodeMapper.getById(id);
+        return flowNodeMapper.findById(id, FlowNodeEntity.class);
     }
 
     /**

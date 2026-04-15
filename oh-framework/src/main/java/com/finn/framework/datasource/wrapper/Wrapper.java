@@ -1,7 +1,6 @@
 package com.finn.framework.datasource.wrapper;
 
 import com.finn.framework.aop.annotations.FuncUtils;
-import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.ReflectUtil;
 import com.finn.framework.utils.Tools;
@@ -19,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.finn.framework.common.constant.Constant.*;
 
 /**
- * SQL where 条件构建类
+ * SQL where 条件构建类<br/>
+ * 注：如果对性能要求高，请写原生SQL脚本，不建议使用该构造器
  * @author 王小费
  * @since 2025-06-28
  */

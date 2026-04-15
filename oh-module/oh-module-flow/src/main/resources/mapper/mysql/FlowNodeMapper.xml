@@ -3,7 +3,4 @@
 
 <mapper namespace="com.finn.flow.mapper.FlowNodeMapper">
 
-    <select id="getById" resultType="com.finn.flow.entity.FlowNodeEntity">
-        select * from bpmn_flow_node where id = #{id}
-    </select>
 </mapper>

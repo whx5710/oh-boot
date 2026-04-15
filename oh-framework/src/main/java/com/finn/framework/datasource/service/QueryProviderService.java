@@ -11,8 +11,8 @@ import static com.finn.framework.common.constant.Constant.PAGE_SIZE;
 
 /**
  * 通用provider,拼接增删查改，通过 @SelectProvider注解操作，减少sql编写<br/>
- * 单表查询      selectPageByWrapper、selectListByWrapper <br/>
- * 注意：如果对查询性能有要求，不建议使用
+ * 单表查询      listByWrapper，如果有分页参数，则对list进行分页 <br/>
+ * 注：如果对查询性能要求高，不建议使用，请直接使用SQL操作
  * @author 王小费 whx5710@qq.com
  */
 public class QueryProviderService {
