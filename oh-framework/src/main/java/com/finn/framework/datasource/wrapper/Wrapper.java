@@ -87,7 +87,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
     }
 
     /**
-     * 获取主键
+     * 获取主键，如果TableId注解未填值，默认字段名
      * @param clazz 实体类
      * @return 主键名
      */
@@ -96,7 +96,11 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
         for(Field field: fields){
             if (field.isAnnotationPresent(TableId.class)) { // 判断是否有该注解
                 TableId annotation = field.getAnnotation(TableId.class);
-                return annotation.value();
+                if(annotation.value() == null || annotation.value().isEmpty()){
+                    return field.getName();
+                }else{
+                    return annotation.value();
+                }
             }
         }
         return "id";

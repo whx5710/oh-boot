@@ -71,6 +71,13 @@ public class QueryProviderService {
         return fp.getSql().toString();
     }
 
+    /**
+     * 通过主键ID获取一个实体对象
+     * @param id 主键ID
+     * @param clazz 类
+     * @return sql
+     * @param <T> e
+     */
     public <T> String findById(Long id, Class<T> clazz){
         SQL sql = new SQL();
         String tableName = Wrapper.getTableName(clazz);
