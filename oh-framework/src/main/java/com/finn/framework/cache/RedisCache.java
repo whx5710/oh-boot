@@ -47,9 +47,11 @@ public class RedisCache {
      * @param expire 时长-秒
      */
     public void set(String key, Object value, long expire) {
-        redisTemplate.opsForValue().set(key, value);
-        if (expire != NOT_EXPIRE) {
-            expire(key, expire);
+        // 优化：使用原子操作，减少网络往返
+        if (expire == NOT_EXPIRE) {
+            redisTemplate.opsForValue().set(key, value);
+        } else {
+            redisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
         }
     }
 

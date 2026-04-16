@@ -94,6 +94,10 @@ public class TokenStoreCache {
         // 删除token
         String key = RedisKeys.getAccessTokenKey(accessToken);
         RefreshTokenInfo refreshTokenInfo = (RefreshTokenInfo) redisCache.get(key);
+        // 修复：添加空值检查，避免NPE
+        if (refreshTokenInfo == null) {
+            return;
+        }
         String refresh = refreshTokenInfo.getRefreshToken();
         redisCache.delete(key);
         // 删除用户
