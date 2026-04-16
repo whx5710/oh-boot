@@ -55,11 +55,11 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return 列名
      */
     protected String getColName(String fieldName){
-        if(colValue.containsKey(fieldName)){
-            return colValue.get(fieldName);
-        }else{
+        String colName = colValue.get(fieldName);
+        if(colName == null){
             throw new ServerException("【" + fieldName + "】字段不存在，请检查");
         }
+        return colName;
     }
 
     /**
@@ -140,9 +140,11 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return 列名映射
      */
     private static Map<String, String> buildColumn(Class<?> clazz, SQL sql){
-        Map<String, String> colValue = new HashMap<>();
         List<Field> fields = getCachedFields(clazz);
-        Map<String, Boolean> judge = new HashMap<>();
+        // 根据字段数预估HashMap容量，避免扩容：容量 = 字段数 / 0.75 + 1
+        int initialCapacity = (int) (fields.size() / 0.75f) + 1;
+        Map<String, String> colValue = new HashMap<>(initialCapacity);
+        Map<String, Boolean> judge = new HashMap<>(initialCapacity);
         for(Field field: fields){
             if (field.isAnnotationPresent(TableField.class)) { // 判断是否有该注解
                 TableField annotation = field.getAnnotation(TableField.class);
@@ -486,7 +488,9 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
         if(value != null && !value.isEmpty()){
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            StringBuilder stringBuilder = new StringBuilder();
+            // 预估容量：colName + " in (" + ... + ")"，每个参数约占用 fieldName.length() + 10 字符
+            int estimatedCapacity = colName.length() + 8 + value.size() * (fieldName.length() + 10);
+            StringBuilder stringBuilder = new StringBuilder(estimatedCapacity);
             stringBuilder.append(colName).append(" in (");
             for(int i = 0; i < value.size(); i++){
                 String tmpStr = fieldName + "_" + i;
@@ -510,10 +514,12 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> in(FuncUtils<T> function, Object... value){
-        if(value != null){
+        if(value != null && value.length > 0){
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            StringBuilder stringBuilder = new StringBuilder();
+            // 预估容量
+            int estimatedCapacity = colName.length() + 8 + value.length * (fieldName.length() + 10);
+            StringBuilder stringBuilder = new StringBuilder(estimatedCapacity);
             stringBuilder.append(colName).append(" in (");
             for(int i = 0; i < value.length; i++){
                 String tmpStr = fieldName + "_" + i;
