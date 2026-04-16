@@ -7,6 +7,7 @@ import org.apache.ibatis.jdbc.SQL;
  * @author 王小费
  * @since 2025-06-29
  */
+@Deprecated
 public class InsertWrapper extends Wrapper<Object> {
 
     /**

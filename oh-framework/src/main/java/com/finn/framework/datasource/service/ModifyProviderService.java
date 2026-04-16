@@ -310,6 +310,7 @@ public class ModifyProviderService {
      * @param fp 参数 + sql
      * @return sql
      */
+    @Deprecated
     public String insertByWrapper(InsertWrapper fp){
         return fp.getSql().toString();
     }

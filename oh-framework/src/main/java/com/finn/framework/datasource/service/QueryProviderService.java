@@ -5,6 +5,7 @@ import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.io.Serializable;
 
 import static com.finn.framework.common.constant.Constant.PAGE_NUM;
 import static com.finn.framework.common.constant.Constant.PAGE_SIZE;
@@ -12,7 +13,7 @@ import static com.finn.framework.common.constant.Constant.PAGE_SIZE;
 /**
  * 通用provider,拼接增删查改，通过 @SelectProvider注解操作，减少sql编写<br/>
  * 单表查询      listByWrapper，如果有分页参数，则对list进行分页 <br/>
- * 注：如果对查询性能要求高，不建议使用，请直接使用SQL操作
+ * 注：如果对查询性能要求高，请直接使用SQL操作
  * @author 王小费 whx5710@qq.com
  */
 public class QueryProviderService {
@@ -78,7 +79,7 @@ public class QueryProviderService {
      * @return sql
      * @param <T> e
      */
-    public <T> String findById(Long id, Class<T> clazz){
+    public <T> String findById(Serializable id, Class<T> clazz){
         SQL sql = new SQL();
         String tableName = Wrapper.getTableName(clazz);
         String priKey = Wrapper.getPriKey(clazz);
