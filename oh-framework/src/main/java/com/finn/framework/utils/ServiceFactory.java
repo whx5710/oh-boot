@@ -123,7 +123,7 @@ public class ServiceFactory {
     }
 
     /**
-     * 设置上下文
+     * 设置上下文,启动后，需将 ApplicationContext 传进来
      * @param applicationContext a
      */
     public static synchronized void setApplicationContext(ApplicationContext applicationContext){

@@ -16,13 +16,13 @@ import java.util.List;
  * 缓存数据
  */
 @Component
-public class RunHandle {
+public class InitFlowData {
 
     private final FlowNodeMapper flowNodeMapper;
 
     private final RedisCache redisCache;
 
-    public RunHandle(FlowNodeMapper flowNodeMapper, RedisCache redisCache){
+    public InitFlowData(FlowNodeMapper flowNodeMapper, RedisCache redisCache){
         this.flowNodeMapper = flowNodeMapper;
         this.redisCache = redisCache;
     }
