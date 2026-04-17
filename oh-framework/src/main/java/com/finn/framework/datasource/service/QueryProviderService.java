@@ -45,8 +45,8 @@ public class QueryProviderService {
      * @param <T> 类
      */
     public <T> String selectListByWrapper(QueryWrapper<T> fp){
-        fp.remove(PAGE_NUM);
-        fp.remove(PAGE_SIZE);
+        // 优化：提取公共方法移除分页参数
+        removePageParams(fp);
         return fp.getSql().toString();
     }
 
@@ -67,8 +67,8 @@ public class QueryProviderService {
      * @param <T> 类
      */
     public <T> String count(CountWrapper<T> fp){
-        fp.remove(PAGE_NUM);
-        fp.remove(PAGE_SIZE);
+        // 优化：提取公共方法移除分页参数
+        removePageParams(fp);
         return fp.getSql().toString();
     }
 
@@ -85,5 +85,14 @@ public class QueryProviderService {
         String priKey = Wrapper.getPriKey(clazz);
         sql.SELECT("*").FROM(tableName).WHERE(priKey + " = #{id}");
         return sql.toString();
+    }
+
+    /**
+     * 移除分页参数的公共方法
+     * @param fp Wrapper对象
+     */
+    private void removePageParams(Wrapper<?> fp) {
+        fp.remove(PAGE_NUM);
+        fp.remove(PAGE_SIZE);
     }
 }

@@ -349,8 +349,8 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      * @return w
      */
     @Override
-    public QueryWrapper<T> orderBy(FuncUtils<T> function) {
-        return (QueryWrapper<T>) super.orderBy(function);
+    public DeleteWrapper<T> orderBy(FuncUtils<T> function) {
+        return (DeleteWrapper<T>) super.orderBy(function);
     }
 
     /**
