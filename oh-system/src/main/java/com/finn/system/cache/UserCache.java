@@ -38,7 +38,13 @@ public class UserCache {
         }else{
             UserEntity user = userMapper.getById(userId);
             if(user != null && user.getId() != null){
-                redisCache.set(key, user, 7200);// 缓存2小时
+                // 清空多余的数据
+                user.setPassword(null);
+                user.setAvatar(null);
+                user.setUpdater(null);
+                user.setUpdateTime(null);
+                user.setPwdModifyTime(null);
+                redisCache.set(key, user.toJson(), 7200);// 缓存2小时
                 return user;
             }else{
                 return new UserEntity();
