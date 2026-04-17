@@ -57,6 +57,12 @@ public class UserCache {
                 if(redisCache.hasKey(key)){
                     redisCache.delete(key);
                 }
+                // 清空多余的数据
+                item.setPassword(null);
+                item.setAvatar(null);
+                item.setUpdater(null);
+                item.setUpdateTime(null);
+                item.setPwdModifyTime(null);
                 // 缓存数据
                 redisCache.set(key, item.toJson());
             });
