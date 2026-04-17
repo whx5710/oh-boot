@@ -1,5 +1,6 @@
 package com.finn.system.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.system.entity.RoleEntity;
 import com.finn.system.query.RoleQuery;
@@ -14,7 +15,7 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface RoleMapper {
+public interface RoleMapper extends BaseMapper<RoleEntity> {
 
 
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
@@ -28,10 +29,6 @@ public interface RoleMapper {
     Integer getDataScopeByUserId(@Param("userId") Long userId);
 
     List<RoleEntity> getList(RoleQuery roleQuery);
-
-    // 动态拼接SQL
-    @UpdateProvider(method = ModifyProviderService.UPDATE, type = ModifyProviderService.class)
-    boolean updateById(RoleEntity roleEntity);
 
     @Select("select * from sys_role where id = #{id}")
     RoleEntity getById(@Param("id") Long id);

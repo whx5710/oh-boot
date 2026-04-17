@@ -32,9 +32,11 @@ import com.finn.system.cache.DictCache;
 import com.finn.system.cache.ParamsCache;
 import com.finn.system.cache.UserCache;
 import com.finn.system.entity.ParamsEntity;
+import com.finn.system.entity.RoleEntity;
 import com.finn.system.entity.TenantMemberEntity;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.*;
+import com.finn.system.service.RoleService;
 import com.finn.system.service.impl.DictTypeServiceImpl;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -64,10 +66,12 @@ public class ApplicationInitializer implements ApplicationRunner {
     private final DictCache dictCache;
     private final UserCache userCache;
     private final RedisCache redisCache;
+    private final RoleService roleService;
 
     public ApplicationInitializer(ServerProperties serverProperties, DynamicDataSource dynamicDataSource,
                                   SysDataSourceProperties sysDataSourceProperties, ParamsCache paramsCache,
-                                  DictCache dictCache, UserCache userCache, RedisCache redisCache){
+                                  DictCache dictCache, UserCache userCache, RedisCache redisCache,
+                                  RoleService roleService){
         this.serverProperties = serverProperties;
         this.dynamicDataSource = dynamicDataSource;
         this.sysDataSourceProperties = sysDataSourceProperties;
@@ -75,6 +79,7 @@ public class ApplicationInitializer implements ApplicationRunner {
         this.dictCache = dictCache;
         this.userCache = userCache;
         this.redisCache = redisCache;
+        this.roleService = roleService;
     }
     
     @Override
@@ -131,11 +136,18 @@ public class ApplicationInitializer implements ApplicationRunner {
             userCache.saveList(list);
             log.debug("缓存用户信息！{}", list.size());
 
+            // 缓存角色
+            RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+            List<RoleEntity> roleList = roleMapper.listByWrapper(QueryWrapper.of(RoleEntity.class).eq(RoleEntity::getDbStatus, 1));
+            for(RoleEntity role: roleList){
+                roleService.cacheRole(role);
+            }
+            log.debug("缓存角色信息！{}", roleList.size());
+
             // 缓存租户信息
             TenantMemberMapper tenantMemberMapper = sqlSession.getMapper(TenantMemberMapper.class);
             List<TenantMemberEntity> tenantList = tenantMemberMapper.listByWrapper(QueryWrapper.of(TenantMemberEntity.class)
                     .eq(TenantMemberEntity::getDbStatus, 1).orderBy(TenantMemberEntity::getSort));
-            // redisCache.deleteAll(CommConstant.TENANT_PREFIX + "*");
             for(TenantMemberEntity item : tenantList){
                 // 以json格式缓存到redis，方便直接读取
                 redisCache.set(CommConstant.TENANT_PREFIX + item.getTenantId(), item.toJson());

@@ -29,4 +29,6 @@ public interface RoleService {
 	void delete(List<Long> idList);
 
 	RoleEntity getById(Long id);
+
+	void cacheRole(RoleEntity entity);
 }

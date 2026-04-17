@@ -1,8 +1,12 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.common.constant.CommConstant;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.service.impl.BaseServiceImpl;
+import com.finn.framework.utils.AssertUtils;
 import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.RoleConvert;
 import com.finn.system.entity.RoleEntity;
@@ -36,14 +40,17 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	private final UserRoleService userRoleService;
 	private final RoleMapper roleMapper;
 	private final TenantCache tenantCache;
+	private final RedisCache redisCache;
 
 	public RoleServiceImpl(RoleMenuService roleMenuService, RoleDataScopeService roleDataScopeService,
-						   UserRoleService userRoleService, RoleMapper roleMapper, TenantCache tenantCache) {
+						   UserRoleService userRoleService, RoleMapper roleMapper, TenantCache tenantCache,
+						   RedisCache redisCache) {
 		this.roleMenuService = roleMenuService;
 		this.roleDataScopeService = roleDataScopeService;
 		this.userRoleService = userRoleService;
 		this.roleMapper = roleMapper;
 		this.tenantCache = tenantCache;
+		this.redisCache = redisCache;
 	}
 
 	@Override
@@ -91,6 +98,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 
 	@Override
 	public void save(RoleVO vo) {
+		// 判断角色编码是否重复
+		AssertUtils.isBlank(vo.getCode(), "角色编码");
+		List<RoleEntity> list = roleMapper.listByWrapper(QueryWrapper.of(RoleEntity.class).eq(RoleEntity::getDbStatus, 1)
+				.eq(RoleEntity::getCode, vo.getCode()));
+		if(!list.isEmpty()){
+			throw new ServerException("角色编码已存在！", "角色：" + list.getFirst().getName());
+		}
+
 		RoleEntity entity = RoleConvert.INSTANCE.convert(vo);
 		if(entity.getIsSystem() == null){
 			entity.setIsSystem(0);
@@ -104,16 +119,24 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 
 		// 保存角色菜单关系
 		roleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
+
+		// 缓存角色
+		entity = roleMapper.findById(entity.getId(), RoleEntity.class);
+		cacheRole(entity);
 	}
 
 	@Override
 	public void update(RoleVO vo) {
+		AssertUtils.isNull(vo.getId(), "角色ID");
 		RoleEntity entity = RoleConvert.INSTANCE.convert(vo);
 		// 更新角色
 		roleMapper.updateById(entity);
 
 		// 更新角色菜单关系
 		roleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
+		// 缓存角色
+		entity = roleMapper.findById(entity.getId(), RoleEntity.class);
+		cacheRole(entity);
 	}
 
 	@Override
@@ -159,6 +182,19 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	@Override
 	public RoleEntity getById(Long id) {
 		return roleMapper.getById(id);
+	}
+
+	/**
+	 * 缓存角色
+	 * @param entity role
+	 */
+	@Override
+	public void cacheRole(RoleEntity entity){
+		RoleVO vo = RoleConvert.INSTANCE.convert(entity);
+		if(vo.getTenantId() != null && !vo.getTenantId().isEmpty()){
+			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
+		}
+		redisCache.set(CommConstant.ROLE__PREFIX + vo.getCode(), vo.toJson());
 	}
 
 }
