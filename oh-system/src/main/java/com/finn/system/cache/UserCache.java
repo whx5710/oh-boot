@@ -44,7 +44,7 @@ public class UserCache {
                 user.setUpdater(null);
                 user.setUpdateTime(null);
                 user.setPwdModifyTime(null);
-                redisCache.set(key, user.toJson(), 7200);// 缓存2小时
+                redisCache.set(key, user.toJson());
                 return user;
             }else{
                 return new UserEntity();
