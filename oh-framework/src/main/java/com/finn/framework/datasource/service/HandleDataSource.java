@@ -140,11 +140,14 @@ public class HandleDataSource {
         hikariConfig.setDriverClassName(dataSourceProperty.getDriverClassName()); // 驱动
         
         // 连接池配置
-        hikariConfig.setMinimumIdle(Integer.parseInt(dataSourceProperty.getHikari().getMinIdle())); // 最小连接数
-        hikariConfig.setMaximumPoolSize(Integer.parseInt(dataSourceProperty.getHikari().getMaxActive())); // 连接池最大连接数
-        hikariConfig.setConnectionTimeout(Long.parseLong(dataSourceProperty.getHikari().getMaxWait())); // 获取连接时的最大等待时间，单位为毫秒
-        hikariConfig.setMaxLifetime(Long.parseLong(dataSourceProperty.getHikari().getMaxLifetime())); // Hikari属性,控制池中连接的最长生命周期
+        hikariConfig.setMinimumIdle(dataSourceProperty.getHikari().getMinimumIdle()); // 最小连接数
+        hikariConfig.setMaximumPoolSize(dataSourceProperty.getHikari().getMaximumPoolSize()); // 连接池最大连接数
+        hikariConfig.setConnectionTimeout(dataSourceProperty.getHikari().getConnectionTimeout()); // 获取连接时的最大等待时间，单位为毫秒
+        hikariConfig.setMaxLifetime(dataSourceProperty.getHikari().getMaxLifetime()); // Hikari属性,控制池中连接的最长生命周期
         hikariConfig.setPoolName(key); // 连接池名称
+        hikariConfig.setIsolateInternalQueries(dataSourceProperty.getHikari().getIsolateInternalQueries()); // 是否隔离自动提交事务 (默认: false)
+        hikariConfig.setAutoCommit(dataSourceProperty.getHikari().getAutoCommit()); // 自动提交 (默认: true)
+        hikariConfig.setIdleTimeout(dataSourceProperty.getHikari().getIdleTimeout()); // 连接空闲超时时间 (毫秒) (默认: 600000)
         
         // 健康检查配置
         hikariConfig.setConnectionTestQuery(dataSourceProperty.getHikari().getConnectionTestQuery()); // 连接测试语句
