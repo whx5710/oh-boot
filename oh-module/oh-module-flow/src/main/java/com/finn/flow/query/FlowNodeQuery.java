@@ -22,6 +22,8 @@ public class FlowNodeQuery extends Query {
      */
     private String actDefId;
 
+    private String keyWord;
+
     public String getProcDefId() {
         return procDefId;
     }
@@ -36,5 +38,13 @@ public class FlowNodeQuery extends Query {
 
     public void setActDefId(String actDefId) {
         this.actDefId = actDefId;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }

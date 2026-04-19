@@ -39,10 +39,15 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
-        try (Page<FlowNodeEntity> page = flowNodeMapper.listByWrapper(QueryWrapper.of(FlowNodeEntity.class)
+        QueryWrapper<FlowNodeEntity> queryWrapper = QueryWrapper.of(FlowNodeEntity.class)
                 .eq(FlowNodeEntity::getDbStatus, 1).eq(FlowNodeEntity::getProcDefId, query.getProcDefId())
-                .eq(FlowNodeEntity::getActDefId, query.getActDefId())
-                .orderBy(FlowNodeEntity::getSort).page(query.getPageNum(), query.getPageSize()))) {
+                .eq(FlowNodeEntity::getActDefId, query.getActDefId());
+        if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
+            queryWrapper.jointSQL("(act_def_id like concat('%', #{keyWord}, '%') or node_name like concat('%', #{keyWord}, '%'))",
+                    "keyWord", query.getKeyWord());
+        }
+        queryWrapper.orderBy(FlowNodeEntity::getSort).page(query.getPageNum(), query.getPageSize());
+        try (Page<FlowNodeEntity> page = flowNodeMapper.listByWrapper(queryWrapper)) {
             return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
