@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,8 @@ public class FlowNodeServiceImpl implements FlowNodeService {
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
         QueryWrapper<FlowNodeEntity> queryWrapper = QueryWrapper.of(FlowNodeEntity.class)
                 .eq(FlowNodeEntity::getDbStatus, 1).eq(FlowNodeEntity::getProcDefId, query.getProcDefId())
-                .eq(FlowNodeEntity::getActDefId, query.getActDefId());
+                .eq(FlowNodeEntity::getActDefId, query.getActDefId())
+                .eq(FlowNodeEntity::getElementType, query.getElementType());
         if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
             queryWrapper.jointSQL("(act_def_id like concat('%', #{keyWord}, '%') or node_name like concat('%', #{keyWord}, '%'))",
                     "keyWord", query.getKeyWord());
@@ -106,6 +108,24 @@ public class FlowNodeServiceImpl implements FlowNodeService {
                 sqlSession.clearCache();
                 sqlSession.close();// 用完关闭
             }
+        }
+    }
+
+    /**
+     * 批量保存
+     * @param list lit
+     * @return 数量
+     */
+    @Override
+    public long saveBatch(List<FlowNodeVO> list) {
+        if(list != null && !list.isEmpty()){
+            List<FlowNodeEntity> entities = new ArrayList<>(list.size());
+            for(FlowNodeVO vo: list){
+                entities.add(FlowNodeConvert.INSTANCE.convert(vo));
+            }
+            return flowNodeMapper.insertBatch(entities);
+        }else {
+            throw new ServerException("批量保存参数不能为空");
         }
     }
 
