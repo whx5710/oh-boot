@@ -90,18 +90,24 @@ public class ProcessHandlerService {
 
         Process process = bpmnModel.getMainProcess();
         for(FlowElement element: process.getFlowElements()){
-            FlowNodeVO flowNodeVO = new FlowNodeVO();
-            flowNodeVO.setProcDefId(procDefId);
-            flowNodeVO.setActDefId(element.getId());
-            flowNodeVO.setNodeName(element.getName());
-            flowNodeVO.setElementType(element.getClass().getSimpleName());
-            flowNodeVO.setNote(element.getDocumentation());
-            if(element instanceof SequenceFlow sequenceFlow){
-                flowNodeVO.setConditionExpression(sequenceFlow.getConditionExpression());
-            }
+            FlowNodeVO flowNodeVO = getNodeVO(element, procDefId);
             flowNodeService.save(flowNodeVO);
         }
         return procDefId;
+    }
+    // 组装
+    private static FlowNodeVO getNodeVO(FlowElement element, String procDefId) {
+        FlowNodeVO flowNodeVO = new FlowNodeVO();
+        flowNodeVO.setProcDefId(procDefId);
+        flowNodeVO.setActDefId(element.getId());
+        flowNodeVO.setNodeName(element.getName());
+        flowNodeVO.setElementType(element.getClass().getSimpleName());
+        flowNodeVO.setNote(element.getDocumentation());
+        flowNodeVO.setSort(1);
+        if(element instanceof SequenceFlow sequenceFlow){
+            flowNodeVO.setConditionExpression(sequenceFlow.getConditionExpression());
+        }
+        return flowNodeVO;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.finn.flow.service.impl;
 
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.finn.flow.convert.FlowNodeConvert;
 import com.finn.flow.entity.FlowNodeEntity;
@@ -98,7 +99,7 @@ public class FlowNodeServiceImpl implements FlowNodeService {
                 mapper.updateById(FlowNodeConvert.INSTANCE.convert(vo));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServerException(e.getMessage(), e);
         }finally {
             if(sqlSession != null){
                 sqlSession.commit();
