@@ -53,7 +53,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             }).collect(Collectors.toList());
 
             // 批量新增
-            userRoleMapper.saveBatch(roleList);
+            userRoleMapper.insertBatch(roleList);
         }
 
         // 需要删除的角色ID
@@ -82,7 +82,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         }).collect(Collectors.toList());
 
         // 批量新增
-        userRoleMapper.saveBatch(list);
+        userRoleMapper.insertBatch(list);
     }
 
     @Override
