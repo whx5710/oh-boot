@@ -36,6 +36,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.finn.framework.common.enums.ErrorCode.REFRESH_TOKEN_ERROR;
+
 /**
  * 权限认证服务
  *
@@ -164,7 +166,8 @@ public class AuthServiceImpl implements AuthService {
                 throw new ServerException("【IP】请求非法，刷新token失败");
             }
         }else{
-            throw new ServerException("刷新token过期，请重新登录");
+            // 刷新token过期，请重新登录
+            throw new ServerException(REFRESH_TOKEN_ERROR);
         }
     }
 
