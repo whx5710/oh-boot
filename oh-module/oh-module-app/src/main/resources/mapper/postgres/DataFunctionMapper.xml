@@ -36,7 +36,7 @@
     <select id="pageByClientId" resultType="com.finn.app.vo.DataFunctionVO">
         SELECT
         a.*,
-        if(b.client_id is null,0, 1) as checkedFunc
+        case when b.client_id is null then 0 else 1 end AS checkedFunc
         FROM
         data_function a
         LEFT JOIN data_function_authority b ON a.func_code = b.func_code
