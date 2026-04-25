@@ -7,8 +7,7 @@
 		update sys_role_menu
 		<set>
 			<if test="param != null and param.updater != null">updater = #{param.updater},</if>
-			db_status = 0,
-			update_time = sysdate()
+			db_status = 0
 		</set>
 		where role_id in
 		<foreach item="roleId" index="index" collection="list" open="(" separator="," close=")">
@@ -20,8 +19,7 @@
 		update sys_role_menu
 		<set>
 			<if test="param != null and param.updater != null">updater = #{param.updater},</if>
-			db_status = 0,
-			update_time = sysdate()
+			db_status = 0
 		</set>
 		where menu_id = #{menuId}
 	</update>

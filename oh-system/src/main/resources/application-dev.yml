@@ -36,7 +36,7 @@ finn:
     enabled: true
     config:
       type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
-      domain: http://localhost:5666/api/sysApi
+      domain: http://localhost:5777/api/sysApi
     local.path: /home/finn/文档/upFiles
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:

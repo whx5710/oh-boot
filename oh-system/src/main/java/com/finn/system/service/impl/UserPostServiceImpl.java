@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.system.entity.UserPostEntity;
 import com.finn.system.mapper.UserPostMapper;
@@ -58,26 +59,23 @@ public class UserPostServiceImpl implements UserPostService {
         Collection<Long> deletePostIdList = dbPostIdList.stream()
                 .filter(element -> !finalPostIdList.contains(element))
                 .collect(Collectors.toList());
-        if (deletePostIdList != null && deletePostIdList.size() > 0){
-            UserPostEntity param = new UserPostEntity();
-            param.setUserId(userId);
-            param.setUpdater(SecurityUser.getUserId());
-            userPostMapper.deleteByPostIdList((List<Long>) deletePostIdList, param);
+        if (!deletePostIdList.isEmpty()){
+            deleteByPostIdList((List<Long>) deletePostIdList);
         }
     }
 
     @Override
     public void deleteByPostIdList(List<Long> postIdList) {
-        UserPostEntity param = new UserPostEntity();
-        param.setUpdater(SecurityUser.getUserId());
-        userPostMapper.deleteByPostIdList(postIdList, param);
+        UpdateWrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
+                .in(UserPostEntity::getPostId, postIdList);
+        userPostMapper.updateByWrapper(updateWrapper);
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        UserPostEntity param = new UserPostEntity();
-        param.setUpdater(SecurityUser.getUserId());
-        userPostMapper.deleteByUserIdList(userIdList, param);
+        UpdateWrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
+                .in(UserPostEntity::getUserId, userIdList);
+        userPostMapper.updateByWrapper(updateWrapper);
     }
 
     @Override

@@ -23,8 +23,7 @@
         UPDATE sys_role_data_scope
         <set>
             <if test="param != null and param.updater != null">updater = #{param.updater},</if>
-            db_status = 0,
-            update_time = sysdate()
+            db_status = 0
         </set>
         WHERE role_id in
         <foreach item="roleId" index="index" collection="list" open="(" separator="," close=")">
@@ -36,8 +35,7 @@
         UPDATE sys_role_data_scope
         <set>
             <if test="param != null and param.updater != null">updater = #{param.updater},</if>
-            db_status = 0,
-            update_time = sysdate()
+            db_status = 0
         </set>
         WHERE dept_id in
         <foreach item="deptId" index="index" collection="list" open="(" separator="," close=")">

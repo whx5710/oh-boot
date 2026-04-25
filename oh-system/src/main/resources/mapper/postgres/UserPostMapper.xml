@@ -10,30 +10,4 @@
         </foreach>
     </insert>
 
-    <update id="deleteByUserIdList">
-        UPDATE sys_user_post
-        <set>
-            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
-            db_status = 0,
-            update_time = sysdate()
-        </set>
-        WHERE user_id in
-        <foreach item="userId" index="index" collection="list" open="(" separator="," close=")">
-            #{userId}
-        </foreach>
-    </update>
-
-    <update id="deleteByPostIdList">
-        UPDATE sys_user_post
-        <set>
-            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
-            db_status = 0,
-            update_time = sysdate()
-        </set>
-        WHERE post_id in
-        <foreach item="postId" index="index" collection="list" open="(" separator="," close=")">
-            #{postId}
-        </foreach>
-        <if test="param != null and param.userId != null">and user_id = #{param.userId}</if>
-    </update>
 </mapper>

@@ -21,24 +21,6 @@
         </where>
     </update>
 
-    <update id="deleteByRoleIdList">
-        update sys_user_role
-        <set>
-            <if test="param.updater != null">updater = #{param.updater},</if>
-            db_status = 0,
-            update_time = sysdate()
-        </set>
-        <where>
-            <if test="param != null and param.userId != null and param.userId != ''">
-                and user_id = #{param.userId}
-            </if>
-            and role_id in
-            <foreach item="roleId" index="index" collection="list" open="(" separator="," close=")">
-                #{roleId}
-            </foreach>
-        </where>
-    </update>
-
     <select id="getUserAuthorityList" resultType="string">
         select t3.authority from sys_user_role t1
         left join sys_role_menu t2 on t1.role_id = t2.role_id
