@@ -41,7 +41,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageResult<PostVO> page(PostQuery query) {
-        Page<PostEntity> page = postMapper.listByWrapper(getQueryWrapper(query));
+        QueryWrapper<PostEntity> queryWrapper = getQueryWrapper(query);
+        Page<PostEntity> page = postMapper.listByWrapper(queryWrapper);
         List<PostVO> list = PostConvert.INSTANCE.convertList(page.getResult());
         for(PostVO vo: list){
             vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));

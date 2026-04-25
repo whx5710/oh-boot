@@ -283,7 +283,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
         if (shouldProcessValue(value, isEmpty)) {
             String fieldName = ReflectUtil.getFieldName(function);
             String colName = getColName(fieldName);
-            this.sql.WHERE(colName + " like concat('%',#{", fieldName, "},'%')");
+            this.sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
             this.put(fieldName, value);
         }
         return this;
