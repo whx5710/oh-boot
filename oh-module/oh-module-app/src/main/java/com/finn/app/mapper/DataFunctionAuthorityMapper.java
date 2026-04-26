@@ -1,5 +1,7 @@
 package com.finn.app.mapper;
 
+import com.finn.app.entity.DataFunctionAuthorityEntity;
+import com.finn.framework.datasource.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
 * @since 1.0.0 2023-07-29
 */
 @Mapper
-public interface DataFunctionAuthorityMapper {
+public interface DataFunctionAuthorityMapper extends BaseMapper<DataFunctionAuthorityEntity> {
 	
 }

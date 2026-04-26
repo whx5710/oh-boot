@@ -6,6 +6,7 @@ import com.finn.app.query.DataFunctionAuthorityQuery;
 import com.finn.app.query.DataFunctionQuery;
 import com.finn.app.vo.DataFunctionVO;
 import com.finn.framework.aop.annotations.Pages;
+import com.finn.framework.datasource.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,26 +19,16 @@ import java.util.List;
 * @since 1.0.0 2023-07-30
 */
 @Mapper
-public interface DataFunctionMapper {
+public interface DataFunctionMapper extends BaseMapper<DataFunctionEntity> {
 
     List<DataFunctionEntity> getList(DataFunctionQuery query);
 
     List<DataFunctionVO> pageByClientId(@Param("clientId")String clientId);
 
-    boolean updateById(DataFunctionEntity param);
-
-    int insertFunc(DataFunctionEntity param);
-
     DataFunctionEntity getById(@Param("id")Long id);
 
     @Pages
     List<DataFunctionAuthorityEntity> getAuthorityList(DataFunctionAuthorityQuery params);
-
-    int insertFuncAuthority(DataFunctionAuthorityEntity params);
-
-    boolean updateFuncAuthorityById(DataFunctionAuthorityEntity params);
-
-    boolean updateFuncAuthorityStatus(@Param("clientId") String clientId,@Param("funcCode") String funcCode,@Param("dbStatus") int dbStatus);
 
     DataFunctionAuthorityEntity getFuncAuthorityById(@Param("id")Long id);
 }

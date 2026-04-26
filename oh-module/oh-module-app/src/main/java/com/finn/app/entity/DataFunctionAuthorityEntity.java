@@ -1,5 +1,7 @@
 package com.finn.app.entity;
 
+import com.finn.framework.aop.annotations.TableField;
+import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 /**
@@ -8,17 +10,19 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-07-29
  */
-
+@TableName("data_function_authority")
 public class DataFunctionAuthorityEntity extends BaseEntity {
 
 	/**
 	* 客户端ID
 	*/
+	@TableField("client_id")
 	private String clientId;
 
 	/**
 	* 功能号
 	*/
+	@TableField("func_code")
 	private String funcCode;
 
 	/**
