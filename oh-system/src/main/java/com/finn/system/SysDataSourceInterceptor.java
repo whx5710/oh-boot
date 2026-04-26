@@ -41,7 +41,8 @@ public class SysDataSourceInterceptor {
      * 拦截Service层是为了在@Transactional开启事务前切换数据源
      * 注意：排除WebSocketHandler，因为它使用了@ServerEndpoint注解，不能被CGLIB代理
      */
-    @Pointcut("(execution(* com.finn.system.service.*.*(..)) || execution(* com.finn.system.mapper.*Mapper.*(..))) && !execution(* com.finn.system.service.WebSocketHandler.*(..))")
+    @Pointcut("(execution(* com.finn.system.service.*.*(..)) || execution(* com.finn.system.mapper.*Mapper.*(..))) " +
+            "&& !execution(* com.finn.system.service.WebSocketHandler.*(..))")
     public void sysDataSourcePointcut() {}
 
     /**
