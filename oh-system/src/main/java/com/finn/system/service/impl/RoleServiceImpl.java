@@ -22,6 +22,7 @@ import com.finn.system.vo.RoleVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -155,6 +156,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
 		// 删除角色
 		// removeByIds(idList);
