@@ -323,7 +323,7 @@ CREATE TABLE "oh_boot"."data_function" (
   "id" int8 NOT NULL,
   "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "func_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "is_async" int2 NOT NULL DEFAULT 0,
+  "is_async" bool NOT NULL,
   "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "creator" int8,
   "create_time" timestamp(6),
@@ -349,9 +349,9 @@ COMMENT ON TABLE "oh_boot"."data_function" IS '功能列表';
 -- Records of data_function
 -- ----------------------------
 BEGIN;
-INSERT INTO "oh_boot"."data_function" ("id", "name", "func_code", "is_async", "remark", "creator", "create_time", "updater", "update_time", "db_status") VALUES (1, '用户信息上传', 'F1001', 1, '用户信息同步', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:13', 1);
-INSERT INTO "oh_boot"."data_function" ("id", "name", "func_code", "is_async", "remark", "creator", "create_time", "updater", "update_time", "db_status") VALUES (2, '账单查询', 'F1002', 0, '查询账单信息', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:18', 1);
-INSERT INTO "oh_boot"."data_function" ("id", "name", "func_code", "is_async", "remark", "creator", "create_time", "updater", "update_time", "db_status") VALUES (3, '新增工单', 'F1003', 1, '', 10000, '2024-02-28 21:50:47', NULL, NULL, 1);
+INSERT INTO "oh_boot"."data_function" ("id", "name", "func_code", "is_async", "remark", "creator", "create_time", "updater", "update_time", "db_status") VALUES (1, '用户信息上传', 'F1001', 't', '用户信息同步', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:13', 1);
+INSERT INTO "oh_boot"."data_function" ("id", "name", "func_code", "is_async", "remark", "creator", "create_time", "updater", "update_time", "db_status") VALUES (2, '账单查询', 'F1002', 'f', '查询账单信息', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:18', 1);
+INSERT INTO "oh_boot"."data_function" ("id", "name", "func_code", "is_async", "remark", "creator", "create_time", "updater", "update_time", "db_status") VALUES (3, '新增工单', 'F1003', 't', '', 10000, '2024-02-28 21:50:47', NULL, NULL, 1);
 COMMIT;
 
 -- ----------------------------
