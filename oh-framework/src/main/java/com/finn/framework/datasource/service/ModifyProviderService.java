@@ -191,15 +191,16 @@ public class ModifyProviderService {
                     }else{
                         if (annotation.value().equals("id")) {
                             hasId = true;
-                        }
-                        // 不为空才更新
-                        try {
-                            Object object = ReflectUtil.getValue(entity, field.getName());
-                            if(object != null){
-                                sql.SET(annotation.value() + " = #{" + field.getName() + "}");
+                        }else{
+                            // 不为空才更新
+                            try {
+                                Object object = ReflectUtil.getValue(entity, field.getName());
+                                if(object != null){
+                                    sql.SET(annotation.value() + " = #{" + field.getName() + "}");
+                                }
+                            }catch (NoSuchFieldException e){
+                                log.warn("无{}属性！", field.getName());
                             }
-                        }catch (NoSuchFieldException e){
-                            log.warn("无{}属性！", field.getName());
                         }
                     }
                 }else{
@@ -222,14 +223,15 @@ public class ModifyProviderService {
                 // 无注解的字段默认成与数据库字段一致
                 if (field.getName().equals("id")) {
                     hasId = true;
-                }
-                try {
-                    Object object = ReflectUtil.getValue(entity, field.getName());
-                    if(object != null){
-                        sql.SET(field.getName() + " = #{" + field.getName() + "} ");
+                }else{
+                    try {
+                        Object object = ReflectUtil.getValue(entity, field.getName());
+                        if(object != null){
+                            sql.SET(field.getName() + " = #{" + field.getName() + "} ");
+                        }
+                    } catch (NoSuchFieldException e){
+                        log.warn("无{}属性！", field.getName());
                     }
-                } catch (NoSuchFieldException e){
-                    log.warn("无{}属性！", field.getName());
                 }
             }
         }
@@ -240,7 +242,7 @@ public class ModifyProviderService {
                 throw new ServerException("无id字段或指定条件ID字段，不能进行更新！");
             }
         }
-        log.debug("生成修改SQL: {}", sql);
+        // log.debug("生成修改SQL: {}", sql);
         return  sql.toString();
     }
 
