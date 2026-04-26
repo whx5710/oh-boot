@@ -36,7 +36,6 @@ public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
             "and sys_role.db_status = 1 and sys_role.is_system = 0 and sys_user_role.user_id = #{userId}")
     List<Long> getTenantRoleIds(@Param("userId") Long userId);
 
-    boolean deleteByUserIdList(@Param("list") List<Long> userIdList,@Param("param") UserRoleEntity param);
     /**
      * 查询用户权限列表
      * @param userId  用户ID
