@@ -25,9 +25,4 @@ public interface RoleMenuMapper extends BaseMapper<RoleMenuEntity> {
 
 	int saveBatch(@Param("list") List<RoleMenuEntity> menuList);
 
-	int deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param") RoleMenuEntity param);
-
-	int deleteByMenuId(@Param("menuId")Long menuId, @Param("param") RoleMenuEntity param);
-
-	int deleteMenuIdList(@Param("list") List<Long> menuIdList, @Param("param") RoleMenuEntity param);
 }

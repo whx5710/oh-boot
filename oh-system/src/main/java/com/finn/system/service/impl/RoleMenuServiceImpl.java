@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
@@ -63,11 +64,11 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 				.collect(Collectors.toList());
 
 		if (!deleteMenuIdList.isEmpty()){
-			RoleMenuEntity param = new RoleMenuEntity();
-			param.setRoleId(roleId);
-			param.setUpdater(user.getId());
-			param.setUpdateTime(LocalDateTime.now());
-			roleMenuMapper.deleteMenuIdList(deleteMenuIdList, param);
+			UpdateWrapper<RoleMenuEntity> updateWrapper = UpdateWrapper.of(RoleMenuEntity.class)
+					.set(RoleMenuEntity::getDbStatus, 0)
+					.in(RoleMenuEntity::getMenuId, deleteMenuIdList)
+					.eq(RoleMenuEntity::getRoleId, roleId);
+			roleMenuMapper.updateByWrapper(updateWrapper);
 		}
 	}
 
@@ -78,12 +79,18 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 
 	@Override
 	public void deleteByRoleIdList(List<Long> roleIdList) {
-		roleMenuMapper.deleteByRoleIdList(roleIdList, new RoleMenuEntity());
+		UpdateWrapper<RoleMenuEntity> updateWrapper = UpdateWrapper.of(RoleMenuEntity.class)
+						.set(RoleMenuEntity::getDbStatus, 0)
+								.in(RoleMenuEntity::getRoleId, roleIdList);
+		roleMenuMapper.updateByWrapper(updateWrapper);
 	}
 
 	@Override
 	public void deleteByMenuId(Long menuId) {
-		roleMenuMapper.deleteByMenuId(menuId, new RoleMenuEntity());
+		UpdateWrapper<RoleMenuEntity> updateWrapper = UpdateWrapper.of(RoleMenuEntity.class)
+				.set(RoleMenuEntity::getDbStatus, 0)
+						.eq(RoleMenuEntity::getMenuId, menuId);
+		roleMenuMapper.updateByWrapper(updateWrapper);
 	}
 
 }
