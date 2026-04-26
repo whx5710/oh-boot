@@ -19,28 +19,4 @@
         </foreach>
     </insert>
 
-    <update id="deleteByRoleIdList">
-        UPDATE sys_role_data_scope
-        <set>
-            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
-            db_status = 0
-        </set>
-        WHERE role_id in
-        <foreach item="roleId" index="index" collection="list" open="(" separator="," close=")">
-            #{roleId}
-        </foreach>
-    </update>
-
-    <update id="deleteDeptIdList">
-        UPDATE sys_role_data_scope
-        <set>
-            <if test="param != null and param.updater != null">updater = #{param.updater},</if>
-            db_status = 0
-        </set>
-        WHERE dept_id in
-        <foreach item="deptId" index="index" collection="list" open="(" separator="," close=")">
-            #{deptId}
-        </foreach>
-        <if test="param != null and param.roleId != null">and role_id = #{param.role_id}</if>
-    </update>
 </mapper>
