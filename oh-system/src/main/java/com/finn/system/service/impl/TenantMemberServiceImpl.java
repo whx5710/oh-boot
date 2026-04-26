@@ -18,7 +18,6 @@ import com.finn.system.mapper.TenantMemberMapper;
 import com.finn.system.query.TenantMemberQuery;
 import com.finn.system.service.TenantMemberService;
 import com.finn.system.vo.TenantMemberVO;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -187,21 +186,5 @@ public class TenantMemberServiceImpl implements TenantMemberService {
                         "or note like concat('%',#{keyWord}, '%'))","keyWord", query.getKeyWord())
                 .page(query.getPageNum(), query.getPageSize())
                 .orderBy("sort");
-    }
-
-    /**
-     * 初始化
-     */
-    @PostConstruct
-    private void init(){
-        List<TenantMemberEntity> list = tenantMemberMapper.listByWrapper(QueryWrapper.of(TenantMemberEntity.class)
-                .eq(TenantMemberEntity::getDbStatus, 1).orderBy("sort"));
-        redisCache.deleteAll(CommConstant.TENANT_PREFIX + "*");
-        if(list != null){
-            for(TenantMemberEntity item : list){
-                // 以json格式缓存到redis，方便直接读取
-                redisCache.set(CommConstant.TENANT_PREFIX + item.getTenantId(), item);
-            }
-        }
     }
 }

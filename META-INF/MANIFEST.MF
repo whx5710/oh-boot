@@ -5,7 +5,7 @@ Implementation-Title: oh-system
 Implementation-Version: 1.0.0
 Main-Class: org.springframework.boot.loader.launch.JarLauncher
 Start-Class: com.finn.ServerApplication
-Spring-Boot-Version: 4.0.3
+Spring-Boot-Version: 4.0.5
 Spring-Boot-Classes: BOOT-INF/classes/
 Spring-Boot-Lib: BOOT-INF/lib/
 Spring-Boot-Classpath-Index: BOOT-INF/classpath.idx

@@ -1,5 +1,6 @@
 package com.finn.system.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.UserPostEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +14,7 @@ import java.util.List;
 * @author 王小费 whx5710@qq.com
 */
 @Mapper
-public interface UserPostMapper {
+public interface UserPostMapper extends BaseMapper<UserPostEntity> {
 
     /**
      * 岗位ID列表
@@ -23,8 +24,4 @@ public interface UserPostMapper {
     List<Long> getPostIdList(@Param("userId") Long userId);
 
     int saveBatch(@Param("list") List<UserPostEntity> param);
-
-    boolean deleteByUserIdList(@Param("list")List<Long> userIdList, @Param("param") UserPostEntity param);
-
-    boolean deleteByPostIdList(@Param("list")List<Long> postIdList, @Param("param") UserPostEntity param);
 }

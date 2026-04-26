@@ -116,6 +116,7 @@ public interface BaseMapper<T>{
      * @param fp 使用InsertWrapper构建
      * @return 插入数量
      */
+    @Deprecated
     @InsertProvider(method = ModifyProviderService.INSERT_PARAM, type = ModifyProviderService.class)
     Integer insertByWrapper(InsertWrapper fp);
 }

@@ -26,4 +26,6 @@ public interface FlowNodeService {
     FlowNodeEntity getById(Long id);
 
     void updateBatch(List<FlowNodeVO> list);
+
+    long saveBatch(List<FlowNodeVO> list);
 }

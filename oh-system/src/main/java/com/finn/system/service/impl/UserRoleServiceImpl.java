@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.entity.UserRoleEntity;
@@ -53,7 +54,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             }).collect(Collectors.toList());
 
             // 批量新增
-            userRoleMapper.saveBatch(roleList);
+            userRoleMapper.insertBatch(roleList);
         }
 
         // 需要删除的角色ID
@@ -63,10 +64,10 @@ public class UserRoleServiceImpl implements UserRoleService {
                 .filter(element -> !finalRoleIdList.contains(element))
                 .collect(Collectors.toList());
         if (!deleteRoleIdList.isEmpty()){
-            UserRoleEntity param = new UserRoleEntity();
-            param.setUserId(userId);
-            param.setUpdater(SecurityUser.getUserId());
-            userRoleMapper.deleteByRoleIdList((List<Long>) deleteRoleIdList, param);
+            UpdateWrapper<UserRoleEntity> updateWrapper = UpdateWrapper.of(UserRoleEntity.class)
+                    .set(UserRoleEntity::getDbStatus, 0).in(UserRoleEntity::getRoleId, (List<Long>) deleteRoleIdList)
+                    .eq(UserRoleEntity::getUserId, userId);
+            userRoleMapper.updateByWrapper(updateWrapper);
         }
     }
 
@@ -82,29 +83,31 @@ public class UserRoleServiceImpl implements UserRoleService {
         }).collect(Collectors.toList());
 
         // 批量新增
-        userRoleMapper.saveBatch(list);
+        userRoleMapper.insertBatch(list);
     }
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        UserRoleEntity param = new UserRoleEntity();
-        param.setUpdater(SecurityUser.getUserId());
-        param.setUpdateTime(LocalDateTime.now());
-        userRoleMapper.deleteByRoleIdList(roleIdList, param);
+        UpdateWrapper<UserRoleEntity> updateWrapper = UpdateWrapper.of(UserRoleEntity.class)
+                        .set(UserRoleEntity::getDbStatus, 0).in(UserRoleEntity::getRoleId, roleIdList);
+        userRoleMapper.updateByWrapper(updateWrapper);
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        userRoleMapper.deleteByUserIdList(userIdList, null);
+        UpdateWrapper<UserRoleEntity> updateWrapper = UpdateWrapper.of(UserRoleEntity.class)
+                        .set(UserRoleEntity::getDbStatus, 0)
+                                .in(UserRoleEntity::getUserId, userIdList);
+        userRoleMapper.updateByWrapper(updateWrapper);
     }
 
     @Override
     public void deleteByUserIdList(Long roleId, List<Long> userIdList) {
-        UserRoleEntity param = new UserRoleEntity();
-        param.setRoleId(roleId);
-        param.setUpdateTime(LocalDateTime.now());
-        param.setUpdater(SecurityUser.getUserId());
-        userRoleMapper.deleteByUserIdList(userIdList, param);
+        UpdateWrapper<UserRoleEntity> updateWrapper = UpdateWrapper.of(UserRoleEntity.class)
+                .set(UserRoleEntity::getDbStatus, 0)
+                    .in(UserRoleEntity::getUserId, userIdList)
+                    .eq(UserRoleEntity::getRoleId, roleId);
+        userRoleMapper.updateByWrapper(updateWrapper);
     }
 
     @Override

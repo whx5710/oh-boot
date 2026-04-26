@@ -3,7 +3,6 @@ package com.finn.flow.mapper;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.flow.entity.FlowNodeEntity;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
 * 环节定义表
@@ -14,5 +13,4 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface FlowNodeMapper extends BaseMapper<FlowNodeEntity> {
 
-    FlowNodeEntity getById(@Param("id")Long id);
 }

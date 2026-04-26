@@ -1,5 +1,6 @@
 package com.finn.system.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.RoleDataScopeEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +14,7 @@ import java.util.List;
  *
  */
 @Mapper
-public interface RoleDataScopeMapper {
+public interface RoleDataScopeMapper extends BaseMapper<RoleDataScopeEntity> {
 
     /**
      * 根据角色ID，获取部门ID列表
@@ -27,7 +28,4 @@ public interface RoleDataScopeMapper {
 
     int saveBatch(@Param("list") List<RoleDataScopeEntity> param);
 
-    int deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param") RoleDataScopeEntity param);
-
-    int deleteDeptIdList(@Param("list") List<Long> deptIdList, @Param("param") RoleDataScopeEntity param);
 }

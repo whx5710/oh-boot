@@ -38,7 +38,7 @@ public class UserQuery extends Query {
     /**
      * 部门ID
      */
-    private String deptId;
+    private Long deptId;
 
     /**
      * 关键字
@@ -103,11 +103,11 @@ public class UserQuery extends Query {
         this.realName = realName;
     }
 
-    public String getDeptId() {
+    public Long getDeptId() {
         return deptId;
     }
 
-    public void setDeptId(String deptId) {
+    public void setDeptId(Long deptId) {
         this.deptId = deptId;
     }
 

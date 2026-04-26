@@ -3,8 +3,6 @@ package com.finn.framework.datasource.wrapper;
 import com.finn.framework.aop.annotations.FuncUtils;
 import org.apache.ibatis.jdbc.SQL;
 
-import java.util.Map;
-
 /**
  * SQL 统计语句构建器<br/>
  * 参数构建类；支持常用的单表查询语句构建

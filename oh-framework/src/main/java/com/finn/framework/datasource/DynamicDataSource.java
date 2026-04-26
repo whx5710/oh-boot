@@ -35,6 +35,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * mybatis配置属性
      */
     private MybatisProperties mybatisProperties;
+    /**
+     * SqlSessionFactory 缓存，避免重复创建
+     */
+    private final Map<DataSource, SqlSessionFactory> sqlSessionFactoryCache = new ConcurrentHashMap<>();
 
     public DynamicDataSource(){
 
@@ -164,12 +168,29 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
     /**
-     * 获取SqlSessionFactory
+     * 获取SqlSessionFactory（带缓存）
      * @param dataSource 数据源
      * @return s
      * @throws Exception e
      */
     public SqlSessionFactory getSqlSessionFactory(DataSource dataSource) throws Exception {
+        // 优化：使用缓存避免重复创建SqlSessionFactory
+        return sqlSessionFactoryCache.computeIfAbsent(dataSource, ds -> {
+            try {
+                return createSqlSessionFactory(ds);
+            } catch (Exception e) {
+                throw new RuntimeException("创建SqlSessionFactory失败", e);
+            }
+        });
+    }
+
+    /**
+     * 创建SqlSessionFactory
+     * @param dataSource 数据源
+     * @return SqlSessionFactory
+     * @throws Exception e
+     */
+    private SqlSessionFactory createSqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
         // 对应mybatis的xml路径

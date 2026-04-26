@@ -1,10 +1,15 @@
 package com.finn.flow.service.flowable;
 
 import com.finn.flow.entity.FlowEntity;
+import com.finn.flow.entity.FlowNodeEntity;
+import com.finn.flow.query.FlowNodeQuery;
 import com.finn.flow.service.FlowNodeService;
 import com.finn.flow.service.FlowService;
+import com.finn.framework.entity.HashDto;
+import com.finn.framework.entity.PageResult;
 import com.finn.framework.exception.ServerException;
 import com.finn.flow.vo.FlowNodeVO;
+import com.finn.framework.utils.JsonUtils;
 import org.flowable.bpmn.exceptions.XMLException;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.FlowElement;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,25 +89,84 @@ public class ProcessHandlerService {
         }catch (XMLException | FlowableException | NoClassDefFoundError e){
             throw new ServerException("流程部署失败！", e.getMessage());
         }
+        // 历史发布记录，取最近的一次
+        String preProcDefId = null; // 前一次发布的
+        List<ProcessDefinition>  hisProc = listProcessByKey(key);
+        if(hisProc != null && !hisProc.isEmpty()){
+            preProcDefId = hisProc.getFirst().getId();
+        }
 
         // 保存环节
         String procDefId = getProcessDefID(deployment);
         BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
 
         Process process = bpmnModel.getMainProcess();
+
+        List<FlowNodeVO> vos = new ArrayList<>();
         for(FlowElement element: process.getFlowElements()){
-            FlowNodeVO flowNodeVO = new FlowNodeVO();
-            flowNodeVO.setProcDefId(procDefId);
-            flowNodeVO.setActDefId(element.getId());
-            flowNodeVO.setNodeName(element.getName());
-            flowNodeVO.setElementType(element.getClass().getSimpleName());
-            flowNodeVO.setNote(element.getDocumentation());
-            if(element instanceof SequenceFlow sequenceFlow){
-                flowNodeVO.setConditionExpression(sequenceFlow.getConditionExpression());
-            }
-            flowNodeService.save(flowNodeVO);
+            vos.add(getNodeVO(element, procDefId, preProcDefId));
         }
+        flowNodeService.saveBatch(vos);
         return procDefId;
+    }
+
+    /**
+     * 组装参数,如果上个版本配置了自定义参数，新版本从上个版本获取
+     *
+     * timeLimit 时限，单位秒
+     * assigneeType 受理人类型1人员2角色3部门
+     * assignee  受理人编码
+     * assigneeName 受理人名称
+     * autoComplete 自动完成 true|false
+     *
+     * @param element
+     * @param procDefId
+     * @param preProcDefId 上一版本流程定义ID
+     * @return
+     */
+    private FlowNodeVO getNodeVO(FlowElement element, String procDefId, String preProcDefId) {
+        FlowNodeVO flowNodeVO = new FlowNodeVO();
+        flowNodeVO.setProcDefId(procDefId);
+        flowNodeVO.setActDefId(element.getId());
+        flowNodeVO.setNodeName(element.getName());
+        flowNodeVO.setElementType(element.getClass().getSimpleName());
+        flowNodeVO.setNote(element.getDocumentation());
+        flowNodeVO.setSort(1);
+        if(element instanceof SequenceFlow sequenceFlow){
+            flowNodeVO.setConditionExpression(sequenceFlow.getConditionExpression());
+        }else{
+            if(preProcDefId == null){
+                // 自定义参数
+                HashDto params = new HashDto();
+                params.put("timeLimit","时限，单位秒");
+                params.put("assigneeType","受理人类型1人员2角色3部门");
+                params.put("assignee","受理人编码");
+                params.put("assigneeName","受理人名称");
+                params.put("autoComplete","自动完成 true|false");
+                flowNodeVO.setJsonParams(JsonUtils.toJsonString(params));
+            }else{
+                FlowNodeQuery query = new FlowNodeQuery();
+                query.setElementType(flowNodeVO.getElementType());
+                query.setProcDefId(preProcDefId);
+                query.setActDefId(flowNodeVO.getActDefId());
+                query.setPageNum(1);
+                query.setPageSize(5);
+                PageResult<FlowNodeVO> pageResult = flowNodeService.page(query);
+                if(pageResult.getTotal() == 1){
+                    flowNodeVO.setJsonParams(pageResult.getList().getFirst().getJsonParams());
+                }else{
+                    // 自定义参数
+                    HashDto params = new HashDto();
+                    params.put("timeLimit","时限，单位秒");
+                    params.put("assigneeType","受理人类型1人员2角色3部门");
+                    params.put("assignee","受理人编码");
+                    params.put("assigneeName","受理人名称");
+                    params.put("autoComplete","自动完成 true|false");
+                    flowNodeVO.setJsonParams(JsonUtils.toJsonString(params));
+                }
+            }
+        }
+        return flowNodeVO;
     }
 
     /**

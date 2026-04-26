@@ -21,7 +21,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2025-03-01
  */
 public class ReflectUtil {
+    // 函数式接口到Field的缓存
     private static final Map<FuncUtils<?>, Field> FUNCTION_CACHE = new ConcurrentHashMap<>();
+    // 类到字段列表的缓存
+    private static final Map<Class<?>, List<Field>> CLASS_FIELDS_CACHE = new ConcurrentHashMap<>();
 
     /**
      * 获取属性值，无对应属性需捕获异常
@@ -73,18 +76,7 @@ public class ReflectUtil {
      * @throws NoSuchFieldException 异常
      */
     public static Field getField(Object object, String fieldName) throws NoSuchFieldException {
-        Class<?> clazz = object.getClass();
-        List<Field> list = getFields(clazz);
-        if(!list.isEmpty()){
-            for(Field field: list){
-                if(field.getName().equals(fieldName)){
-                    return field;
-                }
-            }
-        }else{
-            throw new NoSuchFieldException();
-        }
-        return object.getClass().getDeclaredField(fieldName);
+        return getFieldByClass(object.getClass(), fieldName);
     }
 
     /**
@@ -96,27 +88,32 @@ public class ReflectUtil {
      */
     public static Field getFieldByClass(Class<?> clazz, String fieldName) throws NoSuchFieldException {
         List<Field> list = getFields(clazz);
-        if(!list.isEmpty()){
-            for(Field field: list){
-                if(field.getName().equals(fieldName)){
-                    return field;
-                }
+        for(Field field : list){
+            if(field.getName().equals(fieldName)){
+                return field;
             }
-        }else{
-            throw new NoSuchFieldException();
         }
-        return clazz.getDeclaredField(fieldName);
+        throw new NoSuchFieldException("Field '" + fieldName + "' not found in class " + clazz.getName());
     }
 
     /**
-     * 获取所有 Field
+     * 获取所有 Field（带缓存）
      * @param clazz 类
      * @return list
      */
     public static List<Field> getFields(Class<?> clazz){
+        return CLASS_FIELDS_CACHE.computeIfAbsent(clazz, ReflectUtil::doGetFields);
+    }
+
+    /**
+     * 实际获取字段列表的方法
+     * @param clazz 类
+     * @return 字段列表
+     */
+    private static List<Field> doGetFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
-        while (clazz != null){
-            fields.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+        while (clazz != null && clazz != Object.class) {
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
             // 父级类中的属性
             clazz = clazz.getSuperclass();
         }
@@ -130,12 +127,11 @@ public class ReflectUtil {
      * @param <T>
      */
     public static <T> String getFieldName(FuncUtils<T> function) {
-        Field field = ReflectUtil.getField(function);
-        return field.getName();
+        return getField(function).getName();
     }
 
     /**
-     * 根据函数式接口获取Field
+     * 根据函数式接口获取Field（带缓存）
      * @param function
      * @return
      * @param <T>
@@ -179,26 +175,21 @@ public class ReflectUtil {
     }
 
     static String convertToFieldName(String getterMethodName) {
-        // 获取方法名
-        String prefix = null;
-        if (getterMethodName.startsWith("get")) {
-            prefix = "get";
-        }
-        else if (getterMethodName.startsWith("is")) {
-            prefix = "is";
-        }
-        if (prefix == null) {
-            throw new IllegalArgumentException("invalid getter method: " + getterMethodName);
-        }
+        // 使用JDK 21的switch表达式优化
+        String prefix = switch (getterMethodName) {
+            case String s when s.startsWith("get") -> "get";
+            case String s when s.startsWith("is") -> "is";
+            default -> throw new IllegalArgumentException("invalid getter method: " + getterMethodName);
+        };
         // 截取get/is之后的字符串并转换首字母为小写
-        return Introspector.decapitalize(getterMethodName.replace(prefix, ""));
+        return Introspector.decapitalize(getterMethodName.substring(prefix.length()));
     }
 
     static Field getField(String fieldName, SerializedLambda serializedLambda) {
         try {
             // 获取的Class是字符串，并且包名是“/”分割，需要替换成“.”，才能获取到对应的Class对象
-            String declaredClass = serializedLambda.getImplClass().replace("/", ".");
-            Class<?>aClass = Class.forName(declaredClass, false, ClassUtils.getDefaultClassLoader());
+            String declaredClass = serializedLambda.getImplClass().replace('/', '.');
+            Class<?> aClass = Class.forName(declaredClass, false, ClassUtils.getDefaultClassLoader());
             return ReflectionUtils.findField(aClass, fieldName);
         }
         catch (ClassNotFoundException e) {

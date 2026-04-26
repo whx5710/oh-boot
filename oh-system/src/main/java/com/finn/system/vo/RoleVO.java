@@ -1,9 +1,9 @@
 package com.finn.system.vo;
 
+import com.finn.framework.entity.SuperEntity;
 import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +13,8 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  *
  */
-public class RoleVO implements Serializable {
+public class RoleVO extends SuperEntity {
+
     @Serial
     private static final long serialVersionUID = 1L;
 

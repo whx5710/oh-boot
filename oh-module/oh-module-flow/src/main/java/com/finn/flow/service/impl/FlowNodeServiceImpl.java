@@ -2,6 +2,7 @@ package com.finn.flow.service.impl;
 
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.finn.flow.convert.FlowNodeConvert;
 import com.finn.flow.entity.FlowNodeEntity;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,10 +41,16 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
-        try (Page<FlowNodeEntity> page = flowNodeMapper.listByWrapper(QueryWrapper.of(FlowNodeEntity.class)
+        QueryWrapper<FlowNodeEntity> queryWrapper = QueryWrapper.of(FlowNodeEntity.class)
                 .eq(FlowNodeEntity::getDbStatus, 1).eq(FlowNodeEntity::getProcDefId, query.getProcDefId())
                 .eq(FlowNodeEntity::getActDefId, query.getActDefId())
-                .orderBy(FlowNodeEntity::getSort).page(query.getPageNum(), query.getPageSize()))) {
+                .eq(FlowNodeEntity::getElementType, query.getElementType());
+        if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
+            queryWrapper.jointSQL("(act_def_id like concat('%', #{keyWord}, '%') or node_name like concat('%', #{keyWord}, '%'))",
+                    "keyWord", query.getKeyWord());
+        }
+        queryWrapper.orderBy(FlowNodeEntity::getSort).page(query.getPageNum(), query.getPageSize());
+        try (Page<FlowNodeEntity> page = flowNodeMapper.listByWrapper(queryWrapper)) {
             return new PageResult<>(FlowNodeConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
@@ -73,7 +81,7 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public FlowNodeEntity getById(Long id) {
-        return flowNodeMapper.getById(id);
+        return flowNodeMapper.findById(id, FlowNodeEntity.class);
     }
 
     /**
@@ -93,13 +101,31 @@ public class FlowNodeServiceImpl implements FlowNodeService {
                 mapper.updateById(FlowNodeConvert.INSTANCE.convert(vo));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServerException(e.getMessage(), e);
         }finally {
             if(sqlSession != null){
                 sqlSession.commit();
                 sqlSession.clearCache();
                 sqlSession.close();// 用完关闭
             }
+        }
+    }
+
+    /**
+     * 批量保存
+     * @param list lit
+     * @return 数量
+     */
+    @Override
+    public long saveBatch(List<FlowNodeVO> list) {
+        if(list != null && !list.isEmpty()){
+            List<FlowNodeEntity> entities = new ArrayList<>(list.size());
+            for(FlowNodeVO vo: list){
+                entities.add(FlowNodeConvert.INSTANCE.convert(vo));
+            }
+            return flowNodeMapper.insertBatch(entities);
+        }else {
+            throw new ServerException("批量保存参数不能为空");
         }
     }
 

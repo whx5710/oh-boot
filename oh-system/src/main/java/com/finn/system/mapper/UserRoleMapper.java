@@ -1,5 +1,6 @@
 package com.finn.system.mapper;
 
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.UserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  */
 @Mapper
-public interface UserRoleMapper {
+public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
 
     /**
      * 角色ID列表
@@ -34,12 +35,6 @@ public interface UserRoleMapper {
             "on sys_user_role.role_id = sys_role.id and sys_user_role.db_status = 1 " +
             "and sys_role.db_status = 1 and sys_role.is_system = 0 and sys_user_role.user_id = #{userId}")
     List<Long> getTenantRoleIds(@Param("userId") Long userId);
-
-    int saveBatch(@Param("list") List<UserRoleEntity> params);
-
-    boolean deleteByUserIdList(@Param("list") List<Long> userIdList,@Param("param") UserRoleEntity param);
-
-    boolean deleteByRoleIdList(@Param("list") List<Long> roleIdList, @Param("param") UserRoleEntity param);
 
     /**
      * 查询用户权限列表

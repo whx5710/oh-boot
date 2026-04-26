@@ -56,7 +56,7 @@ public class FlowController {
      * @return 流程信息
      */
     @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('finn:flow:info')")
+    @PreAuthorize("hasAuthority('flow:info')")
     public Result<FlowVO> get(@PathVariable("id") Long id){
         FlowEntity entity = flowService.getById(id);
 
@@ -82,7 +82,7 @@ public class FlowController {
      * @return 提示信息
      */
     @PostMapping("/update")
-    @PreAuthorize("hasAuthority('finn:flow:update')")
+    @PreAuthorize("hasAuthority('flow:update')")
     public Result<String> update(@RequestBody @Valid FlowVO vo){
         flowService.update(vo);
 

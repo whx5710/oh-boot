@@ -3,6 +3,7 @@ package com.finn.framework.datasource.wrapper;
 import com.finn.framework.aop.annotations.FuncUtils;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -311,7 +312,7 @@ public class QueryWrapper<T> extends Wrapper<T> {
      * @return p
      */
     @Override
-    public QueryWrapper<T> jointSQL(String whereSQL, java.util.HashMap<String, Object> param){
+    public QueryWrapper<T> jointSQL(String whereSQL, HashMap<String, Object> param){
         return (QueryWrapper<T>) super.jointSQL(whereSQL, param);
     }
 

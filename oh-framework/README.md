@@ -74,16 +74,18 @@ spring:
         username: root
         password: 123456
         hikari: # 默认hikari连接池
-          initialSize: 5
-          minIdle: 5
-          maxActive: 50
-          maxWait: 30000 # 获取连接时的最大等待时间，单位为毫秒。配置了maxWait后，默认启用公平锁
-          maxLifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
-          checkConnection: true # 初始化时是否检查连接，默认false
-          hikariLog: true # 是否开启hikari监控日志打印，默认false
-          slowThreshold: 1000 # 慢查询阈值,默认1000（毫秒）
-          connectionTestQuery: SELECT 1 # 连接测试查询语句,默认SELECT 1
-          validationTimeout: 5000 # 验证超时时间，默认5秒
+          minimum-idle: 10 # 连接池中保持的最小空闲连接数
+          maximum-pool-size: 100 # 连接池中允许的最大连接数
+          connection-timeout: 30000 # 连接超时时间 (毫秒) (默认: 30000)
+          max-lifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+          idle-timeout: 600000  # 连接空闲超时时间 (毫秒) (默认: 600000)
+          connection-test-query: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          auto-commit: true # 自动提交 (默认: true)
+          validation-timeout: 5000 # 验证超时时间，默认5秒
+          isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
+          check-connection: true # 初始化时是否检查连接，默认false
+          hikari-log: true # 是否开启hikari监控日志打印，默认false
+          slow-threshold: 500 # 慢查询阈值,默认1000（毫秒）
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
 ```

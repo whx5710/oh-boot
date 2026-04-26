@@ -12,7 +12,6 @@ import com.finn.app.query.DataFunctionAuthorityQuery;
 import com.finn.app.service.DataFunctionAuthorityService;
 import com.finn.app.vo.DataFunctionAuthorityVO;
 import com.finn.framework.entity.api.DataAppDTO;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -129,13 +128,5 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
                 redisCache.set(RedisKeys.getClientKey(entry.getKey()), entry.getValue(), RedisCache.NOT_EXPIRE);
             }
         }
-    }
-
-    /**
-     * 启动时初始化
-     */
-    @PostConstruct
-    public void initData(){
-        this.refreshAppAuthority(null);
     }
 }

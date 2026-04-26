@@ -6,6 +6,7 @@ import com.finn.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,13 +61,10 @@ public class BaseServiceImpl<T> {
             }
             sqlFilter.append(tableAlias).append(deptIdAlias);
 
-            StringBuilder result = new StringBuilder();
-            for(Long dsl: dataScopeList){
-                result.append(dsl).append(",");
-            }
-            if (!result.isEmpty()) {
-                result.deleteCharAt(result.length() - 1); // 移除最后一个多余的逗号
-            }
+            // 优化：使用 Stream API 拼接字符串，更简洁高效
+            String result = dataScopeList.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
             sqlFilter.append(" in(").append(result).append(")");
             sqlFilter.append(" or ");
         }

@@ -47,12 +47,12 @@ public class UpdateWrapper<T> extends Wrapper<T> {
             if(colValue.containsKey(UPDATER)){
                 UserDetail user = SecurityUser.getUser();
                 if(user != null && user.getId() != null){
-                    tmpSQL.SET(UPDATER + " = #{", "__SET" + UPDATER, "}");
+                    tmpSQL.SET(UPDATER + " = #{__SET" + UPDATER + "}");
                     params.put("__SET" + UPDATER, user.getId());
                 }
             }
             if(colValue.containsKey(UPDATE_TIME)){
-                tmpSQL.SET("update_time = #{", "__SET" + UPDATE_TIME, "}");
+                tmpSQL.SET("update_time = #{__SET" + UPDATE_TIME + "}");
                 params.put("__SET" + UPDATE_TIME, LocalDateTime.now());
             }
         }
@@ -81,7 +81,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
         String fieldName = com.finn.framework.utils.ReflectUtil.getFieldName(function);
         String colName = getColName(fieldName);
         fieldName = "__SET" + fieldName;
-        this.getSql().SET(colName + " = #{", fieldName, "}");
+        this.getSql().SET(colName + " = #{" + fieldName + "}");
         this.put(fieldName, value);
         return this;
     }

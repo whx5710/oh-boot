@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.entity.RoleDataScopeEntity;
@@ -35,9 +36,9 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
         // Collection<Long> insertDeptIdList = CollUtil.subtract(deptIdList, dbDeptIdList);
         Collection<Long> insertDeptIdList = deptIdList.stream()
                 .filter(element -> !dbDeptIdList.contains(element))
-                .collect(Collectors.toList());
+                .toList();
 
-        if (insertDeptIdList != null && insertDeptIdList.size() > 0){
+        if (!insertDeptIdList.isEmpty()){
             UserDetail user = SecurityUser.getUser();
             String tenantId;
             if(user != null){
@@ -64,12 +65,12 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
         Collection<Long> deleteDeptIdList = dbDeptIdList.stream()
                 .filter(element -> !deptIdList.contains(element))
                 .collect(Collectors.toList());
-        if (deleteDeptIdList != null && deleteDeptIdList.size() > 0){
-            RoleDataScopeEntity param = new RoleDataScopeEntity();
-            param.setRoleId(roleId);
-            param.setUpdateTime(LocalDateTime.now());
-            param.setUpdater(SecurityUser.getUserId());
-            roleDataScopeMapper.deleteDeptIdList((List<Long>) deleteDeptIdList, param);
+        if (!deleteDeptIdList.isEmpty()){
+            UpdateWrapper<RoleDataScopeEntity> updateWrapper = UpdateWrapper.of(RoleDataScopeEntity.class)
+                    .set(RoleDataScopeEntity::getDbStatus, 0)
+                    .in(RoleDataScopeEntity::getDeptId, (List<Long>) deleteDeptIdList)
+                    .eq(RoleDataScopeEntity::getRoleId, roleId);
+            roleDataScopeMapper.updateByWrapper(updateWrapper);
         }
     }
 
@@ -80,8 +81,9 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        RoleDataScopeEntity param = new RoleDataScopeEntity();
-        param.setUpdater(SecurityUser.getUserId());
-        roleDataScopeMapper.deleteByRoleIdList(roleIdList, param);
+        UpdateWrapper<RoleDataScopeEntity> updateWrapper = UpdateWrapper.of(RoleDataScopeEntity.class)
+                        .set(RoleDataScopeEntity::getDbStatus, 0)
+                                .in(RoleDataScopeEntity::getRoleId, roleIdList);
+        roleDataScopeMapper.updateByWrapper(updateWrapper);
     }
 }
