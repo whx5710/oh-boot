@@ -2,6 +2,7 @@ package com.finn.system.cache;
 
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.constant.CommConstant;
+import com.finn.framework.utils.JsonUtils;
 import com.finn.system.entity.TenantMemberEntity;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,7 @@ public class TenantCache {
         }
         Object obj = redisCache.get(CommConstant.TENANT_PREFIX + tenantId);
         if(obj != null){
-            return (TenantMemberEntity) obj;
+            return JsonUtils.parseObject((String) obj, TenantMemberEntity.class);
         }else{
             return null;
         }

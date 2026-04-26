@@ -5,7 +5,7 @@
 
     <!-- 统计最近几天相关操作情况 -->
     <select id="latestDateCount" resultType="com.finn.system.vo.AnalysisVO">
-        select '登录情况' as label,t1.dates as analysisTime,IFNULL(t2.analysisCount, 0) analysisValue from (
+        select '登录情况' as label,t1.dates as analysisTime,COALESCE(t2.analysisCount, 0) analysisValue from (
         select * from (
         SELECT
         @v_day := @v_day + 1 AS indexs,
