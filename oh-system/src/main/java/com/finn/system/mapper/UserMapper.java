@@ -37,16 +37,4 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 	@Select("select a.*,b.name as dept_name from sys_user a left join sys_dept b on a.dept_id = b.id where a.db_status != 0 and a.mobile = #{mobile}")
 	UserEntity getByMobile(@Param("mobile") String mobile);
 
-	// 保存用户
-//	void insertUser(UserEntity userEntity);
-
-
-	// 根据ID修改用户信息
-//	boolean updateById(UserEntity userEntity);
-
-	// 解绑租户用户
-	boolean unbindUser(UserEntity userEntity);
-
-	@Select("select count(1) from sys_user where db_status != 0 and dept_id = #{deptId}")
-	int countByDeptId(@Param("deptId")long deptId);
 }

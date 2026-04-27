@@ -26,6 +26,4 @@ public interface RoleDataScopeMapper extends BaseMapper<RoleDataScopeEntity> {
      */
     List<Long> getDataScopeList(@Param("userId") Long userId);
 
-    int saveBatch(@Param("list") List<RoleDataScopeEntity> param);
-
 }

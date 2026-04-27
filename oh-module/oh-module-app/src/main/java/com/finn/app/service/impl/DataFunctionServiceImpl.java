@@ -49,7 +49,7 @@ public class DataFunctionServiceImpl implements DataFunctionService {
 
     @Override
     public DataFunctionEntity getById(Long id) {
-        return dataFunctionMapper.getById(id);
+        return dataFunctionMapper.findById(id, DataFunctionEntity.class);
     }
 
     @Override

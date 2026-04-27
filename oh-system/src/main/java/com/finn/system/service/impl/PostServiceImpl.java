@@ -66,7 +66,7 @@ public class PostServiceImpl implements PostService {
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("岗位编码已存在");
         }
-        postMapper.insertPost(entity);
+        postMapper.insert(entity);
     }
 
     @Override

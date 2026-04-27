@@ -10,22 +10,4 @@
         order by id desc
     </select>
 
-    <update id="updateById">
-        UPDATE sys_attachment
-        <set>
-            <if test="name != null and name != ''">name = #{name},</if>
-            <if test="url != null and url != ''">url = #{url},</if>
-            <if test="size != null">size = #{size},</if>
-            <if test="platform != null and platform != ''">platform = #{platform},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null">updater = #{updater},</if>
-            update_time = #{updateTime}
-        </set>
-        WHERE id = #{id}
-    </update>
-
-    <insert id="insertAttach" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO sys_attachment (id, name, url, size, platform, db_status, creator, create_time, tenant_id)
-        VALUES (#{id}, #{name}, #{url}, #{size}, #{platform}, #{dbStatus}, #{creator}, #{createTime}, #{tenantId})
-    </insert>
 </mapper>

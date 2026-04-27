@@ -25,8 +25,6 @@ public interface DataFunctionMapper extends BaseMapper<DataFunctionEntity> {
 
     List<DataFunctionVO> pageByClientId(@Param("clientId")String clientId);
 
-    DataFunctionEntity getById(@Param("id")Long id);
-
     @Pages
     List<DataFunctionAuthorityEntity> getAuthorityList(DataFunctionAuthorityQuery params);
 

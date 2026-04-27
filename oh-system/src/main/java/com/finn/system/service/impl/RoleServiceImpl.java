@@ -98,6 +98,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void save(RoleVO vo) {
 		// 判断角色编码是否重复
 		AssertUtils.isBlank(vo.getCode(), "角色编码");
@@ -116,7 +117,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 		}
 		// 保存角色
 		entity.setDataScope(DataScopeEnum.SELF.getValue());
-		roleMapper.insertRole(entity);
+		roleMapper.insert(entity);
 
 		// 保存角色菜单关系
 		roleMenuService.saveOrUpdate(entity.getId(), vo.getMenuIdList());
@@ -142,7 +143,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 
 	@Override
 	public void dataScope(RoleDataScopeVO vo) {
-		RoleEntity entity = roleMapper.getById(vo.getId());
+		RoleEntity entity = roleMapper.findById(vo.getId(), RoleEntity.class);
 		entity.setDataScope(vo.getDataScope());
 		// 更新角色
 		roleMapper.updateById(entity);
@@ -161,7 +162,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 		// 删除角色
 		// removeByIds(idList);
 		idList.forEach(id -> {
-            RoleEntity role = roleMapper.getById(id);
+            RoleEntity role = roleMapper.findById(id, RoleEntity.class);
             if(role != null && role.getIsSystem() == 1){
                 throw new ServerException("系统角色禁止删除");
             }
@@ -183,7 +184,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 
 	@Override
 	public RoleEntity getById(Long id) {
-		return roleMapper.getById(id);
+		return roleMapper.findById(id, RoleEntity.class);
 	}
 
 	/**

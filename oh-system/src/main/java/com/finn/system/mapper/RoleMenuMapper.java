@@ -23,6 +23,4 @@ public interface RoleMenuMapper extends BaseMapper<RoleMenuEntity> {
 	@Select("select menu_id from sys_role_menu where role_id = #{roleId} and db_status = 1")
 	List<Long> getMenuIdList(@Param("roleId") Long roleId);
 
-	int saveBatch(@Param("list") List<RoleMenuEntity> menuList);
-
 }

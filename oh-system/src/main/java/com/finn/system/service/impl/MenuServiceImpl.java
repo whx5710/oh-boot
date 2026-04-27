@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.entity.TreeNode;
 import com.finn.framework.security.user.SecurityUser;
@@ -267,15 +268,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Long getSubMenuCount(Long pid) {
-        MenuEntity param = new MenuEntity();
-        param.setParentId(pid);
-        List<MenuEntity> list = menuMapper.getList(param);
-        return (long) list.size();
+        return menuMapper.count(CountWrapper.of(MenuEntity.class).eq(MenuEntity::getDbStatus, 1)
+                .eq(MenuEntity::getParentId, pid));
     }
 
     @Override
     public MenuEntity getById(Long id) {
-        return menuMapper.getById(id);
+        return menuMapper.findById(id, MenuEntity.class);
     }
 
     @Override

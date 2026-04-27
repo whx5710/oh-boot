@@ -3,6 +3,7 @@ package com.finn.system.service.impl;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.enums.CommonEnum;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.excel.ExcelUtils;
@@ -352,8 +353,9 @@ public class UserServiceImpl implements UserService {
             if(!tenantID.equals(user.getTenantId())){
                 throw new ServerException("租户ID不准确，不能解绑【" + user.getTenantId() + "】");
             }
-            user.setTenantId(null);
-            userMapper.unbindUser(user);// 解绑用户
+            // 解绑用户,  TenantId = null
+            userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, null)
+                    .eq(UserEntity::getId,user.getId()));
         }
     }
 

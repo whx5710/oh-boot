@@ -16,8 +16,6 @@ import java.util.List;
  */
 @Mapper
 public interface MenuMapper extends BaseMapper<MenuEntity> {
-
-	List<MenuEntity> getList(MenuEntity query);
 	/**
 	 * 查询所有菜单列表
 	 *
@@ -32,11 +30,5 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
 	 * @param query 菜单参数
 	 */
 	List<MenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("query") MenuQuery query);
-
-	// int save(MenuEntity param);
-
-	// boolean updateById(MenuEntity param);
-
-	MenuEntity getById(@Param("id")Long id);
 
 }

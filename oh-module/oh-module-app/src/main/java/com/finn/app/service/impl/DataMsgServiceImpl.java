@@ -5,15 +5,12 @@ import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
-import com.finn.framework.utils.ExceptionUtils;
-import com.finn.framework.utils.JsonUtils;
-import com.finn.framework.utils.SnowflakeIdWorker;
+import com.finn.framework.utils.*;
 import com.github.pagehelper.Page;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.common.properties.OpenApiProperties;
-import com.finn.framework.utils.ServiceFactory;
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.entity.api.DataAppDTO;
 import com.finn.framework.entity.api.MsgEntity;
@@ -97,7 +94,10 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @Override
     public void deleteByDate(String date) {
-        dataMessageMapper.deleteByDate(date);
+        UpdateWrapper<DataMsgEntity> updateWrapper = UpdateWrapper.of(DataMsgEntity.class)
+                .set(DataMsgEntity::getDbStatus, 0).eq(DataMsgEntity::getDbStatus, 1)
+                .le(DataMsgEntity::getCreateTime, DateUtils.parseLocalDateTime(date));
+        dataMessageMapper.updateByWrapper(updateWrapper);
     }
 
     // 保存报文
@@ -126,7 +126,7 @@ public class DataMsgServiceImpl implements DataMsgService {
                 SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(); // 默认主数据源
                 sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
                 DataMessageMapper messageMapper = sqlSession.getMapper(DataMessageMapper.class);
-                list.forEach(messageMapper::insertDataMsg);
+                list.forEach(messageMapper::insert);
             }
         } catch (Exception e) {
             log.error("保存消息日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));

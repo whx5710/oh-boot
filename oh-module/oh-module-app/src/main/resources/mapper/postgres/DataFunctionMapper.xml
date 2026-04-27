@@ -10,10 +10,6 @@
         </if>
     </select>
 
-    <select id="getById" resultType="com.finn.app.entity.DataFunctionEntity">
-        select * from data_function where id = #{id}
-    </select>
-
     <select id="pageByClientId" resultType="com.finn.app.vo.DataFunctionVO">
         SELECT
         a.*,

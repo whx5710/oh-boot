@@ -1402,7 +1402,7 @@ CREATE TABLE "oh_sys"."sys_version_info" (
   "title" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "content" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
   "release_time" timestamp(6) NOT NULL,
-  "is_curr_version" int2 NOT NULL DEFAULT '0'::smallint,
+  "is_curr_version" bool,
   "cover_picture" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "re_login" int2,
   "remark" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
@@ -1434,7 +1434,7 @@ COMMENT ON TABLE "oh_sys"."sys_version_info" IS '版本信息';
 -- Records of sys_version_info
 -- ----------------------------
 BEGIN;
-INSERT INTO "oh_sys"."sys_version_info" ("id", "version_num", "title", "content", "release_time", "is_curr_version", "cover_picture", "re_login", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 1, '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
+INSERT INTO "oh_sys"."sys_version_info" ("id", "version_num", "title", "content", "release_time", "is_curr_version", "cover_picture", "re_login", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 't', '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
 COMMIT;
 
 -- ----------------------------

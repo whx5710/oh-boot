@@ -46,7 +46,7 @@ public class DataAppServiceImpl implements DataAppService {
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("客户端ID已存在");
         }
-        dataAppMapper.insertDataApp(entity);
+        dataAppMapper.insert(entity);
     }
 
     @Override
@@ -84,6 +84,6 @@ public class DataAppServiceImpl implements DataAppService {
 
     @Override
     public DataAppEntity getById(Long id) {
-        return dataAppMapper.getById(id);
+        return dataAppMapper.findById(id, DataAppEntity.class);
     }
 }

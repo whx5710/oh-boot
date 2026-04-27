@@ -2,6 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.security.user.SecurityUser;
+import com.finn.framework.utils.AssertUtils;
 import com.finn.system.convert.MessageConvert;
 import com.finn.system.entity.MessageEntity;
 import com.finn.system.mapper.MessageMapper;
@@ -39,10 +40,12 @@ public class MessageServiceImpl implements MessageService {
         MessageEntity entity = MessageConvert.INSTANCE.convert(vo);
         if(ObjectUtils.isEmpty(entity.getFromId())){
             entity.setFromId(SecurityUser.getUserId());
-            entity.setFromName(SecurityUser.getUser().getRealName());
+            if(SecurityUser.getUser() != null){
+                entity.setFromName(SecurityUser.getUser().getRealName());
+            }
         }
         entity.setType("success");
-        messageMapper.save(entity);
+        messageMapper.insert(entity);
     }
 
     @Override
@@ -86,11 +89,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageEntity getById(Long id) {
-        return messageMapper.getById(id);
+        return messageMapper.findById(id, MessageEntity.class);
     }
 
     @Override
-    public boolean updateById(MessageEntity param) {
+    public long updateById(MessageEntity param) {
+        AssertUtils.isNull(param.getId(), "ID");
         return messageMapper.updateById(param);
     }
 

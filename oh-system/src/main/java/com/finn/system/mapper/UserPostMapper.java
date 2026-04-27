@@ -23,5 +23,4 @@ public interface UserPostMapper extends BaseMapper<UserPostEntity> {
     @Select("select post_id from sys_user_post where user_id = #{userId} and db_status = 1")
     List<Long> getPostIdList(@Param("userId") Long userId);
 
-    int saveBatch(@Param("list") List<UserPostEntity> param);
 }

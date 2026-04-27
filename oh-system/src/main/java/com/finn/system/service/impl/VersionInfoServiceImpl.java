@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.convert.VersionInfoConvert;
@@ -44,11 +45,12 @@ public class VersionInfoServiceImpl implements VersionInfoService {
     @Override
     public void save(VersionInfoVO vo) {
         // 修改当前版本标记
-        versionInfoMapper.updateCurVersion(false);
+        versionInfoMapper.updateByWrapper(UpdateWrapper.of(VersionInfoEntity.class).set(VersionInfoEntity::getIsCurrVersion, false)
+                .eq(VersionInfoEntity::getDbStatus, 1));
 
         VersionInfoEntity entity = VersionInfoConvert.INSTANCE.convert(vo);
         entity.setIsCurrVersion(true);
-        versionInfoMapper.save(entity);
+        versionInfoMapper.insert(entity);
     }
 
     @Override
@@ -81,7 +83,7 @@ public class VersionInfoServiceImpl implements VersionInfoService {
 
     @Override
     public VersionInfoEntity getById(Long id) {
-        return versionInfoMapper.getById(id);
+        return versionInfoMapper.findById(id, VersionInfoEntity.class);
     }
 
 }

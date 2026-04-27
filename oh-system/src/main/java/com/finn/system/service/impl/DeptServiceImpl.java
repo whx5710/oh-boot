@@ -15,6 +15,7 @@ import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.DeptConvert;
 import com.finn.system.entity.DeptEntity;
 import com.finn.system.entity.TenantMemberEntity;
+import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.DeptMapper;
 import com.finn.system.mapper.UserMapper;
 import com.finn.system.query.DeptQuery;
@@ -158,7 +159,8 @@ public class DeptServiceImpl implements DeptService {
             throw new ServerException("请先删除子部门");
         }
         // 判断部门下面是否有用户
-        long userCount = userMapper.countByDeptId(id);
+        long userCount = userMapper.count(CountWrapper.of(UserEntity.class).ne(UserEntity::getDbStatus, 0)
+                .eq(UserEntity::getDeptId, id));
         if(userCount > 0){
             throw new ServerException("部门下面有用户，不能删除");
         }

@@ -19,14 +19,10 @@ import java.util.List;
 */
 @Mapper
 public interface DataAppMapper extends BaseMapper<DataAppEntity> {
+
     List<DataAppDTO> listAuthority(@Param("params") DataFunctionAuthorityQuery params);
 
     @Pages
     List<DataAppEntity> getList(DataAppQuery dataAppQuery);
 
-    int insertDataApp(DataAppEntity dataAppEntity);
-
-//    boolean updateById(DataAppEntity dataAppEntity);
-
-    DataAppEntity getById(@Param("id")Long id);
 }

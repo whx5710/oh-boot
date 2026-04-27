@@ -12,11 +12,4 @@
           where t1.user_id = #{userId} and t1.role_id = t2.role_id and t1.db_status = 1 and t2.db_status = 1
     </select>
 
-    <insert id="saveBatch">
-        INSERT INTO sys_role_data_scope (role_id, dept_id, db_status, creator, create_time, tenant_id) VALUES
-        <foreach item="item" index="index" collection="list" separator=",">
-            (#{item.roleId}, #{item.deptId}, #{item.dbStatus}, #{item.creator}, #{item.createTime}, #{tenantId})
-        </foreach>
-    </insert>
-
 </mapper>

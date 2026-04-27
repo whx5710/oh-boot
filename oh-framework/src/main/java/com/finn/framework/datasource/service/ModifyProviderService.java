@@ -167,7 +167,7 @@ public class ModifyProviderService {
     }
 
     /**
-     * 根据ID更新数据
+     * 根据ID更新数据,值为null不会进行更新
      * @param entity 实体
      * @return sql
      * @param <T> p

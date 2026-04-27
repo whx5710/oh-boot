@@ -7,6 +7,7 @@ import com.finn.system.entity.RoleDataScopeEntity;
 import com.finn.system.mapper.RoleDataScopeMapper;
 import com.finn.system.service.RoleDataScopeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -28,6 +29,7 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveOrUpdate(Long roleId, List<Long> deptIdList) {
         // 数据库部门ID列表
         List<Long> dbDeptIdList = getDeptIdList(roleId);
@@ -57,7 +59,7 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
             }).collect(Collectors.toList());
 
             // 批量新增
-            roleDataScopeMapper.saveBatch(orgList);
+            roleDataScopeMapper.insertBatch(orgList);
         }
 
         // 需要删除的部门ID

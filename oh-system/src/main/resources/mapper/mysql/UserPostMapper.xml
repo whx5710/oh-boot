@@ -3,11 +3,4 @@
 
 <mapper namespace="com.finn.system.mapper.UserPostMapper">
 
-    <insert id="saveBatch">
-        INSERT INTO sys_user_post ( user_id, post_id, db_status, creator, create_time ) VALUES
-        <foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.userId}, #{item.postId}, #{item.dbStatus}, #{item.creator}, #{item.createTime} )
-        </foreach>
-    </insert>
-
 </mapper>

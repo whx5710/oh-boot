@@ -1,7 +1,6 @@
 package com.finn.system.mapper;
 
 import com.finn.framework.datasource.mapper.BaseMapper;
-import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.system.entity.PostEntity;
 import org.apache.ibatis.annotations.*;
 
@@ -12,12 +11,6 @@ import org.apache.ibatis.annotations.*;
 */
 @Mapper
 public interface PostMapper extends BaseMapper<PostEntity> {
-
-//    List<PostEntity> getList(PostQuery postQuery);
-
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
-    @InsertProvider(method = ModifyProviderService.INSERT, type = ModifyProviderService.class)
-    int insertPost(PostEntity postEntity);
 
     @Select("select * from sys_post where id = #{id}")
     PostEntity getById(@Param("id") Long id);

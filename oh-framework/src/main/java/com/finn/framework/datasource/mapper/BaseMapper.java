@@ -36,7 +36,7 @@ public interface BaseMapper<T>{
     long insertBatch(List<T> entities);
 
     /**
-     * 根据ID更新
+     * 根据ID更新，值为null不会进行更新
      * @param entity 实体类
      * @return int
      */
@@ -104,7 +104,7 @@ public interface BaseMapper<T>{
     Integer deleteByWrapper(DeleteWrapper<T> fp);
 
     /**
-     * 修改数据
+     * 修改数据，set什么值就更新什么值
      * @param fp 使用UpdateWrapper构建
      * @return 更新数量
      */

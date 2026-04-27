@@ -39,8 +39,8 @@ public class UserPostServiceImpl implements UserPostService {
         // Collection<Long> insertPostIdList = CollUtil.subtract(postIdList, dbPostIdList);
         Collection<Long> insertPostIdList = postIdList.stream()
                 .filter(element -> !dbPostIdList.contains(element))
-                .collect(Collectors.toList());
-        if (insertPostIdList != null && insertPostIdList.size() > 0){
+                .toList();
+        if (!insertPostIdList.isEmpty()){
             List<UserPostEntity> postList = insertPostIdList.stream().map(postId -> {
                 UserPostEntity entity = new UserPostEntity();
                 entity.setUserId(userId);
@@ -50,7 +50,7 @@ public class UserPostServiceImpl implements UserPostService {
                 return entity;
             }).collect(Collectors.toList());
             // 批量新增
-            userPostMapper.saveBatch(postList);
+            userPostMapper.insertBatch(postList);
         }
 
         // 需要删除的岗位ID

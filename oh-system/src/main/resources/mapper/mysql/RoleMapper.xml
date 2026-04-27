@@ -20,24 +20,4 @@
         order by a.create_time desc
     </select>
 
-    <!--<update id="updateById">
-        UPDATE sys_role
-        <set>
-            <if test="name != null and name != ''">name = #{name},</if>
-            <if test="remark != null and remark != ''">remark = #{remark},</if>
-            <if test="dataScope != null">data_scope = #{dataScope},</if>
-            <if test="deptId != null">dept_id = #{deptId},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null and updater != 0">updater = #{updater},</if>
-            update_time = #{updateTime}
-        </set>
-        WHERE id = #{id}
-    </update>-->
-
-    <!--<insert id="insertRole" parameterType="entity.import com.finn.system.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO sys_role ( name, remark, data_scope, dept_id, db_status, creator, create_time)
-        VALUES
-        (#{name}, #{remark}, #{dataScope}, #{deptId}, #{dbStatus}, #{creator}, #{createTime})
-    </insert>-->
-
 </mapper>
