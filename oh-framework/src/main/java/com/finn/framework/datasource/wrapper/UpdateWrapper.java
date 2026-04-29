@@ -94,19 +94,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> eq(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.eq(function, value, false);
-    }
-
-    /**
-     * 等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> eq(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.eq(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.eq(function, value);
     }
 
     /**
@@ -117,19 +105,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> ne(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.ne(function, value, false);
-    }
-
-    /**
-     * 不等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> ne(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.ne(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.ne(function, value);
     }
 
     /**
@@ -140,19 +116,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> like(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.like(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> like(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.like(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.like(function, value);
     }
 
     /**
@@ -163,19 +127,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> likeRight(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.likeRight(function, value, false);
-    }
-
-    /**
-     * 右模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> likeRight(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.likeRight(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.likeRight(function, value);
     }
 
     /**
@@ -186,19 +138,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> likeLeft(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.likeLeft(function, value, false);
-    }
-
-    /**
-     * 左模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> likeLeft(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.likeLeft(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.likeLeft(function, value);
     }
 
     /**
@@ -209,19 +149,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> notLike(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.notLike(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> notLike(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.notLike(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.notLike(function, value);
     }
 
     /**
@@ -232,19 +160,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> gt(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.gt(function, value, false);
-    }
-
-    /**
-     * 大于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> gt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.gt(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.gt(function, value);
     }
 
     /**
@@ -255,19 +171,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> ge(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.ge(function, value, false);
-    }
-
-    /**
-     * 大于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> ge(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.ge(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.ge(function, value);
     }
 
     /**
@@ -278,19 +182,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> lt(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.lt(function, value, false);
-    }
-
-    /**
-     * 小于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> lt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.lt(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.lt(function, value);
     }
 
     /**
@@ -301,19 +193,7 @@ public class UpdateWrapper<T> extends Wrapper<T> {
      */
     @Override
     public UpdateWrapper<T> le(FuncUtils<T> function, Object value) {
-        return (UpdateWrapper<T>) super.le(function, value, false);
-    }
-
-    /**
-     * 小于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public UpdateWrapper<T> le(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (UpdateWrapper<T>) super.le(function, value, isEmpty);
+        return (UpdateWrapper<T>) super.le(function, value);
     }
 
     /**

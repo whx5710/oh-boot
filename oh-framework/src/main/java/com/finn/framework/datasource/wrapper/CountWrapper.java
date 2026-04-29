@@ -13,9 +13,8 @@ public class CountWrapper<T> extends Wrapper<T> {
 
     /**
      * 初始化,构建SQL：select count(1) from tableName
-     * @param clazz
-     * @return
-     * @param <T>
+     * @param clazz c
+     * @return c
      */
     public static <T> CountWrapper<T> of(Class<T> clazz) {
         CountWrapper<T> params = new CountWrapper<>();
@@ -36,19 +35,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> eq(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.eq(function, value, false);
-    }
-
-    /**
-     * 等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> eq(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.eq(function, value, isEmpty);
+        return (CountWrapper<T>) super.eq(function, value);
     }
 
     /**
@@ -59,19 +46,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> ne(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.ne(function, value, false);
-    }
-
-    /**
-     * 不等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> ne(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.ne(function, value, isEmpty);
+        return (CountWrapper<T>) super.ne(function, value);
     }
 
     /**
@@ -82,19 +57,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> like(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.like(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> like(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.like(function, value, isEmpty);
+        return (CountWrapper<T>) super.like(function, value);
     }
 
     /**
@@ -105,19 +68,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> likeRight(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.likeRight(function, value, false);
-    }
-
-    /**
-     * 右模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> likeRight(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.likeRight(function, value, isEmpty);
+        return (CountWrapper<T>) super.likeRight(function, value);
     }
 
     /**
@@ -128,19 +79,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> likeLeft(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.likeLeft(function, value, false);
-    }
-
-    /**
-     * 左模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> likeLeft(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.likeLeft(function, value, isEmpty);
+        return (CountWrapper<T>) super.likeLeft(function, value);
     }
 
     /**
@@ -151,19 +90,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> notLike(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.notLike(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> notLike(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.notLike(function, value, isEmpty);
+        return (CountWrapper<T>) super.notLike(function, value);
     }
 
     /**
@@ -174,19 +101,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> gt(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.gt(function, value, false);
-    }
-
-    /**
-     * 大于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> gt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.gt(function, value, isEmpty);
+        return (CountWrapper<T>) super.gt(function, value);
     }
 
     /**
@@ -197,19 +112,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> ge(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.ge(function, value, false);
-    }
-
-    /**
-     * 大于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> ge(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.ge(function, value, isEmpty);
+        return (CountWrapper<T>) super.ge(function, value);
     }
 
     /**
@@ -220,19 +123,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> lt(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.lt(function, value, false);
-    }
-
-    /**
-     * 小于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> lt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.lt(function, value, isEmpty);
+        return (CountWrapper<T>) super.lt(function, value);
     }
 
     /**
@@ -243,19 +134,7 @@ public class CountWrapper<T> extends Wrapper<T> {
      */
     @Override
     public CountWrapper<T> le(FuncUtils<T> function, Object value) {
-        return (CountWrapper<T>) super.le(function, value, false);
-    }
-
-    /**
-     * 小于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public CountWrapper<T> le(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (CountWrapper<T>) super.le(function, value, isEmpty);
+        return (CountWrapper<T>) super.le(function, value);
     }
 
     /**

@@ -12,9 +12,8 @@ public class DeleteWrapper<T> extends Wrapper<T> {
 
     /**
      * 初始化，构建SQL：delete from tableName
-     * @param clazz
-     * @return
-     * @param <T>
+     * @param clazz c
+     * @return d
      */
     public static <T> DeleteWrapper<T> of(Class<T> clazz) {
         DeleteWrapper<T> params = new DeleteWrapper<>();
@@ -35,20 +34,9 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> eq(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.eq(function, value, false);
+        return (DeleteWrapper<T>) super.eq(function, value);
     }
 
-    /**
-     * 等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> eq(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.eq(function, value, isEmpty);
-    }
 
     /**
      * 不等于
@@ -58,19 +46,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> ne(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.ne(function, value, false);
-    }
-
-    /**
-     * 不等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> ne(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.ne(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.ne(function, value);
     }
 
     /**
@@ -81,19 +57,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> like(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.like(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> like(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.like(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.like(function, value);
     }
 
     /**
@@ -104,19 +68,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> likeRight(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.likeRight(function, value, false);
-    }
-
-    /**
-     * 右模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> likeRight(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.likeRight(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.likeRight(function, value);
     }
 
     /**
@@ -127,19 +79,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> likeLeft(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.likeLeft(function, value, false);
-    }
-
-    /**
-     * 左模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> likeLeft(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.likeLeft(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.likeLeft(function, value);
     }
 
     /**
@@ -150,19 +90,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> notLike(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.notLike(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> notLike(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.notLike(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.notLike(function, value);
     }
 
     /**
@@ -173,19 +101,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> gt(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.gt(function, value, false);
-    }
-
-    /**
-     * 大于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> gt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.gt(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.gt(function, value);
     }
 
     /**
@@ -196,19 +112,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> ge(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.ge(function, value, false);
-    }
-
-    /**
-     * 大于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> ge(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.ge(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.ge(function, value);
     }
 
     /**
@@ -219,19 +123,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> lt(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.lt(function, value, false);
-    }
-
-    /**
-     * 小于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> lt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.lt(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.lt(function, value);
     }
 
     /**
@@ -242,19 +134,7 @@ public class DeleteWrapper<T> extends Wrapper<T> {
      */
     @Override
     public DeleteWrapper<T> le(FuncUtils<T> function, Object value) {
-        return (DeleteWrapper<T>) super.le(function, value, false);
-    }
-
-    /**
-     * 小于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    @Override
-    public DeleteWrapper<T> le(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        return (DeleteWrapper<T>) super.le(function, value, isEmpty);
+        return (DeleteWrapper<T>) super.le(function, value);
     }
 
     /**

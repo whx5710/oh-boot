@@ -4,7 +4,6 @@ import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.ReflectUtil;
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableId;
-import com.finn.framework.datasource.wrapper.InsertWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
@@ -27,7 +26,6 @@ public class ModifyProviderService {
 
     public static final String INSERT = "insert";
     public static final String INSERT_BATCH = "insertBatch";
-    public static final String INSERT_PARAM = "insertByWrapper";
     public static final String UPDATE = "updateById";
     public static final String DELETE = "delete";
     public static final String DELETE_PARAM = "deleteByWrapper";
@@ -304,16 +302,6 @@ public class ModifyProviderService {
      * @param <T> c
      */
     public <T> String updateByWrapper(UpdateWrapper<T> fp){
-        return fp.getSql().toString();
-    }
-
-    /**
-     * 新增sql
-     * @param fp 参数 + sql
-     * @return sql
-     */
-    @Deprecated
-    public String insertByWrapper(InsertWrapper fp){
         return fp.getSql().toString();
     }
 

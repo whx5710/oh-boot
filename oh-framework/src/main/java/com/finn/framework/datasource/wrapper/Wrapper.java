@@ -181,33 +181,15 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
     }
 
     /**
-     * 处理条件值，判断是否为空字符串
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return 是否处理
-     */
-    private boolean shouldProcessValue(Object value, Boolean isEmpty) {
-        if (value == null) {
-            return false;
-        }
-        if (value instanceof String str) {
-            return !str.isEmpty() || isEmpty;
-        }
-        return true;
-    }
-
-    /**
-     * 构建条件SQL
+     * 构建条件SQL；1、构建where条件 2、设置参数值
      * @param function 函数
      * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @param conditionSQL 条件SQL模板
+     * @param conditionSQL 条件SQL模板 %s = #{%s}
      * @param fieldNamePrefix 字段名前缀
-     * @return 处理后的字段名
      */
-    private String buildCondition(FuncUtils<T> function, Object value, Boolean isEmpty, String conditionSQL, String fieldNamePrefix) {
-        if (!shouldProcessValue(value, isEmpty)) {
-            return null;
+    private void buildCondition(FuncUtils<T> function, Object value, String conditionSQL, String fieldNamePrefix) {
+        if (value == null) {
+            return;
         }
         String fieldName = ReflectUtil.getFieldName(function);
         String colName = getColName(fieldName);
@@ -215,7 +197,6 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
         String sql = String.format(conditionSQL, colName, paramName);
         this.sql.WHERE(sql);
         this.put(paramName, value);
-        return paramName;
     }
 
     /**
@@ -225,18 +206,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> eq(FuncUtils<T> function, Object value) {
-        return eq(function, value, false);
-    }
-
-    /**
-     * 等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> eq(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        buildCondition(function, value, isEmpty, "%s = #{%s}", null);
+        buildCondition(function, value, "%s = #{%s}", null);
         return this;
     }
 
@@ -247,18 +217,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> ne(FuncUtils<T> function, Object value) {
-        return ne(function, value, false);
-    }
-
-    /**
-     * 不等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> ne(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        buildCondition(function, value, isEmpty, "%s <> #{%s}", null);
+        buildCondition(function, value, "%s <> #{%s}", null);
         return this;
     }
 
@@ -269,23 +228,13 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> like(FuncUtils<T> function, Object value) {
-        return like(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> like(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if (shouldProcessValue(value, isEmpty)) {
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            this.sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
-            this.put(fieldName, value);
+        if (value == null) {
+            return this;
         }
+        String fieldName = ReflectUtil.getFieldName(function);
+        String colName = getColName(fieldName);
+        this.sql.WHERE(colName + " like concat('%',#{" + fieldName + "},'%')");
+        this.put(fieldName, value);
         return this;
     }
 
@@ -296,23 +245,13 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> likeRight(FuncUtils<T> function, Object value) {
-        return likeRight(function, value, false);
-    }
-
-    /**
-     * 右模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> likeRight(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if (shouldProcessValue(value, isEmpty)) {
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            this.sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
-            this.put(fieldName, value);
+        if (value == null) {
+            return this;
         }
+        String fieldName = ReflectUtil.getFieldName(function);
+        String colName = getColName(fieldName);
+        this.sql.WHERE(colName + " like concat(#{" + fieldName + "},'%')");
+        this.put(fieldName, value);
         return this;
     }
 
@@ -323,23 +262,13 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> likeLeft(FuncUtils<T> function, Object value) {
-        return likeLeft(function, value, false);
-    }
-
-    /**
-     * 左模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> likeLeft(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if (shouldProcessValue(value, isEmpty)) {
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            this.sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
-            this.put(fieldName, value);
+        if (value == null) {
+            return this;
         }
+        String fieldName = ReflectUtil.getFieldName(function);
+        String colName = getColName(fieldName);
+        this.sql.WHERE(colName + " like concat('%',#{" + fieldName + "})");
+        this.put(fieldName, value);
         return this;
     }
 
@@ -350,23 +279,13 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> notLike(FuncUtils<T> function, Object value) {
-        return notLike(function, value, false);
-    }
-
-    /**
-     * 模糊查询
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> notLike(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        if (shouldProcessValue(value, isEmpty)) {
-            String fieldName = ReflectUtil.getFieldName(function);
-            String colName = getColName(fieldName);
-            this.sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
-            this.put(fieldName, value);
+        if (value == null) {
+            return this;
         }
+        String fieldName = ReflectUtil.getFieldName(function);
+        String colName = getColName(fieldName);
+        this.sql.WHERE(colName + " not like concat('%',#{" + fieldName + "},'%')");
+        this.put(fieldName, value);
         return this;
     }
 
@@ -377,18 +296,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> gt(FuncUtils<T> function, Object value) {
-        return gt(function, value, false);
-    }
-
-    /**
-     * 大于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> gt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        buildCondition(function, value, isEmpty, "%s > #{%s}", "__GT");
+        buildCondition(function, value, "%s > #{%s}", "__GT");
         return this;
     }
 
@@ -399,18 +307,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> ge(FuncUtils<T> function, Object value) {
-        return ge(function, value, false);
-    }
-
-    /**
-     * 大于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> ge(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        buildCondition(function, value, isEmpty, "%s >= #{%s}", "Ge");
+        buildCondition(function, value, "%s >= #{%s}", "__GE");
         return this;
     }
 
@@ -421,18 +318,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> lt(FuncUtils<T> function, Object value) {
-        return lt(function, value, false);
-    }
-
-    /**
-     * 小于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> lt(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        buildCondition(function, value, isEmpty, "%s < #{%s}", null);
+        buildCondition(function, value, "%s < #{%s}", null);
         return this;
     }
 
@@ -443,18 +329,7 @@ public abstract class Wrapper<T>  extends HashMap<String, Object> {
      * @return p
      */
     public Wrapper<T> le(FuncUtils<T> function, Object value) {
-        return le(function, value, false);
-    }
-
-    /**
-     * 小于等于
-     * @param function f
-     * @param value 值
-     * @param isEmpty 是否允许为空字符串
-     * @return p
-     */
-    public Wrapper<T> le(FuncUtils<T> function, Object value, Boolean isEmpty) {
-        buildCondition(function, value, isEmpty, "%s <= #{%s}", null);
+        buildCondition(function, value, "%s <= #{%s}", null);
         return this;
     }
 
