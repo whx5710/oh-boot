@@ -944,4 +944,19 @@ CREATE TABLE `sys_version_info`  (
 -- ----------------------------
 INSERT INTO `sys_version_info` VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 1, '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
 
+
+CREATE TABLE sys_error_log  (
+  `id` bigint NOT NULL,
+  `err_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误编码',
+  `msg` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误提示',
+  `stack_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '堆栈信息',
+  `err_time` datetime NOT NULL COMMENT '错误发生时间',
+  `trace_id` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链路跟踪ID',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `err_log_01`(`trace_id`) USING BTREE,
+  INDEX `err_log_02`(`err_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统错误日志' ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;
