@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * 
  */
 @RestController
-@RequestMapping("sys/code")
+@RequestMapping("/sys/code")
 public class CodeGeneratorController {
 
     private final CodeGenerator codeGenerator;

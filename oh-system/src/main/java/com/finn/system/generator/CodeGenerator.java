@@ -29,7 +29,7 @@ public class CodeGenerator {
     public static class GeneratorConfig {
         public static final String BASE_PACKAGE = "com.finn";
         public static final String MODULE_NAME = "oh-system";
-        public static final String TABLE_PREFIX = "t_";
+        public static final String TABLE_PREFIX = "sys_";
         public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".system";
         public static final String AUTHOR = "王小费 whx5710@qq.com";
 
@@ -108,7 +108,8 @@ public class CodeGenerator {
      * @return 表信息
      */
     public TableInfo getTableInfo(String tableName) throws SQLException {
-        try (Connection connection = dynamicDataSource.getPrimaryDb().getConnection()) {
+//        try (Connection connection = dynamicDataSource.getPrimaryDb().getConnection()) {
+        try (Connection connection = dynamicDataSource.getDs("sysDb").getConnection()) {
             TableInfo tableInfo = new TableInfo();
             tableInfo.setTableName(tableName);
             tableInfo.setEntityName(convertToEntityName(tableName));

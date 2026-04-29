@@ -10,3 +10,4 @@ auth:
     - /sys/params/getByKeys
     - /sys/info/latestVersion
     - /sys/user/register
+    - /sys/code/generate/*
