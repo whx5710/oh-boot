@@ -23,8 +23,8 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class JacksonConfig {
 
-    /** 时间格式(yyyy-MM-dd HH:mm:ss) */
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN);
+    /** 时间格式(yyyy-MM-dd HH:mm:ss.SSS) */
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_MIL_PATTERN);
     private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN);
 
     @Bean

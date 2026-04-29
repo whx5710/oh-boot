@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  *
  */
 @TableName("sys_error_log")
-public class ErrorLog extends IDEntity {
+public class ErrorLogEntity extends IDEntity {
     /**
      * 错误编码
      */

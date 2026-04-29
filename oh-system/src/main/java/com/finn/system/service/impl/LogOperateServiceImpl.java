@@ -92,7 +92,7 @@ public class LogOperateServiceImpl implements LogOperateService {
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
                     if(object == null){
-                        return;
+                        break;
                     }
                     OperateLogDTO log = (OperateLogDTO) object;
                     LogOperateEntity entity = LogOperateConvert.INSTANCE.convert(log);
@@ -101,6 +101,6 @@ public class LogOperateServiceImpl implements LogOperateService {
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 1, 20, TimeUnit.SECONDS);
+        }, 1, 120, TimeUnit.SECONDS);
     }
 }

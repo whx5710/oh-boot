@@ -1648,3 +1648,27 @@ ALTER TABLE "oh_sys"."qrtz_simprop_triggers" ADD CONSTRAINT "qrtz_simprop_trigge
 -- Foreign Keys structure for table qrtz_triggers
 -- ----------------------------
 ALTER TABLE "oh_sys"."qrtz_triggers" ADD CONSTRAINT "qrtz_triggers_fk" FOREIGN KEY ("sched_name", "job_name", "job_group") REFERENCES "oh_sys"."qrtz_job_details" ("sched_name", "job_name", "job_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+CREATE TABLE sys_error_log (
+   id bigint NOT NULL,
+   err_code varchar(20) NULL DEFAULT NULL,
+   msg varchar(300) NULL DEFAULT NULL,
+   stack_info text NULL,
+   err_time timestamp NOT NULL,
+   trace_id varchar(80) NOT NULL,
+   create_time timestamp NULL DEFAULT NULL,
+   tenant_id varchar(30) NULL DEFAULT NULL,
+   CONSTRAINT sys_error_log_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE sys_error_log IS '系统错误日志';
+COMMENT ON COLUMN sys_error_log.err_code IS '错误编码';
+COMMENT ON COLUMN sys_error_log.msg IS '错误提示';
+COMMENT ON COLUMN sys_error_log.stack_info IS '堆栈信息';
+COMMENT ON COLUMN sys_error_log.err_time IS '错误发生时间';
+COMMENT ON COLUMN sys_error_log.trace_id IS '链路跟踪ID';
+COMMENT ON COLUMN sys_error_log.create_time IS '创建时间';
+COMMENT ON COLUMN sys_error_log.tenant_id IS '租户ID';
+
+CREATE INDEX err_log_01 ON sys_error_log (trace_id);
+CREATE INDEX err_log_02 ON sys_error_log (err_time);

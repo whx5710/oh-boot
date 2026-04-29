@@ -1,6 +1,6 @@
 package com.finn.system.convert;
 
-import com.finn.system.entity.ErrorLog;
+import com.finn.system.entity.ErrorLogEntity;
 import com.finn.system.vo.ErrorLogVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,10 +18,10 @@ public interface ErrorLogConvert {
 
     ErrorLogConvert INSTANCE = Mappers.getMapper(ErrorLogConvert.class);
 
-    ErrorLog convert(ErrorLogVO vo);
+    ErrorLogEntity convert(ErrorLogVO vo);
 
-    ErrorLogVO convert(ErrorLog entity);
+    ErrorLogVO convert(ErrorLogEntity entity);
 
-    List<ErrorLogVO> convertList(List<ErrorLog> list);
+    List<ErrorLogVO> convertList(List<ErrorLogEntity> list);
 
 }

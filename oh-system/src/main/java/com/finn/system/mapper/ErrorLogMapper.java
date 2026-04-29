@@ -1,6 +1,6 @@
 package com.finn.system.mapper;
 
-import com.finn.system.entity.ErrorLog;
+import com.finn.system.entity.ErrorLogEntity;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  */
 @Mapper
-public interface ErrorLogMapper extends BaseMapper<ErrorLog> {
+public interface ErrorLogMapper extends BaseMapper<ErrorLogEntity> {
 
 }

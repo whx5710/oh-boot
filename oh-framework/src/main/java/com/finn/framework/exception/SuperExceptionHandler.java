@@ -4,7 +4,6 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.enums.ErrorCode;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.Result;
-import com.finn.framework.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import java.time.LocalDateTime;
 
 import static com.finn.framework.cache.RedisKeys.PREFIX;
-import static com.finn.framework.utils.DateUtils.DATE_TIME_MIL_PATTERN;
 
 
 /**
@@ -105,7 +103,7 @@ public class SuperExceptionHandler {
         // 默认缓存1小时
         HashDto dto = new HashDto();
         dto.put("stackInfo", msg);
-        dto.put("errTime", DateUtils.format(LocalDateTime.now(), DATE_TIME_MIL_PATTERN));
+        dto.put("errTime", LocalDateTime.now());
         dto.put("errCode", result.getCode());
         dto.put("msg", result.getMsg());
         dto.put("traceId", TraceIdUtils.getTraceId());
