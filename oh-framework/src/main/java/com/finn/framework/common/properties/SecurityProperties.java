@@ -27,6 +27,10 @@ public class SecurityProperties {
      */
     private Long lockTime = 0L;
     /**
+     * 是否开启系统错误日志记录
+     */
+    private Boolean errLog = false;
+    /**
      * 忽略路径
      */
     private List<String> ignoreUrls;
@@ -77,5 +81,13 @@ public class SecurityProperties {
 
     public void setIgnoreUrls(List<String> ignoreUrls) {
         this.ignoreUrls = ignoreUrls;
+    }
+
+    public Boolean getErrLog() {
+        return errLog;
+    }
+
+    public void setErrLog(Boolean errLog) {
+        this.errLog = errLog;
     }
 }

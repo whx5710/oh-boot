@@ -2,6 +2,7 @@ package com.finn.framework.exception;
 
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.enums.ErrorCode;
+import com.finn.framework.common.properties.SecurityProperties;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.Result;
 import org.slf4j.Logger;
@@ -31,9 +32,11 @@ public class SuperExceptionHandler {
     private final Logger log = LoggerFactory.getLogger(SuperExceptionHandler.class);
 
     private final RedisCache redisCache;
+    private final SecurityProperties securityProperties;
 
-    public SuperExceptionHandler(RedisCache redisCache){
+    public SuperExceptionHandler(RedisCache redisCache, SecurityProperties securityProperties){
         this.redisCache = redisCache;
+        this.securityProperties = securityProperties;
     }
 
     /**
@@ -90,7 +93,7 @@ public class SuperExceptionHandler {
     }
 
     /**
-     * 异常处理
+     * 未捕获的异常处理
      * @param ex
      * @return
      */
@@ -100,14 +103,16 @@ public class SuperExceptionHandler {
         log.error("系统出现异常！[{}] {}", TraceIdUtils.getTraceId(), msg, ex);
         Result<String> result = Result.error(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), ErrorCode.INTERNAL_SERVER_ERROR.getMsg());
 
-        // 默认缓存1小时
-        HashDto dto = new HashDto();
-        dto.put("stackInfo", msg);
-        dto.put("errTime", LocalDateTime.now());
-        dto.put("errCode", result.getCode());
-        dto.put("msg", result.getMsg());
-        dto.put("traceId", TraceIdUtils.getTraceId());
-        redisCache.leftPush(PREFIX + "error:msg", dto.toJson(), 3600);
+        // 默认缓存5分钟
+        if(securityProperties.getErrLog()){
+            HashDto dto = new HashDto();
+            dto.put("stackInfo", msg);
+            dto.put("errTime", LocalDateTime.now());
+            dto.put("errCode", result.getCode());
+            dto.put("msg", result.getMsg());
+            dto.put("traceId", TraceIdUtils.getTraceId());
+            redisCache.leftPush(PREFIX + "error:msg", dto.toJson(), 300);
+        }
         return result;
     }
 }
