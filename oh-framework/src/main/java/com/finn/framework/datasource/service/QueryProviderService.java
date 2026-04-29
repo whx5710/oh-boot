@@ -18,10 +18,6 @@ import static com.finn.framework.common.constant.Constant.PAGE_SIZE;
  */
 public class QueryProviderService {
 
-    public static final String SELECT_PAGE_PARAM = "selectPageByWrapper";
-
-    public static final String SELECT_LIST_PARAM = "selectListByWrapper";
-
     public static final String LIST_PARAM = "listByWrapper";
 
     public static final String FIND_BY_ID = "findById";
@@ -29,47 +25,25 @@ public class QueryProviderService {
     public static final String SELECT_COUNT_PARAM = "count";
 
     /**
-     * 通用单表查询
-     * @param fp 参数
-     * @return sql
-     * @param <T> 类
-     */
-    public <T> String selectPageByWrapper(QueryWrapper<T> fp){
-        return fp.getSql().toString();
-    }
-
-    /**
-     * 通用单表查询
-     * @param fp 参数
-     * @return sql
-     * @param <T> 类
-     */
-    public <T> String selectListByWrapper(QueryWrapper<T> fp){
-        // 优化：提取公共方法移除分页参数
-        removePageParams(fp);
-        return fp.getSql().toString();
-    }
-
-    /**
      * 通用单表查询，如果传入了分页参数，进行分页查询
-     * @param fp 参数
+     * @param queryWrapper 参数
      * @return sql
      * @param <T> 类
      */
-    public <T> String listByWrapper(QueryWrapper<T> fp){
-        return fp.getSql().toString();
+    public <T> String listByWrapper(QueryWrapper<T> queryWrapper){
+        return queryWrapper.getSql().toString();
     }
 
     /**
      * 通用汇总计数
-     * @param fp 参数
+     * @param countWrapper 参数
      * @return sql
      * @param <T> 类
      */
-    public <T> String count(CountWrapper<T> fp){
+    public <T> String count(CountWrapper<T> countWrapper){
         // 优化：提取公共方法移除分页参数
-        removePageParams(fp);
-        return fp.getSql().toString();
+        removePageParams(countWrapper);
+        return countWrapper.getSql().toString();
     }
 
     /**

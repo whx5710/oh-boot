@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.DateUtils;
 import com.finn.framework.utils.excel.ExcelUtils;
@@ -106,7 +107,7 @@ public class LogLoginServiceImpl implements LogLoginService {
         log.debug("删除{}条记录", i);
     }
 
-    private QueryWrapper<LogLoginEntity> buildParams(LogLoginQuery query){
+    private Wrapper<LogLoginEntity> buildParams(LogLoginQuery query){
         return QueryWrapper.of(LogLoginEntity.class)
                 .like(LogLoginEntity::getUsername, query.getUsername())
                 .like(LogLoginEntity::getAddress, query.getAddress())

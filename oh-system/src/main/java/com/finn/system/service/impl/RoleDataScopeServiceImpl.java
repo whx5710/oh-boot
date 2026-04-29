@@ -1,6 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.entity.RoleDataScopeEntity;
@@ -68,7 +69,7 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
                 .filter(element -> !deptIdList.contains(element))
                 .collect(Collectors.toList());
         if (!deleteDeptIdList.isEmpty()){
-            UpdateWrapper<RoleDataScopeEntity> updateWrapper = UpdateWrapper.of(RoleDataScopeEntity.class)
+            Wrapper<RoleDataScopeEntity> updateWrapper = UpdateWrapper.of(RoleDataScopeEntity.class)
                     .set(RoleDataScopeEntity::getDbStatus, 0)
                     .in(RoleDataScopeEntity::getDeptId, (List<Long>) deleteDeptIdList)
                     .eq(RoleDataScopeEntity::getRoleId, roleId);
@@ -83,7 +84,7 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
 
     @Override
     public void deleteByRoleIdList(List<Long> roleIdList) {
-        UpdateWrapper<RoleDataScopeEntity> updateWrapper = UpdateWrapper.of(RoleDataScopeEntity.class)
+        Wrapper<RoleDataScopeEntity> updateWrapper = UpdateWrapper.of(RoleDataScopeEntity.class)
                         .set(RoleDataScopeEntity::getDbStatus, 0)
                                 .in(RoleDataScopeEntity::getRoleId, roleIdList);
         roleDataScopeMapper.updateByWrapper(updateWrapper);

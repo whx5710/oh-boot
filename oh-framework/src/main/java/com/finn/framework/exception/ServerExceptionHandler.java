@@ -1,5 +1,6 @@
 package com.finn.framework.exception;
 
+import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.enums.ErrorCode;
 import com.finn.framework.entity.Result;
 import org.slf4j.Logger;
@@ -19,6 +20,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ServerExceptionHandler extends SuperExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(ServerExceptionHandler.class);
+
+    public ServerExceptionHandler(RedisCache redisCache) {
+        super(redisCache);
+    }
 
     /**
      * 403 没有权限，禁止访问

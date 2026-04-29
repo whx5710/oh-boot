@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.JsonUtils;
@@ -223,7 +224,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
      * @param query
      * @return
      */
-    private QueryWrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
+    private Wrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
         if(query == null){
             return QueryWrapper.of(ParamsEntity.class);
         }else{

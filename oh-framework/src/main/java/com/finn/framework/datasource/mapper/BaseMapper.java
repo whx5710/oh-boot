@@ -1,9 +1,8 @@
 package com.finn.framework.datasource.mapper;
 
-import com.finn.framework.aop.annotations.Pages;
 import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.framework.datasource.service.QueryProviderService;
-import com.finn.framework.datasource.wrapper.*;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -52,39 +51,20 @@ public interface BaseMapper<T>{
     boolean delete(T entity);
 
     /**
-     * 分页查询;需设置当前页和每页数量
-     * @param fp 使用QueryWrapper构建
-     * @return page
-     */
-    @Deprecated
-    @Pages
-    @SelectProvider(method = QueryProviderService.SELECT_PAGE_PARAM, type = QueryProviderService.class)
-    Page<T>  selectPageByWrapper(QueryWrapper<T> fp);
-
-    /**
-     * 查询列表
-     * @param fp QueryWrapper
-     * @return list
-     */
-    @Deprecated
-    @SelectProvider(method = QueryProviderService.SELECT_LIST_PARAM, type = QueryProviderService.class)
-    List<T> selectListByWrapper(QueryWrapper<T> fp);
-
-    /**
      * 通用单表查询，如果传入了分页参数，进行分页查询
-     * @param fp SQL构建
+     * @param queryWrapper QueryWrapper
      * @return list/page
      */
     @SelectProvider(method = QueryProviderService.LIST_PARAM, type = QueryProviderService.class)
-    Page<T> listByWrapper(QueryWrapper<T> fp);
+    Page<T> listByWrapper(Wrapper<T> queryWrapper);
 
     /**
      * 查询列表
-     * @param fp CountWrapper
+     * @param countWrapper CountWrapper
      * @return list
      */
     @SelectProvider(method = QueryProviderService.SELECT_COUNT_PARAM, type = QueryProviderService.class)
-    long count(CountWrapper<T> fp);
+    long count(Wrapper<T> countWrapper);
 
     /**
      * 根据ID查询数据
@@ -97,18 +77,18 @@ public interface BaseMapper<T>{
 
     /**
      * 删除接口
-     * @param fp 使用DeleteWrapper构建
+     * @param deleteWrapper 使用DeleteWrapper构建
      * @return 删除数量
      */
     @DeleteProvider(method = ModifyProviderService.DELETE_PARAM, type = ModifyProviderService.class)
-    Integer deleteByWrapper(DeleteWrapper<T> fp);
+    Integer deleteByWrapper(Wrapper<T> deleteWrapper);
 
     /**
      * 修改数据，set什么值就更新什么值
-     * @param fp 使用UpdateWrapper构建
+     * @param updateWrapper 使用UpdateWrapper构建
      * @return 更新数量
      */
     @UpdateProvider(method = ModifyProviderService.UPDATE_PARAM, type = ModifyProviderService.class)
-    Integer updateByWrapper(UpdateWrapper<T> fp);
+    Integer updateByWrapper(Wrapper<T> updateWrapper);
 
 }

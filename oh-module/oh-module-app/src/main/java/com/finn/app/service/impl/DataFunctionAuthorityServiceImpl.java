@@ -5,6 +5,7 @@ import com.finn.app.mapper.DataFunctionAuthorityMapper;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.exception.ServerException;
 import com.finn.app.convert.DataFunctionAuthorityConvert;
@@ -91,7 +92,7 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
             throw new ServerException("客户端不能为空");
         }
         if(i == 0){ // 删除
-            UpdateWrapper<DataFunctionAuthorityEntity> updateWrapper = UpdateWrapper.of(DataFunctionAuthorityEntity.class)
+            Wrapper<DataFunctionAuthorityEntity> updateWrapper = UpdateWrapper.of(DataFunctionAuthorityEntity.class)
                     .set(DataFunctionAuthorityEntity::getDbStatus, 0)
                     .eq(DataFunctionAuthorityEntity::getClientId, data.getClientId())
                     .eq(DataFunctionAuthorityEntity::getFuncCode, data.getFuncCode());

@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
@@ -59,7 +60,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
         AssertUtils.isNull(vo.getDeptId(), "根部门");
         TenantMemberEntity entity = TenantMemberConvert.INSTANCE.convert(vo);
         // 判断租户ID是否存在
-        QueryWrapper<TenantMemberEntity> params = QueryWrapper.of(TenantMemberEntity.class)
+        Wrapper<TenantMemberEntity> params = QueryWrapper.of(TenantMemberEntity.class)
                 .eq(TenantMemberEntity::getTenantId, entity.getTenantId()).eq(TenantMemberEntity::getDbStatus, 1);
         List<TenantMemberEntity> list = tenantMemberMapper.listByWrapper(params);
         if(list != null && !list.isEmpty()){
@@ -177,7 +178,7 @@ public class TenantMemberServiceImpl implements TenantMemberService {
      * @param query
      * @return
      */
-    private QueryWrapper<TenantMemberEntity> getQueryWrapper(TenantMemberQuery query){
+    private Wrapper<TenantMemberEntity> getQueryWrapper(TenantMemberQuery query){
         return QueryWrapper.of(TenantMemberEntity.class).eq(TenantMemberEntity::getDbStatus, 1)
                 .like(TenantMemberEntity::getTenantName, query.getTenantName())
                 .eq(TenantMemberEntity::getStatus, query.getStatus())

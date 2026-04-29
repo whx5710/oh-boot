@@ -1,6 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.convert.VersionInfoConvert;
@@ -31,7 +32,7 @@ public class VersionInfoServiceImpl implements VersionInfoService {
 
     @Override
     public PageResult<VersionInfoVO> page(VersionInfoQuery query) {
-        QueryWrapper<VersionInfoEntity> param = QueryWrapper.of(VersionInfoEntity.class)
+        Wrapper<VersionInfoEntity> param = QueryWrapper.of(VersionInfoEntity.class)
                 .eq(VersionInfoEntity::getIsCurrVersion, query.getCurrVersion())
                 .eq(VersionInfoEntity::getDbStatus, 1)
                 .pageNum(query.getPageNum()).pageSize(query.getPageSize())

@@ -1,7 +1,10 @@
 package com.finn.framework.exception;
 
+import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.enums.ErrorCode;
+import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.Result;
+import com.finn.framework.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,6 +14,11 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.time.LocalDateTime;
+
+import static com.finn.framework.cache.RedisKeys.PREFIX;
+import static com.finn.framework.utils.DateUtils.DATE_TIME_MIL_PATTERN;
 
 
 /**
@@ -23,6 +31,12 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class SuperExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(SuperExceptionHandler.class);
+
+    private final RedisCache redisCache;
+
+    public SuperExceptionHandler(RedisCache redisCache){
+        this.redisCache = redisCache;
+    }
 
     /**
      * 处理自定义异常
@@ -84,7 +98,18 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception ex) {
-        log.error("系统出现异常！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
-        return Result.error(ErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage());
+        String msg = ex.getMessage().strip();
+        log.error("系统出现异常！[{}] {}", TraceIdUtils.getTraceId(), msg, ex);
+        Result<String> result = Result.error(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), ErrorCode.INTERNAL_SERVER_ERROR.getMsg());
+
+        // 默认缓存1小时
+        HashDto dto = new HashDto();
+        dto.put("stackInfo", msg);
+        dto.put("errTime", DateUtils.format(LocalDateTime.now(), DATE_TIME_MIL_PATTERN));
+        dto.put("errCode", result.getCode());
+        dto.put("msg", result.getMsg());
+        dto.put("traceId", TraceIdUtils.getTraceId());
+        redisCache.leftPush(PREFIX + "error:msg", dto.toJson(), 3600);
+        return result;
     }
 }

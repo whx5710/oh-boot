@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.utils.excel.ExcelUtils;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.github.pagehelper.Page;
@@ -62,7 +63,7 @@ public class LogOperateServiceImpl implements LogOperateService {
      * @param query
      * @return
      */
-    private QueryWrapper<LogOperateEntity> getParams(LogOperateQuery query){
+    private Wrapper<LogOperateEntity> getParams(LogOperateQuery query){
         return QueryWrapper.of(LogOperateEntity.class)
                 .eq(LogOperateEntity::getStatus, query.getStatus())
                 .like(LogOperateEntity::getRealName, query.getRealName())

@@ -1,6 +1,7 @@
 package com.finn.app.service.impl;
 
 import com.finn.app.convert.DataMsgConvert;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
@@ -94,7 +95,7 @@ public class DataMsgServiceImpl implements DataMsgService {
      */
     @Override
     public void deleteByDate(String date) {
-        UpdateWrapper<DataMsgEntity> updateWrapper = UpdateWrapper.of(DataMsgEntity.class)
+        Wrapper<DataMsgEntity> updateWrapper = UpdateWrapper.of(DataMsgEntity.class)
                 .set(DataMsgEntity::getDbStatus, 0).eq(DataMsgEntity::getDbStatus, 1)
                 .le(DataMsgEntity::getCreateTime, DateUtils.parseLocalDateTime(date));
         dataMessageMapper.updateByWrapper(updateWrapper);

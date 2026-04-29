@@ -1,6 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.system.entity.UserPostEntity;
 import com.finn.system.mapper.UserPostMapper;
@@ -66,14 +67,14 @@ public class UserPostServiceImpl implements UserPostService {
 
     @Override
     public void deleteByPostIdList(List<Long> postIdList) {
-        UpdateWrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
+        Wrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
                 .in(UserPostEntity::getPostId, postIdList);
         userPostMapper.updateByWrapper(updateWrapper);
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        UpdateWrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
+        Wrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
                 .in(UserPostEntity::getUserId, userIdList);
         userPostMapper.updateByWrapper(updateWrapper);
     }

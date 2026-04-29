@@ -287,22 +287,22 @@ public class ModifyProviderService {
 
     /**
      * 删除
-     * @param fp 删除条件构造器
+     * @param deleteWrapper 删除条件构造器
      * @return sql
      * @param <T> t
      */
-    public <T> String deleteByWrapper(DeleteWrapper<T> fp){
-        return fp.getSql().toString();
+    public <T> String deleteByWrapper(DeleteWrapper<T> deleteWrapper){
+        return deleteWrapper.getSql().toString();
     }
 
     /**
      * 修改sql
-     * @param fp 参数 + sql
+     * @param updateWrapper 参数 + sql
      * @return sql
      * @param <T> c
      */
-    public <T> String updateByWrapper(UpdateWrapper<T> fp){
-        return fp.getSql().toString();
+    public <T> String updateByWrapper(UpdateWrapper<T> updateWrapper){
+        return updateWrapper.getSql().toString();
     }
 
 }
