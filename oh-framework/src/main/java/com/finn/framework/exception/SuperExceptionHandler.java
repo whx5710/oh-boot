@@ -2,7 +2,7 @@ package com.finn.framework.exception;
 
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.enums.ErrorCode;
-import com.finn.framework.common.properties.SecurityProperties;
+import com.finn.framework.common.properties.CommonProperty;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.Result;
 import org.slf4j.Logger;
@@ -32,11 +32,11 @@ public class SuperExceptionHandler {
     private final Logger log = LoggerFactory.getLogger(SuperExceptionHandler.class);
 
     private final RedisCache redisCache;
-    private final SecurityProperties securityProperties;
+    private final CommonProperty commonProperty;
 
-    public SuperExceptionHandler(RedisCache redisCache, SecurityProperties securityProperties){
+    public SuperExceptionHandler(RedisCache redisCache, CommonProperty commonProperty){
         this.redisCache = redisCache;
-        this.securityProperties = securityProperties;
+        this.commonProperty = commonProperty;
     }
 
     /**
@@ -111,16 +111,23 @@ public class SuperExceptionHandler {
      * @param ex 异常
      */
     private void cacheErrorLog(Result<String> result, Exception ex){
-        // 默认缓存5分钟
-        if(securityProperties.getErrLog()){
-            String msg = ex.getMessage().strip();
-            HashDto dto = new HashDto();
-            dto.put("stackInfo", msg);
-            dto.put("errTime", LocalDateTime.now());
-            dto.put("errCode", result.getCode());
-            dto.put("msg", result.getMsg());
-            dto.put("traceId", TraceIdUtils.getTraceId());
-            redisCache.leftPush(PREFIX + "error:msg", dto.toJson(), 300);
+        // 默认缓存5分钟，缓存时间要与消费总时间相匹配，如果消费时间比缓存时间长，那么就会造成缓存的错误日志丢失
+        if(commonProperty.getErrLogCache()){
+            String key = PREFIX + "error:msg";
+            Long size = redisCache.getListSize(key);
+            if(size <= commonProperty.getLogCacheMaxSize()){
+                String msg = ex.getMessage().strip();
+                HashDto dto = new HashDto();
+                dto.put("stackInfo", msg);
+                dto.put("errTime", LocalDateTime.now());
+                dto.put("errCode", result.getCode());
+                dto.put("msg", result.getMsg());
+                dto.put("traceId", TraceIdUtils.getTraceId()); // 链路跟踪ID
+                dto.put("queueSize", size); // 队列大小
+                redisCache.leftPush(key, dto.toJson(), commonProperty.getLogCacheTime());
+            }else{
+                log.warn("错误日志缓存超出最大数量！{}", commonProperty.getLogCacheMaxSize());
+            }
         }
     }
 }

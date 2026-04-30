@@ -205,7 +205,7 @@ public class RedisCache {
     }
 
     /**
-     *
+     * 推送数据到list表
      * @param key
      * @param value
      * @param expire 时长-秒
@@ -217,10 +217,24 @@ public class RedisCache {
         }
     }
 
+    /**
+     * 从list表拉取数据
+     * @param key 键
+     * @return obj
+     */
     public Object rightPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
     }
 
+    /**
+     * 获取list大小
+     * @param key 键
+     * @return 大小
+     */
+    public Long getListSize(String key) {
+        Long size = redisTemplate.opsForList().size(key);
+        return size != null ? size : 0L;
+    }
 
     /**
      * redis key的层级不能超过3层（）

@@ -1,6 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.cache.RedisCache;
+import com.finn.framework.common.properties.CommonProperty;
 import com.finn.framework.utils.ExceptionUtils;
 import com.finn.framework.utils.JsonUtils;
 import com.finn.system.entity.ErrorLogEntity;
@@ -30,26 +31,35 @@ public class ErrorLogServiceImpl implements ErrorLogService {
 
     private final static Logger log = LoggerFactory.getLogger(ErrorLogServiceImpl.class);
 
+    // 60秒执行一次
+    int time = 60;
+
     private final ErrorLogMapper errorLogMapper;
     private final RedisCache redisCache;
-    public ErrorLogServiceImpl(ErrorLogMapper errorLogMapper, RedisCache redisCache) {
+    private final CommonProperty commonProperty;
+
+    public ErrorLogServiceImpl(ErrorLogMapper errorLogMapper, RedisCache redisCache, CommonProperty commonProperty) {
         this.errorLogMapper = errorLogMapper;
         this.redisCache = redisCache;
+        this.commonProperty = commonProperty;
     }
 
     /**
      * 启动项目时，从Redis队列获取操作日志并保存
+     *
      */
     @PostConstruct
     public void saveLog() {
         ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
 
+        // 每次插入条数，每次插入的数据要根据缓存时间、最大缓存量计算
+        int minite = Math.toIntExact((commonProperty.getLogCacheTime() / time))<=0?1:Math.toIntExact((commonProperty.getLogCacheTime() / time));
+        int count = Math.toIntExact((commonProperty.getLogCacheMaxSize() / minite));
+
         // 每隔60秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
                 String key = PREFIX + "error:msg";
-                // 每次插入50条
-                int count = 50;
                 List<ErrorLogEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
@@ -57,21 +67,24 @@ public class ErrorLogServiceImpl implements ErrorLogService {
                         break;
                     }
                     ErrorLogEntity e = JsonUtils.parseObject(object.toString(), ErrorLogEntity.class);
+                    e.setQueueSize(Math.toIntExact(redisCache.getListSize(key)));
                     list.add(e);
                 }
                 if(!list.isEmpty()){
                     int i = list.size();
-                    log.debug("保存错误日志{}条", i);
                     if(i == count){
-                        list.forEach(item -> {
+                        for (ErrorLogEntity item : list) {
                             item.setNote("警告：错误日志过多，请排查");
-                        });
+                            long score = Math.min((item.getQueueSize() *10 / commonProperty.getLogCacheMaxSize()) + 1, 10);
+                            item.setScore((int) score);
+                        }
                     }
-                    errorLogMapper.insertBatch(list);
+                    long l = errorLogMapper.insertBatch(list);
+                    log.debug("保存错误日志{}条", l);
                 }
             } catch (Exception e) {
                 log.error("保存错误日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 1, 60, TimeUnit.SECONDS);
+        }, 1, time, TimeUnit.SECONDS);
     }
 }

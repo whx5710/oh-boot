@@ -953,6 +953,8 @@ CREATE TABLE sys_error_log  (
   `err_time` datetime NOT NULL COMMENT '错误发生时间',
   `trace_id` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链路跟踪ID',
   `note` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `score` int NULL DEFAULT NULL COMMENT '队列拥挤程度0-10',
+  `queue_size` int NULL DEFAULT NULL COMMENT '队列大小',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
   PRIMARY KEY (`id`) USING BTREE,

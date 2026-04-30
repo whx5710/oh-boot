@@ -43,6 +43,16 @@ public class ErrorLogEntity extends IDEntity {
     private String note;
 
     /**
+     * 队列拥挤程度0-10
+     */
+    private Integer score = 0;
+    /**
+     * 队列大小
+     */
+    @TableField("queue_size")
+    private Integer queueSize = 0;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")
@@ -122,5 +132,21 @@ public class ErrorLogEntity extends IDEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getQueueSize() {
+        return queueSize;
+    }
+
+    public void setQueueSize(Integer queueSize) {
+        this.queueSize = queueSize;
     }
 }
