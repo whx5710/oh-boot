@@ -48,7 +48,7 @@ public class ErrorLogServiceImpl implements ErrorLogService {
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
                 String key = PREFIX + "error:msg";
-                // 每次插入10条
+                // 每次插入50条
                 int count = 50;
                 List<ErrorLogEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
@@ -60,7 +60,13 @@ public class ErrorLogServiceImpl implements ErrorLogService {
                     list.add(e);
                 }
                 if(!list.isEmpty()){
-                    log.debug("保存错误日志{}条", list.size());
+                    int i = list.size();
+                    log.debug("保存错误日志{}条", i);
+                    if(i == count){
+                        list.forEach(item -> {
+                            item.setNote("警告：错误日志过多，请排查");
+                        });
+                    }
                     errorLogMapper.insertBatch(list);
                 }
             } catch (Exception e) {

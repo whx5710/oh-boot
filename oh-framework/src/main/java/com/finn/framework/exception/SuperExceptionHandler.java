@@ -99,12 +99,21 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception ex) {
-        String msg = ex.getMessage().strip();
-        log.error("系统出现异常！[{}] {}", TraceIdUtils.getTraceId(), msg, ex);
+        log.error("系统出现异常！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage().strip(), ex);
         Result<String> result = Result.error(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), ErrorCode.INTERNAL_SERVER_ERROR.getMsg());
+        cacheErrorLog(result, ex);
+        return result;
+    }
 
+    /**
+     * 缓存日志,缓存时间不要太长，防止恶意攻击导致redis内存溢出
+     * @param result 响应结果
+     * @param ex 异常
+     */
+    private void cacheErrorLog(Result<String> result, Exception ex){
         // 默认缓存5分钟
         if(securityProperties.getErrLog()){
+            String msg = ex.getMessage().strip();
             HashDto dto = new HashDto();
             dto.put("stackInfo", msg);
             dto.put("errTime", LocalDateTime.now());
@@ -113,6 +122,5 @@ public class SuperExceptionHandler {
             dto.put("traceId", TraceIdUtils.getTraceId());
             redisCache.leftPush(PREFIX + "error:msg", dto.toJson(), 300);
         }
-        return result;
     }
 }

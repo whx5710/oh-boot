@@ -38,6 +38,11 @@ public class ErrorLogEntity extends IDEntity {
     private LocalDateTime errTime;
 
     /**
+     * 备注
+     */
+    private String note;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")
@@ -109,5 +114,13 @@ public class ErrorLogEntity extends IDEntity {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

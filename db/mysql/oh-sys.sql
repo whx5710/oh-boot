@@ -952,6 +952,7 @@ CREATE TABLE sys_error_log  (
   `stack_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '堆栈信息',
   `err_time` datetime NOT NULL COMMENT '错误发生时间',
   `trace_id` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链路跟踪ID',
+  `note` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
   PRIMARY KEY (`id`) USING BTREE,

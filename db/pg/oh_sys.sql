@@ -1656,6 +1656,7 @@ CREATE TABLE sys_error_log (
    stack_info text NULL,
    err_time timestamp NOT NULL,
    trace_id varchar(80) NOT NULL,
+   note varchar(100) NULL DEFAULT NULL,
    create_time timestamp NULL DEFAULT NULL,
    tenant_id varchar(30) NULL DEFAULT NULL,
    CONSTRAINT sys_error_log_pkey PRIMARY KEY (id)
@@ -1667,6 +1668,7 @@ COMMENT ON COLUMN sys_error_log.msg IS '错误提示';
 COMMENT ON COLUMN sys_error_log.stack_info IS '堆栈信息';
 COMMENT ON COLUMN sys_error_log.err_time IS '错误发生时间';
 COMMENT ON COLUMN sys_error_log.trace_id IS '链路跟踪ID';
+COMMENT ON COLUMN sys_error_log.note IS '备注';
 COMMENT ON COLUMN sys_error_log.create_time IS '创建时间';
 COMMENT ON COLUMN sys_error_log.tenant_id IS '租户ID';
 
