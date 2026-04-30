@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.finn.system.generator.CodeGenerator.GeneratorConfig.FRAMEWORK_PACKAGE;
+
 /**
  * 代码生成器核心类
  *
@@ -34,7 +36,6 @@ public class CodeGenerator {
         public static final String AUTHOR = "王小费 whx5710@qq.com";
 
         public static final String FRAMEWORK_PACKAGE = BASE_PACKAGE + ".framework";
-        public static final String CORE_PACKAGE = BASE_PACKAGE + ".core";
         
         public static final String ENTITY_PACKAGE = SYSTEM_PACKAGE + ".entity";
         public static final String MAPPER_PACKAGE = SYSTEM_PACKAGE + ".mapper";
@@ -45,12 +46,12 @@ public class CodeGenerator {
         public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";
         public static final String CONTROLLER_PACKAGE = SYSTEM_PACKAGE + ".controller";
         
-        public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".datasource.annotations.TableName";
+        public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".aop.annotations.TableName";
         public static final String TENANT_ENTITY = FRAMEWORK_PACKAGE + ".entity.TenantEntity";
-        public static final String PAGES_ANNOTATION = FRAMEWORK_PACKAGE + ".datasource.annotations.Pages";
+        public static final String PAGES_ANNOTATION = FRAMEWORK_PACKAGE + ".aop.annotations.Pages";
         public static final String QUERY_BASE = FRAMEWORK_PACKAGE + ".query.Query";
-        public static final String PAGE_RESULT = CORE_PACKAGE + ".utils.PageResult";
-        public static final String RESULT = CORE_PACKAGE + ".utils.Result";
+        public static final String PAGE_RESULT = FRAMEWORK_PACKAGE + ".entity.PageResult";
+        public static final String RESULT = FRAMEWORK_PACKAGE + ".entity.Result";
         public static final String SERVICE_ANNOTATION = "org.springframework.stereotype.Service";
         
         public static final String JAVA_SOURCE_PATH = "/src/main/java/";
@@ -550,8 +551,8 @@ public class CodeGenerator {
     public String generateController(TableInfo tableInfo) {
         StringBuilder sb = new StringBuilder();
         sb.append("package " + GeneratorConfig.CONTROLLER_PACKAGE + ";\n\n");
-        sb.append("import com.finn.framework.operatelog.annotations.Log;\n");
-        sb.append("import com.finn.framework.operatelog.enums.OperateTypeEnum;\n");
+        sb.append("import " + FRAMEWORK_PACKAGE + ".aop.annotations.Log;\n");
+        sb.append("import " + FRAMEWORK_PACKAGE + ".common.enums.OperateTypeEnum;\n");
         sb.append("import " + GeneratorConfig.PAGE_RESULT + ";\n");
         sb.append("import " + GeneratorConfig.RESULT + ";\n");
         sb.append("import " + GeneratorConfig.QUERY_PACKAGE + ".").append(tableInfo.getQueryName()).append(";\n");
