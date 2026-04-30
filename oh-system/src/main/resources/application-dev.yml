@@ -10,6 +10,11 @@ server:
     context-path: /
     session.cookie.http-only: true
 finn:
+  # 框架公共配置
+  common:
+    err-log-cache: true            # 是否开启系统错误日志记录
+    log-cache-time: 300            # 日志默认缓存时间 300秒
+    log-cache-max-size: 1000       # 日志默认缓存最大数量
   multi-tenant: # 多租户配置
     tenant-id-field: tenant_id # 隔离字段名称，默认tenant_id
     table-pattern: ^t_.* # 需要隔离的表名称（正则表达式）
