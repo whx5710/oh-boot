@@ -1,5 +1,7 @@
 package com.finn.system.vo;
 
+import com.finn.framework.aop.annotations.TableField;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -59,6 +61,20 @@ public class ErrorLogVO implements Serializable {
      * 租户名称
      */
     private String tenantName;
+
+    /**
+     * 备注
+     */
+    private String note;
+
+    /**
+     * 队列拥挤程度0-10
+     */
+    private Integer score;
+    /**
+     * 队列大小
+     */
+    private Integer queueSize;
 
     public Long getId() {
         return id;
@@ -130,5 +146,29 @@ public class ErrorLogVO implements Serializable {
 
     public void setTenantName(String tenantName) {
         this.tenantName = tenantName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getQueueSize() {
+        return queueSize;
+    }
+
+    public void setQueueSize(Integer queueSize) {
+        this.queueSize = queueSize;
     }
 }

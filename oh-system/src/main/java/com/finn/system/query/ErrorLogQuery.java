@@ -18,24 +18,24 @@ public class ErrorLogQuery extends Query {
     private String errCode;
 
     /**
-     * 错误提示
+     * 错误发生开始时间
      */
-    private String msg;
+    private LocalDateTime startErrTime;
 
     /**
-     * 堆栈信息
+     * 错误发生结束时间
      */
-    private String stackInfo;
-
-    /**
-     * 错误发生时间
-     */
-    private LocalDateTime errTime;
+    private LocalDateTime endErrTime;
 
     /**
      * 链路跟踪ID
      */
     private String traceId;
+
+    /**
+     * 租户ID
+     */
+    private String tenantId;
 
     public String getErrCode() {
         return errCode;
@@ -45,28 +45,20 @@ public class ErrorLogQuery extends Query {
         this.errCode = errCode;
     }
 
-    public String getMsg() {
-        return msg;
+    public LocalDateTime getStartErrTime() {
+        return startErrTime;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setStartErrTime(LocalDateTime startErrTime) {
+        this.startErrTime = startErrTime;
     }
 
-    public String getStackInfo() {
-        return stackInfo;
+    public LocalDateTime getEndErrTime() {
+        return endErrTime;
     }
 
-    public void setStackInfo(String stackInfo) {
-        this.stackInfo = stackInfo;
-    }
-
-    public LocalDateTime getErrTime() {
-        return errTime;
-    }
-
-    public void setErrTime(LocalDateTime errTime) {
-        this.errTime = errTime;
+    public void setEndErrTime(LocalDateTime endErrTime) {
+        this.endErrTime = endErrTime;
     }
 
     public String getTraceId() {
@@ -77,4 +69,11 @@ public class ErrorLogQuery extends Query {
         this.traceId = traceId;
     }
 
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 }

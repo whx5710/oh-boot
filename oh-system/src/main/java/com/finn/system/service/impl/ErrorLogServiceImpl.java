@@ -1,12 +1,19 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.cache.RedisCache;
+import com.finn.framework.common.constant.Constant;
 import com.finn.framework.common.properties.CommonProperty;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.entity.PageResult;
 import com.finn.framework.utils.ExceptionUtils;
 import com.finn.framework.utils.JsonUtils;
+import com.finn.system.convert.ErrorLogConvert;
 import com.finn.system.entity.ErrorLogEntity;
 import com.finn.system.mapper.ErrorLogMapper;
+import com.finn.system.query.ErrorLogQuery;
 import com.finn.system.service.ErrorLogService;
+import com.finn.system.vo.ErrorLogVO;
+import com.github.pagehelper.Page;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +82,7 @@ public class ErrorLogServiceImpl implements ErrorLogService {
                     if(i == count){
                         for (ErrorLogEntity item : list) {
                             item.setNote("警告：错误日志过多，请排查");
-                            long score = Math.min((item.getQueueSize() *10 / commonProperty.getLogCacheMaxSize()) + 1, 10);
+                            long score = Math.min((item.getQueueSize() * 10L / commonProperty.getLogCacheMaxSize()) + 1, 10);
                             item.setScore((int) score);
                         }
                     }
@@ -86,5 +93,34 @@ public class ErrorLogServiceImpl implements ErrorLogService {
                 log.error("保存错误日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
         }, 1, time, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public PageResult<ErrorLogVO> page(ErrorLogQuery query) {
+        QueryWrapper<ErrorLogEntity> wrapper = QueryWrapper.of(ErrorLogEntity.class);
+        wrapper.eq(ErrorLogEntity::getTraceId, query.getTraceId())
+                        .like(ErrorLogEntity::getTenantId, query.getTenantId())
+                        .le(ErrorLogEntity::getErrTime, query.getEndErrTime())
+                        .ge(ErrorLogEntity::getErrTime, query.getStartErrTime())
+                .orderBy(ErrorLogEntity::getErrTime, Constant.DESC)
+                .page(query.getPageNum(), query.getPageSize());
+        try (Page<ErrorLogEntity> page = errorLogMapper.listByWrapper(wrapper)) {
+            return new PageResult<>(ErrorLogConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        }
+    }
+
+    @Override
+    public void export(ErrorLogQuery query) {
+
+    }
+
+    @Override
+    public long delete(List<Long> idList) {
+        return 0;
+    }
+
+    @Override
+    public long deleteByDate(String date) {
+        return 0;
     }
 }

@@ -1,6 +1,14 @@
 package com.finn.system.controller;
 
+import com.finn.framework.aop.annotations.Log;
+import com.finn.framework.common.enums.OperateTypeEnum;
+import com.finn.framework.entity.PageResult;
+import com.finn.framework.entity.Result;
+import com.finn.system.query.ErrorLogQuery;
 import com.finn.system.service.ErrorLogService;
+import com.finn.system.vo.ErrorLogVO;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +21,7 @@ import java.util.List;
  * 
  */
 @RestController
-@RequestMapping("sys/error_log")
+@RequestMapping("/sys/errorLog")
 public class ErrorLogController {
     private final ErrorLogService errorLogService;
 
@@ -21,4 +29,49 @@ public class ErrorLogController {
         this.errorLogService = errorLogService;
     }
 
+    /**
+     * 分页
+     * @param query 查询参数
+     * @return 集合
+     */
+    @GetMapping("/page")
+    @PreAuthorize("hasAuthority('sys:error:log')")
+    public Result<PageResult<ErrorLogVO>> page(@Valid ErrorLogQuery query) {
+        PageResult<ErrorLogVO> page = errorLogService.page(query);
+        return Result.ok(page);
+    }
+
+    /**
+     * 导出excel
+     */
+    @GetMapping("/export")
+    @Log(module = "登录日志", name = "导出登录日志", type = OperateTypeEnum.EXPORT)
+    @PreAuthorize("hasAuthority('sys:error:log')")
+    public void export(ErrorLogQuery query) {
+        errorLogService.export(query);
+    }
+
+    /**
+     * 删除
+     * @param idList id集合
+     * @return str
+     */
+    @PostMapping("/del")
+    @PreAuthorize("hasAuthority('sys:error:log:delete')")
+    public Result<String> delete(@RequestBody List<Long> idList){
+        errorLogService.delete(idList);
+        return Result.ok();
+    }
+
+    /**
+     * 根据日期删除日志（删除日期之前的数据）
+     * @param date
+     * @return
+     */
+    @GetMapping("/deleteByDate/{date}")
+    @PreAuthorize("hasAuthority('sys:error:log:delete')")
+    public Result<String> deleteByDate(@PathVariable("date")String date){
+        errorLogService.deleteByDate(date);
+        return Result.ok();
+    }
 }

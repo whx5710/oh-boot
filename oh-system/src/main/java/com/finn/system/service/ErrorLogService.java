@@ -1,5 +1,11 @@
 package com.finn.system.service;
 
+import com.finn.framework.entity.PageResult;
+import com.finn.system.query.ErrorLogQuery;
+import com.finn.system.vo.ErrorLogVO;
+
+import java.util.List;
+
 /**
  * 系统错误日志
  *
@@ -8,5 +14,11 @@ package com.finn.system.service;
  *
  */
 public interface ErrorLogService {
+    PageResult<ErrorLogVO> page(ErrorLogQuery query);
 
+    void export(ErrorLogQuery query);
+
+    long delete(List<Long> idList);
+
+    long deleteByDate(String date);
 }
