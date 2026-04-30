@@ -12,7 +12,7 @@
  Target Server Version : 180003 (180003)
  File Encoding         : 65001
 
- Date: 15/04/2026 21:31:36
+ Date: 30/04/2026 21:35:48
 */
 
 
@@ -790,6 +790,43 @@ INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_sour
 COMMIT;
 
 -- ----------------------------
+-- Table structure for sys_error_log
+-- ----------------------------
+DROP TABLE IF EXISTS "oh_sys"."sys_error_log";
+CREATE TABLE "oh_sys"."sys_error_log" (
+  "id" int8 NOT NULL,
+  "err_code" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "msg" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "stack_info" text COLLATE "pg_catalog"."default",
+  "err_time" timestamp(6) NOT NULL,
+  "trace_id" varchar(80) COLLATE "pg_catalog"."default" NOT NULL,
+  "note" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "score" int4,
+  "queue_size" int4,
+  "create_time" timestamp(6),
+  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+)
+;
+ALTER TABLE "oh_sys"."sys_error_log" OWNER TO "postgres";
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."err_code" IS '错误编码';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."msg" IS '错误提示';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."stack_info" IS '堆栈信息';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."err_time" IS '错误发生时间';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."trace_id" IS '链路跟踪ID';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."note" IS '备注';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."score" IS '队列拥挤程度0-10';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."queue_size" IS '队列大小';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."tenant_id" IS '租户ID';
+COMMENT ON TABLE "oh_sys"."sys_error_log" IS '系统错误日志';
+
+-- ----------------------------
+-- Records of sys_error_log
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for sys_log_login
 -- ----------------------------
 DROP TABLE IF EXISTS "oh_sys"."sys_log_login";
@@ -1438,243 +1475,16 @@ INSERT INTO "oh_sys"."sys_version_info" ("id", "version_num", "title", "content"
 COMMIT;
 
 -- ----------------------------
--- Primary Key structure for table online_table_column
--- ----------------------------
-ALTER TABLE "oh_sys"."online_table_column" ADD CONSTRAINT "online_table_column_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table qrtz_blob_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_blob_triggers" ADD CONSTRAINT "qrtz_blob_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_calendars
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_calendars" ADD CONSTRAINT "qrtz_calendars_pkey" PRIMARY KEY ("sched_name", "calendar_name");
-
--- ----------------------------
--- Primary Key structure for table qrtz_cron_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_cron_triggers" ADD CONSTRAINT "qrtz_cron_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_fired_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_fired_triggers" ADD CONSTRAINT "qrtz_fired_triggers_pkey" PRIMARY KEY ("sched_name", "entry_id");
-
--- ----------------------------
--- Primary Key structure for table qrtz_job_details
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_job_details" ADD CONSTRAINT "qrtz_job_details_pkey" PRIMARY KEY ("sched_name", "job_name", "job_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_locks
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_locks" ADD CONSTRAINT "qrtz_locks_pkey" PRIMARY KEY ("sched_name", "lock_name");
-
--- ----------------------------
--- Primary Key structure for table qrtz_paused_trigger_grps
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_paused_trigger_grps" ADD CONSTRAINT "qrtz_paused_trigger_grps_pkey" PRIMARY KEY ("sched_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_scheduler_state
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_scheduler_state" ADD CONSTRAINT "qrtz_scheduler_state_pkey" PRIMARY KEY ("sched_name", "instance_name");
-
--- ----------------------------
--- Primary Key structure for table qrtz_simple_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simple_triggers" ADD CONSTRAINT "qrtz_simple_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_simprop_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simprop_triggers" ADD CONSTRAINT "qrtz_simprop_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_triggers" ADD CONSTRAINT "qrtz_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table schedule_job
--- ----------------------------
-ALTER TABLE "oh_sys"."schedule_job" ADD CONSTRAINT "schedule_job_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table schedule_job_log
--- ----------------------------
-ALTER TABLE "oh_sys"."schedule_job_log" ADD CONSTRAINT "schedule_job_log_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sms_log
--- ----------------------------
-ALTER TABLE "oh_sys"."sms_log" ADD CONSTRAINT "sms_log_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sms_platform
--- ----------------------------
-ALTER TABLE "oh_sys"."sms_platform" ADD CONSTRAINT "sms_platform_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_attachment
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_attachment" ADD CONSTRAINT "sys_attachment_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_dept
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_dept" ADD CONSTRAINT "sys_dept_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_dict_data
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_dict_data" ADD CONSTRAINT "sys_dict_data_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_dict_type
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_dict_type" ADD CONSTRAINT "sys_dict_type_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_log_login
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_log_login" ADD CONSTRAINT "sys_log_login_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_log_operate
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_log_operate" ADD CONSTRAINT "sys_log_operate_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_menu
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_menu" ADD CONSTRAINT "sys_menu_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_message
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_message" ADD CONSTRAINT "sys_message_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Uniques structure for table sys_params
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_params" ADD CONSTRAINT "sys_params_param_key_key" UNIQUE ("param_key");
-
--- ----------------------------
--- Primary Key structure for table sys_params
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_params" ADD CONSTRAINT "sys_params_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_post
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_post" ADD CONSTRAINT "sys_post_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_role
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_role" ADD CONSTRAINT "sys_role_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_role_data_scope
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_role_data_scope" ADD CONSTRAINT "sys_role_data_scope_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_role_menu
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_role_menu" ADD CONSTRAINT "sys_role_menu_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Uniques structure for table sys_tenant_member
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_tenant_member" ADD CONSTRAINT "sys_tenant_member_tenant_id_key" UNIQUE ("tenant_id");
-
--- ----------------------------
--- Primary Key structure for table sys_tenant_member
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_tenant_member" ADD CONSTRAINT "sys_tenant_member_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_user
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_user" ADD CONSTRAINT "sys_user_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_user_post
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_user_post" ADD CONSTRAINT "sys_user_post_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_user_role
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_user_role" ADD CONSTRAINT "sys_user_role_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table sys_version_info
--- ----------------------------
-CREATE INDEX "idx_01" ON "oh_sys"."sys_version_info" USING btree (
-  "is_curr_version" "pg_catalog"."int2_ops" ASC NULLS LAST
+-- Indexes structure for table sys_error_log
+-- ----------------------------
+CREATE INDEX "err_log_01" ON "oh_sys"."sys_error_log" USING btree (
+  "trace_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "err_log_02" ON "oh_sys"."sys_error_log" USING btree (
+  "err_time" "pg_catalog"."timestamp_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
--- Primary Key structure for table sys_version_info
+-- Primary Key structure for table sys_error_log
 -- ----------------------------
-ALTER TABLE "oh_sys"."sys_version_info" ADD CONSTRAINT "sys_version_info_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_blob_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_blob_triggers" ADD CONSTRAINT "qrtz_blob_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_cron_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_cron_triggers" ADD CONSTRAINT "qrtz_cron_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_simple_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simple_triggers" ADD CONSTRAINT "qrtz_simple_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_simprop_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simprop_triggers" ADD CONSTRAINT "qrtz_simprop_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_triggers" ADD CONSTRAINT "qrtz_triggers_fk" FOREIGN KEY ("sched_name", "job_name", "job_group") REFERENCES "oh_sys"."qrtz_job_details" ("sched_name", "job_name", "job_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-CREATE TABLE sys_error_log (
-   id bigint NOT NULL,
-   err_code varchar(20) NULL DEFAULT NULL,
-   msg varchar(300) NULL DEFAULT NULL,
-   stack_info text NULL,
-   err_time timestamp NOT NULL,
-   trace_id varchar(80) NOT NULL,
-   note varchar(100) NULL DEFAULT NULL,
-   score int4,
-   queue_size int4,
-   create_time timestamp NULL DEFAULT NULL,
-   tenant_id varchar(30) NULL DEFAULT NULL,
-   CONSTRAINT sys_error_log_pkey PRIMARY KEY (id)
-);
-
-COMMENT ON TABLE sys_error_log IS '系统错误日志';
-COMMENT ON COLUMN sys_error_log.err_code IS '错误编码';
-COMMENT ON COLUMN sys_error_log.msg IS '错误提示';
-COMMENT ON COLUMN sys_error_log.stack_info IS '堆栈信息';
-COMMENT ON COLUMN sys_error_log.err_time IS '错误发生时间';
-COMMENT ON COLUMN sys_error_log.trace_id IS '链路跟踪ID';
-COMMENT ON COLUMN sys_error_log.note IS '备注';
-COMMENT ON COLUMN sys_error_log.score IS '队列拥挤程度0-10';
-COMMENT ON COLUMN sys_error_log.queue_size IS '队列大小';
-COMMENT ON COLUMN sys_error_log.create_time IS '创建时间';
-COMMENT ON COLUMN sys_error_log.tenant_id IS '租户ID';
-
-CREATE INDEX err_log_01 ON sys_error_log (trace_id);
-CREATE INDEX err_log_02 ON sys_error_log (err_time);
+ALTER TABLE "oh_sys"."sys_error_log" ADD CONSTRAINT "sys_error_log_pkey" PRIMARY KEY ("id");
