@@ -801,7 +801,7 @@ CREATE TABLE "oh_sys"."sys_error_log" (
   "err_time" timestamp(6) NOT NULL,
   "trace_id" varchar(80) COLLATE "pg_catalog"."default" NOT NULL,
   "note" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "score" int4,
+  "score" numeric(5,2),,
   "queue_size" int4,
   "create_time" timestamp(6),
   "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying

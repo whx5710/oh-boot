@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -82,8 +83,8 @@ public class ErrorLogServiceImpl implements ErrorLogService {
                     if(i == count){
                         for (ErrorLogEntity item : list) {
                             item.setNote("警告：错误日志过多，请排查");
-                            long score = Math.min((item.getQueueSize() * 10L / commonProperty.getLogCacheMaxSize()) + 1, 10);
-                            item.setScore((int) score);
+                            BigDecimal score = BigDecimal.valueOf(Math.min((item.getQueueSize() * 5L / commonProperty.getLogCacheMaxSize()) + 1, 5));
+                            item.setScore(score);
                         }
                     }
                     long l = errorLogMapper.insertBatch(list);

@@ -3,6 +3,8 @@ package com.finn.system.entity;
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.IDEntity;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -45,7 +47,7 @@ public class ErrorLogEntity extends IDEntity {
     /**
      * 队列拥挤程度0-10
      */
-    private Integer score = 0;
+    private BigDecimal score = BigDecimal.valueOf(0);
     /**
      * 队列大小
      */
@@ -134,11 +136,11 @@ public class ErrorLogEntity extends IDEntity {
         this.note = note;
     }
 
-    public Integer getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(BigDecimal score) {
         this.score = score;
     }
 

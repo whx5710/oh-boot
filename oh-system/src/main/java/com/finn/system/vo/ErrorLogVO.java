@@ -4,6 +4,7 @@ import com.finn.framework.aop.annotations.TableField;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -70,7 +71,7 @@ public class ErrorLogVO implements Serializable {
     /**
      * 队列拥挤程度0-10
      */
-    private Integer score;
+    private BigDecimal score;
     /**
      * 队列大小
      */
@@ -156,11 +157,11 @@ public class ErrorLogVO implements Serializable {
         this.note = note;
     }
 
-    public Integer getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(BigDecimal score) {
         this.score = score;
     }
 
