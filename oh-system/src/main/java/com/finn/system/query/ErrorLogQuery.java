@@ -1,6 +1,7 @@
 package com.finn.system.query;
 
 import com.finn.framework.query.Query;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -19,12 +20,16 @@ public class ErrorLogQuery extends Query {
 
     /**
      * 错误发生开始时间
+     * 毫秒部分[.SSS]是可选的，没有也能正常解析
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss[.SSS]")
     private LocalDateTime startErrTime;
 
     /**
      * 错误发生结束时间
+     * 毫秒部分[.SSS]是可选的，没有也能正常解析
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss[.SSS]")
     private LocalDateTime endErrTime;
 
     /**
