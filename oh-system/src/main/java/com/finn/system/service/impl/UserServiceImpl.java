@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService {
         // 判断租户与部门是否有关联变化
         if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
             DeptEntity deptEntity = deptService.getById(entity.getDeptId());
-            if(deptEntity.getTenantId() == null || !deptEntity.getTenantId().equals(entity.getTenantId())){
+            if(deptEntity.getTenantId() == null || !deptEntity.getTenantId().equals(user.getTenantId())){
                 throw new ServerException("不能切换到非本租户下的单位下");
             }
         }
