@@ -85,6 +85,9 @@ public class ErrorLogServiceImpl implements ErrorLogService {
                             item.setNote("警告：错误日志过多，请排查");
                             BigDecimal score = BigDecimal.valueOf(Math.min((item.getQueueSize() * 5L / commonProperty.getLogCacheMaxSize()) + 1, 5));
                             item.setScore(score);
+                            if(score.compareTo(new BigDecimal("4")) > 0){
+                                item.setNote("警告：错误日志极多，影响系统性能");
+                            }
                         }
                     }
                     long l = errorLogMapper.insertBatch(list);

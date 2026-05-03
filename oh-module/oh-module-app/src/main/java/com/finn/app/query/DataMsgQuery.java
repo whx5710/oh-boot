@@ -1,6 +1,9 @@
 package com.finn.app.query;
 
 import com.finn.framework.query.Query;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 /**
  * 消息日志查询
@@ -11,9 +14,13 @@ import com.finn.framework.query.Query;
 public class DataMsgQuery extends Query {
     String keyWord;
 
-    String startDate;
+    // 毫秒部分[.SSS]是可选的，没有也能正常解析
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss[.SSS]")
+    LocalDateTime startDate;
 
-    String endDate;
+    // 毫秒部分[.SSS]是可选的，没有也能正常解析
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss[.SSS]")
+    LocalDateTime endDate;
 
     private Long id;
 
@@ -95,19 +102,19 @@ public class DataMsgQuery extends Query {
         this.state = state;
     }
 
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 }
