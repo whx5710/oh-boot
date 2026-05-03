@@ -100,11 +100,16 @@ public class ErrorLogServiceImpl implements ErrorLogService {
     public PageResult<ErrorLogVO> page(ErrorLogQuery query) {
         QueryWrapper<ErrorLogEntity> wrapper = QueryWrapper.of(ErrorLogEntity.class);
         wrapper.eq(ErrorLogEntity::getTraceId, query.getTraceId())
-                        .like(ErrorLogEntity::getTenantId, query.getTenantId())
+                        .eq(ErrorLogEntity::getTenantId, query.getTenantId())
                         .le(ErrorLogEntity::getErrTime, query.getEndErrTime())
                         .ge(ErrorLogEntity::getErrTime, query.getStartErrTime())
                 .orderBy(ErrorLogEntity::getErrTime, Constant.DESC)
                 .page(query.getPageNum(), query.getPageSize());
+        if(query.getKeyWord() != null && !query.getKeyWord().isEmpty()){
+            wrapper.jointSQL("(msg like concat('%', #{keyWord}, '%') or stack_info like concat('%', #{keyWord}, '%')" +
+                            " or trace_id like concat('%', #{keyWord}, '%'))",
+                    "keyWord", query.getKeyWord());
+        }
         try (Page<ErrorLogEntity> page = errorLogMapper.listByWrapper(wrapper)) {
             return new PageResult<>(ErrorLogConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }

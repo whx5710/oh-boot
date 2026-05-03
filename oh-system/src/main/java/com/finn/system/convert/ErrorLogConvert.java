@@ -2,6 +2,7 @@ package com.finn.system.convert;
 
 import com.finn.system.entity.ErrorLogEntity;
 import com.finn.system.vo.ErrorLogVO;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,6 +15,7 @@ import java.util.List;
  *
  */
 @Mapper
+@DecoratedWith(ErrorLogExtConvert.class) // 指定实现类
 public interface ErrorLogConvert {
 
     ErrorLogConvert INSTANCE = Mappers.getMapper(ErrorLogConvert.class);

@@ -33,6 +33,11 @@ public class ErrorLogQuery extends Query {
     private String traceId;
 
     /**
+     * 搜索关键字
+     */
+    private String keyWord;
+
+    /**
      * 租户ID
      */
     private String tenantId;
@@ -75,5 +80,13 @@ public class ErrorLogQuery extends Query {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }

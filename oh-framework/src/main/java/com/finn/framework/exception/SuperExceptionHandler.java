@@ -5,6 +5,8 @@ import com.finn.framework.common.enums.ErrorCode;
 import com.finn.framework.common.properties.CommonProperty;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.Result;
+import com.finn.framework.security.user.SecurityUser;
+import com.finn.framework.security.user.UserDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -124,6 +126,11 @@ public class SuperExceptionHandler {
                 dto.put("msg", result.getMsg());
                 dto.put("traceId", TraceIdUtils.getTraceId()); // 链路跟踪ID
                 dto.put("queueSize", size); // 队列大小
+                // 获取租户编码
+                UserDetail user = SecurityUser.getUser();
+                if(user != null && user.getTenantId() != null && !user.getTenantId().isEmpty()){
+                    dto.put("tenantId", user.getTenantId());
+                }
                 redisCache.leftPush(key, dto.toJson(), commonProperty.getLogCacheTime());
             }else{
                 log.warn("错误日志缓存超出最大数量！{}", commonProperty.getLogCacheMaxSize());
