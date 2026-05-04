@@ -292,6 +292,10 @@ public class ModifyProviderService {
      * @param <T> t
      */
     public <T> String deleteByWrapper(DeleteWrapper<T> deleteWrapper){
+        if(deleteWrapper == null || deleteWrapper.getSql() == null){
+            log.error("参数DeleteWrapper为空，请检查参数是否为空或类型是否正确");
+            throw new RuntimeException("参数DeleteWrapper为空，请检查参数是否为空或类型是否正确");
+        }
         return deleteWrapper.getSql().toString();
     }
 
@@ -302,6 +306,10 @@ public class ModifyProviderService {
      * @param <T> c
      */
     public <T> String updateByWrapper(UpdateWrapper<T> updateWrapper){
+        if(updateWrapper == null || updateWrapper.getSql() == null){
+            log.error("参数UpdateWrapper为空，请检查参数是否为空或类型是否正确");
+            throw new RuntimeException("参数UpdateWrapper为空，请检查参数是否为空或类型是否正确");
+        }
         return updateWrapper.getSql().toString();
     }
 

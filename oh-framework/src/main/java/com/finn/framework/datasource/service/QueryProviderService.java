@@ -4,6 +4,8 @@ import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import org.apache.ibatis.jdbc.SQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -18,6 +20,8 @@ import static com.finn.framework.common.constant.Constant.PAGE_SIZE;
  */
 public class QueryProviderService {
 
+    private final static Logger log = LoggerFactory.getLogger(QueryProviderService.class);
+
     public static final String LIST_PARAM = "listByWrapper";
 
     public static final String FIND_BY_ID = "findById";
@@ -31,6 +35,10 @@ public class QueryProviderService {
      * @param <T> 类
      */
     public <T> String listByWrapper(QueryWrapper<T> queryWrapper){
+        if(queryWrapper == null || queryWrapper.getSql() == null){
+            log.error("参数QueryWrapper为空，请检查参数是否为空或类型是否正确");
+            throw new RuntimeException("参数QueryWrapper为空，请检查参数是否为空或类型是否正确");
+        }
         return queryWrapper.getSql().toString();
     }
 
@@ -41,6 +49,10 @@ public class QueryProviderService {
      * @param <T> 类
      */
     public <T> String count(CountWrapper<T> countWrapper){
+        if(countWrapper == null || countWrapper.getSql() == null){
+            log.error("参数CountWrapper为空，请检查参数是否为空或类型是否正确");
+            throw new RuntimeException("参数CountWrapper为空，请检查参数是否为空或类型是否正确");
+        }
         // 优化：提取公共方法移除分页参数
         removePageParams(countWrapper);
         return countWrapper.getSql().toString();
