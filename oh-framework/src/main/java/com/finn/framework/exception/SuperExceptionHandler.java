@@ -90,8 +90,10 @@ public class SuperExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<String> handleNotReadableException(Exception ex) {
-        log.error("消息不可读！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
-        return Result.error(ErrorCode.HTTP_MSG_NOT_READABLE, ex.getMessage());
+        log.error("无法正确解析或消息不可读！[{}] {}", TraceIdUtils.getTraceId(), ex.getMessage(), ex);
+        Result<String> result = Result.error(ErrorCode.HTTP_MSG_NOT_READABLE.getCode(), ErrorCode.HTTP_MSG_NOT_READABLE.getMsg());
+        cacheErrorLog(result, ex);
+        return result;
     }
 
     /**
