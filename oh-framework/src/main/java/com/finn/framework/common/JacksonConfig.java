@@ -16,6 +16,7 @@ import tools.jackson.databind.module.SimpleModule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * JACKSON 配置
@@ -24,7 +25,10 @@ import java.time.format.DateTimeFormatter;
 public class JacksonConfig {
 
     /** 时间格式(yyyy-MM-dd HH:mm:ss.SSS) */
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_MIL_PATTERN);
+    private static final DateTimeFormatter DATE_TIME_MIL_PATTERN = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_MIL_PATTERN);
+    /** 时间格式(yyyy-MM-dd HH:mm:ss) */
+    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_PATTERN);
+
     private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern(DateUtils.DATE_PATTERN);
 
     @Bean
@@ -66,7 +70,11 @@ public class JacksonConfig {
         @Override
         public void serialize(LocalDateTime value, JsonGenerator gen, SerializationContext ctxt) throws JacksonException {
             if (value != null) {
-                gen.writeString(value.format(DATE_TIME_FORMATTER));
+                try {
+                    gen.writeString(value.format(DATE_TIME_PATTERN));
+                }catch (Exception e){
+                    gen.writeString(value.format(DATE_TIME_MIL_PATTERN));
+                }
             } else {
                 gen.writeNull();
             }
@@ -96,7 +104,13 @@ public class JacksonConfig {
             if (dateString == null || dateString.trim().isEmpty()) {
                 return null;
             }
-            return LocalDateTime.parse(dateString, DATE_TIME_FORMATTER);
+            try {
+                // 秒
+                return LocalDateTime.parse(dateString, DATE_TIME_PATTERN);
+            }catch (DateTimeParseException e){
+                // 毫米
+                return LocalDateTime.parse(dateString, DATE_TIME_MIL_PATTERN);
+            }
         }
     }
     /**
