@@ -1,6 +1,6 @@
 package com.finn.system.vo;
 
-import com.finn.framework.aop.annotations.TableField;
+import cn.idev.excel.annotation.ExcelProperty;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,26 +26,31 @@ public class ErrorLogVO implements Serializable {
     /**
      * 错误编码
      */
+    @ExcelProperty(value = "错误编码")
     private String errCode;
 
     /**
      * 错误提示
      */
+    @ExcelProperty(value = "错误提示")
     private String msg;
 
     /**
      * 堆栈信息
      */
+    @ExcelProperty(value = "堆栈信息")
     private String stackInfo;
 
     /**
      * 错误发生时间
      */
+    @ExcelProperty(value = "错误发生时间")
     private LocalDateTime errTime;
 
     /**
      * 链路跟踪ID
      */
+    @ExcelProperty(value = "链路跟踪ID")
     private String traceId;
 
     /**
@@ -61,6 +66,7 @@ public class ErrorLogVO implements Serializable {
     /**
      * 租户名称
      */
+    @ExcelProperty(value = "租户名称")
     private String tenantName;
 
     /**
@@ -69,7 +75,7 @@ public class ErrorLogVO implements Serializable {
     private String note;
 
     /**
-     * 队列拥挤程度0-10
+     * 队列拥挤程度0-5
      */
     private BigDecimal score;
     /**

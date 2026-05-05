@@ -12,7 +12,7 @@
  Target Server Version : 180003 (180003)
  File Encoding         : 65001
 
- Date: 03/05/2026 23:19:25
+ Date: 05/05/2026 11:00:33
 */
 
 
@@ -1035,6 +1035,8 @@ INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "me
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (38012908344442880, 36769889070874624, '环节修改', '环节修改', '', NULL, 1, 'f', 'f', 'flow:node:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:29:43.593548', NULL, NULL);
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43462997489745920, 42, 'ErrorLog', '错误日志', '/system/errLog', '/system/log/errorLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:ibm-knowledge-catalog-premium', 'f', 0, 1, NULL, 10000, '2026-04-30 22:26:26.104883', NULL, NULL);
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43463159524098048, 43462997489745920, '查询错误日志', '查询错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-30 22:27:04.737104', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45101480209809408, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 10:57:10.827503', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45108924046639104, 43462997489745920, '删除错误日志', '删除错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 11:26:45.576264', NULL, NULL);
 COMMIT;
 
 -- ----------------------------

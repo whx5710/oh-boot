@@ -58,9 +58,8 @@ public class ErrorLogController {
      */
     @PostMapping("/del")
     @PreAuthorize("hasAuthority('sys:error:log:delete')")
-    public Result<String> delete(@RequestBody List<Long> idList){
-        errorLogService.delete(idList);
-        return Result.ok();
+    public Result<Long> delete(@RequestBody List<Long> idList){
+        return Result.ok(errorLogService.delete(idList));
     }
 
     /**
@@ -70,8 +69,7 @@ public class ErrorLogController {
      */
     @GetMapping("/deleteByDate/{date}")
     @PreAuthorize("hasAuthority('sys:error:log:delete')")
-    public Result<String> deleteByDate(@PathVariable("date")String date){
-        errorLogService.deleteByDate(date);
-        return Result.ok();
+    public Result<Long> deleteByDate(@PathVariable String date){
+        return Result.ok(errorLogService.deleteByDate(date));
     }
 }
