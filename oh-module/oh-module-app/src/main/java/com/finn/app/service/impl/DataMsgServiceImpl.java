@@ -1,6 +1,5 @@
 package com.finn.app.service.impl;
 
-import com.finn.app.convert.DataMsgConvert;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
@@ -12,7 +11,6 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.common.properties.OpenApiProperties;
-import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.entity.api.DataAppDTO;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.framework.exception.ServerException;
@@ -22,19 +20,14 @@ import com.finn.app.query.DataMsgQuery;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.vo.DataMsgVO;
 import com.finn.framework.service.JobService;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -53,19 +46,17 @@ public class DataMsgServiceImpl implements DataMsgService {
 
     private final RedisCache redisCache;
     private final DataMessageMapper dataMessageMapper;
-    private final DynamicDataSource dynamicDataSource;
     private final OpenApiProperties openApiProperties;
 
-//    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     public DataMsgServiceImpl(RedisCache redisCache, DataMessageMapper dataMessageMapper,
-                              DynamicDataSource dynamicDataSource, OpenApiProperties openApiProperties
-//                              ,KafkaTemplate<String, String> kafkaTemplate
+                              OpenApiProperties openApiProperties,
+                              KafkaTemplate<String, String> kafkaTemplate
     ){
         this.redisCache = redisCache;
         this.dataMessageMapper = dataMessageMapper;
-        this.dynamicDataSource = dynamicDataSource;
         this.openApiProperties = openApiProperties;
-//        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     /**
@@ -99,45 +90,6 @@ public class DataMsgServiceImpl implements DataMsgService {
                 .set(DataMsgEntity::getDbStatus, 0).eq(DataMsgEntity::getDbStatus, 1)
                 .le(DataMsgEntity::getCreateTime, DateUtils.parseLocalDateTime(date));
         dataMessageMapper.updateByWrapper(updateWrapper);
-    }
-
-    // 保存报文
-    @Override
-    public void saveMsgLog() {
-        SqlSession sqlSession = null;
-        try {
-            String key = RedisKeys.getDataMsgKey();
-            // 每次插入1000条
-            int count = 1000;
-            List<DataMsgEntity> list = new ArrayList<>();
-            for (int i = 0; i < count; i++) {
-                MsgEntity msgEntity = (MsgEntity) redisCache.rightPop(key);
-                if (msgEntity == null) {
-                    break;
-                }
-                DataMsgEntity entity = DataMsgConvert.INSTANCE.convert(msgEntity);
-                entity.setJsonStr(JsonUtils.toJsonString(msgEntity.getData()));
-                entity.setCreateTime(LocalDateTime.now());
-                // dataMessageMapper.insertDataMsg(entity);
-                list.add(entity);
-            }
-            if(!list.isEmpty()){
-                // dynamicDataSource.getSqlSessionFactory(sysDataSourceProperties.getSysDefault()); // 系统数据源
-                // SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(sysDataSourceProperties.getPrimary()); // 主数据源
-                SqlSessionFactory sqlSessionFactory = dynamicDataSource.getSqlSessionFactory(); // 默认主数据源
-                sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
-                DataMessageMapper messageMapper = sqlSession.getMapper(DataMessageMapper.class);
-                list.forEach(messageMapper::insert);
-            }
-        } catch (Exception e) {
-            log.error("保存消息日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
-        }finally {
-            if(sqlSession != null){
-                sqlSession.commit();
-                sqlSession.clearCache();
-                sqlSession.close();// 用完关闭
-            }
-        }
     }
 
     /**
@@ -199,7 +151,7 @@ public class DataMsgServiceImpl implements DataMsgService {
             }else{
                 msgEntity.setId(idWorker.nextId()); // 设置ID，如果在业务处理中有异常(jobService.handle)，可根据此ID更新消息状态
                 try {
-                    CompletableFuture<SendResult<String, String>> completableFuture = null; // kafkaTemplate.send(Constant.TOPIC_SUBMIT, msgEntity.toJson());
+                    CompletableFuture<SendResult<String, String>> completableFuture = kafkaTemplate.send(Constant.TOPIC_SUBMIT, msgEntity.toJson());
                     //执行成功回调
                     completableFuture.thenAccept(msg -> {
                         log.debug("发送成功");
@@ -219,20 +171,6 @@ public class DataMsgServiceImpl implements DataMsgService {
         }else{
             throw new ServerException("未获取到相关服务，功能号【" + msgEntity.getFuncCode() + "】无效！ ");
         }
-    }
-
-    /**
-     * 启动项目时，从Redis队列获取MQ日志并保存
-     */
-    @PostConstruct
-    public void saveLogJob() {
-        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(3);
-        //提交固定周期任务
-        ScheduledFuture<?> runnableFuture = scheduledThreadPoolExecutor.scheduleAtFixedRate(this::saveMsgLog, 1,15, TimeUnit.SECONDS);
-        //设置为true
-        //scheduledThreadPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(true);
-        //关闭线程池
-        //scheduledThreadPoolExecutor.shutdown();
     }
 
 }

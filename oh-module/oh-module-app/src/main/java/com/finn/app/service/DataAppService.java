@@ -4,7 +4,6 @@ import com.finn.app.entity.DataAppEntity;
 import com.finn.app.query.DataAppQuery;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.api.DataAppDTO;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,5 +25,5 @@ public interface DataAppService{
 
     DataAppDTO findByClientId(String clientId);
 
-    DataAppEntity getById(@Param("id")Long id);
+    DataAppEntity getById(Long id);
 }

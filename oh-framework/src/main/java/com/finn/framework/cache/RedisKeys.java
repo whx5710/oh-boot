@@ -70,14 +70,6 @@ public class RedisKeys {
     }
 
     /**
-     * mq 报文日志
-     * @return sys:msg:log
-     */
-    public static String getDataMsgKey() {
-        return PREFIX + "msg:log";
-    }
-
-    /**
      * 用户信息key
      * @param userId 用户ID
      * @return s

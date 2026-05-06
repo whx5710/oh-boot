@@ -23,9 +23,6 @@ public interface DataMsgService {
     void delete(List<Long> idList);
 
     void deleteByDate(String date);
-
-    // 保存报文
-    void saveMsgLog();
     /**
      * 校验接口基本信息
      * @param request
