@@ -10,7 +10,7 @@ import com.finn.framework.utils.IpUtils;
 import com.finn.framework.utils.Tools;
 import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.common.properties.SecurityProperties;
-import com.finn.framework.cache.TokenStoreCache;
+import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.mobile.MobileAuthenticationToken;
 import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
@@ -19,7 +19,7 @@ import com.finn.system.entity.UserEntity;
 import com.finn.system.enums.LoginOperationEnum;
 import com.finn.system.service.AuthService;
 import com.finn.system.service.CaptchaService;
-import com.finn.system.service.LogLoginService;
+import com.finn.system.service.LoginLogService;
 import com.finn.system.service.UserService;
 import com.finn.system.vo.AccountLoginVO;
 import com.finn.system.vo.MobileLoginVO;
@@ -47,9 +47,9 @@ import static com.finn.framework.common.enums.ErrorCode.REFRESH_TOKEN_ERROR;
 @Service
 public class AuthServiceImpl implements AuthService {
     private final CaptchaService captchaService;
-    private final TokenStoreCache tokenStoreCache;
+    private final TokenCache tokenCache;
     private final AuthenticationManager authenticationManager;
-    private final LogLoginService logLoginService;
+    private final LoginLogService loginLogService;
     private final UserService userService;
 
     private final RedisCache redisCache;
@@ -60,15 +60,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public AuthServiceImpl(CaptchaService captchaService, TokenStoreCache tokenStoreCache,
-                           AuthenticationManager authenticationManager, LogLoginService logLoginService,
+    public AuthServiceImpl(CaptchaService captchaService, TokenCache tokenCache,
+                           AuthenticationManager authenticationManager, LoginLogService loginLogService,
                            UserService userService, RedisCache redisCache,
                            SecurityProperties securityProperties,
                            TenantCache tenantCache, MultiTenantProperties tenantProperties) {
         this.captchaService = captchaService;
-        this.tokenStoreCache = tokenStoreCache;
+        this.tokenCache = tokenCache;
         this.authenticationManager = authenticationManager;
-        this.logLoginService = logLoginService;
+        this.loginLogService = loginLogService;
         this.userService = userService;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
         boolean flag = captchaService.validate(login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
-            logLoginService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
+            loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
             throw new ServerException(buildErrorMessage(login.getUsername(), "验证码错误"));
         }
         // 验证账号生成token
@@ -127,7 +127,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = Tools.generator();
 
         // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, refreshToken, user);
+        tokenCache.saveUser(accessToken, refreshToken, user);
 
         return new TokenVO(accessToken, refreshToken);
     }
@@ -160,7 +160,7 @@ public class AuthServiceImpl implements AuthService {
                 // 生成 accessToken
                 String accessToken = Tools.generator();
                 // 保存用户信息到缓存
-                tokenStoreCache.saveUser(accessToken, refreshToken, userDetailDb);
+                tokenCache.saveUser(accessToken, refreshToken, userDetailDb);
                 return new TokenVO(accessToken, refreshToken);
             }else{
                 throw new ServerException("【IP】请求非法，刷新token失败");
@@ -180,12 +180,12 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         // 用户信息
-        UserDetail user = tokenStoreCache.getUser(accessToken);
+        UserDetail user = tokenCache.getUser(accessToken);
         if(user != null){
             // 删除用户信息
-            tokenStoreCache.deleteUser(user.getId(), accessToken);
+            tokenCache.deleteUser(user.getId(), accessToken);
             // 保存登录日志
-            logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
+            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
         }
     }
 
@@ -261,7 +261,7 @@ public class AuthServiceImpl implements AuthService {
         String ip = IpUtils.getIpAddress(request);
         user.setIp(ip);
         // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, refreshToken, user);
+        tokenCache.saveUser(accessToken, refreshToken, user);
         // 限制次数内登录成功，清除错误计数
         redisCache.delete(authCountKey);
         return new TokenVO(accessToken, refreshToken);

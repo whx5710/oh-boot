@@ -1,10 +1,11 @@
 package com.finn.system.service.impl;
 
-import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.ErrorLogCache;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.common.properties.CommonProperty;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.DateUtils;
@@ -29,8 +30,6 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.finn.framework.cache.RedisKeys.PREFIX;
-
 /**
  * 系统错误日志
  *
@@ -44,21 +43,21 @@ public class ErrorLogServiceImpl implements ErrorLogService {
     private final static Logger log = LoggerFactory.getLogger(ErrorLogServiceImpl.class);
 
     // 60秒执行一次
-    int time = 60;
+    final int time = 60;
 
     private final ErrorLogMapper errorLogMapper;
-    private final RedisCache redisCache;
+    private final ErrorLogCache errorLogCache;
     private final CommonProperty commonProperty;
 
-    public ErrorLogServiceImpl(ErrorLogMapper errorLogMapper, RedisCache redisCache, CommonProperty commonProperty) {
+    public ErrorLogServiceImpl(ErrorLogMapper errorLogMapper, ErrorLogCache errorLogCache, CommonProperty commonProperty) {
         this.errorLogMapper = errorLogMapper;
-        this.redisCache = redisCache;
+        this.errorLogCache = errorLogCache;
         this.commonProperty = commonProperty;
     }
 
     /**
      * 启动项目时，从Redis队列获取操作日志并保存
-     *
+     * 60秒一次，从redis中获取错误日志并保存
      */
     @PostConstruct
     public void saveLog() {
@@ -71,36 +70,30 @@ public class ErrorLogServiceImpl implements ErrorLogService {
         // 每隔60秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
-                String key = PREFIX + "error:msg";
-                List<ErrorLogEntity> list = new ArrayList<>();
-                for (int i = 0; i < count; i++) {
-                    Object object = redisCache.rightPop(key);
-                    if(object == null){
-                        break;
-                    }
-                    ErrorLogEntity e = JsonUtils.parseObject(object.toString(), ErrorLogEntity.class);
-                    e.setQueueSize(Math.toIntExact(redisCache.getListSize(key)));
-                    list.add(e);
-                }
+                List<HashDto> list = errorLogCache.getLog(count);
                 if(!list.isEmpty()){
                     int i = list.size();
-                    if(i == count){
-                        for (ErrorLogEntity item : list) {
-                            item.setNote("警告：错误日志过多，请排查");
-                            BigDecimal score = BigDecimal.valueOf(Math.min((item.getQueueSize() * 5L / commonProperty.getLogCacheMaxSize()) + 1, 5));
-                            item.setScore(score);
-                            if(score.compareTo(new BigDecimal("4")) > 0){
-                                item.setNote("警告：错误日志极多，影响系统性能");
-                            }
+                    List<ErrorLogEntity> errorLogEntities = new ArrayList<>(i);
+                    for(HashDto hashDto: list){
+                        ErrorLogEntity e = JsonUtils.parseObject(hashDto.getStr("data"), ErrorLogEntity.class);
+                        e.setQueueSize(hashDto.getInt("cacheSize"));
+                        BigDecimal score = BigDecimal.valueOf(Math.min((e.getQueueSize() * 5L / commonProperty.getLogCacheMaxSize()) + 1, 5));
+                        e.setScore(score);
+                        if(i == count){
+                            e.setNote("警告：错误日志过多，请排查");
                         }
+                        if(score.compareTo(new BigDecimal("4")) > 0){
+                            e.setNote("警告：错误日志极多，影响系统性能");
+                        }
+                        errorLogEntities.add(e);
                     }
-                    long l = errorLogMapper.insertBatch(list);
+                    long l = errorLogMapper.insertBatch(errorLogEntities);
                     log.debug("保存错误日志{}条", l);
                 }
             } catch (Exception e) {
                 log.error("保存错误日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 1, time, TimeUnit.SECONDS);
+        }, 10, time, TimeUnit.SECONDS);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.finn.system.mapper;
 
 import com.finn.framework.datasource.mapper.BaseMapper;
-import com.finn.system.entity.LogOperateEntity;
-import com.finn.system.query.LogOperateQuery;
+import com.finn.system.entity.OperateLogEntity;
+import com.finn.system.query.OperateLogQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface LogOperateMapper extends BaseMapper<LogOperateEntity> {
+public interface OperateLogMapper extends BaseMapper<OperateLogEntity> {
 
-    List<LogOperateEntity> getList(LogOperateQuery query);
+    List<OperateLogEntity> getList(OperateLogQuery query);
 
 //    int save(LogOperateEntity param);
 

@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AuthenticationEvents {
-    private final LogLoginService logLoginService;
+    private final LoginLogService loginLogService;
 
-    public AuthenticationEvents(LogLoginService logLoginService) {
-        this.logLoginService = logLoginService;
+    public AuthenticationEvents(LoginLogService loginLogService) {
+        this.loginLogService = loginLogService;
     }
 
     @EventListener
@@ -29,7 +29,7 @@ public class AuthenticationEvents {
 
         // 保存登录日志
         if(user != null){
-            logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
+            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
         }
     }
 
@@ -39,7 +39,7 @@ public class AuthenticationEvents {
         String username = (String) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        logLoginService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
+        loginLogService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
     }
 
 }

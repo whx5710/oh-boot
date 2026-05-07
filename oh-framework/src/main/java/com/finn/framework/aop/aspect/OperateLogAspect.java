@@ -8,7 +8,7 @@ import com.finn.framework.utils.HttpContextUtils;
 import com.finn.framework.utils.IpUtils;
 import com.finn.framework.utils.Tools;
 import com.finn.framework.utils.JsonUtils;
-import com.finn.framework.cache.TokenStoreCache;
+import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.user.UserDetail;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,11 +42,11 @@ import java.util.stream.IntStream;
 public class OperateLogAspect {
     private final OperateLogService operateLogService;
 
-    private final TokenStoreCache tokenStoreCache;
+    private final TokenCache tokenCache;
 
-    public OperateLogAspect(OperateLogService operateLogService, TokenStoreCache tokenStoreCache) {
+    public OperateLogAspect(OperateLogService operateLogService, TokenCache tokenCache) {
         this.operateLogService = operateLogService;
-        this.tokenStoreCache = tokenStoreCache;
+        this.tokenCache = tokenCache;
     }
 
     @Around("@annotation(log)")
@@ -90,7 +90,7 @@ public class OperateLogAspect {
         if (request != null) {
             // 用户信息
             String accessToken = Tools.getAccessToken(request);
-            UserDetail userDetail = tokenStoreCache.getUser(accessToken);
+            UserDetail userDetail = tokenCache.getUser(accessToken);
             if(userDetail != null){
                 log.setUserId(userDetail.getId());
                 log.setRealName(userDetail.getRealName());

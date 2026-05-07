@@ -1,7 +1,7 @@
 package com.finn.system.controller;
 
 import com.finn.framework.entity.Result;
-import com.finn.system.service.LogLoginService;
+import com.finn.system.service.LoginLogService;
 import com.finn.system.vo.AnalysisVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,10 +22,10 @@ import java.util.Map;
 @RequestMapping("sys/analysis")
 public class AnalysisController {
 
-    private final LogLoginService logLoginService;
+    private final LoginLogService loginLogService;
 
-    public AnalysisController(LogLoginService logLoginService){
-        this.logLoginService = logLoginService;
+    public AnalysisController(LoginLogService loginLogService){
+        this.loginLogService = loginLogService;
     }
 
     /**
@@ -36,7 +36,7 @@ public class AnalysisController {
      */
     @GetMapping("/latestLogin/{day}/{operation}")
     public Result<List<AnalysisVO>> latestLogin(@PathVariable("day")Integer day, @PathVariable("operation")Integer operation){
-        return Result.ok(logLoginService.latestDateCount(day, operation));
+        return Result.ok(loginLogService.latestDateCount(day, operation));
     }
 
     /**
@@ -48,10 +48,10 @@ public class AnalysisController {
     @GetMapping("/latestLoginLog/{day}")
     public Result<Map<String, List<AnalysisVO>>> latestDateLogin(@PathVariable("day")Integer day){
         Map<String, List<AnalysisVO>> map = new HashMap<String, List<AnalysisVO>>();
-        map.put("登录成功", logLoginService.latestDateCount(day, 0));
-        map.put("退出成功", logLoginService.latestDateCount(day, 1));
-        map.put("验证码错误", logLoginService.latestDateCount(day, 2));
-        map.put("账号密码错误", logLoginService.latestDateCount(day, 3));
+        map.put("登录成功", loginLogService.latestDateCount(day, 0));
+        map.put("退出成功", loginLogService.latestDateCount(day, 1));
+        map.put("验证码错误", loginLogService.latestDateCount(day, 2));
+        map.put("账号密码错误", loginLogService.latestDateCount(day, 3));
         return Result.ok(map);
     }
 }

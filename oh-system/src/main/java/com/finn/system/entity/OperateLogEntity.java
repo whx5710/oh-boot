@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * 
  */
 @TableName("sys_log_operate")
-public class LogOperateEntity {
+public class OperateLogEntity {
     /**
      * id
      */

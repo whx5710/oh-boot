@@ -1,39 +1,48 @@
-package com.finn.system.entity;
+package com.finn.system.vo;
 
-import com.finn.framework.entity.IDEntity;
-import com.finn.framework.aop.annotations.TableField;
-import com.finn.framework.aop.annotations.TableName;
+import cn.idev.excel.annotation.ExcelProperty;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * 登录日志
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
-@TableName("sys_log_login")
-public class LogLoginEntity extends IDEntity {
+public class LoginLogVO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * id
+     */
+    private Long id;
 
     /**
      * 用户名
      */
+    @ExcelProperty(value = "用户名")
     private String username;
 
     /**
      * 登录IP
      */
+    @ExcelProperty(value = "登录IP")
     private String ip;
 
     /**
      * 登录地点
      */
+    @ExcelProperty(value = "登录地点")
     private String address;
 
     /**
      * User Agent
      */
-    @TableField("user_agent")
+    @ExcelProperty(value = "User Agent")
     private String userAgent;
 
     /**
@@ -41,20 +50,32 @@ public class LogLoginEntity extends IDEntity {
      */
     private Integer status;
 
+    @ExcelProperty(value = "登录状态")
+    private String statusLabel;
+
     /**
      * 操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误
      */
     private Integer operation;
-    // 租户ID
-    @TableField("tenant_id")
-    private String tenantId;
 
+    @ExcelProperty(value = "操作信息")
+    private String operationLabel;
+
+    @ExcelProperty(value = "租户名称")
+    private String tenantName;
     /**
      * 创建时间
      */
-    @TableField("create_time")
+    @ExcelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -96,12 +117,28 @@ public class LogLoginEntity extends IDEntity {
         this.status = status;
     }
 
+    public String getStatusLabel() {
+        return statusLabel;
+    }
+
+    public void setStatusLabel(String statusLabel) {
+        this.statusLabel = statusLabel;
+    }
+
     public Integer getOperation() {
         return operation;
     }
 
     public void setOperation(Integer operation) {
         this.operation = operation;
+    }
+
+    public String getOperationLabel() {
+        return operationLabel;
+    }
+
+    public void setOperationLabel(String operationLabel) {
+        this.operationLabel = operationLabel;
     }
 
     public LocalDateTime getCreateTime() {
@@ -112,11 +149,11 @@ public class LogLoginEntity extends IDEntity {
         this.createTime = createTime;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public String getTenantName() {
+        return tenantName;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 }

@@ -1,9 +1,9 @@
 package com.finn.system.service;
 
 import com.finn.framework.entity.PageResult;
-import com.finn.system.query.LogLoginQuery;
+import com.finn.system.query.LoginLogQuery;
 import com.finn.system.vo.AnalysisVO;
-import com.finn.system.vo.LogLoginVO;
+import com.finn.system.vo.LoginLogVO;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public interface LogLoginService {
+public interface LoginLogService {
 
     /**
      * Page result.
@@ -21,7 +21,7 @@ public interface LogLoginService {
      * @param query the query
      * @return the page result
      */
-    PageResult<LogLoginVO> page(LogLoginQuery query);
+    PageResult<LoginLogVO> page(LoginLogQuery query);
 
     /**
      * 保存登录日志
@@ -35,7 +35,7 @@ public interface LogLoginService {
     /**
      * 导出登录日志
      */
-    void export(LogLoginQuery query);
+    void export(LoginLogQuery query);
 
     /**
      * 统计最近几天相关操作情况

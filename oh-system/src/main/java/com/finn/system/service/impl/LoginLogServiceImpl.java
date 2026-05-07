@@ -9,13 +9,13 @@ import com.finn.framework.utils.IpUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
-import com.finn.system.convert.LogLoginConvert;
-import com.finn.system.entity.LogLoginEntity;
-import com.finn.system.mapper.LogLoginMapper;
-import com.finn.system.query.LogLoginQuery;
-import com.finn.system.service.LogLoginService;
+import com.finn.system.convert.LoginLogConvert;
+import com.finn.system.entity.LoginLogEntity;
+import com.finn.system.mapper.LoginLogMapper;
+import com.finn.system.query.LoginLogQuery;
+import com.finn.system.service.LoginLogService;
 import com.finn.system.vo.AnalysisVO;
-import com.finn.system.vo.LogLoginVO;
+import com.finn.system.vo.LoginLogVO;
 import com.github.pagehelper.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -32,18 +32,18 @@ import java.util.List;
  *
  */
 @Service
-public class LogLoginServiceImpl implements LogLoginService {
-    private static final Logger log = LoggerFactory.getLogger(LogLoginServiceImpl.class);
-    private final LogLoginMapper logLoginMapper;
+public class LoginLogServiceImpl implements LoginLogService {
+    private static final Logger log = LoggerFactory.getLogger(LoginLogServiceImpl.class);
+    private final LoginLogMapper loginLogMapper;
 
-    public LogLoginServiceImpl(LogLoginMapper logLoginMapper) {
-        this.logLoginMapper = logLoginMapper;
+    public LoginLogServiceImpl(LoginLogMapper loginLogMapper) {
+        this.loginLogMapper = loginLogMapper;
     }
 
     @Override
-    public PageResult<LogLoginVO> page(LogLoginQuery query) {
-        try (Page<LogLoginEntity> page = logLoginMapper.listByWrapper(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
-            return new PageResult<>(LogLoginConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+    public PageResult<LoginLogVO> page(LoginLogQuery query) {
+        try (Page<LoginLogEntity> page = loginLogMapper.listByWrapper(this.buildParams(query).page(query.getPageNum(), query.getPageSize()))) {
+            return new PageResult<>(LoginLogConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
 
@@ -55,7 +55,7 @@ public class LogLoginServiceImpl implements LogLoginService {
         String ip = IpUtils.getIpAddress(request);
         String address = "未知"; // AddressUtils.getAddressByIP(ip);
 
-        LogLoginEntity entity = new LogLoginEntity();
+        LoginLogEntity entity = new LoginLogEntity();
         entity.setUsername(username);
         entity.setStatus(status);
         entity.setOperation(operation);
@@ -63,14 +63,14 @@ public class LogLoginServiceImpl implements LogLoginService {
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
         entity.setTenantId(tenantId);
-        logLoginMapper.insert(entity);
+        loginLogMapper.insert(entity);
     }
 
     @Override
-    public void export(LogLoginQuery query) {
-        List<LogLoginEntity> list = logLoginMapper.listByWrapper(buildParams(query));
-        List<LogLoginVO> logLoginVOS = LogLoginConvert.INSTANCE.convertList(list);
-        ExcelUtils.excelExport(LogLoginVO.class, "登录日志", "日志", logLoginVOS);
+    public void export(LoginLogQuery query) {
+        List<LoginLogEntity> list = loginLogMapper.listByWrapper(buildParams(query));
+        List<LoginLogVO> loginLogVOS = LoginLogConvert.INSTANCE.convertList(list);
+        ExcelUtils.excelExport(LoginLogVO.class, "登录日志", "日志", loginLogVOS);
     }
 
     /**
@@ -81,7 +81,7 @@ public class LogLoginServiceImpl implements LogLoginService {
      */
     @Override
     public List<AnalysisVO> latestDateCount(int day, int operation) {
-        return logLoginMapper.latestDateCount(day, operation);
+        return loginLogMapper.latestDateCount(day, operation);
     }
 
     @Override
@@ -90,9 +90,9 @@ public class LogLoginServiceImpl implements LogLoginService {
             throw new ServerException("ID不能为空");
         }
         for(Long id: idList){
-            LogLoginEntity log = new LogLoginEntity();
+            LoginLogEntity log = new LoginLogEntity();
             log.setId(id);
-            logLoginMapper.delete(log);
+            loginLogMapper.delete(log);
         }
     }
 
@@ -102,19 +102,19 @@ public class LogLoginServiceImpl implements LogLoginService {
      */
     @Override
     public void deleteByDate(String date) {
-        int i = logLoginMapper.deleteByWrapper(DeleteWrapper.of(LogLoginEntity.class)
-                .le(LogLoginEntity::getCreateTime, DateUtils.parseLocalDateTime(date)));
+        int i = loginLogMapper.deleteByWrapper(DeleteWrapper.of(LoginLogEntity.class)
+                .le(LoginLogEntity::getCreateTime, DateUtils.parseLocalDateTime(date)));
         log.debug("删除{}条记录", i);
     }
 
-    private Wrapper<LogLoginEntity> buildParams(LogLoginQuery query){
-        return QueryWrapper.of(LogLoginEntity.class)
-                .like(LogLoginEntity::getUsername, query.getUsername())
-                .like(LogLoginEntity::getAddress, query.getAddress())
-                .eq(LogLoginEntity::getStatus, query.getStatus())
-                .ge(LogLoginEntity::getCreateTime, query.getStartTime())
-                .le(LogLoginEntity::getCreateTime, query.getEndTime())
-                .eq(LogLoginEntity::getTenantId, query.getTenantId())
+    private Wrapper<LoginLogEntity> buildParams(LoginLogQuery query){
+        return QueryWrapper.of(LoginLogEntity.class)
+                .like(LoginLogEntity::getUsername, query.getUsername())
+                .like(LoginLogEntity::getAddress, query.getAddress())
+                .eq(LoginLogEntity::getStatus, query.getStatus())
+                .ge(LoginLogEntity::getCreateTime, query.getStartTime())
+                .le(LoginLogEntity::getCreateTime, query.getEndTime())
+                .eq(LoginLogEntity::getTenantId, query.getTenantId())
                 .orderBy("id desc");
     }
 }

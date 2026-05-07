@@ -7,7 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.finn.framework.cache.TokenStoreCache;
+import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.user.UserDetail;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -33,11 +33,11 @@ import java.io.IOException;
 public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final static Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
-    private final TokenStoreCache tokenStoreCache;
+    private final TokenCache tokenCache;
     private final MultiTenantProperties multiTenantProperties;
 
-    public AuthenticationFilter(TokenStoreCache tokenStoreCache, MultiTenantProperties multiTenantProperties){
-        this.tokenStoreCache = tokenStoreCache;
+    public AuthenticationFilter(TokenCache tokenCache, MultiTenantProperties multiTenantProperties){
+        this.tokenCache = tokenCache;
         this.multiTenantProperties = multiTenantProperties;
     }
 
@@ -51,7 +51,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         // 获取登录用户信息
-        UserDetail user = tokenStoreCache.getUser(accessToken);
+        UserDetail user = tokenCache.getUser(accessToken);
         if (user == null) {
             chain.doFilter(request, response);
             return;

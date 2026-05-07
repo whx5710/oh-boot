@@ -1,8 +1,8 @@
 package com.finn.system.mapper;
 
 import com.finn.framework.datasource.mapper.BaseMapper;
-import com.finn.system.entity.LogLoginEntity;
-import com.finn.system.query.LogLoginQuery;
+import com.finn.system.entity.LoginLogEntity;
+import com.finn.system.query.LoginLogQuery;
 import com.finn.system.vo.AnalysisVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,7 +16,7 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface LogLoginMapper extends BaseMapper<LogLoginEntity> {
+public interface LoginLogMapper extends BaseMapper<LoginLogEntity> {
 
     /**
      * 统计最近几天相关操作情况
@@ -26,5 +26,5 @@ public interface LogLoginMapper extends BaseMapper<LogLoginEntity> {
      */
     List<AnalysisVO> latestDateCount(@Param("day")int day, @Param("operation")int operation);
 
-    List<LogLoginEntity> getList(LogLoginQuery query);
+    List<LoginLogEntity> getList(LoginLogQuery query);
 }

@@ -3,36 +3,27 @@ package com.finn.system.query;
 import com.finn.framework.query.Query;
 
 /**
- * 操作日志查询
+ * 登录日志查询
  *
  * @author 王小费 whx5710@qq.com
- * 
+ *
  */
-public class LogOperateQuery extends Query {
+public class LoginLogQuery extends Query {
     /**
-     * 用户
+     * 用户名
      */
-    private String realName;
+    private String username;
 
     /**
-     * 模块名
+     * 登录地点
      */
-    private String module;
+    private String address;
 
     /**
-     * 请求URI
-     */
-    private String reqUri;
-
-    /**
-     * 操作状态
+     * 登录状态  0：失败   1：成功
      */
     private Integer status;
 
-    /**
-     * 关键字搜索
-     */
-    private String keyWord;
     /**
      * 开始时间
      */
@@ -41,34 +32,25 @@ public class LogOperateQuery extends Query {
      * 结束时间
      */
     String endTime;
-
     /**
-     * 租户
+     * 租户ID
      */
-    private String tenantId;
+    String tenantId;
 
-    public String getRealName() {
-        return realName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getModule() {
-        return module;
+    public String getAddress() {
+        return address;
     }
 
-    public void setModule(String module) {
-        this.module = module;
-    }
-
-    public String getReqUri() {
-        return reqUri;
-    }
-
-    public void setReqUri(String reqUri) {
-        this.reqUri = reqUri;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getStatus() {
@@ -77,14 +59,6 @@ public class LogOperateQuery extends Query {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public String getKeyWord() {
-        return keyWord;
-    }
-
-    public void setKeyWord(String keyWord) {
-        this.keyWord = keyWord;
     }
 
     public String getStartTime() {

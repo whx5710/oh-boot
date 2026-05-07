@@ -14,12 +14,12 @@ import java.util.*;
  *
  */
 @Component
-public class TokenStoreCache {
+public class TokenCache {
     private final RedisCache redisCache;
 
     private final SecurityProperties securityProperties;
 
-    public TokenStoreCache(RedisCache redisCache, SecurityProperties securityProperties) {
+    public TokenCache(RedisCache redisCache, SecurityProperties securityProperties) {
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
     }

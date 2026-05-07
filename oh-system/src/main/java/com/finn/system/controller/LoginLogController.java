@@ -4,9 +4,9 @@ import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
-import com.finn.system.query.LogLoginQuery;
-import com.finn.system.service.LogLoginService;
-import com.finn.system.vo.LogLoginVO;
+import com.finn.system.query.LoginLogQuery;
+import com.finn.system.service.LoginLogService;
+import com.finn.system.vo.LoginLogVO;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +21,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("sys/log/login")
-public class LogLoginController {
+public class LoginLogController {
 
-    private final LogLoginService logLoginService;
+    private final LoginLogService loginLogService;
 
-    public LogLoginController(LogLoginService logLoginService){
-        this.logLoginService = logLoginService;
+    public LoginLogController(LoginLogService loginLogService){
+        this.loginLogService = loginLogService;
     }
 
     /**
@@ -36,8 +36,8 @@ public class LogLoginController {
      */
     @GetMapping("page")
     @PreAuthorize("hasAuthority('sys:log:login')")
-    public Result<PageResult<LogLoginVO>> page(@Valid LogLoginQuery query) {
-        PageResult<LogLoginVO> page = logLoginService.page(query);
+    public Result<PageResult<LoginLogVO>> page(@Valid LoginLogQuery query) {
+        PageResult<LoginLogVO> page = loginLogService.page(query);
         return Result.ok(page);
     }
 
@@ -47,8 +47,8 @@ public class LogLoginController {
     @GetMapping("export")
     @Log(module = "登录日志", name = "导出登录日志", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:log:login')")
-    public void export(LogLoginQuery query) {
-        logLoginService.export(query);
+    public void export(LoginLogQuery query) {
+        loginLogService.export(query);
     }
 
     /**
@@ -59,7 +59,7 @@ public class LogLoginController {
     @PostMapping("/del")
     @PreAuthorize("hasAuthority('sys:log:login:delete')")
     public Result<String> delete(@RequestBody List<Long> idList){
-        logLoginService.delete(idList);
+        loginLogService.delete(idList);
         return Result.ok();
     }
 
@@ -71,7 +71,7 @@ public class LogLoginController {
     @GetMapping("/deleteByDate/{date}")
     @PreAuthorize("hasAuthority('sys:log:login:delete')")
     public Result<String> deleteByDate(@PathVariable("date")String date){
-        logLoginService.deleteByDate(date);
+        loginLogService.deleteByDate(date);
         return Result.ok();
     }
 

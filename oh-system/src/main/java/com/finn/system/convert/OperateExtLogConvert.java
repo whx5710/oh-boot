@@ -5,8 +5,8 @@ import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.DictCache;
 import com.finn.system.cache.TenantCache;
 import com.finn.system.vo.DictDataSingleVO;
-import com.finn.system.entity.LogOperateEntity;
-import com.finn.system.vo.LogOperateVO;
+import com.finn.system.entity.OperateLogEntity;
+import com.finn.system.vo.OperateLogVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,31 +16,31 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2025-06-14
  */
-public class LogOperateExtConvert implements LogOperateConvert{
+public class OperateExtLogConvert implements OperateLogConvert {
 
     TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
 
     DictCache dictCache = ServiceFactory.getBean("dictCache", DictCache.class);
 
-    private final LogOperateConvert logOperateConvert;
+    private final OperateLogConvert operateLogConvert;
 
-    public LogOperateExtConvert(LogOperateConvert logOperateConvert){
-        this.logOperateConvert = logOperateConvert;
+    public OperateExtLogConvert(OperateLogConvert operateLogConvert){
+        this.operateLogConvert = operateLogConvert;
     }
 
     @Override
-    public LogOperateEntity convert(LogOperateVO vo) {
-        return logOperateConvert.convert(vo);
+    public OperateLogEntity convert(OperateLogVO vo) {
+        return operateLogConvert.convert(vo);
     }
 
     @Override
-    public LogOperateEntity convert(OperateLogDTO vo) {
-        return logOperateConvert.convert(vo);
+    public OperateLogEntity convert(OperateLogDTO vo) {
+        return operateLogConvert.convert(vo);
     }
 
     @Override
-    public LogOperateVO convert(LogOperateEntity entity) {
-        LogOperateVO vo = logOperateConvert.convert(entity);
+    public OperateLogVO convert(OperateLogEntity entity) {
+        OperateLogVO vo = operateLogConvert.convert(entity);
         // 租户名称获取
         vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
 
@@ -55,13 +55,13 @@ public class LogOperateExtConvert implements LogOperateConvert{
     }
 
     @Override
-    public List<LogOperateVO> convertList(List<LogOperateEntity> list) {
+    public List<OperateLogVO> convertList(List<OperateLogEntity> list) {
         if ( list == null ) {
             return null;
         }
-        List<LogOperateVO> list1 = new ArrayList<LogOperateVO>( list.size() );
-        for ( LogOperateEntity logOperateEntity : list ) {
-            list1.add( convert( logOperateEntity ) );
+        List<OperateLogVO> list1 = new ArrayList<OperateLogVO>( list.size() );
+        for ( OperateLogEntity operateLogEntity : list ) {
+            list1.add( convert(operateLogEntity) );
         }
         return list1;
     }

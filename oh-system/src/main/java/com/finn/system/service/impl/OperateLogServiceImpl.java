@@ -9,12 +9,12 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.utils.ExceptionUtils;
 import com.finn.framework.entity.PageResult;
-import com.finn.system.convert.LogOperateConvert;
-import com.finn.system.entity.LogOperateEntity;
-import com.finn.system.mapper.LogOperateMapper;
-import com.finn.system.query.LogOperateQuery;
-import com.finn.system.service.LogOperateService;
-import com.finn.system.vo.LogOperateVO;
+import com.finn.system.convert.OperateLogConvert;
+import com.finn.system.entity.OperateLogEntity;
+import com.finn.system.mapper.OperateLogMapper;
+import com.finn.system.query.OperateLogQuery;
+import com.finn.system.service.OperateLogService;
+import com.finn.system.vo.OperateLogVO;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,31 +31,31 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @Service
-public class LogOperateServiceImpl implements LogOperateService {
+public class OperateLogServiceImpl implements OperateLogService {
 
-    private final static Logger log = LoggerFactory.getLogger(LogOperateServiceImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(OperateLogServiceImpl.class);
 
     private final RedisCache redisCache;
-    private final LogOperateMapper logOperateMapper;
+    private final OperateLogMapper operateLogMapper;
 
-    public LogOperateServiceImpl(RedisCache redisCache, LogOperateMapper logOperateMapper) {
+    public OperateLogServiceImpl(RedisCache redisCache, OperateLogMapper operateLogMapper) {
         this.redisCache = redisCache;
-        this.logOperateMapper = logOperateMapper;
+        this.operateLogMapper = operateLogMapper;
     }
 
     @Override
-    public PageResult<LogOperateVO> page(LogOperateQuery query) {
-        try (Page<LogOperateEntity> page = logOperateMapper.listByWrapper(getParams(query)
+    public PageResult<OperateLogVO> page(OperateLogQuery query) {
+        try (Page<OperateLogEntity> page = operateLogMapper.listByWrapper(getParams(query)
                 .page(query.getPageNum(), query.getPageSize()))) {
-            return new PageResult<>(LogOperateConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+            return new PageResult<>(OperateLogConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
         }
     }
 
     @Override
-    public void export(LogOperateQuery query) {
-        List<LogOperateEntity> list = logOperateMapper.listByWrapper(getParams(query));
-        List<LogOperateVO> vo = LogOperateConvert.INSTANCE.convertList(list);
-        ExcelUtils.excelExport(LogOperateVO.class, "操作日志", "日志", vo);
+    public void export(OperateLogQuery query) {
+        List<OperateLogEntity> list = operateLogMapper.listByWrapper(getParams(query));
+        List<OperateLogVO> vo = OperateLogConvert.INSTANCE.convertList(list);
+        ExcelUtils.excelExport(OperateLogVO.class, "操作日志", "日志", vo);
     }
 
     /**
@@ -63,15 +63,15 @@ public class LogOperateServiceImpl implements LogOperateService {
      * @param query
      * @return
      */
-    private Wrapper<LogOperateEntity> getParams(LogOperateQuery query){
-        return QueryWrapper.of(LogOperateEntity.class)
-                .eq(LogOperateEntity::getStatus, query.getStatus())
-                .like(LogOperateEntity::getRealName, query.getRealName())
-                .like(LogOperateEntity::getModule, query.getModule())
-                .like(LogOperateEntity::getReqUri, query.getReqUri())
-                .ge(LogOperateEntity::getCreateTime, query.getStartTime())
-                .le(LogOperateEntity::getCreateTime, query.getEndTime())
-                .eq(LogOperateEntity::getTenantId, query.getTenantId())
+    private Wrapper<OperateLogEntity> getParams(OperateLogQuery query){
+        return QueryWrapper.of(OperateLogEntity.class)
+                .eq(OperateLogEntity::getStatus, query.getStatus())
+                .like(OperateLogEntity::getRealName, query.getRealName())
+                .like(OperateLogEntity::getModule, query.getModule())
+                .like(OperateLogEntity::getReqUri, query.getReqUri())
+                .ge(OperateLogEntity::getCreateTime, query.getStartTime())
+                .le(OperateLogEntity::getCreateTime, query.getEndTime())
+                .eq(OperateLogEntity::getTenantId, query.getTenantId())
                 .jointSQL("(module like concat('%',#{keyWord},'%') or name like concat('%',#{keyWord},'%') or req_uri like concat('%',#{keyWord},'%') or real_name like concat('%',#{keyWord},'%'))","keyWord",query.getKeyWord())
                 .orderBy("create_time desc");
     }
@@ -95,8 +95,8 @@ public class LogOperateServiceImpl implements LogOperateService {
                         break;
                     }
                     OperateLogDTO log = (OperateLogDTO) object;
-                    LogOperateEntity entity = LogOperateConvert.INSTANCE.convert(log);
-                    logOperateMapper.insert(entity);
+                    OperateLogEntity entity = OperateLogConvert.INSTANCE.convert(log);
+                    operateLogMapper.insert(entity);
                 }
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));

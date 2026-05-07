@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @author 王小费 whx5710@qq.com
  * 
  */
-public class LogOperateVO implements Serializable {
+public class OperateLogVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

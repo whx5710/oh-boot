@@ -4,9 +4,9 @@ import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
 import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
-import com.finn.system.query.LogOperateQuery;
-import com.finn.system.service.LogOperateService;
-import com.finn.system.vo.LogOperateVO;
+import com.finn.system.query.OperateLogQuery;
+import com.finn.system.service.OperateLogService;
+import com.finn.system.vo.OperateLogVO;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("sys/log/operate")
-public class LogOperateController {
-    private final LogOperateService logOperateService;
+public class OperateLogController {
+    private final OperateLogService operateLogService;
 
-    public LogOperateController(LogOperateService logOperateService) {
-        this.logOperateService = logOperateService;
+    public OperateLogController(OperateLogService operateLogService) {
+        this.operateLogService = operateLogService;
     }
 
     /**
@@ -35,8 +35,8 @@ public class LogOperateController {
      */
     @GetMapping("page")
     @PreAuthorize("hasAuthority('sys:operate:all')")
-    public Result<PageResult<LogOperateVO>> page(@Valid LogOperateQuery query) {
-        PageResult<LogOperateVO> page = logOperateService.page(query);
+    public Result<PageResult<OperateLogVO>> page(@Valid OperateLogQuery query) {
+        PageResult<OperateLogVO> page = operateLogService.page(query);
         return Result.ok(page);
     }
 
@@ -46,7 +46,7 @@ public class LogOperateController {
     @GetMapping("export")
     @Log(module = "操作日志", name = "导出操作日志", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:operate:all')")
-    public void export(LogOperateQuery query) {
-        logOperateService.export(query);
+    public void export(OperateLogQuery query) {
+        operateLogService.export(query);
     }
 }
