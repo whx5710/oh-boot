@@ -48,6 +48,8 @@ public class DataMsgVO implements Serializable {
 
     private LocalDateTime createTime;
 
+    private String note;
+
     public Long getId() {
         return id;
     }
@@ -126,5 +128,13 @@ public class DataMsgVO implements Serializable {
 
     public void setResultMsg(String resultMsg) {
         this.resultMsg = resultMsg;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
