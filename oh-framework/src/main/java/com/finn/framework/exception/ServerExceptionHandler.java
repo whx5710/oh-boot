@@ -1,8 +1,7 @@
 package com.finn.framework.exception;
 
-import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.ErrorLogCache;
 import com.finn.framework.common.enums.ErrorCode;
-import com.finn.framework.common.properties.CommonProperty;
 import com.finn.framework.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +21,8 @@ public class ServerExceptionHandler extends SuperExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(ServerExceptionHandler.class);
 
-    public ServerExceptionHandler(RedisCache redisCache, CommonProperty commonProperty) {
-        super(redisCache, commonProperty);
+    public ServerExceptionHandler(ErrorLogCache errorLogCache) {
+        super(errorLogCache);
     }
 
     /**
