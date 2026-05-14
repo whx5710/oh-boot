@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenVO loginByAccount(AccountLoginVO login) {
         AssertUtils.isBlank(login.getUsername(), "用户名");
         // 验证码效验
-        boolean flag = captchaService.validate(login.getKey(), login.getCaptcha());
+        boolean flag = captchaService.validate(login.getPlatformKey(), login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
             loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
@@ -129,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
         // 保存用户信息到缓存
         tokenCache.saveUser(accessToken, refreshToken, user);
 
-        return new TokenVO(accessToken, refreshToken);
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
     }
 
     /**
@@ -161,7 +161,7 @@ public class AuthServiceImpl implements AuthService {
                 String accessToken = Tools.generator();
                 // 保存用户信息到缓存
                 tokenCache.saveUser(accessToken, refreshToken, userDetailDb);
-                return new TokenVO(accessToken, refreshToken);
+                return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
             }else{
                 throw new ServerException("【IP】请求非法，刷新token失败");
             }
@@ -264,7 +264,7 @@ public class AuthServiceImpl implements AuthService {
         tokenCache.saveUser(accessToken, refreshToken, user);
         // 限制次数内登录成功，清除错误计数
         redisCache.delete(authCountKey);
-        return new TokenVO(accessToken, refreshToken);
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
     }
 
     /**

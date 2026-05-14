@@ -118,7 +118,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
             // redis为空，则从数据库中获取
             ParamsEntity paramsEntity = this.getByKey(paramKey);
             if(ObjectUtils.isEmpty(paramsEntity)){
-                throw new ServerException("参数不能为空，paramKey：" + paramKey);
+                throw new ServerException("系统参数不能为空，paramKey：" + paramKey);
             }else{
                 value = paramsEntity.getParamValue();
             }

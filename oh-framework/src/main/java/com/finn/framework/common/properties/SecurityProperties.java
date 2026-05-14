@@ -10,14 +10,16 @@ import java.util.List;
 public class SecurityProperties {
 
     /**
-     * token过期时间
+     * token过期时间(秒)
+     * 默认2小时
      */
-    private Long accessTokenExpire;
+    private Long accessTokenExpire = 7200L;
 
     /**
-     * token刷新时间
+     * token刷新时间(秒)
+     * 默认12小时
      */
-    private Long refreshTokenExpire;
+    private Long refreshTokenExpire = 43200L;
     /**
      * 多少次鉴权失败锁定，0表示不开启
      */

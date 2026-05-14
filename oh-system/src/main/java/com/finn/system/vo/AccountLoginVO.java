@@ -40,6 +40,10 @@ public class AccountLoginVO implements Serializable {
      * 用户密钥，用于第三方系统登录
      */
     private String userKey;
+    /**
+     * 平台key,默认PC端 电脑端：PC 移动app端：APP
+     */
+    private String platformKey = "PC";
 
     public String getUsername() {
         return username;
@@ -79,5 +83,13 @@ public class AccountLoginVO implements Serializable {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
+    }
+
+    public String getPlatformKey() {
+        return platformKey;
+    }
+
+    public void setPlatformKey(String platformKey) {
+        this.platformKey = platformKey;
     }
 }

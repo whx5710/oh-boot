@@ -36,10 +36,9 @@ public class AuthController {
      * 验证码
      * @return 验证码信息
      */
-    @GetMapping("captcha")
-    public Result<CaptchaVO> captcha() {
-        CaptchaVO captchaVO = captchaService.generateImg();
-        return Result.ok(captchaVO);
+    @GetMapping("/captcha/{platformKey}")
+    public Result<CaptchaVO> captcha(@PathVariable String platformKey) {
+        return Result.ok(captchaService.generateImg(platformKey));
     }
 
     /**
