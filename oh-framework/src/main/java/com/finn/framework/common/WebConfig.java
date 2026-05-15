@@ -1,7 +1,9 @@
 package com.finn.framework.common;
 
+import com.finn.framework.common.properties.SecurityProperties;
 import com.finn.framework.exception.TraceIdInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -14,10 +16,31 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    private final SecurityProperties securityProperties;
+
+    public WebConfig(SecurityProperties securityProperties){
+        this.securityProperties = securityProperties;
+    }
+
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册TraceId拦截器，拦截所有请求
         registry.addInterceptor(new TraceIdInterceptor()).addPathPatterns("/**");
+    }
+
+    /**
+     * 跨域配置
+     * @param registry r
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins(securityProperties.getOrigins().split(",")) // 解析逗号分隔的域名
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

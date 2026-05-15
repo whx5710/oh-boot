@@ -21,6 +21,10 @@ public class SecurityProperties {
      */
     private Long refreshTokenExpire = 43200L;
     /**
+     * 跨域配置，生产环境建议指定具体域名
+     */
+    private String origins = "";
+    /**
      * 多少次鉴权失败锁定，0表示不开启
      */
     private int authCount = 0;
@@ -81,4 +85,11 @@ public class SecurityProperties {
         this.ignoreUrls = ignoreUrls;
     }
 
+    public String getOrigins() {
+        return origins;
+    }
+
+    public void setOrigins(String origins) {
+        this.origins = origins;
+    }
 }
