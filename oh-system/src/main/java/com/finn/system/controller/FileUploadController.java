@@ -3,6 +3,7 @@ package com.finn.system.controller;
 import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.entity.Result;
+import com.finn.system.config.StorageProperties;
 import com.finn.system.service.AttachmentService;
 import com.finn.system.vo.AttachmentVO;
 import com.finn.system.vo.FileUploadVO;
@@ -26,9 +27,13 @@ public class FileUploadController {
 
     private final AttachmentService attachmentService;
 
-    public FileUploadController(StorageService storageService, AttachmentService attachmentService) {
+    private final StorageProperties storageProperties;
+
+    public FileUploadController(StorageService storageService, AttachmentService attachmentService,
+                                StorageProperties storageProperties) {
         this.storageService = storageService;
         this.attachmentService = attachmentService;
+        this.storageProperties = storageProperties;
     }
 
     /**
@@ -53,7 +58,7 @@ public class FileUploadController {
         vo.setUrl(url);
         vo.setSize(file.getSize());
         vo.setName(file.getOriginalFilename());
-        vo.setPlatform(storageService.properties.getConfig().getType().name());
+        vo.setPlatform(storageProperties.getConfig().getType().name());
         // 保存文件信息
         AttachmentVO attachmentVO = new AttachmentVO();
         attachmentVO.setName(vo.getName());
