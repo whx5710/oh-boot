@@ -7,7 +7,7 @@ import com.finn.framework.utils.Tools;
 import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.security.user.UserDetail;
+import com.finn.system.entity.UserEntity;
 import com.finn.system.query.UserQuery;
 import com.finn.system.service.UserService;
 import com.finn.system.vo.UserPasswordVO;
@@ -143,9 +143,13 @@ public class UserController {
     @Log(module = "用户管理", name = "修改密码", type = OperateTypeEnum.UPDATE)
     public Result<String> password(@RequestBody @Valid UserPasswordVO vo) {
         // 原密码不正确
-        UserDetail user = SecurityUser.getUser();
-        if(user == null){
+        Long userId = SecurityUser.getUserId();
+        if(userId == null){
             throw new ServerException("请先登录！");
+        }
+        UserEntity user = userService.getUser(userId);
+        if(user == null || user.getId() == null){
+            throw new ServerException("该用户不存在！");
         }
         if (!passwordEncoder.matches(vo.getPassword(), user.getPassword())) {
             return Result.error("原密码不正确");
