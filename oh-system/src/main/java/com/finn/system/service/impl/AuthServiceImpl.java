@@ -120,6 +120,9 @@ public class AuthServiceImpl implements AuthService {
 
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();
+        if(user == null){
+            throw new ServerException("未获取到用户信息");
+        }
 
         // 生成 accessToken
         String accessToken = Tools.generator();
@@ -233,7 +236,6 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadCredentialsException e) {
             throw new ServerException(buildErrorMessage(login.getUsername(), "用户名或密码错误"));
         } catch (InternalAuthenticationServiceException e){
-            e.printStackTrace();
             log.error("登录发生异常!{}", e.getMessage());
             throw new ServerException("登录发生异常，请联写管理员!");
         }

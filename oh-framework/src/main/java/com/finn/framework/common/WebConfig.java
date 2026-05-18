@@ -1,6 +1,6 @@
 package com.finn.framework.common;
 
-import com.finn.framework.common.properties.SecurityProperties;
+import com.finn.framework.common.properties.CorsProperties;
 import com.finn.framework.exception.TraceIdInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -17,16 +17,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final SecurityProperties securityProperties;
+    private final CorsProperties corsProperties;
 
-    public WebConfig(SecurityProperties securityProperties){
-        this.securityProperties = securityProperties;
+    public WebConfig(CorsProperties corsProperties){
+        this.corsProperties = corsProperties;
     }
 
-    
+    /**
+     * 注册TraceId拦截器，拦截所有请求
+     * @param registry r
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册TraceId拦截器，拦截所有请求
         registry.addInterceptor(new TraceIdInterceptor()).addPathPatterns("/**");
     }
 
@@ -37,10 +39,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(securityProperties.getOrigins().split(",")) // 解析逗号分隔的域名
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+                .allowedOrigins(corsProperties.getAllowedOrigins().split(",")) // 解析逗号分隔的域名
+                .allowedMethods(corsProperties.getAllowedMethods().split(",")) // 请求方法
+                .allowedHeaders(corsProperties.getAllowedHeaders())
+                .allowCredentials(corsProperties.isAllowCredentials())
+                .maxAge(corsProperties.getMaxAge());
     }
 }

@@ -26,8 +26,8 @@ public class TokenCache {
 
     /**
      * 保存用户信息到redis中
-     * @param accessToken
-     * @param user
+     * @param accessToken a
+     * @param user u
      */
     public void saveUser(String accessToken, String refreshToken, UserDetail user) {
         // token用户信息

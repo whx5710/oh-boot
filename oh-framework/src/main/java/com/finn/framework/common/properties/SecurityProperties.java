@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * 登录鉴权相关配置
+ */
 @Component
 @ConfigurationProperties(prefix = "finn.security")
 public class SecurityProperties {
@@ -20,10 +23,6 @@ public class SecurityProperties {
      * 默认12小时
      */
     private Long refreshTokenExpire = 43200L;
-    /**
-     * 跨域配置，生产环境建议指定具体域名
-     */
-    private String origins = "";
     /**
      * 多少次鉴权失败锁定，0表示不开启
      */
@@ -85,11 +84,4 @@ public class SecurityProperties {
         this.ignoreUrls = ignoreUrls;
     }
 
-    public String getOrigins() {
-        return origins;
-    }
-
-    public void setOrigins(String origins) {
-        this.origins = origins;
-    }
 }

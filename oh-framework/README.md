@@ -54,11 +54,17 @@ finn:
   security:
     access-token-expire: 43200      # token有效期
     refresh-token-expire: 604800    # 刷新token有效期
-    origins: http://127.0.0.1:9001                  # 跨域配置，多个用逗号隔开
     auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
     lock-time: 3600                 # 账号锁定时间(秒)
     ignore-urls:                    # 忽略鉴权的url
       - /doc.html
+  # 跨域配置
+  cors:
+    allowed-origins: http://127.0.0.1:9001 # 多个用逗号隔开
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS # 请求方法
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600
   open-api: # 异步调用接口
     type: 2 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
