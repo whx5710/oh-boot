@@ -1,6 +1,6 @@
 auth:
   ignore-urls:
-    - /sys/auth/captcha/*
+    - /sys/auth/captcha
     - /sys/auth/login
     - /sys/auth/refresh
     - /sys/auth/loginByKey
