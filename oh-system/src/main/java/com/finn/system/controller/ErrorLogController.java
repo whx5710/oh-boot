@@ -37,8 +37,7 @@ public class ErrorLogController {
     @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:error:log')")
     public Result<PageResult<ErrorLogVO>> page(@Valid ErrorLogQuery query) {
-        PageResult<ErrorLogVO> page = errorLogService.page(query);
-        return Result.ok(page);
+        return Result.ok(errorLogService.page(query));
     }
 
     /**

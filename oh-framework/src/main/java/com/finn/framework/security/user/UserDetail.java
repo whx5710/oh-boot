@@ -27,15 +27,27 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
     private String avatar;
     private Integer gender;
     private Long deptId;
+    /**
+     * 角色id集合
+     */
+    private List<Long> roleIds;
     private Integer status;
     private Integer superAdmin;
-    // 登录时间戳
+    /**
+     * 登录时间戳
+     */
     private LocalDateTime loginTime;
-    // token刷新时间
+    /**
+     * token刷新时间
+     */
     private Long refreshTokenExpire;
-    // 用户密钥
+    /**
+     * 用户密钥
+     */
     private String userKey;
-    // 登录IP
+    /**
+     * 登录IP
+     */
     private String ip;
 
     public String getPassword() {
@@ -150,6 +162,13 @@ public class UserDetail extends BaseUserEntity implements UserDetails {
         this.userKey = userKey;
     }
 
+    public List<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
+    }
     /**
      * 数据权限范围
      * <p>

@@ -223,7 +223,6 @@ public class AuthServiceImpl implements AuthService {
      * @return token
      */
     private TokenVO createToken(AccountLoginVO login, boolean checkKey){
-        String msg;
         Authentication authentication;
         String authCountKey = RedisKeys.getAuthCountKey(login.getUsername());
         // 判断错误次数，超出则锁定账号
@@ -237,7 +236,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServerException(buildErrorMessage(login.getUsername(), "用户名或密码错误"));
         } catch (InternalAuthenticationServiceException e){
             log.error("登录发生异常!{}", e.getMessage());
-            throw new ServerException("登录发生异常，请联写管理员!");
+            throw new ServerException("登录发生异常，请联系管理员!");
         }
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();

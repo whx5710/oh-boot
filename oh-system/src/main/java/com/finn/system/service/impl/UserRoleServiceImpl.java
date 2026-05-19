@@ -59,14 +59,13 @@ public class UserRoleServiceImpl implements UserRoleService {
         }
 
         // 需要删除的角色ID
-        // Collection<Long> deleteRoleIdList = CollUtil.subtract(dbRoleIdList, roleIdList);
         List<Long> finalRoleIdList = roleIdList;
-        Collection<Long> deleteRoleIdList = dbRoleIdList.stream()
+        List<Long> deleteRoleIdList = dbRoleIdList.stream()
                 .filter(element -> !finalRoleIdList.contains(element))
                 .collect(Collectors.toList());
         if (!deleteRoleIdList.isEmpty()){
             Wrapper<UserRoleEntity> updateWrapper = UpdateWrapper.of(UserRoleEntity.class)
-                    .set(UserRoleEntity::getDbStatus, 0).in(UserRoleEntity::getRoleId, (List<Long>) deleteRoleIdList)
+                    .set(UserRoleEntity::getDbStatus, 0).in(UserRoleEntity::getRoleId, deleteRoleIdList)
                     .eq(UserRoleEntity::getUserId, userId);
             userRoleMapper.updateByWrapper(updateWrapper);
         }
@@ -127,7 +126,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
             authorityList = userRoleMapper.getAuthorityList();
         } else {
-            authorityList = userRoleMapper.getUserAuthorityList(user.getId());
+            authorityList = userRoleMapper.getUserAuthorityList(user.getRoleIds());
         }
 
         // 用户权限列表

@@ -27,20 +27,20 @@ public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
     List<Long> getRoleIdList(@Param("userId") Long userId);
 
     /**
-     * 根据用户ID获取非系统内置的角色ID
+     * 根据用户ID获取角色ID
      * @param userId 用户ID
      * @return 角色ids
      */
     @Select("select sys_user_role.role_id from sys_user_role INNER JOIN sys_role " +
             "on sys_user_role.role_id = sys_role.id and sys_user_role.db_status = 1 " +
-            "and sys_role.db_status = 1 and sys_role.is_system = 0 and sys_user_role.user_id = #{userId}")
+            "and sys_role.db_status = 1 and sys_user_role.user_id = #{userId}")
     List<Long> getTenantRoleIds(@Param("userId") Long userId);
 
     /**
-     * 查询用户权限列表
-     * @param userId  用户ID
+     * 查询角色权限列表
+     * @param roleIds  角色ID
      */
-    List<String> getUserAuthorityList(@Param("userId") Long userId);
+    List<String> getUserAuthorityList(@Param("roleIds") List<Long> roleIds);
 
     /**
      * 查询所有权限列表

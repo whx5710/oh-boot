@@ -401,6 +401,11 @@ public class UserServiceImpl implements UserService {
         return pwd;
     }
 
+    /**
+     * 获取用户信息详情
+     * @param userEntity
+     * @return
+     */
     @Override
     public UserDetails getUserDetails(UserEntity userEntity) {
         // 转换成UserDetail对象
@@ -414,6 +419,9 @@ public class UserServiceImpl implements UserService {
         // 数据权限范围
         List<Long> dataScopeList = getDataScope(userDetail);
         userDetail.setDataScopeList(dataScopeList);
+
+        // 用户角色
+        userDetail.setRoleIds(userRoleService.getRoleIdList(userEntity.getId()));
 
         // 用户权限列表
         Set<String> authoritySet = userRoleService.getUserAuthority(userDetail);
