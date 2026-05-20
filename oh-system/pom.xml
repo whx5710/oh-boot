@@ -47,11 +47,11 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <!-- 分页插件 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pagehelper.version}</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build><!-- 打jar包命名-${revision} -->
