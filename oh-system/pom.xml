@@ -15,21 +15,12 @@
     <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 打包的版本 -->
         <revision>4.0.1_20260308</revision>
     </properties>
 
     <dependencies>
-        <!-- 监控 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!-- 系统框架：继承自父pom的依赖已包含所有必要的Spring Boot依赖 -->
+        <!-- 系统框架：继承自根pom的依赖已包含所有必要的Spring Boot依赖 -->
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
@@ -47,23 +38,14 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!-- ==================== 数据库驱动 ==================== -->
-        <!-- MySQL驱动：根据实际使用的数据库选择 -->
+        <!-- 数据库驱动：根据实际使用的数据库选择 -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- PostgreSQL驱动：如使用PostgreSQL则取消注释 -->
-        <!--<dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>-->
-
-        <!-- ==================== 其他依赖 ==================== -->
-        <!-- websocket -->
+        <!-- WebSocket -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
