@@ -12,18 +12,22 @@
     <artifactId>oh-module</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <modules>
         <!-- 工作流 -->
         <module>oh-module-flow</module>
         <!-- 外部对接客户端 -->
         <module>oh-module-app</module>
     </modules>
+
     <dependencies>
+        <!-- 系统框架：继承自父pom的依赖已包含所有必要的Spring Boot依赖 -->
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>

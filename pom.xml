@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>4.0.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.finn</groupId>
 	<artifactId>oh-boot</artifactId>
@@ -17,7 +17,7 @@
 	</description>
 	<packaging>pom</packaging>
 	<url>https://gitee.com/whx233</url>
-	<!-- 开发者信息 -->
+
 	<developers>
 		<developer>
 			<name>王小费</name>
@@ -27,33 +27,27 @@
 	</developers>
 
 	<modules>
-		<module>oh-system</module>
-		<module>oh-module</module>
 		<module>oh-framework</module>
+		<module>oh-module</module>
+		<module>oh-system</module>
 	</modules>
 
 	<properties>
 		<java.version>21</java.version>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
-		<!-- 字符集 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!--springboot版本-->
 		<spring-boot-dependencies.version>4.0.5</spring-boot-dependencies.version>
-		<!-- spring security -->
 		<spring.security>7.1.0-M2</spring.security>
-		<!-- 框架版本信息 -->
-		<finn.framework.version>4.0.5_260401</finn.framework.version>
-		<!-- bean 拷贝 -->
+		<finn.framework.version>4.1.0_260523</finn.framework.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
-		<!-- flowable 工作流相关 -->
 		<flowable.version>8.0.0</flowable.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- start ================================= spring boot 相关 ================================= -->
+			<!-- Spring Boot BOM -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
@@ -61,19 +55,15 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- end   ================================= spring boot 相关 ================================= -->
 
-			<!-- start ================================= 项目相关 ================================= -->
 			<!-- 系统框架 -->
 			<dependency>
 				<groupId>com.finn</groupId>
 				<artifactId>oh-framework</artifactId>
 				<version>${finn.framework.version}</version>
 			</dependency>
-			<!-- end   ================================= 项目相关 ================================= -->
 
-			<!-- start ================================= 其他 ================================= -->
-			<!--bean映射-->
+			<!-- MapStruct -->
 			<dependency>
 				<groupId>org.mapstruct</groupId>
 				<artifactId>mapstruct</artifactId>
@@ -84,23 +74,54 @@
 				<artifactId>mapstruct-processor</artifactId>
 				<version>${mapstruct.version}</version>
 			</dependency>
-			<!-- end   ================================= 其他 ================================= -->
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- 所有子模块共享的依赖 -->
 	<dependencies>
-		<!-- spring boot web请求 -->
+		<!-- ==================== Spring Boot Starters ==================== -->
+		<!-- Web MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- 安全认证 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- 参数校验 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- JDBC -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<scope>compile</scope>
-			<version>${spring.security}</version>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
 		</dependency>
-		<!--bean映射-->
+
+		<!-- ==================== 工具类 ==================== -->
+		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -121,6 +142,7 @@
 			</releases>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>public</id>
@@ -142,9 +164,7 @@
 				<artifactId>smart-doc-maven-plugin</artifactId>
 				<version>3.1.0</version>
 				<configuration>
-					<!--指定生成文档的使用的配置文件-->
 					<configFile>${basedir}/src/main/resources/smart-doc.json</configFile>
-					<!--指定项目名称-->
 					<projectName>oh-boot-pro</projectName>
 				</configuration>
 				<executions>
