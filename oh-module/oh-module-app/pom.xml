@@ -10,16 +10,11 @@
     </parent>
     <artifactId>oh-module-app</artifactId>
 
-    <properties>
-        <kafka.version>4.0.5</kafka.version>
-    </properties>
-
     <dependencies>
         <!-- Kafka消息队列 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-kafka</artifactId>
-            <version>${kafka.version}</version>
         </dependency>
     </dependencies>
 </project>
