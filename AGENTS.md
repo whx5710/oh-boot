@@ -131,7 +131,7 @@ public class UserEntity extends TenantEntity {
 ### 4. Controller 规范
 
 - 使用 `@RestController` 注解
-- 使用 `@RequestMapping` 指定基础路径，如 `sys/user`（不需要前导斜杠）
+- 使用 `@RequestMapping` 指定基础路径，如 `/sys/user`
 - 权限控制使用 `@PreAuthorize("hasAuthority('sys:user:page')")`
 - 操作日志使用 `@Log(module = "用户管理", name = "保存", type = OperateTypeEnum.INSERT)`
 - 参数校验使用 `@Valid`
@@ -140,7 +140,7 @@ public class UserEntity extends TenantEntity {
 
 ```java
 @RestController
-@RequestMapping("sys/user")
+@RequestMapping("/sys/user")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
