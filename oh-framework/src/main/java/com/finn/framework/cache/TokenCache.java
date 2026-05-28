@@ -46,6 +46,10 @@ public class TokenCache {
 
         // 用户信息
         redisCache.set(RedisKeys.getUserInfoKey(String.valueOf(user.getId()), accessToken), user, securityProperties.getAccessTokenExpire());
+
+        // 将用户ID添加到在线用户集合（ZSet），score 为过期时间戳
+        long expireTime = System.currentTimeMillis() + (securityProperties.getAccessTokenExpire() * 1000);
+        redisCache.zAdd(RedisKeys.getOnlineUserIdSetKey(), String.valueOf(user.getId()), expireTime);
     }
 
     /**
@@ -103,6 +107,11 @@ public class TokenCache {
         // 删除用户
         if(userId != null){
             redisCache.delete(RedisKeys.getUserInfoKey(String.valueOf(userId), accessToken));
+            // 检查该用户是否还有其他token，如果没有则从在线用户集合中移除
+            List<String> remainingTokens = getTokenByUserId(userId);
+            if (remainingTokens.isEmpty() || (remainingTokens.size() == 1 && remainingTokens.getFirst().equals(accessToken))) {
+                redisCache.zRemove(RedisKeys.getOnlineUserIdSetKey(), String.valueOf(userId));
+            }
         }
         // 删除刷新token
         redisCache.delete(RedisKeys.getAccessRefreshTokenKey(refresh));
@@ -120,79 +129,61 @@ public class TokenCache {
         // 删除刷新token
         String key = RedisKeys.getUserInfoKey(String.valueOf(userId), "");
         redisCache.deleteAll(key);
+        // 从在线用户集合中移除
+        redisCache.zRemove(RedisKeys.getOnlineUserIdSetKey(), String.valueOf(userId));
     }
 
 
     /**
-     * 获取所有用户token的key
+     * 获取所有用户token的key（使用 SCAN 避免阻塞 Redis）
      * @return list
      */
     public List<String> getUserKeyList() {
         String pattern = RedisKeys.getAccessTokenKey("*");
-        Set<String> sets = redisCache.keys(pattern);
-        List<String> list = new ArrayList<>();
-        if(sets != null){
-            list.addAll(sets);
-        }
-        return list;
+        return new ArrayList<>(redisCache.scanKeys(pattern));
     }
 
     /**
-     * 获取所有用户ID的key
+     * 获取所有在线用户ID（使用 ZSet，自动过滤过期用户）
      * @return list
      */
     public List<String> getUserIdList() {
-        String pattern = RedisKeys.getUserInfoKey("*", "*");
-        Set<String> sets = redisCache.keys(pattern);
-        List<String> list = new ArrayList<>();
-        if(sets != null){
-            Set<String> tmp = new HashSet<>();
-            for(String key: sets){
-                String s = key.substring(0, key.lastIndexOf(":"));
-                tmp.add(s.substring(s.lastIndexOf(":") + 1));
-            }
-            list.addAll(tmp);
-        }
-        return list;
+        // 先清理已过期的用户ID（score <= 当前时间戳）
+        long currentTime = System.currentTimeMillis();
+        redisCache.zRemoveRangeByScore(RedisKeys.getOnlineUserIdSetKey(), currentTime);
+        // 获取未过期的用户ID（score > 当前时间戳）
+        return new ArrayList<>(redisCache.zRangeByScore(RedisKeys.getOnlineUserIdSetKey(), Long.MAX_VALUE));
     }
 
     /**
-     * 根据用户ID获取所有token
+     * 根据用户ID获取所有token（使用 SCAN 避免阻塞 Redis）
      * @return list
      */
     public List<String> getTokenByUserId(Long userId) {
         String pattern = RedisKeys.getUserInfoKey(String.valueOf(userId), "*");
-        Set<String> sets = redisCache.keys(pattern);
-        List<String> list = new ArrayList<>();
-        if(sets != null){
-            Set<String> tmp = new HashSet<>();
-            for(String key: sets){
-                tmp.add(key.substring(key.lastIndexOf(":") + 1));
-            }
-            list.addAll(tmp);
-        }
-        return list;
+        Set<String> tokens = new HashSet<>();
+        redisCache.scan(pattern, key -> tokens.add(key.substring(key.lastIndexOf(":") + 1)));
+        return new ArrayList<>(tokens);
     }
 
     /**
-     * 根据用户ID获取用户登录情况
+     * 根据用户ID获取用户登录情况（使用 SCAN 避免阻塞 Redis）
      * @param userId 用户ID
      * @return list
      */
-    public List<UserDetail> getUserById(Long userId){
+    public List<UserDetail> getUserById(Long userId) {
         String pattern = RedisKeys.getUserInfoKey(String.valueOf(userId), "*");
-        Set<String> sets = redisCache.keys(pattern);
         List<UserDetail> list = new ArrayList<>();
-        if(sets != null){
-            for(String key: sets){
-                UserDetail userDetail = (UserDetail) redisCache.get(key);
+        redisCache.scan(pattern, key -> {
+            UserDetail userDetail = (UserDetail) redisCache.get(key);
+            if (userDetail != null) {
                 userDetail.setPassword(key.substring(key.lastIndexOf(":") + 1));
                 list.add(userDetail);
             }
-            list = list.stream().sorted(Comparator.comparing(UserDetail::getLoginTime).reversed())
-                    .toList();
-        }
-        return list;
+        });
+        return list.stream()
+                .sorted(Comparator.comparing(UserDetail::getLoginTime).reversed())
+                .toList();
     }
 
 }

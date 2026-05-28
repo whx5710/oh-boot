@@ -5,8 +5,10 @@ import com.finn.framework.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Redis Cache
@@ -106,12 +109,42 @@ public class RedisCache {
     }
 
     /**
-     * 获取key集合
+     * 获取key集合（注意：大数据量时会阻塞Redis，建议使用 scan 方法）
      * @param pattern
      * @return
      */
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 使用 SCAN 命令增量迭代获取key，避免阻塞Redis
+     * @param pattern 匹配模式
+     * @param keyConsumer 对每个key的消费处理
+     */
+    public void scan(String pattern, Consumer<String> keyConsumer) {
+        ScanOptions options = ScanOptions.scanOptions()
+                .match(pattern)
+                .count(100)
+                .build();
+        try (Cursor<String> cursor = redisTemplate.scan(options)) {
+            while (cursor.hasNext()) {
+                keyConsumer.accept(cursor.next());
+            }
+        } catch (Exception e) {
+            log.error("SCAN 操作失败: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 使用 SCAN 命令增量迭代获取key集合，避免阻塞Redis
+     * @param pattern 匹配模式
+     * @return key集合
+     */
+    public Set<String> scanKeys(String pattern) {
+        Set<String> keys = new HashSet<>();
+        scan(pattern, keys::add);
+        return keys;
     }
 
     /**
@@ -198,6 +231,102 @@ public class RedisCache {
 
     public void hDel(String key, Object... fields) {
         redisTemplate.opsForHash().delete(key, fields);
+    }
+
+    /**
+     * 向 Set 中添加元素
+     * @param key 键
+     * @param member 成员
+     * @return 是否添加成功
+     */
+    public Long sAdd(String key, Object... member) {
+        return redisTemplate.opsForSet().add(key, member);
+    }
+
+    /**
+     * 从 Set 中移除元素
+     * @param key 键
+     * @param member 成员
+     * @return 移除的数量
+     */
+    public Long sRemove(String key, Object... member) {
+        return redisTemplate.opsForSet().remove(key, member);
+    }
+
+    /**
+     * 获取 Set 中的所有成员
+     * @param key 键
+     * @return 成员集合
+     */
+    public Set<String> sMembers(String key) {
+        Set<Object> members = redisTemplate.opsForSet().members(key);
+        if (members == null) {
+            return new HashSet<>();
+        }
+        Set<String> result = new HashSet<>();
+        for (Object member : members) {
+            result.add(String.valueOf(member));
+        }
+        return result;
+    }
+
+    /**
+     * 判断元素是否在 Set 中
+     * @param key 键
+     * @param member 成员
+     * @return 是否存在
+     */
+    public Boolean sIsMember(String key, Object member) {
+        return redisTemplate.opsForSet().isMember(key, member);
+    }
+
+    /**
+     * 向 ZSet 中添加元素（带分数）
+     * @param key 键
+     * @param member 成员
+     * @param score 分数（过期时间戳）
+     * @return 是否添加成功
+     */
+    public Boolean zAdd(String key, Object member, double score) {
+        return redisTemplate.opsForZSet().add(key, member, score);
+    }
+
+    /**
+     * 从 ZSet 中移除元素
+     * @param key 键
+     * @param member 成员
+     * @return 移除的数量
+     */
+    public Long zRemove(String key, Object... member) {
+        return redisTemplate.opsForZSet().remove(key, member);
+    }
+
+    /**
+     * 获取 ZSet 中指定分数范围内的成员（score <= maxScore）
+     * @param key 键
+     * @param maxScore 最大分数（当前时间戳）
+     * @return 成员集合
+     */
+    public Set<String> zRangeByScore(String key, double maxScore) {
+        Set<Object> members = redisTemplate.opsForZSet().rangeByScore(key, 0, maxScore);
+        if (members == null) {
+            return new HashSet<>();
+        }
+        Set<String> result = new HashSet<>();
+        for (Object member : members) {
+            result.add(String.valueOf(member));
+        }
+        return result;
+    }
+
+    /**
+     * 删除 ZSet 中指定分数范围内的成员（清理过期数据）
+     * @param key 键
+     * @param maxScore 最大分数（当前时间戳）
+     * @return 删除的数量
+     */
+    public Long zRemoveRangeByScore(String key, double maxScore) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, 0, maxScore);
     }
 
     public void leftPush(String key, Object value) {
