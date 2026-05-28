@@ -30,7 +30,7 @@ finn:
       - /upload/**
   # 跨域配置
   cors:
-    allowed-origins: http://127.0.0.1:9001 # 多个用逗号隔开
+    allowed-origins: http://127.0.0.1:9001,http://localhost:5777 # 多个用逗号隔开
     allowed-methods: GET,POST,PUT,DELETE,OPTIONS # 请求方法
     allowed-headers: "*"
     allow-credentials: true
