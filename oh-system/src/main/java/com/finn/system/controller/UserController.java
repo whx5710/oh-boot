@@ -81,7 +81,7 @@ public class UserController {
      * @param userName 用户名
      * @return 提示信息
      */
-    @GetMapping("unlock/{userName}")
+    @GetMapping("/unlock/{userName}")
     @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<String> unlock(@PathVariable("userName")String userName) {
         userService.unlock(userName);
@@ -129,7 +129,7 @@ public class UserController {
      * 获取当前登录的用户
      * @return 用户信息
      */
-    @GetMapping("info")
+    @GetMapping("/info")
     public Result<UserVO> info() {
         return Result.ok(userService.info(null));
     }
@@ -186,7 +186,7 @@ public class UserController {
      * @param vo 用户信息
      * @return 提示信息
      */
-    @PostMapping("register")
+    @PostMapping("/register")
     @Log(module = "用户管理", name = "用户注册", type = OperateTypeEnum.INSERT)
     public Result<String> register(@RequestBody @Valid UserVO vo) {
         // 新增密码不能为空

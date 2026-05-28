@@ -26,7 +26,7 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  */
 @RestController
-@RequestMapping("monitor/user")
+@RequestMapping("/monitor/user")
 public class UserOnlineController {
     private final TokenCache tokenCache;
     private final UserCache userCache;
@@ -41,7 +41,7 @@ public class UserOnlineController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('monitor:user:all')")
     public Result<PageResult<UserVO>> page(@Valid Query query) {
         // 获取登录用户的全部key
@@ -121,7 +121,7 @@ public class UserOnlineController {
     public Result<String> forceLogoutAll(@PathVariable("userId") String userId) {
         // token不能为空
         if (userId == null || userId.isEmpty()) {
-            Result.error("用户ID不能为空");
+            return Result.error("用户ID不能为空");
         }
         // 删除用户信息
         tokenCache.deleteUserById(Long.valueOf(userId));
