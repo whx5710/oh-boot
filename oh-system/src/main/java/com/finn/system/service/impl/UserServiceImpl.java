@@ -103,7 +103,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageResult<UserVO> clockPage(UserQuery query) {
-        Set<String> set = redisCache.keys(RedisKeys.getAuthCountKey("*"));
+        // 使用 SCAN 替代 KEYS，避免阻塞 Redis
+        Set<String> set = redisCache.scanKeys(RedisKeys.getAuthCountKey("*"));
         if(!set.isEmpty()){
             List<String> names = new ArrayList<>();
             Set<String> tmp = new HashSet<>();
@@ -118,9 +119,7 @@ public class UserServiceImpl implements UserService {
                     return new PageResult<>(new ArrayList<UserVO>(),0);
                 }
             }else{
-                for(String key: set){
-                    names.add(key.substring(key.lastIndexOf(":") + 1));
-                }
+                names.addAll(tmp);
             }
             query.setUserNames(names);
             return page(query);

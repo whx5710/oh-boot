@@ -91,6 +91,18 @@ public class RedisCache {
     }
 
     /**
+     * 批量获取多个key的值（使用 MGET 减少网络往返）
+     * @param keys key列表
+     * @return value列表（与keys顺序一致，key不存在时对应位置为null）
+     */
+    public List<Object> mGet(List<String> keys) {
+        if (keys == null || keys.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    /**
      * 增量 自增
      * @param key
      * @return
@@ -164,13 +176,23 @@ public class RedisCache {
     }
 
     /**
-     * 删除key前缀的数据
-     * @param key
+     * 删除key前缀的数据（使用 SCAN 分批删除，避免阻塞 Redis）
+     * @param key 前缀
      */
     public void deleteAll(String key) {
-        Set<String> keys = redisTemplate.keys(key + "*");
-        if (keys != null && !keys.isEmpty()) {
-            redisTemplate.delete(keys);
+        String pattern = key + "*";
+        List<String> keysToDelete = new ArrayList<>();
+        scan(pattern, k -> {
+            keysToDelete.add(k);
+            // 每积累 100 个 key 就批量删除一次
+            if (keysToDelete.size() >= 100) {
+                redisTemplate.delete(keysToDelete);
+                keysToDelete.clear();
+            }
+        });
+        // 删除剩余的 key
+        if (!keysToDelete.isEmpty()) {
+            redisTemplate.delete(keysToDelete);
         }
     }
 

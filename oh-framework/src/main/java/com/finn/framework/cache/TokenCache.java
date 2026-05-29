@@ -167,20 +167,31 @@ public class TokenCache {
     }
 
     /**
-     * 根据用户ID获取用户登录情况（使用 SCAN 避免阻塞 Redis）
+     * 根据用户ID获取用户登录情况（使用 SCAN + 批量获取避免阻塞 Redis）
      * @param userId 用户ID
      * @return list
      */
     public List<UserDetail> getUserById(Long userId) {
         String pattern = RedisKeys.getUserInfoKey(String.valueOf(userId), "*");
+        // 先收集所有 key
+        List<String> keys = new ArrayList<>();
+        redisCache.scan(pattern, keys::add);
+        
+        if (keys.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        // 批量获取用户详情，减少网络往返
         List<UserDetail> list = new ArrayList<>();
-        redisCache.scan(pattern, key -> {
-            UserDetail userDetail = (UserDetail) redisCache.get(key);
-            if (userDetail != null) {
-                userDetail.setPassword(key.substring(key.lastIndexOf(":") + 1));
+        List<Object> values = redisCache.mGet(keys);
+        for (int i = 0; i < keys.size(); i++) {
+            Object value = values.get(i);
+            if (value instanceof UserDetail userDetail) {
+                userDetail.setPassword(keys.get(i).substring(keys.get(i).lastIndexOf(":") + 1));
                 list.add(userDetail);
             }
-        });
+        }
+        
         return list.stream()
                 .sorted(Comparator.comparing(UserDetail::getLoginTime).reversed())
                 .toList();
