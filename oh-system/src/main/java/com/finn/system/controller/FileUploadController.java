@@ -8,6 +8,8 @@ import com.finn.system.service.AttachmentService;
 import com.finn.system.vo.AttachmentVO;
 import com.finn.system.vo.FileUploadVO;
 import com.finn.system.service.StorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("sys/file")
 public class FileUploadController {
+
+    private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
+
+    /**
+     * 默认最大文件大小：100MB
+     */
+    private static final long MAX_FILE_SIZE = 100 * 1024 * 1024;
+
     private final StorageService storageService;
 
     private final AttachmentService attachmentService;
@@ -37,22 +47,34 @@ public class FileUploadController {
     }
 
     /**
-     * 上传
+     * 上传（使用流式上传，支持大文件）
      * @param file
      * @return
      * @throws Exception
      */
-    @PostMapping("upload")
+    @PostMapping("/upload")
     @Log(module = "文件上传", name = "上传", type = OperateTypeEnum.INSERT)
     public Result<FileUploadVO> upload(@RequestParam("file") MultipartFile file) throws Exception {
         if (file.isEmpty()) {
             return Result.error("请选择需要上传的文件");
         }
 
+        // 检查文件大小
+        if (file.getSize() > MAX_FILE_SIZE) {
+            return Result.error("文件大小超过限制，最大支持 " + (MAX_FILE_SIZE / 1024 / 1024) + "MB");
+        }
+
         // 上传路径
         String path = storageService.getPath(file.getOriginalFilename());
-        // 上传文件
-        String url = storageService.upload(file.getBytes(), path);
+
+        // 使用流式上传，避免大文件读取到内存
+        String url;
+        try (var inputStream = file.getInputStream()) {
+            url = storageService.upload(inputStream, path);
+        } catch (Exception e) {
+            log.error("文件上传失败", e);
+            return Result.error("文件上传失败：" + e.getMessage());
+        }
 
         FileUploadVO vo = new FileUploadVO();
         vo.setUrl(url);

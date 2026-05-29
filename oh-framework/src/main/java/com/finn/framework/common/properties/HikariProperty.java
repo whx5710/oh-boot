@@ -51,7 +51,7 @@ public class HikariProperty {
     /**
      * 慢查询阈值（毫秒）
      */
-    private Long slowThreshold = 1000L;
+    private Long slowThreshold = 500L;
     /**
      * 初始化时是否检查连接，默认false
      */

@@ -4,6 +4,7 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.enums.CommonEnum;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.excel.ExcelUtils;
@@ -222,13 +223,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(List<Long> idList) {
         // 删除用户
-//        removeByIds(idList);
-        idList.forEach(id -> {
-            UserEntity entity = new UserEntity();
-            entity.setId(id);
-            entity.setDbStatus(0);
-            userMapper.updateById(entity);
-        });
+        Wrapper<UserEntity> updateWrapper = UpdateWrapper.of(UserEntity.class).set(UserEntity::getDbStatus, 0)
+                .in(UserEntity::getId, idList);
+        userMapper.updateByWrapper(updateWrapper);
 
         // 删除用户角色关系
         userRoleService.deleteByUserIdList(idList);
@@ -344,7 +341,7 @@ public class UserServiceImpl implements UserService {
         for(Long userId: userIdList){
             UserEntity user = userMapper.getById(userId);
             if(user == null || user.getId() == null){
-                throw new ServerException("用户不存在");
+                throw new ServerException("用户不存在 [" + userId + "]");
             }
             if(user.getTenantId() == null || user.getTenantId().isEmpty()){
                 throw new ServerException("用户未绑定租户，不能解绑");
@@ -352,10 +349,10 @@ public class UserServiceImpl implements UserService {
             if(!tenantID.equals(user.getTenantId())){
                 throw new ServerException("租户ID不准确，不能解绑【" + user.getTenantId() + "】");
             }
-            // 解绑用户,  TenantId = null
-            userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, null)
-                    .eq(UserEntity::getId,user.getId()));
         }
+        // 解绑用户,  TenantId = null
+        userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, null)
+                .in(UserEntity::getId, userIdList));
     }
 
     /**
@@ -370,14 +367,14 @@ public class UserServiceImpl implements UserService {
         for(Long userId: userIdList){
             UserEntity user = userMapper.getById(userId);
             if(user == null || user.getId() == null){
-                throw new ServerException("用户不存在");
+                throw new ServerException("用户不存在 [" + userId + "]");
             }
             if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
                 throw new ServerException("用户已存在其他租户中【" + user.getTenantId() + "】");
             }
-            user.setTenantId(tenantID);
-            userMapper.updateById(user);
         }
+        userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, tenantID)
+                .in(UserEntity::getId, userIdList));
     }
 
     /**

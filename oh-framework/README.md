@@ -98,7 +98,7 @@ spring:
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
           hikari-log: true # 是否开启hikari监控日志打印，默认false
-          slow-threshold: 500 # 慢查询阈值,默认1000（毫秒）
+          slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
       mysqlDb: # 数据源2 配置同 sysDb
         driver-class-name: com.mysql.cj.jdbc.Driver
 ```
