@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -89,6 +90,7 @@ public class OperateLogServiceImpl implements OperateLogService {
                 String key = RedisKeys.getLogKey();
                 // 每次插入10条
                 int count = 10;
+                List<OperateLogEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
                     if(object == null){
@@ -96,7 +98,10 @@ public class OperateLogServiceImpl implements OperateLogService {
                     }
                     OperateLogDTO log = (OperateLogDTO) object;
                     OperateLogEntity entity = OperateLogConvert.INSTANCE.convert(log);
-                    operateLogMapper.insert(entity);
+                    list.add(entity);
+                }
+                if(!list.isEmpty()){
+                    operateLogMapper.insertBatch(list);
                 }
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
