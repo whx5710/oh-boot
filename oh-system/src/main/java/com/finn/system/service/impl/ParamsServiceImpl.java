@@ -184,17 +184,37 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
     }
 
     /**
-     *  根据key获取数据库中的值
+     *  根据key获取数据库中的值（优化：使用 Hash 批量获取，减少缓存查询次数）
      * @param keys 参数Key
      * @return 集合
      */
     @Override
     public Map<String, String> getByKeys(List<String> keys) {
         Map<String, String> data = new HashMap<>();
-        for(String key: keys){
-            String value = getDefaultString(key.toUpperCase());
-            if(value != null){
-                data.put(key.toUpperCase(), value);
+        if (keys == null || keys.isEmpty()) {
+            return data;
+        }
+        
+        // 批量从缓存获取（使用 HMGET 减少网络往返）
+        List<String> upperKeys = keys.stream()
+                .map(String::toUpperCase)
+                .distinct()
+                .toList();
+        
+        Map<String, Object> cacheMap = paramsCache.mGet(upperKeys);
+        
+        for (String key : upperKeys) {
+            Object value = cacheMap.get(key);
+            if (value != null) {
+                data.put(key, String.valueOf(value));
+            } else {
+                // 缓存未命中，从数据库获取
+                ParamsEntity paramsEntity = this.getByKey(key);
+                if (paramsEntity != null) {
+                    data.put(key, paramsEntity.getParamValue());
+                    // 回填缓存
+                    paramsCache.save(key, paramsEntity.getParamValue());
+                }
             }
         }
         return data;

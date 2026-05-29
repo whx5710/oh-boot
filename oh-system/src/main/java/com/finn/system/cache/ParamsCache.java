@@ -5,6 +5,7 @@ import com.finn.framework.cache.RedisKeys;
 import com.finn.system.entity.ParamsEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -63,6 +64,19 @@ public class ParamsCache {
             return null;
         }
         return String.valueOf(obj);
+    }
+
+    /**
+     * 批量获取参数值（使用 HMGET 减少网络往返）
+     *
+     * @param paramKeys 参数键列表
+     * @return 参数键值对
+     */
+    public Map<String, Object> mGet(List<String> paramKeys) {
+        if (paramKeys == null || paramKeys.isEmpty()) {
+            return new HashMap<>();
+        }
+        return redisCache.hMGet(SYSTEM_PARAMS_KEY, paramKeys.toArray(new String[0]));
     }
 
     /**

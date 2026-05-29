@@ -205,6 +205,27 @@ public class RedisCache {
         return hashOperations.entries(key);
     }
 
+    /**
+     * 批量获取 Hash 中的多个字段值（使用 HMGET 减少网络往返）
+     * @param key 键
+     * @param fields 字段数组
+     * @return 字段值映射（field -> value）
+     */
+    public Map<String, Object> hMGet(String key, String... fields) {
+        if (fields == null || fields.length == 0) {
+            return new HashMap<>();
+        }
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        List<Object> values = hashOperations.multiGet(key, List.of(fields));
+        Map<String, Object> result = new HashMap<>();
+        for (int i = 0; i < fields.length; i++) {
+            if (values.get(i) != null) {
+                result.put(fields[i], values.get(i));
+            }
+        }
+        return result;
+    }
+
     public void hMSet(String key, Map<String, Object> map) {
         hMSet(key, map, NOT_EXPIRE);
     }
