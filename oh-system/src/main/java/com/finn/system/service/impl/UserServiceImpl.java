@@ -140,6 +140,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserVO vo) {
+        if(vo.getUserType() == null || vo.getUserType().isEmpty()){
+            vo.setUserType("0");
+        }else{
+            if(!vo.getUserType().equals("0")){
+                AssertUtils.isBlank(vo.getOpenId(), "第三方用户open_id");
+            }
+        }
         // 密码验证
         passwordStrength(vo.getPassword());
         // 密码加密
@@ -153,7 +160,6 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             throw new ServerException("用户名已经存在");
         }
-
         // 判断手机号是否存在
         user = userMapper.getByMobile(entity.getMobile());
         if (user != null) {
@@ -163,7 +169,6 @@ public class UserServiceImpl implements UserService {
             entity.setStatus(1);
         }
         // 保存用户
-        //sysUserMapper.insertUser(entity);
         userMapper.insert(entity); // 保存用户-动态sql
 
         // 保存用户角色关系

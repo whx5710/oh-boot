@@ -59,6 +59,17 @@ public class UserEntity extends TenantEntity {
      */
     private Integer status;
 
+    /**
+     * 用户类型，0普通用户1微信小程序用户
+     */
+    @TableField("user_type")
+    private String userType;
+    /**
+     * 外部用户ID
+     */
+    @TableField("open_id")
+    private String openId;
+
     // 备注
     private String note;
 
@@ -189,5 +200,21 @@ public class UserEntity extends TenantEntity {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

@@ -189,15 +189,22 @@ public class UserController {
     @PostMapping("/register")
     @Log(module = "用户管理", name = "用户注册", type = OperateTypeEnum.INSERT)
     public Result<String> register(@RequestBody @Valid UserVO vo) {
-        // 新增密码不能为空
+        // 新增密码
+        String pwd = null;
         if (ObjectUtils.isEmpty(vo.getPassword())) {
-            return Result.error("密码不能为空");
+            pwd = Tools.getRandom(8);
+            vo.setPassword(pwd);
         }
         // 自己注册的用户不分配角色，由管理员进行配置
         vo.setRoleIdList(null);
         // 保存
         userService.save(vo);
-        return Result.ok("提交成功");
+        if(pwd == null){
+            return Result.ok("保存成功！");
+        }else{
+            return Result.ok("保存成功！默认密码 " + pwd);
+        }
+
     }
 
     /**
