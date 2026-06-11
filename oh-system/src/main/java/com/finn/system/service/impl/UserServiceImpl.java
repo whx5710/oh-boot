@@ -3,6 +3,7 @@ package com.finn.system.service.impl;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.enums.CommonEnum;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
@@ -437,6 +438,31 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 根据open id 获取用户信息
+     * @param openId 第三方ID
+     * @param userType 用户类型，0普通用户1微信小程序用户
+     * @return 用户实体
+     */
+    @Override
+    public UserEntity getByOpenId(String openId, String userType) {
+        AssertUtils.isBlank(openId, "第三方ID");
+        Wrapper<UserEntity> queryWrapper = QueryWrapper.of(UserEntity.class).eq(UserEntity::getDbStatus, 1)
+                .eq(UserEntity::getOpenId, openId).eq(UserEntity::getUserType, userType);
+        List<UserEntity> list = userMapper.listByWrapper(queryWrapper);
+        if(list != null){
+            if(list.size() > 1){
+                throw new ServerException("第三方ID对应多个账号，请检查");
+            }
+            if(list.isEmpty()){
+                return null;
+            }
+            return list.getFirst();
+        }else{
+            return null;
+        }
+    }
+
+    /**
      * 密码校验
      * @param password 原始密码
      */
@@ -460,7 +486,6 @@ public class UserServiceImpl implements UserService {
         if (dataScope == null) {
             return new ArrayList<>();
         }
-
         if (dataScope.equals(DataScopeEnum.ALL.getValue())) {
             // 全部数据权限，则返回null
             return null;
@@ -483,7 +508,6 @@ public class UserServiceImpl implements UserService {
             // 自定义数据权限范围
             return roleDataScopeMapper.getDataScopeList(userDetail.getId());
         }
-
         return new ArrayList<>();
     }
 }

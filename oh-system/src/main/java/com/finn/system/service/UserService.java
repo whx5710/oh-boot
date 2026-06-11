@@ -102,4 +102,12 @@ public interface UserService {
 
     UserEntity getByUsername(String username);
 
+    /**
+     * 根据open id 获取用户信息
+     * @param openId 第三方ID
+     * @param userType 用户类型，0普通用户1微信小程序用户
+     * @return 用户实体
+     */
+    UserEntity getByOpenId(String openId, String userType);
+
 }

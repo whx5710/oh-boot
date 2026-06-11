@@ -119,6 +119,9 @@ public class AuthServiceImpl implements AuthService {
         if(user == null){
             throw new ServerException("未获取到用户信息");
         }
+        // 登录时间和token刷新时间
+        user.setLoginTime(LocalDateTime.now());
+        user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
 
         // 生成 accessToken
         String accessToken = Tools.generator();
@@ -159,6 +162,9 @@ public class AuthServiceImpl implements AuthService {
         if(user == null){
             throw new ServerException("未获取到用户信息");
         }
+        // 登录时间和token刷新时间
+        user.setLoginTime(LocalDateTime.now());
+        user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
 
         // 生成 accessToken
         String accessToken = Tools.generator();

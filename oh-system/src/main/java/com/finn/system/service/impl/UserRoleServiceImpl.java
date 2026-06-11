@@ -122,11 +122,13 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public Set<String> getUserAuthority(UserDetail user) {
         // 系统管理员，拥有最高权限
-        List<String> authorityList;
+        List<String> authorityList = new ArrayList<>();
         if (user.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())) {
             authorityList = userRoleMapper.getAuthorityList();
         } else {
-            authorityList = userRoleMapper.getUserAuthorityList(user.getRoleIds());
+            if(user.getRoleIds() != null && !user.getRoleIds().isEmpty()){
+                authorityList = userRoleMapper.getUserAuthorityList(user.getRoleIds());
+            }
         }
 
         // 用户权限列表
