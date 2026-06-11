@@ -12,15 +12,25 @@ import java.util.Map;
  * @since 1.0.0 2025-06-14
  */
 public class HttpUtil {
+
     /**
      * get请求
      *
      * @param url
-     * @param params 请求参数
      * @return
      */
-    public static String get(String url, Map<String, Object> params) {
-        return get(url, params, null);
+    public static String get(String url) {
+        return get(url, null, null);
+    }
+    /**
+     * get请求
+     *
+     * @param url
+     * @param headers 请求参数
+     * @return
+     */
+    public static String get(String url, HashMap<String, String> headers) {
+        return get(url, null, headers);
     }
 
     /**

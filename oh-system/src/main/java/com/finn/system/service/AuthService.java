@@ -21,6 +21,25 @@ public interface AuthService {
     TokenVO loginByAccount(AccountLoginVO login);
 
     /**
+     * 用户点击微信登录
+     *     ↓
+     * 小程序调用 wx.login() 获取 code
+     *     ↓
+     * 前端将 code 发送到后端
+     *     ↓
+     * 后端用 code + appid + secret 请求微信接口获取 openid/session_key
+     *     ↓
+     * 后端根据 openid 查找或创建用户
+     *     ↓
+     * 后端生成 JWT Token 返回给前端
+     *     ↓
+     * 前端存储 token，后续请求携带 Authorization: Bearer <token>
+     * @param code
+     * @return
+     */
+    TokenVO wechatLogin(String code);
+
+    /**
      * 第三方用户登录（验证码不校验，密钥必填）
      * @param login 登录信息，用户密钥必填
      * @return token信息

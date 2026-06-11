@@ -38,6 +38,11 @@ finn:
       type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
       domain: http://localhost:8080
     local.path: /data/图片/upload
+  # 微信相关配置
+  wechat:
+    api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
+    app-id: wxe1234567 # 微信小程序app id
+    secret: abc71234567 # 微信小程序密钥
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:

@@ -20,6 +20,7 @@ import java.util.Collection;
  * 后端生成 JWT Token 返回给前端
  *     ↓
  * 前端存储 token，后续请求携带 Authorization: Bearer <token>
+ *  @author 王小费 whx5710@qq.com
  */
 public class WechatMiniProgramAuthenticationToken extends AbstractAuthenticationToken {
 

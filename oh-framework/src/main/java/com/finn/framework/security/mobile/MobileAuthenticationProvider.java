@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
@@ -21,14 +22,13 @@ import org.springframework.util.Assert;
  * @author 王小费 whx5710@qq.com
  *
  */
+@Component
 public class MobileAuthenticationProvider implements AuthenticationProvider, InitializingBean, MessageSourceAware {
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-    private final MobileUserDetailsService mobileUserDetailsService;
     private final MobileVerifyCodeService mobileVerifyCodeService;
 
-    public MobileAuthenticationProvider(MobileUserDetailsService mobileUserDetailsService, MobileVerifyCodeService mobileVerifyCodeService) {
-        this.mobileUserDetailsService = mobileUserDetailsService;
+    public MobileAuthenticationProvider(MobileVerifyCodeService mobileVerifyCodeService) {
         this.mobileVerifyCodeService = mobileVerifyCodeService;
     }
 
@@ -44,7 +44,7 @@ public class MobileAuthenticationProvider implements AuthenticationProvider, Ini
         String code = (String) authenticationToken.getCredentials();
 
         try {
-            UserDetails userDetails = mobileUserDetailsService.loadUserByMobile(mobile);
+            UserDetails userDetails = mobileVerifyCodeService.loadUserByMobile(mobile);
             if (userDetails == null) {
                 throw new BadCredentialsException("Bad credentials");
             }
@@ -76,7 +76,6 @@ public class MobileAuthenticationProvider implements AuthenticationProvider, Ini
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(mobileUserDetailsService, "mobileUserDetailsService must not be null");
         Assert.notNull(mobileVerifyCodeService, "mobileVerifyCodeService must not be null");
     }
 

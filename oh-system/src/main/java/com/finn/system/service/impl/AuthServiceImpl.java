@@ -4,6 +4,7 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.wechat.WechatMiniProgramAuthenticationToken;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpContextUtils;
 import com.finn.framework.utils.IpUtils;
@@ -96,6 +97,41 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
+     * 微信登录
+     * @param code
+     * @return
+     */
+    @Override
+    public TokenVO wechatLogin(String code) {
+        // 1. 创建未认证 Token
+        WechatMiniProgramAuthenticationToken authRequest = new WechatMiniProgramAuthenticationToken(code);
+        // 2. 执行认证
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(authRequest);
+        }catch (Exception e){
+            log.error("微信认证失败！code = {}, {}", code, e.getMessage());
+            throw new ServerException("微信认证失败！");
+        }
+
+        // 用户信息
+        UserDetail user = (UserDetail) authentication.getPrincipal();
+        if(user == null){
+            throw new ServerException("未获取到用户信息");
+        }
+
+        // 生成 accessToken
+        String accessToken = Tools.generator();
+
+        String refreshToken = Tools.generator();
+
+        // 保存用户信息到缓存
+        tokenCache.saveUser(accessToken, refreshToken, user);
+
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
+    }
+
+    /**
      * 第三方用户登录（验证码不校验，密钥必填）
      * @param login 登录信息，用户密钥必填
      * @return token
@@ -111,7 +147,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenVO loginByMobile(MobileLoginVO login) {
         Authentication authentication;
         try {
-            // 用户认证
+            // 执行认证
             authentication = authenticationManager.authenticate(
                     new MobileAuthenticationToken(login.getMobile(), login.getCode()));
         } catch (BadCredentialsException e) {

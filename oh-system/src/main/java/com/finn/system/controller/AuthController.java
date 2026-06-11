@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  *
  */
 @RestController
-@RequestMapping("sys/auth")
+@RequestMapping("/sys/auth")
 public class AuthController {
     private final CaptchaService captchaService;
     private final AuthService authService;
@@ -46,11 +46,33 @@ public class AuthController {
      * @param login 登录信息
      * @return token信息
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     @Idempotent(keyPrefix = "auth:account", limit = true, message = "登录请求重复操作！") // 限制1秒内只能请求一次
     public Result<TokenVO> login(@RequestBody AccountLoginVO login) {
-        TokenVO token = authService.loginByAccount(login);
-        return Result.ok(token);
+        return Result.ok(authService.loginByAccount(login));
+    }
+
+    /**
+     * 微信登录
+     *用户点击微信登录
+     *     ↓
+     * 小程序调用 wx.login() 获取 code
+     *     ↓
+     * 前端将 code 发送到后端
+     *     ↓
+     * 后端用 code + appid + secret 请求微信接口获取 openid/session_key
+     *     ↓
+     * 后端根据 openid 查找或创建用户
+     *     ↓
+     * 后端生成 JWT Token 返回给前端
+     *     ↓
+     * 前端存储 token，后续请求携带 Authorization: Bearer <token>
+     * @param code 微信code
+     * @return token信息
+     */
+    @RequestMapping(value = "/wechat-login", method = {RequestMethod.GET,RequestMethod.POST})
+    public Result<TokenVO> wechatLogin(@RequestParam String code) {
+        return Result.ok(authService.wechatLogin(code));
     }
 
     /**

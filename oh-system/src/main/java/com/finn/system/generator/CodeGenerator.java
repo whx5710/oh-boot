@@ -30,9 +30,10 @@ public class CodeGenerator {
 
     public static class GeneratorConfig {
         public static final String BASE_PACKAGE = "com.finn";
-        public static final String MODULE_NAME = "oh-system";
-        public static final String TABLE_PREFIX = "sys_";
-        public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".system";
+//        public static final String MODULE_NAME = "oh-system";
+        public static final String MODULE_NAME = "oh-module/oh-module-stone";
+        public static final String TABLE_PREFIX = "st_";
+        public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".stone";
         public static final String AUTHOR = "王小费 whx5710@qq.com";
 
         public static final String FRAMEWORK_PACKAGE = BASE_PACKAGE + ".framework";
@@ -110,7 +111,7 @@ public class CodeGenerator {
      */
     public TableInfo getTableInfo(String tableName) throws SQLException {
 //        try (Connection connection = dynamicDataSource.getPrimaryDb().getConnection()) {
-        try (Connection connection = dynamicDataSource.getDs("sysDb").getConnection()) {
+        try (Connection connection = dynamicDataSource.getDs("masterDb").getConnection()) {
             TableInfo tableInfo = new TableInfo();
             tableInfo.setTableName(tableName);
             tableInfo.setEntityName(convertToEntityName(tableName));
@@ -574,7 +575,7 @@ public class CodeGenerator {
         if (requestMappingPath.startsWith(GeneratorConfig.TABLE_PREFIX)) {
             requestMappingPath = requestMappingPath.substring(GeneratorConfig.TABLE_PREFIX.length());
         }
-        sb.append("@RequestMapping(\"sys/").append(requestMappingPath).append("\")\n");
+        sb.append("@RequestMapping(\"/").append(requestMappingPath).append("\")\n");
         sb.append("public class ").append(tableInfo.getControllerName()).append(" {\n");
         sb.append("    private final ").append(tableInfo.getServiceName()).append(" ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(";\n\n");
         sb.append("    public ").append(tableInfo.getControllerName()).append("(").append(tableInfo.getServiceName()).append(" ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(") {\n");
@@ -586,7 +587,7 @@ public class CodeGenerator {
         sb.append("     * @return 列表\n");
         sb.append("     */\n");
         sb.append("    @GetMapping(\"page\")\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":page')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":page')\")\n");
         sb.append("    public Result<PageResult<").append(tableInfo.getVoName()).append(">> page(@Valid ").append(tableInfo.getQueryName()).append(" query) {\n");
         sb.append("        PageResult<").append(tableInfo.getVoName()).append("> page = ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".page(query);\n\n");
         sb.append("        return Result.ok(page);\n");
@@ -598,7 +599,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PostMapping\n");
         sb.append("    @Log(module = \"").append(tableInfo.getTableComment()).append("\", name = \"保存\", type = OperateTypeEnum.INSERT)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":save')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":save')\")\n");
         sb.append("    public Result<String> save(@RequestBody ").append(tableInfo.getVoName()).append(" vo) {\n");
         sb.append("        Long id = ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".save(vo);\n");
         sb.append("        return Result.ok(String.valueOf(id));\n");
@@ -610,7 +611,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PutMapping\n");
         sb.append("    @Log(module = \"").append(tableInfo.getTableComment()).append("\", name = \"修改\", type = OperateTypeEnum.UPDATE)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":update')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":update')\")\n");
         sb.append("    public Result<String> update(@RequestBody ").append(tableInfo.getVoName()).append(" vo) {\n");
         sb.append("        ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".update(vo);\n");
         sb.append("        return Result.ok();\n");
@@ -622,7 +623,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PostMapping(\"/del\")\n");
         sb.append("    @Log(module = \"").append(tableInfo.getTableComment()).append("\", name = \"删除\", type = OperateTypeEnum.DELETE)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":delete')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":delete')\")\n");
         sb.append("    public Result<String> delete(@RequestBody List<Long> idList) {\n");
         sb.append("        ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".delete(idList);\n\n");
         sb.append("        return Result.ok();\n");
