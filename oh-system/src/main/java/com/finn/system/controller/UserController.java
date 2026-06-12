@@ -30,7 +30,7 @@ import java.util.List;
  * 
  */
 @RestController
-@RequestMapping("sys/user")
+@RequestMapping("/sys/user")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -45,7 +45,7 @@ public class UserController {
      * @param query 查询参数
      * @return 用户列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<PageResult<UserVO>> page(@Valid UserQuery query) {
         PageResult<UserVO> page = userService.page(query);
@@ -69,7 +69,7 @@ public class UserController {
      * @param query 查询参数
      * @return 用户列表
      */
-    @GetMapping("clockPage")
+    @GetMapping("/clockPage")
     @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<PageResult<UserVO>> clockPage(@Valid UserQuery query) {
         PageResult<UserVO> page = userService.clockPage(query);
@@ -119,7 +119,7 @@ public class UserController {
      * @param id 用户ID
      * @return 用户信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:user:info')")
     public Result<UserVO> get(@PathVariable("id") Long id) {
         return Result.ok(userService.info(id));
@@ -254,7 +254,7 @@ public class UserController {
      * @param file excel文件
      * @return 提示信息
      */
-    @PostMapping("import")
+    @PostMapping("/import")
     @Log(module = "用户管理", name = "导入用户", type = OperateTypeEnum.IMPORT)
     @PreAuthorize("hasAuthority('sys:user:import')")
     public Result<String> importExcel(@RequestParam("file") MultipartFile file) {
@@ -269,7 +269,7 @@ public class UserController {
     /**
      * 导出用户
      */
-    @GetMapping("export")
+    @GetMapping("/export")
     @Log(module = "用户管理", name = "导出用户", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:user:export')")
     public void export(@Valid UserQuery query) {

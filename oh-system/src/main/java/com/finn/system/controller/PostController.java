@@ -23,7 +23,7 @@ import java.util.List;
  *
  */
 @RestController
-@RequestMapping("sys/post")
+@RequestMapping("/sys/post")
 public class PostController {
     private final PostService postService;
 
@@ -36,23 +36,19 @@ public class PostController {
      * @param query 查询条件
      * @return 岗位列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:post:page')")
     public Result<PageResult<PostVO>> page(@Valid PostQuery query) {
-        PageResult<PostVO> page = postService.page(query);
-
-        return Result.ok(page);
+        return Result.ok(postService.page(query));
     }
 
     /**
      * 岗位列表-不分页
      * @return 岗位列表
      */
-    @GetMapping("list")
+    @GetMapping("/list")
     public Result<List<PostVO>> list() {
-        List<PostVO> list = postService.getList();
-
-        return Result.ok(list);
+        return Result.ok(postService.getList());
     }
 
     /**
@@ -60,11 +56,10 @@ public class PostController {
      * @param id 岗位ID
      * @return 岗位信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:post:info')")
     public Result<PostVO> get(@PathVariable("id") Long id) {
         PostEntity entity = postService.getById(id);
-
         return Result.ok(PostConvert.INSTANCE.convert(entity));
     }
 
@@ -78,7 +73,6 @@ public class PostController {
     @PreAuthorize("hasAuthority('sys:post:save')")
     public Result<String> save(@RequestBody PostVO vo) {
         postService.save(vo);
-
         return Result.ok();
     }
 
@@ -92,7 +86,6 @@ public class PostController {
     @PreAuthorize("hasAuthority('sys:post:update')")
     public Result<String> update(@RequestBody @Valid PostVO vo) {
         postService.update(vo);
-
         return Result.ok();
     }
 
@@ -106,7 +99,6 @@ public class PostController {
     @PreAuthorize("hasAuthority('sys:post:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         postService.delete(idList);
-
         return Result.ok();
     }
 }

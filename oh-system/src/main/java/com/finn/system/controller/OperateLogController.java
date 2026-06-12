@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping("sys/log/operate")
+@RequestMapping("/sys/log/operate")
 public class OperateLogController {
     private final OperateLogService operateLogService;
 
@@ -33,7 +33,7 @@ public class OperateLogController {
      * @param query 查询条件
      * @return 结合
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:operate:all')")
     public Result<PageResult<OperateLogVO>> page(@Valid OperateLogQuery query) {
         PageResult<OperateLogVO> page = operateLogService.page(query);
@@ -43,7 +43,7 @@ public class OperateLogController {
     /**
      * 导出excel
      */
-    @GetMapping("export")
+    @GetMapping("/export")
     @Log(module = "操作日志", name = "导出操作日志", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:operate:all')")
     public void export(OperateLogQuery query) {

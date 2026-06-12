@@ -31,7 +31,7 @@ public class TenantMemberController {
      * @param query 查询参数
      * @return 集合
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('tenant:member:page')")
     public Result<PageResult<TenantMemberVO>> page(@Valid TenantMemberQuery query){
         PageResult<TenantMemberVO> page = tenantMemberService.page(query);
@@ -43,7 +43,7 @@ public class TenantMemberController {
      * @param id 租户ID
      * @return 租户信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('tenant:member:info')")
     public Result<TenantMemberVO> get(@PathVariable("id") Long id){
         TenantMemberEntity entity = tenantMemberService.getById(id);

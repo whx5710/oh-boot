@@ -29,7 +29,7 @@ import java.util.Map;
  * 
  */
 @RestController
-@RequestMapping("sms/platform")
+@RequestMapping("/sms/platform")
 public class SmsPlatformController {
     private final SmsPlatformService smsPlatformService;
     private final SmsService smsService;
@@ -44,7 +44,7 @@ public class SmsPlatformController {
      * @param query 查询参数
      * @return 集合
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sms:platform:page')")
     public Result<PageResult<SmsPlatformVO>> page(@Valid SmsPlatformQuery query) {
         PageResult<SmsPlatformVO> page = smsPlatformService.page(query);
@@ -57,11 +57,10 @@ public class SmsPlatformController {
      * @param id 短信平台ID
      * @return data
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sms:platform:info')")
     public Result<SmsPlatformVO> get(@PathVariable("id") Long id) {
         SmsPlatformEntity entity = smsPlatformService.getById(id);
-
         return Result.ok(SmsPlatformConvert.INSTANCE.convert(entity));
     }
 
@@ -75,7 +74,6 @@ public class SmsPlatformController {
     @PreAuthorize("hasAuthority('sms:platform:save')")
     public Result<String> save(@RequestBody SmsPlatformVO vo) {
         smsPlatformService.save(vo);
-
         return Result.ok();
     }
 
@@ -84,7 +82,7 @@ public class SmsPlatformController {
      * @param vo 短信信息
      * @return 提示信息
      */
-    @PostMapping("send")
+    @PostMapping("/send")
     @Log(module = "短信平台", name = "发送短信", type = OperateTypeEnum.OTHER)
     @PreAuthorize("hasAuthority('sms:platform:update')")
     public Result<String> send(@RequestBody SmsSendVO vo) {

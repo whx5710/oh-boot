@@ -29,7 +29,7 @@ import java.util.Set;
  *
  */
 @RestController
-@RequestMapping("sys/menu")
+@RequestMapping("/sys/menu")
 public class MenuController {
     private final MenuService menuService;
 
@@ -39,16 +39,6 @@ public class MenuController {
         this.menuService = menuService;
         this.userRoleService = userRoleService;
     }
-
-    /**
-     * 菜单导航
-     * @return
-     */
-//    @GetMapping("nav")
-//    public Result<List<MenuTreeVO>> nav() {
-//        List<MenuTreeVO> list = menuService.getUserMenuList(new MenuQuery());
-//        return Result.ok(list);
-//    }
 
     /**
      * 获取菜单
@@ -64,7 +54,7 @@ public class MenuController {
      * 用户权限标识
      * @return
      */
-    @GetMapping("authority")
+    @GetMapping("/authority")
     public Result<Set<String>> authority() {
         UserDetail user = SecurityUser.getUser();
         Set<String> set = userRoleService.getUserAuthority(user);
@@ -76,7 +66,7 @@ public class MenuController {
      * @param query 查询条件
      * @return 集合
      */
-    @GetMapping("listTree")
+    @GetMapping("/listTree")
     @PreAuthorize("hasAuthority('sys:menu:list')")
     public Result<List<MenuTreeVO>> listTree(MenuQuery query) {
         List<MenuTreeVO> list = menuService.getMenuTreeList(query);
@@ -88,7 +78,7 @@ public class MenuController {
      * @param query 查询条件
      * @return 集合
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:menu:list')")
     public Result<PageResult<MenuVO>> page(MenuQuery query) {
         return Result.ok(menuService.page(query));
@@ -99,7 +89,7 @@ public class MenuController {
      * @param id 菜单ID
      * @return 菜单数据
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:menu:info')")
     public Result<MenuTreeVO> get(@PathVariable("id") Long id) {
         MenuEntity entity = menuService.getById(id);
@@ -110,7 +100,6 @@ public class MenuController {
             MenuEntity parentEntity = menuService.getById(entity.getParentId());
             vo.setParentName(parentEntity.getName());
         }
-
         return Result.ok(vo);
     }
 

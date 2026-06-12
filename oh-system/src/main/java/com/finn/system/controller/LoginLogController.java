@@ -20,7 +20,7 @@ import java.util.List;
  *
  */
 @RestController
-@RequestMapping("sys/log/login")
+@RequestMapping("/sys/log/login")
 public class LoginLogController {
 
     private final LoginLogService loginLogService;
@@ -34,7 +34,7 @@ public class LoginLogController {
      * @param query 查询参数
      * @return 集合
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:log:login')")
     public Result<PageResult<LoginLogVO>> page(@Valid LoginLogQuery query) {
         PageResult<LoginLogVO> page = loginLogService.page(query);
@@ -44,7 +44,7 @@ public class LoginLogController {
     /**
      * 导出excel
      */
-    @GetMapping("export")
+    @GetMapping("/export")
     @Log(module = "登录日志", name = "导出登录日志", type = OperateTypeEnum.EXPORT)
     @PreAuthorize("hasAuthority('sys:log:login')")
     public void export(LoginLogQuery query) {

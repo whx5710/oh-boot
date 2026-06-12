@@ -22,7 +22,7 @@ import java.util.List;
  * 
  */
 @RestController
-@RequestMapping("sys/dict/data")
+@RequestMapping("/sys/dict/data")
 public class DictDataController {
     private final DictDataService dictDataService;
 
@@ -35,7 +35,7 @@ public class DictDataController {
      * @param query
      * @return
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:dict:page')")
     public Result<PageResult<DictDataVO>> page(@Valid DictDataQuery query) {
         PageResult<DictDataVO> page = dictDataService.page(query);
@@ -48,7 +48,7 @@ public class DictDataController {
      * @param id 字典数据ID
      * @return 字典数据
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:dict:info')")
     public Result<DictDataVO> get(@PathVariable("id") Long id) {
         DictDataEntity entity = dictDataService.getById(id);

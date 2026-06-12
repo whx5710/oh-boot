@@ -23,7 +23,7 @@ import java.util.List;
  * 
  */
 @RestController
-@RequestMapping("sys/dict/type")
+@RequestMapping("/sys/dict/type")
 public class DictTypeController {
     private final DictTypeService dictTypeService;
 
@@ -36,7 +36,7 @@ public class DictTypeController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:dict:page')")
     public Result<PageResult<DictTypeVO>> page(@Valid DictTypeQuery query) {
         PageResult<DictTypeVO> page = dictTypeService.page(query);
@@ -49,7 +49,7 @@ public class DictTypeController {
      * @param id 字典ID
      * @return 数据列表
      */
-    @GetMapping("list/sql")
+    @GetMapping("/list/sql")
     @PreAuthorize("hasAuthority('sys:dict:page')")
     public Result<PageResult<DictVO.DictData>> listSql(Long id) {
         List<DictVO.DictData> list = dictTypeService.getDictSql(id);
@@ -64,7 +64,7 @@ public class DictTypeController {
      * @param id 字典类型ID
      * @return
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:dict:info')")
     public Result<DictTypeVO> get(@PathVariable("id") Long id) {
         DictTypeEntity entity = dictTypeService.getById(id);
@@ -117,7 +117,7 @@ public class DictTypeController {
      * 全部字典类型数据
      * @return 列表
      */
-    @GetMapping("all")
+    @GetMapping("/all")
     public Result<List<DictVO>> all() {
         List<DictVO> dictList = dictTypeService.getDictList();
 
@@ -128,7 +128,7 @@ public class DictTypeController {
      * 刷新字典翻译缓存数据
      * @return 提示信息
      */
-    @GetMapping("refreshTransCache")
+    @GetMapping("/refreshTransCache")
     @PreAuthorize("hasAuthority('sys:dict:refreshTransCache')")
     public Result<String> refreshTransCache() {
         dictTypeService.refreshTransCache();

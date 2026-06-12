@@ -97,8 +97,7 @@ public class AuthController {
         }
         login.setPassword(password);
         login.setUserKey(userKey);
-        TokenVO token = authService.loginByUserKey(login);
-        return Result.ok(token);
+        return Result.ok(authService.loginByUserKey(login));
     }
 
     /**
@@ -106,10 +105,9 @@ public class AuthController {
      * @param login
      * @return
      */
-    @PostMapping("mobile")
+    @PostMapping("/mobile")
     public Result<TokenVO> mobile(@RequestBody MobileLoginVO login) {
-        TokenVO token = authService.loginByMobile(login);
-        return Result.ok(token);
+        return Result.ok(authService.loginByMobile(login));
     }
 
     /**
@@ -118,7 +116,7 @@ public class AuthController {
      * @param request
      * @return
      */
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public Result<TokenVO> refresh(@RequestParam String refreshToken, HttpServletRequest request) {
         AssertUtils.isBlank(refreshToken, "刷新token");
         return Result.ok(authService.refreshToken(refreshToken, request));
@@ -130,7 +128,7 @@ public class AuthController {
      * @param refreshToken
      * @return
      */
-    @PostMapping("logout")
+    @PostMapping("/logout")
     public Result<String> logout(HttpServletRequest request, @RequestParam(required = false) String refreshToken) {
         authService.logout(Tools.getAccessToken(request), refreshToken);
         return Result.ok();

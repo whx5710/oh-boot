@@ -23,7 +23,7 @@ import java.util.Map;
  * 
  */
 @RestController
-@RequestMapping("sys/params")
+@RequestMapping("/sys/params")
 public class ParamsController {
     private final ParamsService paramsService;
 
@@ -36,7 +36,7 @@ public class ParamsController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:params:info')")
     public Result<PageResult<ParamsVO>> page(@Valid ParamsQuery query) {
         PageResult<ParamsVO> page = paramsService.page(query);
@@ -68,7 +68,7 @@ public class ParamsController {
      * @param id 参数ID
      * @return 参数信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:params:info')")
     public Result<ParamsVO> get(@PathVariable("id") Long id) {
         ParamsEntity entity = paramsService.getById(id);

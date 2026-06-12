@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 @RestController
-@RequestMapping("sys/file")
+@RequestMapping("/sys/file")
 public class FileUploadController {
 
     private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
@@ -75,7 +75,6 @@ public class FileUploadController {
             log.error("文件上传失败", e);
             return Result.error("文件上传失败：" + e.getMessage());
         }
-
         FileUploadVO vo = new FileUploadVO();
         vo.setUrl(url);
         vo.setSize(file.getSize());

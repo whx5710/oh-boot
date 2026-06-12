@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping("sms/log")
+@RequestMapping("/sms/log")
 public class SmsLogController {
     private final SmsLogService smsLogService;
 
@@ -34,7 +34,7 @@ public class SmsLogController {
      * @param query 查询条件
      * @return
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sms:log')")
     public Result<PageResult<SmsLogVO>> page(@Valid SmsLogQuery query) {
         PageResult<SmsLogVO> page = smsLogService.page(query);
@@ -47,7 +47,7 @@ public class SmsLogController {
      * @param id 日志ID
      * @return 数据
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sms:log')")
     public Result<SmsLogVO> get(@PathVariable("id") Long id) {
         SmsLogEntity entity = smsLogService.getById(id);
