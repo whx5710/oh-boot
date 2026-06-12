@@ -20,5 +20,5 @@ public interface MobileVerifyCodeService {
      * @return 用户信息
      * @throws UsernameNotFoundException 不存在异常
      */
-    UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException;
+    UserDetails loadUserByMobile(String mobile, String userType) throws UsernameNotFoundException;
 }

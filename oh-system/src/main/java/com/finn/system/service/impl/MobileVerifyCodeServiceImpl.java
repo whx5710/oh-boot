@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * 短信验证码效验
- *
+ * 由于用户可能是平台用户的同时，还是第三方平台用户（微信、支付宝小程序等其他第三方平台），手机号码相同，
+ * 因此，用手机验证码登录时，需确定用户源于哪个平台登录
  * @author 王小费 whx5710@qq.com
  *
  */
@@ -34,8 +35,11 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     }
 
     @Override
-    public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
-        UserEntity userEntity = userMapper.getByMobile(mobile);
+    public UserDetails loadUserByMobile(String mobile, String userType) throws UsernameNotFoundException {
+        if(userType == null || userType.isEmpty()){
+            throw new SecurityException("用户类型不能为空");
+        }
+        UserEntity userEntity = userMapper.getByMobile(mobile, userType);
         if (userEntity == null) {
             throw new UsernameNotFoundException("手机号或验证码错误");
         }

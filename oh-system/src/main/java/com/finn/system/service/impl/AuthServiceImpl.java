@@ -152,7 +152,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             // 执行认证
             authentication = authenticationManager.authenticate(
-                    new MobileAuthenticationToken(login.getMobile(), login.getCode()));
+                    new MobileAuthenticationToken(login.getMobile(), login.getCode(), login.getUserType()));
         } catch (BadCredentialsException e) {
             throw new ServerException("手机号或验证码错误");
         }

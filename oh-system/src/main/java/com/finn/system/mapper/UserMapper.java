@@ -31,10 +31,20 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 	@Pages
 	List<UserEntity> getRoleUserList(RoleUserQuery params);
 
-	@Select("select a.*,b.name as dept_name from sys_user a left join sys_dept b on a.dept_id = b.id where a.db_status != 0 and a.username = #{username}")
-	UserEntity getByUsername(@Param("username") String username);
+	/**
+	 * 根据用户名和用户类型查询用户信息
+	 * @param username
+	 * @param userType
+	 * @return
+	 */
+	UserEntity getByUsername(@Param("username") String username, @Param("userType")String userType);
 
-	@Select("select a.*,b.name as dept_name from sys_user a left join sys_dept b on a.dept_id = b.id where a.db_status != 0 and a.mobile = #{mobile}")
-	UserEntity getByMobile(@Param("mobile") String mobile);
+	/**
+	 *
+	 * @param mobile
+	 * @param userType
+	 * @return
+	 */
+	UserEntity getByMobile(@Param("mobile") String mobile, @Param("userType")String userType);
 
 }

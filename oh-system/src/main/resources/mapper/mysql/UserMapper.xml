@@ -81,4 +81,29 @@
 		</if>
 	</select>
 
+	<select id="getByUsername" resultType="com.finn.system.entity.UserEntity">
+		SELECT
+		a.*,
+		b.NAME AS dept_name
+		FROM
+		sys_user a
+		LEFT JOIN sys_dept b ON a.dept_id = b.id
+		WHERE
+		a.db_status = 1
+		AND a.user_type = #{userType}
+		AND a.username = #{username}
+	</select>
+
+	<select id="getByMobile" resultType="com.finn.system.entity.UserEntity">
+		SELECT
+		a.*,
+		b.NAME AS dept_name
+		FROM
+		sys_user a
+		LEFT JOIN sys_dept b ON a.dept_id = b.id
+		WHERE
+		a.db_status = 1
+		AND a.user_type = #{userType}
+		AND a.mobile = #{mobile}
+	</select>
 </mapper>
