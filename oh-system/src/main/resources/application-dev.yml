@@ -50,6 +50,11 @@ finn:
       type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
       domain: http://localhost:5777/api/sysApi
     local.path: /home/finn/文档/upFiles
+    # 微信相关配置
+    wechat:
+      api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
+      app-id: wxappid # 微信小程序app id
+      secret: wxmiy # 微信小程序密钥
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
