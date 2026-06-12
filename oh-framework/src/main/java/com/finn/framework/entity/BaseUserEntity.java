@@ -16,6 +16,9 @@ public class BaseUserEntity extends IDEntity {
     private Integer gender;
     private String email;
     private String mobile;
+    // 用户类型，根据业务规则可扩展其他类型
+    private String userType;
+    private String openId;
     // 租户ID
     private String tenantId;
 
@@ -65,5 +68,21 @@ public class BaseUserEntity extends IDEntity {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }
