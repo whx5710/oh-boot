@@ -71,6 +71,9 @@ public class WechatController {
         if(user == null || user.getId() == null){
             throw new ServerException("未找到该用户");
         }
+        if(!user.getUserType().equals("1")){
+            throw new ServerException("该用户不是微信用户");
+        }
         user.setAvatar(vo.getAvatar());
         user.setMobile(vo.getMobile());
         user.setRealName(vo.getRealName());
