@@ -1,10 +1,14 @@
 package com.finn.system.controller;
 
 import com.finn.framework.entity.Result;
+import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.wechat.WechatService;
+import com.finn.framework.utils.AssertUtils;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.UserMapper;
+import com.finn.system.vo.UserVO;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,5 +57,25 @@ public class WechatController {
             userMapper.updateById(user);
         }
         return Result.ok(phone);
+    }
+
+    /**
+     * 修改用户信息（昵称、头像、手机号，性别）
+     * @param vo 用户
+     * @return 提示信息
+     */
+    @PostMapping("/update")
+    public Result<String> update(@RequestBody @Valid UserVO vo) {
+        AssertUtils.isNull(vo.getId(), "用户ID");
+        UserEntity user = userMapper.findById(vo.getId(), UserEntity.class);
+        if(user == null || user.getId() == null){
+            throw new ServerException("未找到该用户");
+        }
+        user.setAvatar(vo.getAvatar());
+        user.setMobile(vo.getMobile());
+        user.setRealName(vo.getRealName());
+        user.setGender(vo.getGender());
+        userMapper.updateById(user);
+        return Result.ok("修改成功");
     }
 }
