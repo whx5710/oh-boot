@@ -87,6 +87,7 @@ public class WechatServiceImpl implements WechatService {
                 "&appid=%s&secret=%s", wechatProperties.getAppId(), wechatProperties.getSecret()
         );
         String result = HttpUtil.get(url);
+        System.out.println("获取微信小程序token " + result);
         HashDto hashDto = JsonUtils.parseObject(result, HashDto.class);
         return hashDto.getStr("access_token");
     }
