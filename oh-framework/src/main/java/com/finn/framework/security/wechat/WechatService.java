@@ -2,6 +2,8 @@ package com.finn.framework.security.wechat;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Map;
+
 /**
  * 如果微信登录，需实现该接口
  *
@@ -22,4 +24,11 @@ public interface WechatService {
      * @return user info
      */
     UserDetails findOrCreateByOpenid(String openId);
+
+    /**
+     * 解密获取手机号
+     * @param body code 参数
+     * @return json字符串
+     */
+    String getPhoneNumber(Map<String, String> body);
 }
