@@ -5,13 +5,10 @@ import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
-import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.security.user.UserDetail;
 import com.finn.system.convert.MenuConvert;
 import com.finn.system.entity.MenuEntity;
 import com.finn.system.query.MenuQuery;
 import com.finn.system.service.MenuService;
-import com.finn.system.service.UserRoleService;
 import com.finn.system.vo.MenuTreeVO;
 import com.finn.system.vo.MenuVO;
 import com.finn.system.vo.RouteVO;
@@ -20,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单管理
@@ -33,11 +29,8 @@ import java.util.Set;
 public class MenuController {
     private final MenuService menuService;
 
-    private final UserRoleService userRoleService;
-
-    public MenuController(MenuService menuService, UserRoleService userRoleService) {
+    public MenuController(MenuService menuService) {
         this.menuService = menuService;
-        this.userRoleService = userRoleService;
     }
 
     /**
@@ -48,17 +41,6 @@ public class MenuController {
     @PostMapping("/route")
     public Result<List<RouteVO>> route(@RequestBody MenuQuery query) {
         return Result.ok(menuService.getUserRouteList(query));
-    }
-
-    /**
-     * 用户权限标识
-     * @return
-     */
-    @GetMapping("/authority")
-    public Result<Set<String>> authority() {
-        UserDetail user = SecurityUser.getUser();
-        Set<String> set = userRoleService.getUserAuthority(user);
-        return Result.ok(set);
     }
 
     /**
@@ -194,6 +176,5 @@ public class MenuController {
     public Result<Boolean> pathExists(@RequestParam String path, @RequestParam(required = false) Long id) {
         return Result.ok(menuService.pathExists(id, path));
     }
-
 
 }

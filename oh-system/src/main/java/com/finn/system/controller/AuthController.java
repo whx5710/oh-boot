@@ -1,6 +1,8 @@
 package com.finn.system.controller;
 
 import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.user.SecurityUser;
+import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.Tools;
 import com.finn.framework.entity.Result;
@@ -8,12 +10,15 @@ import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.framework.aop.annotations.RequestKeyParam;
 import com.finn.system.service.AuthService;
 import com.finn.system.service.CaptchaService;
+import com.finn.system.service.UserRoleService;
 import com.finn.system.vo.AccountLoginVO;
 import com.finn.system.vo.CaptchaVO;
 import com.finn.system.vo.MobileLoginVO;
 import com.finn.system.vo.TokenVO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * 认证管理
@@ -26,10 +31,13 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final CaptchaService captchaService;
     private final AuthService authService;
+    private final UserRoleService userRoleService;
 
-    public AuthController(CaptchaService captchaService, AuthService authService) {
+    public AuthController(CaptchaService captchaService, AuthService authService,
+                          UserRoleService userRoleService) {
         this.captchaService = captchaService;
         this.authService = authService;
+        this.userRoleService = userRoleService;
     }
 
     /**
@@ -108,6 +116,17 @@ public class AuthController {
     @PostMapping("/mobile")
     public Result<TokenVO> mobile(@RequestBody MobileLoginVO login) {
         return Result.ok(authService.loginByMobile(login));
+    }
+
+    /**
+     * 用户权限标识
+     * @return
+     */
+    @GetMapping("/authority")
+    public Result<Set<String>> authority() {
+        UserDetail user = SecurityUser.getUser();
+        Set<String> set = userRoleService.getUserAuthority(user);
+        return Result.ok(set);
     }
 
     /**
