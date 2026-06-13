@@ -32,10 +32,6 @@ public class LoginLogQuery extends Query {
      * 结束时间
      */
     String endTime;
-    /**
-     * 租户ID
-     */
-    String tenantId;
 
     public String getUsername() {
         return username;
@@ -77,11 +73,4 @@ public class LoginLogQuery extends Query {
         this.endTime = endTime;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

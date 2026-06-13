@@ -19,8 +19,6 @@ public class BaseUserEntity extends IDEntity {
     // 用户类型，根据业务规则可扩展其他类型
     private String userType;
     private String openId;
-    // 租户ID
-    private String tenantId;
 
     public String getUsername() {
         return username;
@@ -60,14 +58,6 @@ public class BaseUserEntity extends IDEntity {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
     public String getUserType() {

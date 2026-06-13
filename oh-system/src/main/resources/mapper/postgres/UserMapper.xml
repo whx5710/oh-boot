@@ -30,21 +30,6 @@
 		<if test="params.deptId != null and params.deptId != 0">
 			and t1.dept_id = #{params.deptId}
 		</if>
-		<if test="params.tenantId != null and params.tenantId != ''">
-			and t1.tenant_id = #{params.tenantId}
-		</if>
-		<if test="params.unTenantId != null and params.unTenantId != ''">
-			and COALESCE(t1.tenant_id, '') != #{params.unTenantId}
-		</if>
-		<if test="params.tenantFlag != null and params.tenantFlag != 0">
-			and COALESCE(t1.tenant_id, '') != ''
-		</if>
-		<if test="params.tenantFlag != null and params.tenantFlag == 0">
-			and COALESCE(t1.tenant_id, '') = ''
-		</if>
-		<if test="params.tenantRole != null and params.tenantRole">
-			and exists (select 1 from sys_user_role t3 where t1.id = t3.user_id and t3.db_status = 1 and t3.role_id = 1)
-		</if>
 		<if test="params.keyWord != null and params.keyWord.trim() != ''">
 			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%")
 			or t1.username like concat("%",#{params.keyWord},"%") or t1.mobile like concat("%",#{params.keyWord},"%")

@@ -12,492 +12,9 @@
  Target Server Version : 180003 (180003)
  File Encoding         : 65001
 
- Date: 05/05/2026 11:00:33
+ Date: 13/06/2026 20:43:53
 */
 
-
--- ----------------------------
--- Table structure for online_table_column
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."online_table_column";
-CREATE TABLE "oh_sys"."online_table_column" (
-  "id" int8 NOT NULL,
-  "name" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "comments" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "length" int4 NOT NULL,
-  "point_length" int4 NOT NULL,
-  "default_value" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "column_type" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "column_pk" int2,
-  "column_null" int2,
-  "form_item" int2,
-  "form_required" int2,
-  "form_input" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "form_default" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "form_dict" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "grid_item" int2,
-  "grid_sort" int2,
-  "query_item" int2,
-  "query_type" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "query_input" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "sort" int4,
-  "table_id" varchar(32) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
-)
-;
-ALTER TABLE "oh_sys"."online_table_column" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."online_table_column"."id" IS 'id';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."name" IS '字段名称';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."comments" IS '字段描述';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."length" IS '字段长度';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."point_length" IS '小数点';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."default_value" IS '默认值';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."column_type" IS '字段类型';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."column_pk" IS '字段主键 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."column_null" IS '字段为空 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."form_item" IS '表单项 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."form_required" IS '表单必填 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."form_input" IS '表单控件';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."form_default" IS '表单控件默认值';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."form_dict" IS '表单字典';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."grid_item" IS '列表项 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."grid_sort" IS '列表排序 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."query_item" IS '查询项 0：否  1：是';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."query_type" IS '查询方式';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."query_input" IS '查询控件';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."sort" IS '排序';
-COMMENT ON COLUMN "oh_sys"."online_table_column"."table_id" IS '表id';
-COMMENT ON TABLE "oh_sys"."online_table_column" IS 'Online表单字段';
-
--- ----------------------------
--- Records of online_table_column
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_blob_triggers
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_blob_triggers";
-CREATE TABLE "oh_sys"."qrtz_blob_triggers" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "blob_data" bytea
-)
-;
-ALTER TABLE "oh_sys"."qrtz_blob_triggers" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_blob_triggers"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_blob_triggers"."trigger_name" IS 'qrtz_triggers表trigger_name的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_blob_triggers"."trigger_group" IS 'qrtz_triggers表trigger_group的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_blob_triggers"."blob_data" IS '存放持久化Trigger对象';
-COMMENT ON TABLE "oh_sys"."qrtz_blob_triggers" IS 'Blob类型的触发器表';
-
--- ----------------------------
--- Records of qrtz_blob_triggers
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_calendars
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_calendars";
-CREATE TABLE "oh_sys"."qrtz_calendars" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "calendar_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "calendar" bytea NOT NULL
-)
-;
-ALTER TABLE "oh_sys"."qrtz_calendars" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_calendars"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_calendars"."calendar_name" IS '日历名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_calendars"."calendar" IS '存放持久化calendar对象';
-COMMENT ON TABLE "oh_sys"."qrtz_calendars" IS '日历信息表';
-
--- ----------------------------
--- Records of qrtz_calendars
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_cron_triggers
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_cron_triggers";
-CREATE TABLE "oh_sys"."qrtz_cron_triggers" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "cron_expression" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "time_zone_id" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
-)
-;
-ALTER TABLE "oh_sys"."qrtz_cron_triggers" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_cron_triggers"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_cron_triggers"."trigger_name" IS 'qrtz_triggers表trigger_name的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_cron_triggers"."trigger_group" IS 'qrtz_triggers表trigger_group的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_cron_triggers"."cron_expression" IS 'cron表达式';
-COMMENT ON COLUMN "oh_sys"."qrtz_cron_triggers"."time_zone_id" IS '时区';
-COMMENT ON TABLE "oh_sys"."qrtz_cron_triggers" IS 'Cron类型的触发器表';
-
--- ----------------------------
--- Records of qrtz_cron_triggers
--- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."qrtz_cron_triggers" ("sched_name", "trigger_name", "trigger_group", "cron_expression", "time_zone_id") VALUES ('OhScheduler', 'TASK_NAME_1', 'system', '0 * * * * ? *', 'Asia/Shanghai');
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_fired_triggers
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_fired_triggers";
-CREATE TABLE "oh_sys"."qrtz_fired_triggers" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "entry_id" varchar(95) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "instance_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "fired_time" int8 NOT NULL,
-  "sched_time" int8 NOT NULL,
-  "priority" int4 NOT NULL,
-  "state" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "job_group" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "is_nonconcurrent" varchar(1) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "requests_recovery" varchar(1) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
-)
-;
-ALTER TABLE "oh_sys"."qrtz_fired_triggers" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."entry_id" IS '调度器实例id';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."trigger_name" IS 'qrtz_triggers表trigger_name的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."trigger_group" IS 'qrtz_triggers表trigger_group的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."instance_name" IS '调度器实例名';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."fired_time" IS '触发的时间';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."sched_time" IS '定时器制定的时间';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."priority" IS '优先级';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."state" IS '状态';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."job_name" IS '任务名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."job_group" IS '任务组名';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."is_nonconcurrent" IS '是否并发';
-COMMENT ON COLUMN "oh_sys"."qrtz_fired_triggers"."requests_recovery" IS '是否接受恢复执行';
-COMMENT ON TABLE "oh_sys"."qrtz_fired_triggers" IS '已触发的触发器表';
-
--- ----------------------------
--- Records of qrtz_fired_triggers
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_job_details
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_job_details";
-CREATE TABLE "oh_sys"."qrtz_job_details" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "description" varchar(250) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "job_class_name" varchar(250) COLLATE "pg_catalog"."default" NOT NULL,
-  "is_durable" varchar(1) COLLATE "pg_catalog"."default" NOT NULL,
-  "is_nonconcurrent" varchar(1) COLLATE "pg_catalog"."default" NOT NULL,
-  "is_update_data" varchar(1) COLLATE "pg_catalog"."default" NOT NULL,
-  "requests_recovery" varchar(1) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_data" bytea
-)
-;
-ALTER TABLE "oh_sys"."qrtz_job_details" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."job_name" IS '任务名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."job_group" IS '任务组名';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."description" IS '相关介绍';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."job_class_name" IS '执行任务类名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."is_durable" IS '是否持久化';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."is_nonconcurrent" IS '是否并发';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."is_update_data" IS '是否更新数据';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."requests_recovery" IS '是否接受恢复执行';
-COMMENT ON COLUMN "oh_sys"."qrtz_job_details"."job_data" IS '存放持久化job对象';
-COMMENT ON TABLE "oh_sys"."qrtz_job_details" IS '任务详细信息表';
-
--- ----------------------------
--- Records of qrtz_job_details
--- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."qrtz_job_details" ("sched_name", "job_name", "job_group", "description", "job_class_name", "is_durable", "is_nonconcurrent", "is_update_data", "requests_recovery", "job_data") VALUES ('OhScheduler', 'TASK_NAME_1', 'system', NULL, 'com.finn.sys.quartz.utils.ScheduleDisallowConcurrentExecution', '0', '1', '0', '0', E'\\254\\355\\000\\005sr\\000\\025org.quartz.JobDataMap\\237\\260\\203\\350\\277\\251\\260\\313\\002\\000\\000xr\\000&org.quartz.utils.StringKeyDirtyFlagMap\\202\\010\\350\\303\\373\\305](\\002\\000\\001Z\\000\\023allowsTransientDataxr\\000\\035org.quartz.utils.DirtyFlagMap\\023\\346.\\255(v\\012\\316\\002\\000\\002Z\\000\\005dirtyL\\000\\003mapt\\000\\017Ljava/util/Map;xp\\001sr\\000\\021java.util.HashMap\\005\\007\\332\\301\\303\\026`\\321\\003\\000\\002F\\000\\012loadFactorI\\000\\011thresholdxp?@\\000\\000\\000\\000\\000\\014w\\010\\000\\000\\000\\020\\000\\000\\000\\001t\\000\\015JOB_PARAM_KEYsr\\000,com.iris.sys.quartz.entity.ScheduleJobEntity\\035\\017\\337\\344\\207\\205\\250\\327\\002\\000\\012L\\000\\010beanNamet\\000\\022Ljava/lang/String;L\\000\\012concurrentt\\000\\023Ljava/lang/Integer;L\\000\\016cronExpressionq\\000~\\000\\011L\\000\\002idt\\000\\020Ljava/lang/Long;L\\000\\010jobGroupq\\000~\\000\\011L\\000\\007jobNameq\\000~\\000\\011L\\000\\006methodq\\000~\\000\\011L\\000\\006paramsq\\000~\\000\\011L\\000\\006remarkq\\000~\\000\\011L\\000\\006statusq\\000~\\000\\012xr\\000$com.iris.framework.entity.BaseEntity\\014\\254\\231\\332K\\244''-\\002\\000\\006L\\000\\012createTimet\\000\\031Ljava/time/LocalDateTime;L\\000\\007creatorq\\000~\\000\\013L\\000\\010dbStatusq\\000~\\000\\012L\\000\\010tenantIdq\\000~\\000\\011L\\000\\012updateTimeq\\000~\\000\\015L\\000\\007updaterq\\000~\\000\\013xr\\000\\035com.iris.core.entity.IDEntity\\273\\006\\002\\215f5\\240\\023\\002\\000\\001L\\000\\002idq\\000~\\000\\013xr\\000 com.iris.core.entity.SuperEntity\\037\\327w\\255~\\264\\332@\\002\\000\\000xppsr\\000\\015java.time');
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_locks
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_locks";
-CREATE TABLE "oh_sys"."qrtz_locks" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "lock_name" varchar(40) COLLATE "pg_catalog"."default" NOT NULL
-)
-;
-ALTER TABLE "oh_sys"."qrtz_locks" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_locks"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_locks"."lock_name" IS '悲观锁名称';
-COMMENT ON TABLE "oh_sys"."qrtz_locks" IS '存储的悲观锁信息表';
-
--- ----------------------------
--- Records of qrtz_locks
--- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."qrtz_locks" ("sched_name", "lock_name") VALUES ('OhScheduler', 'STATE_ACCESS');
-INSERT INTO "oh_sys"."qrtz_locks" ("sched_name", "lock_name") VALUES ('OhScheduler', 'TRIGGER_ACCESS');
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_paused_trigger_grps
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_paused_trigger_grps";
-CREATE TABLE "oh_sys"."qrtz_paused_trigger_grps" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL
-)
-;
-ALTER TABLE "oh_sys"."qrtz_paused_trigger_grps" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_paused_trigger_grps"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_paused_trigger_grps"."trigger_group" IS 'qrtz_triggers表trigger_group的外键';
-COMMENT ON TABLE "oh_sys"."qrtz_paused_trigger_grps" IS '暂停的触发器表';
-
--- ----------------------------
--- Records of qrtz_paused_trigger_grps
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_scheduler_state
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_scheduler_state";
-CREATE TABLE "oh_sys"."qrtz_scheduler_state" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "instance_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "last_checkin_time" int8 NOT NULL,
-  "checkin_interval" int8 NOT NULL
-)
-;
-ALTER TABLE "oh_sys"."qrtz_scheduler_state" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_scheduler_state"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_scheduler_state"."instance_name" IS '实例名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_scheduler_state"."last_checkin_time" IS '上次检查时间';
-COMMENT ON COLUMN "oh_sys"."qrtz_scheduler_state"."checkin_interval" IS '检查间隔时间';
-COMMENT ON TABLE "oh_sys"."qrtz_scheduler_state" IS '调度器状态表';
-
--- ----------------------------
--- Records of qrtz_scheduler_state
--- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."qrtz_scheduler_state" ("sched_name", "instance_name", "last_checkin_time", "checkin_interval") VALUES ('OhScheduler', 'DESKTOP-IHJIP1I1737353556355', 1737353677179, 15000);
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_simple_triggers
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_simple_triggers";
-CREATE TABLE "oh_sys"."qrtz_simple_triggers" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "repeat_count" int8 NOT NULL,
-  "repeat_interval" int8 NOT NULL,
-  "times_triggered" int8 NOT NULL
-)
-;
-ALTER TABLE "oh_sys"."qrtz_simple_triggers" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_simple_triggers"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_simple_triggers"."trigger_name" IS 'qrtz_triggers表trigger_name的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_simple_triggers"."trigger_group" IS 'qrtz_triggers表trigger_group的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_simple_triggers"."repeat_count" IS '重复的次数统计';
-COMMENT ON COLUMN "oh_sys"."qrtz_simple_triggers"."repeat_interval" IS '重复的间隔时间';
-COMMENT ON COLUMN "oh_sys"."qrtz_simple_triggers"."times_triggered" IS '已经触发的次数';
-COMMENT ON TABLE "oh_sys"."qrtz_simple_triggers" IS '简单触发器的信息表';
-
--- ----------------------------
--- Records of qrtz_simple_triggers
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_simprop_triggers
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_simprop_triggers";
-CREATE TABLE "oh_sys"."qrtz_simprop_triggers" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "str_prop_1" varchar(512) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "str_prop_2" varchar(512) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "str_prop_3" varchar(512) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "int_prop_1" int4,
-  "int_prop_2" int4,
-  "long_prop_1" int8,
-  "long_prop_2" int8,
-  "dec_prop_1" numeric(13,4) DEFAULT NULL::numeric,
-  "dec_prop_2" numeric(13,4) DEFAULT NULL::numeric,
-  "bool_prop_1" varchar(1) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "bool_prop_2" varchar(1) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
-)
-;
-ALTER TABLE "oh_sys"."qrtz_simprop_triggers" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."trigger_name" IS 'qrtz_triggers表trigger_name的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."trigger_group" IS 'qrtz_triggers表trigger_group的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."str_prop_1" IS 'String类型的trigger的第一个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."str_prop_2" IS 'String类型的trigger的第二个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."str_prop_3" IS 'String类型的trigger的第三个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."int_prop_1" IS 'int类型的trigger的第一个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."int_prop_2" IS 'int类型的trigger的第二个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."long_prop_1" IS 'long类型的trigger的第一个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."long_prop_2" IS 'long类型的trigger的第二个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."dec_prop_1" IS 'decimal类型的trigger的第一个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."dec_prop_2" IS 'decimal类型的trigger的第二个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."bool_prop_1" IS 'Boolean类型的trigger的第一个参数';
-COMMENT ON COLUMN "oh_sys"."qrtz_simprop_triggers"."bool_prop_2" IS 'Boolean类型的trigger的第二个参数';
-COMMENT ON TABLE "oh_sys"."qrtz_simprop_triggers" IS '同步机制的行锁表';
-
--- ----------------------------
--- Records of qrtz_simprop_triggers
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for qrtz_triggers
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."qrtz_triggers";
-CREATE TABLE "oh_sys"."qrtz_triggers" (
-  "sched_name" varchar(120) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_name" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_group" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "description" varchar(250) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "next_fire_time" int8,
-  "prev_fire_time" int8,
-  "priority" int4,
-  "trigger_state" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "trigger_type" varchar(8) COLLATE "pg_catalog"."default" NOT NULL,
-  "start_time" int8 NOT NULL,
-  "end_time" int8,
-  "calendar_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "misfire_instr" int2,
-  "job_data" bytea
-)
-;
-ALTER TABLE "oh_sys"."qrtz_triggers" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."sched_name" IS '调度名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."trigger_name" IS '触发器的名字';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."trigger_group" IS '触发器所属组的名字';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."job_name" IS 'qrtz_job_details表job_name的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."job_group" IS 'qrtz_job_details表job_group的外键';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."description" IS '相关介绍';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."next_fire_time" IS '上一次触发时间（毫秒）';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."prev_fire_time" IS '下一次触发时间（默认为-1表示不触发）';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."priority" IS '优先级';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."trigger_state" IS '触发器状态';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."trigger_type" IS '触发器的类型';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."start_time" IS '开始时间';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."end_time" IS '结束时间';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."calendar_name" IS '日程表名称';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."misfire_instr" IS '补偿执行的策略';
-COMMENT ON COLUMN "oh_sys"."qrtz_triggers"."job_data" IS '存放持久化job对象';
-COMMENT ON TABLE "oh_sys"."qrtz_triggers" IS '触发器详细信息表';
-
--- ----------------------------
--- Records of qrtz_triggers
--- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group", "job_name", "job_group", "description", "next_fire_time", "prev_fire_time", "priority", "trigger_state", "trigger_type", "start_time", "end_time", "calendar_name", "misfire_instr", "job_data") VALUES ('OhScheduler', 'TASK_NAME_1', 'system', 'TASK_NAME_1', 'system', NULL, 1737353580000, -1, 5, 'PAUSED', 'CRON', 1737353556000, 0, NULL, 2, '');
-COMMIT;
-
--- ----------------------------
--- Table structure for schedule_job
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."schedule_job";
-CREATE TABLE "oh_sys"."schedule_job" (
-  "id" int8 NOT NULL,
-  "job_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "job_group" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "bean_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "method" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "params" varchar(2000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "cron_expression" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "status" int2,
-  "concurrent" int2,
-  "remark" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int2 DEFAULT '1'::smallint,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "updater" int8,
-  "update_time" timestamp(6)
-)
-;
-ALTER TABLE "oh_sys"."schedule_job" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."schedule_job"."id" IS 'id';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."job_name" IS '名称';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."job_group" IS '分组';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."bean_name" IS 'spring bean名称';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."method" IS '执行方法';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."params" IS '参数';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."cron_expression" IS 'cron表达式';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."status" IS '状态  0：暂停  1：正常';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."concurrent" IS '是否并发  0：禁止  1：允许';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."remark" IS '备注';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_sys"."schedule_job"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_sys"."schedule_job" IS '定时任务';
-
--- ----------------------------
--- Records of schedule_job
--- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."schedule_job" ("id", "job_name", "job_group", "bean_name", "method", "params", "cron_expression", "status", "concurrent", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '测试任务', 'system', 'testTask', 'run', '123', '0 * * * * ? *', 0, 0, '', 1, 10000, '2023-06-12 21:38:32', 10000, '2023-06-12 21:38:32');
-COMMIT;
-
--- ----------------------------
--- Table structure for schedule_job_log
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."schedule_job_log";
-CREATE TABLE "oh_sys"."schedule_job_log" (
-  "id" int8 NOT NULL,
-  "job_id" int8 NOT NULL,
-  "job_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "job_group" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "bean_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "method" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "params" varchar(2000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "status" int2 NOT NULL,
-  "error" varchar(2000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "times" int8 NOT NULL,
-  "create_time" timestamp(6)
-)
-;
-ALTER TABLE "oh_sys"."schedule_job_log" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."id" IS 'id';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."job_id" IS '任务id';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."job_name" IS '任务名称';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."job_group" IS '任务组名';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."bean_name" IS 'spring bean名称';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."method" IS '执行方法';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."params" IS '参数';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."status" IS '任务状态    0：失败    1：成功';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."error" IS '异常信息';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."times" IS '耗时(单位：毫秒)';
-COMMENT ON COLUMN "oh_sys"."schedule_job_log"."create_time" IS '创建时间';
-COMMENT ON TABLE "oh_sys"."schedule_job_log" IS '定时任务日志';
-
--- ----------------------------
--- Records of schedule_job_log
--- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sms_log
@@ -514,7 +31,6 @@ CREATE TABLE "oh_sys"."sms_log" (
   "create_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sms_log" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sms_log"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sms_log"."platform_id" IS '平台ID';
 COMMENT ON COLUMN "oh_sys"."sms_log"."platform" IS '平台类型';
@@ -528,8 +44,6 @@ COMMENT ON TABLE "oh_sys"."sms_log" IS '短信日志';
 -- ----------------------------
 -- Records of sms_log
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sms_platform
@@ -553,7 +67,6 @@ CREATE TABLE "oh_sys"."sms_platform" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sms_platform" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sms_platform"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sms_platform"."platform" IS '平台类型  0：阿里云   1：腾讯云   2：七牛云   3：华为云';
 COMMENT ON COLUMN "oh_sys"."sms_platform"."sign_name" IS '短信签名';
@@ -574,8 +87,6 @@ COMMENT ON TABLE "oh_sys"."sms_platform" IS '短信平台';
 -- ----------------------------
 -- Records of sms_platform
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_attachment
@@ -591,11 +102,9 @@ CREATE TABLE "oh_sys"."sys_attachment" (
   "creator" int8,
   "create_time" timestamp(6),
   "updater" int8,
-  "update_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_attachment" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."name" IS '附件名称';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."url" IS '附件地址';
@@ -606,14 +115,11 @@ COMMENT ON COLUMN "oh_sys"."sys_attachment"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_sys"."sys_attachment"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_attachment" IS '附件管理';
 
 -- ----------------------------
 -- Records of sys_attachment
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -629,11 +135,9 @@ CREATE TABLE "oh_sys"."sys_dept" (
   "creator" int8,
   "create_time" timestamp(6),
   "updater" int8,
-  "update_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_dept" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_dept"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_dept"."parent_id" IS '上级ID';
 COMMENT ON COLUMN "oh_sys"."sys_dept"."name" IS '机构名称';
@@ -644,14 +148,11 @@ COMMENT ON COLUMN "oh_sys"."sys_dept"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_sys"."sys_dept"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_sys"."sys_dept"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_dept"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_sys"."sys_dept"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_dept" IS '机构管理';
 
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_dict_data
@@ -672,7 +173,6 @@ CREATE TABLE "oh_sys"."sys_dict_data" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_dict_data" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_dict_data"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_dict_data"."dict_type_id" IS '字典类型ID';
 COMMENT ON COLUMN "oh_sys"."sys_dict_data"."dict_label" IS '字典标签';
@@ -690,50 +190,48 @@ COMMENT ON TABLE "oh_sys"."sys_dict_data" IS '字典数据';
 -- ----------------------------
 -- Records of sys_dict_data
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, 1, '停用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (2, 1, '正常', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (3, 2, '男', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (4, 2, '女', '1', 'success', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (5, 2, '未知', '2', 'warning', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (6, 3, '正常', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (7, 3, '停用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (8, 4, '全部数据', '0', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (9, 4, '本机构及子机构数据', '1', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (10, 4, '本机构数据', '2', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (11, 4, '本人数据', '3', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (12, 4, '自定义数据', '4', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (13, 5, '禁用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (14, 5, '启用', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (15, 6, '失败', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (16, 6, '成功', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (17, 7, '登录成功', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (18, 7, '退出成功', '1', 'warning', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (19, 7, '验证码错误', '2', 'danger', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (20, 7, '账号密码错误', '3', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (21, 8, '否', '0', 'primary', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (22, 8, '是', '1', 'danger', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (23, 9, '是', '1', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (24, 9, '否', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (25, 10, '其它', '0', 'info', '', 10, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (26, 10, '查询', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (27, 10, '新增', '2', 'success', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (28, 10, '修改', '3', 'warning', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (29, 10, '删除', '4', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (30, 10, '导出', '5', 'info', '', 4, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (31, 10, '导入', '6', 'info', '', 5, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (32, 12, '开始', '1', NULL, '', 1, 1, 10000, '2022-11-27 19:23:01', 10000, '2022-11-27 19:23:01');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (33, 12, '暂停', '2', NULL, '', 2, 1, 10000, '2022-11-27 19:23:16', 10000, '2022-11-27 19:23:16');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (34, 12, '关闭', '3', NULL, '', 3, 1, 10000, '2022-11-27 19:23:29', 10000, '2022-11-27 19:23:29');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (35, 13, '默认', 'default', '', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (36, 13, '系统', 'system', '', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (37, 14, '暂停', '0', 'danger', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (38, 14, '正常', '1', 'primary', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (39, 15, '阿里云', '0', '', '', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (40, 15, '腾讯云', '1', '', '', 1, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (41, 15, '七牛云', '2', '', '', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-INSERT INTO "oh_sys"."sys_dict_data" ("id", "dict_type_id", "dict_label", "dict_value", "label_class", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (42, 15, '华为云', '3', '', '', 3, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-COMMIT;
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (1, 1, '停用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (2, 1, '正常', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (3, 2, '男', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (4, 2, '女', '1', 'success', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (5, 2, '未知', '2', 'warning', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (6, 3, '正常', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (7, 3, '停用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (8, 4, '全部数据', '0', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (9, 4, '本机构及子机构数据', '1', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (10, 4, '本机构数据', '2', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (11, 4, '本人数据', '3', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (12, 4, '自定义数据', '4', '', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (13, 5, '禁用', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (14, 5, '启用', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (15, 6, '失败', '0', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (16, 6, '成功', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (17, 7, '登录成功', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (18, 7, '退出成功', '1', 'warning', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (19, 7, '验证码错误', '2', 'danger', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (20, 7, '账号密码错误', '3', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (21, 8, '否', '0', 'primary', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (22, 8, '是', '1', 'danger', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (23, 9, '是', '1', 'danger', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (24, 9, '否', '0', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (25, 10, '其它', '0', 'info', '', 10, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (26, 10, '查询', '1', 'primary', '', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (27, 10, '新增', '2', 'success', '', 1, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (28, 10, '修改', '3', 'warning', '', 2, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (29, 10, '删除', '4', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (30, 10, '导出', '5', 'info', '', 4, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (31, 10, '导入', '6', 'info', '', 5, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (32, 12, '开始', '1', NULL, '', 1, 1, 10000, '2022-11-27 19:23:01', 10000, '2022-11-27 19:23:01');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (33, 12, '暂停', '2', NULL, '', 2, 1, 10000, '2022-11-27 19:23:16', 10000, '2022-11-27 19:23:16');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (34, 12, '关闭', '3', NULL, '', 3, 1, 10000, '2022-11-27 19:23:29', 10000, '2022-11-27 19:23:29');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (35, 13, '默认', 'default', '', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (36, 13, '系统', 'system', '', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (37, 14, '暂停', '0', 'danger', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (38, 14, '正常', '1', 'primary', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (39, 15, '阿里云', '0', '', '', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (40, 15, '腾讯云', '1', '', '', 1, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (41, 15, '七牛云', '2', '', '', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (42, 15, '华为云', '3', '', '', 3, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -754,7 +252,6 @@ CREATE TABLE "oh_sys"."sys_dict_type" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_dict_type" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_dict_type"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_dict_type"."dict_type" IS '字典类型';
 COMMENT ON COLUMN "oh_sys"."sys_dict_type"."dict_name" IS '字典名称';
@@ -772,22 +269,20 @@ COMMENT ON TABLE "oh_sys"."sys_dict_type" IS '字典类型';
 -- ----------------------------
 -- Records of sys_dict_type
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, 'post_status', '状态', 0, NULL, '岗位管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (2, 'user_gender', '性别', 0, NULL, '用户管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (3, 'user_status', '状态', 0, NULL, '用户管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (4, 'role_data_scope', '数据范围', 0, NULL, '角色管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (5, 'enable_disable', '状态', 0, NULL, '功能状态：启用 | 禁用 ', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (6, 'success_fail', '状态', 0, NULL, '操作状态：成功 | 失败', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (7, 'login_operation', '操作信息', 0, NULL, '登录管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (8, 'params_type', '系统参数', 0, NULL, '参数管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (9, 'user_super_admin', '用户是否是超管', 0, NULL, '用户是否是超管', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (10, 'log_operate_type', '操作类型', 0, NULL, '操作日志', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (12, 'project_status', '状态', 0, '', '项目状态', 12, 1, 10000, '2022-11-27 19:19:50', 10000, '2022-11-27 19:19:50');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (13, 'schedule_group', '任务组名', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (14, 'schedule_status', '状态', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
-INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_source", "dict_sql", "remark", "sort", "db_status", "creator", "create_time", "updater", "update_time") VALUES (15, 'sms_platform', '平台类型', 0, NULL, '短信管理', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
-COMMIT;
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (1, 'post_status', '状态', 0, NULL, '岗位管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (2, 'user_gender', '性别', 0, NULL, '用户管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (3, 'user_status', '状态', 0, NULL, '用户管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (4, 'role_data_scope', '数据范围', 0, NULL, '角色管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (5, 'enable_disable', '状态', 0, NULL, '功能状态：启用 | 禁用 ', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (6, 'success_fail', '状态', 0, NULL, '操作状态：成功 | 失败', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (7, 'login_operation', '操作信息', 0, NULL, '登录管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (8, 'params_type', '系统参数', 0, NULL, '参数管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (9, 'user_super_admin', '用户是否是超管', 0, NULL, '用户是否是超管', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (10, 'log_operate_type', '操作类型', 0, NULL, '操作日志', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (12, 'project_status', '状态', 0, '', '项目状态', 12, 1, 10000, '2022-11-27 19:19:50', 10000, '2022-11-27 19:19:50');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (13, 'schedule_group', '任务组名', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (14, 'schedule_status', '状态', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (15, 'sms_platform', '平台类型', 0, NULL, '短信管理', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 
 -- ----------------------------
 -- Table structure for sys_error_log
@@ -803,11 +298,9 @@ CREATE TABLE "oh_sys"."sys_error_log" (
   "note" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "score" numeric(5,2),
   "queue_size" int4,
-  "create_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "create_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_error_log" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_error_log"."err_code" IS '错误编码';
 COMMENT ON COLUMN "oh_sys"."sys_error_log"."msg" IS '错误提示';
 COMMENT ON COLUMN "oh_sys"."sys_error_log"."stack_info" IS '堆栈信息';
@@ -817,14 +310,11 @@ COMMENT ON COLUMN "oh_sys"."sys_error_log"."note" IS '备注';
 COMMENT ON COLUMN "oh_sys"."sys_error_log"."score" IS '队列拥挤程度0-10';
 COMMENT ON COLUMN "oh_sys"."sys_error_log"."queue_size" IS '队列大小';
 COMMENT ON COLUMN "oh_sys"."sys_error_log"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_sys"."sys_error_log"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_error_log" IS '系统错误日志';
 
 -- ----------------------------
 -- Records of sys_error_log
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_log_login
@@ -838,11 +328,9 @@ CREATE TABLE "oh_sys"."sys_log_login" (
   "user_agent" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "status" int2,
   "operation" int2,
-  "create_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "create_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_log_login" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_log_login"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_log_login"."username" IS '用户名';
 COMMENT ON COLUMN "oh_sys"."sys_log_login"."ip" IS '登录IP';
@@ -851,14 +339,11 @@ COMMENT ON COLUMN "oh_sys"."sys_log_login"."user_agent" IS 'User Agent';
 COMMENT ON COLUMN "oh_sys"."sys_log_login"."status" IS '登录状态  0：失败   1：成功';
 COMMENT ON COLUMN "oh_sys"."sys_log_login"."operation" IS '操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误';
 COMMENT ON COLUMN "oh_sys"."sys_log_login"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_sys"."sys_log_login"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_log_login" IS '登录日志';
 
 -- ----------------------------
 -- Records of sys_log_login
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_log_operate
@@ -880,11 +365,9 @@ CREATE TABLE "oh_sys"."sys_log_operate" (
   "user_id" int8,
   "real_name" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "result_msg" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "create_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "create_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_log_operate" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_log_operate"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_log_operate"."module" IS '模块名';
 COMMENT ON COLUMN "oh_sys"."sys_log_operate"."name" IS '操作名';
@@ -901,14 +384,11 @@ COMMENT ON COLUMN "oh_sys"."sys_log_operate"."user_id" IS '用户ID';
 COMMENT ON COLUMN "oh_sys"."sys_log_operate"."real_name" IS '操作人';
 COMMENT ON COLUMN "oh_sys"."sys_log_operate"."result_msg" IS '返回消息';
 COMMENT ON COLUMN "oh_sys"."sys_log_operate"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_sys"."sys_log_operate"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_log_operate" IS '操作日志';
 
 -- ----------------------------
 -- Records of sys_log_operate
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -943,7 +423,6 @@ CREATE TABLE "oh_sys"."sys_menu" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_menu" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_menu"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_menu"."parent_id" IS '上级ID，一级菜单为0';
 COMMENT ON COLUMN "oh_sys"."sys_menu"."name" IS '菜单名称';
@@ -975,73 +454,71 @@ COMMENT ON TABLE "oh_sys"."sys_menu" IS '菜单管理';
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (15, 6, 'Role', '角色管理', '/system/role', '/system/role/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'mdi:account-group', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:19:26');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (16, 15, '查询角色', '查询角色', NULL, NULL, 1, 'f', 'f', 'sys:role:page,sys:role:list,sys:role:info', NULL, '', NULL, 'f', NULL, 'button', 0, NULL, 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (17, 15, '新增修改角色', '新增修改角色', NULL, NULL, 1, 'f', 'f', 'sys:role:save,sys:role:update,sys:role:delete', NULL, '', NULL, 'f', NULL, 'button', 0, NULL, 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (19, 6, 'Dept', '部门管理', '/system/dept', '/system/dept/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:container-services', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:19:49');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (20, 19, '查询部门', '查询部门', NULL, NULL, 1, 'f', 'f', 'sys:dept:list,sys:dept:info', NULL, '', NULL, 'f', NULL, 'button', 0, NULL, 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (23, 5, 'Params', '参数管理', '/system/params', '/system/params/index', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:delivery-parcel', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:20:47');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (27, 6, 'Users', '用户管理', '/system/user', '/system/user/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-multiple', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:19:59');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36, 6, 'Post', '岗位管理', '/system/post', '/system/post/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:calls-all', 't', 0, 1, NULL, 10000, '2025-05-20 17:54:23', 10000, '2025-06-22 14:20:26');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (2, 1, 'WorkSpace', '工作台', '/workspace', '/dashboard/workspace/index', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:workspace', 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (13, 11, '新增修改菜单', '新增修改菜单', '', NULL, 1, 'f', 'f', 'sys:menu:save,sys:menu:update,sys:menu:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-06-06 10:11:39');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (1, 0, 'Dashboard', '概览', '/dashboard', NULL, 1, 'f', 'f', '', NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'lucide:layout-dashboard', 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-05-26 13:39:51');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (3, 1, 'Analytics', '分析页', '/analytics', '/dashboard/analytics/index', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'lucide:area-chart', 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (11, 5, 'Menu', '菜单管理', '/system/menu', '/system/menu/list', 1, 'f', 'f', NULL, 'new', 'normal', 'default', 'f', NULL, 'menu', 0, 'carbon:menu', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:20:37');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (10, 0, 'System', '系统管理', '/sys', NULL, 1, 'f', 'f', '', NULL, 'dot', NULL, 'f', NULL, 'menu', 0, 'carbon:settings', 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-05-07 10:16:33');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (21, 19, '新增修改部门', '新增修改部门', '', NULL, 1, 'f', 'f', 'sys:dept:save,sys:dept:update,sys:dept:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (24, 23, '查询参数', '查询参数', '', NULL, 1, 'f', 'f', 'sys:params:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (28, 27, '查询用户', '查询用户', '', NULL, 1, 'f', 'f', 'sys:user:page,sys:user:info,sys:user:export', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (29, 27, '新增修改用户', '新增修改用户', '', NULL, 1, 'f', 'f', 'sys:user:save,sys:user:update,sys:user:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (30, 5, 'Dict', '字典管理', '/system/dict', '/system/dict/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:align-horizontal-left', 'f', 0, 1, NULL, 10000, '2025-05-19 09:30:58', 10000, '2025-06-22 14:20:57');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (31, 30, '查询字典', '查询字典', '', NULL, 1, 'f', 'f', 'sys:dict:page,sys:dict:info,sys:dict:refreshTransCache', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-19 09:32:48', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (32, 30, '新增修改字典', '新增修改字典', '', NULL, 1, 'f', 'f', 'sys:dict:save,sys:dict:update,sys:dict:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-19 09:33:38', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (33, 6, 'Tenant', '租户管理', '/system/tenant', '/system/tenant/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:catalog-publish', 'f', 0, 1, NULL, 10000, '2025-05-20 11:07:19', 10000, '2025-06-22 14:20:12');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (34, 33, '查询租户', '查询租户', '', NULL, 1, 'f', 'f', 'tenant:member:page,tenant:member:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 11:08:47', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (37, 36, '查询岗位', '查询岗位', '', NULL, 1, 'f', 'f', 'sys:post:page,sys:post:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 17:55:22', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (39, 7, 'Attachment', '附件管理', '/system/attachment', '/system/attachment/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:file-storage', 'f', 0, 1, NULL, 10000, '2025-06-08 11:26:11', 10000, '2025-06-22 14:21:39');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (40, 39, '查询附件', '查询附件', '', NULL, 1, 'f', 'f', 'sys:attachment:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-08 11:27:23', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (41, 39, '新增修改附件', '新增修改附件', '', NULL, 1, 'f', 'f', 'sys:attachment:save,sys:attachment:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-08 11:28:09', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (42, 10, 'Log', '日志管理', '/system/log', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:catalog', 'f', 0, 1, NULL, 10000, '2025-06-11 17:24:35', 10000, '2025-06-11 17:29:17');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43, 42, 'LoginLog', '登录日志', '/system/loginLog', '/system/log/loginLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:change-catalog', 'f', 0, 1, NULL, 10000, '2025-06-11 17:25:59', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (44, 43, '查询登录日志', '查询登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-11 20:35:32', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45, 42, 'OpLog', '操作日志', '/system/opLog', '/system/log/opLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:border-top', 'f', 0, 1, NULL, 10000, '2025-06-11 17:28:36', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (46, 45, '查询操作日志', '查询操作日志', '', NULL, 1, 'f', 'f', 'sys:operate:all', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-11 20:40:14', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (48, 47, 'SystemAppInterface', '客户端管理', '/system/app/list', '/system/app/list', 1, 'f', 'f', '', NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:multiuser-device', 'f', 0, 1, NULL, 10000, '2025-06-22 20:42:06', 10000, '2025-06-22 20:46:05');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (49, 48, '查询客户端', '查询客户端', '', NULL, 1, 'f', 'f', 'sys:app:page,sys:app:info,sys:function:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-22 20:46:30', 10000, '2025-06-23 15:13:02');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (50, 48, '新增修改客户端', '新增修改客户端', '', NULL, 1, 'f', 'f', 'sys:app:save,sys:app:update,sys:app:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-24 14:27:08', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (51, 47, 'SystemFunc', '接口管理', '/system/app/func', '/system/app/funcList', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:interface-usage-1', 'f', 0, 1, NULL, 10000, '2025-06-25 10:35:16', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (5, 10, 'SystemSetting', '系统设置', '/system/setting', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:settings-check', 'f', 0, 1, NULL, 10000, '2025-06-22 14:05:38', 10000, '2025-06-22 14:18:50');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (47, 7, 'SystemInterface', '接口管理', '/system/app/manage', '', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:ibm-cloud-vpc-client-vpn', 'f', 0, 1, NULL, 10000, '2025-06-22 20:39:43', 10000, '2025-06-22 20:43:16');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (7, 10, 'SystemApp', '系统应用', '/system/app', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:app', 'f', 0, 1, NULL, 10000, '2025-06-22 14:09:17', 10000, '2025-06-22 14:19:12');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (35, 33, '新增修改租户', '新增修改租户', '', NULL, 1, 'f', 'f', 'tenant:member:save,tenant:member:update,sys:user:bindTenantUser,sys:user:unBindTenantUser', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 11:09:21', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (6, 10, 'SystemAuthority', '权限管理', '/system/authority', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:delivery-settings', 'f', 0, 1, NULL, 10000, '2025-06-22 14:07:19', 10000, '2025-06-22 14:19:02');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (38, 36, '新增修改岗位', '新增修改岗位', '', NULL, 1, 'f', 'f', 'sys:post:save,sys:post:update,sys:post:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 17:56:26', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (52, 51, '查询接口', '查询接口', '', NULL, 1, 'f', 'f', 'sys:function:page,sys:function:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 10:36:10', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (12, 11, '查询菜单', '查询菜单', '', NULL, 1, 'f', 'f', 'sys:menu:list,sys:menu:info,sys:role:menu', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-06-06 10:12:33');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (25, 23, '新增修改参数', '新增修改参数', '', NULL, 1, 'f', 'f', 'sys:params:save,sys:params:update,sys:params:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53, 51, '新增修改接口', '新增修改接口', '', NULL, 1, 'f', 'f', 'sys:function:save,sys:function:update,sys:function:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 11:00:12', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (54, 47, 'SystemAppLog', '接口日志', '/system/app/log', '/system/app/log', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:catalog-publish', 'f', 0, 1, NULL, 10000, '2025-06-25 17:27:26', 10000, '2025-06-25 17:30:01');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (55, 54, '查询日志', '查询日志', '', NULL, 1, 'f', 'f', 'sys:app:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 17:28:11', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (56, 54, '删除日志', '删除日志', '', NULL, 1, 'f', 'f', 'sys:app:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 17:28:37', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (57, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'menu', 0, NULL, 'f', 0, 0, NULL, 10000, '2025-06-25 19:45:26', 10000, '2025-09-18 13:32:58');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (33304128612466688, 7, 'Flow', '绘制流程', '/system/flow', '/system/flow/draw', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:flow-logs-vpc', 'f', 0, 1, NULL, 10000, '2026-04-02 21:38:43.022556', 10000, '2026-04-06 18:10:42.981877');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36768990499962880, 33304128612466688, '流程查询', '流程查询', '', NULL, 1, 'f', 'f', 'flow:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-12 11:06:50.469297', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36769889070874624, 7, 'FlowManage', '流程管理', '/system/flow-manage', '/system/flow/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:workflow-automation', 'f', 0, 1, NULL, 10000, '2026-04-12 11:10:24.706571', 10000, '2026-04-12 11:15:00.57417');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (36770623787106304, 36769889070874624, '流程管理新增修改', '流程管理新增修改', '', NULL, 1, 'f', 'f', 'flow:task:saveOrUpdate,flow:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-12 11:13:19.876445', 10000, '2026-04-12 11:17:29.143403');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (34701521023139840, 33304128612466688, '流程新增修改', '流程新增修改', '', NULL, 1, 'f', 'f', 'flow:saveOrUpdate,flow:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-06 18:11:27.33507', 10000, '2026-04-15 21:21:57.624954');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (38012448816496640, 36769889070874624, '环节查看', '环节查看', '', NULL, 1, 'f', 'f', 'flow:node:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:27:54.035171', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (38012908344442880, 36769889070874624, '环节修改', '环节修改', '', NULL, 1, 'f', 'f', 'flow:node:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:29:43.593548', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43462997489745920, 42, 'ErrorLog', '错误日志', '/system/errLog', '/system/log/errorLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:ibm-knowledge-catalog-premium', 'f', 0, 1, NULL, 10000, '2026-04-30 22:26:26.104883', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43463159524098048, 43462997489745920, '查询错误日志', '查询错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-30 22:27:04.737104', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45101480209809408, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 10:57:10.827503', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45108924046639104, 43462997489745920, '删除错误日志', '删除错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 11:26:45.576264', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (51801209756975104, 6, 'LockUser', '用户锁定', '/system/lockUser', '/system/user/lock', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-access-locked', 'f', 1, 1, NULL, 10000, '2026-05-23 22:39:30.82555', 10000, '2026-05-24 10:59:42.103162');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53949658837286912, 53949269693956096, '查询在线用户', '查询在线用户', '', NULL, 1, 'f', 'f', 'monitor:user:all,monitor:user:tokens', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 1, 1, NULL, 10000, '2026-05-29 20:56:41.003309', 10000, '2026-05-29 20:59:55.515648');
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53951928605868032, 53949269693956096, '下线操作', '下线操作', '', NULL, 1, 'f', 'f', 'monitor:user:logout', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-29 21:05:42.157191', NULL, NULL);
-INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53949269693956096, 6, 'OnlineUser', '在线用户', '/system/online-user', '/system/user/monitor', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-online', 'f', 1, 1, NULL, 10000, '2026-05-29 20:55:08.223114', 10000, '2026-05-29 21:07:06.986522');
-COMMIT;
+INSERT INTO "oh_sys"."sys_menu" VALUES (15, 6, 'Role', '角色管理', '/system/role', '/system/role/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'mdi:account-group', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:19:26');
+INSERT INTO "oh_sys"."sys_menu" VALUES (16, 15, '查询角色', '查询角色', NULL, NULL, 1, 'f', 'f', 'sys:role:page,sys:role:list,sys:role:info', NULL, '', NULL, 'f', NULL, 'button', 0, NULL, 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (17, 15, '新增修改角色', '新增修改角色', NULL, NULL, 1, 'f', 'f', 'sys:role:save,sys:role:update,sys:role:delete', NULL, '', NULL, 'f', NULL, 'button', 0, NULL, 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (19, 6, 'Dept', '部门管理', '/system/dept', '/system/dept/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:container-services', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:19:49');
+INSERT INTO "oh_sys"."sys_menu" VALUES (20, 19, '查询部门', '查询部门', NULL, NULL, 1, 'f', 'f', 'sys:dept:list,sys:dept:info', NULL, '', NULL, 'f', NULL, 'button', 0, NULL, 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (23, 5, 'Params', '参数管理', '/system/params', '/system/params/index', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:delivery-parcel', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:20:47');
+INSERT INTO "oh_sys"."sys_menu" VALUES (27, 6, 'Users', '用户管理', '/system/user', '/system/user/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-multiple', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:19:59');
+INSERT INTO "oh_sys"."sys_menu" VALUES (36, 6, 'Post', '岗位管理', '/system/post', '/system/post/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:calls-all', 't', 0, 1, NULL, 10000, '2025-05-20 17:54:23', 10000, '2025-06-22 14:20:26');
+INSERT INTO "oh_sys"."sys_menu" VALUES (2, 1, 'WorkSpace', '工作台', '/workspace', '/dashboard/workspace/index', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:workspace', 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (13, 11, '新增修改菜单', '新增修改菜单', '', NULL, 1, 'f', 'f', 'sys:menu:save,sys:menu:update,sys:menu:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-06-06 10:11:39');
+INSERT INTO "oh_sys"."sys_menu" VALUES (1, 0, 'Dashboard', '概览', '/dashboard', NULL, 1, 'f', 'f', '', NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'lucide:layout-dashboard', 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-05-26 13:39:51');
+INSERT INTO "oh_sys"."sys_menu" VALUES (3, 1, 'Analytics', '分析页', '/analytics', '/dashboard/analytics/index', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'lucide:area-chart', 't', 1, 1, NULL, 10000, '2023-09-24 20:13:47', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (11, 5, 'Menu', '菜单管理', '/system/menu', '/system/menu/list', 1, 'f', 'f', NULL, 'new', 'normal', 'default', 'f', NULL, 'menu', 0, 'carbon:menu', 't', 0, 1, NULL, 10000, '2023-06-04 21:03:59', 10000, '2025-06-22 14:20:37');
+INSERT INTO "oh_sys"."sys_menu" VALUES (10, 0, 'System', '系统管理', '/sys', NULL, 1, 'f', 'f', '', NULL, 'dot', NULL, 'f', NULL, 'menu', 0, 'carbon:settings', 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-05-07 10:16:33');
+INSERT INTO "oh_sys"."sys_menu" VALUES (21, 19, '新增修改部门', '新增修改部门', '', NULL, 1, 'f', 'f', 'sys:dept:save,sys:dept:update,sys:dept:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
+INSERT INTO "oh_sys"."sys_menu" VALUES (24, 23, '查询参数', '查询参数', '', NULL, 1, 'f', 'f', 'sys:params:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
+INSERT INTO "oh_sys"."sys_menu" VALUES (28, 27, '查询用户', '查询用户', '', NULL, 1, 'f', 'f', 'sys:user:page,sys:user:info,sys:user:export', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
+INSERT INTO "oh_sys"."sys_menu" VALUES (29, 27, '新增修改用户', '新增修改用户', '', NULL, 1, 'f', 'f', 'sys:user:save,sys:user:update,sys:user:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
+INSERT INTO "oh_sys"."sys_menu" VALUES (30, 5, 'Dict', '字典管理', '/system/dict', '/system/dict/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:align-horizontal-left', 'f', 0, 1, NULL, 10000, '2025-05-19 09:30:58', 10000, '2025-06-22 14:20:57');
+INSERT INTO "oh_sys"."sys_menu" VALUES (31, 30, '查询字典', '查询字典', '', NULL, 1, 'f', 'f', 'sys:dict:page,sys:dict:info,sys:dict:refreshTransCache', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-19 09:32:48', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (32, 30, '新增修改字典', '新增修改字典', '', NULL, 1, 'f', 'f', 'sys:dict:save,sys:dict:update,sys:dict:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-19 09:33:38', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (33, 6, 'Tenant', '租户管理', '/system/tenant', '/system/tenant/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:catalog-publish', 'f', 0, 1, NULL, 10000, '2025-05-20 11:07:19', 10000, '2025-06-22 14:20:12');
+INSERT INTO "oh_sys"."sys_menu" VALUES (34, 33, '查询租户', '查询租户', '', NULL, 1, 'f', 'f', 'tenant:member:page,tenant:member:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 11:08:47', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (37, 36, '查询岗位', '查询岗位', '', NULL, 1, 'f', 'f', 'sys:post:page,sys:post:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 17:55:22', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (39, 7, 'Attachment', '附件管理', '/system/attachment', '/system/attachment/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:file-storage', 'f', 0, 1, NULL, 10000, '2025-06-08 11:26:11', 10000, '2025-06-22 14:21:39');
+INSERT INTO "oh_sys"."sys_menu" VALUES (40, 39, '查询附件', '查询附件', '', NULL, 1, 'f', 'f', 'sys:attachment:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-08 11:27:23', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (41, 39, '新增修改附件', '新增修改附件', '', NULL, 1, 'f', 'f', 'sys:attachment:save,sys:attachment:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-08 11:28:09', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (42, 10, 'Log', '日志管理', '/system/log', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:catalog', 'f', 0, 1, NULL, 10000, '2025-06-11 17:24:35', 10000, '2025-06-11 17:29:17');
+INSERT INTO "oh_sys"."sys_menu" VALUES (43, 42, 'LoginLog', '登录日志', '/system/loginLog', '/system/log/loginLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:change-catalog', 'f', 0, 1, NULL, 10000, '2025-06-11 17:25:59', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (44, 43, '查询登录日志', '查询登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-11 20:35:32', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (45, 42, 'OpLog', '操作日志', '/system/opLog', '/system/log/opLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:border-top', 'f', 0, 1, NULL, 10000, '2025-06-11 17:28:36', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (46, 45, '查询操作日志', '查询操作日志', '', NULL, 1, 'f', 'f', 'sys:operate:all', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-11 20:40:14', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (48, 47, 'SystemAppInterface', '客户端管理', '/system/app/list', '/system/app/list', 1, 'f', 'f', '', NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:multiuser-device', 'f', 0, 1, NULL, 10000, '2025-06-22 20:42:06', 10000, '2025-06-22 20:46:05');
+INSERT INTO "oh_sys"."sys_menu" VALUES (49, 48, '查询客户端', '查询客户端', '', NULL, 1, 'f', 'f', 'sys:app:page,sys:app:info,sys:function:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-22 20:46:30', 10000, '2025-06-23 15:13:02');
+INSERT INTO "oh_sys"."sys_menu" VALUES (50, 48, '新增修改客户端', '新增修改客户端', '', NULL, 1, 'f', 'f', 'sys:app:save,sys:app:update,sys:app:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-24 14:27:08', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (51, 47, 'SystemFunc', '接口管理', '/system/app/func', '/system/app/funcList', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:interface-usage-1', 'f', 0, 1, NULL, 10000, '2025-06-25 10:35:16', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (5, 10, 'SystemSetting', '系统设置', '/system/setting', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:settings-check', 'f', 0, 1, NULL, 10000, '2025-06-22 14:05:38', 10000, '2025-06-22 14:18:50');
+INSERT INTO "oh_sys"."sys_menu" VALUES (47, 7, 'SystemInterface', '接口管理', '/system/app/manage', '', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:ibm-cloud-vpc-client-vpn', 'f', 0, 1, NULL, 10000, '2025-06-22 20:39:43', 10000, '2025-06-22 20:43:16');
+INSERT INTO "oh_sys"."sys_menu" VALUES (7, 10, 'SystemApp', '系统应用', '/system/app', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:app', 'f', 0, 1, NULL, 10000, '2025-06-22 14:09:17', 10000, '2025-06-22 14:19:12');
+INSERT INTO "oh_sys"."sys_menu" VALUES (35, 33, '新增修改租户', '新增修改租户', '', NULL, 1, 'f', 'f', 'tenant:member:save,tenant:member:update,sys:user:bindTenantUser,sys:user:unBindTenantUser', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 11:09:21', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (6, 10, 'SystemAuthority', '权限管理', '/system/authority', NULL, 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:delivery-settings', 'f', 0, 1, NULL, 10000, '2025-06-22 14:07:19', 10000, '2025-06-22 14:19:02');
+INSERT INTO "oh_sys"."sys_menu" VALUES (38, 36, '新增修改岗位', '新增修改岗位', '', NULL, 1, 'f', 'f', 'sys:post:save,sys:post:update,sys:post:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-20 17:56:26', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (52, 51, '查询接口', '查询接口', '', NULL, 1, 'f', 'f', 'sys:function:page,sys:function:info', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 10:36:10', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (12, 11, '查询菜单', '查询菜单', '', NULL, 1, 'f', 'f', 'sys:menu:list,sys:menu:info,sys:role:menu', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 't', 0, 1, NULL, 10000, '2023-09-24 20:13:47', 10000, '2025-06-06 10:12:33');
+INSERT INTO "oh_sys"."sys_menu" VALUES (25, 23, '新增修改参数', '新增修改参数', '', NULL, 1, 'f', 'f', 'sys:params:save,sys:params:update,sys:params:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-05-08 14:22:58', 10000, '2025-05-08 14:23:29');
+INSERT INTO "oh_sys"."sys_menu" VALUES (53, 51, '新增修改接口', '新增修改接口', '', NULL, 1, 'f', 'f', 'sys:function:save,sys:function:update,sys:function:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 11:00:12', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (54, 47, 'SystemAppLog', '接口日志', '/system/app/log', '/system/app/log', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:catalog-publish', 'f', 0, 1, NULL, 10000, '2025-06-25 17:27:26', 10000, '2025-06-25 17:30:01');
+INSERT INTO "oh_sys"."sys_menu" VALUES (55, 54, '查询日志', '查询日志', '', NULL, 1, 'f', 'f', 'sys:app:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 17:28:11', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (56, 54, '删除日志', '删除日志', '', NULL, 1, 'f', 'f', 'sys:app:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2025-06-25 17:28:37', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (57, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'menu', 0, NULL, 'f', 0, 0, NULL, 10000, '2025-06-25 19:45:26', 10000, '2025-09-18 13:32:58');
+INSERT INTO "oh_sys"."sys_menu" VALUES (33304128612466688, 7, 'Flow', '绘制流程', '/system/flow', '/system/flow/draw', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:flow-logs-vpc', 'f', 0, 1, NULL, 10000, '2026-04-02 21:38:43.022556', 10000, '2026-04-06 18:10:42.981877');
+INSERT INTO "oh_sys"."sys_menu" VALUES (36768990499962880, 33304128612466688, '流程查询', '流程查询', '', NULL, 1, 'f', 'f', 'flow:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-12 11:06:50.469297', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (36769889070874624, 7, 'FlowManage', '流程管理', '/system/flow-manage', '/system/flow/list', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:workflow-automation', 'f', 0, 1, NULL, 10000, '2026-04-12 11:10:24.706571', 10000, '2026-04-12 11:15:00.57417');
+INSERT INTO "oh_sys"."sys_menu" VALUES (36770623787106304, 36769889070874624, '流程管理新增修改', '流程管理新增修改', '', NULL, 1, 'f', 'f', 'flow:task:saveOrUpdate,flow:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-12 11:13:19.876445', 10000, '2026-04-12 11:17:29.143403');
+INSERT INTO "oh_sys"."sys_menu" VALUES (34701521023139840, 33304128612466688, '流程新增修改', '流程新增修改', '', NULL, 1, 'f', 'f', 'flow:saveOrUpdate,flow:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-06 18:11:27.33507', 10000, '2026-04-15 21:21:57.624954');
+INSERT INTO "oh_sys"."sys_menu" VALUES (38012448816496640, 36769889070874624, '环节查看', '环节查看', '', NULL, 1, 'f', 'f', 'flow:node:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:27:54.035171', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (38012908344442880, 36769889070874624, '环节修改', '环节修改', '', NULL, 1, 'f', 'f', 'flow:node:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:29:43.593548', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (43462997489745920, 42, 'ErrorLog', '错误日志', '/system/errLog', '/system/log/errorLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:ibm-knowledge-catalog-premium', 'f', 0, 1, NULL, 10000, '2026-04-30 22:26:26.104883', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (43463159524098048, 43462997489745920, '查询错误日志', '查询错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-30 22:27:04.737104', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (45101480209809408, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 10:57:10.827503', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (45108924046639104, 43462997489745920, '删除错误日志', '删除错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 11:26:45.576264', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (51801209756975104, 6, 'LockUser', '用户锁定', '/system/lockUser', '/system/user/lock', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-access-locked', 'f', 1, 1, NULL, 10000, '2026-05-23 22:39:30.82555', 10000, '2026-05-24 10:59:42.103162');
+INSERT INTO "oh_sys"."sys_menu" VALUES (53949658837286912, 53949269693956096, '查询在线用户', '查询在线用户', '', NULL, 1, 'f', 'f', 'monitor:user:all,monitor:user:tokens', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 1, 1, NULL, 10000, '2026-05-29 20:56:41.003309', 10000, '2026-05-29 20:59:55.515648');
+INSERT INTO "oh_sys"."sys_menu" VALUES (53951928605868032, 53949269693956096, '下线操作', '下线操作', '', NULL, 1, 'f', 'f', 'monitor:user:logout', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-29 21:05:42.157191', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" VALUES (53949269693956096, 6, 'OnlineUser', '在线用户', '/system/online-user', '/system/user/monitor', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-online', 'f', 1, 1, NULL, 10000, '2026-05-29 20:55:08.223114', 10000, '2026-05-29 21:07:06.986522');
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -1061,11 +538,9 @@ CREATE TABLE "oh_sys"."sys_message" (
   "creator" int8,
   "create_time" timestamp(6),
   "updater" int8,
-  "update_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_message" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_message"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_message"."title" IS '标题';
 COMMENT ON COLUMN "oh_sys"."sys_message"."content" IS '内容';
@@ -1080,14 +555,11 @@ COMMENT ON COLUMN "oh_sys"."sys_message"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_sys"."sys_message"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_sys"."sys_message"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_message"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_sys"."sys_message"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_message" IS '系统消息';
 
 -- ----------------------------
 -- Records of sys_message
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_params
@@ -1107,7 +579,6 @@ CREATE TABLE "oh_sys"."sys_params" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_params" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_params"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_params"."param_name" IS '参数名称';
 COMMENT ON COLUMN "oh_sys"."sys_params"."param_type" IS '系统参数   0：否   1：是';
@@ -1124,12 +595,10 @@ COMMENT ON TABLE "oh_sys"."sys_params" IS '参数管理';
 -- ----------------------------
 -- Records of sys_params
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_params" ("id", "param_name", "param_type", "param_key", "param_value", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '用户登录-验证码开关', 1, 'LOGIN_CAPTCHA', 'false', '是否开启验证码（true：开启，false：关闭）', 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_params" ("id", "param_name", "param_type", "param_key", "param_value", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (2, '验证码类型', 1, 'CAPTCHA_TYPE', '4', '1-png图形干扰、2-gif类型、3-png圆圈干扰、4-png短线干扰', 1, 10000, '2023-09-09 16:25:06', 10000, '2023-09-09 16:25:06');
-INSERT INTO "oh_sys"."sys_params" ("id", "param_name", "param_type", "param_key", "param_value", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (3, '验证码长度', 1, 'CAPTCHA_LENGTH', '4', '验证码长度，默认5个', 1, 10000, '2023-10-04 12:15:07', 10000, '2023-10-04 12:15:07');
-INSERT INTO "oh_sys"."sys_params" ("id", "param_name", "param_type", "param_key", "param_value", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (4, 'websocket连接', 1, 'WS_URL', '/dev/socket', 'websocket连接反向代理名称', 1, 10000, '2023-10-06 15:07:55', 10000, '2023-10-06 15:07:55');
-COMMIT;
+INSERT INTO "oh_sys"."sys_params" VALUES (1, '用户登录-验证码开关', 1, 'LOGIN_CAPTCHA', 'false', '是否开启验证码（true：开启，false：关闭）', 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
+INSERT INTO "oh_sys"."sys_params" VALUES (2, '验证码类型', 1, 'CAPTCHA_TYPE', '4', '1-png图形干扰、2-gif类型、3-png圆圈干扰、4-png短线干扰', 1, 10000, '2023-09-09 16:25:06', 10000, '2023-09-09 16:25:06');
+INSERT INTO "oh_sys"."sys_params" VALUES (3, '验证码长度', 1, 'CAPTCHA_LENGTH', '4', '验证码长度，默认5个', 1, 10000, '2023-10-04 12:15:07', 10000, '2023-10-04 12:15:07');
+INSERT INTO "oh_sys"."sys_params" VALUES (4, 'websocket连接', 1, 'WS_URL', '/dev/socket', 'websocket连接反向代理名称', 1, 10000, '2023-10-06 15:07:55', 10000, '2023-10-06 15:07:55');
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1145,11 +614,9 @@ CREATE TABLE "oh_sys"."sys_post" (
   "creator" int8,
   "create_time" timestamp(6),
   "updater" int8,
-  "update_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_post" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_post"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_post"."post_code" IS '岗位编码';
 COMMENT ON COLUMN "oh_sys"."sys_post"."post_name" IS '岗位名称';
@@ -1160,14 +627,11 @@ COMMENT ON COLUMN "oh_sys"."sys_post"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_sys"."sys_post"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_sys"."sys_post"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_post"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_sys"."sys_post"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_post" IS '岗位管理';
 
 -- ----------------------------
 -- Records of sys_post
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1184,11 +648,9 @@ CREATE TABLE "oh_sys"."sys_role" (
   "creator" int8,
   "create_time" timestamp(6),
   "updater" int8,
-  "update_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_role" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_role"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_role"."code" IS '角色编码';
 COMMENT ON COLUMN "oh_sys"."sys_role"."name" IS '角色名称';
@@ -1200,15 +662,11 @@ COMMENT ON COLUMN "oh_sys"."sys_role"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_sys"."sys_role"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_sys"."sys_role"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_role"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_sys"."sys_role"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_role" IS '角色管理';
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_role" ("id", "code", "name", "remark", "data_scope", "db_status", "is_system", "creator", "create_time", "updater", "update_time", "tenant_id") VALUES (1, 'Tenant', '租户角色', '系统内置', 0, 1, 1, 10000, '2025-01-01 01:23:45', 10000, '2025-06-07 21:53:07', '');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_role_data_scope
@@ -1222,11 +680,9 @@ CREATE TABLE "oh_sys"."sys_role_data_scope" (
   "creator" int8,
   "create_time" timestamp(6),
   "updater" int8,
-  "update_time" timestamp(6),
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_role_data_scope" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."role_id" IS '角色ID';
 COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."dept_id" IS '部门ID';
@@ -1235,14 +691,11 @@ COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_sys"."sys_role_data_scope"."tenant_id" IS '租户ID';
 COMMENT ON TABLE "oh_sys"."sys_role_data_scope" IS '角色数据权限';
 
 -- ----------------------------
 -- Records of sys_role_data_scope
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -1259,7 +712,6 @@ CREATE TABLE "oh_sys"."sys_role_menu" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_role_menu" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_role_menu"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_role_menu"."role_id" IS '角色ID';
 COMMENT ON COLUMN "oh_sys"."sys_role_menu"."menu_id" IS '菜单ID';
@@ -1273,48 +725,6 @@ COMMENT ON TABLE "oh_sys"."sys_role_menu" IS '角色菜单关系';
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
--- Table structure for sys_tenant_member
--- ----------------------------
-DROP TABLE IF EXISTS "oh_sys"."sys_tenant_member";
-CREATE TABLE "oh_sys"."sys_tenant_member" (
-  "id" int8 NOT NULL,
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" NOT NULL,
-  "tenant_name" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-  "dept_id" int8,
-  "note" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "status" int2,
-  "sort" int4,
-  "db_status" int2 DEFAULT '1'::smallint,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "updater" int8,
-  "update_time" timestamp(6)
-)
-;
-ALTER TABLE "oh_sys"."sys_tenant_member" OWNER TO "postgres";
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."id" IS 'id';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."tenant_id" IS '租户ID';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."tenant_name" IS '租户名';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."dept_id" IS '默认根部门';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."note" IS '备注';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."status" IS '状态  0：停用   1：正常';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."sort" IS '排序';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_sys"."sys_tenant_member"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_sys"."sys_tenant_member" IS '租户信息';
-
--- ----------------------------
--- Records of sys_tenant_member
--- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -1340,10 +750,10 @@ CREATE TABLE "oh_sys"."sys_user" (
   "update_time" timestamp(6),
   "pwd_modify_time" timestamp(6),
   "user_key" varchar(60) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+  "user_type" varchar(2) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 0,
+  "open_id" varchar(100) COLLATE "pg_catalog"."default"
 )
 ;
-ALTER TABLE "oh_sys"."sys_user" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_user"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_user"."username" IS '用户名';
 COMMENT ON COLUMN "oh_sys"."sys_user"."password" IS '密码';
@@ -1363,15 +773,14 @@ COMMENT ON COLUMN "oh_sys"."sys_user"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_user"."update_time" IS '更新时间';
 COMMENT ON COLUMN "oh_sys"."sys_user"."pwd_modify_time" IS '密码修改时间';
 COMMENT ON COLUMN "oh_sys"."sys_user"."user_key" IS '用户密钥，用于第三方系统登录';
-COMMENT ON COLUMN "oh_sys"."sys_user"."tenant_id" IS '租户ID';
+COMMENT ON COLUMN "oh_sys"."sys_user"."user_type" IS '用户类型，0普通用户1微信小程序用户';
+COMMENT ON COLUMN "oh_sys"."sys_user"."open_id" IS '外部用户ID';
 COMMENT ON TABLE "oh_sys"."sys_user" IS '用户管理';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_user" ("id", "username", "password", "real_name", "avatar", "gender", "email", "mobile", "dept_id", "super_admin", "status", "note", "db_status", "creator", "create_time", "updater", "update_time", "pwd_modify_time", "user_key", "tenant_id") VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, NULL, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', '123', NULL);
-COMMIT;
+INSERT INTO "oh_sys"."sys_user" VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, NULL, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', '123', '0', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1388,7 +797,6 @@ CREATE TABLE "oh_sys"."sys_user_post" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_user_post" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_user_post"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_user_post"."user_id" IS '用户ID';
 COMMENT ON COLUMN "oh_sys"."sys_user_post"."post_id" IS '岗位ID';
@@ -1402,8 +810,6 @@ COMMENT ON TABLE "oh_sys"."sys_user_post" IS '用户岗位关系';
 -- ----------------------------
 -- Records of sys_user_post
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -1420,7 +826,6 @@ CREATE TABLE "oh_sys"."sys_user_role" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_user_role" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_user_role"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_user_role"."role_id" IS '角色ID';
 COMMENT ON COLUMN "oh_sys"."sys_user_role"."user_id" IS '用户ID';
@@ -1434,8 +839,6 @@ COMMENT ON TABLE "oh_sys"."sys_user_role" IS '用户角色关系';
 -- ----------------------------
 -- Records of sys_user_role
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_version_info
@@ -1458,7 +861,6 @@ CREATE TABLE "oh_sys"."sys_version_info" (
   "update_time" timestamp(6)
 )
 ;
-ALTER TABLE "oh_sys"."sys_version_info" OWNER TO "postgres";
 COMMENT ON COLUMN "oh_sys"."sys_version_info"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_version_info"."version_num" IS '版本号';
 COMMENT ON COLUMN "oh_sys"."sys_version_info"."title" IS '标题';
@@ -1478,9 +880,28 @@ COMMENT ON TABLE "oh_sys"."sys_version_info" IS '版本信息';
 -- ----------------------------
 -- Records of sys_version_info
 -- ----------------------------
-BEGIN;
-INSERT INTO "oh_sys"."sys_version_info" ("id", "version_num", "title", "content", "release_time", "is_curr_version", "cover_picture", "re_login", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 't', '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
-COMMIT;
+INSERT INTO "oh_sys"."sys_version_info" VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 't', '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
+
+-- ----------------------------
+-- Indexes structure for table sys_dept
+-- ----------------------------
+CREATE INDEX "idx_dept_parent_id" ON "oh_sys"."sys_dept" USING btree (
+  "parent_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Indexes structure for table sys_dict_data
+-- ----------------------------
+CREATE INDEX "idx_dict_data_type" ON "oh_sys"."sys_dict_data" USING btree (
+  "dict_type_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Indexes structure for table sys_dict_type
+-- ----------------------------
+CREATE INDEX "idx_dict_type" ON "oh_sys"."sys_dict_type" USING btree (
+  "dict_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
 
 -- ----------------------------
 -- Indexes structure for table sys_error_log
@@ -1496,3 +917,34 @@ CREATE INDEX "err_log_02" ON "oh_sys"."sys_error_log" USING btree (
 -- Primary Key structure for table sys_error_log
 -- ----------------------------
 ALTER TABLE "oh_sys"."sys_error_log" ADD CONSTRAINT "sys_error_log_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table sys_params
+-- ----------------------------
+CREATE INDEX "idx_params_key" ON "oh_sys"."sys_params" USING btree (
+  "param_key" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Indexes structure for table sys_post
+-- ----------------------------
+CREATE INDEX "idx_post_code" ON "oh_sys"."sys_post" USING btree (
+  "post_code" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Indexes structure for table sys_role
+-- ----------------------------
+CREATE INDEX "idx_role_code" ON "oh_sys"."sys_role" USING btree (
+  "code" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Indexes structure for table sys_user
+-- ----------------------------
+CREATE INDEX "idx_user_name" ON "oh_sys"."sys_user" USING btree (
+  "username" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "idx_user_type" ON "oh_sys"."sys_user" USING btree (
+  "user_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);

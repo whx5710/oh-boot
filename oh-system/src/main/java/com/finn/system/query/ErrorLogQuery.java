@@ -42,10 +42,6 @@ public class ErrorLogQuery extends Query {
      */
     private String keyWord;
 
-    /**
-     * 租户ID
-     */
-    private String tenantId;
 
     public String getErrCode() {
         return errCode;
@@ -77,14 +73,6 @@ public class ErrorLogQuery extends Query {
 
     public void setTraceId(String traceId) {
         this.traceId = traceId;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
     public String getKeyWord() {

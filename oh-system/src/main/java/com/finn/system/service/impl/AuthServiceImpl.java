@@ -9,7 +9,6 @@ import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpContextUtils;
 import com.finn.framework.utils.IpUtils;
 import com.finn.framework.utils.Tools;
-import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.common.properties.SecurityProperties;
 import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.mobile.MobileAuthenticationToken;
@@ -55,15 +54,13 @@ public class AuthServiceImpl implements AuthService {
     private final RedisCache redisCache;
 
     private final SecurityProperties securityProperties;
-    private final MultiTenantProperties tenantProperties;
 
     private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(CaptchaService captchaService, TokenCache tokenCache,
                            AuthenticationManager authenticationManager, LoginLogService loginLogService,
                            UserService userService, RedisCache redisCache,
-                           SecurityProperties securityProperties,
-                           MultiTenantProperties tenantProperties) {
+                           SecurityProperties securityProperties) {
         this.captchaService = captchaService;
         this.tokenCache = tokenCache;
         this.authenticationManager = authenticationManager;
@@ -71,7 +68,6 @@ public class AuthServiceImpl implements AuthService {
         this.userService = userService;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
-        this.tenantProperties = tenantProperties;
     }
 
     /**
@@ -86,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
         boolean flag = captchaService.validate(login.getPlatformKey(), login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
-            loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
+            loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue());
             throw new ServerException(buildErrorMessage(login.getUsername(), "验证码错误"));
         }
         // 验证账号生成token
@@ -227,7 +223,7 @@ public class AuthServiceImpl implements AuthService {
             // 删除用户信息
             tokenCache.deleteUser(user.getId(), accessToken);
             // 保存登录日志
-            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
+            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue());
         }
     }
 

@@ -42,11 +42,6 @@ public class OperateLogQuery extends Query {
      */
     String endTime;
 
-    /**
-     * 租户
-     */
-    private String tenantId;
-
     public String getRealName() {
         return realName;
     }
@@ -103,11 +98,4 @@ public class OperateLogQuery extends Query {
         this.endTime = endTime;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

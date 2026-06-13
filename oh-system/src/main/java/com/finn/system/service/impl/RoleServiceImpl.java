@@ -67,7 +67,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 				vo.setRemark(item.getRemark());
 				vo.setDataScope(item.getDataScope());
 				vo.setIsSystem(item.getIsSystem());
-				vo.setTenantName(item.getTenantName());
 				vo.setCreateTime(item.getCreateTime());
 				if(item.getMenuIds() != null){
 					String[] m = item.getMenuIds().split(",");

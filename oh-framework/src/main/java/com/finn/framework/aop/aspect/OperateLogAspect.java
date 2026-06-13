@@ -94,7 +94,6 @@ public class OperateLogAspect {
             if(userDetail != null){
                 log.setUserId(userDetail.getId());
                 log.setRealName(userDetail.getRealName());
-                log.setTenantId(userDetail.getTenantId());
             }
 
             // 请求端信息

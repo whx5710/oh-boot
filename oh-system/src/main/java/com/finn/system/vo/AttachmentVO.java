@@ -40,15 +40,6 @@ public class AttachmentVO implements Serializable {
     private String platform;
 
     /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 租户名称
-     */
-    private String tenantName;
-    /**
      * 创建时间
      */
     private LocalDateTime createTime;
@@ -101,19 +92,4 @@ public class AttachmentVO implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
-    }
 }

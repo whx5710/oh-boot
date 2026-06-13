@@ -76,7 +76,6 @@ com.finn.{module}
 SuperEntity (序列化基础)
     └── IDEntity (含 id 字段)
             └── BaseEntity (含 creator、create_time、updater、update_time、db_status)
-                    └── TenantEntity (含 tenant_id)
 ```
 
 #### 使用场景
@@ -86,11 +85,10 @@ SuperEntity (序列化基础)
 | `SuperEntity` | 仅需要序列化能力的简单实体 |
 | `IDEntity` | 只需要 ID 字段的实体 |
 | `BaseEntity` | 需要完整审计字段（创建人、创建时间、更新人、更新时间、数据状态）的实体 |
-| `TenantEntity` | 需要多租户支持的实体（继承 BaseEntity 的所有字段 + tenant_id） |
 
 #### 编码规范
 
-- 实体类根据业务需求选择继承 `TenantEntity`、`BaseEntity`、`IDEntity` 或 `SuperEntity`
+- 实体类根据业务需求选择继承 `BaseEntity`、`IDEntity` 或 `SuperEntity`
 - 使用 `@TableName` 注解指定表名
 - 使用 `@TableField` 注解映射字段（下划线转驼峰）
 - 非数据库字段使用 `@TableField(exists = false)`
@@ -347,7 +345,6 @@ public interface UserConvert {
 ## 数据库规范
 
 - 逻辑删除字段：`db_status`（1 正常，0 删除）
-- 租户字段：`tenant_id`（String 类型）
 - 时间字段：`create_time`、`update_time`（LocalDateTime 类型）
 - 操作人字段：`creator`、`updater`（Long 类型）
 - 表名前缀：`sys_`（系统表）、`app_`（应用模块）、`flow_`（工作流模块）

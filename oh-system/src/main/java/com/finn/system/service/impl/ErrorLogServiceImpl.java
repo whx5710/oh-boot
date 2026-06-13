@@ -139,7 +139,6 @@ public class ErrorLogServiceImpl implements ErrorLogService {
     private QueryWrapper<ErrorLogEntity> getQueryWrapper(ErrorLogQuery query){
         QueryWrapper<ErrorLogEntity> wrapper = QueryWrapper.of(ErrorLogEntity.class);
         wrapper.eq(ErrorLogEntity::getTraceId, query.getTraceId())
-                .eq(ErrorLogEntity::getTenantId, query.getTenantId())
                 .le(ErrorLogEntity::getErrTime, query.getEndErrTime())
                 .ge(ErrorLogEntity::getErrTime, query.getStartErrTime())
                 .orderBy(ErrorLogEntity::getErrTime, Constant.DESC);

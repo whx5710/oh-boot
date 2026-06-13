@@ -36,11 +36,6 @@ public class RoleEntity extends BaseEntity {
 	@TableField("is_system")
 	private Integer isSystem;
 
-	/**
-	 * 租户
-	 */
-	@TableField(exists = false)
-	private String tenantName;
 
 	@TableField(exists = false)
 	private String menuIds;
@@ -83,14 +78,6 @@ public class RoleEntity extends BaseEntity {
 
 	public void setIsSystem(Integer isSystem) {
 		this.isSystem = isSystem;
-	}
-
-	public String getTenantName() {
-		return tenantName;
-	}
-
-	public void setTenantName(String tenantName) {
-		this.tenantName = tenantName;
 	}
 
 	public String getMenuIds() {

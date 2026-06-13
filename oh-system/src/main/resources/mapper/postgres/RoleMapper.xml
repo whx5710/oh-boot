@@ -4,19 +4,17 @@
 <mapper namespace="com.finn.system.mapper.RoleMapper">
 
     <select id="getList" parameterType="com.finn.system.query.RoleQuery">
-        select a.*,b.tenant_name,STRING_AGG(c.menu_id::text, ',') menuIds
-        from sys_role a left join sys_tenant_member b on a.tenant_id = b.tenant_id and b.db_status = 1
+        select a.*,STRING_AGG(c.menu_id::text, ',') menuIds
+        from sys_role a
         left join sys_role_menu c on a.id = c.role_id and c.db_status = 1
         where a.db_status != 0
         <if test="name != null and name != ''">
             and a.name like concat('%',#{name}, '%')
         </if>
-        <if test="tenantId != null and tenantId != ''">and a.tenant_id = #{tenantId}</if>
         <if test="isSystem != null">and a.is_system = #{isSystem}</if>
         <if test="startTime != null and endTime != null">and DATE_FORMAT(a.create_time,'%Y-%m-%d') between #{startTime} and #{endTime}</if>
         <if test="remark != null and remark !=''">and a.remark like concat('%',#{remark},'%')</if>
-        <if test="tenantName != null and tenantName !=''">and b.tenant_name like concat('%',#{tenantName},'%')</if>
-        group by a.id,a.code,a.name,a.remark,a.data_scope,a.db_status,a.is_system,a.creator,a.create_time,a.updater,a.update_time,a.tenant_id,b.tenant_name
+        group by a.id,a.code,a.name,a.remark,a.data_scope,a.db_status,a.is_system,a.creator,a.create_time,a.updater,a.update_time
         order by a.create_time desc
     </select>
 

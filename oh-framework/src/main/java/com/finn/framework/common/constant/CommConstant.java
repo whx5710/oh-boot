@@ -12,11 +12,6 @@ import static com.finn.framework.cache.RedisKeys.PREFIX;
  */
 public interface CommConstant {
 
-    /**
-     * 默认租户角色
-     */
-    Long TENANT_ROLE = 1L;
-
     String ROLE = "role:";
     /**
      * 角色编码
