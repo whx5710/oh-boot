@@ -29,5 +29,5 @@ public interface MessageService {
 
     MessageEntity getById(Long id);
 
-    boolean updateById(MessageEntity param);
+    long updateById(MessageEntity param);
 }

@@ -49,7 +49,7 @@ public class DataFunctionServiceImpl implements DataFunctionService {
 
     @Override
     public DataFunctionEntity getById(Long id) {
-        return dataFunctionMapper.getById(id);
+        return dataFunctionMapper.findById(id, DataFunctionEntity.class);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DataFunctionServiceImpl implements DataFunctionService {
     @Override
     public void save(DataFunctionVO vo) {
         DataFunctionEntity entity = DataFunctionConvert.INSTANCE.convert(vo);
-        dataFunctionMapper.insertFunc(entity);
+        dataFunctionMapper.insert(entity);
     }
 
     @Override

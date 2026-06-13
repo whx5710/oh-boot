@@ -12,7 +12,7 @@
  Target Server Version : 180003 (180003)
  File Encoding         : 65001
 
- Date: 15/04/2026 21:31:36
+ Date: 05/05/2026 11:00:33
 */
 
 
@@ -790,6 +790,43 @@ INSERT INTO "oh_sys"."sys_dict_type" ("id", "dict_type", "dict_name", "dict_sour
 COMMIT;
 
 -- ----------------------------
+-- Table structure for sys_error_log
+-- ----------------------------
+DROP TABLE IF EXISTS "oh_sys"."sys_error_log";
+CREATE TABLE "oh_sys"."sys_error_log" (
+  "id" int8 NOT NULL,
+  "err_code" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "msg" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "stack_info" text COLLATE "pg_catalog"."default",
+  "err_time" timestamp(6) NOT NULL,
+  "trace_id" varchar(80) COLLATE "pg_catalog"."default" NOT NULL,
+  "note" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "score" numeric(5,2),
+  "queue_size" int4,
+  "create_time" timestamp(6),
+  "tenant_id" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+)
+;
+ALTER TABLE "oh_sys"."sys_error_log" OWNER TO "postgres";
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."err_code" IS '错误编码';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."msg" IS '错误提示';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."stack_info" IS '堆栈信息';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."err_time" IS '错误发生时间';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."trace_id" IS '链路跟踪ID';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."note" IS '备注';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."score" IS '队列拥挤程度0-10';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."queue_size" IS '队列大小';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_sys"."sys_error_log"."tenant_id" IS '租户ID';
+COMMENT ON TABLE "oh_sys"."sys_error_log" IS '系统错误日志';
+
+-- ----------------------------
+-- Records of sys_error_log
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for sys_log_login
 -- ----------------------------
 DROP TABLE IF EXISTS "oh_sys"."sys_log_login";
@@ -996,6 +1033,14 @@ INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "me
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (34701521023139840, 33304128612466688, '流程新增修改', '流程新增修改', '', NULL, 1, 'f', 'f', 'flow:saveOrUpdate,flow:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-06 18:11:27.33507', 10000, '2026-04-15 21:21:57.624954');
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (38012448816496640, 36769889070874624, '环节查看', '环节查看', '', NULL, 1, 'f', 'f', 'flow:node:page', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:27:54.035171', NULL, NULL);
 INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (38012908344442880, 36769889070874624, '环节修改', '环节修改', '', NULL, 1, 'f', 'f', 'flow:node:update', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-15 21:29:43.593548', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43462997489745920, 42, 'ErrorLog', '错误日志', '/system/errLog', '/system/log/errorLog', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:ibm-knowledge-catalog-premium', 'f', 0, 1, NULL, 10000, '2026-04-30 22:26:26.104883', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (43463159524098048, 43462997489745920, '查询错误日志', '查询错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-04-30 22:27:04.737104', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45101480209809408, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 'f', 'f', 'sys:log:login:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 10:57:10.827503', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (45108924046639104, 43462997489745920, '删除错误日志', '删除错误日志', '', NULL, 1, 'f', 'f', 'sys:error:log:delete', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-05 11:26:45.576264', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (51801209756975104, 6, 'LockUser', '用户锁定', '/system/lockUser', '/system/user/lock', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-access-locked', 'f', 1, 1, NULL, 10000, '2026-05-23 22:39:30.82555', 10000, '2026-05-24 10:59:42.103162');
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53949658837286912, 53949269693956096, '查询在线用户', '查询在线用户', '', NULL, 1, 'f', 'f', 'monitor:user:all,monitor:user:tokens', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 1, 1, NULL, 10000, '2026-05-29 20:56:41.003309', 10000, '2026-05-29 20:59:55.515648');
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53951928605868032, 53949269693956096, '下线操作', '下线操作', '', NULL, 1, 'f', 'f', 'monitor:user:logout', NULL, NULL, NULL, 'f', NULL, 'button', 0, NULL, 'f', 0, 1, NULL, 10000, '2026-05-29 21:05:42.157191', NULL, NULL);
+INSERT INTO "oh_sys"."sys_menu" ("id", "parent_id", "name", "title", "path", "menu_path", "status", "hide_in_menu", "hide_in_tab", "authority", "badge", "badge_type", "badge_variants", "affix_tab", "link", "type", "open_style", "icon", "keep_alive", "sort", "db_status", "mark", "creator", "create_time", "updater", "update_time") VALUES (53949269693956096, 6, 'OnlineUser', '在线用户', '/system/online-user', '/system/user/monitor', 1, 'f', 'f', NULL, NULL, NULL, NULL, 'f', NULL, 'menu', 0, 'carbon:user-online', 'f', 1, 1, NULL, 10000, '2026-05-29 20:55:08.223114', 10000, '2026-05-29 21:07:06.986522');
 COMMIT;
 
 -- ----------------------------
@@ -1402,7 +1447,7 @@ CREATE TABLE "oh_sys"."sys_version_info" (
   "title" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "content" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
   "release_time" timestamp(6) NOT NULL,
-  "is_curr_version" int2 NOT NULL DEFAULT '0'::smallint,
+  "is_curr_version" bool,
   "cover_picture" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "re_login" int2,
   "remark" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
@@ -1434,217 +1479,20 @@ COMMENT ON TABLE "oh_sys"."sys_version_info" IS '版本信息';
 -- Records of sys_version_info
 -- ----------------------------
 BEGIN;
-INSERT INTO "oh_sys"."sys_version_info" ("id", "version_num", "title", "content", "release_time", "is_curr_version", "cover_picture", "re_login", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 1, '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
+INSERT INTO "oh_sys"."sys_version_info" ("id", "version_num", "title", "content", "release_time", "is_curr_version", "cover_picture", "re_login", "remark", "db_status", "creator", "create_time", "updater", "update_time") VALUES (1, '1.0.0', '初始版本', '初始版本。采用SpringBoot3.0、SpringSecurity6.0、Mybatis，Kafka等框架开发的一套SpringBoot低代码开发平台，支持多数据源，使用门槛极低。', '2023-09-24 20:41:27', 't', '', 0, NULL, 1, 10000, '2023-09-24 20:42:39', 10000, '2023-09-24 20:42:39');
 COMMIT;
 
 -- ----------------------------
--- Primary Key structure for table online_table_column
--- ----------------------------
-ALTER TABLE "oh_sys"."online_table_column" ADD CONSTRAINT "online_table_column_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table qrtz_blob_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_blob_triggers" ADD CONSTRAINT "qrtz_blob_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_calendars
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_calendars" ADD CONSTRAINT "qrtz_calendars_pkey" PRIMARY KEY ("sched_name", "calendar_name");
-
--- ----------------------------
--- Primary Key structure for table qrtz_cron_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_cron_triggers" ADD CONSTRAINT "qrtz_cron_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_fired_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_fired_triggers" ADD CONSTRAINT "qrtz_fired_triggers_pkey" PRIMARY KEY ("sched_name", "entry_id");
-
--- ----------------------------
--- Primary Key structure for table qrtz_job_details
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_job_details" ADD CONSTRAINT "qrtz_job_details_pkey" PRIMARY KEY ("sched_name", "job_name", "job_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_locks
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_locks" ADD CONSTRAINT "qrtz_locks_pkey" PRIMARY KEY ("sched_name", "lock_name");
-
--- ----------------------------
--- Primary Key structure for table qrtz_paused_trigger_grps
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_paused_trigger_grps" ADD CONSTRAINT "qrtz_paused_trigger_grps_pkey" PRIMARY KEY ("sched_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_scheduler_state
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_scheduler_state" ADD CONSTRAINT "qrtz_scheduler_state_pkey" PRIMARY KEY ("sched_name", "instance_name");
-
--- ----------------------------
--- Primary Key structure for table qrtz_simple_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simple_triggers" ADD CONSTRAINT "qrtz_simple_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_simprop_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simprop_triggers" ADD CONSTRAINT "qrtz_simprop_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table qrtz_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_triggers" ADD CONSTRAINT "qrtz_triggers_pkey" PRIMARY KEY ("sched_name", "trigger_name", "trigger_group");
-
--- ----------------------------
--- Primary Key structure for table schedule_job
--- ----------------------------
-ALTER TABLE "oh_sys"."schedule_job" ADD CONSTRAINT "schedule_job_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table schedule_job_log
--- ----------------------------
-ALTER TABLE "oh_sys"."schedule_job_log" ADD CONSTRAINT "schedule_job_log_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sms_log
--- ----------------------------
-ALTER TABLE "oh_sys"."sms_log" ADD CONSTRAINT "sms_log_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sms_platform
--- ----------------------------
-ALTER TABLE "oh_sys"."sms_platform" ADD CONSTRAINT "sms_platform_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_attachment
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_attachment" ADD CONSTRAINT "sys_attachment_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_dept
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_dept" ADD CONSTRAINT "sys_dept_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_dict_data
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_dict_data" ADD CONSTRAINT "sys_dict_data_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_dict_type
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_dict_type" ADD CONSTRAINT "sys_dict_type_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_log_login
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_log_login" ADD CONSTRAINT "sys_log_login_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_log_operate
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_log_operate" ADD CONSTRAINT "sys_log_operate_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_menu
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_menu" ADD CONSTRAINT "sys_menu_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_message
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_message" ADD CONSTRAINT "sys_message_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Uniques structure for table sys_params
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_params" ADD CONSTRAINT "sys_params_param_key_key" UNIQUE ("param_key");
-
--- ----------------------------
--- Primary Key structure for table sys_params
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_params" ADD CONSTRAINT "sys_params_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_post
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_post" ADD CONSTRAINT "sys_post_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_role
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_role" ADD CONSTRAINT "sys_role_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_role_data_scope
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_role_data_scope" ADD CONSTRAINT "sys_role_data_scope_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_role_menu
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_role_menu" ADD CONSTRAINT "sys_role_menu_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Uniques structure for table sys_tenant_member
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_tenant_member" ADD CONSTRAINT "sys_tenant_member_tenant_id_key" UNIQUE ("tenant_id");
-
--- ----------------------------
--- Primary Key structure for table sys_tenant_member
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_tenant_member" ADD CONSTRAINT "sys_tenant_member_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_user
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_user" ADD CONSTRAINT "sys_user_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_user_post
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_user_post" ADD CONSTRAINT "sys_user_post_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table sys_user_role
--- ----------------------------
-ALTER TABLE "oh_sys"."sys_user_role" ADD CONSTRAINT "sys_user_role_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table sys_version_info
--- ----------------------------
-CREATE INDEX "idx_01" ON "oh_sys"."sys_version_info" USING btree (
-  "is_curr_version" "pg_catalog"."int2_ops" ASC NULLS LAST
+-- Indexes structure for table sys_error_log
+-- ----------------------------
+CREATE INDEX "err_log_01" ON "oh_sys"."sys_error_log" USING btree (
+  "trace_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "err_log_02" ON "oh_sys"."sys_error_log" USING btree (
+  "err_time" "pg_catalog"."timestamp_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
--- Primary Key structure for table sys_version_info
+-- Primary Key structure for table sys_error_log
 -- ----------------------------
-ALTER TABLE "oh_sys"."sys_version_info" ADD CONSTRAINT "sys_version_info_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_blob_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_blob_triggers" ADD CONSTRAINT "qrtz_blob_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_cron_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_cron_triggers" ADD CONSTRAINT "qrtz_cron_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_simple_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simple_triggers" ADD CONSTRAINT "qrtz_simple_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_simprop_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_simprop_triggers" ADD CONSTRAINT "qrtz_simprop_triggers_fk" FOREIGN KEY ("sched_name", "trigger_name", "trigger_group") REFERENCES "oh_sys"."qrtz_triggers" ("sched_name", "trigger_name", "trigger_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- ----------------------------
--- Foreign Keys structure for table qrtz_triggers
--- ----------------------------
-ALTER TABLE "oh_sys"."qrtz_triggers" ADD CONSTRAINT "qrtz_triggers_fk" FOREIGN KEY ("sched_name", "job_name", "job_group") REFERENCES "oh_sys"."qrtz_job_details" ("sched_name", "job_name", "job_group") ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE "oh_sys"."sys_error_log" ADD CONSTRAINT "sys_error_log_pkey" PRIMARY KEY ("id");

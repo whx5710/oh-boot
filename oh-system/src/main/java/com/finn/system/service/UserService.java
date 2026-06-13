@@ -38,7 +38,13 @@ public interface UserService {
      */
     void delete(List<Long> idList);
 
-    UserVO getByMobile(String mobile);
+    /**
+     *
+     * @param mobile
+     * @param userType 0普通用户1微信小程序用户
+     * @return
+     */
+    UserVO getByMobile(String mobile, String userType);
 
     UserVO info(Long userId);
 
@@ -100,6 +106,20 @@ public interface UserService {
     UserDetails getUserDetails(UserEntity userEntity);
 
 
-    UserEntity getByUsername(String username);
+    /**
+     * 获取用户信息
+     * @param username 用户名
+     * @param userType 用户类型，0普通用户1微信小程序用户
+     * @return 用户信息
+     */
+    UserEntity getByUsername(String username, String userType);
+
+    /**
+     * 根据open id 获取用户信息
+     * @param openId 第三方ID
+     * @param userType 用户类型，0普通用户1微信小程序用户
+     * @return 用户实体
+     */
+    UserEntity getByOpenId(String openId, String userType);
 
 }

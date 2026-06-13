@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.JsonUtils;
@@ -117,7 +118,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
             // redis为空，则从数据库中获取
             ParamsEntity paramsEntity = this.getByKey(paramKey);
             if(ObjectUtils.isEmpty(paramsEntity)){
-                throw new ServerException("参数不能为空，paramKey：" + paramKey);
+                throw new ServerException("系统参数不能为空，paramKey：" + paramKey);
             }else{
                 value = paramsEntity.getParamValue();
             }
@@ -183,17 +184,37 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
     }
 
     /**
-     *  根据key获取数据库中的值
+     *  根据key获取数据库中的值（优化：使用 Hash 批量获取，减少缓存查询次数）
      * @param keys 参数Key
      * @return 集合
      */
     @Override
     public Map<String, String> getByKeys(List<String> keys) {
         Map<String, String> data = new HashMap<>();
-        for(String key: keys){
-            String value = getDefaultString(key.toUpperCase());
-            if(value != null){
-                data.put(key.toUpperCase(), value);
+        if (keys == null || keys.isEmpty()) {
+            return data;
+        }
+        
+        // 批量从缓存获取（使用 HMGET 减少网络往返）
+        List<String> upperKeys = keys.stream()
+                .map(String::toUpperCase)
+                .distinct()
+                .toList();
+        
+        Map<String, Object> cacheMap = paramsCache.mGet(upperKeys);
+        
+        for (String key : upperKeys) {
+            Object value = cacheMap.get(key);
+            if (value != null) {
+                data.put(key, String.valueOf(value));
+            } else {
+                // 缓存未命中，从数据库获取
+                ParamsEntity paramsEntity = this.getByKey(key);
+                if (paramsEntity != null) {
+                    data.put(key, paramsEntity.getParamValue());
+                    // 回填缓存
+                    paramsCache.save(key, paramsEntity.getParamValue());
+                }
             }
         }
         return data;
@@ -223,7 +244,7 @@ public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements 
      * @param query
      * @return
      */
-    private QueryWrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
+    private Wrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
         if(query == null){
             return QueryWrapper.of(ParamsEntity.class);
         }else{

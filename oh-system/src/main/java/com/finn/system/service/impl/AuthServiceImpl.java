@@ -4,13 +4,14 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.wechat.WechatMiniProgramAuthenticationToken;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpContextUtils;
 import com.finn.framework.utils.IpUtils;
 import com.finn.framework.utils.Tools;
 import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.common.properties.SecurityProperties;
-import com.finn.framework.cache.TokenStoreCache;
+import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.mobile.MobileAuthenticationToken;
 import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
@@ -19,7 +20,7 @@ import com.finn.system.entity.UserEntity;
 import com.finn.system.enums.LoginOperationEnum;
 import com.finn.system.service.AuthService;
 import com.finn.system.service.CaptchaService;
-import com.finn.system.service.LogLoginService;
+import com.finn.system.service.LoginLogService;
 import com.finn.system.service.UserService;
 import com.finn.system.vo.AccountLoginVO;
 import com.finn.system.vo.MobileLoginVO;
@@ -47,9 +48,9 @@ import static com.finn.framework.common.enums.ErrorCode.REFRESH_TOKEN_ERROR;
 @Service
 public class AuthServiceImpl implements AuthService {
     private final CaptchaService captchaService;
-    private final TokenStoreCache tokenStoreCache;
+    private final TokenCache tokenCache;
     private final AuthenticationManager authenticationManager;
-    private final LogLoginService logLoginService;
+    private final LoginLogService loginLogService;
     private final UserService userService;
 
     private final RedisCache redisCache;
@@ -60,15 +61,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public AuthServiceImpl(CaptchaService captchaService, TokenStoreCache tokenStoreCache,
-                           AuthenticationManager authenticationManager, LogLoginService logLoginService,
+    public AuthServiceImpl(CaptchaService captchaService, TokenCache tokenCache,
+                           AuthenticationManager authenticationManager, LoginLogService loginLogService,
                            UserService userService, RedisCache redisCache,
                            SecurityProperties securityProperties,
                            TenantCache tenantCache, MultiTenantProperties tenantProperties) {
         this.captchaService = captchaService;
-        this.tokenStoreCache = tokenStoreCache;
+        this.tokenCache = tokenCache;
         this.authenticationManager = authenticationManager;
-        this.logLoginService = logLoginService;
+        this.loginLogService = loginLogService;
         this.userService = userService;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
@@ -85,14 +86,52 @@ public class AuthServiceImpl implements AuthService {
     public TokenVO loginByAccount(AccountLoginVO login) {
         AssertUtils.isBlank(login.getUsername(), "用户名");
         // 验证码效验
-        boolean flag = captchaService.validate(login.getKey(), login.getCaptcha());
+        boolean flag = captchaService.validate(login.getPlatformKey(), login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
-            logLoginService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
+            loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
             throw new ServerException(buildErrorMessage(login.getUsername(), "验证码错误"));
         }
         // 验证账号生成token
         return createToken(login, false);
+    }
+
+    /**
+     * 微信登录
+     * @param code
+     * @return
+     */
+    @Override
+    public TokenVO wechatLogin(String code) {
+        // 1. 创建未认证 Token
+        WechatMiniProgramAuthenticationToken authRequest = new WechatMiniProgramAuthenticationToken(code);
+        // 2. 执行认证
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(authRequest);
+        }catch (Exception e){
+            log.error("微信认证失败！code = {}, {}", code, e.getMessage());
+            throw new ServerException("微信认证失败！");
+        }
+
+        // 用户信息
+        UserDetail user = (UserDetail) authentication.getPrincipal();
+        if(user == null){
+            throw new ServerException("未获取到用户信息");
+        }
+        // 登录时间和token刷新时间
+        user.setLoginTime(LocalDateTime.now());
+        user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
+
+        // 生成 accessToken
+        String accessToken = Tools.generator();
+
+        String refreshToken = Tools.generator();
+
+        // 保存用户信息到缓存
+        tokenCache.saveUser(accessToken, refreshToken, user);
+
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
     }
 
     /**
@@ -111,15 +150,21 @@ public class AuthServiceImpl implements AuthService {
     public TokenVO loginByMobile(MobileLoginVO login) {
         Authentication authentication;
         try {
-            // 用户认证
+            // 执行认证
             authentication = authenticationManager.authenticate(
-                    new MobileAuthenticationToken(login.getMobile(), login.getCode()));
+                    new MobileAuthenticationToken(login.getMobile(), login.getCode(), login.getUserType()));
         } catch (BadCredentialsException e) {
             throw new ServerException("手机号或验证码错误");
         }
 
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();
+        if(user == null){
+            throw new ServerException("未获取到用户信息");
+        }
+        // 登录时间和token刷新时间
+        user.setLoginTime(LocalDateTime.now());
+        user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
 
         // 生成 accessToken
         String accessToken = Tools.generator();
@@ -127,9 +172,9 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = Tools.generator();
 
         // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, refreshToken, user);
+        tokenCache.saveUser(accessToken, refreshToken, user);
 
-        return new TokenVO(accessToken, refreshToken);
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
     }
 
     /**
@@ -160,8 +205,8 @@ public class AuthServiceImpl implements AuthService {
                 // 生成 accessToken
                 String accessToken = Tools.generator();
                 // 保存用户信息到缓存
-                tokenStoreCache.saveUser(accessToken, refreshToken, userDetailDb);
-                return new TokenVO(accessToken, refreshToken);
+                tokenCache.saveUser(accessToken, refreshToken, userDetailDb);
+                return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
             }else{
                 throw new ServerException("【IP】请求非法，刷新token失败");
             }
@@ -180,12 +225,12 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         // 用户信息
-        UserDetail user = tokenStoreCache.getUser(accessToken);
+        UserDetail user = tokenCache.getUser(accessToken);
         if(user != null){
             // 删除用户信息
-            tokenStoreCache.deleteUser(user.getId(), accessToken);
+            tokenCache.deleteUser(user.getId(), accessToken);
             // 保存登录日志
-            logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
+            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
         }
     }
 
@@ -220,7 +265,6 @@ public class AuthServiceImpl implements AuthService {
      * @return token
      */
     private TokenVO createToken(AccountLoginVO login, boolean checkKey){
-        String msg;
         Authentication authentication;
         String authCountKey = RedisKeys.getAuthCountKey(login.getUsername());
         // 判断错误次数，超出则锁定账号
@@ -233,9 +277,8 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadCredentialsException e) {
             throw new ServerException(buildErrorMessage(login.getUsername(), "用户名或密码错误"));
         } catch (InternalAuthenticationServiceException e){
-            e.printStackTrace();
             log.error("登录发生异常!{}", e.getMessage());
-            throw new ServerException("登录发生异常，请联写管理员!");
+            throw new ServerException("登录发生异常，请联系管理员!");
         }
         // 用户信息
         UserDetail user = (UserDetail) authentication.getPrincipal();
@@ -261,10 +304,10 @@ public class AuthServiceImpl implements AuthService {
         String ip = IpUtils.getIpAddress(request);
         user.setIp(ip);
         // 保存用户信息到缓存
-        tokenStoreCache.saveUser(accessToken, refreshToken, user);
+        tokenCache.saveUser(accessToken, refreshToken, user);
         // 限制次数内登录成功，清除错误计数
         redisCache.delete(authCountKey);
-        return new TokenVO(accessToken, refreshToken);
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
     }
 
     /**

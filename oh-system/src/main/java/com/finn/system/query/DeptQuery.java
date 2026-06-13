@@ -32,7 +32,7 @@ public class DeptQuery extends Query {
     /**
      * 部门ID集合
      */
-    private List<String> deptIds;
+    private List<Long> deptIds;
 
     public String getName() {
         return name;
@@ -58,11 +58,11 @@ public class DeptQuery extends Query {
         this.tenantId = tenantId;
     }
 
-    public List<String> getDeptIds() {
+    public List<Long> getDeptIds() {
         return deptIds;
     }
 
-    public void setDeptIds(List<String> deptIds) {
+    public void setDeptIds(List<Long> deptIds) {
         this.deptIds = deptIds;
     }
 

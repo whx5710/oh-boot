@@ -9,27 +9,17 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>oh-module-flow</artifactId>
-    <!--<groupId>com.finn.flow</groupId>
-    <packaging>jar</packaging>-->
+
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <flowable.version>8.0.0</flowable.version>
     </properties>
 
     <dependencies>
-        <!-- 工作流程 -->
-        <!-- Source: https://mvnrepository.com/artifact/org.flowable/flowable-spring-boot-starter -->
+        <!-- 工作流引擎 -->
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>
-            <version>8.0.0</version>
-            <scope>compile</scope>
+            <version>${flowable.version}</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.finn</groupId>
-            <artifactId>oh-framework</artifactId>
-        </dependency>-->
     </dependencies>
-
 </project>

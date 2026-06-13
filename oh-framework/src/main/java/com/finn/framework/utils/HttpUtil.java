@@ -12,15 +12,25 @@ import java.util.Map;
  * @since 1.0.0 2025-06-14
  */
 public class HttpUtil {
+
     /**
      * get请求
      *
      * @param url
-     * @param params 请求参数
      * @return
      */
-    public static String get(String url, Map<String, Object> params) {
-        return get(url, params, null);
+    public static String get(String url) {
+        return get(url, null, null);
+    }
+    /**
+     * get请求
+     *
+     * @param url
+     * @param headers 请求参数
+     * @return
+     */
+    public static String get(String url, HashMap<String, String> headers) {
+        return get(url, null, headers);
     }
 
     /**
@@ -42,7 +52,7 @@ public class HttpUtil {
      * @param params 请求参数
      * @return
      */
-    public static String post(String url, Map<String, Object> params) {
+    public static String post(String url, Object params) {
         return post(url, params, null);
     }
 
@@ -54,7 +64,7 @@ public class HttpUtil {
      * @param headers 请求头
      * @return
      */
-    public static String post(String url, Map<String, Object> params, HashMap<String, String> headers) {
+    public static String post(String url, Object params, HashMap<String, String> headers) {
         return request(url, params, headers, HttpMethod.POST);
     }
 
@@ -113,7 +123,7 @@ public class HttpUtil {
      * @param method  请求方式
      * @return
      */
-    public static String request(String url, Map<String, Object> params, HashMap<String, String> headers, HttpMethod method) {
+    public static String request(String url, Object params, HashMap<String, String> headers, HttpMethod method) {
         if (params == null) {
             params = new HashMap<>();
         }

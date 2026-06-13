@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.entity.PageResult;
@@ -41,7 +42,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageResult<PostVO> page(PostQuery query) {
-        QueryWrapper<PostEntity> queryWrapper = getQueryWrapper(query);
+        Wrapper<PostEntity> queryWrapper = getQueryWrapper(query);
         Page<PostEntity> page = postMapper.listByWrapper(queryWrapper);
         List<PostVO> list = PostConvert.INSTANCE.convertList(page.getResult());
         for(PostVO vo: list){
@@ -66,7 +67,7 @@ public class PostServiceImpl implements PostService {
         if(!ObjectUtils.isEmpty(list)){
             throw new ServerException("岗位编码已存在");
         }
-        postMapper.insertPost(entity);
+        postMapper.insert(entity);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class PostServiceImpl implements PostService {
      * @param query
      * @return
      */
-    private QueryWrapper<PostEntity> getQueryWrapper(PostQuery query){
+    private Wrapper<PostEntity> getQueryWrapper(PostQuery query){
         if(query == null){
             return QueryWrapper.of(PostEntity.class).eq(PostEntity::getDbStatus, 1).orderBy("sort");
         }else{

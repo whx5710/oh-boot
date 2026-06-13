@@ -1,6 +1,8 @@
 package com.finn.system.controller;
 
 import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.user.SecurityUser;
+import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.Tools;
 import com.finn.framework.entity.Result;
@@ -8,12 +10,15 @@ import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.framework.aop.annotations.RequestKeyParam;
 import com.finn.system.service.AuthService;
 import com.finn.system.service.CaptchaService;
+import com.finn.system.service.UserRoleService;
 import com.finn.system.vo.AccountLoginVO;
 import com.finn.system.vo.CaptchaVO;
 import com.finn.system.vo.MobileLoginVO;
 import com.finn.system.vo.TokenVO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * 认证管理
@@ -22,24 +27,26 @@ import org.springframework.web.bind.annotation.*;
  *
  */
 @RestController
-@RequestMapping("sys/auth")
+@RequestMapping("/sys/auth")
 public class AuthController {
     private final CaptchaService captchaService;
     private final AuthService authService;
+    private final UserRoleService userRoleService;
 
-    public AuthController(CaptchaService captchaService, AuthService authService) {
+    public AuthController(CaptchaService captchaService, AuthService authService,
+                          UserRoleService userRoleService) {
         this.captchaService = captchaService;
         this.authService = authService;
+        this.userRoleService = userRoleService;
     }
 
     /**
      * 验证码
      * @return 验证码信息
      */
-    @GetMapping("captcha")
-    public Result<CaptchaVO> captcha() {
-        CaptchaVO captchaVO = captchaService.generateImg();
-        return Result.ok(captchaVO);
+    @GetMapping("/captcha")
+    public Result<CaptchaVO> captcha(@RequestParam String platformKey) {
+        return Result.ok(captchaService.generateImg(platformKey));
     }
 
     /**
@@ -47,11 +54,33 @@ public class AuthController {
      * @param login 登录信息
      * @return token信息
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     @Idempotent(keyPrefix = "auth:account", limit = true, message = "登录请求重复操作！") // 限制1秒内只能请求一次
     public Result<TokenVO> login(@RequestBody AccountLoginVO login) {
-        TokenVO token = authService.loginByAccount(login);
-        return Result.ok(token);
+        return Result.ok(authService.loginByAccount(login));
+    }
+
+    /**
+     * 微信登录
+     *用户点击微信登录
+     *     ↓
+     * 小程序调用 wx.login() 获取 code
+     *     ↓
+     * 前端将 code 发送到后端
+     *     ↓
+     * 后端用 code + appid + secret 请求微信接口获取 openid/session_key
+     *     ↓
+     * 后端根据 openid 查找或创建用户
+     *     ↓
+     * 后端生成 JWT Token 返回给前端
+     *     ↓
+     * 前端存储 token，后续请求携带 Authorization: Bearer <token>
+     * @param code 微信code
+     * @return token信息
+     */
+    @RequestMapping(value = "/wechat-login", method = {RequestMethod.GET,RequestMethod.POST})
+    public Result<TokenVO> wechatLogin(@RequestParam String code) {
+        return Result.ok(authService.wechatLogin(code));
     }
 
     /**
@@ -76,8 +105,7 @@ public class AuthController {
         }
         login.setPassword(password);
         login.setUserKey(userKey);
-        TokenVO token = authService.loginByUserKey(login);
-        return Result.ok(token);
+        return Result.ok(authService.loginByUserKey(login));
     }
 
     /**
@@ -85,10 +113,20 @@ public class AuthController {
      * @param login
      * @return
      */
-    @PostMapping("mobile")
+    @PostMapping("/mobile")
     public Result<TokenVO> mobile(@RequestBody MobileLoginVO login) {
-        TokenVO token = authService.loginByMobile(login);
-        return Result.ok(token);
+        return Result.ok(authService.loginByMobile(login));
+    }
+
+    /**
+     * 用户权限标识
+     * @return
+     */
+    @GetMapping("/authority")
+    public Result<Set<String>> authority() {
+        UserDetail user = SecurityUser.getUser();
+        Set<String> set = userRoleService.getUserAuthority(user);
+        return Result.ok(set);
     }
 
     /**
@@ -97,7 +135,7 @@ public class AuthController {
      * @param request
      * @return
      */
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public Result<TokenVO> refresh(@RequestParam String refreshToken, HttpServletRequest request) {
         AssertUtils.isBlank(refreshToken, "刷新token");
         return Result.ok(authService.refreshToken(refreshToken, request));
@@ -109,7 +147,7 @@ public class AuthController {
      * @param refreshToken
      * @return
      */
-    @PostMapping("logout")
+    @PostMapping("/logout")
     public Result<String> logout(HttpServletRequest request, @RequestParam(required = false) String refreshToken) {
         authService.logout(Tools.getAccessToken(request), refreshToken);
         return Result.ok();

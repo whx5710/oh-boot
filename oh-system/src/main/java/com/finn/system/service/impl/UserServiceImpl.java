@@ -3,6 +3,9 @@ package com.finn.system.service.impl;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.enums.CommonEnum;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.excel.ExcelUtils;
@@ -102,7 +105,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageResult<UserVO> clockPage(UserQuery query) {
-        Set<String> set = redisCache.keys(RedisKeys.getAuthCountKey("*"));
+        // 使用 SCAN 替代 KEYS，避免阻塞 Redis
+        Set<String> set = redisCache.scanKeys(RedisKeys.getAuthCountKey("*"));
         if(!set.isEmpty()){
             List<String> names = new ArrayList<>();
             Set<String> tmp = new HashSet<>();
@@ -117,9 +121,7 @@ public class UserServiceImpl implements UserService {
                     return new PageResult<>(new ArrayList<UserVO>(),0);
                 }
             }else{
-                for(String key: set){
-                    names.add(key.substring(key.lastIndexOf(":") + 1));
-                }
+                names.addAll(tmp);
             }
             query.setUserNames(names);
             return page(query);
@@ -139,6 +141,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserVO vo) {
+        if(vo.getUserType() == null || vo.getUserType().isEmpty()){
+            vo.setUserType("0");
+        }else{
+            if(!vo.getUserType().equals("0")){
+                AssertUtils.isBlank(vo.getOpenId(), "第三方用户open_id");
+            }
+        }
         // 密码验证
         passwordStrength(vo.getPassword());
         // 密码加密
@@ -148,13 +157,12 @@ public class UserServiceImpl implements UserService {
         entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
         // 判断用户名是否存在
-        UserEntity user = userMapper.getByUsername(entity.getUsername());
+        UserEntity user = userMapper.getByUsername(entity.getUsername(), vo.getUserType());
         if (user != null) {
             throw new ServerException("用户名已经存在");
         }
-
         // 判断手机号是否存在
-        user = userMapper.getByMobile(entity.getMobile());
+        user = userMapper.getByMobile(entity.getMobile(), vo.getUserType());
         if (user != null) {
             throw new ServerException("手机号已经存在");
         }
@@ -162,7 +170,6 @@ public class UserServiceImpl implements UserService {
             entity.setStatus(1);
         }
         // 保存用户
-        //sysUserMapper.insertUser(entity);
         userMapper.insert(entity); // 保存用户-动态sql
 
         // 保存用户角色关系
@@ -175,6 +182,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(UserVO vo) {
         AssertUtils.isNull(vo.getId(), "用户ID");
+        UserEntity userDb = userMapper.getById(vo.getId());
+        if(userDb == null || userDb.getId() == null){
+            throw new ServerException("用户不存在");
+        }
         // 如果密码不为空，则进行加密处理
         if (vo.getPassword() == null || vo.getPassword().isEmpty()) {
             vo.setPassword(null);
@@ -185,23 +196,24 @@ public class UserServiceImpl implements UserService {
         }
         UserEntity entity = UserConvert.INSTANCE.convert(vo);
         // 判断用户名是否存在
-        UserEntity user = userMapper.getByUsername(entity.getUsername());
-        if (user != null && !user.getId().equals(entity.getId())) {
-            throw new ServerException("用户名已经存在");
+        if(entity.getUsername() != null){
+            UserEntity user = userMapper.getByUsername(entity.getUsername(), userDb.getUserType());
+            if (user != null && !user.getId().equals(entity.getId())) {
+                throw new ServerException("用户名已经存在");
+            }
         }
+
         // 判断手机号是否存在
-        user = userMapper.getByMobile(entity.getMobile());
-        if (user != null && !user.getId().equals(entity.getId())) {
-            throw new ServerException("手机号已经存在");
-        }
-        user = userMapper.getById(entity.getId());
-        if(user == null || user.getId() == null){
-            throw new ServerException("用户不存在");
+        if(entity.getMobile() != null){
+            UserEntity user = userMapper.getByMobile(entity.getMobile(), userDb.getUserType());
+            if (user != null && !user.getId().equals(entity.getId())) {
+                throw new ServerException("手机号已经存在");
+            }
         }
         // 判断租户与部门是否有关联变化
-        if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
+        if(userDb.getTenantId() != null && !userDb.getTenantId().isEmpty()){
             DeptEntity deptEntity = deptService.getById(entity.getDeptId());
-            if(deptEntity.getTenantId() == null || !deptEntity.getTenantId().equals(entity.getTenantId())){
+            if(deptEntity.getTenantId() == null || !deptEntity.getTenantId().equals(userDb.getTenantId())){
                 throw new ServerException("不能切换到非本租户下的单位下");
             }
         }
@@ -222,13 +234,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(List<Long> idList) {
         // 删除用户
-//        removeByIds(idList);
-        idList.forEach(id -> {
-            UserEntity entity = new UserEntity();
-            entity.setId(id);
-            entity.setDbStatus(0);
-            userMapper.updateById(entity);
-        });
+        Wrapper<UserEntity> updateWrapper = UpdateWrapper.of(UserEntity.class).set(UserEntity::getDbStatus, 0)
+                .in(UserEntity::getId, idList);
+        userMapper.updateByWrapper(updateWrapper);
 
         // 删除用户角色关系
         userRoleService.deleteByUserIdList(idList);
@@ -238,8 +246,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVO getByMobile(String mobile) {
-        UserEntity user = userMapper.getByMobile(mobile);
+    public UserVO getByMobile(String mobile, String userType) {
+        if(userType == null || userType.isEmpty()){
+            throw new ServerException("用户类型不能为空");
+        }
+        UserEntity user = userMapper.getByMobile(mobile, userType);
         return UserConvert.INSTANCE.convert(user);
     }
 
@@ -344,7 +355,7 @@ public class UserServiceImpl implements UserService {
         for(Long userId: userIdList){
             UserEntity user = userMapper.getById(userId);
             if(user == null || user.getId() == null){
-                throw new ServerException("用户不存在");
+                throw new ServerException("用户不存在 [" + userId + "]");
             }
             if(user.getTenantId() == null || user.getTenantId().isEmpty()){
                 throw new ServerException("用户未绑定租户，不能解绑");
@@ -352,9 +363,10 @@ public class UserServiceImpl implements UserService {
             if(!tenantID.equals(user.getTenantId())){
                 throw new ServerException("租户ID不准确，不能解绑【" + user.getTenantId() + "】");
             }
-            user.setTenantId(null);
-            userMapper.unbindUser(user);// 解绑用户
         }
+        // 解绑用户,  TenantId = null
+        userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, null)
+                .in(UserEntity::getId, userIdList));
     }
 
     /**
@@ -369,14 +381,14 @@ public class UserServiceImpl implements UserService {
         for(Long userId: userIdList){
             UserEntity user = userMapper.getById(userId);
             if(user == null || user.getId() == null){
-                throw new ServerException("用户不存在");
+                throw new ServerException("用户不存在 [" + userId + "]");
             }
             if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
                 throw new ServerException("用户已存在其他租户中【" + user.getTenantId() + "】");
             }
-            user.setTenantId(tenantID);
-            userMapper.updateById(user);
         }
+        userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, tenantID)
+                .in(UserEntity::getId, userIdList));
     }
 
     /**
@@ -391,7 +403,7 @@ public class UserServiceImpl implements UserService {
         if(user == null || user.getId() == null){
             throw new ServerException("未找到对应的用户，重置密码失败！");
         }
-        String pwd = Tools.getRandom(8);
+        String pwd = Tools.getRandom(10);
         user.setPassword(passwordEncoder.encode(pwd));
         user.setUpdateTime(LocalDateTime.now());
         user.setUpdater(SecurityUser.getUserId());
@@ -399,6 +411,11 @@ public class UserServiceImpl implements UserService {
         return pwd;
     }
 
+    /**
+     * 获取用户信息详情
+     * @param userEntity
+     * @return
+     */
     @Override
     public UserDetails getUserDetails(UserEntity userEntity) {
         // 转换成UserDetail对象
@@ -413,6 +430,9 @@ public class UserServiceImpl implements UserService {
         List<Long> dataScopeList = getDataScope(userDetail);
         userDetail.setDataScopeList(dataScopeList);
 
+        // 用户角色
+        userDetail.setRoleIds(userRoleService.getRoleIdList(userEntity.getId()));
+
         // 用户权限列表
         Set<String> authoritySet = userRoleService.getUserAuthority(userDetail);
         userDetail.setAuthoritySet(authoritySet);
@@ -421,8 +441,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity getByUsername(String username) {
-        return userMapper.getByUsername(username);
+    public UserEntity getByUsername(String username, String userType) {
+        if(userType == null || userType.isEmpty()){
+            throw new ServerException("用户类型不能为空");
+        }
+        return userMapper.getByUsername(username, userType);
+    }
+
+    /**
+     * 根据open id 获取用户信息
+     * @param openId 第三方ID
+     * @param userType 用户类型，0普通用户1微信小程序用户
+     * @return 用户实体
+     */
+    @Override
+    public UserEntity getByOpenId(String openId, String userType) {
+        AssertUtils.isBlank(openId, "第三方ID");
+        Wrapper<UserEntity> queryWrapper = QueryWrapper.of(UserEntity.class).eq(UserEntity::getDbStatus, 1)
+                .eq(UserEntity::getOpenId, openId).eq(UserEntity::getUserType, userType);
+        List<UserEntity> list = userMapper.listByWrapper(queryWrapper);
+        if(list != null){
+            if(list.size() > 1){
+                throw new ServerException("第三方ID对应多个账号，请检查");
+            }
+            if(list.isEmpty()){
+                return null;
+            }
+            return list.getFirst();
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -449,7 +497,6 @@ public class UserServiceImpl implements UserService {
         if (dataScope == null) {
             return new ArrayList<>();
         }
-
         if (dataScope.equals(DataScopeEnum.ALL.getValue())) {
             // 全部数据权限，则返回null
             return null;
@@ -472,7 +519,6 @@ public class UserServiceImpl implements UserService {
             // 自定义数据权限范围
             return roleDataScopeMapper.getDataScopeList(userDetail.getId());
         }
-
         return new ArrayList<>();
     }
 }

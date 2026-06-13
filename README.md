@@ -23,6 +23,7 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 - 支持postgres，增加建表sql，划分mysql、pg脚本目录，根据项目需求选择对应的数据库【2026年3月】
 - oh-core模块合并到oh-framework，简化框架,升级spring-boot 4.0.5【2026年4月】
 - 增加批量插入insertBatch(List<T>)通用方法【2026年4月】
+- 错误日志缓存到redis，可设置日志量、缓存时间，方便查询报错信息【2026年5月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git
@@ -42,7 +43,7 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 ```
 
 oh-framework 系统框架，包括数据库、基础实体类、鉴权
-oh-system    系统管理模块，包括组织架构、鉴权、基础配置等
+oh-system    系统管理模块，包括组织架构、用户、鉴权、基础配置等
 oh-module    业务模块
     - oh-module-app    对外服务接口
     - oh-module-flow   工作流程管理
@@ -51,9 +52,9 @@ oh-module    业务模块
 通过引入`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
 
 ## 快速开始
-环境：JDK17+、MySQL8+（Postgresql）、Redis、Kafka（如果需要）
+环境：JDK17+、Postgresql（MySQL8+）、Redis、Kafka（如果需要）
 - 1、克隆项目 `git clone https://gitee.com/whx233/oh-boot.git`
-- 2、创建数据库，分别创建 oh_sys 和 oh_boot数据库（可合并成一个库），并执行db\mysql目录下的SQL脚本（根据实际数据库执行）
+- 2、创建数据库，分别创建 oh_sys 和 oh_boot数据库（可合并成一个库），并执行db目录下的SQL脚本（根据实际数据库执行）
 - 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka、文件存储路径等
 - 4、启动服务 `com.finn.ServerApplication`
 - 5、API文档地址：自行部署发布Torna

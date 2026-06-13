@@ -44,7 +44,7 @@ public class SlowSqlInterceptor implements Interceptor {
         String dbKey = DynamicDataSourceHolder.getDynamicDataSourceKey();
         dbKey = dbKey == null ? primary : dbKey;
 
-        long slowThreshold = 1000L; // 默认阈值
+        long slowThreshold = 500L; // 默认阈值
         DataSourceProperty property = dataSourceMap.get(dbKey);
         if (property != null && property.getHikari() != null) {
             slowThreshold = property.getHikari().getSlowThreshold();

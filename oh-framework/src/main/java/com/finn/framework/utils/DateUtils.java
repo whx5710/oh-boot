@@ -25,7 +25,7 @@ public class DateUtils {
 	/** 时间格式(yyyy-MM-dd HH:mm:ss) */
 	public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     /** 时间格式-毫秒(yyyy-MM-dd HH:mm:ss:SSS) */
-    public final static String DATE_TIME_MIL_PATTERN = "yyyy-MM-dd HH:mm:ss:SSS";
+    public final static String DATE_TIME_MIL_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
     /** 时间格式(HH:mm:ss) */
     public final static String TIME_PATTERN = "HH:mm:ss";
 

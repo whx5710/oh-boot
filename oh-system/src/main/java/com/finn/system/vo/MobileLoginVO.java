@@ -10,6 +10,7 @@ import java.io.Serializable;
  * 
  */
 public class MobileLoginVO implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -22,6 +23,11 @@ public class MobileLoginVO implements Serializable {
      * 验证码
      */
     private String code;
+    /**
+     * 由于用户可能是平台用户的同时，还是第三方平台用户（微信、支付宝小程序等其他第三方平台），手机号码相同，
+     * 因此，用手机验证码登录时，需确定用户源于哪个平台登录
+     */
+    private String userType;
 
     public String getMobile() {
         return mobile;
@@ -37,5 +43,13 @@ public class MobileLoginVO implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

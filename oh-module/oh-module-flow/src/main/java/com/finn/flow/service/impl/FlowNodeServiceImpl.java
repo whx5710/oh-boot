@@ -2,6 +2,7 @@ package com.finn.flow.service.impl;
 
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.finn.flow.convert.FlowNodeConvert;
@@ -41,7 +42,7 @@ public class FlowNodeServiceImpl implements FlowNodeService {
 
     @Override
     public PageResult<FlowNodeVO> page(FlowNodeQuery query) {
-        QueryWrapper<FlowNodeEntity> queryWrapper = QueryWrapper.of(FlowNodeEntity.class)
+        Wrapper<FlowNodeEntity> queryWrapper = QueryWrapper.of(FlowNodeEntity.class)
                 .eq(FlowNodeEntity::getDbStatus, 1).eq(FlowNodeEntity::getProcDefId, query.getProcDefId())
                 .eq(FlowNodeEntity::getActDefId, query.getActDefId())
                 .eq(FlowNodeEntity::getElementType, query.getElementType());

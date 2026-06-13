@@ -10,20 +10,11 @@
     </parent>
     <artifactId>oh-module-app</artifactId>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
-        <!-- Kafka https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+        <!-- Kafka消息队列 -->
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>4.0.4</version>
-            <scope>compile</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-kafka</artifactId>
         </dependency>
     </dependencies>
-
 </project>

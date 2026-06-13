@@ -1,8 +1,11 @@
 package com.finn.app.service.impl;
 
 import com.finn.app.mapper.DataAppMapper;
+import com.finn.app.mapper.DataFunctionAuthorityMapper;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.exception.ServerException;
 import com.finn.app.convert.DataFunctionAuthorityConvert;
@@ -35,11 +38,14 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
 
     private final DataAppMapper dataAppMapper;
 
+    private final DataFunctionAuthorityMapper dataFunctionAuthorityMapper;
+
     public DataFunctionAuthorityServiceImpl(DataFunctionMapper dataFunctionMapper, RedisCache redisCache,
-                                            DataAppMapper dataAppMapper){
+                                            DataAppMapper dataAppMapper, DataFunctionAuthorityMapper dataFunctionAuthorityMapper){
         this.dataFunctionMapper = dataFunctionMapper;
         this.redisCache = redisCache;
         this.dataAppMapper = dataAppMapper;
+        this.dataFunctionAuthorityMapper = dataFunctionAuthorityMapper;
     }
 
     @Override
@@ -51,14 +57,13 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
     @Override
     public void save(DataFunctionAuthorityVO vo) {
         DataFunctionAuthorityEntity entity = DataFunctionAuthorityConvert.INSTANCE.convert(vo);
-        dataFunctionMapper.insertFuncAuthority(entity);
+        dataFunctionAuthorityMapper.insert(entity);
     }
 
     @Override
     public void update(DataFunctionAuthorityVO vo) {
         DataFunctionAuthorityEntity entity = DataFunctionAuthorityConvert.INSTANCE.convert(vo);
-
-        dataFunctionMapper.updateFuncAuthorityById(entity);
+        dataFunctionAuthorityMapper.updateById(entity);
     }
 
     @Override
@@ -68,13 +73,13 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
             DataFunctionAuthorityEntity param = new DataFunctionAuthorityEntity();
             param.setId(id);
             param.setDbStatus(0);
-            dataFunctionMapper.updateFuncAuthorityById(param);
+            dataFunctionAuthorityMapper.updateById(param);
         });
     }
 
     /**
      * 客户端功能授权或取消授权
-     * @param data
+     * @param data d
      */
     @Override
     public void make(DataFunctionAuthorityVO data) {
@@ -87,12 +92,16 @@ public class DataFunctionAuthorityServiceImpl implements DataFunctionAuthoritySe
             throw new ServerException("客户端不能为空");
         }
         if(i == 0){ // 删除
-            dataFunctionMapper.updateFuncAuthorityStatus(data.getClientId(), data.getFuncCode(), 0);
+            Wrapper<DataFunctionAuthorityEntity> updateWrapper = UpdateWrapper.of(DataFunctionAuthorityEntity.class)
+                    .set(DataFunctionAuthorityEntity::getDbStatus, 0)
+                    .eq(DataFunctionAuthorityEntity::getClientId, data.getClientId())
+                    .eq(DataFunctionAuthorityEntity::getFuncCode, data.getFuncCode());
+            dataFunctionAuthorityMapper.updateByWrapper(updateWrapper);
         }else{
             DataFunctionAuthorityEntity dae = new DataFunctionAuthorityEntity();
             dae.setFuncCode(data.getFuncCode());
             dae.setClientId(data.getClientId());
-            dataFunctionMapper.insertFuncAuthority(dae);
+            dataFunctionAuthorityMapper.insert(dae);
         }
         // 刷新
         refreshAppAuthority(data.getClientId());

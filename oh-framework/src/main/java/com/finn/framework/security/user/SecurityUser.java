@@ -19,17 +19,22 @@ public class SecurityUser {
      */
     public static UserDetail getUser() {
         UserDetail user;
+        Object object = null;
         try {
             if(SecurityContextHolder.getContext().getAuthentication() == null){
                 return null;
             }
-            user = (UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(object == null){
+                return null;
+            }else {
+                return (UserDetail)object;
+            }
         } catch (NullPointerException | ClassCastException | IllegalStateException e) {
             // 优化：只捕获特定异常，避免隐藏其他问题
-            log.error("未获取到用户信息：{}", e.getMessage());
+            log.error("未获取到用户信息 [{}]：{}", object, e.getMessage());
             return null;
         }
-        return user;
     }
 
     /**

@@ -23,7 +23,7 @@ import java.util.List;
  *
  */
 @RestController
-@RequestMapping("sys/dept")
+@RequestMapping("/sys/dept")
 public class DeptController {
     private final DeptService deptService;
 
@@ -36,7 +36,7 @@ public class DeptController {
      * @param query 部门查询条件
      * @return 树形集合
      */
-    @PostMapping("list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('sys:dept:list')")
     public Result<List<DeptVO>> list(@RequestBody DeptQuery query) {
         return Result.ok(deptService.getList(query));
@@ -59,7 +59,7 @@ public class DeptController {
      * @param id 部门ID
      * @return 部门信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:dept:info')")
     public Result<DeptVO> get(@PathVariable("id") Long id) {
         DeptEntity entity = deptService.getById(id);

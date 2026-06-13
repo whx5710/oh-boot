@@ -93,7 +93,7 @@ public class OpenApiController {
 
         System.out.println("开始请求" + DateUtils.format(new Date()));
 
-        for(int i = 0; i< 50000; i++){
+        for(int i = 0; i< 10; i++){
             data.put("address","湖南长沙岳麓区" + System.currentTimeMillis());
 
             data.put("createDate", DateUtils.format(LocalDateTime.now()));
@@ -101,6 +101,7 @@ public class OpenApiController {
             data.put("incidentTime", DateUtils.format(LocalDateTime.now(ZoneId.systemDefault())));
             //data.put("orderCode", IdUtil.simpleUUID());
             data.put("note", "备注信息" + System.currentTimeMillis());
+            data.put("procDefId", "Process_demo20231222:13:39731594046869504");
             Map<String,String> map = new HashMap<>();
             map.put("key1","扩展参数");
             data.put("extendJsonMap", map);

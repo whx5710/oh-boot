@@ -13,11 +13,6 @@
         order by id desc
     </select>
 
-    <insert id="save">
-        INSERT INTO sys_message (title, content, type, state, from_id, from_name, to_id, to_name, db_status, creator, create_time)
-        VALUES (#{title}, #{content}, #{type}, #{state}, #{fromId}, #{fromName}, #{toId}, #{toName}, #{dbStatus}, #{creator}, #{createTime})
-    </insert>
-
     <select id="getUnSendMsg" resultType="com.finn.system.entity.MessageEntity">
         select * from sys_message where db_status = 1
         <if test="state != null and state != ''">and state = #{state}</if>
@@ -25,25 +20,4 @@
         order by create_time desc
     </select>
 
-    <update id="updateById">
-        UPDATE sys_message
-        <set>
-            <if test="title != null and title != ''">title = #{title},</if>
-            <if test="content != null and content != ''">content = #{content},</if>
-            <if test="type != null and type != ''">type = #{type},</if>
-            <if test="state != null and state != ''">state = #{state},</if>
-            <if test="fromId != null and fromId != 0">from_id = #{fromId},</if>
-            <if test="fromName != null and fromName != ''">from_name = #{fromName},</if>
-            <if test="toId != null and toId != 0">to_id = #{toId},</if>
-            <if test="toName != null and toName != ''">to_name = #{toName},</if>
-            <if test="dbStatus != null">db_status = #{dbStatus},</if>
-            <if test="updater != null and updater != ''">updater = #{updater},</if>
-            update_time = #{updateTime}
-        </set>
-        WHERE id = #{id}
-    </update>
-
-    <select id="getById" resultType="com.finn.system.entity.MessageEntity">
-        select * from sys_message where id = #{id}
-    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.entity.PageResult;
+import com.finn.framework.utils.AssertUtils;
 import com.finn.system.convert.AttachmentConvert;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.mapper.AttachmentMapper;
@@ -34,13 +35,13 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public Long save(AttachmentVO vo) {
         AttachmentEntity entity = AttachmentConvert.INSTANCE.convert(vo);
-
-        attachmentMapper.insertAttach(entity);
+        attachmentMapper.insert(entity);
         return entity.getId();
     }
 
     @Override
     public void update(AttachmentVO vo) {
+        AssertUtils.isNull(vo.getId(), "ID");
         AttachmentEntity entity = AttachmentConvert.INSTANCE.convert(vo);
         attachmentMapper.updateById(entity);
     }

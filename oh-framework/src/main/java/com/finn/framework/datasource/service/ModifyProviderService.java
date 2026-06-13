@@ -4,7 +4,6 @@ import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.ReflectUtil;
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableId;
-import com.finn.framework.datasource.wrapper.InsertWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
@@ -27,7 +26,6 @@ public class ModifyProviderService {
 
     public static final String INSERT = "insert";
     public static final String INSERT_BATCH = "insertBatch";
-    public static final String INSERT_PARAM = "insertByWrapper";
     public static final String UPDATE = "updateById";
     public static final String DELETE = "delete";
     public static final String DELETE_PARAM = "deleteByWrapper";
@@ -167,7 +165,7 @@ public class ModifyProviderService {
     }
 
     /**
-     * 根据ID更新数据
+     * 根据ID更新数据,值为null不会进行更新
      * @param entity 实体
      * @return sql
      * @param <T> p
@@ -289,32 +287,28 @@ public class ModifyProviderService {
 
     /**
      * 删除
-     * @param fp 删除条件构造器
+     * @param deleteWrapper 删除条件构造器
      * @return sql
      * @param <T> t
      */
-    public <T> String deleteByWrapper(DeleteWrapper<T> fp){
-        return fp.getSql().toString();
+    public <T> String deleteByWrapper(DeleteWrapper<T> deleteWrapper){
+        if(deleteWrapper == null || deleteWrapper.getSql() == null){
+            throw new NullPointerException("参数DeleteWrapper为空，请检查参数是否为空或类型是否正确");
+        }
+        return deleteWrapper.getSql().toString();
     }
 
     /**
      * 修改sql
-     * @param fp 参数 + sql
+     * @param updateWrapper 参数 + sql
      * @return sql
      * @param <T> c
      */
-    public <T> String updateByWrapper(UpdateWrapper<T> fp){
-        return fp.getSql().toString();
-    }
-
-    /**
-     * 新增sql
-     * @param fp 参数 + sql
-     * @return sql
-     */
-    @Deprecated
-    public String insertByWrapper(InsertWrapper fp){
-        return fp.getSql().toString();
+    public <T> String updateByWrapper(UpdateWrapper<T> updateWrapper){
+        if(updateWrapper == null || updateWrapper.getSql() == null){
+            throw new NullPointerException("参数UpdateWrapper为空，请检查参数是否为空或类型是否正确");
+        }
+        return updateWrapper.getSql().toString();
     }
 
 }

@@ -70,14 +70,6 @@ public class RedisKeys {
     }
 
     /**
-     * mq 报文日志
-     * @return sys:msg:log
-     */
-    public static String getDataMsgKey() {
-        return PREFIX + "msg:log";
-    }
-
-    /**
      * 用户信息key
      * @param userId 用户ID
      * @return s
@@ -93,5 +85,13 @@ public class RedisKeys {
      */
     public static String getDeptCacheKey(Long deptId){
         return PREFIX + "dept:info:" + deptId;
+    }
+
+    /**
+     * 在线用户ID集合key（用于快速获取所有在线用户ID）
+     * @return key
+     */
+    public static String getOnlineUserIdSetKey() {
+        return ACCESS + "online:user:ids";
     }
 }

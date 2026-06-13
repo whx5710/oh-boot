@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * 账号登录 UserDetailsService
+ * 账号密码登录 UserDetailsService
  *
  * @author 王小费 whx5710@qq.com
  *
@@ -23,7 +23,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userService.getByUsername(username);
+        // 用户类型，0普通用户1微信小程序用户
+        UserEntity userEntity = userService.getByUsername(username, "0");
         if (userEntity == null) {
             throw new UsernameNotFoundException("用户名或密码错误");
         }

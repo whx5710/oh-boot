@@ -20,7 +20,7 @@ import java.util.List;
 * @since 1.0.0 2023-10-10
 */
 @RestController
-@RequestMapping("message")
+@RequestMapping("/message")
 public class MessageController {
 
     @Resource
@@ -31,10 +31,9 @@ public class MessageController {
      * @param query 查询条件
      * @return 分页列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     public Result<PageResult<MessageVO>> page(@Valid MessageQuery query){
         PageResult<MessageVO> page = messageService.page(query);
-
         return Result.ok(page);
     }
 
@@ -43,10 +42,9 @@ public class MessageController {
      * @param id 消息ID
      * @return 消息数据
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Result<MessageVO> get(@PathVariable("id") Long id){
         MessageEntity entity = messageService.getById(id);
-
         return Result.ok(MessageConvert.INSTANCE.convert(entity));
     }
 
@@ -58,7 +56,6 @@ public class MessageController {
     @PostMapping
     public Result<String> save(@RequestBody MessageVO vo){
         messageService.save(vo);
-
         return Result.ok();
     }
 
@@ -81,7 +78,6 @@ public class MessageController {
     @PostMapping("/del")
     public Result<String> delete(@RequestBody List<Long> idList){
         messageService.delete(idList);
-
         return Result.ok();
     }
 }

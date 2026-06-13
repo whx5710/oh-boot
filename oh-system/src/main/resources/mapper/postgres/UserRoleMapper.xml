@@ -3,13 +3,14 @@
 
 <mapper namespace="com.finn.system.mapper.UserRoleMapper">
     <select id="getUserAuthorityList" resultType="string">
-        select t3.authority from sys_user_role t1
-        left join sys_role_menu t2 on t1.role_id = t2.role_id
-        left join sys_menu t3 on t2.menu_id = t3.id
-        where t1.user_id = #{userId} and t1.db_status = 1 and t2.db_status = 1 and t3.db_status = 1 order by t3.sort asc
+        select distinct a.authority from sys_menu a inner join sys_role_menu b on a.id = b.menu_id
+        where a.db_status = 1 and b.db_status = 1 and b.role_id in
+        <foreach collection="roleIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
     <select id="getAuthorityList" resultType="string">
-        select authority from sys_menu where db_status = 1
+        select distinct authority from sys_menu where db_status = 1 and authority is not null
     </select>
 </mapper>

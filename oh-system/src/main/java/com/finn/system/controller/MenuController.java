@@ -5,13 +5,10 @@ import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
-import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.security.user.UserDetail;
 import com.finn.system.convert.MenuConvert;
 import com.finn.system.entity.MenuEntity;
 import com.finn.system.query.MenuQuery;
 import com.finn.system.service.MenuService;
-import com.finn.system.service.UserRoleService;
 import com.finn.system.vo.MenuTreeVO;
 import com.finn.system.vo.MenuVO;
 import com.finn.system.vo.RouteVO;
@@ -20,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单管理
@@ -29,26 +25,13 @@ import java.util.Set;
  *
  */
 @RestController
-@RequestMapping("sys/menu")
+@RequestMapping("/sys/menu")
 public class MenuController {
     private final MenuService menuService;
 
-    private final UserRoleService userRoleService;
-
-    public MenuController(MenuService menuService, UserRoleService userRoleService) {
+    public MenuController(MenuService menuService) {
         this.menuService = menuService;
-        this.userRoleService = userRoleService;
     }
-
-    /**
-     * 菜单导航
-     * @return
-     */
-//    @GetMapping("nav")
-//    public Result<List<MenuTreeVO>> nav() {
-//        List<MenuTreeVO> list = menuService.getUserMenuList(new MenuQuery());
-//        return Result.ok(list);
-//    }
 
     /**
      * 获取菜单
@@ -61,22 +44,11 @@ public class MenuController {
     }
 
     /**
-     * 用户权限标识
-     * @return
-     */
-    @GetMapping("authority")
-    public Result<Set<String>> authority() {
-        UserDetail user = SecurityUser.getUser();
-        Set<String> set = userRoleService.getUserAuthority(user);
-        return Result.ok(set);
-    }
-
-    /**
      * 菜单列表-树形
      * @param query 查询条件
      * @return 集合
      */
-    @GetMapping("listTree")
+    @GetMapping("/listTree")
     @PreAuthorize("hasAuthority('sys:menu:list')")
     public Result<List<MenuTreeVO>> listTree(MenuQuery query) {
         List<MenuTreeVO> list = menuService.getMenuTreeList(query);
@@ -88,7 +60,7 @@ public class MenuController {
      * @param query 查询条件
      * @return 集合
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:menu:list')")
     public Result<PageResult<MenuVO>> page(MenuQuery query) {
         return Result.ok(menuService.page(query));
@@ -99,7 +71,7 @@ public class MenuController {
      * @param id 菜单ID
      * @return 菜单数据
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:menu:info')")
     public Result<MenuTreeVO> get(@PathVariable("id") Long id) {
         MenuEntity entity = menuService.getById(id);
@@ -110,7 +82,6 @@ public class MenuController {
             MenuEntity parentEntity = menuService.getById(entity.getParentId());
             vo.setParentName(parentEntity.getName());
         }
-
         return Result.ok(vo);
     }
 
@@ -205,6 +176,5 @@ public class MenuController {
     public Result<Boolean> pathExists(@RequestParam String path, @RequestParam(required = false) Long id) {
         return Result.ok(menuService.pathExists(id, path));
     }
-
 
 }

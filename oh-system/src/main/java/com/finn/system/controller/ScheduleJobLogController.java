@@ -22,7 +22,7 @@ import java.util.List;
  *
  */
 @RestController
-@RequestMapping("schedule/log")
+@RequestMapping("/schedule/log")
 public class ScheduleJobLogController {
     private final ScheduleJobLogService scheduleJobLogService;
 
@@ -35,12 +35,10 @@ public class ScheduleJobLogController {
      * @param query 查询参数
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<PageResult<ScheduleJobLogVO>> page(@Valid ScheduleJobLogQuery query) {
-        PageResult<ScheduleJobLogVO> page = scheduleJobLogService.page(query);
-
-        return Result.ok(page);
+        return Result.ok(scheduleJobLogService.page(query));
     }
 
     /**
@@ -48,7 +46,7 @@ public class ScheduleJobLogController {
      * @param id 日志ID
      * @return 日志信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('schedule:log')")
     public Result<ScheduleJobLogVO> get(@PathVariable("id") Long id) {
         ScheduleJobLogEntity entity = scheduleJobLogService.getById(id);

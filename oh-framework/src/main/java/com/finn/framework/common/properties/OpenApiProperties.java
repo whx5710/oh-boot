@@ -10,11 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "finn.open-api")
 public class OpenApiProperties {
-    // 1直接保存 2使用MQ异步保存
+    /**
+     * 1直接保存 2使用MQ异步保存
+     */
     private Integer type = 1;
     // Kafka监听是否开启
     private Boolean autoStartUp = false;
-    // 缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
+    /**
+     * 缓存时间-秒，0不进行缓存，缓存日志可从MQ中读取日志保存到表中
+     */
     private Long cacheTime = 0L;
 
     public Integer getType() {

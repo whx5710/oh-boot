@@ -78,6 +78,15 @@ public class UserVO implements Serializable {
     @Max(value = 1, message = "用户状态不正确")
     private Integer status;
 
+    /**
+     * 用户类型，0普通用户1微信小程序用户
+     */
+    private String userType;
+    /**
+     * 外部用户ID
+     */
+    private String openId;
+
     // 备注
     private String note;
 
@@ -283,5 +292,21 @@ public class UserVO implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

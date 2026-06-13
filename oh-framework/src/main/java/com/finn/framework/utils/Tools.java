@@ -71,9 +71,9 @@ public class Tools {
     /**
      * 补全自增的数据
      *
-     * @param seq
-     * @param length
-     * @return
+     * @param seq 序列号 123
+     * @param length 数据长度 4
+     * @return 0123
      */
     public static String getSequence(long seq, int length) {
         String str = String.valueOf(seq);
@@ -83,12 +83,7 @@ public class Tools {
             return str;
         }
         int rest = length - len;
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < rest; i++) {
-            sb.append('0');
-        }
-        sb.append(str);
-        return sb.toString();
+        return "0".repeat(rest) + str;
     }
 
     // 使用ThreadLocal存储Random对象，提高并发性能

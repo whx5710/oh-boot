@@ -1,6 +1,7 @@
 package com.finn.system.mapper;
 
 import com.finn.framework.aop.annotations.Pages;
+import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.query.AttachmentQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,13 +15,8 @@ import java.util.List;
  * 
  */
 @Mapper
-public interface AttachmentMapper {
+public interface AttachmentMapper extends BaseMapper<AttachmentEntity> {
 
     @Pages
     List<AttachmentEntity> getList(AttachmentQuery query);
-
-    boolean updateById(AttachmentEntity entity);
-
-    // @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
-    int insertAttach(AttachmentEntity entity);
 }

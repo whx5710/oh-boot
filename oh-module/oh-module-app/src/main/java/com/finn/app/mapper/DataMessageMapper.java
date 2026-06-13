@@ -21,9 +21,6 @@ public interface DataMessageMapper extends BaseMapper<DataMsgEntity> {
     @Pages // 分页注解
     Page<DataMsgVO> getList(DataMsgQuery query);
 
-    int insertDataMsg(DataMsgEntity param);
-
     boolean deleteByDate(@Param("date")String date);
 
-//    boolean updateById(DataMsgEntity param);
 }

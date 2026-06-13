@@ -5,8 +5,10 @@ import com.finn.framework.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Redis Cache
@@ -88,6 +91,18 @@ public class RedisCache {
     }
 
     /**
+     * 批量获取多个key的值（使用 MGET 减少网络往返）
+     * @param keys key列表
+     * @return value列表（与keys顺序一致，key不存在时对应位置为null）
+     */
+    public List<Object> mGet(List<String> keys) {
+        if (keys == null || keys.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    /**
      * 增量 自增
      * @param key
      * @return
@@ -106,12 +121,42 @@ public class RedisCache {
     }
 
     /**
-     * 获取key集合
+     * 获取key集合（注意：大数据量时会阻塞Redis，建议使用 scan 方法）
      * @param pattern
      * @return
      */
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 使用 SCAN 命令增量迭代获取key，避免阻塞Redis
+     * @param pattern 匹配模式
+     * @param keyConsumer 对每个key的消费处理
+     */
+    public void scan(String pattern, Consumer<String> keyConsumer) {
+        ScanOptions options = ScanOptions.scanOptions()
+                .match(pattern)
+                .count(100)
+                .build();
+        try (Cursor<String> cursor = redisTemplate.scan(options)) {
+            while (cursor.hasNext()) {
+                keyConsumer.accept(cursor.next());
+            }
+        } catch (Exception e) {
+            log.error("SCAN 操作失败: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 使用 SCAN 命令增量迭代获取key集合，避免阻塞Redis
+     * @param pattern 匹配模式
+     * @return key集合
+     */
+    public Set<String> scanKeys(String pattern) {
+        Set<String> keys = new HashSet<>();
+        scan(pattern, keys::add);
+        return keys;
     }
 
     /**
@@ -131,13 +176,23 @@ public class RedisCache {
     }
 
     /**
-     * 删除key前缀的数据
-     * @param key
+     * 删除key前缀的数据（使用 SCAN 分批删除，避免阻塞 Redis）
+     * @param key 前缀
      */
     public void deleteAll(String key) {
-        Set<String> keys = redisTemplate.keys(key + "*");
-        if (keys != null && !keys.isEmpty()) {
-            redisTemplate.delete(keys);
+        String pattern = key + "*";
+        List<String> keysToDelete = new ArrayList<>();
+        scan(pattern, k -> {
+            keysToDelete.add(k);
+            // 每积累 100 个 key 就批量删除一次
+            if (keysToDelete.size() >= 100) {
+                redisTemplate.delete(keysToDelete);
+                keysToDelete.clear();
+            }
+        });
+        // 删除剩余的 key
+        if (!keysToDelete.isEmpty()) {
+            redisTemplate.delete(keysToDelete);
         }
     }
 
@@ -148,6 +203,27 @@ public class RedisCache {
     public Map<String, Object> hGetAll(String key) {
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         return hashOperations.entries(key);
+    }
+
+    /**
+     * 批量获取 Hash 中的多个字段值（使用 HMGET 减少网络往返）
+     * @param key 键
+     * @param fields 字段数组
+     * @return 字段值映射（field -> value）
+     */
+    public Map<String, Object> hMGet(String key, String... fields) {
+        if (fields == null || fields.length == 0) {
+            return new HashMap<>();
+        }
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+        List<Object> values = hashOperations.multiGet(key, List.of(fields));
+        Map<String, Object> result = new HashMap<>();
+        for (int i = 0; i < fields.length; i++) {
+            if (values.get(i) != null) {
+                result.put(fields[i], values.get(i));
+            }
+        }
+        return result;
     }
 
     public void hMSet(String key, Map<String, Object> map) {
@@ -200,12 +276,108 @@ public class RedisCache {
         redisTemplate.opsForHash().delete(key, fields);
     }
 
+    /**
+     * 向 Set 中添加元素
+     * @param key 键
+     * @param member 成员
+     * @return 是否添加成功
+     */
+    public Long sAdd(String key, Object... member) {
+        return redisTemplate.opsForSet().add(key, member);
+    }
+
+    /**
+     * 从 Set 中移除元素
+     * @param key 键
+     * @param member 成员
+     * @return 移除的数量
+     */
+    public Long sRemove(String key, Object... member) {
+        return redisTemplate.opsForSet().remove(key, member);
+    }
+
+    /**
+     * 获取 Set 中的所有成员
+     * @param key 键
+     * @return 成员集合
+     */
+    public Set<String> sMembers(String key) {
+        Set<Object> members = redisTemplate.opsForSet().members(key);
+        if (members == null) {
+            return new HashSet<>();
+        }
+        Set<String> result = new HashSet<>();
+        for (Object member : members) {
+            result.add(String.valueOf(member));
+        }
+        return result;
+    }
+
+    /**
+     * 判断元素是否在 Set 中
+     * @param key 键
+     * @param member 成员
+     * @return 是否存在
+     */
+    public Boolean sIsMember(String key, Object member) {
+        return redisTemplate.opsForSet().isMember(key, member);
+    }
+
+    /**
+     * 向 ZSet 中添加元素（带分数）
+     * @param key 键
+     * @param member 成员
+     * @param score 分数（过期时间戳）
+     * @return 是否添加成功
+     */
+    public Boolean zAdd(String key, Object member, double score) {
+        return redisTemplate.opsForZSet().add(key, member, score);
+    }
+
+    /**
+     * 从 ZSet 中移除元素
+     * @param key 键
+     * @param member 成员
+     * @return 移除的数量
+     */
+    public Long zRemove(String key, Object... member) {
+        return redisTemplate.opsForZSet().remove(key, member);
+    }
+
+    /**
+     * 获取 ZSet 中指定分数范围内的成员（score <= maxScore）
+     * @param key 键
+     * @param maxScore 最大分数（当前时间戳）
+     * @return 成员集合
+     */
+    public Set<String> zRangeByScore(String key, double maxScore) {
+        Set<Object> members = redisTemplate.opsForZSet().rangeByScore(key, 0, maxScore);
+        if (members == null) {
+            return new HashSet<>();
+        }
+        Set<String> result = new HashSet<>();
+        for (Object member : members) {
+            result.add(String.valueOf(member));
+        }
+        return result;
+    }
+
+    /**
+     * 删除 ZSet 中指定分数范围内的成员（清理过期数据）
+     * @param key 键
+     * @param maxScore 最大分数（当前时间戳）
+     * @return 删除的数量
+     */
+    public Long zRemoveRangeByScore(String key, double maxScore) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, 0, maxScore);
+    }
+
     public void leftPush(String key, Object value) {
         leftPush(key, value, NOT_EXPIRE);
     }
 
     /**
-     *
+     * 推送数据到list表
      * @param key
      * @param value
      * @param expire 时长-秒
@@ -217,10 +389,24 @@ public class RedisCache {
         }
     }
 
+    /**
+     * 从list表拉取数据
+     * @param key 键
+     * @return obj
+     */
     public Object rightPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
     }
 
+    /**
+     * 获取list大小
+     * @param key 键
+     * @return 大小
+     */
+    public Long getListSize(String key) {
+        Long size = redisTemplate.opsForList().size(key);
+        return size != null ? size : 0L;
+    }
 
     /**
      * redis key的层级不能超过3层（）

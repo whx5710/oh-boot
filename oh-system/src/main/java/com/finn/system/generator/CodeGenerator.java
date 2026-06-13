@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.finn.system.generator.CodeGenerator.GeneratorConfig.FRAMEWORK_PACKAGE;
+
 /**
  * 代码生成器核心类
  *
@@ -28,13 +30,13 @@ public class CodeGenerator {
 
     public static class GeneratorConfig {
         public static final String BASE_PACKAGE = "com.finn";
-        public static final String MODULE_NAME = "oh-system";
-        public static final String TABLE_PREFIX = "t_";
-        public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".system";
+//        public static final String MODULE_NAME = "oh-system";
+        public static final String MODULE_NAME = "oh-module/oh-module-stone";
+        public static final String TABLE_PREFIX = "st_";
+        public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".stone";
         public static final String AUTHOR = "王小费 whx5710@qq.com";
 
         public static final String FRAMEWORK_PACKAGE = BASE_PACKAGE + ".framework";
-        public static final String CORE_PACKAGE = BASE_PACKAGE + ".core";
         
         public static final String ENTITY_PACKAGE = SYSTEM_PACKAGE + ".entity";
         public static final String MAPPER_PACKAGE = SYSTEM_PACKAGE + ".mapper";
@@ -45,12 +47,12 @@ public class CodeGenerator {
         public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";
         public static final String CONTROLLER_PACKAGE = SYSTEM_PACKAGE + ".controller";
         
-        public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".datasource.annotations.TableName";
+        public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".aop.annotations.TableName";
         public static final String TENANT_ENTITY = FRAMEWORK_PACKAGE + ".entity.TenantEntity";
-        public static final String PAGES_ANNOTATION = FRAMEWORK_PACKAGE + ".datasource.annotations.Pages";
+        public static final String PAGES_ANNOTATION = FRAMEWORK_PACKAGE + ".aop.annotations.Pages";
         public static final String QUERY_BASE = FRAMEWORK_PACKAGE + ".query.Query";
-        public static final String PAGE_RESULT = CORE_PACKAGE + ".utils.PageResult";
-        public static final String RESULT = CORE_PACKAGE + ".utils.Result";
+        public static final String PAGE_RESULT = FRAMEWORK_PACKAGE + ".entity.PageResult";
+        public static final String RESULT = FRAMEWORK_PACKAGE + ".entity.Result";
         public static final String SERVICE_ANNOTATION = "org.springframework.stereotype.Service";
         
         public static final String JAVA_SOURCE_PATH = "/src/main/java/";
@@ -108,7 +110,8 @@ public class CodeGenerator {
      * @return 表信息
      */
     public TableInfo getTableInfo(String tableName) throws SQLException {
-        try (Connection connection = dynamicDataSource.getPrimaryDb().getConnection()) {
+//        try (Connection connection = dynamicDataSource.getPrimaryDb().getConnection()) {
+        try (Connection connection = dynamicDataSource.getDs("masterDb").getConnection()) {
             TableInfo tableInfo = new TableInfo();
             tableInfo.setTableName(tableName);
             tableInfo.setEntityName(convertToEntityName(tableName));
@@ -549,8 +552,8 @@ public class CodeGenerator {
     public String generateController(TableInfo tableInfo) {
         StringBuilder sb = new StringBuilder();
         sb.append("package " + GeneratorConfig.CONTROLLER_PACKAGE + ";\n\n");
-        sb.append("import com.finn.framework.operatelog.annotations.Log;\n");
-        sb.append("import com.finn.framework.operatelog.enums.OperateTypeEnum;\n");
+        sb.append("import " + FRAMEWORK_PACKAGE + ".aop.annotations.Log;\n");
+        sb.append("import " + FRAMEWORK_PACKAGE + ".common.enums.OperateTypeEnum;\n");
         sb.append("import " + GeneratorConfig.PAGE_RESULT + ";\n");
         sb.append("import " + GeneratorConfig.RESULT + ";\n");
         sb.append("import " + GeneratorConfig.QUERY_PACKAGE + ".").append(tableInfo.getQueryName()).append(";\n");
@@ -572,7 +575,7 @@ public class CodeGenerator {
         if (requestMappingPath.startsWith(GeneratorConfig.TABLE_PREFIX)) {
             requestMappingPath = requestMappingPath.substring(GeneratorConfig.TABLE_PREFIX.length());
         }
-        sb.append("@RequestMapping(\"sys/").append(requestMappingPath).append("\")\n");
+        sb.append("@RequestMapping(\"/").append(requestMappingPath).append("\")\n");
         sb.append("public class ").append(tableInfo.getControllerName()).append(" {\n");
         sb.append("    private final ").append(tableInfo.getServiceName()).append(" ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(";\n\n");
         sb.append("    public ").append(tableInfo.getControllerName()).append("(").append(tableInfo.getServiceName()).append(" ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(") {\n");
@@ -584,7 +587,7 @@ public class CodeGenerator {
         sb.append("     * @return 列表\n");
         sb.append("     */\n");
         sb.append("    @GetMapping(\"page\")\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":page')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":page')\")\n");
         sb.append("    public Result<PageResult<").append(tableInfo.getVoName()).append(">> page(@Valid ").append(tableInfo.getQueryName()).append(" query) {\n");
         sb.append("        PageResult<").append(tableInfo.getVoName()).append("> page = ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".page(query);\n\n");
         sb.append("        return Result.ok(page);\n");
@@ -596,7 +599,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PostMapping\n");
         sb.append("    @Log(module = \"").append(tableInfo.getTableComment()).append("\", name = \"保存\", type = OperateTypeEnum.INSERT)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":save')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":save')\")\n");
         sb.append("    public Result<String> save(@RequestBody ").append(tableInfo.getVoName()).append(" vo) {\n");
         sb.append("        Long id = ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".save(vo);\n");
         sb.append("        return Result.ok(String.valueOf(id));\n");
@@ -608,7 +611,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PutMapping\n");
         sb.append("    @Log(module = \"").append(tableInfo.getTableComment()).append("\", name = \"修改\", type = OperateTypeEnum.UPDATE)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":update')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":update')\")\n");
         sb.append("    public Result<String> update(@RequestBody ").append(tableInfo.getVoName()).append(" vo) {\n");
         sb.append("        ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".update(vo);\n");
         sb.append("        return Result.ok();\n");
@@ -620,7 +623,7 @@ public class CodeGenerator {
         sb.append("     */\n");
         sb.append("    @PostMapping(\"/del\")\n");
         sb.append("    @Log(module = \"").append(tableInfo.getTableComment()).append("\", name = \"删除\", type = OperateTypeEnum.DELETE)\n");
-        sb.append("    @PreAuthorize(\"hasAuthority('sys:").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":delete')\")\n");
+        sb.append("    @PreAuthorize(\"hasAuthority('").append(getTableNameWithoutPrefix(tableInfo.getTableName())).append(":delete')\")\n");
         sb.append("    public Result<String> delete(@RequestBody List<Long> idList) {\n");
         sb.append("        ").append(tableInfo.getServiceName().substring(0, 1).toLowerCase()).append(tableInfo.getServiceName().substring(1)).append(".delete(idList);\n\n");
         sb.append("        return Result.ok();\n");

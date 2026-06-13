@@ -23,9 +23,27 @@ public class TokenVO implements Serializable {
      */
     private String refreshToken;
 
-    public TokenVO(String accessToken, String refreshToken) {
+    /**
+     * token有效时间
+     */
+    private Long expiresIn;
+    /**
+     * 刷新token有效时间
+     */
+    private Long expireTime;
+
+    /**
+     *
+     * @param accessToken token值
+     * @param refreshToken 刷新token
+     * @param expiresIn token有效时间
+     * @param expireTime token过期时间
+     */
+    public TokenVO(String accessToken, String refreshToken, Long expiresIn, Long expireTime) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.expiresIn = expiresIn;
+        this.expireTime = expireTime;
     }
 
     public String getAccessToken() {
@@ -42,5 +60,21 @@ public class TokenVO implements Serializable {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public Long getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
+    }
+
+    public Long getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Long expireTime) {
+        this.expireTime = expireTime;
     }
 }

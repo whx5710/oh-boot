@@ -19,7 +19,6 @@ import com.finn.flow.vo.WorkOrderVO;
 import com.finn.framework.entity.MetaEntity;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.service.JobService;
-import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.framework.aop.annotations.RequestKeyParam;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +39,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
     // 功能号
     public static final String funcCode = "F1003";
 
-    private final String processKey = "Process_demo20231222";
+    private String processKey = "Process_demo20231222";
 
     private final TaskHandlerService taskHandlerService;
 
@@ -125,14 +124,18 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @Idempotent(keyPrefix = "flow:order:save")
+//    @Idempotent(keyPrefix = "flow:order:save")
     public Result<List<TaskRecordVO>> handle(@RequestKeyParam MetaEntity data) throws ServerException {
         WorkOrderVO workOrderVO = JsonUtils.convertValue(data.getData(), WorkOrderVO.class);
         if(workOrderVO.getId() == null || workOrderVO.getId() == 0L){
             workOrderVO.setId(idWorker.nextId());
         }
+        String procDefId = processKey;
+        if(data.getData() != null && data.getData().containsKey("procDefId")){
+            procDefId = data.getData().getStr("procDefId");
+        }
         // 启动流程
-        List<TaskRecordVO> list = taskHandlerService.startByProcessId(processKey, String.valueOf(workOrderVO.getId()), null);
+        List<TaskRecordVO> list = taskHandlerService.startByProcessId(procDefId, String.valueOf(workOrderVO.getId()), null);
         if(list != null && !list.isEmpty()){
             List<String> flowInfo = new ArrayList<>(list.size());
             list.forEach(item ->{
@@ -143,6 +146,7 @@ public class WorkOrderServiceImpl implements WorkOrderService, JobService {
         this.save(workOrderVO);
         // 模拟业务处理异常
 //        throw new ServerException("模拟异常！！！");
+        System.out.println(funcCode + " 业务处理完成");
         return Result.ok(list);
     }
 }

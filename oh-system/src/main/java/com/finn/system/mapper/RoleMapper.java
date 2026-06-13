@@ -1,7 +1,6 @@
 package com.finn.system.mapper;
 
 import com.finn.framework.datasource.mapper.BaseMapper;
-import com.finn.framework.datasource.service.ModifyProviderService;
 import com.finn.system.entity.RoleEntity;
 import com.finn.system.query.RoleQuery;
 import org.apache.ibatis.annotations.*;
@@ -17,11 +16,6 @@ import java.util.List;
 @Mapper
 public interface RoleMapper extends BaseMapper<RoleEntity> {
 
-
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // 回写ID
-    @InsertProvider(method = ModifyProviderService.INSERT,type = ModifyProviderService.class) // 动态拼接SQL
-    int insertRole(RoleEntity roleEntity);
-
     /**
      * 根据用户ID，获取用户最大的数据范围
      */
@@ -29,8 +23,5 @@ public interface RoleMapper extends BaseMapper<RoleEntity> {
     Integer getDataScopeByUserId(@Param("userId") Long userId);
 
     List<RoleEntity> getList(RoleQuery roleQuery);
-
-    @Select("select * from sys_role where id = #{id}")
-    RoleEntity getById(@Param("id") Long id);
 
 }

@@ -1,5 +1,7 @@
 package com.finn.app.entity;
 
+import com.finn.framework.aop.annotations.TableField;
+import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 /**
@@ -8,7 +10,7 @@ import com.finn.framework.entity.BaseEntity;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2023-07-30
  */
-
+@TableName("data_function")
 public class DataFunctionEntity extends BaseEntity {
 
 	/**
@@ -19,6 +21,7 @@ public class DataFunctionEntity extends BaseEntity {
 	/**
 	* 功能号
 	*/
+	@TableField("func_code")
 	private String funcCode;
 
 	/**
@@ -29,6 +32,7 @@ public class DataFunctionEntity extends BaseEntity {
 	/**
 	 * 是否异步0否1是
 	 */
+	@TableField("is_async")
 	private Boolean isAsync;
 
 	public String getName() {

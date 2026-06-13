@@ -25,6 +25,10 @@ public interface DeptService {
 
     void updateById(DeptEntity dept);
 
+    /**
+     * 删除部门
+     * @param id 部门ID
+     */
     void delete(Long id);
 
     /**

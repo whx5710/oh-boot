@@ -23,9 +23,6 @@ public interface ParamsMapper extends BaseMapper<ParamsEntity> {
         return list != null && !list.isEmpty();
     }
 
-//    List<ParamsEntity> getList(ParamsQuery query);
-
     ParamsEntity getById(@Param("id")Long id);
 
-//    int save(ParamsEntity param);
 }

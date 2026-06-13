@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 80022
  Source Host           : localhost:3306
- Source Schema         : oh-sys
+ Source Schema         : oh-sys3.0
 
  Target Server Type    : MySQL
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 07/04/2026 15:15:36
+ Date: 12/06/2026 14:32:46
 */
 
 SET NAMES utf8mb4;
@@ -388,7 +388,8 @@ CREATE TABLE `sys_attachment`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_att_tenant`(`tenant_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '附件管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -436,7 +437,8 @@ CREATE TABLE `sys_dict_data`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_dict_data_type`(`dict_type_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -502,7 +504,8 @@ CREATE TABLE `sys_dict_type`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_dict_type`(`dict_type`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -524,6 +527,31 @@ INSERT INTO `sys_dict_type` VALUES (14, 'schedule_status', '状态', 0, NULL, '�
 INSERT INTO `sys_dict_type` VALUES (15, 'sms_platform', '平台类型', 0, NULL, '短信管理', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 
 -- ----------------------------
+-- Table structure for sys_error_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_error_log`;
+CREATE TABLE `sys_error_log`  (
+  `id` bigint NOT NULL,
+  `err_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误编码',
+  `msg` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '错误提示',
+  `stack_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '堆栈信息',
+  `err_time` datetime NOT NULL COMMENT '错误发生时间',
+  `trace_id` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链路跟踪ID',
+  `note` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `score` int NULL DEFAULT NULL COMMENT '队列拥挤程度0-10',
+  `queue_size` int NULL DEFAULT NULL COMMENT '队列大小',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `err_log_01`(`trace_id`) USING BTREE,
+  INDEX `err_log_02`(`err_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统错误日志' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_error_log
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sys_log_login
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log_login`;
@@ -537,7 +565,9 @@ CREATE TABLE `sys_log_login`  (
   `operation` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_log_time`(`create_time`) USING BTREE,
+  INDEX `idx_log_tenant`(`tenant_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -566,7 +596,8 @@ CREATE TABLE `sys_log_operate`  (
   `result_msg` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回消息',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_log_o_tenant`(`tenant_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -663,6 +694,19 @@ INSERT INTO `sys_menu` VALUES (56, 54, '删除日志', '删除日志', '', NULL,
 INSERT INTO `sys_menu` VALUES (57, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 0, 0, 'sys:log:login:delete', NULL, NULL, NULL, 0, NULL, 'menu', 0, NULL, 0, 0, 0, NULL, 10000, '2025-06-25 19:45:26', 10000, '2025-09-18 13:32:58');
 INSERT INTO `sys_menu` VALUES (33304128612466688, 7, 'Flow', '绘制流程', '/system/flow', '/system/flow/draw', 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, 'menu', 0, 'carbon:flow-logs-vpc', 0, 0, 1, NULL, 10000, '2026-04-02 21:38:43', 10000, '2026-04-06 18:10:43');
 INSERT INTO `sys_menu` VALUES (34701521023139840, 33304128612466688, '流程新增修改', '流程新增修改', '', NULL, 1, 0, 0, 'flow:saveOrUpdate', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-04-06 18:11:27', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (36768990499962880, 33304128612466688, '流程查询', '流程查询', '', NULL, 1, 0, 0, 'flow:page', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-04-12 11:06:50', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (36769889070874624, 7, 'FlowManage', '流程管理', '/system/flow-manage', '/system/flow/list', 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, 'menu', 0, 'carbon:workflow-automation', 0, 0, 1, NULL, 10000, '2026-04-12 11:10:25', 10000, '2026-04-12 11:15:01');
+INSERT INTO `sys_menu` VALUES (36770623787106304, 36769889070874624, '流程管理新增修改', '流程管理新增修改', '', NULL, 1, 0, 0, 'flow:task:saveOrUpdate,flow:delete', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-04-12 11:13:20', 10000, '2026-04-12 11:17:29');
+INSERT INTO `sys_menu` VALUES (38012448816496640, 36769889070874624, '环节查看', '环节查看', '', NULL, 1, 0, 0, 'flow:node:page', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-04-15 21:27:54', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (38012908344442880, 36769889070874624, '环节修改', '环节修改', '', NULL, 1, 0, 0, 'flow:node:update', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-04-15 21:29:44', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (43462997489745920, 42, 'ErrorLog', '错误日志', '/system/errLog', '/system/log/errorLog', 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, 'menu', 0, 'carbon:ibm-knowledge-catalog-premium', 0, 0, 1, NULL, 10000, '2026-04-30 22:26:26', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (43463159524098048, 43462997489745920, '查询错误日志', '查询错误日志', '', NULL, 1, 0, 0, 'sys:error:log', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-04-30 22:27:05', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (45101480209809408, 43, '删除登录日志', '删除登录日志', '', NULL, 1, 0, 0, 'sys:log:login:delete', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-05-05 10:57:11', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (45108924046639104, 43462997489745920, '删除错误日志', '删除错误日志', '', NULL, 1, 0, 0, 'sys:error:log:delete', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-05-05 11:26:46', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (51801209756975104, 6, 'LockUser', '用户锁定', '/system/lockUser', '/system/user/lock', 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, 'menu', 0, 'carbon:user-access-locked', 0, 1, 1, NULL, 10000, '2026-05-23 22:39:31', 10000, '2026-05-24 10:59:42');
+INSERT INTO `sys_menu` VALUES (53949269693956096, 6, 'OnlineUser', '在线用户', '/system/online-user', '/system/user/monitor', 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, 'menu', 0, 'carbon:user-online', 0, 1, 1, NULL, 10000, '2026-05-29 20:55:08', 10000, '2026-05-29 21:07:07');
+INSERT INTO `sys_menu` VALUES (53949658837286912, 53949269693956096, '查询在线用户', '查询在线用户', '', NULL, 1, 0, 0, 'monitor:user:all,monitor:user:tokens', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 1, 1, NULL, 10000, '2026-05-29 20:56:41', 10000, '2026-05-29 20:59:56');
+INSERT INTO `sys_menu` VALUES (53951928605868032, 53949269693956096, '下线操作', '下线操作', '', NULL, 1, 0, 0, 'monitor:user:logout', NULL, NULL, NULL, 0, NULL, 'button', 0, NULL, 0, 0, 1, NULL, 10000, '2026-05-29 21:05:42', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -762,7 +806,9 @@ CREATE TABLE `sys_role`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_role_code`(`code`) USING BTREE,
+  INDEX `idx_role_tenant`(`tenant_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -855,6 +901,8 @@ CREATE TABLE `sys_user`  (
   `dept_id` bigint NULL DEFAULT NULL COMMENT '部门ID',
   `super_admin` tinyint NULL DEFAULT NULL COMMENT '超级管理员   0：否   1：是',
   `status` tinyint NULL DEFAULT NULL COMMENT '状态  0：停用   1：正常',
+  `user_type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '用户类型，0普通用户1微信小程序用户',
+  `open_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '外部用户ID',
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` tinyint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
@@ -864,13 +912,17 @@ CREATE TABLE `sys_user`  (
   `pwd_modify_time` datetime NULL DEFAULT NULL COMMENT '密码修改时间',
   `user_key` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户密钥，用于第三方系统登录',
   `tenant_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_user_type`(`user_type`) USING BTREE,
+  INDEX `idx_user_name`(`username`) USING BTREE,
+  INDEX `idx_user_mobile`(`mobile`) USING BTREE,
+  INDEX `idx_user_tenant`(`tenant_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, NULL, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', '123', NULL);
+INSERT INTO `sys_user` VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, '0', NULL, NULL, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', '123', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post

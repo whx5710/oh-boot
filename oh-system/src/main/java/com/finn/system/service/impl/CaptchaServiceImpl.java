@@ -33,15 +33,15 @@ public class CaptchaServiceImpl implements CaptchaService {
      * @return
      */
     @Override
-    public CaptchaVO generateImg() {
+    public CaptchaVO generateImg(String platformKey) {
         // 判断是否开启验证码
-        if (!isCaptchaEnabled()) {
+        if (!enableCaptcha(platformKey)) {
             return new CaptchaVO();
         }
         CaptchaVO captchaVO = new CaptchaVO();
         int width = 150; // 验证码宽度
         int height = 40; // 验证码高度
-        int captchaLen = paramsService.getDefaultInt(ParamsEnum.CAPTCHA_LENGTH.name());
+        int captchaLen = paramsService.getDefaultInt(ParamsEnum.CAPTCHA_LENGTH.getCode());
         captchaLen = captchaLen==-1?5:captchaLen; // 长度
         Object[] objects = VerifyUtil.newBuilder()
                 .setWidth(width)   //设置图片的宽度
@@ -67,10 +67,17 @@ public class CaptchaServiceImpl implements CaptchaService {
         return captchaVO;
     }
 
+    /**
+     * 验证码效验
+     * @param platformKey 平台key 电脑浏览器端：PC 移动app端：APP
+     * @param key  key
+     * @param code 验证码
+     * @return true：成功  false：失败
+     */
     @Override
-    public boolean validate(String key, String code) {
+    public boolean validate(String platformKey, String key, String code) {
         // 如果关闭了验证码，则直接效验通过
-        if (!isCaptchaEnabled()) {
+        if (!enableCaptcha(platformKey)) {
             return true;
         }
         if ((key == null || key.isEmpty()) || (code == null || code.isEmpty())) {
@@ -97,7 +104,17 @@ public class CaptchaServiceImpl implements CaptchaService {
      *
      * @return true：开启  false：关闭
      */
-    private boolean isCaptchaEnabled() {
-        return paramsService.getBoolean(ParamsEnum.LOGIN_CAPTCHA.name());
+    private boolean enableCaptcha(String platformKey) {
+        if(platformKey == null || platformKey.isEmpty()){
+            platformKey = "PC";
+        }
+        platformKey = platformKey.toUpperCase();
+        if(platformKey.equals(ParamsEnum.PC.name())){
+            return paramsService.getBoolean(ParamsEnum.PC.getCode());
+        }else if(platformKey.equals(ParamsEnum.APP.name())){
+            return paramsService.getBoolean(ParamsEnum.APP.getCode());
+        }else{
+            return true;
+        }
     }
 }

@@ -13,45 +13,47 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
  * 手机短信登录 AuthenticationProvider
- *
+ * 由于用户可能是平台用户的同时，还是第三方平台用户（微信、支付宝小程序等其他第三方平台），手机号码相同，
+ * 因此，用手机验证码登录时，需确定用户源于哪个平台登录
  * @author 王小费 whx5710@qq.com
  *
  */
+@Component
 public class MobileAuthenticationProvider implements AuthenticationProvider, InitializingBean, MessageSourceAware {
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-    private final MobileUserDetailsService mobileUserDetailsService;
     private final MobileVerifyCodeService mobileVerifyCodeService;
 
-    public MobileAuthenticationProvider(MobileUserDetailsService mobileUserDetailsService, MobileVerifyCodeService mobileVerifyCodeService) {
-        this.mobileUserDetailsService = mobileUserDetailsService;
+    public MobileAuthenticationProvider(MobileVerifyCodeService mobileVerifyCodeService) {
         this.mobileVerifyCodeService = mobileVerifyCodeService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        Assert.isInstanceOf(MobileAuthenticationToken.class, authentication,
-                () -> messages.getMessage(
-                        "MobileAuthenticationProvider.onlySupports",
-                        "Only MobileAuthenticationProvider is supported"));
+//        Assert.isInstanceOf(MobileAuthenticationToken.class, authentication,
+//                () -> messages.getMessage(
+//                        "MobileAuthenticationProvider.onlySupports",
+//                        "Only MobileAuthenticationProvider is supported"));
 
         MobileAuthenticationToken authenticationToken = (MobileAuthenticationToken) authentication;
         String mobile = authenticationToken.getName();
         String code = (String) authenticationToken.getCredentials();
+        String userType = authenticationToken.getUserType();
 
         try {
-            UserDetails userDetails = mobileUserDetailsService.loadUserByMobile(mobile);
+            UserDetails userDetails = mobileVerifyCodeService.loadUserByMobile(mobile, userType);
             if (userDetails == null) {
                 throw new BadCredentialsException("Bad credentials");
             }
 
             // 短信验证码效验
             if (mobileVerifyCodeService.verifyCode(mobile, code)) {
-                return createSuccessAuthentication(authentication, userDetails);
+                return createSuccessAuthentication(authentication, userDetails, userType);
             } else {
                 throw new BadCredentialsException("mobile code is not matched");
             }
@@ -62,8 +64,8 @@ public class MobileAuthenticationProvider implements AuthenticationProvider, Ini
 
     }
 
-    protected Authentication createSuccessAuthentication(Authentication authentication, UserDetails user) {
-        MobileAuthenticationToken result = new MobileAuthenticationToken(user, null,
+    protected Authentication createSuccessAuthentication(Authentication authentication, UserDetails user, String userType) {
+        MobileAuthenticationToken result = new MobileAuthenticationToken(user, null, userType,
                 authoritiesMapper.mapAuthorities(user.getAuthorities()));
         result.setDetails(authentication.getDetails());
         return result;
@@ -76,7 +78,6 @@ public class MobileAuthenticationProvider implements AuthenticationProvider, Ini
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(mobileUserDetailsService, "mobileUserDetailsService must not be null");
         Assert.notNull(mobileVerifyCodeService, "mobileVerifyCodeService must not be null");
     }
 

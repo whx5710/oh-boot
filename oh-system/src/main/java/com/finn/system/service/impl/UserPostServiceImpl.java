@@ -1,6 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.system.entity.UserPostEntity;
 import com.finn.system.mapper.UserPostMapper;
@@ -39,8 +40,8 @@ public class UserPostServiceImpl implements UserPostService {
         // Collection<Long> insertPostIdList = CollUtil.subtract(postIdList, dbPostIdList);
         Collection<Long> insertPostIdList = postIdList.stream()
                 .filter(element -> !dbPostIdList.contains(element))
-                .collect(Collectors.toList());
-        if (insertPostIdList != null && insertPostIdList.size() > 0){
+                .toList();
+        if (!insertPostIdList.isEmpty()){
             List<UserPostEntity> postList = insertPostIdList.stream().map(postId -> {
                 UserPostEntity entity = new UserPostEntity();
                 entity.setUserId(userId);
@@ -50,7 +51,7 @@ public class UserPostServiceImpl implements UserPostService {
                 return entity;
             }).collect(Collectors.toList());
             // 批量新增
-            userPostMapper.saveBatch(postList);
+            userPostMapper.insertBatch(postList);
         }
 
         // 需要删除的岗位ID
@@ -66,14 +67,14 @@ public class UserPostServiceImpl implements UserPostService {
 
     @Override
     public void deleteByPostIdList(List<Long> postIdList) {
-        UpdateWrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
+        Wrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
                 .in(UserPostEntity::getPostId, postIdList);
         userPostMapper.updateByWrapper(updateWrapper);
     }
 
     @Override
     public void deleteByUserIdList(List<Long> userIdList) {
-        UpdateWrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
+        Wrapper<UserPostEntity> updateWrapper = UpdateWrapper.of(UserPostEntity.class).set(UserPostEntity::getDbStatus, 0)
                 .in(UserPostEntity::getUserId, userIdList);
         userPostMapper.updateByWrapper(updateWrapper);
     }

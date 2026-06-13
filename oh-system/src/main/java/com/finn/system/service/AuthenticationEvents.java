@@ -3,6 +3,8 @@ package com.finn.system.service;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.enums.LoginOperationEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
@@ -16,21 +18,24 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AuthenticationEvents {
-    private final LogLoginService logLoginService;
 
-    public AuthenticationEvents(LogLoginService logLoginService) {
-        this.logLoginService = logLoginService;
+    private final Logger log = LoggerFactory.getLogger(AuthenticationEvents.class);
+
+    private final LoginLogService loginLogService;
+
+    public AuthenticationEvents(LoginLogService loginLogService) {
+        this.loginLogService = loginLogService;
     }
 
     @EventListener
     public void onSuccess(AuthenticationSuccessEvent event) {
-        // 用户信息
-        UserDetail user = (UserDetail) event.getAuthentication().getPrincipal();
-
-        // 保存登录日志
-        if(user != null){
-            logLoginService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
+        Object principal = event.getAuthentication().getPrincipal();
+        
+        if (!(principal instanceof UserDetail user)) {
+            log.warn("非用户信息数据，保存登录日志失败");
+            return;
         }
+        loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
     }
 
     @EventListener
@@ -39,7 +44,7 @@ public class AuthenticationEvents {
         String username = (String) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        logLoginService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
+        loginLogService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
     }
 
 }

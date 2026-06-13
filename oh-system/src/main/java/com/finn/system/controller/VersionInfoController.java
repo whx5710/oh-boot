@@ -21,7 +21,7 @@ import java.util.List;
 * @since 1.0.0 2023-09-16
 */
 @RestController
-@RequestMapping("sys/info")
+@RequestMapping("/sys/info")
 public class VersionInfoController {
 
     @Resource
@@ -32,12 +32,10 @@ public class VersionInfoController {
      * @param query
      * @return
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('system:info:page')")
     public Result<PageResult<VersionInfoVO>> page(@Valid VersionInfoQuery query){
-        PageResult<VersionInfoVO> page = versionInfoService.page(query);
-
-        return Result.ok(page);
+        return Result.ok(versionInfoService.page(query));
     }
 
     /**
@@ -45,7 +43,7 @@ public class VersionInfoController {
      * @param id
      * @return
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('system:info:info')")
     public Result<VersionInfoVO> get(@PathVariable("id") Long id){
         VersionInfoEntity entity = versionInfoService.getById(id);
@@ -57,7 +55,7 @@ public class VersionInfoController {
      * 最新版本信息
      * @return
      */
-    @GetMapping("latestVersion")
+    @GetMapping("/latestVersion")
     public Result<VersionInfoVO> latestVersion(){
         VersionInfoEntity entity = versionInfoService.latestVersion();
         return Result.ok(VersionInfoConvert.INSTANCE.convert(entity));
@@ -72,7 +70,6 @@ public class VersionInfoController {
     @PreAuthorize("hasAuthority('system:info:save')")
     public Result<String> save(@RequestBody VersionInfoVO vo){
         versionInfoService.save(vo);
-
         return Result.ok();
     }
 

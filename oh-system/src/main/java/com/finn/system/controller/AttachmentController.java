@@ -20,7 +20,7 @@ import java.util.List;
  * 
  */
 @RestController
-@RequestMapping("sys/attachment")
+@RequestMapping("/sys/attachment")
 public class AttachmentController {
     private final AttachmentService attachmentService;
 
@@ -33,12 +33,10 @@ public class AttachmentController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:attachment:page')")
     public Result<PageResult<AttachmentVO>> page(@Valid AttachmentQuery query) {
-        PageResult<AttachmentVO> page = attachmentService.page(query);
-
-        return Result.ok(page);
+        return Result.ok(attachmentService.page(query));
     }
 
     /**

@@ -4,9 +4,11 @@ auth:
     - /sys/auth/login
     - /sys/auth/refresh
     - /sys/auth/loginByKey
+    - /sys/auth/wechat-login
     - /sys/auth/send/code
     - /sys/auth/mobile
     - /sys/auth/logout
     - /sys/params/getByKeys
     - /sys/info/latestVersion
     - /sys/user/register
+    - /sys/code/generate/*

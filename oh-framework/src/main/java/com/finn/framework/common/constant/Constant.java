@@ -112,7 +112,7 @@ public interface Constant {
      */
     String FUNC_CODE = "OH-FUNC-CODE";
     /**
-     * 消息主题
+     * 公共接口消息主题
      */
     String TOPIC_SUBMIT = "topic-submit";
 

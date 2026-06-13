@@ -24,7 +24,7 @@ import java.util.List;
  * 
  */
 @RestController
-@RequestMapping("sys/role")
+@RequestMapping("/sys/role")
 public class RoleController {
     private final RoleService roleService;
     private final UserService userService;
@@ -46,7 +46,7 @@ public class RoleController {
      * @param query 查询条件
      * @return 角色列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('sys:role:page')")
     public Result<PageResult<RoleVO>> page(@Valid RoleQuery query) {
         PageResult<RoleVO> page = roleService.page(query);
@@ -69,7 +69,7 @@ public class RoleController {
      * @param id 角色ID
      * @return 角色信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('sys:role:info')")
     public Result<RoleVO> get(@PathVariable("id") Long id) {
         RoleEntity entity = roleService.getById(id);
@@ -84,7 +84,6 @@ public class RoleController {
         // 查询角色对应的数据权限
         List<Long> deptIdList = roleDataScopeService.getDeptIdList(id);
         role.setDeptIdList(deptIdList);
-
         return Result.ok(role);
     }
 
@@ -98,7 +97,6 @@ public class RoleController {
     @PreAuthorize("hasAuthority('sys:role:save')")
     public Result<String> save(@RequestBody @Valid RoleVO vo) {
         roleService.save(vo);
-
         return Result.ok();
     }
 
@@ -112,7 +110,6 @@ public class RoleController {
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> update(@RequestBody @Valid RoleVO vo) {
         roleService.update(vo);
-
         return Result.ok();
     }
 
@@ -126,7 +123,6 @@ public class RoleController {
     @PreAuthorize("hasAuthority('sys:role:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         roleService.delete(idList);
-
         return Result.ok();
     }
 
@@ -135,12 +131,10 @@ public class RoleController {
      * @param query 角色用户查询条件
      * @return
      */
-    @GetMapping("user/page")
+    @GetMapping("/user/page")
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<PageResult<UserVO>> userPage(@Valid RoleUserQuery query) {
-        PageResult<UserVO> page = userService.roleUserPage(query);
-
-        return Result.ok(page);
+        return Result.ok(userService.roleUserPage(query));
     }
 
     /**
@@ -164,7 +158,7 @@ public class RoleController {
      * @param userIdList 用户ID列表
      * @return 提示信息
      */
-    @PostMapping("user/{roleId}")
+    @PostMapping("/user/{roleId}")
     @Log(module = "角色管理", name = "分配角色给用户列表", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Result<String> userSave(@PathVariable("roleId") Long roleId, @RequestBody List<Long> userIdList) {

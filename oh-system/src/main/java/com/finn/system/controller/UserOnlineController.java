@@ -4,7 +4,7 @@ import com.finn.framework.utils.DateUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
 import com.finn.framework.query.Query;
-import com.finn.framework.cache.TokenStoreCache;
+import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.cache.UserCache;
 import com.finn.system.convert.UserConvert;
@@ -26,13 +26,13 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  */
 @RestController
-@RequestMapping("monitor/user")
+@RequestMapping("/monitor/user")
 public class UserOnlineController {
-    private final TokenStoreCache tokenStoreCache;
+    private final TokenCache tokenCache;
     private final UserCache userCache;
 
-    public UserOnlineController(TokenStoreCache tokenStoreCache, UserCache userCache) {
-        this.tokenStoreCache = tokenStoreCache;
+    public UserOnlineController(TokenCache tokenCache, UserCache userCache) {
+        this.tokenCache = tokenCache;
         this.userCache = userCache;
     }
 
@@ -41,11 +41,11 @@ public class UserOnlineController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('monitor:user:all')")
     public Result<PageResult<UserVO>> page(@Valid Query query) {
         // 获取登录用户的全部key
-        List<String> userIds = tokenStoreCache.getUserIdList(); // tokenStoreCache.getUserKeyList();
+        List<String> userIds = tokenCache.getUserIdList(); // tokenCache.getUserKeyList();
 
         // 逻辑分页
         int toIndex = query.getPageNum() * query.getPageSize();
@@ -72,7 +72,7 @@ public class UserOnlineController {
     @GetMapping("/tokenList/{userId}")
     @PreAuthorize("hasAuthority('monitor:user:tokens')")
     public Result<List<UserOnlineVO>> tokenList(@PathVariable("userId")Long userId) {
-        List<UserDetail> list = tokenStoreCache.getUserById(userId);
+        List<UserDetail> list = tokenCache.getUserById(userId);
         List<UserOnlineVO> result = new ArrayList<>();
         if(list != null && !list.isEmpty()){
             for(UserDetail user: list){
@@ -100,13 +100,13 @@ public class UserOnlineController {
         if (accessToken == null || accessToken.isEmpty()) {
             Result.error("token不能为空");
         }
-        UserDetail userDetail = tokenStoreCache.getUser(accessToken);
+        UserDetail userDetail = tokenCache.getUser(accessToken);
         Long userId = null;
         if(userDetail != null){
             userId = userDetail.getId();
         }
         // 删除用户信息
-        tokenStoreCache.deleteUser(userId, accessToken);
+        tokenCache.deleteUser(userId, accessToken);
 
         return Result.ok();
     }
@@ -121,10 +121,10 @@ public class UserOnlineController {
     public Result<String> forceLogoutAll(@PathVariable("userId") String userId) {
         // token不能为空
         if (userId == null || userId.isEmpty()) {
-            Result.error("用户ID不能为空");
+            return Result.error("用户ID不能为空");
         }
         // 删除用户信息
-        tokenStoreCache.deleteUserById(Long.valueOf(userId));
+        tokenCache.deleteUserById(Long.valueOf(userId));
         return Result.ok();
     }
 

@@ -3,9 +3,9 @@ package com.finn.system.convert;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.DictCache;
 import com.finn.system.cache.TenantCache;
-import com.finn.system.entity.LogLoginEntity;
+import com.finn.system.entity.LoginLogEntity;
 import com.finn.system.vo.DictDataSingleVO;
-import com.finn.system.vo.LogLoginVO;
+import com.finn.system.vo.LoginLogVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,26 +15,26 @@ import java.util.List;
  * @author 王小费 whx5710@qq.com
  * @since 1.0.0 2025-06-14
  */
-public class LogLoginExtConvert implements LogLoginConvert {
+public class LogLoginExtConvert implements LoginLogConvert {
 
-    private final LogLoginConvert logLoginConvert;
+    private final LoginLogConvert loginLogConvert;
 
     TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
 
     DictCache dictCache = ServiceFactory.getBean("dictCache", DictCache.class);
 
-    public LogLoginExtConvert(LogLoginConvert logLoginConvert){
-        this.logLoginConvert = logLoginConvert;
+    public LogLoginExtConvert(LoginLogConvert loginLogConvert){
+        this.loginLogConvert = loginLogConvert;
     }
 
     @Override
-    public LogLoginEntity convert(LogLoginVO vo) {
-        return logLoginConvert.convert(vo);
+    public LoginLogEntity convert(LoginLogVO vo) {
+        return loginLogConvert.convert(vo);
     }
 
     @Override
-    public LogLoginVO convert(LogLoginEntity entity) {
-        LogLoginVO vo = logLoginConvert.convert(entity);
+    public LoginLogVO convert(LoginLogEntity entity) {
+        LoginLogVO vo = loginLogConvert.convert(entity);
         // 租户名称获取
         vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
 
@@ -56,13 +56,13 @@ public class LogLoginExtConvert implements LogLoginConvert {
     }
 
     @Override
-    public List<LogLoginVO> convertList(List<LogLoginEntity> list) {
+    public List<LoginLogVO> convertList(List<LoginLogEntity> list) {
         if ( list == null ) {
             return null;
         }
-        List<LogLoginVO> list1 = new ArrayList<LogLoginVO>( list.size() );
-        for ( LogLoginEntity logLoginEntity : list ) {
-            list1.add( convert( logLoginEntity ) );
+        List<LoginLogVO> list1 = new ArrayList<LoginLogVO>( list.size() );
+        for ( LoginLogEntity loginLogEntity : list ) {
+            list1.add( convert(loginLogEntity) );
         }
         return list1;
     }

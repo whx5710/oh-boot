@@ -1,12 +1,9 @@
 package com.finn.framework.service;
 
-import com.finn.framework.cache.RedisCache;
-import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.JsonUtils;
 import com.finn.framework.entity.Result;
-import com.finn.framework.common.properties.OpenApiProperties;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.framework.entity.api.MsgEntity;
 import org.slf4j.Logger;
@@ -23,24 +20,15 @@ public class JobServiceConsumer {
 
     private final Logger log = LoggerFactory.getLogger(JobServiceConsumer.class);
 
-    private final RedisCache redisCache;
-
-    private final OpenApiProperties openApiProperties;
-
-    public JobServiceConsumer(RedisCache redisCache, OpenApiProperties openApiProperties){
-        this.redisCache = redisCache;
-        this.openApiProperties = openApiProperties;
-    }
-
     /**
      * 调用JobService，执行参数验证、业务处置；服务类由spring容器进行管理，可使用注解，不存在map中，区别于jobConsume方法
      * @param dataMsg 参数对象
      * @param check 是否校验参数，未通过校验直接抛出异常
      */
-    public void jobBeanConsume(MsgEntity dataMsg, Boolean check) {
+    public MsgEntity jobBeanConsume(MsgEntity dataMsg, Boolean check) {
         if(dataMsg == null){
             log.warn("消息对象为空!");
-            return;
+            return null;
         }
         if(dataMsg.getTopic() == null){
             dataMsg.setTopic(Constant.TOPIC_SUBMIT);
@@ -63,10 +51,7 @@ public class JobServiceConsumer {
             log.error("处理业务发生错误。{}: {}", funcCode, e.getMessage());
             dataMsg.setNote(e.getMessage());
             dataMsg.setState("3"); // 异常
-        }finally {
-            if(dataMsg.getResultMsg() != null && openApiProperties.getCacheTime() > 0){
-                redisCache.leftPush(RedisKeys.getDataMsgKey(), dataMsg, openApiProperties.getCacheTime()); // 请求参数缓存7天 60*60*24*7
-            }
         }
+        return dataMsg;
     }
 }

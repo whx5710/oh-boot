@@ -81,62 +81,29 @@
 		</if>
 	</select>
 
-	<!--保存用户-->
-	<!--<insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
-		insert into sys_user (
-			username, password,
-			real_name, avatar,
-			gender, email,
-			mobile, dept_id,
-			super_admin, status,
-			db_status, creator,
-			create_time, pwd_modify_time,
-			user_key,note,
-			tenant_id
-		) values (
-			#{username}, #{password},
-			#{realName}, #{avatar},
-			#{gender}, #{email},
-			#{mobile}, #{deptId},
-			#{superAdmin}, #{status},
-			#{dbStatus}, #{creator},
-			#{createTime}, #{pwdModifyTime},
-			#{userKey},#{note},
-			#{tenantId})
-	</insert>-->
+	<select id="getByUsername" resultType="com.finn.system.entity.UserEntity">
+		SELECT
+		a.*,
+		b.NAME AS dept_name
+		FROM
+		sys_user a
+		LEFT JOIN sys_dept b ON a.dept_id = b.id
+		WHERE
+		a.db_status = 1
+		AND a.user_type = #{userType}
+		AND a.username = #{username}
+	</select>
 
-	<!--<update id="updateById" parameterType="com.finn.system.entity.UserEntity">
-		update sys_user
-		<set>
-			<if test="username != null and username != ''">username = #{username},</if>
-			<if test="password != null and password != ''">password = #{password},</if>
-			<if test="realName != null and realName != ''">real_name = #{realName},</if>
-			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
-			<if test="gender != null">gender = #{gender},</if>
-			<if test="email != null and email != ''">email = #{email},</if>
-			<if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
-			<if test="deptId != null">dept_id = #{deptId},</if>
-			<if test="superAdmin != null">super_admin = #{superAdmin},</if>
-			<if test="status != null">status = #{status},</if>
-			<if test="dbStatus != null">db_status = #{dbStatus},</if>
-			<if test="updater != null">updater = #{updater},</if>
-			<if test="pwdModifyTime != null">pwd_modify_time = #{pwdModifyTime},</if>
-			<if test="userKey != null and userKey != ''">user_key = #{userKey},</if>
-			<if test="note != null and note != ''">note = #{note},</if>
-			<if test="tenantId != null and tenantId != ''">tenant_id = #{tenantId},</if>
-			update_time = #{updateTime}
-		</set>
-		WHERE id = #{id}
-	</update>-->
-
-	<update id="unbindUser" parameterType="com.finn.system.entity.UserEntity">
-		update sys_user
-		<set>
-			tenant_id = #{tenantId},
-			<if test="updater != null">updater = #{updater},</if>
-			update_time = #{updateTime}
-		</set>
-		WHERE id = #{id}
-	</update>
-
+	<select id="getByMobile" resultType="com.finn.system.entity.UserEntity">
+		SELECT
+		a.*,
+		b.NAME AS dept_name
+		FROM
+		sys_user a
+		LEFT JOIN sys_dept b ON a.dept_id = b.id
+		WHERE
+		a.db_status = 1
+		AND a.user_type = #{userType}
+		AND a.mobile = #{mobile}
+	</select>
 </mapper>

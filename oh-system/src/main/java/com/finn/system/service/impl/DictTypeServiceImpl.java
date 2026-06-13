@@ -1,5 +1,6 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.CountWrapper;
@@ -171,7 +172,7 @@ public class DictTypeServiceImpl implements DictTypeService {
      * @param query
      * @return
      */
-    private QueryWrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
+    private Wrapper<DictTypeEntity> getDictTypeQuery(DictTypeQuery query){
         if(query == null){
             return QueryWrapper.of(DictTypeEntity.class).eq(DictTypeEntity::getDbStatus, 1);
         }else{
