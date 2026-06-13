@@ -99,7 +99,7 @@ SuperEntity (序列化基础)
 
 ```java
 @TableName("sys_user")
-public class UserEntity extends TenantEntity {
+public class UserEntity extends BaseEntity {
     /**
      * 用户名
      */

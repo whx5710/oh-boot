@@ -2,7 +2,7 @@ package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.TenantEntity;
+import com.finn.framework.entity.BaseEntity;
 import com.finn.system.enums.UserStatusEnum;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  *
  */
 @TableName("sys_user")
-public class UserEntity extends TenantEntity {
+public class UserEntity extends BaseEntity {
     /**
      * 用户名
      */

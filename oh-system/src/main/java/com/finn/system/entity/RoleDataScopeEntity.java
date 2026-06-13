@@ -2,7 +2,7 @@ package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.TenantEntity;
+import com.finn.framework.entity.BaseEntity;
 
 /**
  * 角色数据权限
@@ -11,7 +11,7 @@ import com.finn.framework.entity.TenantEntity;
  *
  */
 @TableName("sys_role_data_scope")
-public class RoleDataScopeEntity extends TenantEntity {
+public class RoleDataScopeEntity extends BaseEntity {
 	/**
 	 * 角色ID
 	 */

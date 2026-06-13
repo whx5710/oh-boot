@@ -11,10 +11,8 @@ import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.DeptConvert;
 import com.finn.system.entity.DeptEntity;
-import com.finn.system.entity.TenantMemberEntity;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.DeptMapper;
 import com.finn.system.mapper.UserMapper;
@@ -39,13 +37,11 @@ public class DeptServiceImpl implements DeptService {
     private final UserMapper userMapper;
     private final DeptMapper deptMapper;
     private final RedisCache redisCache;
-    private final TenantCache tenantCache;
     public DeptServiceImpl(UserMapper userMapper, DeptMapper deptMapper,
-                          RedisCache redisCache, TenantCache tenantCache) {
+                          RedisCache redisCache) {
         this.userMapper = userMapper;
         this.deptMapper = deptMapper;
         this.redisCache = redisCache;
-        this.tenantCache = tenantCache;
     }
 
     @Override
@@ -57,15 +53,7 @@ public class DeptServiceImpl implements DeptService {
         List<DeptEntity> entityList = deptMapper.getList(query);
 
         List<DeptVO> voList = DeptConvert.INSTANCE.convertList(entityList);
-        UserDetail user = SecurityUser.getUser();
-        if(user != null && (user.getSuperAdmin() == 1 || user.getTenantId() == null || user.getTenantId().isEmpty())){
-            for(DeptVO item : voList){
-                if(item.getTenantId() != null && !item.getTenantId().isEmpty()){
-                    item.setTenantName(tenantCache.getNameByTenantId(item.getTenantId()));
-                    item.setName(item.getName() +" [" + item.getTenantName() + "]");
-                }
-            }
-        }
+
         return TreeUtils.build(voList);
     }
 
@@ -170,13 +158,6 @@ public class DeptServiceImpl implements DeptService {
         }
         if(dept.getDbStatus() == 0){
             throw new ServerException("部门已删除，不能重复操作");
-        }
-        // 判断是否绑定了租户
-        if(dept.getTenantId() != null && !dept.getTenantId().isEmpty()){
-            TenantMemberEntity tenantMember = tenantCache.getTenant(dept.getTenantId());
-            if(tenantMember != null && tenantMember.getDbStatus() == 1){
-                throw new ServerException("已绑定租户，不能直接删除");
-            }
         }
         // 删除
         dept.setDbStatus(0);

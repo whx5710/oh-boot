@@ -1,7 +1,5 @@
 package com.finn.system.convert;
 
-import com.finn.framework.utils.ServiceFactory;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.entity.ErrorLogEntity;
 import com.finn.system.vo.ErrorLogVO;
 
@@ -16,8 +14,6 @@ import java.util.List;
 public class ErrorLogExtConvert implements ErrorLogConvert{
 
     private final ErrorLogConvert errorLogConvert;
-    // 租户缓存工具
-    TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
 
     public ErrorLogExtConvert(ErrorLogConvert errorLogConvert){
         this.errorLogConvert = errorLogConvert;
@@ -31,8 +27,6 @@ public class ErrorLogExtConvert implements ErrorLogConvert{
     @Override
     public ErrorLogVO convert(ErrorLogEntity entity) {
         ErrorLogVO vo = errorLogConvert.convert(entity);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
         return vo;
     }
 

@@ -27,16 +27,6 @@ public class DeptVO extends TreeNode<DeptVO> {
     private Integer sort;
 
     /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 租户
-     */
-    private String tenantName;
-
-    /**
      * 创建时间
      */
     private LocalDateTime createTime;
@@ -102,19 +92,4 @@ public class DeptVO extends TreeNode<DeptVO> {
         this.note = note;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
-    }
 }

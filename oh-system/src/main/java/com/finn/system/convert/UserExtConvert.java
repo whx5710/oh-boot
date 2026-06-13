@@ -2,8 +2,6 @@ package com.finn.system.convert;
 
 import com.finn.framework.entity.BaseUserEntity;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.framework.utils.ServiceFactory;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.vo.UserExcelVO;
 import com.finn.system.vo.UserVO;
@@ -19,8 +17,6 @@ import java.util.List;
 public class UserExtConvert implements UserConvert {
 
     private final UserConvert userConvert;
-    // 租户缓存工具
-    TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
 
     public UserExtConvert(UserConvert userConvert){
         this.userConvert = userConvert;
@@ -29,8 +25,6 @@ public class UserExtConvert implements UserConvert {
     @Override
     public UserVO convert(UserEntity entity) {
         UserVO vo = userConvert.convert(entity);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
         return vo;
     }
 
@@ -42,8 +36,6 @@ public class UserExtConvert implements UserConvert {
     @Override
     public UserVO convert(UserDetail userDetail) {
         UserVO vo = userConvert.convert(userDetail);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(userDetail.getTenantId()));
         return vo;
     }
 
@@ -83,8 +75,6 @@ public class UserExtConvert implements UserConvert {
     @Override
     public UserExcelVO convert2Excel(UserEntity entity) {
         UserExcelVO vo = userConvert.convert2Excel(entity);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
         return vo;
     }
 

@@ -1,7 +1,5 @@
 package com.finn.system.convert;
 
-import com.finn.framework.utils.ServiceFactory;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.vo.AttachmentVO;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 public class AttachmentExtConvert implements AttachmentConvert{
     private final AttachmentConvert attachmentConvert;
-    // 租户缓存工具
-    TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
 
     public AttachmentExtConvert(AttachmentConvert attachmentConvert){
         this.attachmentConvert = attachmentConvert;
@@ -31,8 +27,6 @@ public class AttachmentExtConvert implements AttachmentConvert{
     @Override
     public AttachmentVO convert(AttachmentEntity entity) {
         AttachmentVO vo = attachmentConvert.convert(entity);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
         return vo;
     }
 

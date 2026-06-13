@@ -43,19 +43,12 @@ public class RoleDataScopeServiceImpl implements RoleDataScopeService {
 
         if (!insertDeptIdList.isEmpty()){
             UserDetail user = SecurityUser.getUser();
-            String tenantId;
-            if(user != null){
-                tenantId = user.getTenantId();
-            } else {
-                tenantId = null;
-            }
             List<RoleDataScopeEntity> orgList = insertDeptIdList.stream().map(deptId -> {
                 RoleDataScopeEntity entity = new RoleDataScopeEntity();
                 entity.setDeptId(deptId);
                 entity.setRoleId(roleId);
                 entity.setCreateTime(LocalDateTime.now());
                 entity.setCreator(SecurityUser.getUserId());
-                entity.setTenantId(tenantId);
                 return entity;
             }).collect(Collectors.toList());
 

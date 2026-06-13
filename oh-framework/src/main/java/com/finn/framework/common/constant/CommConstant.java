@@ -13,15 +13,6 @@ import static com.finn.framework.cache.RedisKeys.PREFIX;
 public interface CommConstant {
 
     /**
-     * 租户
-     */
-    String TENANT = "tenant:";
-
-    /**
-     * 租户成员key
-     */
-    String TENANT_PREFIX = RedisKeys.PREFIX + TENANT + "member:";
-    /**
      * 默认租户角色
      */
     Long TENANT_ROLE = 1L;

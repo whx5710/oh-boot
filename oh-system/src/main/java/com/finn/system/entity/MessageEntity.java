@@ -2,8 +2,7 @@ package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.TenantEntity;
-
+import com.finn.framework.entity.BaseEntity;
 
 /**
  * 系统消息
@@ -12,7 +11,7 @@ import com.finn.framework.entity.TenantEntity;
  * @since 1.0.0 2023-10-10
  */
 @TableName("sys_message")
-public class MessageEntity extends TenantEntity {
+public class MessageEntity extends BaseEntity {
 	/**
 	* 标题
 	*/

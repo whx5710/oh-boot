@@ -15,7 +15,6 @@ import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.mobile.MobileAuthenticationToken;
 import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.enums.LoginOperationEnum;
 import com.finn.system.service.AuthService;
@@ -54,7 +53,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
 
     private final RedisCache redisCache;
-    private final TenantCache tenantCache;
 
     private final SecurityProperties securityProperties;
     private final MultiTenantProperties tenantProperties;
@@ -65,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                            AuthenticationManager authenticationManager, LoginLogService loginLogService,
                            UserService userService, RedisCache redisCache,
                            SecurityProperties securityProperties,
-                           TenantCache tenantCache, MultiTenantProperties tenantProperties) {
+                           MultiTenantProperties tenantProperties) {
         this.captchaService = captchaService;
         this.tokenCache = tokenCache;
         this.authenticationManager = authenticationManager;
@@ -73,7 +71,6 @@ public class AuthServiceImpl implements AuthService {
         this.userService = userService;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
-        this.tenantCache = tenantCache;
         this.tenantProperties = tenantProperties;
     }
 
@@ -287,11 +284,6 @@ public class AuthServiceImpl implements AuthService {
         }
         // 判断用户密钥
         checkKey(checkKey, user.getUserKey(), login);
-        // 租户判断
-        if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
-                && !tenantCache.valid(user.getTenantId())){
-            throw new ServerException(buildErrorMessage(login.getUsername(), "租户无效"));
-        }
 
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());

@@ -6,7 +6,6 @@ import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.PostConvert;
 import com.finn.system.entity.PostEntity;
 import com.finn.system.mapper.PostMapper;
@@ -31,13 +30,10 @@ import java.util.Objects;
 public class PostServiceImpl implements PostService {
     private final UserPostService userPostService;
     private final PostMapper postMapper;
-    private final TenantCache tenantCache;
 
-    public PostServiceImpl(UserPostService userPostService, PostMapper postMapper,
-                           TenantCache tenantCache) {
+    public PostServiceImpl(UserPostService userPostService, PostMapper postMapper) {
         this.userPostService = userPostService;
         this.postMapper = postMapper;
-        this.tenantCache = tenantCache;
     }
 
     @Override
@@ -45,9 +41,6 @@ public class PostServiceImpl implements PostService {
         Wrapper<PostEntity> queryWrapper = getQueryWrapper(query);
         Page<PostEntity> page = postMapper.listByWrapper(queryWrapper);
         List<PostVO> list = PostConvert.INSTANCE.convertList(page.getResult());
-        for(PostVO vo: list){
-            vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
-        }
         return new PageResult<>(list, page.getTotal());
     }
 
@@ -114,7 +107,6 @@ public class PostServiceImpl implements PostService {
             return QueryWrapper.of(PostEntity.class).eq(PostEntity::getDbStatus, 1)
                     .like(PostEntity::getPostName, query.getPostName())
                     .eq(PostEntity::getPostCode, query.getPostCode())
-                    .eq(PostEntity::getTenantId, query.getTenantId())
                     .eq(PostEntity::getStatus, query.getStatus())
                     .orderBy("sort").page(query.getPageNum(), query.getPageSize());
         }
