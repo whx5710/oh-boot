@@ -7,8 +7,6 @@ import com.finn.framework.security.wechat.WechatService;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.UserMapper;
-import com.finn.system.vo.UserVO;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +63,7 @@ public class WechatController {
      * @return 提示信息
      */
     @PostMapping("/update")
-    public Result<String> update(@RequestBody @Valid UserVO vo) {
+    public Result<String> update(@RequestBody UserEntity vo) {
         AssertUtils.isNull(vo.getId(), "用户ID");
         UserEntity user = userMapper.findById(vo.getId(), UserEntity.class);
         if(user == null || user.getId() == null){
