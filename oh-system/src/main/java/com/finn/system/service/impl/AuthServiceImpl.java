@@ -112,6 +112,9 @@ public class AuthServiceImpl implements AuthService {
         if(user == null){
             throw new ServerException("未获取到用户信息");
         }
+        if(user.getStatus() == 0){
+            throw new ServerException("用户已被禁用!");
+        }
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());
         user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
@@ -155,6 +158,9 @@ public class AuthServiceImpl implements AuthService {
         if(user == null){
             throw new ServerException("未获取到用户信息");
         }
+        if(user.getStatus() == 0){
+            throw new ServerException("用户已被禁用!");
+        }
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());
         user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
@@ -189,6 +195,9 @@ public class AuthServiceImpl implements AuthService {
             if(userDetail.getIp().equals(ip) && expire > 1){
                 // 重新查询用户信息
                 UserEntity userEntity = userService.getUser(userDetail.getId());
+                if(userEntity.getStatus() == 0){
+                    throw new ServerException("用户已被禁用!");
+                }
                 UserDetail userDetailDb = (UserDetail) userService.getUserDetails(userEntity);
                 userDetailDb.setLoginTime(LocalDateTime.now());
                 userDetailDb.setIp(ip);
@@ -277,6 +286,9 @@ public class AuthServiceImpl implements AuthService {
         UserDetail user = (UserDetail) authentication.getPrincipal();
         if(user == null){
             throw new ServerException("未获取到用户信息!");
+        }
+        if(user.getStatus() == 0){
+            throw new ServerException("用户已被禁用!");
         }
         // 判断用户密钥
         checkKey(checkKey, user.getUserKey(), login);
