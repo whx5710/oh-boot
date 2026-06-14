@@ -111,12 +111,6 @@ public class OperateLogVO implements Serializable {
     private String resultMsg;
 
     /**
-     * 租户名称
-     */
-    @ExcelProperty(value = "租户名称")
-    private String tenantName;
-
-    /**
      * 创建时间
      */
     @ExcelProperty(value = "创建时间")
@@ -248,14 +242,6 @@ public class OperateLogVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
     }
 
     public String getOperateTypeLabel() {

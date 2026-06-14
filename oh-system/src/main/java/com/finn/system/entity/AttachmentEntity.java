@@ -1,7 +1,7 @@
 package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.TenantEntity;
+import com.finn.framework.entity.BaseEntity;
 
 /**
  * 附件管理
@@ -10,7 +10,7 @@ import com.finn.framework.entity.TenantEntity;
  *
  */
 @TableName("sys_attachment")
-public class AttachmentEntity extends TenantEntity {
+public class AttachmentEntity extends BaseEntity {
     /**
      * 附件名称
      */

@@ -35,7 +35,7 @@ public class AuthenticationEvents {
             log.warn("非用户信息数据，保存登录日志失败");
             return;
         }
-        loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue(), user.getTenantId());
+        loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGIN_SUCCESS.getValue());
     }
 
     @EventListener
@@ -44,7 +44,7 @@ public class AuthenticationEvents {
         String username = (String) event.getAuthentication().getPrincipal();
 
         // 保存登录日志
-        loginLogService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue(), null);
+        loginLogService.save(username, Constant.FAIL, LoginOperationEnum.ACCOUNT_FAIL.getValue());
     }
 
 }

@@ -2,7 +2,7 @@ package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.TenantEntity;
+import com.finn.framework.entity.BaseEntity;
 import com.finn.system.enums.DataScopeEnum;
 
 /**
@@ -12,7 +12,7 @@ import com.finn.system.enums.DataScopeEnum;
  * 
  */
 @TableName("sys_role")
-public class RoleEntity extends TenantEntity {
+public class RoleEntity extends BaseEntity {
 	/**
 	 * 角色名称
 	 */
@@ -36,11 +36,6 @@ public class RoleEntity extends TenantEntity {
 	@TableField("is_system")
 	private Integer isSystem;
 
-	/**
-	 * 租户
-	 */
-	@TableField(exists = false)
-	private String tenantName;
 
 	@TableField(exists = false)
 	private String menuIds;
@@ -83,14 +78,6 @@ public class RoleEntity extends TenantEntity {
 
 	public void setIsSystem(Integer isSystem) {
 		this.isSystem = isSystem;
-	}
-
-	public String getTenantName() {
-		return tenantName;
-	}
-
-	public void setTenantName(String tenantName) {
-		this.tenantName = tenantName;
 	}
 
 	public String getMenuIds() {

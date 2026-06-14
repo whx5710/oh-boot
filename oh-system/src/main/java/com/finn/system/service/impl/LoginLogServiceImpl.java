@@ -48,7 +48,7 @@ public class LoginLogServiceImpl implements LoginLogService {
     }
 
     @Override
-    public void save(String username, Integer status, Integer operation, String tenantId) {
+    public void save(String username, Integer status, Integer operation) {
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         assert request != null;
         String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
@@ -62,7 +62,6 @@ public class LoginLogServiceImpl implements LoginLogService {
         entity.setIp(ip);
         entity.setAddress(address);
         entity.setUserAgent(userAgent);
-        entity.setTenantId(tenantId);
         loginLogMapper.insert(entity);
     }
 
@@ -114,7 +113,6 @@ public class LoginLogServiceImpl implements LoginLogService {
                 .eq(LoginLogEntity::getStatus, query.getStatus())
                 .ge(LoginLogEntity::getCreateTime, query.getStartTime())
                 .le(LoginLogEntity::getCreateTime, query.getEndTime())
-                .eq(LoginLogEntity::getTenantId, query.getTenantId())
                 .orderBy("id desc");
     }
 }

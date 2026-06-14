@@ -9,13 +9,11 @@ import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpContextUtils;
 import com.finn.framework.utils.IpUtils;
 import com.finn.framework.utils.Tools;
-import com.finn.framework.common.properties.MultiTenantProperties;
 import com.finn.framework.common.properties.SecurityProperties;
 import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.mobile.MobileAuthenticationToken;
 import com.finn.framework.security.user.RefreshTokenInfo;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.enums.LoginOperationEnum;
 import com.finn.system.service.AuthService;
@@ -54,18 +52,15 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
 
     private final RedisCache redisCache;
-    private final TenantCache tenantCache;
 
     private final SecurityProperties securityProperties;
-    private final MultiTenantProperties tenantProperties;
 
     private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(CaptchaService captchaService, TokenCache tokenCache,
                            AuthenticationManager authenticationManager, LoginLogService loginLogService,
                            UserService userService, RedisCache redisCache,
-                           SecurityProperties securityProperties,
-                           TenantCache tenantCache, MultiTenantProperties tenantProperties) {
+                           SecurityProperties securityProperties) {
         this.captchaService = captchaService;
         this.tokenCache = tokenCache;
         this.authenticationManager = authenticationManager;
@@ -73,8 +68,6 @@ public class AuthServiceImpl implements AuthService {
         this.userService = userService;
         this.redisCache = redisCache;
         this.securityProperties = securityProperties;
-        this.tenantCache = tenantCache;
-        this.tenantProperties = tenantProperties;
     }
 
     /**
@@ -89,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
         boolean flag = captchaService.validate(login.getPlatformKey(), login.getKey(), login.getCaptcha());
         if (!flag) {
             // 保存登录日志
-            loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue(), null);
+            loginLogService.save(login.getUsername(), Constant.FAIL, LoginOperationEnum.CAPTCHA_FAIL.getValue());
             throw new ServerException(buildErrorMessage(login.getUsername(), "验证码错误"));
         }
         // 验证账号生成token
@@ -118,6 +111,9 @@ public class AuthServiceImpl implements AuthService {
         UserDetail user = (UserDetail) authentication.getPrincipal();
         if(user == null){
             throw new ServerException("未获取到用户信息");
+        }
+        if(user.getStatus() == 0){
+            throw new ServerException("用户已被禁用!");
         }
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());
@@ -162,6 +158,9 @@ public class AuthServiceImpl implements AuthService {
         if(user == null){
             throw new ServerException("未获取到用户信息");
         }
+        if(user.getStatus() == 0){
+            throw new ServerException("用户已被禁用!");
+        }
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());
         user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
@@ -196,6 +195,9 @@ public class AuthServiceImpl implements AuthService {
             if(userDetail.getIp().equals(ip) && expire > 1){
                 // 重新查询用户信息
                 UserEntity userEntity = userService.getUser(userDetail.getId());
+                if(userEntity.getStatus() == 0){
+                    throw new ServerException("用户已被禁用!");
+                }
                 UserDetail userDetailDb = (UserDetail) userService.getUserDetails(userEntity);
                 userDetailDb.setLoginTime(LocalDateTime.now());
                 userDetailDb.setIp(ip);
@@ -230,7 +232,7 @@ public class AuthServiceImpl implements AuthService {
             // 删除用户信息
             tokenCache.deleteUser(user.getId(), accessToken);
             // 保存登录日志
-            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue(), user.getTenantId());
+            loginLogService.save(user.getUsername(), Constant.SUCCESS, LoginOperationEnum.LOGOUT_SUCCESS.getValue());
         }
     }
 
@@ -285,13 +287,11 @@ public class AuthServiceImpl implements AuthService {
         if(user == null){
             throw new ServerException("未获取到用户信息!");
         }
+        if(user.getStatus() == 0){
+            throw new ServerException("用户已被禁用!");
+        }
         // 判断用户密钥
         checkKey(checkKey, user.getUserKey(), login);
-        // 租户判断
-        if(tenantProperties.isEnable() && user.getTenantId() != null && !user.getTenantId().isEmpty()
-                && !tenantCache.valid(user.getTenantId())){
-            throw new ServerException(buildErrorMessage(login.getUsername(), "租户无效"));
-        }
 
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());

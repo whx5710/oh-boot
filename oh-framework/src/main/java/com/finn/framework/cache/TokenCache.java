@@ -33,9 +33,6 @@ public class TokenCache {
         // token用户信息
         String key = RedisKeys.getAccessTokenKey(accessToken);
         user.setPassword("");
-        if(user.getSuperAdmin() == 1){
-            user.setTenantId(null); // 租户ID为空，都用空字符串
-        }
         RefreshTokenInfo refreshTokenInfo = getRefreshTokenInfo(accessToken, refreshToken, user);
         // token
         redisCache.set(key, refreshTokenInfo, securityProperties.getAccessTokenExpire());

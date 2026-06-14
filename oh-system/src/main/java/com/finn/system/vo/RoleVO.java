@@ -45,16 +45,6 @@ public class RoleVO extends SuperEntity {
     private Integer dataScope;
 
     /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 租户
-     */
-    private String tenantName;
-
-    /**
      * 是否系统内置角色1是 不能修改
      */
     private Integer isSystem;
@@ -112,22 +102,6 @@ public class RoleVO extends SuperEntity {
 
     public void setDataScope(Integer dataScope) {
         this.dataScope = dataScope;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
     }
 
     public List<Long> getMenuIdList() {

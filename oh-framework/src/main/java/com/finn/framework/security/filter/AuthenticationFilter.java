@@ -1,8 +1,6 @@
 package com.finn.framework.security.filter;
 
 import com.finn.framework.utils.Tools;
-import com.finn.framework.common.properties.MultiTenantProperties;
-import com.finn.framework.tenant.TenantContextHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,11 +32,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final static Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
     private final TokenCache tokenCache;
-    private final MultiTenantProperties multiTenantProperties;
 
-    public AuthenticationFilter(TokenCache tokenCache, MultiTenantProperties multiTenantProperties){
+    public AuthenticationFilter(TokenCache tokenCache){
         this.tokenCache = tokenCache;
-        this.multiTenantProperties = multiTenantProperties;
     }
 
     @Override
@@ -62,18 +58,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
-        // 租户ID
-        if(multiTenantProperties.isEnable()){
-            try{
-                // 租户ID
-                log.debug("拦截请求租户: {} {}", user.getUsername(), user.getTenantId()==null?"":user.getTenantId());
-                TenantContextHolder.setTenant(user.getTenantId());
-                chain.doFilter(request, response);
-            }finally {
-                TenantContextHolder.clear();
-            }
-        }else{
-            chain.doFilter(request, response);
-        }
+        chain.doFilter(request, response);
     }
 }

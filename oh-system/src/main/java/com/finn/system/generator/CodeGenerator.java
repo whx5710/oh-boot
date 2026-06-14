@@ -264,7 +264,7 @@ public class CodeGenerator {
         sb.append(" *\n");
         sb.append(" */\n");
         sb.append("@TableName(\"").append(tableInfo.getTableName()).append("\")\n");
-        sb.append("public class ").append(tableInfo.getEntityName()).append(" extends TenantEntity {\n");
+        sb.append("public class ").append(tableInfo.getEntityName()).append(" extends BaseEntity {\n");
         
         // 生成字段
         for (ColumnInfo column : tableInfo.getColumns()) {

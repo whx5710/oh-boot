@@ -20,15 +20,6 @@ public class DeptQuery extends Query {
      * 父级ID
      */
     private Long parentId;
-
-    /**
-     * 租户ID
-     */
-    private String tenantId;
-    /**
-     * 租户名称
-     */
-    private String tenantName;
     /**
      * 部门ID集合
      */
@@ -50,14 +41,6 @@ public class DeptQuery extends Query {
         this.parentId = parentId;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
     public List<Long> getDeptIds() {
         return deptIds;
     }
@@ -66,11 +49,4 @@ public class DeptQuery extends Query {
         this.deptIds = deptIds;
     }
 
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
-    }
 }

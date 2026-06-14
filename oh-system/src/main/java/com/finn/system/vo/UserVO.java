@@ -125,14 +125,6 @@ public class UserVO implements Serializable {
      * 修改密码时间
      */
     private LocalDateTime pwdModifyTime;
-    /**
-     * 租户ID
-     */
-    private String tenantId;
-    /**
-     * 租户
-     */
-    private String tenantName;
 
     public Long getId() {
         return id;
@@ -268,22 +260,6 @@ public class UserVO implements Serializable {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
     }
 
     public String getNote() {

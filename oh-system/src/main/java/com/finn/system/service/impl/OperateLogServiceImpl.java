@@ -72,7 +72,6 @@ public class OperateLogServiceImpl implements OperateLogService {
                 .like(OperateLogEntity::getReqUri, query.getReqUri())
                 .ge(OperateLogEntity::getCreateTime, query.getStartTime())
                 .le(OperateLogEntity::getCreateTime, query.getEndTime())
-                .eq(OperateLogEntity::getTenantId, query.getTenantId())
                 .jointSQL("(module like concat('%',#{keyWord},'%') or name like concat('%',#{keyWord},'%') or req_uri like concat('%',#{keyWord},'%') or real_name like concat('%',#{keyWord},'%'))","keyWord",query.getKeyWord())
                 .orderBy("create_time desc");
     }

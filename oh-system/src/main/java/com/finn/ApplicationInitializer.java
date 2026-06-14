@@ -23,8 +23,6 @@
  */
 package com.finn;
 
-import com.finn.framework.cache.RedisCache;
-import com.finn.framework.common.constant.CommConstant;
 import com.finn.framework.common.properties.SysDataSourceProperties;
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
@@ -33,7 +31,6 @@ import com.finn.system.cache.ParamsCache;
 import com.finn.system.cache.UserCache;
 import com.finn.system.entity.ParamsEntity;
 import com.finn.system.entity.RoleEntity;
-import com.finn.system.entity.TenantMemberEntity;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.*;
 import com.finn.system.service.RoleService;
@@ -65,12 +62,11 @@ public class ApplicationInitializer implements ApplicationRunner {
     private final ParamsCache paramsCache;
     private final DictCache dictCache;
     private final UserCache userCache;
-    private final RedisCache redisCache;
     private final RoleService roleService;
 
     public ApplicationInitializer(ServerProperties serverProperties, DynamicDataSource dynamicDataSource,
                                   SysDataSourceProperties sysDataSourceProperties, ParamsCache paramsCache,
-                                  DictCache dictCache, UserCache userCache, RedisCache redisCache,
+                                  DictCache dictCache, UserCache userCache,
                                   RoleService roleService){
         this.serverProperties = serverProperties;
         this.dynamicDataSource = dynamicDataSource;
@@ -78,7 +74,6 @@ public class ApplicationInitializer implements ApplicationRunner {
         this.paramsCache = paramsCache;
         this.dictCache = dictCache;
         this.userCache = userCache;
-        this.redisCache = redisCache;
         this.roleService = roleService;
     }
     
@@ -143,16 +138,6 @@ public class ApplicationInitializer implements ApplicationRunner {
                 roleService.cacheRole(role);
             }
             log.debug("缓存角色信息！{}", roleList.size());
-
-            // 缓存租户信息
-            TenantMemberMapper tenantMemberMapper = sqlSession.getMapper(TenantMemberMapper.class);
-            List<TenantMemberEntity> tenantList = tenantMemberMapper.listByWrapper(QueryWrapper.of(TenantMemberEntity.class)
-                    .eq(TenantMemberEntity::getDbStatus, 1).orderBy(TenantMemberEntity::getSort));
-            for(TenantMemberEntity item : tenantList){
-                // 以json格式缓存到redis，方便直接读取
-                redisCache.set(CommConstant.TENANT_PREFIX + item.getTenantId(), item.toJson());
-            }
-            log.debug("缓存租户信息！{}", tenantList.size());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }finally {

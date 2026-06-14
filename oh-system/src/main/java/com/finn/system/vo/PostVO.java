@@ -47,15 +47,6 @@ public class PostVO implements Serializable {
     @Min(value = 0, message = "状态不正确")
     @Max(value = 1, message = "状态不正确")
     private Integer status;
-    /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 租户
-     */
-    private String tenantName;
 
     /**
      * 创建时间
@@ -110,19 +101,4 @@ public class PostVO implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
-    }
 }

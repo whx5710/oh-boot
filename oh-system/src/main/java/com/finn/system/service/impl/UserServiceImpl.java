@@ -14,7 +14,6 @@ import com.finn.framework.utils.Tools;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.convert.UserConvert;
-import com.finn.system.entity.DeptEntity;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.enums.DataScopeEnum;
 import com.finn.system.enums.SuperAdminEnum;
@@ -210,13 +209,6 @@ public class UserServiceImpl implements UserService {
                 throw new ServerException("手机号已经存在");
             }
         }
-        // 判断租户与部门是否有关联变化
-        if(userDb.getTenantId() != null && !userDb.getTenantId().isEmpty()){
-            DeptEntity deptEntity = deptService.getById(entity.getDeptId());
-            if(deptEntity.getTenantId() == null || !deptEntity.getTenantId().equals(userDb.getTenantId())){
-                throw new ServerException("不能切换到非本租户下的单位下");
-            }
-        }
         // 更新用户
         userMapper.updateById(entity);
 
@@ -341,54 +333,6 @@ public class UserServiceImpl implements UserService {
         }
         List<UserExcelVO> userExcelVOS = UserConvert.INSTANCE.convert2List(list);
         ExcelUtils.excelExport(UserExcelVO.class, "用户信息", "用户信息", userExcelVOS);
-    }
-
-    /**
-     * 解除绑定租户用户
-     * @param tenantID 租户ID
-     * @param userIdList 用户ID
-     */
-    @Override
-    public void unBindTenantUser(String tenantID, List<Long> userIdList) {
-        AssertUtils.isNull(userIdList, "用户ID");
-        AssertUtils.isNull(tenantID, "租户ID");
-        for(Long userId: userIdList){
-            UserEntity user = userMapper.getById(userId);
-            if(user == null || user.getId() == null){
-                throw new ServerException("用户不存在 [" + userId + "]");
-            }
-            if(user.getTenantId() == null || user.getTenantId().isEmpty()){
-                throw new ServerException("用户未绑定租户，不能解绑");
-            }
-            if(!tenantID.equals(user.getTenantId())){
-                throw new ServerException("租户ID不准确，不能解绑【" + user.getTenantId() + "】");
-            }
-        }
-        // 解绑用户,  TenantId = null
-        userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, null)
-                .in(UserEntity::getId, userIdList));
-    }
-
-    /**
-     * 绑定租户用户
-     * @param tenantID 租户ID
-     * @param userIdList 用户ID
-     */
-    @Override
-    public void bindTenantUser(String tenantID, List<Long> userIdList) {
-        AssertUtils.isNull(userIdList, "用户ID");
-        AssertUtils.isNull(tenantID, "租户ID");
-        for(Long userId: userIdList){
-            UserEntity user = userMapper.getById(userId);
-            if(user == null || user.getId() == null){
-                throw new ServerException("用户不存在 [" + userId + "]");
-            }
-            if(user.getTenantId() != null && !user.getTenantId().isEmpty()){
-                throw new ServerException("用户已存在其他租户中【" + user.getTenantId() + "】");
-            }
-        }
-        userMapper.updateByWrapper(UpdateWrapper.of(UserEntity.class).set(UserEntity::getTenantId, tenantID)
-                .in(UserEntity::getId, userIdList));
     }
 
     /**

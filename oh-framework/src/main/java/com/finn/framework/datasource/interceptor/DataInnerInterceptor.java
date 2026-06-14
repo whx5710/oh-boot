@@ -53,8 +53,6 @@ public class DataInnerInterceptor implements Interceptor {
     private final static String ORG_ID = "deptId";
     // 数据状态标记，0删除1有效
     private final static String DB_STATUS = "dbStatus";
-    // 租户ID
-    private final static String TENANT_ID = "tenantId";
 
     private final static String SQL_FILTER = "sqlFilter";
 
@@ -126,15 +124,6 @@ public class DataInnerInterceptor implements Interceptor {
             setFieldIfNull(entity, CREATOR, user.getId(), false);
             // 所属组织
             setFieldIfNull(entity, ORG_ID, user.getDeptId(), false);
-            // 租户ID
-            try {
-                Object object = ReflectUtil.getValue(entity, TENANT_ID);
-                if(object == null || object.equals("")){
-                    ReflectUtil.setValue(entity, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
-                }
-            }catch (NoSuchFieldException e){
-                log.debug("无{}属性！", TENANT_ID);
-            }
         }
         // 创建时间
         setFieldIfNull(entity, CREATE_TIME, date, false);
@@ -157,15 +146,6 @@ public class DataInnerInterceptor implements Interceptor {
         if (user != null && user.getId() != null) {
             // 更新人ID
             setFieldIfNull(params, UPDATER, user.getId(), false);
-            // 租户ID
-            try {
-                Object object = ReflectUtil.getValue(params, TENANT_ID);
-                if(object == null || object.equals("")){
-                    ReflectUtil.setValue(params, TENANT_ID, user.getTenantId(), true); // 因为有空字符的情况，所以要强制覆盖
-                }
-            }catch (NoSuchFieldException e){
-                log.debug("无{}属性！", TENANT_ID);
-            }
         }
         // 更新时间
         setFieldIfNull(params, UPDATE_TIME, date, false);

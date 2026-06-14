@@ -61,12 +61,6 @@ public class ErrorLogEntity extends IDEntity {
     private LocalDateTime createTime;
 
     /**
-     * 租户ID
-     */
-    @TableField("tenant_id")
-    private String tenantId;
-
-    /**
      * 链路跟踪ID
      */
     @TableField("trace_id")
@@ -110,14 +104,6 @@ public class ErrorLogEntity extends IDEntity {
 
     public void setTraceId(String traceId) {
         this.traceId = traceId;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
     public LocalDateTime getCreateTime() {

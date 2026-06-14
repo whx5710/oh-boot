@@ -3,7 +3,6 @@ package com.finn.system.convert;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.DictCache;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.vo.DictDataSingleVO;
 import com.finn.system.entity.OperateLogEntity;
 import com.finn.system.vo.OperateLogVO;
@@ -18,7 +17,6 @@ import java.util.List;
  */
 public class OperateExtLogConvert implements OperateLogConvert {
 
-    TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
 
     DictCache dictCache = ServiceFactory.getBean("dictCache", DictCache.class);
 
@@ -41,9 +39,6 @@ public class OperateExtLogConvert implements OperateLogConvert {
     @Override
     public OperateLogVO convert(OperateLogEntity entity) {
         OperateLogVO vo = operateLogConvert.convert(entity);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
-
         // 操作操作类型
         if(entity.getOperateType() != null){
             DictDataSingleVO dictDataSingleVO = dictCache.get("log_operate_type", String.valueOf(entity.getOperateType()));

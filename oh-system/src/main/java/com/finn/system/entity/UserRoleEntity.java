@@ -25,9 +25,6 @@ public class UserRoleEntity extends BaseEntity {
 	@TableField("user_id")
 	private Long userId;
 
-	@TableField(exists = false)
-	private String tenantId;
-
 	public Long getRoleId() {
 		return roleId;
 	}
@@ -44,11 +41,4 @@ public class UserRoleEntity extends BaseEntity {
 		this.userId = userId;
 	}
 
-	public String getTenantId() {
-		return tenantId;
-	}
-
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
 }

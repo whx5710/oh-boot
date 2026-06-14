@@ -80,19 +80,7 @@ public interface UserService {
      * 导出用户信息表格
      */
     void export(UserQuery query);
-    /**
-     * 解除绑定租户用户
-     * @param tenantID 租户ID
-     * @param userIdList 用户ID
-     */
-    void unBindTenantUser(String tenantID, List<Long> userIdList);
 
-    /**
-     * 绑定租户用户
-     * @param tenantID 租户ID
-     * @param userIdList 用户ID
-     */
-    void bindTenantUser(String tenantID, List<Long> userIdList);
     /**
      * 重置密码
      * @param userId 用户ID

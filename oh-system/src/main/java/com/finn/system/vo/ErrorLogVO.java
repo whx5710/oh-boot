@@ -59,17 +59,6 @@ public class ErrorLogVO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 租户名称
-     */
-    @ExcelProperty(value = "租户名称")
-    private String tenantName;
-
-    /**
      * 备注
      */
     private String note;
@@ -137,22 +126,6 @@ public class ErrorLogVO implements Serializable {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
     }
 
     public String getNote() {

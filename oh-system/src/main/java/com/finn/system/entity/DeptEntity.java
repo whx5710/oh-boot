@@ -2,7 +2,7 @@ package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.TenantEntity;
+import com.finn.framework.entity.BaseEntity;
 
 /**
  * 部门管理
@@ -11,7 +11,7 @@ import com.finn.framework.entity.TenantEntity;
  *
  */
 @TableName("sys_dept")
-public class DeptEntity extends TenantEntity {
+public class DeptEntity extends BaseEntity {
     /**
      * 上级ID
      */
@@ -30,12 +30,6 @@ public class DeptEntity extends TenantEntity {
      */
     @TableField(exists = false)
     private String parentName;
-
-    /**
-     * 租户名称
-     */
-    @TableField(exists = false)
-    private String tenantName;
 
     // 备注
     private String note;
@@ -80,11 +74,4 @@ public class DeptEntity extends TenantEntity {
         this.note = note;
     }
 
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
-    }
 }

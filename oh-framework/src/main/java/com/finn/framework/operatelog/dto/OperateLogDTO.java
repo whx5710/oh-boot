@@ -78,8 +78,6 @@ public class OperateLogDTO {
      */
     private String resultMsg;
 
-    private String tenantId;
-
     public Long getUserId() {
         return userId;
     }
@@ -192,11 +190,4 @@ public class OperateLogDTO {
         this.resultMsg = resultMsg;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

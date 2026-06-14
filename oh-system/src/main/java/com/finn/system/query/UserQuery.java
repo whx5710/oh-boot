@@ -46,28 +46,9 @@ public class UserQuery extends Query {
     private String keyWord;
 
     /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 排除租户ID
-     */
-    private String unTenantId;
-
-    /**
      * 用户名集合
      */
     private List<String> userNames;
-
-    /**
-     * 租户标识，0所有1租户
-     */
-    private Integer tenantFlag;
-    /**
-     * 是否租户管理员，租户默认角色
-     */
-    private Boolean tenantRole;
 
     private Long roleId;
 
@@ -127,44 +108,12 @@ public class UserQuery extends Query {
         this.userNames = userNames;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getUnTenantId() {
-        return unTenantId;
-    }
-
-    public void setUnTenantId(String unTenantId) {
-        this.unTenantId = unTenantId;
-    }
-
-    public Integer getTenantFlag() {
-        return tenantFlag;
-    }
-
-    public void setTenantFlag(Integer tenantFlag) {
-        this.tenantFlag = tenantFlag;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Boolean getTenantRole() {
-        return tenantRole;
-    }
-
-    public void setTenantRole(Boolean tenantRole) {
-        this.tenantRole = tenantRole;
     }
 
     public Long getRoleId() {

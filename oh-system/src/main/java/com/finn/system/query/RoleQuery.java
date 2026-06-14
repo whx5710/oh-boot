@@ -17,16 +17,6 @@ public class RoleQuery extends Query {
     private String name;
 
     /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
-     * 租户
-     */
-    private String tenantName;
-
-    /**
      * 是否系统内置1是 0 否
      */
     private Integer isSystem;
@@ -52,14 +42,6 @@ public class RoleQuery extends Query {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
     public Integer getIsSystem() {
@@ -94,11 +76,4 @@ public class RoleQuery extends Query {
         this.remark = remark;
     }
 
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public void setTenantName(String tenantName) {
-        this.tenantName = tenantName;
-    }
 }

@@ -97,12 +97,6 @@ public class OperateLogEntity {
     private String resultMsg;
 
     /**
-     * 租户ID
-     */
-    @TableField("tenant_id")
-    private String tenantId;
-
-    /**
      * 创建时间
      */
     @TableField("create_time")
@@ -236,11 +230,4 @@ public class OperateLogEntity {
         this.createTime = createTime;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

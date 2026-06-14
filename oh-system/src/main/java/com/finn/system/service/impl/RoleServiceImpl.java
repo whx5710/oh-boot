@@ -7,7 +7,6 @@ import com.finn.framework.exception.ServerException;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.service.impl.BaseServiceImpl;
 import com.finn.framework.utils.AssertUtils;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.convert.RoleConvert;
 import com.finn.system.entity.RoleEntity;
 import com.finn.system.enums.DataScopeEnum;
@@ -40,17 +39,15 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	private final RoleDataScopeService roleDataScopeService;
 	private final UserRoleService userRoleService;
 	private final RoleMapper roleMapper;
-	private final TenantCache tenantCache;
 	private final RedisCache redisCache;
 
 	public RoleServiceImpl(RoleMenuService roleMenuService, RoleDataScopeService roleDataScopeService,
-						   UserRoleService userRoleService, RoleMapper roleMapper, TenantCache tenantCache,
+						   UserRoleService userRoleService, RoleMapper roleMapper,
 						   RedisCache redisCache) {
 		this.roleMenuService = roleMenuService;
 		this.roleDataScopeService = roleDataScopeService;
 		this.userRoleService = userRoleService;
 		this.roleMapper = roleMapper;
-		this.tenantCache = tenantCache;
 		this.redisCache = redisCache;
 	}
 
@@ -70,8 +67,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 				vo.setRemark(item.getRemark());
 				vo.setDataScope(item.getDataScope());
 				vo.setIsSystem(item.getIsSystem());
-				vo.setTenantId(item.getTenantId());
-				vo.setTenantName(item.getTenantName());
 				vo.setCreateTime(item.getCreateTime());
 				if(item.getMenuIds() != null){
 					String[] m = item.getMenuIds().split(",");
@@ -90,11 +85,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	@Override
 	public List<RoleVO> getList(RoleQuery query) {
 		List<RoleEntity> entityList = roleMapper.getList(query);
-		List<RoleVO> voList = RoleConvert.INSTANCE.convertList(entityList);
-		for(RoleVO vo: voList){
-			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
-		}
-		return voList;
+        return RoleConvert.INSTANCE.convertList(entityList);
 	}
 
 	@Override
@@ -111,9 +102,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 		RoleEntity entity = RoleConvert.INSTANCE.convert(vo);
 		if(entity.getIsSystem() == null){
 			entity.setIsSystem(0);
-		}
-		if(entity.getIsSystem() == 1){
-			entity.setTenantId(null);
 		}
 		// 保存角色
 		entity.setDataScope(DataScopeEnum.SELF.getValue());
@@ -194,9 +182,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 	@Override
 	public void cacheRole(RoleEntity entity){
 		RoleVO vo = RoleConvert.INSTANCE.convert(entity);
-		if(vo.getTenantId() != null && !vo.getTenantId().isEmpty()){
-			vo.setTenantName(tenantCache.getNameByTenantId(vo.getTenantId()));
-		}
 		redisCache.set(CommConstant.ROLE__PREFIX + vo.getCode(), vo.toJson());
 	}
 

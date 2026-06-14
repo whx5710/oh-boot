@@ -2,7 +2,6 @@ package com.finn.system.convert;
 
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.DictCache;
-import com.finn.system.cache.TenantCache;
 import com.finn.system.entity.LoginLogEntity;
 import com.finn.system.vo.DictDataSingleVO;
 import com.finn.system.vo.LoginLogVO;
@@ -19,8 +18,6 @@ public class LogLoginExtConvert implements LoginLogConvert {
 
     private final LoginLogConvert loginLogConvert;
 
-    TenantCache tenantCache = ServiceFactory.getBean("tenantCache", TenantCache.class);
-
     DictCache dictCache = ServiceFactory.getBean("dictCache", DictCache.class);
 
     public LogLoginExtConvert(LoginLogConvert loginLogConvert){
@@ -35,8 +32,6 @@ public class LogLoginExtConvert implements LoginLogConvert {
     @Override
     public LoginLogVO convert(LoginLogEntity entity) {
         LoginLogVO vo = loginLogConvert.convert(entity);
-        // 租户名称获取
-        vo.setTenantName(tenantCache.getNameByTenantId(entity.getTenantId()));
 
         // 登录状态 0：失败   1：成功
         if(entity.getStatus() == 1){

@@ -89,32 +89,6 @@ public class UserController {
     }
 
     /**
-     * 解绑租户的管理用户
-     * @param tenantId 租户ID
-     * @param userIdList 用户列表
-     * @return 提示信息
-     */
-    @PostMapping("/unBindTenantUser/{tenantId}")
-    @PreAuthorize("hasAuthority('sys:user:unBindTenantUser')")
-    public Result<String> unBindTenantUser(@PathVariable("tenantId") String tenantId, @RequestBody List<Long> userIdList) {
-        userService.unBindTenantUser(tenantId, userIdList);
-        return Result.ok("操作成功");
-    }
-
-    /**
-     * 绑定租户的管理用户
-     * @param tenantId 租户ID
-     * @param userIdList 用户列表
-     * @return 提示信息
-     */
-    @PostMapping("/bindTenantUser/{tenantId}")
-    @PreAuthorize("hasAuthority('sys:user:bindTenantUser')")
-    public Result<String> bindTenantUser(@PathVariable("tenantId") String tenantId, @RequestBody List<Long> userIdList) {
-        userService.bindTenantUser(tenantId, userIdList);
-        return Result.ok("操作成功");
-    }
-
-    /**
      * 根据用户ID获取用户信息
      * @param id 用户ID
      * @return 用户信息

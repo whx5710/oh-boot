@@ -49,7 +49,6 @@ public class UserRoleServiceImpl implements UserRoleService {
                 entity.setUserId(userId);
                 entity.setRoleId(roleId);
                 entity.setCreator(SecurityUser.getUserId());
-                entity.setTenantId(user==null?null:user.getTenantId());
                 entity.setCreateTime(LocalDateTime.now());
                 return entity;
             }).collect(Collectors.toList());
@@ -112,11 +111,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<Long> getRoleIdList(Long userId) {
-        if(SecurityUser.isTenant()){
-            return userRoleMapper.getTenantRoleIds(userId);
-        }else{
-            return userRoleMapper.getRoleIdList(userId);
-        }
+        return userRoleMapper.getRoleIdList(userId);
     }
 
     @Override

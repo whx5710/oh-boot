@@ -48,17 +48,4 @@ public class SecurityUser {
         return user.getId();
     }
 
-    /**
-     * 判断是否为租户
-     * @return b
-     */
-    public static Boolean isTenant(){
-        UserDetail user = getUser();
-        if(user == null){
-            log.warn("未获取到用户信息，是否租户默认true");
-            return true;
-        }
-        return user.getTenantId() != null && !user.getTenantId().isEmpty();
-    }
-
 }
