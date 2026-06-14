@@ -1,5 +1,6 @@
 package com.finn.urban.entity;
 
+import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
@@ -23,6 +24,7 @@ public class Event extends BaseEntity {
     /**
      * 上报时间
      */
+    @TableField("report_time")
     private LocalDateTime reportTime;
 
     /**
@@ -58,31 +60,37 @@ public class Event extends BaseEntity {
     /**
      * 对应第三方用户ID
      */
+    @TableField("open_id")
     private String openId;
 
     /**
      * 受理状态，1待处理2处理中3已解决4已驳回
      */
+    @TableField("accept_status")
     private String acceptStatus;
 
     /**
      * 事件类别
      */
+    @TableField("evt_type")
     private String evtType;
 
     /**
      * 完成时间
      */
+    @TableField("completion_time")
     private LocalDateTime completionTime;
 
     /**
      * 驳回意见
      */
+    @TableField("rejection_opinion")
     private String rejectionOpinion;
 
     /**
      * 处理意见
      */
+    @TableField("handling_opinion")
     private String handlingOpinion;
 
     /**

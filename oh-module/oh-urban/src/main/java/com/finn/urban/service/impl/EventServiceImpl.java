@@ -11,6 +11,7 @@ import com.finn.urban.service.EventService;
 import com.finn.urban.vo.EventVO;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -40,6 +41,10 @@ public class EventServiceImpl implements EventService {
     public Long save(EventVO vo) {
         Event entity = EventConvert.INSTANCE.convert(vo);
         entity.setCode(redisCache.getDayIncrementCode("","urban:event:code", 5));
+        if(entity.getReportTime() == null){
+            entity.setReportTime(LocalDateTime.now());
+        }
+        entity.setAcceptStatus("1");
         eventMapper.insert(entity);
         return entity.getId();
     }

@@ -89,7 +89,7 @@ spring:
           validation-timeout: 5000 # 验证超时时间，默认5秒
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
-          hikari-log: true # 是否开启hikari监控日志打印，默认false
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
           slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
       masterDb: # 主数据源
         driver-class-name: org.postgresql.Driver
@@ -108,7 +108,7 @@ spring:
           validation-timeout: 5000 # 验证超时时间，默认5秒
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
-          hikari-log: true # 是否开启hikari监控日志打印，默认false
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
           slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
   kafka:
     bootstrap-servers: 127.0.0.1:9092

@@ -8,7 +8,6 @@ import com.finn.urban.query.EventQuery;
 import com.finn.urban.service.EventService;
 import com.finn.urban.vo.EventVO;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +34,6 @@ public class EventController {
      * @return 列表
      */
     @GetMapping("/page")
-    @PreAuthorize("hasAuthority('event:page')")
     public Result<PageResult<EventVO>> page(@Valid EventQuery query) {
         PageResult<EventVO> page = eventService.page(query);
 
@@ -49,7 +47,6 @@ public class EventController {
      */
     @PostMapping("/save")
     @Log(module = "事件表", name = "保存", type = OperateTypeEnum.INSERT)
-    @PreAuthorize("hasAuthority('event:save')")
     public Result<String> save(@RequestBody EventVO vo) {
         Long id = eventService.save(vo);
         return Result.ok(String.valueOf(id));
@@ -62,7 +59,6 @@ public class EventController {
      */
     @PostMapping("/update")
     @Log(module = "事件表", name = "修改", type = OperateTypeEnum.UPDATE)
-    @PreAuthorize("hasAuthority('event:update')")
     public Result<String> update(@RequestBody EventVO vo) {
         eventService.update(vo);
         return Result.ok();
@@ -75,7 +71,6 @@ public class EventController {
      */
     @PostMapping("/del")
     @Log(module = "事件表", name = "删除", type = OperateTypeEnum.DELETE)
-    @PreAuthorize("hasAuthority('event:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         eventService.delete(idList);
 
