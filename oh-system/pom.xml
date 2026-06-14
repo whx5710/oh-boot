@@ -32,12 +32,7 @@
         <!-- 业务模块 -->
         <dependency>
             <groupId>com.finn.module</groupId>
-            <artifactId>oh-module-app</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.finn.module</groupId>
-            <artifactId>oh-module-flow</artifactId>
+            <artifactId>oh-urban</artifactId>
             <version>1.0.0</version>
         </dependency>
 

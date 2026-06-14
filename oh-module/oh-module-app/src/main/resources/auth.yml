@@ -1,4 +1,0 @@
-auth:
-  ignore-urls:
-    - /openApi/submit
-    - /app/errLogPage
