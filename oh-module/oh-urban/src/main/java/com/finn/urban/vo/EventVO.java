@@ -72,6 +72,10 @@ public class EventVO implements Serializable {
     private String acceptStatus;
 
     /**
+     * 事件类别
+     */
+    private String evtType;
+    /**
      * 完成时间
      */
     private LocalDateTime completionTime;
@@ -264,4 +268,11 @@ public class EventVO implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public String getEvtType() {
+        return evtType;
+    }
+
+    public void setEvtType(String evtType) {
+        this.evtType = evtType;
+    }
 }

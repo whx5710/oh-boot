@@ -34,7 +34,7 @@ public class EventController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('event:page')")
     public Result<PageResult<EventVO>> page(@Valid EventQuery query) {
         PageResult<EventVO> page = eventService.page(query);
@@ -47,7 +47,7 @@ public class EventController {
      * @param vo 事件表信息
      * @return 提示信息
      */
-    @PostMapping
+    @PostMapping("/save")
     @Log(module = "事件表", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('event:save')")
     public Result<String> save(@RequestBody EventVO vo) {
@@ -60,7 +60,7 @@ public class EventController {
      * @param vo 事件表信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "事件表", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('event:update')")
     public Result<String> update(@RequestBody EventVO vo) {

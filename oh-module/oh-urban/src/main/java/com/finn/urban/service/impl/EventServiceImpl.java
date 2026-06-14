@@ -1,5 +1,7 @@
 package com.finn.urban.service.impl;
 
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.entity.PageResult;
 import com.finn.urban.convert.EventConvert;
 import com.finn.urban.entity.Event;
@@ -22,8 +24,10 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     private final EventMapper eventMapper;
-    public EventServiceImpl(EventMapper eventMapper) {
+    private final RedisCache redisCache;
+    public EventServiceImpl(EventMapper eventMapper, RedisCache redisCache) {
         this.eventMapper = eventMapper;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -35,7 +39,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Long save(EventVO vo) {
         Event entity = EventConvert.INSTANCE.convert(vo);
-
+        entity.setCode(redisCache.getDayIncrementCode("","urban:event:code", 5));
         eventMapper.insert(entity);
         return entity.getId();
     }
@@ -48,12 +52,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void delete(List<Long> idList) {
-        idList.forEach(id -> {
-            Event param = new Event();
-            param.setId(id);
-            param.setDbStatus(0);
-            eventMapper.updateById(param);
-        });
+        UpdateWrapper<Event> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set(Event::getDbStatus, 0).in(Event::getId, idList);
+        eventMapper.updateByWrapper(updateWrapper);
     }
 
 }
