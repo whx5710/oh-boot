@@ -434,11 +434,10 @@ public class RedisCache {
     }
 
     /**
-     * 获取redis原子自增数据
-     *
-     * @param key
-     * @param liveTime
-     * @return
+     * 获取redis原子自增数据,每天会重新开始
+     * @param key redis key
+     * @param liveTime 当天失效还剩余多少秒
+     * @return number
      */
     public Long getIncrement(String key, long liveTime) {
         RedisAtomicLong counter = null;
@@ -448,6 +447,32 @@ public class RedisCache {
         }
         counter = new RedisAtomicLong(key, redisConnectionFactory);
         long increment =  counter.incrementAndGet(); // 加1后的值
+        //初始设置过期时间
+        boolean result = (increment == 1) && liveTime > 0;
+        if (result) {
+            counter.set(1);
+            counter.expire(liveTime, TimeUnit.SECONDS);
+            // increment = 1L;
+        }
+        return increment;
+    }
+
+
+    /**
+     * 获取redis原子自增数据，每天会重新开始
+     * @param key redis key
+     * @return number
+     */
+    public Long getIncrement(String key) {
+        RedisAtomicLong counter = null;
+        RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
+        if(redisConnectionFactory == null){
+            return -1L;
+        }
+        counter = new RedisAtomicLong(key, redisConnectionFactory);
+        long increment =  counter.incrementAndGet(); // 加1后的值
+        //当天失效
+        long liveTime = (getAppointDateTimeMills() - System.currentTimeMillis()) / 1000;
         //初始设置过期时间
         boolean result = (increment == 1) && liveTime > 0;
         if (result) {
@@ -469,6 +494,7 @@ public class RedisCache {
         ca.set(Calendar.HOUR_OF_DAY, 23);
         ca.set(Calendar.MINUTE, 59);
         ca.set(Calendar.SECOND, 59);
+        ca.set(Calendar.MILLISECOND, 999);
         return ca.getTimeInMillis();
     }
 
@@ -518,7 +544,7 @@ public class RedisCache {
                 return true;
             }
         } catch (Exception e) {
-            log.error("解锁失败！{}", e.getMessage());
+            log.error("解锁失败 {}", e.getMessage());
             return false;
         }
         return false;
