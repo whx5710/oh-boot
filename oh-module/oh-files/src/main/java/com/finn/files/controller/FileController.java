@@ -14,6 +14,19 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 文件上传
  *
+ * 参考命令
+ * # 1. 启动 Master
+ * weed master -mdir=/data/master
+ *
+ * # 2. 启动 Volume
+ * weed volume -dir=/data/volume -max=7 -mserver=localhost:9333
+ *
+ * # 3. 启动 Filer（可选，S3 网关不依赖 filer）
+ * weed filer -master=localhost:9333
+ *
+ * # 4. 启动 S3 网关（关键）
+ * weed s3 -port=8333
+ *
  * @author 王小费 whx5710@qq.com
  *
  */

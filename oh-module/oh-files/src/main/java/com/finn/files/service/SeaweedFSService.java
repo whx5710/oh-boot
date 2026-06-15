@@ -14,6 +14,17 @@ import java.io.InputStream;
 
 /**
  * SeaweedFS 服务
+ * # 1. 启动 Master
+ * weed master -mdir=/data/master
+ *
+ * # 2. 启动 Volume
+ * weed volume -dir=/data/volume -max=7 -mserver=localhost:9333
+ *
+ * # 3. 启动 Filer（可选，S3 网关不依赖 filer）
+ * weed filer -master=localhost:9333
+ *
+ * # 4. 启动 S3 网关（关键）
+ * weed s3 -port=8333
  */
 @Service
 public class SeaweedFSService {
@@ -39,8 +50,10 @@ public class SeaweedFSService {
                 fileName = "no_file_name";
             }
             String suffix = fileName.substring(file.getOriginalFilename().lastIndexOf("."));
+            if(whitelistVerification(suffix)){
+                throw new ServerException("文件不合法");
+            }
             String key = Tools.generator() + suffix;
-            System.out.println(key);
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(properties.getBucket())
                     .key(key)
@@ -63,6 +76,9 @@ public class SeaweedFSService {
             originalFilename = "no_file_name";
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        if(whitelistVerification(suffix)){
+            throw new ServerException("文件不合法");
+        }
         String key = Tools.generator() + suffix;
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(properties.getBucket())
@@ -122,5 +138,23 @@ public class SeaweedFSService {
         } catch (NoSuchKeyException e) {
             return false;
         }
+    }
+
+    /**
+     * 文件合法性验证,非法返回true
+     * @return bool 返回false表示满足上传条件
+     */
+    private boolean whitelistVerification(String suffix){
+        if(properties.getFileSuffix() == null || properties.getFileSuffix().isEmpty()){
+            return false;
+        }
+        boolean flag = true;
+        for(String item : properties.getFileSuffix()){
+            if(suffix.equalsIgnoreCase(item)){
+                flag = false;
+                break;
+            }
+        }
+        return flag;
     }
 }

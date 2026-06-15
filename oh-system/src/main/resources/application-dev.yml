@@ -162,7 +162,10 @@ seaweedfs:
     bucket: default-bucket                  # 默认存储桶名
     region: us-east-1                       # SeaweedFS 不校验 region，任意填
     path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
-
+    # 允许上传的文件扩展名，如 .jpg
+    file-suffix:
+      - .jpg
+      - .png
 # 日志信息
 logging:
   # 字符集设置
