@@ -43,18 +43,18 @@
         </dependency>
 
         <!-- PostgreSQL驱动：由引入项目决定是否使用 -->
-        <!--<dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-        </dependency>-->
+        </dependency>
 
         <!-- 数据库驱动：根据实际使用的数据库选择 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
 
         <!-- WebSocket -->
         <dependency>
