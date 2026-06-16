@@ -57,6 +57,7 @@ public class EventServiceImpl implements EventService {
             for(MultiMedia item: vo.getMediaList()){
                 if(item.getFileId() != null){
                     item.setStatusType("1");
+                    item.setEvtId(entity.getId());
                     if(item.getFileName() == null){
                         item.setFileName(item.getFileId());
                     }
