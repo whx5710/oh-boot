@@ -19,11 +19,10 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedUploadPartReq
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * SeaweedFS 服务
@@ -79,7 +78,6 @@ public class SeaweedFSService {
      * @return 文件唯一标识 key
      */
     public String uploadFile(MultipartFile file) {
-        Path tempFile = null;
         try {
             String fileName = file.getOriginalFilename();
             if (fileName == null) {
@@ -97,24 +95,26 @@ public class SeaweedFSService {
                     .contentType(file.getContentType())
                     .build();
 
-            // 小文件直接读内存，避免磁盘 I/O；大文件使用临时文件
+            // 小文件直接读内存；大文件使用 ContentStreamProvider，
+            // 利用 Spring 已创建的临时文件流，避免二次磁盘写
             if (file.getSize() <= MEMORY_UPLOAD_THRESHOLD) {
                 s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
             } else {
-                tempFile = Files.createTempFile("upload-", suffix);
-                file.transferTo(tempFile);
-                s3Client.putObject(putObjectRequest, RequestBody.fromFile(tempFile));
+                s3Client.putObject(putObjectRequest, RequestBody.fromContentProvider(
+                        () -> {
+                            try {
+                                return file.getInputStream();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        },
+                        file.getSize(),
+                        Objects.requireNonNull(file.getContentType())
+                ));
             }
             return key;
         } catch (IOException e) {
             throw new ServerException("文件上传失败", e);
-        } finally {
-            if (tempFile != null) {
-                try {
-                    Files.deleteIfExists(tempFile);
-                } catch (IOException ignored) {
-                }
-            }
         }
     }
 
