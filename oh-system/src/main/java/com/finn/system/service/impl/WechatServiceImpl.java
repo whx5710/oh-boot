@@ -13,6 +13,7 @@ import com.finn.system.vo.UserVO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,12 +70,15 @@ public class WechatServiceImpl implements WechatService {
         Map<String, String> req = new HashMap<>();
         req.put("code", code);
 
-        String jsonStr = HttpUtil.post(url, req);
+        String paramJson = JsonUtils.toJsonString(req);
+        HashMap<String, String> headers = new HashMap<>();
+        // 微信接口必须有Content-Length
+        headers.put("Content-Length", paramJson.getBytes(StandardCharsets.UTF_8).length + "");
+        String jsonStr = HttpUtil.post(url, req, headers);
         System.out.println("请求返回：" + jsonStr);
-
         HashDto result = JsonUtils.parseObject(jsonStr, HashDto.class);
         if (result.getInt("errcode") == 0) {
-            HashDto phoneInfo = JsonUtils.parseObject(result.getStr("phone_info"), HashDto.class);
+            HashDto phoneInfo = result.getDto("phone_info");
             return  phoneInfo.getStr("phoneNumber"); // 明文手机号
         }
         return "";
