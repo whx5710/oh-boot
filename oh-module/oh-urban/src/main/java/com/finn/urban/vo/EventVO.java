@@ -1,9 +1,12 @@
 package com.finn.urban.vo;
 
+import com.finn.urban.entity.MultiMedia;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 事件表
@@ -96,25 +99,9 @@ public class EventVO implements Serializable {
     private String remark;
 
     /**
-     * 创建者
+     * 附件信息
      */
-    private Long creator;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新者
-     */
-    private Long updater;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
+    private List<MultiMedia> mediaList;
 
     public Long getId() {
         return id;
@@ -236,43 +223,19 @@ public class EventVO implements Serializable {
         this.remark = remark;
     }
 
-    public Long getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Long creator) {
-        this.creator = creator;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public Long getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(Long updater) {
-        this.updater = updater;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public String getEvtType() {
         return evtType;
     }
 
     public void setEvtType(String evtType) {
         this.evtType = evtType;
+    }
+
+    public List<MultiMedia> getMediaList() {
+        return mediaList;
+    }
+
+    public void setMediaList(List<MultiMedia> mediaList) {
+        this.mediaList = mediaList;
     }
 }
