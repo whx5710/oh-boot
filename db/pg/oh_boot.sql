@@ -422,6 +422,7 @@ CREATE TABLE "oh_boot"."ur_event" (
   "code" varchar(20) COLLATE "pg_catalog"."default",
   "report_time" timestamp(6) NOT NULL,
   "description" varchar(1000) COLLATE "pg_catalog"."default" NOT NULL,
+  "evt_type" varchar(50) COLLATE "pg_catalog"."default",
   "location" varchar(300) COLLATE "pg_catalog"."default",
   "longitude" numeric(12,8),
   "latitude" numeric(12,8),
@@ -443,6 +444,7 @@ CREATE TABLE "oh_boot"."ur_event" (
 COMMENT ON COLUMN "oh_boot"."ur_event"."code" IS '事件编码';
 COMMENT ON COLUMN "oh_boot"."ur_event"."report_time" IS '上报时间';
 COMMENT ON COLUMN "oh_boot"."ur_event"."description" IS '问题描述';
+COMMENT ON COLUMN "oh_boot"."ur_event"."evt_type" IS '案件类别';
 COMMENT ON COLUMN "oh_boot"."ur_event"."location" IS '事发位置';
 COMMENT ON COLUMN "oh_boot"."ur_event"."longitude" IS '经度';
 COMMENT ON COLUMN "oh_boot"."ur_event"."latitude" IS '纬度';
