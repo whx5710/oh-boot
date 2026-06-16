@@ -156,9 +156,9 @@ spring:
 # 文件服务 s3
 seaweedfs:
   s3:
-    endpoint: http://localhost:8333          # SeaweedFS S3 网关地址
-    access-key: any_access_key              # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
-    secret-key: any_secret_key              # 同上
+    endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
+    access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
+    secret-key: admin123                    # 同上
     bucket: default-bucket                  # 默认存储桶名
     region: us-east-1                       # SeaweedFS 不校验 region，任意填
     path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style

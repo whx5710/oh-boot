@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 
 /**
  * 文件上传
@@ -78,9 +81,30 @@ public class FileController {
     }
 
     /**
+     * 预览文件（浏览器直接显示图片、PDF）
+     */
+    @GetMapping("/preview/{key}")
+    public ResponseEntity<byte[]> preview(@PathVariable String key) {
+        byte[] data = seaweedFSService.downloadFile(key);
+
+        // 根据文件扩展名获取 Content-Type
+        MediaType contentType = getMediaType(key);
+
+        // inline 表示浏览器内直接显示，不下载
+        String encodedFilename = URLEncoder.encode(key, StandardCharsets.UTF_8)
+                .replace("+", "%20");
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + encodedFilename + "\"")
+                .contentType(contentType)
+                .body(data);
+    }
+
+    /**
      * 删除文件
      */
-    @DeleteMapping("/delete/{key}")
+    @GetMapping("/delete/{key}")
     public Result<String> delete(@PathVariable String key) {
         seaweedFSService.deleteFile(key);
         return Result.ok("删除成功");
@@ -92,5 +116,40 @@ public class FileController {
     @GetMapping("/exists/{key}")
     public Result<Boolean> exists(@PathVariable String key) {
         return Result.ok(seaweedFSService.exists(key));
+    }
+
+
+    /**
+     * 根据文件名获取 MediaType
+     */
+    private MediaType getMediaType(String filename) {
+        String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+
+        return switch (ext) {
+            // 图片
+            case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
+            case "png" -> MediaType.IMAGE_PNG;
+            case "gif" -> MediaType.IMAGE_GIF;
+            case "webp" -> MediaType.valueOf("image/webp");
+            case "svg" -> MediaType.valueOf("image/svg+xml");
+            case "bmp" -> MediaType.valueOf("image/bmp");
+            // PDF
+            case "pdf" -> MediaType.APPLICATION_PDF;
+            // 文本
+            case "txt" -> MediaType.TEXT_PLAIN;
+            case "html", "htm" -> MediaType.TEXT_HTML;
+            case "css" -> MediaType.valueOf("text/css");
+            case "js" -> MediaType.valueOf("application/javascript");
+            case "json" -> MediaType.APPLICATION_JSON;
+            case "xml" -> MediaType.APPLICATION_XML;
+            // 视频
+            case "mp4" -> MediaType.valueOf("video/mp4");
+            case "webm" -> MediaType.valueOf("video/webm");
+            // 音频
+            case "mp3" -> MediaType.valueOf("audio/mpeg");
+            case "wav" -> MediaType.valueOf("audio/wav");
+            // 默认：二进制流（浏览器会提示下载）
+            default -> MediaType.APPLICATION_OCTET_STREAM;
+        };
     }
 }

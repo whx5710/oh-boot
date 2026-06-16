@@ -14,17 +14,25 @@ import java.io.InputStream;
 
 /**
  * SeaweedFS 服务
- * # 1. 启动 Master
- * weed master -mdir=/data/master
- *
- * # 2. 启动 Volume
- * weed volume -dir=/data/volume -max=7 -mserver=localhost:9333
- *
- * # 3. 启动 Filer（可选，S3 网关不依赖 filer）
- * weed filer -master=localhost:9333
- *
- * # 4. 启动 S3 网关（关键）
- * weed s3 -port=8333
+ * windows启动： weed.exe server -dir=D:\data\seaweedfs\data -s3 -s3.config=D:\data\seaweedfs\s3-config.json
+ * {
+ *   "identities": [
+ *     {
+ *       "name": "admin",
+ *       "credentials": [
+ *         {
+ *           "accessKey": "admin",
+ *           "secretKey": "admin123"
+ *         }
+ *       ],
+ *       "actions": [
+ *         "Admin",
+ *         "Read",
+ *         "Write"
+ *       ]
+ *     }
+ *   ]
+ * }
  */
 @Service
 public class SeaweedFSService {
@@ -99,7 +107,11 @@ public class SeaweedFSService {
                 .bucket(properties.getBucket())
                 .key(key)
                 .build();
-        return s3Client.getObjectAsBytes(getObjectRequest).asByteArray();
+        try {
+            return s3Client.getObjectAsBytes(getObjectRequest).asByteArray();
+        }catch (NoSuchKeyException e){
+            throw new ServerException("文件不存在");
+        }
     }
 
     /**
