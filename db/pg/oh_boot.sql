@@ -551,3 +551,34 @@ ALTER TABLE "oh_boot"."data_message" ADD CONSTRAINT "data_message_pkey" PRIMARY 
 -- Primary Key structure for table ur_event
 -- ----------------------------
 ALTER TABLE "oh_boot"."ur_event" ADD CONSTRAINT "ur_event_pkey" PRIMARY KEY ("id");
+
+DROP TABLE IF EXISTS "oh_boot"."ur_multi_media";
+CREATE TABLE "oh_boot"."ur_multi_media" (
+  "id" int8 NOT NULL,
+  "evt_id" int8 NOT NULL,
+  "file_id" varchar(80) NOT NULL,
+  "file_name" varchar(100) DEFAULT NULL,
+  "status_type" varchar(2) NOT NULL,
+  "remark" varchar(255) DEFAULT NULL,
+  "db_status" int4 NOT NULL DEFAULT 1,
+  "creator" int8 DEFAULT NULL,
+  "create_time" timestamp DEFAULT NULL,
+  "updater" int8 DEFAULT NULL,
+  "update_time" timestamp DEFAULT NULL,
+  CONSTRAINT "ur_multi_media_pkey" PRIMARY KEY ("id")
+);
+
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."evt_id" IS '事件ID';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."file_id" IS '文件ID';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."file_name" IS '文件名';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."status_type" IS '所属状态：1待处理2处理中3已解决4已驳回';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."remark" IS '备注';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."creator" IS '创建者';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."updater" IS '更新者';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_multi_media" IS '多媒体表';
+
+CREATE INDEX "idx_media_evt_id" ON "oh_boot"."ur_multi_media" ("evt_id");
+CREATE INDEX "idx_media_type" ON "oh_boot"."ur_multi_media" ("status_type");
