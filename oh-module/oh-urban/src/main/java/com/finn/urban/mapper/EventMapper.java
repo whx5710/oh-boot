@@ -1,8 +1,6 @@
 package com.finn.urban.mapper;
 
-import com.finn.framework.aop.annotations.Pages;
 import com.finn.urban.entity.Event;
-import com.finn.urban.query.EventQuery;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,6 +15,5 @@ import java.util.List;
  */
 @Mapper
 public interface EventMapper extends BaseMapper<Event> {
-    @Pages
-    List<Event> getList(EventQuery query);
+
 }

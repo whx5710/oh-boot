@@ -1,7 +1,5 @@
 package com.finn.urban.vo;
 
-import com.finn.urban.entity.MultiMedia;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -101,7 +99,7 @@ public class EventVO implements Serializable {
     /**
      * 附件信息
      */
-    private List<MultiMedia> mediaList;
+    private List<MultiMediaVO> mediaList;
 
     public Long getId() {
         return id;
@@ -231,11 +229,11 @@ public class EventVO implements Serializable {
         this.evtType = evtType;
     }
 
-    public List<MultiMedia> getMediaList() {
+    public List<MultiMediaVO> getMediaList() {
         return mediaList;
     }
 
-    public void setMediaList(List<MultiMedia> mediaList) {
+    public void setMediaList(List<MultiMediaVO> mediaList) {
         this.mediaList = mediaList;
     }
 }

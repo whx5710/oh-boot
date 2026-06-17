@@ -1,8 +1,9 @@
 package com.finn.urban.service;
 
-import com.finn.framework.entity.PageResult;
+import com.finn.urban.entity.Event;
 import com.finn.urban.query.EventQuery;
 import com.finn.urban.vo.EventVO;
+import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -15,11 +16,15 @@ import java.util.List;
  */
 public interface EventService {
 
-    PageResult<EventVO> page(EventQuery query);
+    Page<Event> page(EventQuery query);
 
     Long save(EventVO vo);
 
     void update(EventVO vo);
 
     void delete(List<Long> idList);
+
+    Page<Event> myEvent(EventQuery query);
+
+    EventVO detail(Long id);
 }

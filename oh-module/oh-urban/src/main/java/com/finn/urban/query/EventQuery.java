@@ -2,7 +2,6 @@ package com.finn.urban.query;
 
 import com.finn.framework.query.Query;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -13,15 +12,21 @@ import java.time.LocalDateTime;
  *
  */
 public class EventQuery extends Query {
+
+    private String keyWord;
     /**
      * 事件编码
      */
     private String code;
 
     /**
-     * 上报时间
+     * 上报时间 start
      */
-    private LocalDateTime reportTime;
+    private LocalDateTime reportStartTime;
+    /**
+     * 上报时间 end
+     */
+    private LocalDateTime reportEndTime;
 
     /**
      * 问题描述
@@ -32,16 +37,6 @@ public class EventQuery extends Query {
      * 事发位置
      */
     private String location;
-
-    /**
-     * 经度
-     */
-    private BigDecimal longitude;
-
-    /**
-     * 纬度
-     */
-    private BigDecimal latitude;
 
     /**
      * 联系电话
@@ -83,30 +78,12 @@ public class EventQuery extends Query {
      */
     private String remark;
 
-    /**
-     * 创建者
-     */
-    private Long creator;
-
-    /**
-     * 更新者
-     */
-    private Long updater;
-
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public LocalDateTime getReportTime() {
-        return reportTime;
-    }
-
-    public void setReportTime(LocalDateTime reportTime) {
-        this.reportTime = reportTime;
     }
 
     public String getDescription() {
@@ -123,22 +100,6 @@ public class EventQuery extends Query {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public BigDecimal getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
-    }
-
-    public BigDecimal getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
     }
 
     public String getMobile() {
@@ -205,20 +166,27 @@ public class EventQuery extends Query {
         this.remark = remark;
     }
 
-    public Long getCreator() {
-        return creator;
+    public LocalDateTime getReportStartTime() {
+        return reportStartTime;
     }
 
-    public void setCreator(Long creator) {
-        this.creator = creator;
+    public void setReportStartTime(LocalDateTime reportStartTime) {
+        this.reportStartTime = reportStartTime;
     }
 
-    public Long getUpdater() {
-        return updater;
+    public LocalDateTime getReportEndTime() {
+        return reportEndTime;
     }
 
-    public void setUpdater(Long updater) {
-        this.updater = updater;
+    public void setReportEndTime(LocalDateTime reportEndTime) {
+        this.reportEndTime = reportEndTime;
     }
 
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
 }

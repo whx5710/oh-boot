@@ -4,9 +4,12 @@ import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
+import com.finn.urban.convert.EventConvert;
+import com.finn.urban.entity.Event;
 import com.finn.urban.query.EventQuery;
 import com.finn.urban.service.EventService;
 import com.finn.urban.vo.EventVO;
+import com.github.pagehelper.Page;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +38,29 @@ public class EventController {
      */
     @GetMapping("/page")
     public Result<PageResult<EventVO>> page(@Valid EventQuery query) {
-        PageResult<EventVO> page = eventService.page(query);
+        Page<Event> page = eventService.page(query);
+        return Result.ok(new PageResult<>(EventConvert.INSTANCE.convertList(page.getResult()), page.getTotal()));
+    }
 
-        return Result.ok(page);
+    /**
+     * 分页查询
+     * @param query 查询条件
+     * @return 列表
+     */
+    @GetMapping("/myEvent")
+    public Result<PageResult<EventVO>> myEvent(@Valid EventQuery query) {
+        Page<Event> page = eventService.myEvent(query);
+        return Result.ok(new PageResult<>(EventConvert.INSTANCE.convertList(page.getResult()), page.getTotal()));
+    }
+
+    /**
+     * 获取案件详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Result<EventVO> info(@PathVariable("id") Long id) {
+        return Result.ok(eventService.detail(id));
     }
 
     /**
