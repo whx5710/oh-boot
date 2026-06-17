@@ -85,7 +85,7 @@ public class SeaweedFSService {
             }
             String suffix = fileName.substring(file.getOriginalFilename().lastIndexOf("."));
             if (whitelistVerification(suffix)) {
-                throw new ServerException("文件不合法");
+                throw new ServerException(suffix + " 文件不合法");
             }
             String key = Tools.generator() + suffix;
 
