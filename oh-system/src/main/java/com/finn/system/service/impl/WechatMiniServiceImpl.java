@@ -1,7 +1,7 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.entity.HashDto;
-import com.finn.framework.security.wechat.WechatService;
+import com.finn.framework.security.wechat.WechatMiniService;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpUtil;
 import com.finn.framework.utils.JsonUtils;
@@ -21,13 +21,13 @@ import java.util.Map;
  * 微信登录
  */
 @Service
-public class WechatServiceImpl implements WechatService {
+public class WechatMiniServiceImpl implements WechatMiniService {
 
     private final WechatProperties wechatProperties;
 
     private final UserService userService;
 
-    public WechatServiceImpl(WechatProperties wechatProperties, UserService userService){
+    public WechatMiniServiceImpl(WechatProperties wechatProperties, UserService userService){
         this.wechatProperties = wechatProperties;
         this.userService = userService;
     }

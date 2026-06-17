@@ -3,7 +3,7 @@ package com.finn.system.controller;
 import com.finn.framework.entity.Result;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.security.wechat.WechatService;
+import com.finn.framework.security.wechat.WechatMiniService;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.mapper.UserMapper;
@@ -23,11 +23,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/wechat")
 public class WechatController {
-    private final WechatService wechatService;
+    private final WechatMiniService wechatMiniService;
     private final UserMapper userMapper;
 
-    public WechatController(WechatService wechatService, UserMapper userMapper){
-        this.wechatService = wechatService;
+    public WechatController(WechatMiniService wechatMiniService, UserMapper userMapper){
+        this.wechatMiniService = wechatMiniService;
         this.userMapper = userMapper;
     }
 
@@ -39,7 +39,7 @@ public class WechatController {
     @PostMapping("/bindPhone")
     public Result<String> login(@RequestBody Map<String, String> params) {
         // 解密手机号
-        String phone = wechatService.getPhoneNumber(params);
+        String phone = wechatMiniService.getPhoneNumber(params);
         // 更新手机号
         if(params.containsKey("bind") && params.get("bind") != null
                 && params.get("bind").equals("1")){

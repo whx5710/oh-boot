@@ -18,19 +18,22 @@ import java.util.Collection;
  *     ↓
  * 后端根据 openid 查找或创建用户
  *     ↓
- * 后端生成 JWT Token 返回给前端
+ * 后端生成 Token 返回给前端
  *     ↓
  * 前端存储 token，后续请求携带 Authorization: Bearer <token>
  *  @author 王小费 whx5710@qq.com
  */
-public class WechatMiniProgramAuthenticationToken extends AbstractAuthenticationToken {
+public class WechatMiniAuthenticationToken extends AbstractAuthenticationToken {
 
     private String code;           // 微信临时登录凭证
     private final String openId;   // 微信用户唯一标识（认证后填充）
     private final UserDetails userDetails; // 用户详情（认证后填充）
 
-    // 未认证状态（构造时）
-    public WechatMiniProgramAuthenticationToken(String code) {
+    /**
+     * 未认证状态（构造时）
+     * @param code
+     */
+    public WechatMiniAuthenticationToken(String code) {
         super((Collection<? extends GrantedAuthority>) null);
         this.code = code;
         this.openId = null;
@@ -38,8 +41,13 @@ public class WechatMiniProgramAuthenticationToken extends AbstractAuthentication
         setAuthenticated(false);
     }
 
-    // 已认证状态（认证成功后）
-    public WechatMiniProgramAuthenticationToken(String openId, UserDetails userDetails, Collection<? extends GrantedAuthority> authorities) {
+    /**
+     * 已认证状态（认证成功后）
+     * @param openId
+     * @param userDetails
+     * @param authorities
+     */
+    public WechatMiniAuthenticationToken(String openId, UserDetails userDetails, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.code = null;
         this.openId = openId;
@@ -47,6 +55,10 @@ public class WechatMiniProgramAuthenticationToken extends AbstractAuthentication
         super.setAuthenticated(true);
     }
 
+    /**
+     * 微信临时登录凭证 code
+     * @return code
+     */
     @Override
     public Object getCredentials() { return code; }
 

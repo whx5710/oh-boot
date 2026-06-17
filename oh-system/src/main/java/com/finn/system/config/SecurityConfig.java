@@ -1,7 +1,7 @@
 package com.finn.system.config;
 
 import com.finn.framework.security.mobile.MobileAuthenticationProvider;
-import com.finn.framework.security.wechat.WechatMiniProgramAuthenticationProvider;
+import com.finn.framework.security.wechat.WechatMiniAuthenticationProvider;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,18 +26,18 @@ import java.util.List;
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final MobileAuthenticationProvider mobileAuthenticationProvider;
-    private final WechatMiniProgramAuthenticationProvider wechatMiniProgramAuthenticationProvider;
+    private final WechatMiniAuthenticationProvider wechatMiniAuthenticationProvider;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public SecurityConfig(UserDetailsService userDetailsService,
                           MobileAuthenticationProvider mobileAuthenticationProvider,
-                          WechatMiniProgramAuthenticationProvider wechatMiniProgramAuthenticationProvider,
+                          WechatMiniAuthenticationProvider wechatMiniAuthenticationProvider,
                           PasswordEncoder passwordEncoder, ApplicationEventPublisher applicationEventPublisher) {
 
         this.userDetailsService = userDetailsService;
         this.mobileAuthenticationProvider = mobileAuthenticationProvider;
-        this.wechatMiniProgramAuthenticationProvider = wechatMiniProgramAuthenticationProvider;
+        this.wechatMiniAuthenticationProvider = wechatMiniAuthenticationProvider;
         this.passwordEncoder = passwordEncoder;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -64,7 +64,7 @@ public class SecurityConfig {
         List<AuthenticationProvider> providerList = new ArrayList<>();
         providerList.add(daoAuthenticationProvider());
         providerList.add(mobileAuthenticationProvider); // 手机验证码登录
-        providerList.add(wechatMiniProgramAuthenticationProvider); // 微信小程序登录
+        providerList.add(wechatMiniAuthenticationProvider); // 微信小程序登录
 
         ProviderManager providerManager = new ProviderManager(providerList);
         // 事件注册，可监听登录事件，记录登录日志
