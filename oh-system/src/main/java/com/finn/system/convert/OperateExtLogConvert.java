@@ -3,8 +3,8 @@ package com.finn.system.convert;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.DictCache;
-import com.finn.system.vo.DictDataSingleVO;
 import com.finn.system.entity.OperateLogEntity;
+import com.finn.system.vo.DictDataVO;
 import com.finn.system.vo.OperateLogVO;
 
 import java.util.ArrayList;
@@ -41,9 +41,9 @@ public class OperateExtLogConvert implements OperateLogConvert {
         OperateLogVO vo = operateLogConvert.convert(entity);
         // 操作操作类型
         if(entity.getOperateType() != null){
-            DictDataSingleVO dictDataSingleVO = dictCache.get("log_operate_type", String.valueOf(entity.getOperateType()));
-            if(dictDataSingleVO != null){
-                vo.setOperateTypeLabel(dictDataSingleVO.getDictLabel());
+            DictDataVO dictDataVO = dictCache.get("log_operate_type", String.valueOf(entity.getOperateType()));
+            if(dictDataVO != null){
+                vo.setOperateTypeLabel(dictDataVO.getDictLabel());
             }
         }
         return vo;

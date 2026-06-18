@@ -3,6 +3,7 @@ package com.finn.system.service;
 import com.finn.framework.entity.PageResult;
 import com.finn.system.entity.DictTypeEntity;
 import com.finn.system.query.DictTypeQuery;
+import com.finn.system.vo.DictDataVO;
 import com.finn.system.vo.DictTypeVO;
 import com.finn.system.vo.DictVO;
 
@@ -27,7 +28,7 @@ public interface DictTypeService {
     /**
      * 获取动态SQL数据
      */
-    List<DictVO.DictData> getDictSql(Long id);
+    List<DictDataVO> getDictSql(Long id);
 
     /**
      * 获取全部字典列表

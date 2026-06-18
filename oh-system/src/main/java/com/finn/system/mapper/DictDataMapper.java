@@ -4,7 +4,6 @@ import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.system.entity.DictDataEntity;
 import com.finn.system.query.DictDataQuery;
 import com.finn.system.vo.DictDataVO;
-import com.finn.system.vo.DictVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -21,7 +20,7 @@ import java.util.List;
 public interface DictDataMapper extends BaseMapper<DictDataEntity> {
 
     @Select("${sql}")
-    List<DictVO.DictData> getListForSql(@Param("sql") String sql);
+    List<DictDataVO> getListForSql(@Param("sql") String sql);
 
     List<DictDataVO> getList(DictDataQuery query);
 }

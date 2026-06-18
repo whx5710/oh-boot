@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 字典数据
@@ -61,15 +60,6 @@ public class DictDataVO implements Serializable {
     @Min(value = 0, message = "排序值不能小于0")
     private Integer sort;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
 
     public Long getId() {
         return id;
@@ -135,19 +125,4 @@ public class DictDataVO implements Serializable {
         this.sort = sort;
     }
 
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
 }

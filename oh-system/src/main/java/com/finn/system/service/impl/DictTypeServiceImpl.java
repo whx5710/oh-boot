@@ -17,7 +17,6 @@ import com.finn.system.mapper.DictTypeMapper;
 import com.finn.system.query.DictDataQuery;
 import com.finn.system.query.DictTypeQuery;
 import com.finn.system.service.DictTypeService;
-import com.finn.system.vo.DictDataSingleVO;
 import com.finn.system.vo.DictDataVO;
 import com.finn.system.vo.DictTypeVO;
 import com.finn.system.vo.DictVO;
@@ -67,6 +66,25 @@ public class DictTypeServiceImpl implements DictTypeService {
             throw new ServerException("字典类型已存在");
         }
         dictTypeMapper.insert(entity);
+
+        // 缓存数据
+        QueryWrapper<DictDataEntity> queryWrapper = QueryWrapper.of(DictDataEntity.class);
+        queryWrapper.eq(DictDataEntity::getDbStatus, 1).eq(DictDataEntity::getDictTypeId, entity.getId())
+                .orderBy(DictDataEntity::getSort);
+        List<DictDataEntity> list = dictDataMapper.listByWrapper(queryWrapper);
+        if(list != null){
+            List<DictDataVO> dataVOList = new ArrayList<>(list.size());
+            for(DictDataEntity item: list){
+                DictDataVO dictDataVO = DictDataConvert.INSTANCE.convert(item);
+                dictDataVO.setDictType(entity.getDictType());
+                dictDataVO.setDictTypeId(entity.getId());
+                dataVOList.add(dictDataVO);
+            }
+            DictVO dictVO = new DictVO();
+            dictVO.setDictType(entity.getDictType());
+            dictVO.setDataList(dataVOList);
+            dictCache.save(dictVO);
+        }
     }
 
     @Override
@@ -83,6 +101,26 @@ public class DictTypeServiceImpl implements DictTypeService {
         }
         DictTypeEntity entity = DictTypeConvert.INSTANCE.convert(vo);
         dictTypeMapper.updateById(entity);
+
+        // 缓存数据
+        entity = dictTypeMapper.findById(entity.getId(), DictTypeEntity.class);
+        QueryWrapper<DictDataEntity> queryWrapper = QueryWrapper.of(DictDataEntity.class);
+        queryWrapper.eq(DictDataEntity::getDbStatus, 1).eq(DictDataEntity::getDictTypeId, entity.getId())
+                .orderBy(DictDataEntity::getSort);
+        List<DictDataEntity> list = dictDataMapper.listByWrapper(queryWrapper);
+        if(list != null){
+            List<DictDataVO> dataVOList = new ArrayList<>(list.size());
+            for(DictDataEntity item: list){
+                DictDataVO dictDataVO = DictDataConvert.INSTANCE.convert(item);
+                dictDataVO.setDictType(entity.getDictType());
+                dictDataVO.setDictTypeId(entity.getId());
+                dataVOList.add(dictDataVO);
+            }
+            DictVO dictVO = new DictVO();
+            dictVO.setDictType(entity.getDictType());
+            dictVO.setDataList(dataVOList);
+            dictCache.save(dictVO);
+        }
     }
 
     @Override
@@ -99,7 +137,7 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
-    public List<DictVO.DictData> getDictSql(Long id) {
+    public List<DictDataVO> getDictSql(Long id) {
         DictTypeEntity entity = dictTypeMapper.findById(id, DictTypeEntity.class);
         try {
             return dictDataMapper.getListForSql(entity.getDictSql());
@@ -122,10 +160,17 @@ public class DictTypeServiceImpl implements DictTypeService {
         for (DictTypeEntity type : typeList) {
             DictVO dict = new DictVO();
             dict.setDictType(type.getDictType());
-
             for (DictDataVO data : dataList) {
                 if (type.getId().equals(data.getDictTypeId())) {
-                    dict.getDataList().add(new DictVO.DictData(data.getDictLabel(), data.getDictValue(), data.getLabelClass()));
+                    DictDataVO dictDataVO = new DictDataVO();
+                    dictDataVO.setId(data.getId());
+                    dictDataVO.setDictTypeId(type.getId());
+                    dictDataVO.setDictType(type.getDictName());
+                    dictDataVO.setDictLabel(data.getDictLabel());
+                    dictDataVO.setDictValue(data.getDictValue());
+                    dictDataVO.setLabelClass(data.getLabelClass());
+                    dictDataVO.setSort(data.getSort());
+                    dict.getDataList().add(dictDataVO);
                 }
             }
             // 数据来源动态SQL
@@ -150,16 +195,7 @@ public class DictTypeServiceImpl implements DictTypeService {
     public void refreshTransCache() {
         //保存列表
         List<DictVO> list = getDictList();
-        dictCache.saveList(list);
-        // 逐一单个保存
-        List<DictDataVO>  dataList = dictDataMapper.getList(new DictDataQuery());
-        dictCache.delSingleAll(); // 先清除
-        if(dataList != null && !dataList.isEmpty()){
-            for(DictDataVO vo: dataList){
-                DictDataSingleVO dataSingleVO = DictDataConvert.INSTANCE.convertSingle(vo);
-                dictCache.save(dataSingleVO);
-            }
-        }
+        dictCache.saveAllList(list);
     }
 
     @Override
