@@ -9,6 +9,7 @@ import com.finn.framework.entity.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,7 @@ import java.time.Duration;
  */
 @RestController
 @RequestMapping("/file")
+@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
 public class FileController {
 
     private static final Logger log = LoggerFactory.getLogger(FileController.class);

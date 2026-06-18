@@ -6,6 +6,7 @@ import com.finn.files.vo.PresignedUrlVO;
 import com.finn.files.vo.MultipartUploadInitVO;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.utils.Tools;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -47,6 +48,7 @@ import java.util.Objects;
  * }
  */
 @Service
+@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
 public class SeaweedFSService {
 
     private final S3Client s3Client;

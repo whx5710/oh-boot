@@ -1,5 +1,6 @@
 package com.finn.files.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -16,6 +17,7 @@ import java.time.Duration;
  * S3 客户端配置
  */
 @Configuration
+@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
 public class S3Config {
 
     private final SeaweedFSProperties properties;

@@ -25,11 +25,19 @@ public class SeaweedFSProperties {
     private String region;
     private boolean pathStyleAccess = true;
     /**
+     * 是否启用文件服务
+     */
+    private boolean enabled = true;
+
+    /**
      * 运行的文件，为空运行全部
      */
     private List<String> fileSuffix;
 
     // Getters & Setters
+    public boolean isEnabled() { return enabled; }
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
     public String getEndpoint() { return endpoint; }
     public void setEndpoint(String endpoint) { this.endpoint = endpoint; }
 
