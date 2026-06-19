@@ -4,10 +4,12 @@ import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
 import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
+import com.finn.system.cache.DictCache;
 import com.finn.system.convert.DictTypeConvert;
 import com.finn.system.entity.DictTypeEntity;
 import com.finn.system.query.DictTypeQuery;
 import com.finn.system.service.DictTypeService;
+import com.finn.system.vo.DictDataVO;
 import com.finn.system.vo.DictTypeVO;
 import com.finn.system.vo.DictVO;
 import jakarta.validation.Valid;
@@ -26,9 +28,11 @@ import java.util.List;
 @RequestMapping("/sys/dict/type")
 public class DictTypeController {
     private final DictTypeService dictTypeService;
+    private final DictCache dictCache;
 
-    public DictTypeController(DictTypeService dictTypeService) {
+    public DictTypeController(DictTypeService dictTypeService, DictCache dictCache) {
         this.dictTypeService = dictTypeService;
+        this.dictCache = dictCache;
     }
 
     /**
@@ -51,10 +55,10 @@ public class DictTypeController {
      */
     @GetMapping("/list/sql")
     @PreAuthorize("hasAuthority('sys:dict:page')")
-    public Result<PageResult<DictVO.DictData>> listSql(Long id) {
-        List<DictVO.DictData> list = dictTypeService.getDictSql(id);
+    public Result<PageResult<DictDataVO>> listSql(Long id) {
+        List<DictDataVO> list = dictTypeService.getDictSql(id);
 
-        PageResult<DictVO.DictData> page = new PageResult<>(list, list.size());
+        PageResult<DictDataVO> page = new PageResult<>(list, list.size());
 
         return Result.ok(page);
     }
@@ -122,6 +126,14 @@ public class DictTypeController {
         List<DictVO> dictList = dictTypeService.getDictList();
 
         return Result.ok(dictList);
+    }
+
+    /**
+     * 获取字典列表
+     */
+    @GetMapping("/getByType/{dictType}")
+    public Result<List<DictDataVO>> getByType(@PathVariable("dictType") String dictType) {
+        return Result.ok(dictCache.getListData(dictType));
     }
 
     /**

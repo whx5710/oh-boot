@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * hash dto 集合
@@ -37,22 +38,18 @@ public class HashDto extends HashMap<String, Object> {
      */
     public Integer getInt(String key){
         Object obj = this.get(key);
-        switch (obj) {
-            case null -> {
-                return null;
-            }
-            case Integer i -> {
-                return i;
-            }
+        return switch (obj) {
+            case null -> null;
+            case Integer i -> i;
             case String str -> {
                 try {
-                    return Integer.parseInt(str);
+                    yield Integer.parseInt(str);
                 } catch (NumberFormatException e) {
                     throw new ServerException("数字类型不正确，获取失败");
                 }
             }
             default -> throw new ServerException("数字类型不正确，获取失败");
-        }
+        };
     }
 
     /**
@@ -62,31 +59,21 @@ public class HashDto extends HashMap<String, Object> {
      */
     public Long getLong(String key){
         Object obj = this.get(key);
-        if(obj == null){
-            return null;
-        }
-        switch (obj) {
-            case Long l -> {
-                return l;
-            }
-            case Integer i -> {
-                return Long.valueOf(i);
-            }
+        return switch (obj) {
+            case null -> null;
+            case Long l -> l;
+            case Integer i -> Long.valueOf(i);
             case String str -> {
                 try {
-                    return Long.parseLong(str);
+                    yield Long.parseLong(str);
                 } catch (NumberFormatException e) {
                     throw new ServerException(str + " 数字类型不正确[Long]，获取失败");
                 }
             }
-            case Date date -> {
-                return date.getTime();
-            }
-            case LocalDateTime localDateTime -> {
-                return localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
-            }
+            case Date date -> date.getTime();
+            case LocalDateTime localDateTime -> localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
             default -> throw new ServerException("数字类型不正确[Long]，获取失败");
-        }
+        };
     }
 
     /**
@@ -97,25 +84,17 @@ public class HashDto extends HashMap<String, Object> {
      */
     public Date getDate(String key, String pattern){
         Object obj = this.get(key);
-        switch (obj) {
-            case Date date -> {
-                return date;
-            }
+        return switch (obj) {
+            case Date date -> date;
             case String str -> {
                 try {
-                    if (pattern == null || pattern.isEmpty()) {
-                        return DateUtils.parse(str, DateUtils.DATE_TIME_PATTERN);
-                    } else {
-                        return DateUtils.parse(str, pattern);
-                    }
+                    yield DateUtils.parse(str, (pattern == null || pattern.isEmpty()) ? DateUtils.DATE_TIME_PATTERN : pattern);
                 } catch (Exception e) {
                     throw new ServerException(str + " 日期格式不正确");
                 }
             }
-            case null, default -> {
-                return null;
-            }
-        }
+            case null, default -> null;
+        };
     }
 
     /**
@@ -135,21 +114,11 @@ public class HashDto extends HashMap<String, Object> {
      */
     public LocalDateTime getLocalDateTime(String key, String pattern){
         Object obj = this.get(key);
-        switch (obj) {
-            case LocalDateTime localDateTime -> {
-                return localDateTime;
-            }
-            case String str -> {
-                if (pattern == null || pattern.isEmpty()) {
-                    return DateUtils.parseLocalDateTime(str);
-                } else {
-                    return DateUtils.parseLocalDateTime(str, pattern);
-                }
-            }
-            case null, default -> {
-                return null;
-            }
-        }
+        return switch (obj) {
+            case LocalDateTime localDateTime -> localDateTime;
+            case String str -> (pattern == null || pattern.isEmpty()) ? DateUtils.parseLocalDateTime(str) : DateUtils.parseLocalDateTime(str, pattern);
+            case null, default -> null;
+        };
     }
 
     /**
@@ -162,26 +131,37 @@ public class HashDto extends HashMap<String, Object> {
     }
 
     /**
+     * 根据key获取对应的HashDto
+     * @param key key
+     * @return HashDto
+     */
+    public HashDto getDto(String key){
+        Object obj = this.get(key);
+        return switch (obj) {
+            case null -> null;
+            case HashDto dto -> dto;
+            case Map<?, ?> map -> {
+                HashDto dto = new HashDto();
+                dto.putAll((Map<String, Object>) map);
+                yield dto;
+            }
+            default -> throw new ServerException("HashDto 类型不正确，获取失败");
+        };
+    }
+    
+    /**
      * 返回布尔类型
      * @param key key
      * @return bool
      */
     public Boolean getBool(String key){
         Object obj = this.get(key);
-        switch (obj) {
-            case Boolean b -> {
-                return b;
-            }
-            case String str -> {
-                return !str.equalsIgnoreCase("false") && !str.equals("0");
-            }
-            case Integer i -> {
-                return i != 0;
-            }
-            case null, default -> {
-                return null;
-            }
-        }
+        return switch (obj) {
+            case Boolean b -> b;
+            case String str -> !str.equalsIgnoreCase("false") && !str.equals("0");
+            case Integer i -> i != 0;
+            case null, default -> null;
+        };
     }
 
 

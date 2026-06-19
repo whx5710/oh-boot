@@ -5,7 +5,7 @@ server:
     threads:
       max: 1000
       min-spare: 30
-  port: 8080
+  port: 5710
   servlet:
     context-path: /
     session.cookie.http-only: true
@@ -89,7 +89,7 @@ spring:
           validation-timeout: 5000 # 验证超时时间，默认5秒
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
-          hikari-log: true # 是否开启hikari监控日志打印，默认false
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
           slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
       masterDb: # 主数据源
         driver-class-name: org.postgresql.Driver
@@ -108,7 +108,7 @@ spring:
           validation-timeout: 5000 # 验证超时时间，默认5秒
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
-          hikari-log: true # 是否开启hikari监控日志打印，默认false
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
           slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
   kafka:
     bootstrap-servers: 127.0.0.1:9092
@@ -153,6 +153,20 @@ spring:
 #    maxMessageSize: 4096 # 消息最大长度，默认1024 * 1024 * 4(默认4M)
 #    compressMessageBodyThreshold: 4096 # 压缩消息阈值，默认4k(1024 * 4)
 
+# 文件服务 s3
+seaweedfs:
+  s3:
+    endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
+    access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
+    secret-key: admin123                    # 同上
+    bucket: default-bucket                  # 默认存储桶名
+    region: us-east-1                       # SeaweedFS 不校验 region，任意填
+    path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
+    # 允许上传的文件扩展名，如 .jpg
+    file-suffix:
+      - .jpg
+      - .png
+      - .jpeg
 # 日志信息
 logging:
   # 字符集设置

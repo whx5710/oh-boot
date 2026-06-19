@@ -3,7 +3,7 @@ package com.finn.system.convert;
 import com.finn.framework.utils.ServiceFactory;
 import com.finn.system.cache.DictCache;
 import com.finn.system.entity.LoginLogEntity;
-import com.finn.system.vo.DictDataSingleVO;
+import com.finn.system.vo.DictDataVO;
 import com.finn.system.vo.LoginLogVO;
 
 import java.util.ArrayList;
@@ -42,9 +42,9 @@ public class LogLoginExtConvert implements LoginLogConvert {
 
         // 登录操作信息 操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误
         if(entity.getOperation() != null){
-            DictDataSingleVO dictDataSingleVO = dictCache.get("login_operation", String.valueOf(entity.getOperation()));
-            if(dictDataSingleVO != null){
-                vo.setOperationLabel(dictDataSingleVO.getDictLabel());
+            DictDataVO dictDataVO = dictCache.get("login_operation", String.valueOf(entity.getOperation()));
+            if(dictDataVO != null){
+                vo.setOperationLabel(dictDataVO.getDictLabel());
             }
         }
         return vo;

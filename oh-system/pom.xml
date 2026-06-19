@@ -28,16 +28,21 @@
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
-
+        <!--文件服务-->
+        <dependency>
+            <groupId>com.finn.module</groupId>
+            <artifactId>oh-files</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- 业务模块 -->
         <dependency>
             <groupId>com.finn.module</groupId>
-            <artifactId>oh-module-app</artifactId>
+            <artifactId>oh-app</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.finn.module</groupId>
-            <artifactId>oh-module-flow</artifactId>
+            <artifactId>oh-flow</artifactId>
             <version>1.0.0</version>
         </dependency>
 

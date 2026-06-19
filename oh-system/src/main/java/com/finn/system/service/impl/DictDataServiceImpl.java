@@ -1,18 +1,24 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.CountWrapper;
+import com.finn.system.cache.DictCache;
 import com.finn.system.convert.DictDataConvert;
 import com.finn.system.entity.DictDataEntity;
+import com.finn.system.entity.DictTypeEntity;
 import com.finn.system.mapper.DictDataMapper;
+import com.finn.system.mapper.DictTypeMapper;
 import com.finn.system.query.DictDataQuery;
 import com.finn.system.service.DictDataService;
 import com.finn.system.vo.DictDataVO;
+import com.finn.system.vo.DictVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +30,13 @@ import java.util.List;
 @Service
 public class DictDataServiceImpl implements DictDataService {
     private final DictDataMapper dictDataMapper;
-    public DictDataServiceImpl(DictDataMapper dictDataMapper) {
+    private final DictTypeMapper dictTypeMapper;
+    private final DictCache dictCache;
+    public DictDataServiceImpl(DictDataMapper dictDataMapper, DictTypeMapper dictTypeMapper,
+                               DictCache dictCache) {
         this.dictDataMapper = dictDataMapper;
+        this.dictTypeMapper = dictTypeMapper;
+        this.dictCache = dictCache;
     }
 
     @Override
@@ -47,6 +58,26 @@ public class DictDataServiceImpl implements DictDataService {
         }
         DictDataEntity entity = DictDataConvert.INSTANCE.convert(vo);
         dictDataMapper.insert(entity);
+
+        // 缓存
+        DictTypeEntity dictType = dictTypeMapper.findById(entity.getDictTypeId(), DictTypeEntity.class);
+        QueryWrapper<DictDataEntity> queryWrapper = QueryWrapper.of(DictDataEntity.class);
+        queryWrapper.eq(DictDataEntity::getDbStatus, 1).eq(DictDataEntity::getDictTypeId, dictType.getId())
+                .orderBy(DictDataEntity::getSort);
+        List<DictDataEntity> list = dictDataMapper.listByWrapper(queryWrapper);
+        if(list != null){
+            List<DictDataVO> dataVOList = new ArrayList<>(list.size());
+            for(DictDataEntity item: list){
+                DictDataVO dictDataVO = DictDataConvert.INSTANCE.convert(item);
+                dictDataVO.setDictType(dictType.getDictType());
+                dictDataVO.setDictTypeId(dictType.getId());
+                dataVOList.add(dictDataVO);
+            }
+            DictVO dictVO = new DictVO();
+            dictVO.setDictType(dictType.getDictType());
+            dictVO.setDataList(dataVOList);
+            dictCache.save(dictVO);
+        }
     }
 
     @Override
@@ -68,6 +99,29 @@ public class DictDataServiceImpl implements DictDataService {
         }
         DictDataEntity entity = DictDataConvert.INSTANCE.convert(vo);
         dictDataMapper.updateById(entity);
+
+        // 缓存
+        entity = dictDataMapper.findById(entity.getId(), DictDataEntity.class);
+
+        DictTypeEntity dictType = dictTypeMapper.findById(entity.getDictTypeId(), DictTypeEntity.class);
+        QueryWrapper<DictDataEntity> queryWrapper = QueryWrapper.of(DictDataEntity.class);
+        queryWrapper.eq(DictDataEntity::getDbStatus, 1).eq(DictDataEntity::getDictTypeId, dictType.getId())
+                .orderBy(DictDataEntity::getSort);
+        List<DictDataEntity> list = dictDataMapper.listByWrapper(queryWrapper);
+        if(list != null){
+            List<DictDataVO> dataVOList = new ArrayList<>(list.size());
+            for(DictDataEntity item: list){
+                DictDataVO dictDataVO = DictDataConvert.INSTANCE.convert(item);
+                dictDataVO.setDictType(dictType.getDictType());
+                dictDataVO.setDictTypeId(dictType.getId());
+                dataVOList.add(dictDataVO);
+            }
+            DictVO dictVO = new DictVO();
+            dictVO.setDictType(dictType.getDictType());
+            dictVO.setDataList(dataVOList);
+            dictCache.save(dictVO);
+        }
+
     }
 
     @Override

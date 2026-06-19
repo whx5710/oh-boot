@@ -4,12 +4,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 
+
 /**
  * 如果微信登录，需实现该接口
- *
- * @author 王小费 whx5710@qq.com
+ *  @author 王小费 whx5710@qq.com
  */
-public interface WechatService {
+public interface WechatMiniService {
 
     /**
      * 使用 code + appid + secret 请求微信接口获取 openid/session_key
@@ -27,8 +27,8 @@ public interface WechatService {
 
     /**
      * 解密获取手机号
-     * @param body code 参数
-     * @return json字符串
+     * @param body {code: 微信code}
+     * @return 手机号
      */
     String getPhoneNumber(Map<String, String> body);
 }

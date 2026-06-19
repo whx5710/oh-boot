@@ -19,8 +19,8 @@
 oh-boot                    # 父项目
 ├── oh-framework           # 框架核心模块（公共组件、配置、工具类）
 ├── oh-module              # 业务模块集合
-│   ├── oh-module-app      # 应用管理模块（OpenAPI、数据应用）
-│   └── oh-module-flow     # 工作流模块
+│   ├── oh-app      # 应用管理模块（OpenAPI、数据应用）
+│   └── oh-flow     # 工作流模块
 └── oh-system              # 系统管理模块（用户、角色、权限等）
 ```
 

@@ -1,0 +1,5 @@
+auth:
+  ignore-urls:
+    - /file/download/*
+    - /file/exists/*
+    - /file/preview/*

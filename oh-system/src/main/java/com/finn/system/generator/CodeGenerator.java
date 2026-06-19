@@ -30,10 +30,9 @@ public class CodeGenerator {
 
     public static class GeneratorConfig {
         public static final String BASE_PACKAGE = "com.finn";
-//        public static final String MODULE_NAME = "oh-system";
-        public static final String MODULE_NAME = "oh-module/oh-module-stone";
-        public static final String TABLE_PREFIX = "st_";
-        public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".stone";
+        public static final String MODULE_NAME = "oh-module/oh-urban";
+        public static final String TABLE_PREFIX = "ur_";
+        public static final String SYSTEM_PACKAGE = BASE_PACKAGE + ".urban";
         public static final String AUTHOR = "王小费 whx5710@qq.com";
 
         public static final String FRAMEWORK_PACKAGE = BASE_PACKAGE + ".framework";
@@ -48,7 +47,6 @@ public class CodeGenerator {
         public static final String CONTROLLER_PACKAGE = SYSTEM_PACKAGE + ".controller";
         
         public static final String TABLE_NAME_ANNOTATION = FRAMEWORK_PACKAGE + ".aop.annotations.TableName";
-        public static final String TENANT_ENTITY = FRAMEWORK_PACKAGE + ".entity.TenantEntity";
         public static final String PAGES_ANNOTATION = FRAMEWORK_PACKAGE + ".aop.annotations.Pages";
         public static final String QUERY_BASE = FRAMEWORK_PACKAGE + ".query.Query";
         public static final String PAGE_RESULT = FRAMEWORK_PACKAGE + ".entity.PageResult";
@@ -139,16 +137,29 @@ public class CodeGenerator {
      * 获取表注释
      */
     private String getTableComment(Connection connection, String tableName) throws SQLException {
-        String sql = "SHOW CREATE TABLE " + tableName;
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-            if (resultSet.next()) {
-                String createTable = resultSet.getString(2);
-                int commentIndex = createTable.indexOf("COMMENT='");
-                if (commentIndex != -1) {
-                    int endIndex = createTable.indexOf("'", commentIndex + 9);
-                    if (endIndex != -1) {
-                        return createTable.substring(commentIndex + 9, endIndex);
+        // 先尝试标准 JDBC 方式
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet rs = metaData.getTables(null, null, tableName, new String[]{"TABLE"})) {
+            if (rs.next()) {
+                String comment = rs.getString("REMARKS");
+                if (comment != null && !comment.isEmpty()) {
+                    return comment;
+                }
+            }
+        }
+
+        // 尝试 PostgreSQL 系统表方式
+        String sql = "SELECT obj_description((quote_ident(n.nspname) || '.' || quote_ident(c.relname))::regclass, 'pg_class') as comment " +
+                "FROM pg_catalog.pg_class c " +
+                "JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace " +
+                "WHERE c.relname = ? AND n.nspname = 'public'";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, tableName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String comment = rs.getString("comment");
+                    if (comment != null && !comment.isEmpty()) {
+                        return comment;
                     }
                 }
             }
@@ -161,19 +172,50 @@ public class CodeGenerator {
      */
     private List<ColumnInfo> getColumnInfos(Connection connection, String tableName) throws SQLException {
         List<ColumnInfo> columnInfos = new ArrayList<>();
-        String sql = "SHOW FULL COLUMNS FROM " + tableName;
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-            while (resultSet.next()) {
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        // 获取列基本信息（兼容所有数据库）
+        try (ResultSet rs = metaData.getColumns(null, null, tableName, null)) {
+            while (rs.next()) {
                 ColumnInfo columnInfo = new ColumnInfo();
-                columnInfo.setColumnName(resultSet.getString("Field"));
-                columnInfo.setColumnType(resultSet.getString("Type"));
-                columnInfo.setColumnComment(resultSet.getString("Comment"));
+                columnInfo.setColumnName(rs.getString("COLUMN_NAME"));
+                columnInfo.setColumnType(rs.getString("TYPE_NAME"));
+                columnInfo.setColumnComment(rs.getString("REMARKS"));
                 columnInfo.setJavaFieldName(convertToJavaFieldName(columnInfo.getColumnName()));
                 columnInfo.setJavaType(convertToJavaType(columnInfo.getColumnType()));
                 columnInfos.add(columnInfo);
             }
         }
+
+        // 如果 JDBC 没有返回注释，尝试 PostgreSQL 系统表补充
+        boolean needFetchComments = columnInfos.stream()
+                .allMatch(c -> c.getColumnComment() == null || c.getColumnComment().isEmpty());
+
+        if (needFetchComments) {
+            String sql = "SELECT a.attname as column_name, pg_catalog.col_description(c.oid, a.attnum) as comment " +
+                    "FROM pg_catalog.pg_attribute a " +
+                    "JOIN pg_catalog.pg_class c ON c.oid = a.attrelid " +
+                    "JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace " +
+                    "WHERE c.relname = ? AND n.nspname = 'public' AND a.attnum > 0 AND NOT a.attisdropped";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, tableName);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        String colName = rs.getString("column_name");
+                        String comment = rs.getString("comment");
+                        for (ColumnInfo col : columnInfos) {
+                            if (col.getColumnName().equalsIgnoreCase(colName)) {
+                                col.setColumnComment(comment);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                // 忽略注释查询失败
+            }
+        }
+
         return columnInfos;
     }
 
@@ -220,21 +262,22 @@ public class CodeGenerator {
      * 转换数据库类型为Java类型
      */
     private String convertToJavaType(String columnType) {
-        if (columnType.contains("int")) {
-            return "Integer";
-        } else if (columnType.contains("bigint")) {
+        String type = columnType.toLowerCase();
+        if (type.contains("bigint") || type.contains("int8")) {
             return "Long";
-        } else if (columnType.contains("varchar") || columnType.contains("text")) {
+        } else if (type.contains("int") || type.contains("serial")) {
+            return "Integer";
+        } else if (type.contains("varchar") || type.contains("text") || type.contains("char")) {
             return "String";
-        } else if (columnType.contains("datetime") || columnType.contains("timestamp")) {
+        } else if (type.contains("datetime") || type.contains("timestamp")) {
             return "LocalDateTime";
-        } else if (columnType.contains("date")) {
+        } else if (type.contains("date")) {
             return "LocalDate";
-        } else if (columnType.contains("time")) {
+        } else if (type.contains("time")) {
             return "LocalTime";
-        } else if (columnType.contains("decimal")) {
+        } else if (type.contains("decimal") || type.contains("numeric")) {
             return "BigDecimal";
-        } else if (columnType.contains("boolean")) {
+        } else if (type.contains("boolean") || type.contains("bool")) {
             return "Boolean";
         } else {
             return "String";
@@ -248,7 +291,6 @@ public class CodeGenerator {
         StringBuilder sb = new StringBuilder();
         sb.append("package " + GeneratorConfig.ENTITY_PACKAGE + ";\n\n");
         sb.append("import " + GeneratorConfig.TABLE_NAME_ANNOTATION + ";\n");
-        sb.append("import " + GeneratorConfig.TENANT_ENTITY + ";\n");
         if (tableInfo.getColumns().stream().anyMatch(col -> col.getJavaType().equals("LocalDateTime") || col.getJavaType().equals("LocalDate") || col.getJavaType().equals("LocalTime"))) {
             sb.append("import java.time.LocalDateTime;\n");
         }
@@ -268,8 +310,8 @@ public class CodeGenerator {
         
         // 生成字段
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") 
-                && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") 
+            if (!column.getColumnName().equals("id")
+                && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time")
                 && !column.getColumnName().equals("db_status") && !column.getColumnName().equals("creator")
                 && !column.getColumnName().equals("updater")) {
                 sb.append("    /**\n");
@@ -278,11 +320,11 @@ public class CodeGenerator {
                 sb.append("    private ").append(column.getJavaType()).append(" ").append(column.getJavaFieldName()).append(";\n\n");
             }
         }
-        
+
         // 生成getter和setter
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") 
-                && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") 
+            if (!column.getColumnName().equals("id")
+                && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time")
                 && !column.getColumnName().equals("db_status") && !column.getColumnName().equals("creator")
                 && !column.getColumnName().equals("updater")) {
                 sb.append("    public ").append(column.getJavaType()).append(" get").append(column.getJavaFieldName().substring(0, 1).toUpperCase()).append(column.getJavaFieldName().substring(1)).append("() {\n");
@@ -341,17 +383,17 @@ public class CodeGenerator {
         
         // 生成查询字段
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
+            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
                 sb.append("    /**\n");
                 sb.append("     * ").append(column.getColumnComment() != null ? column.getColumnComment() : column.getColumnName()).append("\n");
                 sb.append("     */\n");
                 sb.append("    private ").append(column.getJavaType()).append(" ").append(column.getJavaFieldName()).append(";\n\n");
             }
         }
-        
+
         // 生成getter和setter
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
+            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
                 sb.append("    public ").append(column.getJavaType()).append(" get").append(column.getJavaFieldName().substring(0, 1).toUpperCase()).append(column.getJavaFieldName().substring(1)).append("() {\n");
                 sb.append("        return ").append(column.getJavaFieldName()).append(";\n");
                 sb.append("    }\n\n");
@@ -405,12 +447,7 @@ public class CodeGenerator {
                 sb.append("    private ").append(column.getJavaType()).append(" ").append(column.getJavaFieldName()).append(";\n\n");
             }
         }
-        
-        sb.append("    /**\n");
-        sb.append("     * 租户名称\n");
-        sb.append("     */\n");
-        sb.append("    private String tenantName;\n");
-        
+
         // 生成getter和setter
         sb.append("\n    public Long getId() {\n");
         sb.append("        return id;\n");
@@ -429,13 +466,7 @@ public class CodeGenerator {
                 sb.append("    }\n\n");
             }
         }
-        
-        sb.append("    public String getTenantName() {\n");
-        sb.append("        return tenantName;\n");
-        sb.append("    }\n\n");
-        sb.append("    public void setTenantName(String tenantName) {\n");
-        sb.append("        this.tenantName = tenantName;\n");
-        sb.append("    }\n");
+
         sb.append("}\n");
         return sb.toString();
     }
@@ -662,7 +693,7 @@ public class CodeGenerator {
         sb.append("        from ").append(tableInfo.getTableName()).append("\n");
         sb.append("        where db_status = 1\n");
         for (ColumnInfo column : tableInfo.getColumns()) {
-            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("tenant_id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
+            if (!column.getColumnName().equals("id") && !column.getColumnName().equals("create_time") && !column.getColumnName().equals("update_time") && !column.getColumnName().equals("db_status")) {
                 sb.append("        <if test=\"").append(column.getJavaFieldName()).append(" != null");
                 if (column.getJavaType().equals("String")) {
                     sb.append(" and ").append(column.getJavaFieldName()).append(" != ''");

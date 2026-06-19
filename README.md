@@ -45,8 +45,8 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 oh-framework 系统框架，包括数据库、基础实体类、鉴权
 oh-system    系统管理模块，包括组织架构、用户、鉴权、基础配置等
 oh-module    业务模块
-    - oh-module-app    对外服务接口
-    - oh-module-flow   工作流程管理
+    - oh-app    对外服务接口
+    - oh-flow   工作流程管理
     - ...              扩展其他业务模块
 ```
 通过引入`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。

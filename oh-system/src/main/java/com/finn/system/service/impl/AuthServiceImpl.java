@@ -4,7 +4,7 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.security.wechat.WechatMiniProgramAuthenticationToken;
+import com.finn.framework.security.wechat.WechatMiniAuthenticationToken;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpContextUtils;
 import com.finn.framework.utils.IpUtils;
@@ -90,17 +90,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 微信登录
-     * @param code
+     * 微信登录，小程序调用 wx.login() 获取 code
+     * @param code 微信临时登录凭证
      * @return
      */
     @Override
     public TokenVO wechatLogin(String code) {
         // 1. 创建未认证 Token
-        WechatMiniProgramAuthenticationToken authRequest = new WechatMiniProgramAuthenticationToken(code);
+        WechatMiniAuthenticationToken authRequest = new WechatMiniAuthenticationToken(code);
         // 2. 执行认证
         Authentication authentication;
         try {
+            // 调用 WechatMiniAuthenticationProvider.authenticate()，获取用户信息
             authentication = authenticationManager.authenticate(authRequest);
         }catch (Exception e){
             log.error("微信认证失败！code = {}, {}", code, e.getMessage());
@@ -117,7 +118,8 @@ public class AuthServiceImpl implements AuthService {
         }
         // 登录时间和token刷新时间
         user.setLoginTime(LocalDateTime.now());
-        user.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
+        Long refreshTokenExpire = securityProperties.getRefreshTokenExpire() * 365; // 微信小程序的刷新token可设置长一点，或者可另外配置
+        user.setRefreshTokenExpire(refreshTokenExpire);
 
         // 生成 accessToken
         String accessToken = Tools.generator();
@@ -127,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
         // 保存用户信息到缓存
         tokenCache.saveUser(accessToken, refreshToken, user);
 
-        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
+        return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), refreshTokenExpire);
     }
 
     /**

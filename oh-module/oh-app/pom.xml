@@ -8,7 +8,7 @@
         <artifactId>oh-module</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>oh-module-app</artifactId>
+    <artifactId>oh-app</artifactId>
 
     <dependencies>
         <!-- Kafka消息队列 -->
