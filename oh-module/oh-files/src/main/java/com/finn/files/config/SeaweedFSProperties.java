@@ -30,9 +30,13 @@ public class SeaweedFSProperties {
     private boolean enabled = true;
 
     /**
-     * 运行的文件，为空运行全部
+     * 白名单文件，为空运行全部
      */
     private List<String> fileSuffix;
+    /**
+     * 是否缓存文件信息
+     */
+    private boolean cacheFile = false;
 
     // Getters & Setters
     public boolean isEnabled() { return enabled; }
@@ -62,5 +66,13 @@ public class SeaweedFSProperties {
 
     public void setFileSuffix(List<String> fileSuffix) {
         this.fileSuffix = fileSuffix;
+    }
+
+    public boolean isCacheFile() {
+        return cacheFile;
+    }
+
+    public void setCacheFile(boolean cacheFile) {
+        this.cacheFile = cacheFile;
     }
 }
