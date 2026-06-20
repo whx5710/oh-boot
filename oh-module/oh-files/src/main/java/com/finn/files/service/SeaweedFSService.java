@@ -4,7 +4,11 @@ import com.finn.files.config.SeaweedFSProperties;
 import com.finn.files.vo.PartInfoVO;
 import com.finn.files.vo.PresignedUrlVO;
 import com.finn.files.vo.MultipartUploadInitVO;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.entity.HashDto;
 import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.utils.Tools;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -48,6 +52,7 @@ import java.util.Objects;
  * }
  */
 @Service
+// 只有当配置 seaweedfs.s3.enabled=true （或缺省该配置）时，这个 SeaweedFSService Bean 才会被加载到 Spring 容器中
 @ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
 public class SeaweedFSService {
 
@@ -56,6 +61,8 @@ public class SeaweedFSService {
     private final S3Presigner s3Presigner;
 
     private final SeaweedFSProperties properties;
+
+    private final RedisCache redisCache;
 
     /**
      * 分片大小：10MB
@@ -67,10 +74,12 @@ public class SeaweedFSService {
      */
     private static final long MEMORY_UPLOAD_THRESHOLD = 5 * 1024 * 1024;
 
-    public SeaweedFSService(S3Client s3Client, S3Presigner s3Presigner, SeaweedFSProperties properties) {
+    public SeaweedFSService(S3Client s3Client, S3Presigner s3Presigner, SeaweedFSProperties properties,
+                            RedisCache redisCache) {
         this.s3Client = s3Client;
         this.s3Presigner = s3Presigner;
         this.properties = properties;
+        this.redisCache = redisCache;
     }
 
     /**
@@ -96,10 +105,10 @@ public class SeaweedFSService {
                     .key(key)
                     .contentType(file.getContentType())
                     .build();
-
+            long fileSize = file.getSize();
             // 小文件直接读内存；大文件使用 ContentStreamProvider，
             // 利用 Spring 已创建的临时文件流，避免二次磁盘写
-            if (file.getSize() <= MEMORY_UPLOAD_THRESHOLD) {
+            if (fileSize <= MEMORY_UPLOAD_THRESHOLD) {
                 s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
             } else {
                 s3Client.putObject(putObjectRequest, RequestBody.fromContentProvider(
@@ -110,10 +119,12 @@ public class SeaweedFSService {
                                 throw new RuntimeException(e);
                             }
                         },
-                        file.getSize(),
+                        fileSize,
                         Objects.requireNonNull(file.getContentType())
                 ));
             }
+            // 缓存文件信息
+            cacheFile(key, fileName, fileSize);
             return key;
         } catch (IOException e) {
             throw new ServerException("文件上传失败", e);
@@ -436,5 +447,29 @@ public class SeaweedFSService {
             }
         }
         return flag;
+    }
+
+    /**
+     * 缓存文件
+     * fileId 文件id、url
+     * name 文件名
+     * size 文件大小
+     * platform 存储平台
+     * @param fileId
+     */
+    private void cacheFile(String fileId, String fileName, long fileSize){
+        if(properties.isCacheFile()){
+            HashDto hashDto = new HashDto();
+            hashDto.put("fileId", fileId);
+            hashDto.put("name", fileName);
+            hashDto.put("size", fileSize);
+            hashDto.put("platform", "SeaweedFS");
+            if(SecurityUser.getUserId() != null){
+                hashDto.put("creator", SecurityUser.getUserId());
+            }
+            String key = RedisKeys.getFileCacheKey();
+            // 保存到Redis队列,存3天
+            redisCache.leftPush(key, hashDto, 259200); // 60*60*24*3
+        }
     }
 }

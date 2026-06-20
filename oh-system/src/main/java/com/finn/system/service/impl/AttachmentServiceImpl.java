@@ -1,16 +1,26 @@
 package com.finn.system.service.impl;
 
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
+import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.utils.AssertUtils;
+import com.finn.framework.utils.ExceptionUtils;
 import com.finn.system.convert.AttachmentConvert;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.mapper.AttachmentMapper;
 import com.finn.system.query.AttachmentQuery;
 import com.finn.system.service.AttachmentService;
 import com.finn.system.vo.AttachmentVO;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 附件管理
@@ -21,9 +31,13 @@ import java.util.List;
 @Service
 public class AttachmentServiceImpl implements AttachmentService {
 
+    private final static Logger log = LoggerFactory.getLogger(AttachmentServiceImpl.class);
+
     private final AttachmentMapper attachmentMapper;
-    public AttachmentServiceImpl(AttachmentMapper attachmentMapper) {
+    private final RedisCache redisCache;
+    public AttachmentServiceImpl(AttachmentMapper attachmentMapper, RedisCache redisCache) {
         this.attachmentMapper = attachmentMapper;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -54,6 +68,46 @@ public class AttachmentServiceImpl implements AttachmentService {
             param.setDbStatus(0);
             attachmentMapper.updateById(param);
         });
+    }
+
+    /**
+     * 启动项目时，从Redis队列获取附件信息保存数据库
+     * fileId 文件id、url
+     * name 文件名
+     * size 文件大小
+     * platform 存储平台
+     */
+    @PostConstruct
+    public void saveAttachment() {
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
+        // 每隔150秒钟，执行一次
+        scheduledService.scheduleWithFixedDelay(() -> {
+            try {
+                String key = RedisKeys.getFileCacheKey();
+                // 每次插入120条
+                int count = 120;
+                List<AttachmentEntity> list = new ArrayList<>();
+                for (int i = 0; i < count; i++) {
+                    Object object = redisCache.rightPop(key);
+                    if(object == null){
+                        break;
+                    }
+                    HashDto file = (HashDto) object;
+                    AttachmentEntity attachment = new AttachmentEntity();
+                    attachment.setUrl(file.getStr("fileId"));
+                    attachment.setName(file.getStr("name"));
+                    attachment.setSize(file.getLong("size"));
+                    attachment.setPlatform(file.getStr("platform"));
+                    attachment.setCreator(file.getLong("creator"));
+                    list.add(attachment);
+                }
+                if(!list.isEmpty()){
+                    attachmentMapper.insertBatch(list);
+                }
+            } catch (Exception e) {
+                log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));
+            }
+        }, 10, 150, TimeUnit.SECONDS);
     }
 
 }
