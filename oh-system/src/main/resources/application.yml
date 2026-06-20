@@ -6,7 +6,7 @@
 #      linux:   sh startup.sh -m standalone 或 bash startup.sh -m standalone
 #      windows: startup.cmd -m standalone
 #    nacos关闭命令：sh shutdown.sh   或   shutdown.cmd
-# 4、如果使用异步接口（oh-module-api），请自行安装Kafka（换成其他MQ代码进行相应调整），启动并配置正确
+# 4、如果使用异步接口（oh-api），请自行安装Kafka（换成其他MQ代码进行相应调整），启动并配置正确
 #    linux 启动命令
 #    nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
 #    nohup sh bin/kafka-server-start.sh config/server.properties &

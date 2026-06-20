@@ -47,8 +47,20 @@ public class RedisKeys {
         return ACCESS + "refresh:" + refreshToken;
     }
 
-    public static String getLogKey() {
-        return PREFIX + "log";
+    /**
+     * 操作日志key
+     * @return
+     */
+    public static String getOperateLogKey() {
+        return PREFIX + "log:operate";
+    }
+
+    /**
+     * 操作日志key
+     * @return
+     */
+    public static String getFileCacheKey() {
+        return PREFIX + "log:files";
     }
 
     /**

@@ -83,12 +83,12 @@ public class OperateLogServiceImpl implements OperateLogService {
     public void saveLog() {
         ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
 
-        // 每隔20秒钟，执行一次
+        // 每隔120秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
-                String key = RedisKeys.getLogKey();
-                // 每次插入10条
-                int count = 10;
+                String key = RedisKeys.getOperateLogKey();
+                // 每次插入50条
+                int count = 50;
                 List<OperateLogEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
