@@ -21,5 +21,5 @@ public interface CommConstant {
     /**
      * 错误日志前缀
      */
-    String ERROR_LOG_KEY = PREFIX + "error:log";
+    String ERROR_LOG_KEY = PREFIX + "log:error";
 }
