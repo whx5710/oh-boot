@@ -54,12 +54,20 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Long save(EventVO vo) {
+        UserDetail user = SecurityUser.getUser();
+        if(user == null){
+            throw new ServerException("未找到用户信息");
+        }
+        if(user.getOpenId() == null){
+            throw new ServerException("用户ID不能为空");
+        }
         Event entity = EventConvert.INSTANCE.convert(vo);
         entity.setCode(redisCache.getDayIncrementCode("","urban:event:code", 5));
         if(entity.getReportTime() == null){
             entity.setReportTime(LocalDateTime.now());
         }
         entity.setAcceptStatus("1");
+        entity.setOpenId(user.getOpenId());
         eventMapper.insert(entity);
 
         // 保存附件
@@ -134,6 +142,9 @@ public class EventServiceImpl implements EventService {
      * @return
      */
     private QueryWrapper<Event> getQueryWrapper(EventQuery query){
+        if(query.getAcceptStatus() != null && query.getAcceptStatus().isEmpty()){
+            query.setAcceptStatus(null);
+        }
         QueryWrapper<Event> queryWrapper = QueryWrapper.of(Event.class);
         queryWrapper.eq(Event::getAcceptStatus, query.getAcceptStatus())
                 .eq(Event::getAcceptStatus, query.getAnonymous())
