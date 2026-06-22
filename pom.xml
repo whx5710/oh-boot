@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.6</version>
+		<version>4.1.0</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.finn</groupId>
@@ -27,7 +27,7 @@
 	</developers>
 
 	<modules>
-		<module>oh-framework</module>
+		<!--<module>oh-framework</module>-->
 		<module>oh-module</module>
 		<module>oh-system</module>
 	</modules>
@@ -36,9 +36,9 @@
 		<java.version>21</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<spring-boot-dependencies.version>4.0.5</spring-boot-dependencies.version>
+		<spring-boot-dependencies.version>4.1.0</spring-boot-dependencies.version>
 		<spring.security>7.1.0-M2</spring.security>
-		<finn.framework.version>4.1.0_260523</finn.framework.version>
+		<finn.framework.version>4.2.1_260622</finn.framework.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 	</properties>
 
