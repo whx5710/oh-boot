@@ -14,10 +14,13 @@ import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Redis Cache
@@ -431,6 +434,71 @@ public class RedisCache {
         code = code + formatDay + sequence;
 
         return code;
+    }
+
+    /**
+     * 根据模板生成年度自增编号
+     * <p>模板占位符：</p>
+     * <ul>
+     *     <li>#year#：当前年度，如 2026</li>
+     *     <li>#num#：原始序列号，不补零</li>
+     *     <li>#num:4#：指定长度的序列号，不足前面补零，如 0023</li>
+     * </ul>
+     * <p>示例：长城综[#year#]广第#num:4#号 → 长城综[2026]广第0023号</p>
+     *
+     * @param template 模板字符串
+     * @return 生成的编号
+     */
+    public String getCodeByTemplate(String template) {
+        int year = LocalDateTime.now().getYear();
+        String result = template.replace("#year#", String.valueOf(year));
+
+        Pattern numPattern = Pattern.compile("#num(?::(\\d+))?#");
+        Matcher matcher = numPattern.matcher(result);
+        if (!matcher.find()) {
+            return result;
+        }
+
+        String key = "code:tpl:" + year + ":" + template;
+        Long seq = getYearIncrement(key, year);
+        if (seq <= 0) {
+            throw new IllegalStateException("获取年度自增序列号失败");
+        }
+
+        matcher.reset();
+        StringBuilder sb = new StringBuilder();
+        while (matcher.find()) {
+            String lenStr = matcher.group(1);
+            int len = lenStr != null ? Integer.parseInt(lenStr) : 0;
+            String seqStr = len > 0 ? Tools.getSequence(seq, len) : String.valueOf(seq);
+            matcher.appendReplacement(sb, seqStr);
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    /**
+     * 获取年度Redis原子自增数据，每年会重新开始
+     *
+     * @param key  redis key
+     * @param year 当前年份
+     * @return 自增后的值
+     */
+    private Long getYearIncrement(String key, int year) {
+        RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
+        if (redisConnectionFactory == null) {
+            return -1L;
+        }
+        RedisAtomicLong counter = new RedisAtomicLong(key, redisConnectionFactory);
+        long increment = counter.incrementAndGet();
+        if (increment == 1L) {
+            LocalDateTime nextYear = LocalDateTime.of(year + 1, 1, 1, 0, 0, 0);
+            long liveTime = Duration.between(LocalDateTime.now(), nextYear).getSeconds();
+            if (liveTime > 0) {
+                counter.expire(liveTime, TimeUnit.SECONDS);
+            }
+        }
+        return increment;
     }
 
     /**
