@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 分页工具类
- *
+ * list和total
  * @author 王小费 whx5710@qq.com
  *
  */
@@ -17,18 +17,18 @@ public class PageResult<T> implements Serializable {
     /**
      * 总记录数
      */
-    private int total;
+    private long total;
 
     /**
      * 列表数据
      */
     private List<T> list;
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 
@@ -47,6 +47,6 @@ public class PageResult<T> implements Serializable {
      */
     public PageResult(List<T> list, long total) {
         this.list = list;
-        this.total = (int)total;
+        this.total = total;
     }
 }

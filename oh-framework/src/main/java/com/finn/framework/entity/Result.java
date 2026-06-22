@@ -2,6 +2,8 @@ package com.finn.framework.entity;
 
 import com.finn.framework.common.enums.ErrorCode;
 
+import java.util.List;
+
 /**
  * 响应数据
  *
@@ -65,9 +67,31 @@ public class Result<T> {
         return ok(null);
     }
 
+    /**
+     * 返回结果集
+     * @param data
+     * @return
+     * @param <T>
+     */
     public static <T> Result<T> ok(T data) {
         Result<T> result = new Result<>();
         result.setData(data);
+        result.setSuccess(true);
+        return result;
+    }
+
+    /**
+     * 分页数据
+     * @param list 分页list
+     * @param total 总数
+     * @return result
+     * @param <T> t
+     */
+    public static <T> Result<PageResult<T>> ok(List<T> list, long total) {
+        PageResult<T> pageResult = new PageResult<>(list, total);
+
+        Result<PageResult<T>> result = new Result<>();
+        result.setData(pageResult);
         result.setSuccess(true);
         return result;
     }
@@ -137,6 +161,4 @@ public class Result<T> {
         result.setStackInfo(e.getMessage());
         return result;
     }
-
-
 }
