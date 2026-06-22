@@ -39,7 +39,7 @@ public class EventController {
     @GetMapping("/page")
     public Result<PageResult<EventVO>> page(@Valid EventQuery query) {
         Page<Event> page = eventService.page(query);
-        return Result.ok(new PageResult<>(EventConvert.INSTANCE.convertList(page.getResult()), page.getTotal()));
+        return Result.ok(EventConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     /**
@@ -50,7 +50,7 @@ public class EventController {
     @GetMapping("/myEvent")
     public Result<PageResult<EventVO>> myEvent(@Valid EventQuery query) {
         Page<Event> page = eventService.myEvent(query);
-        return Result.ok(new PageResult<>(EventConvert.INSTANCE.convertList(page.getResult()), page.getTotal()));
+        return Result.ok(EventConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
     }
 
     /**
@@ -96,7 +96,6 @@ public class EventController {
     @Log(module = "事件表", name = "删除", type = OperateTypeEnum.DELETE)
     public Result<String> delete(@RequestBody List<Long> idList) {
         eventService.delete(idList);
-
         return Result.ok();
     }
 }
