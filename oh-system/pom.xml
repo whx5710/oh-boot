@@ -28,7 +28,7 @@
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
         </dependency>
-        <!--文件服务-->
+        <!--文件服务，可独立部署-->
         <dependency>
             <groupId>com.finn.module</groupId>
             <artifactId>oh-files</artifactId>
