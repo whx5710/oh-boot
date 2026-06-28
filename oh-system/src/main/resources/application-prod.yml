@@ -36,23 +36,26 @@ finn:
   # 微信相关配置
   wechat:
     api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
-    app-id: wxe0432217f3d5834e # 微信小程序app id
+    app-id: wxe04322abcdefg # 微信小程序app id
     secret: aebf3725274d309de708f0ceaf123 # 微信小程序密钥
+  # Redis 双数据源配置（主缓存 + 队列缓存）
+  redis:
+    primary:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      #password:
+    queue:
+      host: 127.0.0.1
+      port: 6379
+      database: 1
+      #password:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
     multipart:
       max-file-size: 1024MB
       max-request-size: 1024MB
-  data:
-    redis:
-      database: 0
-      host: 127.0.0.1
-      port: 6379
-      #password:
-      timeout: 10s  # 连接超时时间
-      # 是否开启 SSL
-      ssl.enabled: false
   datasource:
     #数据源的类型,对应配置相关的连接池  com.zaxxer.hikari.HikariDataSource
     type: com.zaxxer.hikari.HikariDataSource
