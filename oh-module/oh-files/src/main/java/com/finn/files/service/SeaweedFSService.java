@@ -10,6 +10,7 @@ import com.finn.framework.entity.HashDto;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.utils.Tools;
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SeaweedFS 服务
@@ -86,9 +89,13 @@ public class SeaweedFSService {
      * 上传文件
      *
      * @param file 上传的文件
+     * @param isTmp 是否临时文件，临时文件可删除
      * @return 文件唯一标识 key
      */
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file, Boolean isTmp) {
+        if(isTmp == null){
+            isTmp = false;
+        }
         try {
             String fileName = file.getOriginalFilename();
             if (fileName == null) {
@@ -124,7 +131,7 @@ public class SeaweedFSService {
                 ));
             }
             // 缓存文件信息
-            cacheFile(key, fileName, fileSize);
+            cacheFile(key, fileName, fileSize, file.getContentType(), "SeaweedFS", isTmp);
             return key;
         } catch (IOException e) {
             throw new ServerException("文件上传失败", e);
@@ -250,6 +257,11 @@ public class SeaweedFSService {
             return true;
         } catch (NoSuchKeyException e) {
             return false;
+        } catch (S3Exception e) {
+            if (e.statusCode() == 404) {
+                return false;
+            }
+            throw e;
         }
     }
 
@@ -450,26 +462,58 @@ public class SeaweedFSService {
     }
 
     /**
-     * 缓存文件
-     * fileId 文件id、url
-     * name 文件名
-     * size 文件大小
-     * platform 存储平台
-     * @param fileId
+     * 缓存文件,在oh-system中的AttachmentService保存文件信息
+     * @param  fileId 文件id、url
+     * @param  fileName 文件名
+     * @param  fileSize 文件大小
+     * @param  platform 存储平台
+     * @param  isTmp 是否临时文件，临时文件可以定期删除
+     *
      */
-    private void cacheFile(String fileId, String fileName, long fileSize){
+    private void cacheFile(String fileId, String fileName, long fileSize, String contentType,
+                           String platform, Boolean isTmp){
         if(properties.isCacheFile()){
             HashDto hashDto = new HashDto();
             hashDto.put("fileId", fileId);
             hashDto.put("name", fileName);
             hashDto.put("size", fileSize);
-            hashDto.put("platform", "SeaweedFS");
+            hashDto.put("contentType", contentType);
+            hashDto.put("platform", platform);
+            hashDto.put("tmpFlag", isTmp?1:0);
             if(SecurityUser.getUserId() != null){
                 hashDto.put("creator", SecurityUser.getUserId());
             }
             String key = RedisKeys.getFileCacheKey();
-            // 保存到Redis队列,存3天
-            redisCache.leftPush(key, hashDto, 259200); // 60*60*24*3
+            // 保存到Redis队列,存2天
+            redisCache.leftPush(key, hashDto, 172800); // 60*60*24*2
         }
+    }
+
+    /**
+     * 删除临时文件
+     */
+    @PostConstruct
+    public void clearData (){
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
+        // 每隔150秒钟，执行一次
+        scheduledService.scheduleWithFixedDelay(() -> {
+            if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) > 0){
+                for(int i = 0; i < 20; i++){
+                    Object object = redisCache.rightPop(RedisKeys.getTmpFileCacheKey());
+                    if(object == null){
+                        break;
+                    }
+                    HashDto hashDto = (HashDto) object;
+                    String fileId = hashDto.getStr("url");
+                    // 删除文件
+                    if(fileId != null){
+                        if(this.exists(fileId)){
+                            this.deleteFile(fileId);
+                        }
+                        redisCache.leftPush(RedisKeys.getTmpFileDelKey(), hashDto);
+                    }
+                }
+            }
+        }, 30, 300, TimeUnit.SECONDS);
     }
 }

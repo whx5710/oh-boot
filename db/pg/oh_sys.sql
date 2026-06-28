@@ -3,16 +3,16 @@
 
  Source Server         : postgresql
  Source Server Type    : PostgreSQL
- Source Server Version : 180003 (180003)
+ Source Server Version : 180004 (180004)
  Source Host           : localhost:5432
  Source Catalog        : stepping_stone
  Source Schema         : oh_sys
 
  Target Server Type    : PostgreSQL
- Target Server Version : 180003 (180003)
+ Target Server Version : 180004 (180004)
  File Encoding         : 65001
 
- Date: 13/06/2026 20:43:53
+ Date: 28/06/2026 09:20:53
 */
 
 
@@ -97,6 +97,8 @@ CREATE TABLE "oh_sys"."sys_attachment" (
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "url" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "size" int8,
+  "content_type" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "tmp_flag" int2 NOT NULL DEFAULT 0,
   "platform" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "db_status" int2 DEFAULT '1'::smallint,
   "creator" int8,
@@ -109,6 +111,7 @@ COMMENT ON COLUMN "oh_sys"."sys_attachment"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."name" IS '附件名称';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."url" IS '附件地址';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."size" IS '附件大小';
+COMMENT ON COLUMN "oh_sys"."sys_attachment"."tmp_flag" IS '临时文件标识，1为临时文件';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."platform" IS '存储平台';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."creator" IS '创建者';
@@ -221,9 +224,6 @@ INSERT INTO "oh_sys"."sys_dict_data" VALUES (28, 10, '修改', '3', 'warning', '
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (29, 10, '删除', '4', 'danger', '', 3, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (30, 10, '导出', '5', 'info', '', 4, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (31, 10, '导入', '6', 'info', '', 5, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_data" VALUES (32, 12, '开始', '1', NULL, '', 1, 1, 10000, '2022-11-27 19:23:01', 10000, '2022-11-27 19:23:01');
-INSERT INTO "oh_sys"."sys_dict_data" VALUES (33, 12, '暂停', '2', NULL, '', 2, 1, 10000, '2022-11-27 19:23:16', 10000, '2022-11-27 19:23:16');
-INSERT INTO "oh_sys"."sys_dict_data" VALUES (34, 12, '关闭', '3', NULL, '', 3, 1, 10000, '2022-11-27 19:23:29', 10000, '2022-11-27 19:23:29');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (35, 13, '默认', 'default', '', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (36, 13, '系统', 'system', '', '', 1, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (37, 14, '暂停', '0', 'danger', '', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
@@ -232,6 +232,12 @@ INSERT INTO "oh_sys"."sys_dict_data" VALUES (39, 15, '阿里云', '0', '', '', 0
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (40, 15, '腾讯云', '1', '', '', 1, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (41, 15, '七牛云', '2', '', '', 2, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
 INSERT INTO "oh_sys"."sys_dict_data" VALUES (42, 15, '华为云', '3', '', '', 3, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (32, 12, '设施损坏', 'facility', NULL, '', 1, 1, 10000, '2022-11-27 19:23:01', 10000, '2026-06-18 23:08:33.839675');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (33, 12, '环境卫生', 'hygiene', NULL, '', 2, 1, 10000, '2022-11-27 19:23:16', 10000, '2026-06-18 23:08:52.339996');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (34, 12, '安全隐患', 'safety', NULL, '', 3, 1, 10000, '2022-11-27 19:23:29', 10000, '2026-06-18 23:09:04.405446');
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (61231154140807168, 12, '秩序问题', 'order', NULL, NULL, 4, 1, 10000, '2026-06-18 23:10:44.767269', NULL, NULL);
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (61231247732506624, 12, '服务质量', 'service', NULL, NULL, 5, 1, 10000, '2026-06-18 23:11:07.081686', NULL, NULL);
+INSERT INTO "oh_sys"."sys_dict_data" VALUES (61231295530795008, 12, '其他问题', 'other', NULL, NULL, 1, 1, 10000, '2026-06-18 23:11:18.477354', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -279,10 +285,10 @@ INSERT INTO "oh_sys"."sys_dict_type" VALUES (7, 'login_operation', '操作信息
 INSERT INTO "oh_sys"."sys_dict_type" VALUES (8, 'params_type', '系统参数', 0, NULL, '参数管理', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO "oh_sys"."sys_dict_type" VALUES (9, 'user_super_admin', '用户是否是超管', 0, NULL, '用户是否是超管', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
 INSERT INTO "oh_sys"."sys_dict_type" VALUES (10, 'log_operate_type', '操作类型', 0, NULL, '操作日志', 0, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-04 21:03:59');
-INSERT INTO "oh_sys"."sys_dict_type" VALUES (12, 'project_status', '状态', 0, '', '项目状态', 12, 1, 10000, '2022-11-27 19:19:50', 10000, '2022-11-27 19:19:50');
 INSERT INTO "oh_sys"."sys_dict_type" VALUES (13, 'schedule_group', '任务组名', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO "oh_sys"."sys_dict_type" VALUES (14, 'schedule_status', '状态', 0, NULL, '定时任务', 0, 1, 10000, '2023-06-12 13:45:54', 10000, '2023-06-12 13:45:54');
 INSERT INTO "oh_sys"."sys_dict_type" VALUES (15, 'sms_platform', '平台类型', 0, NULL, '短信管理', 0, 1, 10000, '2023-06-12 13:47:41', 10000, '2023-06-12 13:47:41');
+INSERT INTO "oh_sys"."sys_dict_type" VALUES (12, 'event_type', '事件类型', 0, '', '事件类型', 12, 1, 10000, '2022-11-27 19:19:50', 10000, '2022-11-27 19:19:50');
 
 -- ----------------------------
 -- Table structure for sys_error_log
@@ -395,32 +401,32 @@ COMMENT ON TABLE "oh_sys"."sys_log_operate" IS '操作日志';
 -- ----------------------------
 DROP TABLE IF EXISTS "oh_sys"."sys_menu";
 CREATE TABLE "oh_sys"."sys_menu" (
-                                     "id" int8 NOT NULL,
-                                     "parent_id" int8,
-                                     "name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "title" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "path" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "menu_path" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "status" int4 DEFAULT 1,
-                                     "hide_in_menu" bool,
-                                     "hide_in_tab" bool,
-                                     "authority" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "badge" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "badge_type" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "badge_variants" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "affix_tab" bool,
-                                     "link" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "type" varchar(10) COLLATE "pg_catalog"."default" DEFAULT 'menu'::character varying,
-                                     "open_style" int2 DEFAULT 0,
-                                     "icon" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "keep_alive" bool,
-                                     "sort" int4,
-                                     "db_status" int2 DEFAULT 1,
-                                     "mark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-                                     "creator" int8,
-                                     "create_time" timestamp(6),
-                                     "updater" int8,
-                                     "update_time" timestamp(6)
+  "id" int8 NOT NULL,
+  "parent_id" int8,
+  "name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "title" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "path" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "menu_path" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "status" int4 DEFAULT 1,
+  "hide_in_menu" bool,
+  "hide_in_tab" bool,
+  "authority" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "badge" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "badge_type" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "badge_variants" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "affix_tab" bool,
+  "link" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "type" varchar(10) COLLATE "pg_catalog"."default" DEFAULT 'menu'::character varying,
+  "open_style" int2 DEFAULT 0,
+  "icon" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "keep_alive" bool,
+  "sort" int4,
+  "db_status" int2 DEFAULT 1,
+  "mark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "updater" int8,
+  "update_time" timestamp(6)
 )
 ;
 COMMENT ON COLUMN "oh_sys"."sys_menu"."id" IS 'id';
