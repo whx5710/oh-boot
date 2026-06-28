@@ -31,7 +31,7 @@ finn:
     allow-credentials: true
     max-age: 3600
   open-api:
-    type: 2 # 1直接保存 2使用MQ异步保存
+    type: 1 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
     cache-time: 604800 # 缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
   xss:
@@ -48,23 +48,26 @@ finn:
   # 微信相关配置
   wechat:
     api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
-    app-id: wxbbc8caf161d5b3a1 # 微信小程序app id
-    secret: acbbfffc96970f68c3c7c563c9123456 # 微信小程序密钥
+    app-id: wxe04321234567 # 微信小程序app id
+    secret: ac123c96970f68c3c7c563c9123456 # 微信小程序密钥
+  # Redis 双数据源配置（主缓存 + 队列缓存）
+  redis:
+    primary:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      #password:
+    queue:
+      host: 127.0.0.1
+      port: 6379
+      database: 1
+      #password:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
     multipart:
       max-file-size: 1024MB
       max-request-size: 1024MB
-  data:
-    redis:
-      database: 0
-      host: 127.0.0.1
-      port: 6379
-      #password:
-      timeout: 10s  # 连接超时时间
-      # 是否开启 SSL
-      ssl.enabled: false
   datasource:
     #数据源的类型,对应配置相关的连接池 com.zaxxer.hikari.HikariDataSource
     type: com.zaxxer.hikari.HikariDataSource
@@ -162,7 +165,7 @@ seaweedfs:
     bucket: default-bucket                  # 默认存储桶名
     region: us-east-1                       # SeaweedFS 不校验 region，任意填
     path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
-    cache-file: false                       # 是否redis缓存文件信息，用于异步保存到表中，默认false
+    cache-file: true                        # 是否redis缓存文件信息，用于异步保存到表中，默认false
     # 允许上传的文件扩展名，如 .jpg
     file-suffix:
       - .jpg
