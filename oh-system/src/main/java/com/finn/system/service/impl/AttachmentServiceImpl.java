@@ -18,6 +18,7 @@ import jakarta.annotation.PostConstruct;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,10 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentMapper attachmentMapper;
     private final RedisCache redisCache;
+
+    @Value("${seaweedfs.s3.enabled:true}")
+    private boolean seaweedfsEnabled;
+
     public AttachmentServiceImpl(AttachmentMapper attachmentMapper, RedisCache redisCache) {
         this.attachmentMapper = attachmentMapper;
         this.redisCache = redisCache;
@@ -86,6 +91,10 @@ public class AttachmentServiceImpl implements AttachmentService {
      */
     @PostConstruct
     public void saveAttachment() {
+        if (!seaweedfsEnabled) {
+            log.info("SeaweedFS 未启用，跳过附件定时任务");
+            return;
+        }
         ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
         // 每隔150秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
