@@ -77,7 +77,8 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     /**
-     * 启动项目时，从Redis队列获取附件信息保存数据库
+     * 启动项目时，从Redis队列获取附件信息保存数据库<br/>
+     * 删除48小时前的临时文件
      * fileId 文件id、url
      * name 文件名
      * size 文件大小
@@ -113,7 +114,7 @@ public class AttachmentServiceImpl implements AttachmentService {
                 // 查询48小时前的临时文件
                 LocalDateTime time = LocalDateTime.now();
                 time = time.minusHours(48);
-                QueryWrapper<AttachmentEntity> queryWrapper = new QueryWrapper<>();
+                QueryWrapper<AttachmentEntity> queryWrapper = QueryWrapper.of(AttachmentEntity.class);
                 queryWrapper.eq(AttachmentEntity::getDbStatus, 1).eq(AttachmentEntity::getTmpFlag, 1)
                         .le(AttachmentEntity::getCreateTime, time).orderBy(AttachmentEntity::getCreateTime, ASC)
                         .page(1, 10);
@@ -123,7 +124,7 @@ public class AttachmentServiceImpl implements AttachmentService {
                         HashDto hashDto = new HashDto();
                         hashDto.put("id", item.getId());
                         hashDto.put("url", item.getUrl());
-                        redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto);
+                        redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto, 60*60*24); // 缓存24小时
                     }
                 }
             }
@@ -141,11 +142,11 @@ public class AttachmentServiceImpl implements AttachmentService {
                 }
                 if(!ids.isEmpty()){
                     attachmentMapper.updateByWrapper(UpdateWrapper.of(AttachmentEntity.class)
-                            .set(AttachmentEntity::getDbStatus, 0).set(AttachmentEntity::getUpdateTime, LocalDateTime.now())
+                            .set(AttachmentEntity::getDbStatus, 0)
                             .eq(AttachmentEntity::getDbStatus, 1).in(AttachmentEntity::getId, ids));
                 }
             }
-        }, 10, 150, TimeUnit.SECONDS);
+        }, 10, 180, TimeUnit.SECONDS);
     }
 
     private static @NonNull AttachmentEntity getAttachment(HashDto file) {
@@ -158,6 +159,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         if(tmpFlag == null){
             tmpFlag = 0;
         }
+        attachment.setContentType(file.getStr("contentType"));
         attachment.setTmpFlag(tmpFlag);
         attachment.setCreator(file.getLong("creator"));
         return attachment;

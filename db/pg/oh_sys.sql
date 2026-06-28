@@ -97,6 +97,7 @@ CREATE TABLE "oh_sys"."sys_attachment" (
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "url" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "size" int8,
+  "content_type" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "tmp_flag" int2 NOT NULL DEFAULT 0,
   "platform" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "db_status" int2 DEFAULT '1'::smallint,

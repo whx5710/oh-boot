@@ -37,6 +37,9 @@ public class AttachmentEntity extends BaseEntity {
     @TableField("tmp_flag")
     private Integer tmpFlag;
 
+    @TableField("content_type")
+    private String contentType;
+
     public String getName() {
         return name;
     }
@@ -75,5 +78,13 @@ public class AttachmentEntity extends BaseEntity {
 
     public void setTmpFlag(Integer tmpFlag) {
         this.tmpFlag = tmpFlag;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }
