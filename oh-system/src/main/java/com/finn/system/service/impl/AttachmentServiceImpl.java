@@ -13,6 +13,7 @@ import com.finn.system.query.AttachmentQuery;
 import com.finn.system.service.AttachmentService;
 import com.finn.system.vo.AttachmentVO;
 import jakarta.annotation.PostConstruct;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -84,21 +85,15 @@ public class AttachmentServiceImpl implements AttachmentService {
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
                 String key = RedisKeys.getFileCacheKey();
-                // 每次插入120条
-                int count = 120;
+                // 每次插入200条
+                int count = 200;
                 List<AttachmentEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
                     if(object == null){
                         break;
                     }
-                    HashDto file = (HashDto) object;
-                    AttachmentEntity attachment = new AttachmentEntity();
-                    attachment.setUrl(file.getStr("fileId"));
-                    attachment.setName(file.getStr("name"));
-                    attachment.setSize(file.getLong("size"));
-                    attachment.setPlatform(file.getStr("platform"));
-                    attachment.setCreator(file.getLong("creator"));
+                    AttachmentEntity attachment = getAttachment((HashDto) object);
                     list.add(attachment);
                 }
                 if(!list.isEmpty()){
@@ -108,6 +103,21 @@ public class AttachmentServiceImpl implements AttachmentService {
                 log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
         }, 10, 150, TimeUnit.SECONDS);
+    }
+
+    private static @NonNull AttachmentEntity getAttachment(HashDto file) {
+        AttachmentEntity attachment = new AttachmentEntity();
+        attachment.setUrl(file.getStr("fileId"));
+        attachment.setName(file.getStr("name"));
+        attachment.setSize(file.getLong("size"));
+        attachment.setPlatform(file.getStr("platform"));
+        Integer tmpFlag = file.getInt("tmpFlag");
+        if(tmpFlag == null){
+            tmpFlag = 0;
+        }
+        attachment.setTmpFlag(tmpFlag);
+        attachment.setCreator(file.getLong("creator"));
+        return attachment;
     }
 
 }

@@ -60,11 +60,13 @@ public class FileController {
      * 上传（使用流式上传，支持大文件）
      *
      * @param file 文件
+     * @param isTmp 是否临时文件，临时文件可删除
      * @return 结果
      * @throws Exception 异常
      */
     @PostMapping("/upload")
-    public Result<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
+    public Result<String> upload(@RequestParam("file") MultipartFile file,
+                                 @RequestParam(name = "isTmp", required = false) Boolean isTmp) throws Exception {
         if (file.isEmpty()) {
             return Result.error("请选择需要上传的文件");
         }
@@ -72,7 +74,7 @@ public class FileController {
         if (file.getSize() > MAX_FILE_SIZE) {
             return Result.error("文件大小超过限制，最大支持 " + (MAX_FILE_SIZE / 1024 / 1024) + "MB");
         }
-        return Result.ok(seaweedFSService.uploadFile(file));
+        return Result.ok(seaweedFSService.uploadFile(file, isTmp));
     }
 
     /**

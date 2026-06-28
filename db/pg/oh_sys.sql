@@ -12,7 +12,7 @@
  Target Server Version : 180004 (180004)
  File Encoding         : 65001
 
- Date: 18/06/2026 23:18:11
+ Date: 28/06/2026 09:20:53
 */
 
 
@@ -97,6 +97,7 @@ CREATE TABLE "oh_sys"."sys_attachment" (
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "url" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "size" int8,
+  "tmp_flag" int2 NOT NULL DEFAULT 0,
   "platform" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "db_status" int2 DEFAULT '1'::smallint,
   "creator" int8,
@@ -109,6 +110,7 @@ COMMENT ON COLUMN "oh_sys"."sys_attachment"."id" IS 'id';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."name" IS '附件名称';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."url" IS '附件地址';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."size" IS '附件大小';
+COMMENT ON COLUMN "oh_sys"."sys_attachment"."tmp_flag" IS '临时文件标识，1为临时文件';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."platform" IS '存储平台';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_sys"."sys_attachment"."creator" IS '创建者';

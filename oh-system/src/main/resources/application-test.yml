@@ -140,6 +140,22 @@ spring:
 #    maxMessageSize: 4096 # 消息最大长度，默认1024 * 1024 * 4(默认4M)
 #    compressMessageBodyThreshold: 4096 # 压缩消息阈值，默认4k(1024 * 4)
 
+# 文件服务 s3
+seaweedfs:
+  s3:
+    endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
+    access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
+    secret-key: admin123                    # 同上
+    bucket: default-bucket                  # 默认存储桶名
+    region: us-east-1                       # SeaweedFS 不校验 region，任意填
+    path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
+    cache-file: false                       # 是否redis缓存文件信息，用于异步保存到表中，默认false
+    # 允许上传的文件扩展名，如 .jpg
+    file-suffix:
+      - .jpg
+      - .png
+      - .jpeg
+      - .zip
 # 日志信息
 logging:
   # 字符集设置
