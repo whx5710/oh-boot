@@ -68,11 +68,6 @@ public class SeaweedFSService {
     private final RedisCache redisCache;
 
     /**
-     * 分片大小：10MB
-     */
-    private static final long PART_SIZE = 10 * 1024 * 1024;
-
-    /**
      * 内存上传阈值：5MB，小于此值直接读内存，避免磁盘 I/O
      */
     private static final long MEMORY_UPLOAD_THRESHOLD = 5 * 1024 * 1024;
@@ -495,10 +490,10 @@ public class SeaweedFSService {
     @PostConstruct
     public void clearData (){
         ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
-        // 每隔150秒钟，执行一次
+        // 每隔180秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) > 0){
-                for(int i = 0; i < 20; i++){
+                for(int i = 0; i < 50; i++){
                     Object object = redisCache.rightPop(RedisKeys.getTmpFileCacheKey());
                     if(object == null){
                         break;
@@ -514,6 +509,6 @@ public class SeaweedFSService {
                     }
                 }
             }
-        }, 30, 300, TimeUnit.SECONDS);
+        }, 30, 180, TimeUnit.SECONDS);
     }
 }
