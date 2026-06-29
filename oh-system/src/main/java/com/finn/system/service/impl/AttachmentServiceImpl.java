@@ -150,7 +150,7 @@ public class AttachmentServiceImpl implements AttachmentService {
                     for (AttachmentEntity item: list){
                         HashDto hashDto = new HashDto();
                         hashDto.put("id", item.getId());
-                        hashDto.put("url", item.getUrl());
+                        hashDto.put("fileId", item.getUrl());
                         redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto, 60*60*24); // 缓存24小时
                     }
                 }

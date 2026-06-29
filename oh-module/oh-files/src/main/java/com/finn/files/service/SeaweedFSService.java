@@ -499,7 +499,7 @@ public class SeaweedFSService {
                         break;
                     }
                     HashDto hashDto = (HashDto) object;
-                    String fileId = hashDto.getStr("url");
+                    String fileId = hashDto.getStr("fileId");
                     // 删除文件
                     if(fileId != null){
                         if(this.exists(fileId)){
