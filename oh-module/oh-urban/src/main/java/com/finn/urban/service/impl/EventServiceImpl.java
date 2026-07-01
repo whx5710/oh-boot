@@ -96,7 +96,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void delete(List<Long> idList) {
-        UpdateWrapper<Event> updateWrapper = new UpdateWrapper<>();
+        UpdateWrapper<Event> updateWrapper = UpdateWrapper.of(Event.class);
         updateWrapper.set(Event::getDbStatus, 0).in(Event::getId, idList);
         eventMapper.updateByWrapper(updateWrapper);
     }
