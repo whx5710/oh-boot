@@ -432,7 +432,7 @@ CREATE TABLE `sys_open_user`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   `open_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '外部用户ID',
-  `user_type` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '用户类型，1微信小程序用户；2支付宝',
+  `user_type` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '用户类型，1微信小程序用户；2支付宝',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_third_party_01`(`open_id`) USING BTREE,
   INDEX `idx_third_party_02`(`user_type`) USING BTREE

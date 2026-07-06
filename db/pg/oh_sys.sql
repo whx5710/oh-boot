@@ -756,8 +756,7 @@ CREATE TABLE "oh_sys"."sys_user" (
   "update_time" timestamp(6),
   "pwd_modify_time" timestamp(6),
   "user_key" varchar(60) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "user_type" varchar(2) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 0,
-  "open_id" varchar(100) COLLATE "pg_catalog"."default"
+  "open_id" int8
 )
 ;
 COMMENT ON COLUMN "oh_sys"."sys_user"."id" IS 'id';
@@ -779,14 +778,55 @@ COMMENT ON COLUMN "oh_sys"."sys_user"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_sys"."sys_user"."update_time" IS '更新时间';
 COMMENT ON COLUMN "oh_sys"."sys_user"."pwd_modify_time" IS '密码修改时间';
 COMMENT ON COLUMN "oh_sys"."sys_user"."user_key" IS '用户密钥，用于第三方系统登录';
-COMMENT ON COLUMN "oh_sys"."sys_user"."user_type" IS '用户类型，0普通用户1微信小程序用户';
 COMMENT ON COLUMN "oh_sys"."sys_user"."open_id" IS '外部用户ID';
 COMMENT ON TABLE "oh_sys"."sys_user" IS '用户管理';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "oh_sys"."sys_user" VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, NULL, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', '123', '0', NULL);
+INSERT INTO "oh_sys"."sys_user" VALUES (10000, 'admin', '{bcrypt}$2a$10$LvFSm4kNXo4HLJh1XmXVKu6/sdjbFcjgTxjKvOCNwUAspaw0TPD9W', '系统管理员', 'http://localhost:8080/upload/20230624/1671258609873_76453.jpg', 0, 'whx5710@qq.com', '13612345678', 0, 1, 1, NULL, 1, 10000, '2023-06-04 21:03:59', 10000, '2023-06-24 21:14:15', '2023-06-24 21:14:15', '123', NULL);
+
+
+CREATE TABLE "sys_open_user" (
+  "id" int8 NOT NULL,
+  "user_name" varchar(50) NOT NULL,
+  "secret_key" varchar(100) DEFAULT NULL,
+  "real_name" varchar(50) DEFAULT NULL,
+  "avatar" varchar(200) DEFAULT NULL,
+  "gender" int2 DEFAULT NULL,
+  "email" varchar(100) DEFAULT NULL,
+  "mobile" varchar(20) DEFAULT NULL,
+  "status" int2 DEFAULT NULL,
+  "note" varchar(255) DEFAULT NULL,
+  "db_status" int2 DEFAULT 1::smallint,
+  "creator" int8 DEFAULT NULL,
+  "create_time" timestamp(6) DEFAULT NULL,
+  "updater" int8 DEFAULT NULL,
+  "update_time" timestamp(6) DEFAULT NULL,
+  "open_id" varchar(100) NOT NULL,
+  "user_type" varchar(2) NOT NULL DEFAULT '1'::character varying
+);
+
+COMMENT ON TABLE "sys_open_user" IS '第三方平台用户';
+COMMENT ON COLUMN "sys_open_user"."user_name" IS '用户名';
+COMMENT ON COLUMN "sys_open_user"."secret_key" IS '密钥';
+COMMENT ON COLUMN "sys_open_user"."real_name" IS '姓名';
+COMMENT ON COLUMN "sys_open_user"."avatar" IS '头像';
+COMMENT ON COLUMN "sys_open_user"."gender" IS '性别   0：男   1：女   2：未知';
+COMMENT ON COLUMN "sys_open_user"."email" IS '邮箱';
+COMMENT ON COLUMN "sys_open_user"."mobile" IS '手机号';
+COMMENT ON COLUMN "sys_open_user"."status" IS '状态  0：停用   1：正常';
+COMMENT ON COLUMN "sys_open_user"."note" IS '备注';
+COMMENT ON COLUMN "sys_open_user"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "sys_open_user"."creator" IS '创建者';
+COMMENT ON COLUMN "sys_open_user"."create_time" IS '创建时间';
+COMMENT ON COLUMN "sys_open_user"."updater" IS '更新者';
+COMMENT ON COLUMN "sys_open_user"."update_time" IS '更新时间';
+COMMENT ON COLUMN "sys_open_user"."open_id" IS '外部用户ID';
+COMMENT ON COLUMN "sys_open_user"."user_type" IS '用户类型，1微信小程序用户；2支付宝';
+ALTER TABLE "sys_open_user" ADD CONSTRAINT "sys_open_user_pkey" PRIMARY KEY ("id");
+CREATE INDEX "idx_third_party_01" ON "sys_open_user" USING btree ("open_id");
+CREATE INDEX "idx_third_party_02" ON "sys_open_user" USING btree ("user_type");
 
 -- ----------------------------
 -- Table structure for sys_user_post
