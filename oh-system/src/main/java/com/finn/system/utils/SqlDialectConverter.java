@@ -80,7 +80,7 @@ public class SqlDialectConverter {
         // 第一遍：收集列注释，便于在 CREATE TABLE 中内联
         Map<String, String> columnComments = new LinkedHashMap<>();
         for (String stmt : statements) {
-            String trimmed = stmt.trim();
+            String trimmed = removeComments(stmt).trim();
             if (upperStartsWith(trimmed, "COMMENT ON COLUMN")) {
                 String[] info = parsePgColumnComment(trimmed);
                 if (info != null) {
@@ -521,14 +521,11 @@ public class SqlDialectConverter {
     }
 
     private static String[] parsePgColumnComment(String stmt) {
-        Pattern p = Pattern.compile("COMMENT ON COLUMN\\s+[^\"]*\"?([a-zA-Z_][a-zA-Z0-9_]*)\"?\\.\"?([a-zA-Z_][a-zA-Z0-9_]*)\"?\\s+IS\\s+'([^']*)'", Pattern.CASE_INSENSITIVE);
+        // 支持 "schema"."table"."column" 或 "table"."column" 两种形式
+        Pattern p = Pattern.compile("COMMENT ON COLUMN\\s+(?:\"([^\"]+)\"\\.)?\"?([a-zA-Z_][a-zA-Z0-9_]*)\"?\\.\"?([a-zA-Z_][a-zA-Z0-9_]*)\"?\\s+IS\\s+'([^']*)'", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(stmt);
         if (m.find()) {
-            String table = m.group(1);
-            if (table.contains(".")) {
-                table = table.substring(table.lastIndexOf('.') + 1);
-            }
-            return new String[]{table, m.group(2), m.group(3)};
+            return new String[]{m.group(2), m.group(3), m.group(4)};
         }
         return null;
     }
