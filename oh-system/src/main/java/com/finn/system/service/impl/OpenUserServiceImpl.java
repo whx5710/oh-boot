@@ -3,12 +3,17 @@ package com.finn.system.service.impl;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.utils.AssertUtils;
+import com.finn.system.convert.UserConvert;
 import com.finn.system.entity.OpenUserEntity;
 import com.finn.system.mapper.OpenUserMapper;
 import com.finn.system.service.OpenUserService;
+import com.finn.system.vo.UserVO;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,5 +65,31 @@ public class OpenUserServiceImpl implements OpenUserService {
         AssertUtils.isBlank(user.getOpenId(), "第三方用户ID");
         AssertUtils.isBlank(user.getUserType(), "用户类型");
         return openUserMapper.insert(user);
+    }
+
+    @Override
+    public UserVO info(Long userId) {
+        UserVO user = new UserVO();
+        if(ObjectUtils.isEmpty(userId)){
+            user = UserConvert.INSTANCE.convert(SecurityUser.getUser());
+            userId = user.getId();
+        }
+        // 重新查询，防止修改基本信息后，缓存未更新的情况
+        OpenUserEntity entity = openUserMapper.findById(userId, OpenUserEntity.class);
+        user.setId(entity.getId());
+        user.setUsername(entity.getUserName());
+        user.setRealName(entity.getRealName());
+        user.setAvatar(entity.getAvatar());
+        user.setGender(entity.getGender());
+        user.setEmail(entity.getEmail());
+        user.setMobile(entity.getMobile());
+        user.setStatus(entity.getStatus());
+        user.setOpenId(entity.getOpenId());
+        // 用户角色列表
+        user.setRoleIdList(new ArrayList<>());
+
+        // 用户岗位列表
+        user.setPostIdList(new ArrayList<>());
+        return user;
     }
 }

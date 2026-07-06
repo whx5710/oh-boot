@@ -14,8 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 微信登录
@@ -68,6 +67,8 @@ public class WechatMiniServiceImpl implements WechatMiniService {
         userDetail.setMobile(user.getMobile());
         userDetail.setAvatar(user.getAvatar());
         userDetail.setGender(user.getGender());
+        Set<String> permsSet = new HashSet<>();
+        userDetail.setAuthoritySet(permsSet);
         return userDetail;
     }
 

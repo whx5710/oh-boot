@@ -1,6 +1,7 @@
 package com.finn.system.service;
 
 import com.finn.system.entity.OpenUserEntity;
+import com.finn.system.vo.UserVO;
 
 
 /**
@@ -24,5 +25,7 @@ public interface OpenUserService {
      * @return
      */
     long save(OpenUserEntity user);
+
+    UserVO info(Long userId);
 
 }
