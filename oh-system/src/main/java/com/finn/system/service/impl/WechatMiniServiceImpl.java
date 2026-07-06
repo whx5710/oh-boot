@@ -96,7 +96,10 @@ public class WechatMiniServiceImpl implements WechatMiniService {
 
     }
 
-    // 获取 access_token
+    /**
+     * 获取 access_token,是否需要缓存
+     * @return
+     */
     private String getAccessToken() {
         String url = String.format(wechatProperties.getApi() + "/cgi-bin/token?grant_type=client_credential" +
                 "&appid=%s&secret=%s", wechatProperties.getAppId(), wechatProperties.getSecret()
