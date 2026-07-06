@@ -90,6 +90,8 @@ public class SqlDialectConverter {
         }
 
         Set<String> droppedTables = new HashSet<>();
+        // 收集每表的列类型，用于 INSERT 时值转换（如 bool -> tinyint(1)）
+        Map<String, List<String>> tableColumnTypes = new LinkedHashMap<>();
         StringBuilder result = new StringBuilder();
         for (String stmt : statements) {
             String trimmedNoComments = removeComments(stmt).trim();
@@ -149,11 +151,17 @@ public class SqlDialectConverter {
 
             // CREATE TABLE
             if (upperStartsWith(trimmedNoComments, "CREATE TABLE")) {
-                result.append(convertPgCreateTable(trimmedNoComments, columnComments, droppedTables)).append("\n\n");
+                result.append(convertPgCreateTable(trimmedNoComments, columnComments, droppedTables, tableColumnTypes)).append("\n\n");
                 continue;
             }
 
-            // INSERT INTO 等：仅替换字符串外的双引号为反引号，schema 前缀去掉
+            // INSERT INTO：替换 bool 值 't'/'f' 为 1/0，再替换引号
+            if (upperStartsWith(trimmedNoComments, "INSERT INTO")) {
+                result.append(convertPgInsertToMySql(trimmedNoComments, tableColumnTypes)).append("\n\n");
+                continue;
+            }
+
+            // 其他语句：仅替换字符串外的双引号为反引号，schema 前缀去掉
             result.append(replacePgQuotesOutsideStrings(trimmedNoComments)).append("\n\n");
         }
 
@@ -177,7 +185,8 @@ public class SqlDialectConverter {
         return replacePgQuotesOutsideStrings(sql);
     }
 
-    private static String convertPgCreateTable(String sql, Map<String, String> columnComments, Set<String> droppedTables) {
+    private static String convertPgCreateTable(String sql, Map<String, String> columnComments, Set<String> droppedTables,
+                                               Map<String, List<String>> tableColumnTypes) {
         Pattern tablePattern = Pattern.compile("CREATE TABLE\\s+(.+?)\\s*\\(", Pattern.CASE_INSENSITIVE);
         Matcher tableMatcher = tablePattern.matcher(sql);
         if (!tableMatcher.find()) {
@@ -201,6 +210,7 @@ public class SqlDialectConverter {
 
         StringBuilder mysqlColumns = new StringBuilder();
         List<String> columnDefs = splitColumnDefs(columnsBlock);
+        List<String> mysqlTypes = new ArrayList<>();
 
         for (String colDef : columnDefs) {
             String c = colDef.trim();
@@ -216,12 +226,13 @@ public class SqlDialectConverter {
                 continue;
             }
 
-            String myCol = convertPgColumnDef(c, tableName, columnComments);
+            String myCol = convertPgColumnDef(c, tableName, columnComments, mysqlTypes);
             if (!mysqlColumns.isEmpty()) {
                 mysqlColumns.append(",\n  ");
             }
             mysqlColumns.append(myCol);
         }
+        tableColumnTypes.put(tableName, mysqlTypes);
 
         StringBuilder create = new StringBuilder();
         if (!droppedTables.contains(tableName)) {
@@ -241,7 +252,143 @@ public class SqlDialectConverter {
         return create.toString();
     }
 
-    private static String convertPgColumnDef(String colDef, String tableName, Map<String, String> columnComments) {
+    private static String convertPgInsertToMySql(String sql, Map<String, List<String>> tableColumnTypes) {
+        // 解析表名，支持 "schema"."table" 或 "table"
+        Pattern tablePattern = Pattern.compile("INSERT INTO\\s+(?:\"([^\"]+)\"\\.)?\"?([^\"\\s(]+)\"?", Pattern.CASE_INSENSITIVE);
+        Matcher tm = tablePattern.matcher(sql);
+        if (!tm.find()) {
+            return replacePgQuotesOutsideStrings(sql);
+        }
+        String table = tm.group(2);
+        List<String> types = tableColumnTypes.get(table);
+        if (types == null || types.isEmpty()) {
+            return replacePgQuotesOutsideStrings(sql);
+        }
+
+        // 提取 VALUES 后的值部分
+        Pattern valuesPattern = Pattern.compile("VALUES\\s+(.+)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher vm = valuesPattern.matcher(sql);
+        if (!vm.find()) {
+            return replacePgQuotesOutsideStrings(sql);
+        }
+        String valuesPart = vm.group(1);
+
+        List<String> rowBlocks = extractParenthesizedGroups(valuesPart);
+        if (rowBlocks.isEmpty()) {
+            return replacePgQuotesOutsideStrings(sql);
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append("INSERT INTO `").append(table).append("` VALUES ");
+        for (int i = 0; i < rowBlocks.size(); i++) {
+            if (i > 0) {
+                result.append(", ");
+            }
+            String convertedRow = convertPgInsertValues(rowBlocks.get(i), types);
+            result.append("(").append(convertedRow).append(")");
+        }
+        result.append(";");
+        return result.toString();
+    }
+
+    private static List<String> extractParenthesizedGroups(String sql) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        int depth = 0;
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+        for (int i = 0; i < sql.length(); i++) {
+            char c = sql.charAt(i);
+            if (c == '\'' && !inDoubleQuote) {
+                inSingleQuote = !inSingleQuote;
+            } else if (c == '"' && !inSingleQuote) {
+                inDoubleQuote = !inDoubleQuote;
+            }
+            if (!inSingleQuote && !inDoubleQuote) {
+                if (c == '(') {
+                    if (depth == 0) {
+                        current.setLength(0);
+                    } else {
+                        current.append(c);
+                    }
+                    depth++;
+                    continue;
+                } else if (c == ')') {
+                    depth--;
+                    if (depth == 0) {
+                        result.add(current.toString());
+                        current.setLength(0);
+                    } else {
+                        current.append(c);
+                    }
+                    continue;
+                }
+            }
+            if (depth > 0) {
+                current.append(c);
+            }
+        }
+        return result;
+    }
+
+    private static String convertPgInsertValues(String rowBlock, List<String> types) {
+        List<String> tokens = splitInsertValues(rowBlock);
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < tokens.size(); i++) {
+            if (i > 0) {
+                result.append(", ");
+            }
+            String token = tokens.get(i).trim();
+            if (i < types.size() && types.get(i).toLowerCase().startsWith("tinyint(1)")) {
+                String upper = token.toUpperCase();
+                if (upper.equals("'T'") || upper.equals("TRUE")) {
+                    result.append("1");
+                } else if (upper.equals("'F'") || upper.equals("FALSE")) {
+                    result.append("0");
+                } else {
+                    result.append(token);
+                }
+            } else {
+                result.append(token);
+            }
+        }
+        return result.toString();
+    }
+
+    private static List<String> splitInsertValues(String rowBlock) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        int depth = 0;
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+        for (int i = 0; i < rowBlock.length(); i++) {
+            char c = rowBlock.charAt(i);
+            if (c == '\'' && !inDoubleQuote) {
+                inSingleQuote = !inSingleQuote;
+            } else if (c == '"' && !inSingleQuote) {
+                inDoubleQuote = !inDoubleQuote;
+            }
+            if (!inSingleQuote && !inDoubleQuote) {
+                if (c == '(' || c == '[') {
+                    depth++;
+                } else if (c == ')' || c == ']') {
+                    depth--;
+                } else if (c == ',' && depth == 0) {
+                    result.add(current.toString());
+                    current.setLength(0);
+                    continue;
+                }
+            }
+            current.append(c);
+        }
+        if (current.length() > 0) {
+            result.add(current.toString());
+        }
+        return result;
+    }
+
+    private static String convertPgColumnDef(String colDef, String tableName, Map<String, String> columnComments,
+                                             List<String> mysqlTypes) {
         Pattern namePattern = Pattern.compile("^\"?([a-zA-Z_][a-zA-Z0-9_]*)\"?\\s+(.*)$");
         Matcher m = namePattern.matcher(colDef);
         if (!m.find()) {
@@ -260,7 +407,9 @@ public class SqlDialectConverter {
         String type = extractType(rest);
         String modifiers = rest.substring(type.length()).trim();
 
-        sb.append(convertPgTypeToMySql(type));
+        String mysqlType = convertPgTypeToMySql(type);
+        mysqlTypes.add(mysqlType);
+        sb.append(mysqlType);
 
         // NOT NULL / NULL
         boolean notNull = modifiers.toUpperCase().contains("NOT NULL");
@@ -310,6 +459,11 @@ public class SqlDialectConverter {
             return "longtext";
         }
         if (upper.startsWith("TIMESTAMP")) {
+            Pattern timestampPattern = Pattern.compile("timestamp(?:\\((\\d+)\\))?", Pattern.CASE_INSENSITIVE);
+            Matcher timestampMatcher = timestampPattern.matcher(pgType);
+            if (timestampMatcher.find() && timestampMatcher.group(1) != null) {
+                return "datetime(" + timestampMatcher.group(1) + ")";
+            }
             return "datetime";
         }
         if (upper.startsWith("NUMERIC")) {
