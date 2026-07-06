@@ -85,6 +85,7 @@ public class OpenUserServiceImpl implements OpenUserService {
         user.setMobile(entity.getMobile());
         user.setStatus(entity.getStatus());
         user.setOpenId(entity.getOpenId());
+        user.setCreateTime(entity.getCreateTime());
         // 用户角色列表
         user.setRoleIdList(new ArrayList<>());
 
