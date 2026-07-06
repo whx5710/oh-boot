@@ -75,7 +75,6 @@
 		LEFT JOIN sys_dept b ON a.dept_id = b.id
 		WHERE
 		a.db_status = 1
-		AND a.user_type = #{userType}
 		AND a.username = #{username}
 	</select>
 
@@ -88,7 +87,6 @@
 		LEFT JOIN sys_dept b ON a.dept_id = b.id
 		WHERE
 		a.db_status = 1
-		AND a.user_type = #{userType}
 		AND a.mobile = #{mobile}
 	</select>
 </mapper>

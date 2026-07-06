@@ -3,7 +3,6 @@ package com.finn.system.service.impl;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.common.enums.CommonEnum;
-import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
@@ -140,13 +139,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserVO vo) {
-        if(vo.getUserType() == null || vo.getUserType().isEmpty()){
-            vo.setUserType("0");
-        }else{
-            if(!vo.getUserType().equals("0")){
-                AssertUtils.isBlank(vo.getOpenId(), "第三方用户open_id");
-            }
-        }
         // 密码验证
         passwordStrength(vo.getPassword());
         // 密码加密
@@ -156,12 +148,12 @@ public class UserServiceImpl implements UserService {
         entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
         // 判断用户名是否存在
-        UserEntity user = userMapper.getByUsername(entity.getUsername(), vo.getUserType());
+        UserEntity user = userMapper.getByUsername(entity.getUsername());
         if (user != null) {
             throw new ServerException("用户名已经存在");
         }
         // 判断手机号是否存在
-        user = userMapper.getByMobile(entity.getMobile(), vo.getUserType());
+        user = userMapper.getByMobile(entity.getMobile());
         if (user != null) {
             throw new ServerException("手机号已经存在");
         }
@@ -196,7 +188,7 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = UserConvert.INSTANCE.convert(vo);
         // 判断用户名是否存在
         if(entity.getUsername() != null){
-            UserEntity user = userMapper.getByUsername(entity.getUsername(), userDb.getUserType());
+            UserEntity user = userMapper.getByUsername(entity.getUsername());
             if (user != null && !user.getId().equals(entity.getId())) {
                 throw new ServerException("用户名已经存在");
             }
@@ -204,7 +196,7 @@ public class UserServiceImpl implements UserService {
 
         // 判断手机号是否存在
         if(entity.getMobile() != null){
-            UserEntity user = userMapper.getByMobile(entity.getMobile(), userDb.getUserType());
+            UserEntity user = userMapper.getByMobile(entity.getMobile());
             if (user != null && !user.getId().equals(entity.getId())) {
                 throw new ServerException("手机号已经存在");
             }
@@ -238,11 +230,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVO getByMobile(String mobile, String userType) {
-        if(userType == null || userType.isEmpty()){
-            throw new ServerException("用户类型不能为空");
-        }
-        UserEntity user = userMapper.getByMobile(mobile, userType);
+    public UserVO getByMobile(String mobile) {
+        UserEntity user = userMapper.getByMobile(mobile);
         return UserConvert.INSTANCE.convert(user);
     }
 
@@ -389,32 +378,7 @@ public class UserServiceImpl implements UserService {
         if(userType == null || userType.isEmpty()){
             throw new ServerException("用户类型不能为空");
         }
-        return userMapper.getByUsername(username, userType);
-    }
-
-    /**
-     * 根据open id 获取用户信息
-     * @param openId 第三方ID
-     * @param userType 用户类型，0普通用户1微信小程序用户
-     * @return 用户实体
-     */
-    @Override
-    public UserEntity getByOpenId(String openId, String userType) {
-        AssertUtils.isBlank(openId, "第三方ID");
-        Wrapper<UserEntity> queryWrapper = QueryWrapper.of(UserEntity.class).eq(UserEntity::getDbStatus, 1)
-                .eq(UserEntity::getOpenId, openId).eq(UserEntity::getUserType, userType);
-        List<UserEntity> list = userMapper.listByWrapper(queryWrapper);
-        if(list != null){
-            if(list.size() > 1){
-                throw new ServerException("第三方ID对应多个账号，请检查");
-            }
-            if(list.isEmpty()){
-                return null;
-            }
-            return list.getFirst();
-        }else{
-            return null;
-        }
+        return userMapper.getByUsername(username);
     }
 
     /**

@@ -5,24 +5,24 @@ import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 import com.finn.system.enums.UserStatusEnum;
 
-import java.time.LocalDateTime;
-
 /**
- * 用户
+ * 第三方用户
  *
  * @author 王小费 whx5710@qq.com
  *
  */
-@TableName("sys_user")
-public class UserEntity extends BaseEntity {
+@TableName("sys_open_user")
+public class OpenUserEntity extends BaseEntity {
     /**
      * 用户名
      */
-    private String username;
+    @TableField("user_name")
+    private String userName;
     /**
-     * 密码
+     * 密钥
      */
-    private String password;
+    @TableField("secret_key")
+    private String secretKey;
     /**
      * 姓名
      */
@@ -45,19 +45,15 @@ public class UserEntity extends BaseEntity {
      */
     private String mobile;
     /**
-     * 部门ID
-     */
-    @TableField("dept_id")
-    private Long deptId;
-    /**
-     * 超级管理员   0：否   1：是
-     */
-    @TableField("super_admin")
-    private Integer superAdmin;
-    /**
      * 状态  {@link UserStatusEnum}
      */
     private Integer status;
+
+    /**
+     * 用户类型，1微信小程序用户
+     */
+    @TableField("user_type")
+    private String userType;
     /**
      * 外部用户ID
      */
@@ -67,37 +63,20 @@ public class UserEntity extends BaseEntity {
     // 备注
     private String note;
 
-    /**
-     * 修改吗密码时间
-     */
-    @TableField("pwd_modify_time")
-    private LocalDateTime pwdModifyTime;
-
-    /**
-     * 用户密钥，用于第三方系统登录
-     */
-    @TableField("user_key")
-    private String userKey;
-    /**
-     * 部门名称
-     */
-    @TableField(exists = false)
-    private String deptName;
-
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSecretKey() {
+        return secretKey;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 
     public String getRealName() {
@@ -140,22 +119,6 @@ public class UserEntity extends BaseEntity {
         this.mobile = mobile;
     }
 
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    public Integer getSuperAdmin() {
-        return superAdmin;
-    }
-
-    public void setSuperAdmin(Integer superAdmin) {
-        this.superAdmin = superAdmin;
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -164,36 +127,12 @@ public class UserEntity extends BaseEntity {
         this.status = status;
     }
 
-    public String getNote() {
-        return note;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
-
-    public LocalDateTime getPwdModifyTime() {
-        return pwdModifyTime;
-    }
-
-    public void setPwdModifyTime(LocalDateTime pwdModifyTime) {
-        this.pwdModifyTime = pwdModifyTime;
-    }
-
-    public String getUserKey() {
-        return userKey;
-    }
-
-    public void setUserKey(String userKey) {
-        this.userKey = userKey;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public String getOpenId() {
@@ -202,5 +141,13 @@ public class UserEntity extends BaseEntity {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
