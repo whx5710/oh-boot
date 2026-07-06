@@ -33,12 +33,12 @@ public class WechatController {
 
     /**
      * 解码手机号和绑定
-     * @param params
+     * @param params {code, bind}
      * @return
      */
-    @PostMapping("/bindPhone")
-    public Result<String> login(@RequestBody Map<String, String> params) {
-        // 解密手机号
+    @PostMapping("/getPhone")
+    public Result<String> getPhone(@RequestBody Map<String, String> params) {
+        // 解密手机号,通过微信平台的code获取
         String phone = wechatMiniService.getPhoneNumber(params);
         // 更新手机号
         if(params.containsKey("bind") && params.get("bind") != null
