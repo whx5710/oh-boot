@@ -105,8 +105,8 @@ public class AttachmentServiceImpl implements AttachmentService {
             if (cacheRecord) {
                 try {
                     String key = RedisKeys.getFileCacheKey();
-                    // 每次插入200条
-                    int count = 200;
+                    // 每次插入300条
+                    int count = 300;
                     List<AttachmentEntity> list = new ArrayList<>();
                     for (int i = 0; i < count; i++) {
                         Object object = redisCache.rightPop(key);
