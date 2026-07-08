@@ -43,8 +43,11 @@ public class AttachmentServiceImpl implements AttachmentService {
     private final AttachmentMapper attachmentMapper;
     private final RedisCache redisCache;
 
-    @Value("${seaweedfs.s3.enabled:true}")
-    private boolean seaweedfsEnabled;
+    @Value("${finn.storage.enabled:true}")
+    private boolean storageEnabled;
+
+    @Value("${finn.storage.cache-record:false}")
+    private boolean cacheRecord;
 
     public AttachmentServiceImpl(AttachmentMapper attachmentMapper, RedisCache redisCache) {
         this.attachmentMapper = attachmentMapper;
@@ -91,31 +94,34 @@ public class AttachmentServiceImpl implements AttachmentService {
      */
     @PostConstruct
     public void saveAttachment() {
-        if (!seaweedfsEnabled) {
-            log.info("SeaweedFS 未启用，跳过附件定时任务");
+        if (!storageEnabled) {
+            log.info("文件存储未启用，跳过附件定时任务");
             return;
         }
         ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
         // 每隔180秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
-            try {
-                String key = RedisKeys.getFileCacheKey();
-                // 每次插入200条
-                int count = 200;
-                List<AttachmentEntity> list = new ArrayList<>();
-                for (int i = 0; i < count; i++) {
-                    Object object = redisCache.rightPop(key);
-                    if(object == null){
-                        break;
+            // 只有开启缓存记录时，才从 Redis 队列读取并保存文件信息
+            if (cacheRecord) {
+                try {
+                    String key = RedisKeys.getFileCacheKey();
+                    // 每次插入200条
+                    int count = 200;
+                    List<AttachmentEntity> list = new ArrayList<>();
+                    for (int i = 0; i < count; i++) {
+                        Object object = redisCache.rightPop(key);
+                        if(object == null){
+                            break;
+                        }
+                        AttachmentEntity attachment = getAttachment((HashDto) object);
+                        list.add(attachment);
                     }
-                    AttachmentEntity attachment = getAttachment((HashDto) object);
-                    list.add(attachment);
+                    if(!list.isEmpty()){
+                        attachmentMapper.insertBatch(list);
+                    }
+                } catch (Exception e) {
+                    log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));
                 }
-                if(!list.isEmpty()){
-                    attachmentMapper.insertBatch(list);
-                }
-            } catch (Exception e) {
-                log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
 
             // 更新已删除的文件状态(文件服务已将文件删除)

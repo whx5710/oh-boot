@@ -1,5 +1,6 @@
-package com.finn.files.config;
+package com.finn.files.config.s3;
 
+import com.finn.files.config.SeaweedFSProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import java.time.Duration;
  * S3 客户端配置
  */
 @Configuration
-@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "finn.storage", value = "type", havingValue = "seaweedfs")
 public class S3Config {
 
     private final SeaweedFSProperties properties;

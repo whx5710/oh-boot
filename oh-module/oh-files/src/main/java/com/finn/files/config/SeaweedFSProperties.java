@@ -1,15 +1,10 @@
 package com.finn.files.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 /**
  * 配置属性类
  */
-@Component
-@ConfigurationProperties(prefix = "seaweedfs.s3")
 public class SeaweedFSProperties {
 
     /**
@@ -33,10 +28,6 @@ public class SeaweedFSProperties {
      * 白名单文件，为空运行全部
      */
     private List<String> fileSuffix;
-    /**
-     * 是否缓存文件信息
-     */
-    private boolean cacheFile = false;
 
     // Getters & Setters
     public boolean isEnabled() { return enabled; }
@@ -68,11 +59,4 @@ public class SeaweedFSProperties {
         this.fileSuffix = fileSuffix;
     }
 
-    public boolean isCacheFile() {
-        return cacheFile;
-    }
-
-    public void setCacheFile(boolean cacheFile) {
-        this.cacheFile = cacheFile;
-    }
 }

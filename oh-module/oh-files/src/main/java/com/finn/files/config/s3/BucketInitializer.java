@@ -1,5 +1,6 @@
-package com.finn.files.config;
+package com.finn.files.config.s3;
 
+import com.finn.files.config.SeaweedFSProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +16,7 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
  * 初始化
  */
 @Configuration
-@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "finn.storage", value = "type", havingValue = "seaweedfs")
 public class BucketInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(BucketInitializer.class);
