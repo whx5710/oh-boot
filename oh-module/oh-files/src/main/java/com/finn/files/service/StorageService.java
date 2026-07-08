@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStream;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -248,6 +249,7 @@ public abstract class StorageService {
             hashDto.put("contentType", contentType);
             hashDto.put("platform", platform);
             hashDto.put("tmpFlag", isTmp != null && isTmp ? 1 : 0);
+            hashDto.put("createTime", LocalDateTime.now());
             if (SecurityUser.getUserId() != null) {
                 hashDto.put("creator", SecurityUser.getUserId());
             }

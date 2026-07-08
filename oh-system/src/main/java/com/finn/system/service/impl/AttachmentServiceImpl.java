@@ -182,6 +182,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         attachment.setTmpFlag(tmpFlag);
         attachment.setContentType(file.getStr("contentType"));
         attachment.setCreator(file.getLong("creator"));
+        attachment.setCreateTime(file.getLocalDateTime("createTime"));
         return attachment;
     }
 
