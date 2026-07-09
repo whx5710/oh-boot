@@ -36,10 +36,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     @Override
     public UserDetails loadUserByMobile(String mobile, String userType) throws UsernameNotFoundException {
-        if(userType == null || userType.isEmpty()){
-            throw new SecurityException("用户类型不能为空");
-        }
-        UserEntity userEntity = userMapper.getByMobile(mobile, userType);
+        // userType 用于哪个平台的用户判断
+        UserEntity userEntity = userMapper.getByMobile(mobile);
         if (userEntity == null) {
             throw new UsernameNotFoundException("手机号或验证码错误");
         }

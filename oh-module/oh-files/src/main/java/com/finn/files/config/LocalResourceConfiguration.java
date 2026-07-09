@@ -1,6 +1,6 @@
-package com.finn.system.config;
+package com.finn.files.config;
 
-import com.finn.system.enums.StorageTypeEnum;
+import com.finn.files.enums.StorageTypeEnum;
 import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ public class LocalResourceConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 如果不是本地存储，则返回
-        if (properties.getConfig().getType() != StorageTypeEnum.LOCAL) {
+        if (properties.getType() != StorageTypeEnum.LOCAL) {
             return;
         }
 

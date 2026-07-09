@@ -1,21 +1,20 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.entity.HashDto;
+import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.security.wechat.WechatMiniService;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.HttpUtil;
 import com.finn.framework.utils.JsonUtils;
 import com.finn.framework.utils.Tools;
 import com.finn.system.config.WechatProperties;
-import com.finn.system.entity.UserEntity;
-import com.finn.system.service.UserService;
-import com.finn.system.vo.UserVO;
+import com.finn.system.entity.OpenUserEntity;
+import com.finn.system.service.OpenUserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 微信登录
@@ -25,11 +24,11 @@ public class WechatMiniServiceImpl implements WechatMiniService {
 
     private final WechatProperties wechatProperties;
 
-    private final UserService userService;
+    private final OpenUserService openUserService;
 
-    public WechatMiniServiceImpl(WechatProperties wechatProperties, UserService userService){
+    public WechatMiniServiceImpl(WechatProperties wechatProperties, OpenUserService openUserService){
         this.wechatProperties = wechatProperties;
-        this.userService = userService;
+        this.openUserService = openUserService;
     }
 
     @Override
@@ -43,21 +42,34 @@ public class WechatMiniServiceImpl implements WechatMiniService {
     public UserDetails findOrCreateByOpenid(String openId) {
         AssertUtils.isBlank(openId, "第三方ID");
         String userType = "1";
-        UserEntity user = userService.getByOpenId(openId, userType);
+        OpenUserEntity user = openUserService.getByOpenId(openId, userType);
         if(user == null){
             // 如果用户不存在，则新增
-            UserVO userVO = new UserVO();
+            OpenUserEntity userVO = new OpenUserEntity();
             userVO.setOpenId(openId);
-            userVO.setUsername(openId);
+            userVO.setUserName(openId);
             userVO.setRealName("微信用户");
             userVO.setUserType(userType);
-            userVO.setSuperAdmin(0);
             userVO.setStatus(1);
-            userVO.setPassword(Tools.getRandom(8));
-            userService.save(userVO);
-            user = userService.getByOpenId(openId, userType);
+            userVO.setSecretKey(Tools.getRandom(8));
+            openUserService.save(userVO);
+            user = openUserService.getByOpenId(openId, userType);
         }
-        return userService.getUserDetails(user);
+        // 转换成UserDetail对象
+        UserDetail userDetail = new UserDetail();
+        userDetail.setId(user.getId());
+        userDetail.setUsername(user.getUserName());
+        userDetail.setOpenId(user.getOpenId());
+        userDetail.setUserType(user.getUserType());
+        userDetail.setStatus(user.getStatus());
+        userDetail.setRealName(user.getRealName());
+        userDetail.setEmail(user.getEmail());
+        userDetail.setMobile(user.getMobile());
+        userDetail.setAvatar(user.getAvatar());
+        userDetail.setGender(user.getGender());
+        Set<String> permsSet = new HashSet<>();
+        userDetail.setAuthoritySet(permsSet);
+        return userDetail;
     }
 
     @Override
@@ -85,7 +97,10 @@ public class WechatMiniServiceImpl implements WechatMiniService {
 
     }
 
-    // 获取 access_token
+    /**
+     * 获取 access_token,是否需要缓存
+     * @return
+     */
     private String getAccessToken() {
         String url = String.format(wechatProperties.getApi() + "/cgi-bin/token?grant_type=client_credential" +
                 "&appid=%s&secret=%s", wechatProperties.getAppId(), wechatProperties.getSecret()

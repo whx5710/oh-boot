@@ -1,7 +1,10 @@
 package com.finn.files.controller;
 
-import com.finn.files.service.SeaweedFSService;
+import com.finn.files.service.StorageService;
+import com.finn.files.service.impl.SeaweedFSService;
+import com.finn.files.utils.MediaTypeUtils;
 import com.finn.files.vo.CompleteMultipartRequest;
+import com.finn.files.vo.FileMetadata;
 import com.finn.files.vo.MultipartUploadInitVO;
 import com.finn.files.vo.PartInfoVO;
 import com.finn.files.vo.PresignedUrlVO;
@@ -9,6 +12,7 @@ import com.finn.framework.entity.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,36 +33,29 @@ import java.time.Duration;
  */
 @RestController
 @RequestMapping("/file")
-@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "finn.storage", value = "enabled", havingValue = "true")
 public class FileController {
 
     private static final Logger log = LoggerFactory.getLogger(FileController.class);
 
-    private final SeaweedFSService seaweedFSService;
+    private final StorageService storageService;
+
+    private final ObjectProvider<SeaweedFSService> seaweedFSServiceProvider;
 
     /**
      * 默认最大文件大小：500MB
      */
     private static final long MAX_FILE_SIZE = 500 * 1024 * 1024;
 
-    /**
-     * 分片大小：10MB
-     */
-    private static final long PART_SIZE = 10 * 1024 * 1024;
-
-    /**
-     * 预签名 URL 默认有效期：15 分钟
-     */
-    private static final long PRESIGNED_URL_EXPIRATION = 15 * 60;
-
-    public FileController(SeaweedFSService seaweedFSService) {
-        this.seaweedFSService = seaweedFSService;
+    public FileController(StorageService storageService, ObjectProvider<SeaweedFSService> seaweedFSServiceProvider) {
+        this.storageService = storageService;
+        this.seaweedFSServiceProvider = seaweedFSServiceProvider;
     }
 
     /**
      * 上传（使用流式上传，支持大文件）
      *
-     * @param file 文件
+     * @param file  文件
      * @param isTmp 是否临时文件，临时文件可删除
      * @return 结果
      * @throws Exception 异常
@@ -74,7 +70,7 @@ public class FileController {
         if (file.getSize() > MAX_FILE_SIZE) {
             return Result.error("文件大小超过限制，最大支持 " + (MAX_FILE_SIZE / 1024 / 1024) + "MB");
         }
-        return Result.ok(seaweedFSService.uploadFile(file, isTmp));
+        return Result.ok(storageService.upload(file, isTmp));
     }
 
     /**
@@ -98,7 +94,7 @@ public class FileController {
      */
     @GetMapping("/delete/{key}")
     public Result<String> delete(@PathVariable String key) {
-        seaweedFSService.deleteFile(key);
+        storageService.delete(key);
         return Result.ok("删除成功");
     }
 
@@ -107,7 +103,7 @@ public class FileController {
      */
     @GetMapping("/exists/{key}")
     public Result<Boolean> exists(@PathVariable String key) {
-        return Result.ok(seaweedFSService.exists(key));
+        return Result.ok(storageService.exists(key));
     }
 
     // ===================== 预签名 URL =====================
@@ -125,8 +121,7 @@ public class FileController {
             @RequestParam(required = false) String key,
             @RequestParam String contentType,
             @RequestParam(required = false, defaultValue = "900") Long expiration) {
-        PresignedUrlVO vo = seaweedFSService.generatePresignedUploadUrl(key, contentType, Duration.ofSeconds(expiration));
-        return Result.ok(vo);
+        return Result.ok(getSeaweedFSService().generatePresignedUploadUrl(key, contentType, Duration.ofSeconds(expiration)));
     }
 
     /**
@@ -140,8 +135,7 @@ public class FileController {
     public Result<PresignedUrlVO> presignedDownloadUrl(
             @PathVariable String key,
             @RequestParam(required = false, defaultValue = "900") Long expiration) {
-        PresignedUrlVO vo = seaweedFSService.generatePresignedDownloadUrl(key, Duration.ofSeconds(expiration));
-        return Result.ok(vo);
+        return Result.ok(getSeaweedFSService().generatePresignedDownloadUrl(key, Duration.ofSeconds(expiration)));
     }
 
     // ===================== 分片上传 =====================
@@ -157,8 +151,7 @@ public class FileController {
     public Result<MultipartUploadInitVO> initMultipartUpload(
             @RequestParam(required = false) String key,
             @RequestParam String contentType) {
-        MultipartUploadInitVO vo = seaweedFSService.initiateMultipartUpload(key, contentType);
-        return Result.ok(vo);
+        return Result.ok(getSeaweedFSService().initiateMultipartUpload(key, contentType));
     }
 
     /**
@@ -179,7 +172,7 @@ public class FileController {
         if (file.isEmpty()) {
             return Result.error("分片文件不能为空");
         }
-        String etag = seaweedFSService.uploadPart(key, uploadId, partNumber, file);
+        String etag = getSeaweedFSService().uploadPart(key, uploadId, partNumber, file);
         PartInfoVO vo = new PartInfoVO();
         vo.setPartNumber(partNumber);
         vo.setEtag(etag);
@@ -201,9 +194,8 @@ public class FileController {
             @PathVariable String uploadId,
             @RequestParam Integer partNumber,
             @RequestParam(required = false, defaultValue = "900") Long expiration) {
-        PresignedUrlVO vo = seaweedFSService.generatePresignedUploadPartUrl(
-                key, uploadId, partNumber, Duration.ofSeconds(expiration));
-        return Result.ok(vo);
+        return Result.ok(getSeaweedFSService().generatePresignedUploadPartUrl(
+                key, uploadId, partNumber, Duration.ofSeconds(expiration)));
     }
 
     /**
@@ -214,7 +206,7 @@ public class FileController {
      */
     @PostMapping("/multipart/complete")
     public Result<String> completeMultipartUpload(@RequestBody CompleteMultipartRequest request) {
-        seaweedFSService.completeMultipartUpload(request.getKey(), request.getUploadId(), request.getParts());
+        getSeaweedFSService().completeMultipartUpload(request.getKey(), request.getUploadId(), request.getParts());
         return Result.ok("上传成功");
     }
 
@@ -229,11 +221,22 @@ public class FileController {
     public Result<String> abortMultipartUpload(
             @RequestParam String key,
             @RequestParam String uploadId) {
-        seaweedFSService.abortMultipartUpload(key, uploadId);
+        getSeaweedFSService().abortMultipartUpload(key, uploadId);
         return Result.ok("取消成功");
     }
 
     // ===================== 私有方法 =====================
+
+    /**
+     * 获取 SeaweedFS 服务，当前非 SeaweedFS 存储时抛出异常
+     */
+    private SeaweedFSService getSeaweedFSService() {
+        SeaweedFSService service = seaweedFSServiceProvider.getIfAvailable();
+        if (service == null) {
+            throw new UnsupportedOperationException("当前存储类型不支持该操作");
+        }
+        return service;
+    }
 
     /**
      * 构建流式响应（支持断点续传）
@@ -244,11 +247,11 @@ public class FileController {
      * @return 流式响应
      */
     private ResponseEntity<StreamingResponseBody> streamResponse(String key, HttpServletRequest request, boolean attachment) {
-        HeadObjectResponse metadata = seaweedFSService.getFileMetadata(key);
-        long fileSize = metadata.contentLength();
-        String contentType = metadata.contentType();
+        FileMetadata metadata = storageService.getMetadata(key);
+        long fileSize = metadata.getContentLength();
+        String contentType = metadata.getContentType();
         if (contentType == null || contentType.isEmpty()) {
-            contentType = getMediaType(key).toString();
+            contentType = MediaTypeUtils.getMimeType(key).toString();
         }
 
         long rangeStart = 0;
@@ -298,11 +301,14 @@ public class FileController {
             headers.add(HttpHeaders.CONTENT_RANGE, "bytes " + rangeStart + "-" + rangeEnd + "/" + fileSize);
         }
 
+        String filename = metadata.getFilename();
+        if (filename == null || filename.isEmpty()) {
+            filename = key;
+        }
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20");
         if (attachment) {
-            String encodedFilename = URLEncoder.encode(key, StandardCharsets.UTF_8).replace("+", "%20");
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFilename + "\"");
         } else {
-            String encodedFilename = URLEncoder.encode(key, StandardCharsets.UTF_8).replace("+", "%20");
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + encodedFilename + "\"");
         }
 
@@ -310,43 +316,9 @@ public class FileController {
         final long finalRangeEnd = rangeEnd;
 
         StreamingResponseBody responseBody = outputStream -> {
-            seaweedFSService.streamFile(key, outputStream, finalRangeStart, finalRangeEnd);
+            storageService.streamFile(key, outputStream, finalRangeStart, finalRangeEnd);
         };
 
         return new ResponseEntity<>(responseBody, headers, status);
-    }
-
-    /**
-     * 根据文件名获取 MediaType
-     */
-    private MediaType getMediaType(String filename) {
-        String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
-
-        return switch (ext) {
-            // 图片
-            case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
-            case "png" -> MediaType.IMAGE_PNG;
-            case "gif" -> MediaType.IMAGE_GIF;
-            case "webp" -> MediaType.valueOf("image/webp");
-            case "svg" -> MediaType.valueOf("image/svg+xml");
-            case "bmp" -> MediaType.valueOf("image/bmp");
-            // PDF
-            case "pdf" -> MediaType.APPLICATION_PDF;
-            // 文本
-            case "txt" -> MediaType.TEXT_PLAIN;
-            case "html", "htm" -> MediaType.TEXT_HTML;
-            case "css" -> MediaType.valueOf("text/css");
-            case "js" -> MediaType.valueOf("application/javascript");
-            case "json" -> MediaType.APPLICATION_JSON;
-            case "xml" -> MediaType.APPLICATION_XML;
-            // 视频
-            case "mp4" -> MediaType.valueOf("video/mp4");
-            case "webm" -> MediaType.valueOf("video/webm");
-            // 音频
-            case "mp3" -> MediaType.valueOf("audio/mpeg");
-            case "wav" -> MediaType.valueOf("audio/wav");
-            // 默认：二进制流（浏览器会提示下载）
-            default -> MediaType.APPLICATION_OCTET_STREAM;
-        };
     }
 }

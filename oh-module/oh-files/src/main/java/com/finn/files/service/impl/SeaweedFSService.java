@@ -1,18 +1,16 @@
-package com.finn.files.service;
+package com.finn.files.service.impl;
 
 import com.finn.files.config.SeaweedFSProperties;
+import com.finn.files.config.StorageProperties;
+import com.finn.files.service.StorageService;
+import com.finn.files.utils.MediaTypeUtils;
+import com.finn.files.vo.FileMetadata;
 import com.finn.files.vo.PartInfoVO;
 import com.finn.files.vo.PresignedUrlVO;
 import com.finn.files.vo.MultipartUploadInitVO;
 import com.finn.framework.cache.RedisCache;
-import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.entity.HashDto;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.utils.Tools;
-import jakarta.annotation.PostConstruct;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -29,8 +27,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * SeaweedFS 服务
@@ -54,10 +50,7 @@ import java.util.concurrent.TimeUnit;
  *   ]
  * }
  */
-@Service
-// 只有当配置 seaweedfs.s3.enabled=true （或缺省该配置）时，这个 SeaweedFSService Bean 才会被加载到 Spring 容器中
-@ConditionalOnProperty(prefix = "seaweedfs.s3", value = "enabled", havingValue = "true", matchIfMissing = true)
-public class SeaweedFSService {
+public class SeaweedFSService extends StorageService {
 
     private final S3Client s3Client;
 
@@ -65,35 +58,23 @@ public class SeaweedFSService {
 
     private final SeaweedFSProperties properties;
 
-    private final RedisCache redisCache;
-
-    /**
-     * 分片大小：10MB
-     */
-    private static final long PART_SIZE = 10 * 1024 * 1024;
-
     /**
      * 内存上传阈值：5MB，小于此值直接读内存，避免磁盘 I/O
      */
     private static final long MEMORY_UPLOAD_THRESHOLD = 5 * 1024 * 1024;
 
     public SeaweedFSService(S3Client s3Client, S3Presigner s3Presigner, SeaweedFSProperties properties,
-                            RedisCache redisCache) {
+                            StorageProperties storageProperties, RedisCache redisCache) {
+        super(storageProperties);
         this.s3Client = s3Client;
         this.s3Presigner = s3Presigner;
         this.properties = properties;
         this.redisCache = redisCache;
     }
 
-    /**
-     * 上传文件
-     *
-     * @param file 上传的文件
-     * @param isTmp 是否临时文件，临时文件可删除
-     * @return 文件唯一标识 key
-     */
-    public String uploadFile(MultipartFile file, Boolean isTmp) {
-        if(isTmp == null){
+    @Override
+    public String upload(MultipartFile file, Boolean isTmp) {
+        if (isTmp == null) {
             isTmp = false;
         }
         try {
@@ -101,7 +82,7 @@ public class SeaweedFSService {
             if (fileName == null) {
                 fileName = "no_file_name";
             }
-            String suffix = fileName.substring(file.getOriginalFilename().lastIndexOf("."));
+            String suffix = fileName.substring(fileName.lastIndexOf("."));
             if (whitelistVerification(suffix)) {
                 throw new ServerException(suffix + " 文件不合法");
             }
@@ -138,10 +119,8 @@ public class SeaweedFSService {
         }
     }
 
-    /**
-     * 上传字节数组
-     */
-    public String uploadFile(byte[] data, String originalFilename, String contentType) {
+    @Override
+    public String upload(byte[] data, String originalFilename, String contentType) {
         if (originalFilename == null) {
             originalFilename = "no_file_name";
         }
@@ -156,46 +135,24 @@ public class SeaweedFSService {
                 .contentType(contentType)
                 .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(data));
+        cacheFile(key, originalFilename, data.length, contentType, "SeaweedFS", false);
         return key;
     }
 
-    /**
-     * 下载文件（字节数组，适合小文件）
-     *
-     * @param key 文件 key
-     * @return 文件字节数组
-     */
-    public byte[] downloadFile(String key) {
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(properties.getBucket())
-                .key(key)
-                .build();
+    public String upload(byte[] data, String path) {
+        return upload(data, path, null);
+    }
+
+    public String upload(InputStream inputStream, String path) {
         try {
-            return s3Client.getObjectAsBytes(getObjectRequest).asByteArray();
-        } catch (NoSuchKeyException e) {
-            throw new ServerException("文件不存在");
+            byte[] data = inputStream.readAllBytes();
+            return upload(data, path);
+        } catch (IOException e) {
+            throw new ServerException("文件上传失败", e);
         }
     }
 
-    /**
-     * 获取文件输入流（适合大文件）
-     */
-    public InputStream getFileInputStream(String key) {
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(properties.getBucket())
-                .key(key)
-                .build();
-        return s3Client.getObject(getObjectRequest);
-    }
-
-    /**
-     * 流式下载文件到输出流（支持 Range 断点续传）
-     *
-     * @param key        文件 key
-     * @param outputStream 输出流
-     * @param rangeStart 起始字节（-1 表示从头开始）
-     * @param rangeEnd   结束字节（-1 表示到文件末尾）
-     */
+    @Override
     public void streamFile(String key, OutputStream outputStream, long rangeStart, long rangeEnd) {
         GetObjectRequest.Builder builder = GetObjectRequest.builder()
                 .bucket(properties.getBucket())
@@ -218,25 +175,30 @@ public class SeaweedFSService {
         }
     }
 
-    /**
-     * 获取文件元数据
-     */
-    public HeadObjectResponse getFileMetadata(String key) {
+    @Override
+    public FileMetadata getMetadata(String key) {
         HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
                 .bucket(properties.getBucket())
                 .key(key)
                 .build();
         try {
-            return s3Client.headObject(headObjectRequest);
+            HeadObjectResponse response = s3Client.headObject(headObjectRequest);
+            FileMetadata metadata = new FileMetadata();
+            metadata.setContentLength(response.contentLength());
+            String contentType = response.contentType();
+            if (contentType == null || contentType.isEmpty()) {
+                contentType = MediaTypeUtils.getMimeType(key);
+            }
+            metadata.setContentType(contentType);
+            metadata.setFilename(key);
+            return metadata;
         } catch (NoSuchKeyException e) {
             throw new ServerException("文件不存在");
         }
     }
 
-    /**
-     * 删除文件
-     */
-    public void deleteFile(String key) {
+    @Override
+    public void delete(String key) {
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(properties.getBucket())
                 .key(key)
@@ -244,9 +206,7 @@ public class SeaweedFSService {
         s3Client.deleteObject(deleteObjectRequest);
     }
 
-    /**
-     * 判断文件是否存在
-     */
+    @Override
     public boolean exists(String key) {
         try {
             HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
@@ -275,6 +235,7 @@ public class SeaweedFSService {
      * @param duration    有效期
      * @return 预签名 URL 信息
      */
+    @Override
     public PresignedUrlVO generatePresignedUploadUrl(String key, String contentType, Duration duration) {
         if (key == null || key.isEmpty()) {
             key = Tools.generator();
@@ -304,6 +265,7 @@ public class SeaweedFSService {
      * @param duration 有效期
      * @return 预签名 URL 信息
      */
+    @Override
     public PresignedUrlVO generatePresignedDownloadUrl(String key, Duration duration) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(properties.getBucket())
@@ -331,6 +293,7 @@ public class SeaweedFSService {
      * @param contentType 文件类型
      * @return 分片上传初始化信息
      */
+    @Override
     public MultipartUploadInitVO initiateMultipartUpload(String key, String contentType) {
         if (key == null || key.isEmpty()) {
             key = Tools.generator();
@@ -357,6 +320,7 @@ public class SeaweedFSService {
      * @param file       分片文件
      * @return 分片 ETag
      */
+    @Override
     public String uploadPart(String key, String uploadId, int partNumber, MultipartFile file) {
         try {
             UploadPartRequest uploadPartRequest = UploadPartRequest.builder()
@@ -383,6 +347,7 @@ public class SeaweedFSService {
      * @param duration   有效期
      * @return 预签名 URL 信息
      */
+    @Override
     public PresignedUrlVO generatePresignedUploadPartUrl(String key, String uploadId, int partNumber, Duration duration) {
         UploadPartRequest uploadPartRequest = UploadPartRequest.builder()
                 .bucket(properties.getBucket())
@@ -410,6 +375,7 @@ public class SeaweedFSService {
      * @param uploadId 上传 ID
      * @param parts    分片信息列表
      */
+    @Override
     public void completeMultipartUpload(String key, String uploadId, List<PartInfoVO> parts) {
         List<CompletedPart> completedParts = new ArrayList<>();
         for (PartInfoVO part : parts) {
@@ -433,6 +399,7 @@ public class SeaweedFSService {
      * @param key      文件 key
      * @param uploadId 上传 ID
      */
+    @Override
     public void abortMultipartUpload(String key, String uploadId) {
         AbortMultipartUploadRequest abortRequest = AbortMultipartUploadRequest.builder()
                 .bucket(properties.getBucket())
@@ -459,61 +426,5 @@ public class SeaweedFSService {
             }
         }
         return flag;
-    }
-
-    /**
-     * 缓存文件,在oh-system中的AttachmentService保存文件信息
-     * @param  fileId 文件id、url
-     * @param  fileName 文件名
-     * @param  fileSize 文件大小
-     * @param  platform 存储平台
-     * @param  isTmp 是否临时文件，临时文件可以定期删除
-     *
-     */
-    private void cacheFile(String fileId, String fileName, long fileSize, String contentType,
-                           String platform, Boolean isTmp){
-        if(properties.isCacheFile()){
-            HashDto hashDto = new HashDto();
-            hashDto.put("fileId", fileId);
-            hashDto.put("name", fileName);
-            hashDto.put("size", fileSize);
-            hashDto.put("contentType", contentType);
-            hashDto.put("platform", platform);
-            hashDto.put("tmpFlag", isTmp?1:0);
-            if(SecurityUser.getUserId() != null){
-                hashDto.put("creator", SecurityUser.getUserId());
-            }
-            String key = RedisKeys.getFileCacheKey();
-            // 保存到Redis队列,存2天
-            redisCache.leftPush(key, hashDto, 172800); // 60*60*24*2
-        }
-    }
-
-    /**
-     * 删除临时文件
-     */
-    @PostConstruct
-    public void clearData (){
-        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
-        // 每隔150秒钟，执行一次
-        scheduledService.scheduleWithFixedDelay(() -> {
-            if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) > 0){
-                for(int i = 0; i < 20; i++){
-                    Object object = redisCache.rightPop(RedisKeys.getTmpFileCacheKey());
-                    if(object == null){
-                        break;
-                    }
-                    HashDto hashDto = (HashDto) object;
-                    String fileId = hashDto.getStr("url");
-                    // 删除文件
-                    if(fileId != null){
-                        if(this.exists(fileId)){
-                            this.deleteFile(fileId);
-                        }
-                        redisCache.leftPush(RedisKeys.getTmpFileDelKey(), hashDto);
-                    }
-                }
-            }
-        }, 30, 300, TimeUnit.SECONDS);
     }
 }

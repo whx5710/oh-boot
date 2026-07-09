@@ -18,6 +18,7 @@ import jakarta.annotation.PostConstruct;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,13 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentMapper attachmentMapper;
     private final RedisCache redisCache;
+
+    @Value("${finn.storage.enabled:true}")
+    private boolean storageEnabled;
+
+    @Value("${finn.storage.cache-record:false}")
+    private boolean cacheRecord;
+
     public AttachmentServiceImpl(AttachmentMapper attachmentMapper, RedisCache redisCache) {
         this.attachmentMapper = attachmentMapper;
         this.redisCache = redisCache;
@@ -86,53 +94,40 @@ public class AttachmentServiceImpl implements AttachmentService {
      */
     @PostConstruct
     public void saveAttachment() {
+        if (!storageEnabled) {
+            log.info("文件存储未启用，跳过附件定时任务");
+            return;
+        }
         ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
-        // 每隔150秒钟，执行一次
+        // 每隔180秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
-            try {
-                String key = RedisKeys.getFileCacheKey();
-                // 每次插入200条
-                int count = 200;
-                List<AttachmentEntity> list = new ArrayList<>();
-                for (int i = 0; i < count; i++) {
-                    Object object = redisCache.rightPop(key);
-                    if(object == null){
-                        break;
+            // 只有开启缓存记录时，才从 Redis 队列读取并保存文件信息
+            if (cacheRecord) {
+                try {
+                    String key = RedisKeys.getFileCacheKey();
+                    // 每次插入300条
+                    int count = 300;
+                    List<AttachmentEntity> list = new ArrayList<>();
+                    for (int i = 0; i < count; i++) {
+                        Object object = redisCache.rightPop(key);
+                        if(object == null){
+                            break;
+                        }
+                        AttachmentEntity attachment = getAttachment((HashDto) object);
+                        list.add(attachment);
                     }
-                    AttachmentEntity attachment = getAttachment((HashDto) object);
-                    list.add(attachment);
-                }
-                if(!list.isEmpty()){
-                    attachmentMapper.insertBatch(list);
-                }
-            } catch (Exception e) {
-                log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));
-            }
-
-            // 缓存临时文件队列，在文件服务中读取，删除临时文件
-            if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) == 0){
-                // 查询48小时前的临时文件
-                LocalDateTime time = LocalDateTime.now();
-                time = time.minusHours(48);
-                QueryWrapper<AttachmentEntity> queryWrapper = QueryWrapper.of(AttachmentEntity.class);
-                queryWrapper.eq(AttachmentEntity::getDbStatus, 1).eq(AttachmentEntity::getTmpFlag, 1)
-                        .le(AttachmentEntity::getCreateTime, time).orderBy(AttachmentEntity::getCreateTime, ASC)
-                        .page(1, 10);
-                List<AttachmentEntity> list = attachmentMapper.listByWrapper(queryWrapper);
-                if(list != null && !list.isEmpty()){
-                    for (AttachmentEntity item: list){
-                        HashDto hashDto = new HashDto();
-                        hashDto.put("id", item.getId());
-                        hashDto.put("url", item.getUrl());
-                        redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto, 60*60*24); // 缓存24小时
+                    if(!list.isEmpty()){
+                        attachmentMapper.insertBatch(list);
                     }
+                } catch (Exception e) {
+                    log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));
                 }
             }
 
             // 更新已删除的文件状态(文件服务已将文件删除)
             if(redisCache.getListSize(RedisKeys.getTmpFileDelKey()) > 0){
                 List<Long> ids = new ArrayList<>();
-                for(int i = 0; i < 10; i++){
+                for(int i = 0; i < 50; i++){
                     Object object = redisCache.rightPop(RedisKeys.getTmpFileDelKey());
                     if(object == null){
                         break;
@@ -146,9 +141,34 @@ public class AttachmentServiceImpl implements AttachmentService {
                             .eq(AttachmentEntity::getDbStatus, 1).in(AttachmentEntity::getId, ids));
                 }
             }
-        }, 10, 180, TimeUnit.SECONDS);
+
+            // 缓存临时文件队列，在文件服务中读取，删除临时文件
+            if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) == 0){
+                // 查询48小时前的临时文件
+                LocalDateTime time = LocalDateTime.now();
+                time = time.minusHours(48);
+                QueryWrapper<AttachmentEntity> queryWrapper = QueryWrapper.of(AttachmentEntity.class);
+                queryWrapper.eq(AttachmentEntity::getDbStatus, 1).eq(AttachmentEntity::getTmpFlag, 1)
+                        .le(AttachmentEntity::getCreateTime, time).orderBy(AttachmentEntity::getCreateTime, ASC)
+                        .page(1, 50);
+                List<AttachmentEntity> list = attachmentMapper.listByWrapper(queryWrapper);
+                if(list != null && !list.isEmpty()){
+                    for (AttachmentEntity item: list){
+                        HashDto hashDto = new HashDto();
+                        hashDto.put("id", item.getId());
+                        hashDto.put("fileId", item.getUrl());
+                        redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto, 60*60*24); // 缓存24小时
+                    }
+                }
+            }
+        }, 30, 180, TimeUnit.SECONDS);
     }
 
+    /**
+     * 组装实体类
+     * @param file
+     * @return
+     */
     private static @NonNull AttachmentEntity getAttachment(HashDto file) {
         AttachmentEntity attachment = new AttachmentEntity();
         attachment.setUrl(file.getStr("fileId"));
@@ -159,9 +179,10 @@ public class AttachmentServiceImpl implements AttachmentService {
         if(tmpFlag == null){
             tmpFlag = 0;
         }
-        attachment.setContentType(file.getStr("contentType"));
         attachment.setTmpFlag(tmpFlag);
+        attachment.setContentType(file.getStr("contentType"));
         attachment.setCreator(file.getLong("creator"));
+        attachment.setCreateTime(file.getLocalDateTime("createTime"));
         return attachment;
     }
 

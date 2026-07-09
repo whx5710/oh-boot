@@ -34,17 +34,15 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 	/**
 	 * 根据用户名和用户类型查询用户信息
 	 * @param username
-	 * @param userType
 	 * @return
 	 */
-	UserEntity getByUsername(@Param("username") String username, @Param("userType")String userType);
+	UserEntity getByUsername(@Param("username") String username);
 
 	/**
 	 *
 	 * @param mobile
-	 * @param userType
 	 * @return
 	 */
-	UserEntity getByMobile(@Param("mobile") String mobile, @Param("userType")String userType);
+	UserEntity getByMobile(@Param("mobile") String mobile);
 
 }

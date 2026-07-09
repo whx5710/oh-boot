@@ -1,6 +1,6 @@
-package com.finn.system.config;
+package com.finn.files.config;
 
-import com.finn.system.enums.StorageTypeEnum;
+import com.finn.files.enums.StorageTypeEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -17,13 +17,22 @@ public class StorageProperties {
      */
     private boolean enabled;
     /**
-     * 通用配置项
+     * 存储类型 local、seaweedfs、minio
      */
-    private StorageConfig config;
+    private StorageTypeEnum type;
+
+    /**
+     * 是否缓存文件信息
+     */
+    private boolean cacheRecord = false;
     /**
      * 本地配置项
      */
     private LocalStorageProperties local;
+    /**
+     * seaweedFS配置
+     */
+    private SeaweedFSProperties seaweedFS;
     /**
      * Minio配置项
      */
@@ -37,12 +46,20 @@ public class StorageProperties {
         this.enabled = enabled;
     }
 
-    public StorageConfig getConfig() {
-        return config;
+    public StorageTypeEnum getType() {
+        return type;
     }
 
-    public void setConfig(StorageConfig config) {
-        this.config = config;
+    public void setType(StorageTypeEnum type) {
+        this.type = type;
+    }
+
+    public boolean isCacheRecord() {
+        return cacheRecord;
+    }
+
+    public void setCacheRecord(boolean cacheRecord) {
+        this.cacheRecord = cacheRecord;
     }
 
     public LocalStorageProperties getLocal() {
@@ -61,43 +78,12 @@ public class StorageProperties {
         this.minio = minio;
     }
 
-    public static class StorageConfig {
-        /**
-         * 访问域名
-         */
-        private String domain;
-        /**
-         * 配置路径前缀
-         */
-        private String prefix;
-        /**
-         * 存储类型
-         */
-        private StorageTypeEnum type;
+    public SeaweedFSProperties getSeaweedFS() {
+        return seaweedFS;
+    }
 
-        public String getDomain() {
-            return domain;
-        }
-
-        public void setDomain(String domain) {
-            this.domain = domain;
-        }
-
-        public String getPrefix() {
-            return prefix;
-        }
-
-        public void setPrefix(String prefix) {
-            this.prefix = prefix;
-        }
-
-        public StorageTypeEnum getType() {
-            return type;
-        }
-
-        public void setType(StorageTypeEnum type) {
-            this.type = type;
-        }
+    public void setSeaweedFS(SeaweedFSProperties seaweedFS) {
+        this.seaweedFS = seaweedFS;
     }
 
     @Bean
@@ -106,10 +92,16 @@ public class StorageProperties {
         return new LocalStorageProperties();
     }
 
-    /*@Bean
+    @Bean
+    @ConfigurationProperties(prefix = "finn.storage.seaweedfs")
+    public SeaweedFSProperties seaweedFSProperties() {
+        return new SeaweedFSProperties();
+    }
+
+    @Bean
     @ConfigurationProperties(prefix = "finn.storage.minio")
     public MinioStorageProperties minioStorageProperties() {
         return new MinioStorageProperties();
-    }*/
+    }
 
 }

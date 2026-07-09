@@ -19,7 +19,7 @@ finn:
       - /webjars/**
       - /upload/**
   open-api:
-    type: 2 # 1直接保存 2使用MQ异步保存
+    type: 1 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
     cache-time: 604800 # 缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
   xss:
@@ -28,15 +28,28 @@ finn:
       - /oh-generator/**
   # 文件存储相关
   storage:
-    enabled: true
-    config:
-      type: local  # 存储类型：local、aliyun、tencent、qiniu、huawei、minio
-      domain: http://localhost:8080
-    local.path: /data/图片/upload
+    enabled: true # 控制文件存储是否启用
+    type: local  # 存储类型：local、seaweedfs、minio
+    cache-record: true                      # 是否redis缓存文件信息，用于异步保存到表中，默认false
+    local:
+      path: /home/finn/文档/upFiles
+    seaweedfs:
+      endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
+      access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
+      secret-key: admin123                    # 同上
+      bucket: default-bucket                  # 默认存储桶名
+      region: us-east-1                       # SeaweedFS 不校验 region，任意填
+      path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
+      # 允许上传的文件扩展名，如 .jpg
+      file-suffix:
+        - .jpg
+        - .png
+        - .jpeg
+        - .zip
   # 微信相关配置
   wechat:
     api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
-    app-id: wxe04322abcdefg # 微信小程序app id
+    app-id: wxe1234567 # 微信小程序app id
     secret: aebf3725274d309de708f0ceaf123 # 微信小程序密钥
   # Redis 双数据源配置（主缓存 + 队列缓存）
   redis:
@@ -47,8 +60,8 @@ finn:
       #password:
     queue:
       host: 127.0.0.1
-      port: 6379
-      database: 1
+      port: 6380
+      database: 0
       #password:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
@@ -127,38 +140,7 @@ spring:
         spring.json.add.type.headers: false
         max.request.size: 126951500
         max.block.ms: 30000 # 最大阻塞时间默认60000ms
-#rocketmq:
-#  name-server: 127.0.0.1:9876 # 服务地址，多个用逗号分开
-#  enhance:
-#    autoListener: false # 是否启动时监听
-#    enabledIsolation: true # 启动隔离，用于激活配置类EnvironmentIsolationConfig,启动后会自动在topic上拼接激活的配置文件，达到自动隔离的效果
-#    environment: ${spring.profiles.active} # 隔离环境名称，拼接到topic后,如 topic_dev
-#  producer:
-#    group: oh_group # 必须指定group
-#    send-message-timeout: 3000 # 消息发送超时时长，默认3s
-#    retry-times-when-send-failed: 3 # 同步发送消息失败重试次数，默认2
-#    retry-times-when-send-async-failed: 3 # 异步发送消息失败重试次数，默认2
-#    retryNextServer: false # 是否在内部发送失败时重试另一个broker，默认false
-#    maxMessageSize: 4096 # 消息最大长度，默认1024 * 1024 * 4(默认4M)
-#    compressMessageBodyThreshold: 4096 # 压缩消息阈值，默认4k(1024 * 4)
 
-# 文件服务 s3
-seaweedfs:
-  s3:
-    endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
-    access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
-    secret-key: admin123                    # 同上
-    bucket: default-bucket                  # 默认存储桶名
-    region: us-east-1                       # SeaweedFS 不校验 region，任意填
-    path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
-    #自定义扩展
-    cache-file: false                       # 是否redis缓存文件信息，用于异步保存到表中，默认false
-    # 允许上传的文件扩展名，如 .jpg
-    file-suffix:
-      - .jpg
-      - .png
-      - .jpeg
-      - .zip
 # 日志信息
 logging:
   # 字符集设置

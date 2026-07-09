@@ -5,8 +5,8 @@ import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.wechat.WechatMiniService;
 import com.finn.framework.utils.AssertUtils;
-import com.finn.system.entity.UserEntity;
-import com.finn.system.mapper.UserMapper;
+import com.finn.system.entity.OpenUserEntity;
+import com.finn.system.mapper.OpenUserMapper;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,21 +24,21 @@ import java.util.Map;
 @RequestMapping("/wechat")
 public class WechatController {
     private final WechatMiniService wechatMiniService;
-    private final UserMapper userMapper;
+    private final OpenUserMapper openUserMapper;
 
-    public WechatController(WechatMiniService wechatMiniService, UserMapper userMapper){
+    public WechatController(WechatMiniService wechatMiniService, OpenUserMapper openUserMapper){
         this.wechatMiniService = wechatMiniService;
-        this.userMapper = userMapper;
+        this.openUserMapper = openUserMapper;
     }
 
     /**
      * 解码手机号和绑定
-     * @param params
+     * @param params {code, bind}
      * @return
      */
-    @PostMapping("/bindPhone")
-    public Result<String> login(@RequestBody Map<String, String> params) {
-        // 解密手机号
+    @PostMapping("/getPhone")
+    public Result<String> getPhone(@RequestBody Map<String, String> params) {
+        // 解密手机号,通过微信平台的code获取
         String phone = wechatMiniService.getPhoneNumber(params);
         // 更新手机号
         if(params.containsKey("bind") && params.get("bind") != null
@@ -47,12 +47,12 @@ public class WechatController {
             if(userId == null){
                 throw new SecurityException("请先登录");
             }
-            UserEntity user = userMapper.findById(userId, UserEntity.class);
+            OpenUserEntity user = openUserMapper.findById(userId, OpenUserEntity.class);
             if(user == null){
                 throw new SecurityException("未找到用户信息");
             }
             user.setMobile(phone);
-            userMapper.updateById(user);
+            openUserMapper.updateById(user);
         }
         return Result.ok(phone);
     }
@@ -63,9 +63,9 @@ public class WechatController {
      * @return 提示信息
      */
     @PostMapping("/update")
-    public Result<String> update(@RequestBody UserEntity vo) {
+    public Result<String> update(@RequestBody OpenUserEntity vo) {
         AssertUtils.isNull(vo.getId(), "用户ID");
-        UserEntity user = userMapper.findById(vo.getId(), UserEntity.class);
+        OpenUserEntity user = openUserMapper.findById(vo.getId(), OpenUserEntity.class);
         if(user == null || user.getId() == null){
             throw new ServerException("未找到该用户");
         }
@@ -76,7 +76,7 @@ public class WechatController {
         user.setMobile(vo.getMobile());
         user.setRealName(vo.getRealName());
         user.setGender(vo.getGender());
-        userMapper.updateById(user);
+        openUserMapper.updateById(user);
         return Result.ok("修改成功");
     }
 }
