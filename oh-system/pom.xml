@@ -29,12 +29,6 @@
             <artifactId>oh-framework</artifactId>
         </dependency>
 
-        <!-- 业务模块 -->
-        <dependency>
-            <groupId>com.finn.module</groupId>
-            <artifactId>oh-urban</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <!--文件服务，可独立部署-->
         <dependency>
             <groupId>com.finn.module</groupId>
