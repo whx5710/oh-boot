@@ -40,11 +40,9 @@ public class StorageConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "finn.storage", value = "type", havingValue = "seaweedfs")
     public StorageService seaweedFSService(S3Client s3Client, S3Presigner s3Presigner,
-                                           SeaweedFSProperties seaweedFSProperties, StorageProperties properties,
+                                           StorageProperties properties,
                                            ObjectProvider<RedisCache> redisCacheProvider) {
-        SeaweedFSService service = new SeaweedFSService(s3Client, s3Presigner, seaweedFSProperties, properties,
-                redisCacheProvider.getIfAvailable());
-        return service;
+        return new SeaweedFSService(s3Client, s3Presigner, properties.getSeaweedFS(), properties, redisCacheProvider.getIfAvailable());
     }
 
     /**

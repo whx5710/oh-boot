@@ -11,6 +11,7 @@ import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.DateUtils;
 import com.finn.framework.utils.ExceptionUtils;
 import com.finn.framework.utils.JsonUtils;
+import com.finn.framework.utils.NamedDaemonThreadFactory;
 import com.finn.framework.utils.excel.ExcelUtils;
 import com.finn.system.convert.ErrorLogConvert;
 import com.finn.system.entity.ErrorLogEntity;
@@ -61,7 +62,7 @@ public class ErrorLogServiceImpl implements ErrorLogService {
      */
     @PostConstruct
     public void saveLog() {
-        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1, new NamedDaemonThreadFactory("error-log-save"));
 
         // 每次插入条数，每次插入的数据要根据缓存时间、最大缓存量计算
         int minite = Math.toIntExact((commonProperty.getLogCacheTime() / time))<=0?1:Math.toIntExact((commonProperty.getLogCacheTime() / time));

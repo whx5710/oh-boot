@@ -1,6 +1,7 @@
 package com.finn.files.config.s3;
 
 import com.finn.files.config.SeaweedFSProperties;
+import com.finn.files.config.StorageProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +24,8 @@ public class S3Config {
 
     private final SeaweedFSProperties properties;
 
-    public S3Config(SeaweedFSProperties properties){
-        this.properties = properties;
+    public S3Config(StorageProperties storageProperties){
+        this.properties = storageProperties.getSeaweedFS();
     }
 
     @Bean

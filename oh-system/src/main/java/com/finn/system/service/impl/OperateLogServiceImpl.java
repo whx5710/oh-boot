@@ -8,6 +8,7 @@ import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.utils.ExceptionUtils;
+import com.finn.framework.utils.NamedDaemonThreadFactory;
 import com.finn.framework.entity.PageResult;
 import com.finn.system.convert.OperateLogConvert;
 import com.finn.system.entity.OperateLogEntity;
@@ -81,7 +82,7 @@ public class OperateLogServiceImpl implements OperateLogService {
      */
     @PostConstruct
     public void saveLog() {
-        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1, new NamedDaemonThreadFactory("operate-log-save"));
 
         // 每隔120秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {

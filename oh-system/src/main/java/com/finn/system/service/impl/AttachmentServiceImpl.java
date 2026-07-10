@@ -8,6 +8,7 @@ import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.utils.AssertUtils;
 import com.finn.framework.utils.ExceptionUtils;
+import com.finn.framework.utils.NamedDaemonThreadFactory;
 import com.finn.system.convert.AttachmentConvert;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.mapper.AttachmentMapper;
@@ -48,6 +49,21 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Value("${finn.storage.cache-record:false}")
     private boolean cacheRecord;
+
+    /**
+     * 连续满批次计数，用于检测 Redis 文件队列是否拥挤
+     */
+    private int consecutiveFullBatchCount = 0;
+
+    /**
+     * 触发队列拥挤警告的连续满批次阈值
+     */
+    private static final int QUEUE_CONGESTION_THRESHOLD = 5;
+
+    /**
+     * 每批次处理数量
+     */
+    private static final int BATCH_SIZE = 300;
 
     public AttachmentServiceImpl(AttachmentMapper attachmentMapper, RedisCache redisCache) {
         this.attachmentMapper = attachmentMapper;
@@ -98,17 +114,15 @@ public class AttachmentServiceImpl implements AttachmentService {
             log.info("文件存储未启用，跳过附件定时任务");
             return;
         }
-        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1, new NamedDaemonThreadFactory("attachment-save"));
         // 每隔180秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             // 只有开启缓存记录时，才从 Redis 队列读取并保存文件信息
             if (cacheRecord) {
                 try {
                     String key = RedisKeys.getFileCacheKey();
-                    // 每次插入300条
-                    int count = 300;
                     List<AttachmentEntity> list = new ArrayList<>();
-                    for (int i = 0; i < count; i++) {
+                    for (int i = 0; i < BATCH_SIZE; i++) {
                         Object object = redisCache.rightPop(key);
                         if(object == null){
                             break;
@@ -118,6 +132,16 @@ public class AttachmentServiceImpl implements AttachmentService {
                     }
                     if(!list.isEmpty()){
                         attachmentMapper.insertBatch(list);
+                    }
+                    // 队列拥挤检测：连续达到满批次时打印警告
+                    if (list.size() == BATCH_SIZE) {
+                        consecutiveFullBatchCount++;
+                        if (consecutiveFullBatchCount >= QUEUE_CONGESTION_THRESHOLD) {
+                            log.warn("Redis 文件记录队列出现拥挤，已连续 {} 次每次插入 {} 条记录，建议检查消费速度或调整定时任务频率", consecutiveFullBatchCount, BATCH_SIZE);
+                            consecutiveFullBatchCount = 0;
+                        }
+                    } else {
+                        consecutiveFullBatchCount = 0;
                     }
                 } catch (Exception e) {
                     log.error("保存文件异常：{}", ExceptionUtils.getExceptionMessage(e));

@@ -9,11 +9,11 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * 本地存储
@@ -63,14 +63,14 @@ public class LocalStorageService extends StorageService {
 
     public String upload(InputStream inputStream, String path) {
         try {
-            File file = resolveFile(path);
+            Path file = resolveFile(path);
 
             // 没有目录，则自动创建目录
-            File parent = file.getParentFile();
-            if (parent != null && !parent.mkdirs() && !parent.isDirectory()) {
-                throw new ServerException("目录 '" + parent + "' 创建失败");
+            Path parent = file.getParent();
+            if (parent != null && !Files.exists(parent)) {
+                Files.createDirectories(parent);
             }
-            FileCopyUtils.copy(inputStream, Files.newOutputStream(file.toPath()));
+            FileCopyUtils.copy(inputStream, Files.newOutputStream(file));
         } catch (Exception e) {
             throw new ServerException("上传文件失败", e);
         }
@@ -79,11 +79,16 @@ public class LocalStorageService extends StorageService {
 
     @Override
     public void streamFile(String key, OutputStream outputStream, long rangeStart, long rangeEnd) {
-        File file = resolveFile(key);
-        if (!file.exists()) {
+        Path file = resolveFile(key);
+        if (!Files.exists(file)) {
             throw new ServerException("文件不存在");
         }
-        long fileSize = file.length();
+        long fileSize;
+        try {
+            fileSize = Files.size(file);
+        } catch (IOException e) {
+            throw new ServerException("文件读取失败", e);
+        }
         long start = rangeStart >= 0 ? rangeStart : 0;
         long end = rangeEnd >= 0 ? Math.min(rangeEnd, fileSize - 1) : fileSize - 1;
         if (start > end || start >= fileSize) {
@@ -92,7 +97,7 @@ public class LocalStorageService extends StorageService {
         }
         long length = end - start + 1;
 
-        try (InputStream inputStream = Files.newInputStream(file.toPath())) {
+        try (InputStream inputStream = Files.newInputStream(file)) {
             // 跳过起始位置
             if (start > 0) {
                 long skipped = inputStream.skip(start);
@@ -115,39 +120,46 @@ public class LocalStorageService extends StorageService {
 
     @Override
     public FileMetadata getMetadata(String key) {
-        File file = resolveFile(key);
-        if (!file.exists()) {
+        Path file = resolveFile(key);
+        if (!Files.exists(file)) {
             throw new ServerException("文件不存在");
         }
-        FileMetadata metadata = new FileMetadata();
-        metadata.setContentLength(file.length());
-        metadata.setContentType(MediaTypeUtils.getMimeType(file.getName()));
-        metadata.setFilename(file.getName());
-        return metadata;
+        try {
+            FileMetadata metadata = new FileMetadata();
+            metadata.setContentLength(Files.size(file));
+            String fileName = file.getFileName().toString();
+            metadata.setContentType(MediaTypeUtils.getMimeType(fileName));
+            metadata.setFilename(fileName);
+            return metadata;
+        } catch (IOException e) {
+            throw new ServerException("文件读取失败", e);
+        }
     }
 
     @Override
     public void delete(String key) {
-        File file = resolveFile(key);
-        if (file.exists()) {
-            if (!file.delete()) {
-                throw new ServerException("文件删除失败");
+        Path file = resolveFile(key);
+        try {
+            if (Files.exists(file)) {
+                Files.delete(file);
             }
+        } catch (IOException e) {
+            throw new ServerException("文件删除失败", e);
         }
     }
 
     @Override
     public boolean exists(String key) {
-        return resolveFile(key).exists();
+        return Files.exists(resolveFile(key));
     }
 
     /**
-     * 解析 key 为本地文件
+     * 解析 key 为本地文件路径
      *
      * @param key 文件 key
-     * @return 本地文件
+     * @return 本地文件路径
      */
-    private File resolveFile(String key) {
+    private Path resolveFile(String key) {
         String basePath = properties.getLocal().getPath();
         if (key.startsWith("/")) {
             key = key.substring(1);
@@ -157,6 +169,6 @@ public class LocalStorageService extends StorageService {
         if (urlPrefix != null && !urlPrefix.isEmpty() && key.startsWith(urlPrefix + "/")) {
             key = key.substring(urlPrefix.length() + 1);
         }
-        return new File(basePath + File.separator + key);
+        return Path.of(basePath, key).normalize();
     }
 }
