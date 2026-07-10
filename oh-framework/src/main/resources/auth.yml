@@ -1,5 +1,0 @@
-auth:
-  ignore-urls:
-    - /favicon.ico
-    - /error
-    - /
