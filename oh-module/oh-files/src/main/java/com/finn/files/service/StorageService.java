@@ -11,6 +11,8 @@ import com.finn.framework.entity.HashDto;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.utils.DateUtils;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +22,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 存储服务抽象类
@@ -28,6 +32,8 @@ import java.util.concurrent.TimeUnit;
  * @author 王小费 whx5710@qq.com
  */
 public abstract class StorageService {
+
+    private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
     protected StorageProperties properties;
 
@@ -254,8 +260,8 @@ public abstract class StorageService {
                 hashDto.put("creator", SecurityUser.getUserId());
             }
             String key = RedisKeys.getFileCacheKey();
-            // 保存到Redis队列,存2天
-            redisCache.leftPush(key, hashDto, 172800); // 60*60*24*2
+            // 保存到Redis队列,存5天
+            redisCache.leftPush(key, hashDto, 432000); // 60*60*24*5
         }
     }
 
@@ -267,25 +273,43 @@ public abstract class StorageService {
         if (redisCache == null) {
             return;
         }
-        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1);
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
+            private final AtomicInteger counter = new AtomicInteger(0);
+
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r, "tmp-file-cleanup-" + counter.incrementAndGet());
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
         // 每隔180秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
-            if (redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) > 0) {
-                for (int i = 0; i < 50; i++) {
-                    Object object = redisCache.rightPop(RedisKeys.getTmpFileCacheKey());
-                    if (object == null) {
-                        break;
-                    }
-                    HashDto hashDto = (HashDto) object;
-                    String fileId = hashDto.getStr("fileId");
-                    // 删除文件
-                    if (fileId != null) {
-                        if (this.exists(fileId)) {
-                            this.delete(fileId);
+            try {
+                if (redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) > 0) {
+                    for (int i = 0; i < 50; i++) {
+                        Object object = redisCache.rightPop(RedisKeys.getTmpFileCacheKey());
+                        if (object == null) {
+                            break;
                         }
-                        redisCache.leftPush(RedisKeys.getTmpFileDelKey(), hashDto);
+                        try {
+                            HashDto hashDto = (HashDto) object;
+                            String fileId = hashDto.getStr("fileId");
+                            // 删除文件
+                            if (fileId != null) {
+                                if (this.exists(fileId)) {
+                                    this.delete(fileId);
+                                }
+                                redisCache.leftPush(RedisKeys.getTmpFileDelKey(), hashDto);
+                            }
+                        } catch (Exception e) {
+                            // 单个文件处理失败不应中断本次任务，也不应阻止后续定时调度
+                            log.warn("临时文件清理单项处理失败：{}", e.getMessage());
+                        }
                     }
                 }
+            } catch (Exception e) {
+                log.error("临时文件清理定时任务异常：{}", e.getMessage(), e);
             }
         }, 40, 180, TimeUnit.SECONDS);
     }

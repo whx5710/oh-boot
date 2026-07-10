@@ -2,7 +2,6 @@ package com.finn.files.config;
 
 import com.finn.files.enums.StorageTypeEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 
 /**
  * 存储配置项
@@ -84,24 +83,6 @@ public class StorageProperties {
 
     public void setSeaweedFS(SeaweedFSProperties seaweedFS) {
         this.seaweedFS = seaweedFS;
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "finn.storage.local")
-    public LocalStorageProperties localStorageProperties() {
-        return new LocalStorageProperties();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "finn.storage.seaweedfs")
-    public SeaweedFSProperties seaweedFSProperties() {
-        return new SeaweedFSProperties();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "finn.storage.minio")
-    public MinioStorageProperties minioStorageProperties() {
-        return new MinioStorageProperties();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.finn.files.config.s3;
 
 import com.finn.files.config.SeaweedFSProperties;
+import com.finn.files.config.StorageProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -23,8 +24,8 @@ public class BucketInitializer {
 
     private final SeaweedFSProperties properties;
 
-    public BucketInitializer(SeaweedFSProperties properties){
-        this.properties = properties;
+    public BucketInitializer(StorageProperties storageProperties){
+        this.properties = storageProperties.getSeaweedFS();
     }
 
     @Bean

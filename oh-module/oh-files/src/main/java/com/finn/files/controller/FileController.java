@@ -92,7 +92,7 @@ public class FileController {
     /**
      * 删除文件
      */
-    @GetMapping("/delete/{key}")
+    @DeleteMapping("/delete/{key}")
     public Result<String> delete(@PathVariable String key) {
         storageService.delete(key);
         return Result.ok("删除成功");
