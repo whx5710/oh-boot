@@ -38,7 +38,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring-boot-dependencies.version>4.1.0</spring-boot-dependencies.version>
 		<spring.security>7.1.0-M2</spring.security>
-		<finn.framework.version>4.2.1_260622</finn.framework.version>
+		<finn.framework.version>4.2.2_260711</finn.framework.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 	</properties>
 

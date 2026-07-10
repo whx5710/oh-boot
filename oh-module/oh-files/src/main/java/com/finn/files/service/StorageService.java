@@ -10,6 +10,7 @@ import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.entity.HashDto;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.utils.DateUtils;
+import com.finn.framework.utils.NamedDaemonThreadFactory;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 存储服务抽象类
@@ -273,16 +272,7 @@ public abstract class StorageService {
         if (redisCache == null) {
             return;
         }
-        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
-            private final AtomicInteger counter = new AtomicInteger(0);
-
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r, "tmp-file-cleanup-" + counter.incrementAndGet());
-                thread.setDaemon(true);
-                return thread;
-            }
-        });
+        ScheduledThreadPoolExecutor scheduledService = new ScheduledThreadPoolExecutor(1, new NamedDaemonThreadFactory("tmp-file-cleanup"));
         // 每隔180秒钟，执行一次
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
