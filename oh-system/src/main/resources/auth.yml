@@ -14,3 +14,4 @@ auth:
     - /sys/code/generate/*
     - /license/info
     - /license/machine-code
+    - /license/install
