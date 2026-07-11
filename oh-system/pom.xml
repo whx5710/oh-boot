@@ -36,6 +36,25 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--业务处理-->
+        <dependency>
+            <groupId>com.finn.module</groupId>
+            <artifactId>oh-urban</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.finn.module</groupId>
+            <artifactId>oh-app</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--流程-->
+        <!--<dependency>
+            <groupId>com.finn.module</groupId>
+            <artifactId>oh-flow</artifactId>
+            <version>1.0.0</version>
+        </dependency>-->
+
         <!-- PostgreSQL驱动：由引入项目决定是否使用 -->
         <dependency>
             <groupId>org.postgresql</groupId>

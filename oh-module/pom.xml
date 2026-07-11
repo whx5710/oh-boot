@@ -20,6 +20,8 @@
         <module>oh-app</module>
         <!--文件服务-->
         <module>oh-files</module>
+        <!-- 业务处理 -->
+        <module>oh-urban</module>
     </modules>
 
     <dependencies>
