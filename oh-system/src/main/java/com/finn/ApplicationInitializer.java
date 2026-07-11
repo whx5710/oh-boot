@@ -26,6 +26,7 @@ package com.finn;
 import com.finn.framework.common.properties.SysDataSourceProperties;
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.license.LicenseUtils;
 import com.finn.system.cache.DictCache;
 import com.finn.system.cache.ParamsCache;
 import com.finn.system.cache.UserCache;
@@ -89,6 +90,7 @@ public class ApplicationInitializer implements ApplicationRunner {
         log.info("-----------------------------------------------");
         log.info("后台服务启动成功.");
         log.info("API 地址：{}", baseUrl);
+        log.info("机器码：{}", LicenseUtils.getMachineCode());
         log.info("-----------------------------------------------");
     }
     
