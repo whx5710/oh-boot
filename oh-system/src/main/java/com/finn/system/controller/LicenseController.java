@@ -28,9 +28,9 @@ public class LicenseController {
      * 上传 License 文件，安装后实时生效
      */
     @PostMapping("/install")
-    public Result<Void> install(@RequestBody String licenseJson) {
+    public Result<String> install(@RequestBody String licenseJson) {
         licenseManager.install(licenseJson);
-        return Result.ok();
+        return Result.ok("安装成功");
     }
 
     /**
