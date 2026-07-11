@@ -31,6 +31,20 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
 
+finn:
+  # 框架公共配置
+  common:
+    err-log-cache: true            # 是否开启系统错误日志记录
+    log-cache-time: 300            # 日志默认缓存时间 300秒
+    log-cache-max-size: 1000       # 日志默认缓存最大数量
+  license:
+    enabled: true                         # 是否启用 License 校验，默认 false
+    path: classpath:license.lic           # License 文件路径，支持 classpath: 或 file:
+    # RSA 公钥（Base64），用于校验签名
+    public-key: MIIBIjANBgkqhkiG...
+    check-interval: 3600                  # 运行时校验间隔（秒），默认 3600
+    allow-missing: false                  # License 文件缺失时是否允许启动，默认 false
+    grace-days: 7                         # 未安装 License 时的宽限期（天），0 表示不开启
 # mybatis配置说明: https://mybatis.net.cn/configuration.html
 mybatis:
   mapper-locations: classpath*:/mapper/postgres/*.xml # mapper下有mysql、postgres 目录

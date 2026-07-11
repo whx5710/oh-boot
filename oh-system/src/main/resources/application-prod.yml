@@ -10,11 +10,6 @@ server:
     context-path: /
     session.cookie.http-only: true
 finn:
-  # 框架公共配置
-  common:
-    err-log-cache: true            # 是否开启系统错误日志记录
-    log-cache-time: 300            # 日志默认缓存时间 300秒
-    log-cache-max-size: 1000       # 日志默认缓存最大数量
   security:
     access-token-expire: 7200      # 过期时间-秒，2小时过期
     refresh-token-expire: 43200    # 刷新token-秒 12小时

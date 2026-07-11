@@ -12,3 +12,5 @@ auth:
     - /sys/info/latestVersion
     - /sys/user/register
     - /sys/code/generate/*
+    - /license/info
+    - /license/machine-code
