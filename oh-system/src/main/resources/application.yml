@@ -41,7 +41,7 @@ finn:
     enabled: true                         # 是否启用 License 校验，默认 false
     path: file:${user.dir}/license.lic   # License 文件路径，支持 classpath: 或 file:（classpath 只读，安装时会落到工作目录）
     # RSA 公钥（Base64），用于校验签名
-    public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAM07T27oQERO8Rc7+dtjfnkTJhJ6D9o6/6WxkxebSniJnOU7T+Fa7HAy05/0UiavtP6MZ6YNLpy9sl629m8CeWkCAwEAAQ==
+    public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL7VzoWUrSL8B/yweH6Za9t2AsVSrN9HYc5AmurvI+zvynMWM/fFElzeoR8/diVTc6+38u/BUWJr7TH+qgrZXoUCAwEAAQ==
     check-interval: 3600                  # 运行时校验间隔（秒），默认 3600
     allow-missing: true                  # License 文件缺失时是否允许启动，默认 false
     grace-days: 7                         # 未安装 License 时的宽限期（天），0 表示不开启
