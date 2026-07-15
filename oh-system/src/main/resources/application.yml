@@ -43,7 +43,7 @@ finn:
     # RSA 公钥已硬编码到 oh-framework jar 包中，不通过配置文件下发，防止被替换绕过授权
     # 安全提醒：allow-missing 设置为 true 时，无 License 也能启动，生产环境建议 false
     allow-missing: true                  # License 文件缺失时是否允许启动，默认 false
-    # 安全提醒：grace-days 大于 0 时，未安装 License 可进入宽限期，生产环境建议 0
+    # 安全提醒：生产环境建议 0，最大值 30
     grace-days: 7                        # 未安装 License 时的宽限期（天），0 表示不开启
 # mybatis配置说明: https://mybatis.net.cn/configuration.html
 mybatis:
