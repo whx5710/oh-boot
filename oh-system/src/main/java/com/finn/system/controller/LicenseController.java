@@ -32,8 +32,8 @@ public class LicenseController {
      */
     @Idempotent(keyPrefix = "license", message = "请求过于频繁，请稍后再试", timeout = 10, limit = true)
     @PostMapping("/install")
-    public Result<String> install(@RequestBody License license) {
-        licenseManager.install(JsonUtils.toJsonString(license));
+    public Result<String> install(@RequestBody String licenseJson) {
+        licenseManager.install(licenseJson);
         return Result.ok("安装成功");
     }
 
