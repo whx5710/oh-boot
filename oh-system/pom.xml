@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.finn</groupId>
         <artifactId>oh-boot</artifactId>
-        <version>4.0.3_260307</version>
+        <version>5.0.0_260717</version>
     </parent>
     <groupId>com.finn.sys</groupId>
     <artifactId>oh-system</artifactId>
@@ -27,6 +27,12 @@
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>
+        </dependency>
+
+        <!-- license授权 -->
+        <dependency>
+            <groupId>com.finn</groupId>
+            <artifactId>oh-license</artifactId>
         </dependency>
 
         <!--文件服务，可独立部署-->
