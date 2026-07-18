@@ -5,7 +5,7 @@ server:
     threads:
       max: 1000
       min-spare: 30
-  port: 8080
+  port: 5711
   servlet:
     context-path: /
     session.cookie.http-only: true
@@ -13,11 +13,18 @@ finn:
   security:
     access-token-expire: 7200      # 过期时间-秒，2小时过期
     refresh-token-expire: 43200    # 刷新token-秒 12小时
-    auth-count: 5                   # 多少次鉴权失败锁定，0表示不开启
-    lock-time: 3600                 # 账号锁定时间(秒)
-    ignore-urls:                    # 忽略鉴权的url
+    auth-count: 5                  # 多少次鉴权失败锁定，0表示不开启
+    lock-time: 3600                # 账号锁定时间(秒)
+    ignore-urls:                   # 忽略鉴权的url
       - /webjars/**
       - /upload/**
+  # 跨域配置
+  cors:
+    allowed-origins: http://127.0.0.1:9001,http://localhost:5777 # 多个用逗号隔开
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS # 请求方法
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600
   open-api:
     type: 1 # 1直接保存 2使用MQ异步保存
     auto-start-up: false # Kafka监听是否开启
@@ -49,8 +56,8 @@ finn:
   # 微信相关配置
   wechat:
     api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
-    app-id: wxe1234567 # 微信小程序app id
-    secret: abc71234567 # 微信小程序密钥
+    app-id: wxe04321234567 # 微信小程序app id
+    secret: ac123c96970f68c3c7c563c9123456 # 微信小程序密钥
   # Redis 双数据源配置（主缓存 + 队列缓存）
   redis:
     primary:
@@ -60,8 +67,8 @@ finn:
       #password:
     queue:
       host: 127.0.0.1
-      port: 6380
-      database: 0
+      port: 6379
+      database: 1
       #password:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
@@ -70,17 +77,18 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
   datasource:
-    #数据源的类型,对应配置相关的连接池 com.alibaba.druid.pool.DruidDataSource com.zaxxer.hikari.HikariDataSource
-    #type: com.alibaba.druid.pool.DruidDataSource
+    #数据源的类型,对应配置相关的连接池 com.zaxxer.hikari.HikariDataSource
     type: com.zaxxer.hikari.HikariDataSource
     sys-data-source:
       primary: masterDb # 主数据源或者数据源组,默认 masterDb
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
     dynamic:
       sysDb: # 系统管理数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh_sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        #url: jdbc:mysql://127.0.0.1:3306/oh_sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
+        username: postgres
         password: 123456
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
@@ -93,12 +101,14 @@ spring:
           validation-timeout: 5000 # 验证超时时间，默认5秒
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
-          hikari-log: true # 是否开启hikari监控日志打印，默认false
-          slow-threshold: 500 # 慢查询阈值,默认1000（毫秒）
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
+          slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
       masterDb: # 主数据源
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/oh_boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        username: root
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        #url: jdbc:mysql://127.0.0.1:3306/oh_boot_all?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot_all
+        username: postgres
         password: 123456
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
@@ -111,8 +121,8 @@ spring:
           validation-timeout: 5000 # 验证超时时间，默认5秒
           isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
           check-connection: true # 初始化时是否检查连接，默认false
-          hikari-log: true # 是否开启hikari监控日志打印，默认false
-          slow-threshold: 500 # 慢查询阈值,默认1000（毫秒）
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
+          slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
   kafka:
     bootstrap-servers: 127.0.0.1:9092
     client-id: open-api-flow
@@ -150,4 +160,20 @@ logging:
     console: UTF-8
   level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
     com.finn: DEBUG
-    org.springframework.web: DEBUG # web相关的日志级别
+    org.springframework.web: debug # web相关的日志级别
+    #root: DEBUG
+#  pattern:
+#    # 在控制台输出的日志格式
+#    # 无颜色 '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'
+#    # 有颜色 '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
+#    console: '%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
+#  file:
+#    # 日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
+#    # path: logs
+#    name: logs/${spring.application.name}.out.log
+#  logback:
+#    rollingPolicy:
+#      clean-history-on-start: true                        # 是否在启动时清除存档日志文件
+#      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz # 滚动日志文件名的模式
+#      max-history: 10                                     # 要保留的存档日志文件的最大数量
+#      max-file-size: 100MB                                # 最大文件大小，默认10MB

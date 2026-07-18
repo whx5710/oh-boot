@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.finn</groupId>
 	<artifactId>oh-boot</artifactId>
-	<version>4.0.3_260307</version>
+	<version>5.0.0_260717</version>
 	<name>oh-boot</name>
 	<description>
 		基于SpringBoot4.x、SpringSecurity7.x、Mybatis、Hikari连接池、Kafka等框架开发的一套SpringBoot快速开发平台，数据库支持mysql、postgres
@@ -38,7 +38,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring-boot-dependencies.version>4.1.0</spring-boot-dependencies.version>
 		<spring.security>7.1.0-M2</spring.security>
-		<finn.framework.version>4.2.2_260711</finn.framework.version>
+
+		<finn.framework.version>4.2.5_260717</finn.framework.version>
+		<finn.license.version>1.0.0_260717</finn.license.version>
+
 		<mapstruct.version>1.6.3</mapstruct.version>
 	</properties>
 
@@ -58,6 +61,13 @@
 				<groupId>com.finn</groupId>
 				<artifactId>oh-framework</artifactId>
 				<version>${finn.framework.version}</version>
+			</dependency>
+
+			<!-- license授权 -->
+			<dependency>
+				<groupId>com.finn</groupId>
+				<artifactId>oh-license</artifactId>
+				<version>${finn.license.version}</version>
 			</dependency>
 
 			<!-- MapStruct -->

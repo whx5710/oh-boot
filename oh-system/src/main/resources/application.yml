@@ -31,6 +31,20 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false  # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
 
+finn:
+  # 框架公共配置
+  common:
+    err-log-cache: true            # 是否开启系统错误日志记录
+    log-cache-time: 300            # 日志默认缓存时间 300秒
+    log-cache-max-size: 1000       # 日志默认缓存最大数量
+  license:
+    # License 校验总开关硬编码在 oh-framework jar 包中，业务项目无法通过配置关闭
+    path: file:${user.dir}/license.lic   # License 文件路径，支持 classpath: 或 file:（classpath 只读，安装时会落到工作目录）
+    # RSA 公钥已硬编码到 oh-framework jar 包中，不通过配置文件下发，防止被替换绕过授权
+    # 安全提醒：allow-missing 设置为 true 时，无 License 也能启动，生产环境建议 false
+    allow-missing: true                  # License 文件缺失时是否允许启动，默认 false
+    # 安全提醒：生产环境建议 0，最大值 30
+    grace-days: 3                        # 未安装 License 时的宽限期（天），0 表示不开启
 # mybatis配置说明: https://mybatis.net.cn/configuration.html
 mybatis:
   mapper-locations: classpath*:/mapper/postgres/*.xml # mapper下有mysql、postgres 目录
