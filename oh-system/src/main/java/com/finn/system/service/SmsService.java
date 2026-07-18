@@ -2,8 +2,8 @@ package com.finn.system.service;
 
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.ExceptionUtils;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.ExceptionUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.system.cache.SmsPlatformCache;
 import com.finn.system.entity.Sms;
 import com.finn.system.entity.SmsLogEntity;

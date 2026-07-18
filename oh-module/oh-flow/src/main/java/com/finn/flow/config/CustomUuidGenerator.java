@@ -1,6 +1,6 @@
 package com.finn.flow.config;
 
-import com.finn.framework.utils.SnowflakeIdWorker;
+import com.finn.common.utils.SnowflakeIdWorker;
 import org.flowable.common.engine.impl.cfg.IdGenerator;
 import org.springframework.stereotype.Component;
 

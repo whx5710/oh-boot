@@ -4,7 +4,7 @@ import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.system.convert.UserConvert;
 import com.finn.system.entity.OpenUserEntity;
 import com.finn.system.mapper.OpenUserMapper;

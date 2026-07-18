@@ -6,7 +6,7 @@ import com.finn.flow.mapper.FlowNodeMapper;
 import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.FlowNodeVO;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
 import com.finn.framework.exception.ServerException;

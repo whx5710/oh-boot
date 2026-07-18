@@ -10,7 +10,7 @@ import com.finn.files.vo.PresignedUrlVO;
 import com.finn.files.vo.MultipartUploadInitVO;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.Tools;
+import com.finn.common.utils.Tools;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;

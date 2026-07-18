@@ -3,7 +3,7 @@ package com.finn.system.controller;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
-import com.finn.framework.utils.Tools;
+import com.finn.common.utils.Tools;
 import com.finn.framework.aop.annotations.Log;
 import com.finn.framework.common.enums.OperateTypeEnum;
 import com.finn.framework.security.user.SecurityUser;

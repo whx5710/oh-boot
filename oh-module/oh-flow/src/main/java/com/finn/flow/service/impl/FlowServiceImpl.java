@@ -9,7 +9,7 @@ import com.finn.flow.mapper.FlowMapper;
 import com.finn.flow.query.FlowQuery;
 import com.finn.flow.service.FlowService;
 import com.finn.flow.vo.FlowVO;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.framework.entity.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

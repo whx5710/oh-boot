@@ -1,7 +1,7 @@
 package com.finn.system.service;
 
-import com.finn.framework.utils.ExceptionUtils;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.ExceptionUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.framework.utils.ReflectUtil;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.convert.MessageConvert;

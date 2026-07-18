@@ -1,6 +1,6 @@
 package com.finn.system.controller;
 
-import com.finn.framework.utils.DateUtils;
+import com.finn.common.utils.DateUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
 import com.finn.framework.query.Query;

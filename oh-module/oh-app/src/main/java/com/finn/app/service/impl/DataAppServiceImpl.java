@@ -6,7 +6,7 @@ import com.finn.app.entity.DataAppEntity;
 import com.finn.app.mapper.DataAppMapper;
 import com.finn.app.query.DataAppQuery;
 import com.finn.app.service.DataAppService;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.api.DataAppDTO;
 import org.springframework.stereotype.Service;

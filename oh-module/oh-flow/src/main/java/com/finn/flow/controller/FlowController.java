@@ -1,6 +1,6 @@
 package com.finn.flow.controller;
 
-import com.finn.framework.utils.DateUtils;
+import com.finn.common.utils.DateUtils;
 import com.finn.framework.entity.Result;
 import com.finn.flow.convert.FlowConvert;
 import com.finn.flow.entity.FlowEntity;

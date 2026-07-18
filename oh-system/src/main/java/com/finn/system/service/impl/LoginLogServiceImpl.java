@@ -2,10 +2,10 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.DateUtils;
+import com.finn.common.utils.DateUtils;
 import com.finn.framework.utils.excel.ExcelUtils;
 import com.finn.framework.utils.HttpContextUtils;
-import com.finn.framework.utils.IpUtils;
+import com.finn.common.utils.IpUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;

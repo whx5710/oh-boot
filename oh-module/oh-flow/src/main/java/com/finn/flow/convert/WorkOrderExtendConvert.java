@@ -1,6 +1,6 @@
 package com.finn.flow.convert;
 
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.flow.entity.WorkOrderEntity;
 import com.finn.flow.vo.WorkOrderVO;
 import tools.jackson.core.type.TypeReference;
