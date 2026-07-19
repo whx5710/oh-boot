@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.framework.common.constant.Constant;
+import com.finn.common.constant.Constant;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.enums.LoginOperationEnum;
 import org.slf4j.Logger;

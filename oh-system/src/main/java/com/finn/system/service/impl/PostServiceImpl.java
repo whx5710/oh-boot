@@ -3,7 +3,7 @@ package com.finn.system.service.impl;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.common.utils.AssertUtils;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.system.convert.PostConvert;

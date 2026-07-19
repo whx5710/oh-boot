@@ -1,5 +1,6 @@
 package com.finn.files.controller;
 
+import com.finn.common.entity.Result;
 import com.finn.files.service.StorageService;
 import com.finn.files.service.impl.SeaweedFSService;
 import com.finn.files.utils.MediaTypeUtils;
@@ -8,7 +9,6 @@ import com.finn.files.vo.FileMetadata;
 import com.finn.files.vo.MultipartUploadInitVO;
 import com.finn.files.vo.PartInfoVO;
 import com.finn.files.vo.PresignedUrlVO;
-import com.finn.framework.entity.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

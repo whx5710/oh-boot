@@ -3,7 +3,7 @@ package com.finn.flow.service;
 import com.finn.flow.entity.WorkOrderEntity;
 import com.finn.flow.query.WorkOrderQuery;
 import com.finn.flow.vo.WorkOrderVO;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 
 import java.util.List;
 

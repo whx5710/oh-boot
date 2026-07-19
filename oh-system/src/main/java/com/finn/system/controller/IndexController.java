@@ -1,7 +1,7 @@
 package com.finn.system.controller;
 
 import com.finn.common.utils.DateUtils;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -5,7 +5,7 @@ import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.exception.ServerException;
 import com.finn.common.utils.AssertUtils;
 import com.finn.common.utils.JsonUtils;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.common.utils.TreeUtils;
 import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;

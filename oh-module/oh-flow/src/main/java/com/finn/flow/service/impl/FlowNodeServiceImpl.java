@@ -11,7 +11,7 @@ import com.finn.flow.mapper.FlowNodeMapper;
 import com.finn.flow.query.FlowNodeQuery;
 import com.finn.flow.service.FlowNodeService;
 import com.finn.flow.vo.FlowNodeVO;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

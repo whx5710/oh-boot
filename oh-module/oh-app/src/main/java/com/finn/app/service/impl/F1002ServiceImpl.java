@@ -1,9 +1,9 @@
 package com.finn.app.service.impl;
 
-import com.finn.framework.entity.HashDto;
+import com.finn.common.entity.HashDto;
+import com.finn.common.entity.MetaEntity;
 import com.finn.common.utils.JsonUtils;
-import com.finn.framework.entity.Result;
-import com.finn.framework.entity.MetaEntity;
+import com.finn.common.entity.Result;
 import com.finn.framework.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

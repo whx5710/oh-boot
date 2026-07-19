@@ -1,7 +1,7 @@
 package com.finn.flow.controller;
 
 import com.finn.common.utils.DateUtils;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import com.finn.flow.convert.FlowConvert;
 import com.finn.flow.entity.FlowEntity;
 import com.finn.flow.query.FlowQuery;
@@ -9,7 +9,7 @@ import com.finn.flow.service.FlowService;
 import com.finn.flow.service.flowable.ProcessHandlerService;
 import com.finn.flow.vo.FlowVO;
 import com.finn.flow.vo.ProcessVO;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import jakarta.validation.Valid;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;

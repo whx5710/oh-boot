@@ -5,7 +5,7 @@ import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.common.utils.AssertUtils;
 import com.finn.common.utils.Tools;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.framework.aop.annotations.RequestKeyParam;
 import com.finn.system.service.AuthService;

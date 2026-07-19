@@ -1,7 +1,7 @@
 package com.finn.system.controller;
 
 import com.finn.framework.aop.annotations.Idempotent;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import com.finn.common.utils.JsonUtils;
 import com.finn.license.License;
 import com.finn.license.LicenseManager;

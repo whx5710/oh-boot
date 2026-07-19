@@ -9,7 +9,7 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.common.utils.ExceptionUtils;
 import com.finn.common.utils.NamedDaemonThreadFactory;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.system.convert.OperateLogConvert;
 import com.finn.system.entity.OperateLogEntity;
 import com.finn.system.mapper.OperateLogMapper;

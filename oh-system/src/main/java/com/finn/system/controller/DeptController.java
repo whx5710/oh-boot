@@ -1,10 +1,10 @@
 package com.finn.system.controller;
 
-import com.finn.framework.common.constant.Constant;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.entity.Result;
+import com.finn.common.constant.Constant;
+import com.finn.common.entity.PageResult;
+import com.finn.common.entity.Result;
 import com.finn.framework.aop.annotations.Log;
-import com.finn.framework.common.enums.OperateTypeEnum;
+import com.finn.common.enums.OperateTypeEnum;
 import com.finn.system.convert.DeptConvert;
 import com.finn.system.entity.DeptEntity;
 import com.finn.system.query.DeptQuery;

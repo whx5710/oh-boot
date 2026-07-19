@@ -4,7 +4,7 @@ import com.finn.flow.convert.TaskRecordConvert;
 import com.finn.flow.entity.TaskRecordEntity;
 import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

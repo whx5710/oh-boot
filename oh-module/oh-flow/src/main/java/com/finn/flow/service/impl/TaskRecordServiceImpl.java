@@ -2,7 +2,7 @@ package com.finn.flow.service.impl;
 
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.entity.HashDto;
+import com.finn.common.entity.HashDto;
 import com.finn.common.utils.JsonUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -14,7 +14,7 @@ import com.finn.flow.query.TaskRecordQuery;
 import com.finn.flow.service.TaskRecordService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.common.utils.AssertUtils;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import org.flowable.engine.HistoryService;
 import org.flowable.task.api.history.HistoricTaskInstance;
 import org.slf4j.Logger;

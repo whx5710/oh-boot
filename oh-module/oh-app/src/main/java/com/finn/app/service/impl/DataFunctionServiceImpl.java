@@ -3,7 +3,7 @@ package com.finn.app.service.impl;
 import com.finn.framework.exception.ServerException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.app.convert.DataFunctionConvert;
 import com.finn.app.entity.DataFunctionEntity;
 import com.finn.app.mapper.DataFunctionMapper;

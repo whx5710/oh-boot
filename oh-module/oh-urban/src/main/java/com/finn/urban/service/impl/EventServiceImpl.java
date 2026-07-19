@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.finn.framework.common.constant.Constant.DESC;
+import static com.finn.common.constant.Constant.DESC;
 
 /**
  * 事件表

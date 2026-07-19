@@ -2,8 +2,8 @@ package com.finn.app.service;
 
 import com.finn.app.entity.DataAppEntity;
 import com.finn.app.query.DataAppQuery;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.entity.api.DataAppDTO;
+import com.finn.common.entity.PageResult;
+import com.finn.common.entity.DataAppDTO;
 
 import java.util.List;
 

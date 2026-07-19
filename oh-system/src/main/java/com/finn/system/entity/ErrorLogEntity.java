@@ -2,7 +2,7 @@ package com.finn.system.entity;
 
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
-import com.finn.framework.entity.IDEntity;
+import com.finn.common.entity.IDEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

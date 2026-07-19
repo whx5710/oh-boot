@@ -1,7 +1,7 @@
 package com.finn.app.convert;
 
-import com.finn.framework.entity.api.DataAppDTO;
 import com.finn.app.entity.DataAppEntity;
+import com.finn.common.entity.DataAppDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

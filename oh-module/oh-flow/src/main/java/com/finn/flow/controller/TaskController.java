@@ -5,7 +5,7 @@ import com.finn.flow.service.flowable.TaskHandlerService;
 import com.finn.flow.vo.FlowNodeVO;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.TaskVO;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import com.finn.framework.exception.ServerException;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.Task;

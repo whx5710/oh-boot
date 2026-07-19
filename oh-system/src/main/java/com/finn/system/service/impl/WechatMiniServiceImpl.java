@@ -1,6 +1,6 @@
 package com.finn.system.service.impl;
 
-import com.finn.framework.entity.HashDto;
+import com.finn.common.entity.HashDto;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.framework.security.wechat.WechatMiniService;
 import com.finn.common.utils.AssertUtils;

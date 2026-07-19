@@ -1,5 +1,6 @@
 package com.finn.files.service;
 
+import com.finn.common.entity.HashDto;
 import com.finn.files.config.StorageProperties;
 import com.finn.files.vo.FileMetadata;
 import com.finn.files.vo.MultipartUploadInitVO;
@@ -7,7 +8,6 @@ import com.finn.files.vo.PartInfoVO;
 import com.finn.files.vo.PresignedUrlVO;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.entity.HashDto;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.common.utils.DateUtils;
 import com.finn.common.utils.NamedDaemonThreadFactory;

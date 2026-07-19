@@ -1,7 +1,7 @@
 package com.finn.system.controller;
 
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.PageResult;
+import com.finn.common.entity.Result;
 import com.finn.system.convert.SmsLogConvert;
 import com.finn.system.entity.SmsLogEntity;
 import com.finn.system.query.SmsLogQuery;

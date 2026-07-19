@@ -1,6 +1,6 @@
 package com.finn.system.convert;
 
-import com.finn.framework.entity.BaseUserEntity;
+import com.finn.common.entity.BaseUserEntity;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.vo.UserExcelVO;

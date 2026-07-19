@@ -1,8 +1,8 @@
 package com.finn.system.controller;
 
 import com.finn.common.utils.DateUtils;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.PageResult;
+import com.finn.common.entity.Result;
 import com.finn.framework.query.Query;
 import com.finn.framework.cache.TokenCache;
 import com.finn.framework.security.user.UserDetail;

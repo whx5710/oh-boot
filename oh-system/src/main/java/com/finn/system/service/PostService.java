@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.system.entity.PostEntity;
 import com.finn.system.query.PostQuery;
 import com.finn.system.vo.PostVO;

@@ -1,6 +1,6 @@
 package com.finn.flow.vo;
 
-import com.finn.framework.entity.IDEntity;
+import com.finn.common.entity.IDEntity;
 
 import java.time.LocalDateTime;
 

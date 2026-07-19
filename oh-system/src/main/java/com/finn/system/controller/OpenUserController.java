@@ -1,6 +1,6 @@
 package com.finn.system.controller;
 
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.Result;
 import com.finn.system.service.OpenUserService;
 import com.finn.system.vo.UserVO;
 import org.springframework.web.bind.annotation.*;

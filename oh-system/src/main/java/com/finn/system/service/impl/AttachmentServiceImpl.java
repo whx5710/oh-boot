@@ -4,8 +4,8 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
-import com.finn.framework.entity.HashDto;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.HashDto;
+import com.finn.common.entity.PageResult;
 import com.finn.common.utils.AssertUtils;
 import com.finn.common.utils.ExceptionUtils;
 import com.finn.common.utils.NamedDaemonThreadFactory;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.finn.framework.common.constant.Constant.ASC;
+import static com.finn.common.constant.Constant.ASC;
 
 /**
  * 附件管理

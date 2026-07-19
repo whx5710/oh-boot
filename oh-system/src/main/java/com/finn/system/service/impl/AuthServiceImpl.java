@@ -2,7 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.common.constant.Constant;
+import com.finn.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.wechat.WechatMiniAuthenticationToken;
 import com.finn.common.utils.AssertUtils;
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-import static com.finn.framework.common.enums.ErrorCode.REFRESH_TOKEN_ERROR;
+import static com.finn.common.enums.ErrorCode.REFRESH_TOKEN_ERROR;
 
 /**
  * 权限认证服务

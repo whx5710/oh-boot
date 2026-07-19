@@ -1,11 +1,11 @@
 package com.finn.app.controller;
 
-import com.finn.framework.common.constant.Constant;
-import com.finn.framework.entity.HashDto;
+import com.finn.common.constant.Constant;
+import com.finn.common.entity.HashDto;
 import com.finn.common.utils.DateUtils;
 import com.finn.framework.utils.HttpUtil;
-import com.finn.framework.entity.Result;
-import com.finn.framework.entity.api.MsgEntity;
+import com.finn.common.entity.Result;
+import com.finn.common.entity.MsgEntity;
 import com.finn.app.service.DataMsgService;
 import com.finn.app.utils.ListenerHandler;
 import jakarta.servlet.http.HttpServletRequest;

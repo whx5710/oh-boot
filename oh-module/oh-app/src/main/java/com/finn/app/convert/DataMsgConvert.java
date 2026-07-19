@@ -2,7 +2,7 @@ package com.finn.app.convert;
 
 import com.finn.app.entity.DataMsgEntity;
 import com.finn.app.vo.DataMsgVO;
-import com.finn.framework.entity.api.MsgEntity;
+import com.finn.common.entity.MsgEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

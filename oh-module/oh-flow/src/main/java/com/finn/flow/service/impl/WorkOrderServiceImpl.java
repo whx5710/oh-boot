@@ -1,8 +1,9 @@
 package com.finn.flow.service.impl;
 
-import com.finn.framework.entity.HashDto;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.entity.Result;
+import com.finn.common.entity.HashDto;
+import com.finn.common.entity.MetaEntity;
+import com.finn.common.entity.PageResult;
+import com.finn.common.entity.Result;
 import com.finn.common.utils.JsonUtils;
 import com.finn.common.utils.SnowflakeIdWorker;
 import com.github.pagehelper.Page;
@@ -16,7 +17,6 @@ import com.finn.flow.service.flowable.TaskHandlerService;
 import com.finn.flow.service.WorkOrderService;
 import com.finn.flow.vo.TaskRecordVO;
 import com.finn.flow.vo.WorkOrderVO;
-import com.finn.framework.entity.MetaEntity;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.service.JobService;
 import com.finn.framework.aop.annotations.RequestKeyParam;

@@ -2,7 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.convert.VersionInfoConvert;
 import com.finn.system.entity.VersionInfoEntity;
