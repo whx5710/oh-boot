@@ -39,7 +39,8 @@
 		<spring-boot-dependencies.version>4.1.0</spring-boot-dependencies.version>
 		<spring.security>7.1.0-M2</spring.security>
 
-		<oh.version>4.2.6-SNAPSHOT</oh.version>
+		<oh.framework.version>4.0.6-260718</oh.framework.version>
+		<oh.license.version>1.0.0_260718</oh.license.version>
 
 		<mapstruct.version>1.6.3</mapstruct.version>
 	</properties>
@@ -58,16 +59,15 @@
 			<!-- 开箱即用启动包，已聚合 oh-common + oh-framework -->
 			<dependency>
 				<groupId>com.finn</groupId>
-				<artifactId>oh-spring-boot-starter</artifactId>
-				<version>${oh.version}</version>
-				<type>pom</type>
+				<artifactId>oh-framework</artifactId>
+				<version>${oh.framework.version}</version>
 			</dependency>
 
 			<!-- license授权 -->
 			<dependency>
 				<groupId>com.finn</groupId>
 				<artifactId>oh-license</artifactId>
-				<version>${oh.version}</version>
+				<version>${oh.license.version}</version>
 			</dependency>
 
 			<!-- MapStruct -->

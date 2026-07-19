@@ -28,8 +28,7 @@
         <!-- 系统框架：开箱即用启动包，已聚合 oh-common + oh-framework -->
         <dependency>
             <groupId>com.finn</groupId>
-            <artifactId>oh-spring-boot-starter</artifactId>
-            <type>pom</type>
+            <artifactId>oh-framework</artifactId>
         </dependency>
     </dependencies>
 </project>
