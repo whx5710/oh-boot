@@ -2,8 +2,8 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.AssertUtils;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.AssertUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;

@@ -2,7 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.system.convert.MessageConvert;
 import com.finn.system.entity.MessageEntity;
 import com.finn.system.mapper.MessageMapper;

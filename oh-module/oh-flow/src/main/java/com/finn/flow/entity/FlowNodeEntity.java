@@ -4,7 +4,7 @@ import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.JsonUtils;
 import jakarta.validation.constraints.Min;
 
 import java.util.HashMap;

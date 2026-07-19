@@ -2,7 +2,7 @@ package com.finn.app.controller;
 
 import com.finn.app.service.DataFunctionAuthorityService;
 import com.finn.framework.common.constant.Constant;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.entity.Result;
 import com.finn.framework.entity.api.DataAppDTO;

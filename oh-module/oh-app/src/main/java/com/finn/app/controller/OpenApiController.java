@@ -2,7 +2,7 @@ package com.finn.app.controller;
 
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.entity.HashDto;
-import com.finn.framework.utils.DateUtils;
+import com.finn.common.utils.DateUtils;
 import com.finn.framework.utils.HttpUtil;
 import com.finn.framework.entity.Result;
 import com.finn.framework.entity.api.MsgEntity;

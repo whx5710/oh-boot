@@ -44,7 +44,7 @@ finn:
     # 安全提醒：allow-missing 设置为 true 时，无 License 也能启动，生产环境建议 false
     allow-missing: true                  # License 文件缺失时是否允许启动，默认 false
     # 安全提醒：生产环境建议 0，最大值 30
-    grace-days: 3                        # 未安装 License 时的宽限期（天），0 表示不开启
+    grace-days: 7                        # 未安装 License 时的宽限期（天），0 表示不开启
 # mybatis配置说明: https://mybatis.net.cn/configuration.html
 mybatis:
   mapper-locations: classpath*:/mapper/postgres/*.xml # mapper下有mysql、postgres 目录

@@ -1,6 +1,6 @@
 package com.finn.system.vo;
 
-import com.finn.framework.entity.TreeNode;
+import com.finn.common.entity.TreeNode;
 
 /**
  * 菜单数据结构

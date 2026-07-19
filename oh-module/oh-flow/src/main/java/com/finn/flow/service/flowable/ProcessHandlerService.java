@@ -9,7 +9,7 @@ import com.finn.framework.entity.HashDto;
 import com.finn.framework.entity.PageResult;
 import com.finn.framework.exception.ServerException;
 import com.finn.flow.vo.FlowNodeVO;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.JsonUtils;
 import org.flowable.bpmn.exceptions.XMLException;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.FlowElement;

@@ -2,7 +2,7 @@ package com.finn.system.controller;
 
 import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.framework.entity.Result;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.license.License;
 import com.finn.license.LicenseManager;
 import org.springframework.web.bind.annotation.*;

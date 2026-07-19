@@ -23,7 +23,7 @@
     </modules>
 
     <dependencies>
-        <!-- 系统框架：继承自根pom的依赖已包含所有必要的Spring Boot依赖 -->
+        <!-- 系统框架：开箱即用启动包，已聚合 oh-common + oh-framework -->
         <dependency>
             <groupId>com.finn</groupId>
             <artifactId>oh-framework</artifactId>

@@ -4,7 +4,7 @@ import com.finn.framework.entity.Result;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.wechat.WechatMiniService;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.system.entity.OpenUserEntity;
 import com.finn.system.mapper.OpenUserMapper;
 import org.springframework.web.bind.annotation.PostMapping;

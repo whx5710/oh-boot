@@ -1,7 +1,7 @@
 package com.finn.app.service.impl;
 
 import com.finn.framework.entity.HashDto;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.framework.entity.Result;
 import com.finn.framework.entity.MetaEntity;
 import com.finn.framework.service.JobService;

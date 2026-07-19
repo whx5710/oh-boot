@@ -5,7 +5,7 @@ import com.finn.app.entity.DataMsgEntity;
 import com.finn.app.mapper.DataMessageMapper;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.common.properties.OpenApiProperties;
-import com.finn.framework.utils.JsonUtils;
+import com.finn.common.utils.JsonUtils;
 import com.finn.framework.entity.api.MsgEntity;
 import com.finn.framework.service.JobServiceConsumer;
 import org.slf4j.Logger;

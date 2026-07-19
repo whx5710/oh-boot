@@ -2,8 +2,8 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
-import com.finn.framework.utils.AssertUtils;
-import com.finn.framework.entity.TreeNode;
+import com.finn.common.utils.AssertUtils;
+import com.finn.common.entity.TreeNode;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.system.convert.MenuConvert;
@@ -22,7 +22,7 @@ import com.github.pagehelper.PageHelper;
 import com.finn.framework.common.constant.Constant;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.entity.PageResult;
-import com.finn.framework.utils.TreeUtils;
+import com.finn.common.utils.TreeUtils;
 import com.finn.framework.security.user.UserDetail;
 import org.springframework.stereotype.Service;
 
