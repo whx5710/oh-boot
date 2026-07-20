@@ -24,12 +24,16 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 - oh-core模块合并到oh-framework，简化框架,升级spring-boot 4.0.5【2026年4月】
 - 增加批量插入insertBatch(List<T>)通用方法【2026年4月】
 - 错误日志缓存到redis，可设置日志量、缓存时间，方便查询报错信息【2026年5月】
+- 增加license授权功能【2026年6月】
+- 框架包独立到finn-parent项目中，便于统一版本控制【2027年7月】
 - 后端代码：
 - - Gitee https://gitee.com/whx233/oh-boot.git
 - - GitHub https://github.com/whx5710/oh-boot.git
 - 前端工程：
 - - Gitee https://gitee.com/whx233/oh-web.git
 - - GitHub https://github.com/whx5710/oh-web.git
+- 后台框架：
+- - Gitee https://gitee.com/whx233/finn-parent.git
 - 开发文档：
 - 演示环境：
 - 官网地址：
@@ -37,29 +41,29 @@ oh-boot 是采用SpringBoot4.0、SpringSecurity7.0、Mybatis（如需改Mybatis-
 ### 后期计划支持多种数据（postgresql、国产数据库）
 
 ## 代码目录  
-`oh-framework`属于系统框架类模块，项目上可独立打成jar包引入
-
-~~oh-core      核心系统框架，最基础的系统功能，包括缓存、异常、基础工具类~~ 【2026年4月合并到oh-framework】
+`oh-common`是基础公共工具模块（纯 JDK / 轻依赖） `oh-framework`属于系统框架类模块，项目上可独立打成jar包引入，代码地址： https://gitee.com/whx233/finn-parent ，构建后直接引入`oh-boot`中，在企业开发中，便于核心代码版本统一控制
 ```
-
-oh-framework 系统框架，包括数据库、基础实体类、鉴权
+oh-common    公共工具模块（纯 JDK / 轻依赖） 【2026年7月已独立到finn-parent中】
+oh-framework 系统框架，包括数据库操作、鉴权 【2026年7月已独立到finn-parent中】
 oh-system    系统管理模块，包括组织架构、用户、鉴权、基础配置等
 oh-module    业务模块
     - oh-app    对外服务接口
     - oh-flow   工作流程管理
+    - oh-files  文件服务，支持本地、SeaweedFS
     - ...              扩展其他业务模块
 ```
-通过引入`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
+通过引入`oh-common`、`oh-framework`即可很方便、快捷的搭建开发环境，也可把业务模块单独剥离部署做负载均衡。
 
 ## 快速开始
 环境：JDK17+、Postgresql（MySQL8+）、Redis、Kafka（如果需要）
-- 1、克隆项目 `git clone https://gitee.com/whx233/oh-boot.git`
-- 2、创建数据库，分别创建 oh_sys 和 oh_boot数据库（可合并成一个库），并执行db目录下的SQL脚本（根据实际数据库执行）
-- 3、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka、文件存储路径等
-- 4、启动服务 `com.finn.ServerApplication`
-- 5、API文档地址：自行部署发布Torna
+- 1、克隆项目 `git clone https://gitee.com/whx233/oh-boot.git` 2026年7月后，还需克隆框架工程 `git clone https://gitee.com/whx233/finn-parent.git`
+- 2、按需打包finn-parent框架包，将打好的包引入oh-boot项目
+- 3、创建数据库，分别创建 oh_sys 和 oh_boot数据库（可合并成一个库），并执行db目录下的SQL脚本（根据实际数据库执行）
+- 4、根据实际情况修改application-xxx.yml 配置，包括MySQL、Redis、Kafka、文件存储路径等
+- 5、启动服务 `com.finn.ServerApplication`
+- 6、API文档地址：自行部署发布Torna
 
-注：切换数据库只需调整jdbc驱动配置（引入驱动依赖`oh-framework/pom.xml`） 和`mybatis.mapper-locations`路径配置
+注：切换数据库只需调整jdbc驱动配置和`mybatis.mapper-locations`路径配置
 
 ## 配置说明
 ```yaml
