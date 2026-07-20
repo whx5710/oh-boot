@@ -2,13 +2,16 @@ package com.finn.system.controller;
 
 import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.common.entity.Result;
-import com.finn.common.utils.JsonUtils;
-import com.finn.license.License;
+import com.finn.framework.aop.annotations.RequestKeyParam;
 import com.finn.license.LicenseManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * license授权相关
+ * 获取机器码、授权信息以及授权证书安装
+ */
 @RestController
 @RequestMapping("/license")
 public class LicenseController {
@@ -32,7 +35,7 @@ public class LicenseController {
      */
     @Idempotent(keyPrefix = "license", message = "请求过于频繁，请稍后再试", timeout = 10, limit = true)
     @PostMapping("/install")
-    public Result<String> install(@RequestBody String licenseJson) {
+    public Result<String> install(@RequestBody @RequestKeyParam String licenseJson) {
         licenseManager.install(licenseJson);
         return Result.ok("安装成功");
     }
