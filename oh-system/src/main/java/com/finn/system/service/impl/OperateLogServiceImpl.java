@@ -88,8 +88,8 @@ public class OperateLogServiceImpl implements OperateLogService {
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
                 String key = RedisKeys.getOperateLogKey();
-                // 每次插入50条
-                int count = 50;
+                // 每次插入100条
+                int count = 100;
                 List<OperateLogEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
@@ -106,6 +106,6 @@ public class OperateLogServiceImpl implements OperateLogService {
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 1, 120, TimeUnit.SECONDS);
+        }, 1, 300, TimeUnit.SECONDS);
     }
 }
