@@ -3,6 +3,8 @@ package com.finn.files.config;
 import com.finn.files.enums.StorageTypeEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 /**
  * 存储配置项
  *
@@ -24,6 +26,12 @@ public class StorageProperties {
      * 是否缓存文件信息
      */
     private boolean cacheRecord = false;
+
+    /**
+     * 白名单文件，为空运行全部
+     */
+    private List<String> fileSuffix;
+
     /**
      * 本地配置项
      */
@@ -59,6 +67,14 @@ public class StorageProperties {
 
     public void setCacheRecord(boolean cacheRecord) {
         this.cacheRecord = cacheRecord;
+    }
+
+    public List<String> getFileSuffix() {
+        return fileSuffix;
+    }
+
+    public void setFileSuffix(List<String> fileSuffix) {
+        this.fileSuffix = fileSuffix;
     }
 
     public LocalStorageProperties getLocal() {

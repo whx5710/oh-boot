@@ -265,6 +265,25 @@ public abstract class StorageService {
     }
 
     /**
+     * 文件合法性验证,非法返回true
+     *
+     * @return bool 返回false表示满足上传条件
+     */
+    protected boolean whitelistVerification(String suffix) {
+        if (properties.getFileSuffix() == null || properties.getFileSuffix().isEmpty()) {
+            return false;
+        }
+        boolean flag = true;
+        for (String item : properties.getFileSuffix()) {
+            if (suffix.equalsIgnoreCase(item)) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    /**
      * 删除临时文件定时任务
      */
     @PostConstruct

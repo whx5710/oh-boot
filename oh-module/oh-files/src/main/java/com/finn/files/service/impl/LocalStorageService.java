@@ -36,6 +36,10 @@ public class LocalStorageService extends StorageService {
             if (fileName == null) {
                 fileName = "no_file_name";
             }
+            String suffix = fileName.substring(fileName.lastIndexOf("."));
+            if (whitelistVerification(suffix)) {
+                throw new ServerException(suffix + " 文件不合法");
+            }
             String path = getPath(fileName);
             upload(file.getInputStream(), path);
             // 缓存文件信息

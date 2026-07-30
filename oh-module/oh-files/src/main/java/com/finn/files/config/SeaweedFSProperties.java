@@ -1,7 +1,5 @@
 package com.finn.files.config;
 
-import java.util.List;
-
 /**
  * 配置属性类
  */
@@ -20,11 +18,6 @@ public class SeaweedFSProperties {
     private String region;
     private boolean pathStyleAccess = true;
 
-    /**
-     * 白名单文件，为空运行全部
-     */
-    private List<String> fileSuffix;
-
     public String getEndpoint() { return endpoint; }
     public void setEndpoint(String endpoint) { this.endpoint = endpoint; }
 
@@ -42,13 +35,5 @@ public class SeaweedFSProperties {
 
     public boolean isPathStyleAccess() { return pathStyleAccess; }
     public void setPathStyleAccess(boolean pathStyleAccess) { this.pathStyleAccess = pathStyleAccess; }
-
-    public List<String> getFileSuffix() {
-        return fileSuffix;
-    }
-
-    public void setFileSuffix(List<String> fileSuffix) {
-        this.fileSuffix = fileSuffix;
-    }
 
 }
