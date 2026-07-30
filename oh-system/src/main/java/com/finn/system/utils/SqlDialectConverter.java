@@ -102,9 +102,7 @@ public class SqlDialectConverter {
             // DROP TABLE
             if (upperStartsWith(trimmedNoComments, "DROP TABLE")) {
                 String convertedDrop = convertPgDropTable(trimmedNoComments, droppedTables);
-                if (convertedDrop != null) {
-                    result.append(convertedDrop).append("\n\n");
-                }
+                result.append(convertedDrop).append("\n\n");
                 continue;
             }
 
@@ -381,7 +379,7 @@ public class SqlDialectConverter {
             }
             current.append(c);
         }
-        if (current.length() > 0) {
+        if (!current.isEmpty()) {
             result.add(current.toString());
         }
         return result;
@@ -440,17 +438,19 @@ public class SqlDialectConverter {
 
     private static String convertPgTypeToMySql(String pgType) {
         String upper = pgType.toUpperCase().trim();
-        if (upper.equals("INT8") || upper.equals("BIGINT")) {
-            return "bigint";
-        }
-        if (upper.equals("INT4") || upper.equals("INTEGER")) {
-            return "int";
-        }
-        if (upper.equals("INT2") || upper.equals("SMALLINT")) {
-            return "smallint";
-        }
-        if (upper.equals("BOOL") || upper.equals("BOOLEAN")) {
-            return "tinyint(1)";
+        switch (upper) {
+            case "INT8", "BIGINT" -> {
+                return "bigint";
+            }
+            case "INT4", "INTEGER" -> {
+                return "int";
+            }
+            case "INT2", "SMALLINT" -> {
+                return "smallint";
+            }
+            case "BOOL", "BOOLEAN" -> {
+                return "tinyint(1)";
+            }
         }
         if (upper.startsWith("VARCHAR")) {
             return pgType.toLowerCase();
@@ -635,9 +635,7 @@ public class SqlDialectConverter {
 
             if (upperStartsWith(trimmedNoComments, "DROP TABLE")) {
                 String convertedDrop = convertMySqlDropTable(trimmedNoComments, droppedTables);
-                if (convertedDrop != null) {
-                    result.append(convertedDrop).append("\n\n");
-                }
+                result.append(convertedDrop).append("\n\n");
                 continue;
             }
 
