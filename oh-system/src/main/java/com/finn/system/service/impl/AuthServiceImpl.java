@@ -191,28 +191,36 @@ public class AuthServiceImpl implements AuthService {
         if(redisCache.hasKey(refreshKey)){
             RefreshTokenInfo userDetail = (RefreshTokenInfo) redisCache.get(refreshKey);
             String ip = IpUtils.getIpAddress(request);
+            // 重新查询用户信息
+            UserEntity userEntity = userService.getUser(userDetail.getId());
+            if(userEntity.getStatus() == 0){
+                throw new ServerException("用户已被禁用!");
+            }
             // 获取刷新token有效时间
             Long expire = redisCache.getExpire(refreshKey);
             // 请求IP相同，且刷新token有效时长大于1秒才重新生成token
-            if(userDetail.getIp().equals(ip) && expire > 1){
-                // 重新查询用户信息
-                UserEntity userEntity = userService.getUser(userDetail.getId());
-                if(userEntity.getStatus() == 0){
-                    throw new ServerException("用户已被禁用!");
-                }
+            if(expire > 1){
                 UserDetail userDetailDb = (UserDetail) userService.getUserDetails(userEntity);
+                if(userEntity.getOpenId() != null && !userEntity.getOpenId().isEmpty()){
+                    // 第三方用户使用新的刷新时间
+                    userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
+                }else{
+                    if(userDetail.getIp().equals(ip)){
+                        // 非第三方 防止无限可刷新token，此处使用旧的刷新token有效时间
+                        userDetailDb.setRefreshTokenExpire(expire);
+                    }else{
+                        throw new ServerException("IP发生变化，请重新登录！");
+                    }
+                }
                 userDetailDb.setLoginTime(LocalDateTime.now());
                 userDetailDb.setIp(ip);
-                // userDetailDb.setRefreshTokenExpire(securityProperties.getRefreshTokenExpire());
-                // 防止无限可刷新token，此处使用旧的刷新token有效时间
-                userDetailDb.setRefreshTokenExpire(expire);
                 // 生成 accessToken
                 String accessToken = Tools.generator();
                 // 保存用户信息到缓存
                 tokenCache.saveUser(accessToken, refreshToken, userDetailDb);
-                return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), securityProperties.getRefreshTokenExpire());
+                return new TokenVO(accessToken, refreshToken, securityProperties.getAccessTokenExpire(), userDetailDb.getRefreshTokenExpire());
             }else{
-                throw new ServerException("【IP】请求非法，刷新token失败");
+                throw new ServerException("刷新token已过期");
             }
         }else{
             // 刷新token过期，请重新登录
