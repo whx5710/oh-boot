@@ -1,6 +1,6 @@
 package com.finn.system.vo;
 
-import com.finn.framework.entity.IDEntity;
+import com.finn.common.entity.IDEntity;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.finn.system.generator;
 
-import com.finn.framework.utils.DateUtils;
+import com.finn.common.utils.DateUtils;
 import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.system.generator.dto.TableInfo;
 import com.finn.system.generator.dto.ColumnInfo;

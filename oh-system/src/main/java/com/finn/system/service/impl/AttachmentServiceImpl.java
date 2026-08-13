@@ -4,11 +4,11 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
-import com.finn.framework.entity.HashDto;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.utils.AssertUtils;
-import com.finn.framework.utils.ExceptionUtils;
-import com.finn.framework.utils.NamedDaemonThreadFactory;
+import com.finn.common.entity.HashDto;
+import com.finn.common.entity.PageResult;
+import com.finn.common.utils.AssertUtils;
+import com.finn.common.utils.ExceptionUtils;
+import com.finn.common.utils.NamedDaemonThreadFactory;
 import com.finn.system.convert.AttachmentConvert;
 import com.finn.system.entity.AttachmentEntity;
 import com.finn.system.mapper.AttachmentMapper;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.finn.framework.common.constant.Constant.ASC;
+import static com.finn.common.constant.Constant.ASC;
 
 /**
  * 附件管理
@@ -54,6 +54,10 @@ public class AttachmentServiceImpl implements AttachmentService {
      * 连续满批次计数，用于检测 Redis 文件队列是否拥挤
      */
     private int consecutiveFullBatchCount = 0;
+    /**
+     * 临时文件删除计数，用于判断是否需要查询临时文件
+     */
+    private int tmpFileDelCount = 3;
 
     /**
      * 触发队列拥挤警告的连续满批次阈值
@@ -167,23 +171,38 @@ public class AttachmentServiceImpl implements AttachmentService {
             }
 
             // 缓存临时文件队列，在文件服务中读取，删除临时文件
-            if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) == 0){
-                // 查询48小时前的临时文件
-                LocalDateTime time = LocalDateTime.now();
-                time = time.minusHours(48);
-                QueryWrapper<AttachmentEntity> queryWrapper = QueryWrapper.of(AttachmentEntity.class);
-                queryWrapper.eq(AttachmentEntity::getDbStatus, 1).eq(AttachmentEntity::getTmpFlag, 1)
-                        .le(AttachmentEntity::getCreateTime, time).orderBy(AttachmentEntity::getCreateTime, ASC)
-                        .page(1, 50);
-                List<AttachmentEntity> list = attachmentMapper.listByWrapper(queryWrapper);
-                if(list != null && !list.isEmpty()){
-                    for (AttachmentEntity item: list){
-                        HashDto hashDto = new HashDto();
-                        hashDto.put("id", item.getId());
-                        hashDto.put("fileId", item.getUrl());
-                        redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto, 60*60*24); // 缓存24小时
+            if(tmpFileDelCount > 0){
+                if(redisCache.getListSize(RedisKeys.getTmpFileCacheKey()) == 0){
+                    int pageSize = 50;
+                    // 查询48小时前的临时文件
+                    LocalDateTime time = LocalDateTime.now();
+                    time = time.minusHours(48);
+                    QueryWrapper<AttachmentEntity> queryWrapper = QueryWrapper.of(AttachmentEntity.class);
+                    queryWrapper.eq(AttachmentEntity::getDbStatus, 1).eq(AttachmentEntity::getTmpFlag, 1)
+                            .le(AttachmentEntity::getCreateTime, time).orderBy(AttachmentEntity::getCreateTime, ASC)
+                            .page(1, pageSize);
+                    List<AttachmentEntity> list = attachmentMapper.listByWrapper(queryWrapper);
+                    if(list != null && !list.isEmpty()){
+                        if(list.size() == pageSize){
+                            tmpFileDelCount = 3;
+                        }else{
+                            tmpFileDelCount--;
+                        }
+                        for (AttachmentEntity item: list){
+                            HashDto hashDto = new HashDto();
+                            hashDto.put("id", item.getId());
+                            hashDto.put("fileId", item.getUrl());
+                            redisCache.leftPush(RedisKeys.getTmpFileCacheKey(), hashDto, 60*60*24); // 缓存24小时
+                        }
+                    }else{
+                        tmpFileDelCount--;
                     }
                 }
+            }else{
+                tmpFileDelCount--;
+            }
+            if(tmpFileDelCount < -20){
+                tmpFileDelCount = 1;
             }
         }, 30, 180, TimeUnit.SECONDS);
     }

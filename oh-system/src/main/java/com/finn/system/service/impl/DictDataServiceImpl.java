@@ -2,7 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.system.cache.DictCache;
 import com.finn.system.convert.DictDataConvert;

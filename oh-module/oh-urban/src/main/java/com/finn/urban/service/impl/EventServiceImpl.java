@@ -6,7 +6,7 @@ import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.urban.convert.EventConvert;
 import com.finn.urban.convert.MultiMediaConvert;
 import com.finn.urban.entity.Event;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.finn.framework.common.constant.Constant.DESC;
+import static com.finn.common.constant.Constant.DESC;
 
 /**
  * 事件表

@@ -1,15 +1,15 @@
 package com.finn.system.service.impl;
 
+import com.finn.common.enums.CommonEnum;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.common.enums.CommonEnum;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.framework.utils.excel.ExcelUtils;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.utils.Tools;
+import com.finn.common.entity.PageResult;
+import com.finn.common.utils.Tools;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.convert.UserConvert;

@@ -10,11 +10,6 @@ server:
     context-path: /
     session.cookie.http-only: true
 finn:
-  # 框架公共配置
-  common:
-    err-log-cache: true            # 是否开启系统错误日志记录
-    log-cache-time: 300            # 日志默认缓存时间 300秒
-    log-cache-max-size: 1000       # 日志默认缓存最大数量
   security:
     access-token-expire: 7200      # 过期时间-秒，2小时过期
     refresh-token-expire: 43200    # 刷新token-秒 12小时
@@ -43,6 +38,12 @@ finn:
     enabled: true # 控制文件存储是否启用
     type: local  # 存储类型：local、seaweedfs、minio
     cache-record: true                      # 是否redis缓存文件信息，用于异步保存到表中，默认false
+    # 允许上传的文件扩展名，如 .jpg
+    file-suffix:
+      - .jpg
+      - .png
+      - .jpeg
+      - .zip
     local:
       path: /home/finn/文档/upFiles
     seaweedfs:
@@ -52,12 +53,6 @@ finn:
       bucket: default-bucket                  # 默认存储桶名
       region: us-east-1                       # SeaweedFS 不校验 region，任意填
       path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
-      # 允许上传的文件扩展名，如 .jpg
-      file-suffix:
-        - .jpg
-        - .png
-        - .jpeg
-        - .zip
   # 微信相关配置
   wechat:
     api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
@@ -89,10 +84,11 @@ spring:
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
     dynamic:
       sysDb: # 系统管理数据源
-        driver-class-name: org.postgresql.Driver
-        #driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
-        username: postgres
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        #driver-class-name: org.postgresql.Driver
+        #url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
+        username: root
         password: 123456
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
@@ -108,10 +104,11 @@ spring:
           hikari-log: false # 是否开启hikari监控日志打印，默认false
           slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
       masterDb: # 主数据源
-        driver-class-name: org.postgresql.Driver
-        #driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot
-        username: postgres
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        #driver-class-name: org.postgresql.Driver
+        #url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot_all
+        username: root
         password: 123456
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数

@@ -2,7 +2,7 @@ package com.finn.system.service.impl;
 
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.datasource.wrapper.Wrapper;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
 import com.finn.system.entity.RoleMenuEntity;

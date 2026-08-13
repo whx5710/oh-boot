@@ -4,9 +4,9 @@ import com.finn.framework.cache.RedisCache;
 import com.finn.framework.common.constant.CommConstant;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.framework.service.impl.BaseServiceImpl;
-import com.finn.framework.utils.AssertUtils;
+import com.finn.common.utils.AssertUtils;
 import com.finn.system.convert.RoleConvert;
 import com.finn.system.entity.RoleEntity;
 import com.finn.system.enums.DataScopeEnum;
@@ -96,7 +96,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity> implements Role
 		List<RoleEntity> list = roleMapper.listByWrapper(QueryWrapper.of(RoleEntity.class).eq(RoleEntity::getDbStatus, 1)
 				.eq(RoleEntity::getCode, vo.getCode()));
 		if(!list.isEmpty()){
-			throw new ServerException("角色编码已存在！", "角色：" + list.getFirst().getName());
+			throw new ServerException("角色编码已存在！角色：" + list.getFirst().getName());
 		}
 
 		RoleEntity entity = RoleConvert.INSTANCE.convert(vo);

@@ -1,5 +1,6 @@
 package com.finn.files.service;
 
+import com.finn.common.entity.HashDto;
 import com.finn.files.config.StorageProperties;
 import com.finn.files.vo.FileMetadata;
 import com.finn.files.vo.MultipartUploadInitVO;
@@ -7,10 +8,9 @@ import com.finn.files.vo.PartInfoVO;
 import com.finn.files.vo.PresignedUrlVO;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.entity.HashDto;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.framework.utils.DateUtils;
-import com.finn.framework.utils.NamedDaemonThreadFactory;
+import com.finn.common.utils.DateUtils;
+import com.finn.common.utils.NamedDaemonThreadFactory;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,6 +262,25 @@ public abstract class StorageService {
             // 保存到Redis队列,存5天
             redisCache.leftPush(key, hashDto, 432000); // 60*60*24*5
         }
+    }
+
+    /**
+     * 文件合法性验证,非法返回true
+     *
+     * @return bool 返回false表示满足上传条件
+     */
+    protected boolean whitelistVerification(String suffix) {
+        if (properties.getFileSuffix() == null || properties.getFileSuffix().isEmpty()) {
+            return false;
+        }
+        boolean flag = true;
+        for (String item : properties.getFileSuffix()) {
+            if (suffix.equalsIgnoreCase(item)) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
     }
 
     /**

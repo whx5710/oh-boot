@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.system.query.ErrorLogQuery;
 import com.finn.system.vo.ErrorLogVO;
 

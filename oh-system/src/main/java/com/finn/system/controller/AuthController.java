@@ -3,11 +3,12 @@ package com.finn.system.controller;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
-import com.finn.framework.utils.AssertUtils;
-import com.finn.framework.utils.Tools;
-import com.finn.framework.entity.Result;
+import com.finn.common.utils.AssertUtils;
+import com.finn.common.utils.Tools;
+import com.finn.common.entity.Result;
 import com.finn.framework.aop.annotations.Idempotent;
 import com.finn.framework.aop.annotations.RequestKeyParam;
+import com.finn.framework.utils.HttpContextUtils;
 import com.finn.system.service.AuthService;
 import com.finn.system.service.CaptchaService;
 import com.finn.system.service.UserRoleService;
@@ -149,7 +150,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public Result<String> logout(HttpServletRequest request, @RequestParam(required = false) String refreshToken) {
-        authService.logout(Tools.getAccessToken(request), refreshToken);
+        authService.logout(HttpContextUtils.getAccessToken(request), refreshToken);
         return Result.ok();
     }
 }

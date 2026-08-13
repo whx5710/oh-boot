@@ -1,17 +1,17 @@
 package com.finn.system.service.impl;
 
 import com.finn.framework.cache.ErrorLogCache;
-import com.finn.framework.common.constant.Constant;
+import com.finn.common.constant.Constant;
 import com.finn.framework.common.properties.CommonProperty;
 import com.finn.framework.datasource.wrapper.DeleteWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
-import com.finn.framework.entity.HashDto;
-import com.finn.framework.entity.PageResult;
-import com.finn.framework.utils.AssertUtils;
-import com.finn.framework.utils.DateUtils;
-import com.finn.framework.utils.ExceptionUtils;
-import com.finn.framework.utils.JsonUtils;
-import com.finn.framework.utils.NamedDaemonThreadFactory;
+import com.finn.common.entity.HashDto;
+import com.finn.common.entity.PageResult;
+import com.finn.common.utils.AssertUtils;
+import com.finn.common.utils.DateUtils;
+import com.finn.common.utils.ExceptionUtils;
+import com.finn.common.utils.JsonUtils;
+import com.finn.common.utils.NamedDaemonThreadFactory;
 import com.finn.framework.utils.excel.ExcelUtils;
 import com.finn.system.convert.ErrorLogConvert;
 import com.finn.system.entity.ErrorLogEntity;

@@ -10,7 +10,7 @@ import com.finn.files.vo.PresignedUrlVO;
 import com.finn.files.vo.MultipartUploadInitVO;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.exception.ServerException;
-import com.finn.framework.utils.Tools;
+import com.finn.common.utils.Tools;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -407,24 +407,5 @@ public class SeaweedFSService extends StorageService {
                 .uploadId(uploadId)
                 .build();
         s3Client.abortMultipartUpload(abortRequest);
-    }
-
-    /**
-     * 文件合法性验证,非法返回true
-     *
-     * @return bool 返回false表示满足上传条件
-     */
-    private boolean whitelistVerification(String suffix) {
-        if (properties.getFileSuffix() == null || properties.getFileSuffix().isEmpty()) {
-            return false;
-        }
-        boolean flag = true;
-        for (String item : properties.getFileSuffix()) {
-            if (suffix.equalsIgnoreCase(item)) {
-                flag = false;
-                break;
-            }
-        }
-        return flag;
     }
 }

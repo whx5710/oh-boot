@@ -7,9 +7,9 @@ import com.github.pagehelper.Page;
 import com.finn.framework.operatelog.dto.OperateLogDTO;
 import com.finn.framework.cache.RedisCache;
 import com.finn.framework.cache.RedisKeys;
-import com.finn.framework.utils.ExceptionUtils;
-import com.finn.framework.utils.NamedDaemonThreadFactory;
-import com.finn.framework.entity.PageResult;
+import com.finn.common.utils.ExceptionUtils;
+import com.finn.common.utils.NamedDaemonThreadFactory;
+import com.finn.common.entity.PageResult;
 import com.finn.system.convert.OperateLogConvert;
 import com.finn.system.entity.OperateLogEntity;
 import com.finn.system.mapper.OperateLogMapper;
@@ -88,8 +88,8 @@ public class OperateLogServiceImpl implements OperateLogService {
         scheduledService.scheduleWithFixedDelay(() -> {
             try {
                 String key = RedisKeys.getOperateLogKey();
-                // 每次插入50条
-                int count = 50;
+                // 每次插入100条
+                int count = 100;
                 List<OperateLogEntity> list = new ArrayList<>();
                 for (int i = 0; i < count; i++) {
                     Object object = redisCache.rightPop(key);
@@ -106,6 +106,6 @@ public class OperateLogServiceImpl implements OperateLogService {
             } catch (Exception e) {
                 log.error("保存操作日志发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 1, 120, TimeUnit.SECONDS);
+        }, 1, 300, TimeUnit.SECONDS);
     }
 }

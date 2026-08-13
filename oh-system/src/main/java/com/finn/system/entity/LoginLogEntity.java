@@ -1,6 +1,6 @@
 package com.finn.system.entity;
 
-import com.finn.framework.entity.IDEntity;
+import com.finn.common.entity.IDEntity;
 import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
 

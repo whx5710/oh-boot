@@ -1,6 +1,6 @@
 package com.finn.system.service;
 
-import com.finn.framework.entity.PageResult;
+import com.finn.common.entity.PageResult;
 import com.finn.system.query.LoginLogQuery;
 import com.finn.system.vo.AnalysisVO;
 import com.finn.system.vo.LoginLogVO;

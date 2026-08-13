@@ -1,6 +1,6 @@
 package com.finn.system.vo;
 
-import com.finn.framework.entity.SuperEntity;
+import com.finn.common.entity.SuperEntity;
 import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serial;
