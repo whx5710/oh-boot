@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.finn.urban.mapper.PoiMapper">
+    <resultMap id="BaseResultMap" type="com.finn.urban.entity.Poi">        <id property="id" column="id" />
+        <result property="location" column="location" />
+        <result property="longitude" column="longitude" />
+        <result property="latitude" column="latitude" />
+        <result property="geoType" column="geo_type" />
+        <result property="remark" column="remark" />
+        <result property="dbStatus" column="db_status" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="create_time" />
+        <result property="updater" column="updater" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , location
+        , longitude
+        , latitude
+        , geo_type
+        , remark
+        , db_status
+        , creator
+        , create_time
+        , updater
+        , update_time
+    </sql>
+    <select id="getList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ur_poi
+        where db_status = 1
+        <if test="location != null and location != ''">
+            and location = #{location}
+        </if>
+        <if test="longitude != null">
+            and longitude = #{longitude}
+        </if>
+        <if test="latitude != null">
+            and latitude = #{latitude}
+        </if>
+        <if test="geoType != null and geoType != ''">
+            and geo_type = #{geoType}
+        </if>
+        <if test="remark != null and remark != ''">
+            and remark = #{remark}
+        </if>
+        <if test="creator != null">
+            and creator = #{creator}
+        </if>
+        <if test="updater != null">
+            and updater = #{updater}
+        </if>
+        order by create_time desc
+    </select>
+</mapper>
