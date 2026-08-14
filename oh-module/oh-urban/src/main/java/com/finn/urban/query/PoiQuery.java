@@ -33,19 +33,14 @@ public class PoiQuery extends Query {
     private String geoType;
 
     /**
-     * 备注
+     * 关键字
      */
-    private String remark;
+    private String keyWord;
 
     /**
      * 创建者
      */
     private Long creator;
-
-    /**
-     * 更新者
-     */
-    private Long updater;
 
     public String getLocation() {
         return location;
@@ -79,12 +74,12 @@ public class PoiQuery extends Query {
         this.geoType = geoType;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getKeyWord() {
+        return keyWord;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 
     public Long getCreator() {
@@ -93,14 +88,6 @@ public class PoiQuery extends Query {
 
     public void setCreator(Long creator) {
         this.creator = creator;
-    }
-
-    public Long getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(Long updater) {
-        this.updater = updater;
     }
 
 }

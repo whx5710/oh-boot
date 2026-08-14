@@ -1,8 +1,9 @@
 package com.finn.urban.service;
 
-import com.finn.common.entity.PageResult;
+import com.finn.urban.entity.Poi;
 import com.finn.urban.query.PoiQuery;
 import com.finn.urban.vo.PoiVO;
+import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface PoiService {
 
-    PageResult<PoiVO> page(PoiQuery query);
+    Page<Poi> page(PoiQuery query);
 
     Long save(PoiVO vo);
 

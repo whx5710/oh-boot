@@ -1,5 +1,6 @@
 package com.finn.urban.entity;
 
+import com.finn.framework.aop.annotations.TableField;
 import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
@@ -30,8 +31,21 @@ public class Poi extends BaseEntity {
     private BigDecimal latitude;
 
     /**
+     * 区域编码
+     */
+    @TableField("area_code")
+    private String areaCode;
+
+    /**
+     * 区域名称
+     */
+    @TableField("area_name")
+    private String areaName;
+
+    /**
      * 坐标系，如WGS84、BD09
      */
+    @TableField("geo_type")
     private String geoType;
 
     /**
@@ -61,6 +75,22 @@ public class Poi extends BaseEntity {
 
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getGeoType() {

@@ -4,9 +4,12 @@ import com.finn.common.entity.PageResult;
 import com.finn.common.entity.Result;
 import com.finn.common.enums.OperateTypeEnum;
 import com.finn.framework.aop.annotations.Log;
+import com.finn.urban.convert.PoiConvert;
+import com.finn.urban.entity.Poi;
 import com.finn.urban.query.PoiQuery;
 import com.finn.urban.service.PoiService;
 import com.finn.urban.vo.PoiVO;
+import com.github.pagehelper.Page;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +37,11 @@ public class PoiController {
      * @param query 查询条件
      * @return 列表
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     @PreAuthorize("hasAuthority('poi:page')")
     public Result<PageResult<PoiVO>> page(@Valid PoiQuery query) {
-        PageResult<PoiVO> page = poiService.page(query);
-
-        return Result.ok(page);
+        Page<Poi> page = poiService.page(query);
+        return Result.ok(new PageResult<>(PoiConvert.INSTANCE.convertList(page.getResult()), page.getTotal()));
     }
 
     /**
@@ -47,7 +49,7 @@ public class PoiController {
      * @param vo 兴趣点信息
      * @return 提示信息
      */
-    @PostMapping
+    @PostMapping("/save")
     @Log(module = "兴趣点", name = "保存", type = OperateTypeEnum.INSERT)
     @PreAuthorize("hasAuthority('poi:save')")
     public Result<String> save(@RequestBody PoiVO vo) {
@@ -60,7 +62,7 @@ public class PoiController {
      * @param vo 兴趣点信息
      * @return 提示信息
      */
-    @PutMapping
+    @PostMapping("/update")
     @Log(module = "兴趣点", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('poi:update')")
     public Result<String> update(@RequestBody PoiVO vo) {
@@ -78,7 +80,6 @@ public class PoiController {
     @PreAuthorize("hasAuthority('poi:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         poiService.delete(idList);
-
         return Result.ok();
     }
 }

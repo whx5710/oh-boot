@@ -1,12 +1,9 @@
 package com.finn.urban.mapper;
 
-import com.finn.framework.aop.annotations.Pages;
 import com.finn.urban.entity.Poi;
-import com.finn.urban.query.PoiQuery;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
 
 /**
  * 兴趣点
@@ -17,6 +14,5 @@ import java.util.List;
  */
 @Mapper
 public interface PoiMapper extends BaseMapper<Poi> {
-    @Pages
-    List<Poi> getList(PoiQuery query);
+
 }
