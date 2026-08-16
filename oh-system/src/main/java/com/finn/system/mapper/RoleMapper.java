@@ -1,0 +1,27 @@
+package com.finn.system.mapper;
+
+import com.finn.framework.datasource.mapper.BaseMapper;
+import com.finn.system.entity.RoleEntity;
+import com.finn.system.query.RoleQuery;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+/**
+ * 角色管理
+ * 
+ * @author 王小费 whx5710@qq.com
+ * 
+ */
+@Mapper
+public interface RoleMapper extends BaseMapper<RoleEntity> {
+
+    /**
+     * 根据用户ID，获取用户最大的数据范围
+     */
+    @Select("select min(t1.data_scope) from sys_role t1, sys_user_role t2 where t1.id = t2.role_id and t2.user_id = #{userId} and t1.db_status = 1 and t2.db_status = 1")
+    Integer getDataScopeByUserId(@Param("userId") Long userId);
+
+    List<RoleEntity> getList(RoleQuery roleQuery);
+
+}

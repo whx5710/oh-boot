@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.DictDataMapper">
+
+    <select id="getList" resultType="com.finn.system.vo.DictDataVO">
+        select a.*,b.dict_type from sys_dict_data a INNER JOIN sys_dict_type b on a.dict_type_id = b.id
+        where a.db_status = 1 and b.db_status = 1
+        <if test="dictTypeId != null and dictTypeId != ''">and a.dict_type_id = #{dictTypeId}</if>
+        order by a.dict_type_id,a.sort
+    </select>
+</mapper>

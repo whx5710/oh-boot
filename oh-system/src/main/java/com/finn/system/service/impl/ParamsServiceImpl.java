@@ -1,0 +1,263 @@
+package com.finn.system.service.impl;
+
+import com.finn.framework.datasource.wrapper.Wrapper;
+import com.finn.framework.exception.ServerException;
+import com.finn.common.utils.AssertUtils;
+import com.finn.common.utils.JsonUtils;
+import com.finn.common.entity.PageResult;
+import com.finn.framework.datasource.wrapper.QueryWrapper;
+import com.finn.framework.datasource.wrapper.UpdateWrapper;
+import com.finn.framework.service.impl.BaseServiceImpl;
+import com.finn.system.cache.ParamsCache;
+import com.finn.system.convert.ParamsConvert;
+import com.finn.system.entity.ParamsEntity;
+import com.finn.system.mapper.ParamsMapper;
+import com.finn.system.query.ParamsQuery;
+import com.finn.system.service.ParamsService;
+import com.finn.system.vo.ParamsVO;
+import com.github.pagehelper.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 参数管理
+ *
+ * @author 王小费 whx5710@qq.com
+ *
+ */
+@Service
+public class ParamsServiceImpl extends BaseServiceImpl<ParamsEntity> implements ParamsService {
+
+    private final ParamsCache paramsCache;
+
+    private final ParamsMapper paramsMapper;
+
+    public ParamsServiceImpl(ParamsCache paramsCache, ParamsMapper paramsMapper){
+        this.paramsCache = paramsCache;
+        this.paramsMapper = paramsMapper;
+    }
+
+    @Override
+    public PageResult<ParamsVO> page(ParamsQuery query) {
+        Page<ParamsEntity> page = paramsMapper.listByWrapper(getQueryWrapper(query));
+        return new PageResult<>(ParamsConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+    }
+
+    @Override
+    public void save(ParamsVO vo) {
+        AssertUtils.isBlank(vo.getParamKey(), "参数paramKey");
+        vo.setParamKey(vo.getParamKey().toUpperCase());
+        // 判断 参数键 是否存在
+        boolean exist = paramsMapper.isExist(vo.getParamKey());
+        if (exist) {
+            throw new ServerException("参数键已存在");
+        }
+
+        ParamsEntity entity = ParamsConvert.INSTANCE.convert(vo);
+
+        paramsMapper.insert(entity);
+
+        // 保存到缓存
+        paramsCache.save(entity.getParamKey(), entity.getParamValue());
+    }
+
+    @Override
+    public void update(ParamsVO vo) {
+        ParamsEntity entity = paramsMapper.getById(vo.getId());
+
+        // 如果 参数键 修改过
+        if (!entity.getParamKey().equalsIgnoreCase(vo.getParamKey())) {
+            // 判断 新参数键 是否存在
+            boolean exist = paramsMapper.isExist(vo.getParamKey());
+            if (exist) {
+                throw new ServerException("参数键已存在");
+            }
+
+            // 删除修改前的缓存
+            paramsCache.del(entity.getParamKey());
+        }
+
+        // 修改数据
+        vo.setParamKey(vo.getParamKey().toUpperCase());
+        paramsMapper.updateById(ParamsConvert.INSTANCE.convert(vo));
+
+        // 保存到缓存
+        paramsCache.save(vo.getParamKey(), vo.getParamValue());
+    }
+
+    @Override
+    public void delete(List<Long> idList) {
+        // 查询列表
+        List<ParamsEntity> list = paramsMapper.listByWrapper(QueryWrapper.of(ParamsEntity.class)
+                .in(ParamsEntity::getId, idList));
+        if(!list.isEmpty()){
+            for(ParamsEntity entity: list){
+                if(entity.getParamType() == 1){
+                    throw new ServerException(entity.getParamName() + " 是系统内置参数禁止删除");
+                }
+            }
+        }
+        // 删除数据
+        paramsMapper.updateByWrapper(UpdateWrapper.of(ParamsEntity.class).set(ParamsEntity::getDbStatus, 0)
+                .in(ParamsEntity::getId, idList));
+        // 删除缓存
+        String[] keys = list.stream().map(ParamsEntity::getParamKey).toArray(String[]::new);
+        if(keys.length > 0){
+            paramsCache.del(keys);
+        }
+    }
+
+    @Override
+    public String getString(String paramKey) {
+        String value = paramsCache.get(paramKey);
+        if (value == null || value.isEmpty()) {
+            // redis为空，则从数据库中获取
+            ParamsEntity paramsEntity = this.getByKey(paramKey);
+            if(ObjectUtils.isEmpty(paramsEntity)){
+                throw new ServerException("系统参数不能为空，paramKey：" + paramKey);
+            }else{
+                value = paramsEntity.getParamValue();
+            }
+        }
+        return value;
+    }
+
+    @Override
+    public String getDefaultString(String paramKey) {
+        String value = paramsCache.get(paramKey);
+        if (value == null || value.isEmpty()) {
+            // redis为空，则从数据库中获取
+            ParamsEntity paramsEntity = this.getByKey(paramKey);
+            if(ObjectUtils.isEmpty(paramsEntity)){
+                return null;
+            }else{
+                value = paramsEntity.getParamValue();
+            }
+        }
+        return value;
+    }
+
+    @Override
+    public int getInt(String paramKey) {
+        String value = getString(paramKey);
+        return Integer.parseInt(value);
+    }
+
+    @Override
+    public int getDefaultInt(String paramKey) {
+        String value = getDefaultString(paramKey);
+        if(value == null){
+            return -1;
+        }
+        return Integer.parseInt(value);
+    }
+
+    @Override
+    public boolean getBoolean(String paramKey) {
+        String value = getString(paramKey);
+        return Boolean.parseBoolean(value);
+    }
+
+    @Override
+    public <T> T getJSONObject(String paramKey, Class<T> valueType) {
+        String value = getString(paramKey);
+        return JsonUtils.parseObject(value, valueType);
+    }
+
+    /**
+     * 根据key获取数据库中的值
+     * @param key  参数Key
+     * @return e
+     */
+    @Override
+    public ParamsEntity getByKey(String key) {
+        List<ParamsEntity> list = paramsMapper.listByWrapper(QueryWrapper.of(ParamsEntity.class)
+                .eq(ParamsEntity::getDbStatus,1).eq(ParamsEntity::getParamKey, key));
+        if(!list.isEmpty()){
+            return list.getFirst();
+        }
+        return null;
+    }
+
+    /**
+     *  根据key获取数据库中的值（优化：使用 Hash 批量获取，减少缓存查询次数）
+     * @param keys 参数Key
+     * @return 集合
+     */
+    @Override
+    public Map<String, String> getByKeys(List<String> keys) {
+        Map<String, String> data = new HashMap<>();
+        if (keys == null || keys.isEmpty()) {
+            return data;
+        }
+        
+        // 批量从缓存获取（使用 HMGET 减少网络往返）
+        List<String> upperKeys = keys.stream()
+                .map(String::toUpperCase)
+                .distinct()
+                .toList();
+        
+        Map<String, Object> cacheMap = paramsCache.mGet(upperKeys);
+        
+        for (String key : upperKeys) {
+            Object value = cacheMap.get(key);
+            if (value != null) {
+                data.put(key, String.valueOf(value));
+            } else {
+                // 缓存未命中，从数据库获取
+                ParamsEntity paramsEntity = this.getByKey(key);
+                if (paramsEntity != null) {
+                    data.put(key, paramsEntity.getParamValue());
+                    // 回填缓存
+                    paramsCache.save(key, paramsEntity.getParamValue());
+                }
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public ParamsEntity getById(Long id) {
+        return paramsMapper.getById(id);
+    }
+
+    @Override
+    public Boolean del(Long id) {
+        ParamsEntity entity = paramsMapper.getById(id);
+        if(entity == null || entity.getParamKey() == null){
+            throw new ServerException("未找到该参数");
+        }else {
+            if(entity.getParamType() == 1){
+                throw new ServerException(entity.getParamName() + " 是系统内置参数禁止删除");
+            }
+            entity.setDbStatus(0);
+            return paramsMapper.updateById(entity) > 0;
+        }
+    }
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+    private Wrapper<ParamsEntity> getQueryWrapper(ParamsQuery query){
+        if(query == null){
+            return QueryWrapper.of(ParamsEntity.class);
+        }else{
+            return QueryWrapper.of(ParamsEntity.class).eq(ParamsEntity::getParamKey, query.getParamKey())
+                    .eq(ParamsEntity::getParamValue, query.getParamValue())
+                    .eq(ParamsEntity::getParamType, query.getParamType())
+                    .in(ParamsEntity::getId, query.getIdList())
+                    .eq(ParamsEntity::getDbStatus, 1)
+                    .jointSQL("(param_name like concat('%',#{keyWord}, '%') " +
+                            "or param_value like concat('%',#{keyWord}, '%') " +
+                            "or param_key like concat('%',#{keyWord}, '%') " +
+                            "or remark like concat('%',#{keyWord}, '%'))","keyWord", query.getKeyWord())
+                    .page(query.getPageNum(), query.getPageSize());
+        }
+    }
+}

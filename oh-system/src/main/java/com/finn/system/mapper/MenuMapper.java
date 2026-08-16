@@ -1,0 +1,34 @@
+package com.finn.system.mapper;
+
+import com.finn.framework.datasource.mapper.BaseMapper;
+import com.finn.system.entity.MenuEntity;
+import com.finn.system.query.MenuQuery;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * 菜单管理
+ *
+ * @author 王小费 whx5710@qq.com
+ *
+ */
+@Mapper
+public interface MenuMapper extends BaseMapper<MenuEntity> {
+	/**
+	 * 查询所有菜单列表
+	 *
+	 * @param query params
+	 */
+	List<MenuEntity> getMenuList(@Param("query") MenuQuery query);
+
+	/**
+	 * 查询用户菜单列表
+	 *
+	 * @param userId 用户ID
+	 * @param query 菜单参数
+	 */
+	List<MenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("query") MenuQuery query);
+
+}

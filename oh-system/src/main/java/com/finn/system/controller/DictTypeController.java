@@ -1,0 +1,150 @@
+package com.finn.system.controller;
+
+import com.finn.common.entity.PageResult;
+import com.finn.common.entity.Result;
+import com.finn.framework.aop.annotations.Log;
+import com.finn.common.enums.OperateTypeEnum;
+import com.finn.system.cache.DictCache;
+import com.finn.system.convert.DictTypeConvert;
+import com.finn.system.entity.DictTypeEntity;
+import com.finn.system.query.DictTypeQuery;
+import com.finn.system.service.DictTypeService;
+import com.finn.system.vo.DictDataVO;
+import com.finn.system.vo.DictTypeVO;
+import com.finn.system.vo.DictVO;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 字典类型
+ *
+ * @author 王小费 whx5710@qq.com
+ * 
+ */
+@RestController
+@RequestMapping("/sys/dict/type")
+public class DictTypeController {
+    private final DictTypeService dictTypeService;
+    private final DictCache dictCache;
+
+    public DictTypeController(DictTypeService dictTypeService, DictCache dictCache) {
+        this.dictTypeService = dictTypeService;
+        this.dictCache = dictCache;
+    }
+
+    /**
+     * 分页
+     * @param query 查询条件
+     * @return 列表
+     */
+    @GetMapping("/page")
+    @PreAuthorize("hasAuthority('sys:dict:page')")
+    public Result<PageResult<DictTypeVO>> page(@Valid DictTypeQuery query) {
+        PageResult<DictTypeVO> page = dictTypeService.page(query);
+
+        return Result.ok(page);
+    }
+
+    /**
+     * 根据ID获取动态SQL生成的字典数据
+     * @param id 字典ID
+     * @return 数据列表
+     */
+    @GetMapping("/list/sql")
+    @PreAuthorize("hasAuthority('sys:dict:page')")
+    public Result<PageResult<DictDataVO>> listSql(Long id) {
+        List<DictDataVO> list = dictTypeService.getDictSql(id);
+
+        PageResult<DictDataVO> page = new PageResult<>(list, list.size());
+
+        return Result.ok(page);
+    }
+
+    /**
+     * 根据ID获取字典类型信息
+     * @param id 字典类型ID
+     * @return
+     */
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('sys:dict:info')")
+    public Result<DictTypeVO> get(@PathVariable("id") Long id) {
+        DictTypeEntity entity = dictTypeService.getById(id);
+
+        return Result.ok(DictTypeConvert.INSTANCE.convert(entity));
+    }
+
+    /**
+     * 字典类型保存
+     * @param vo 字典类型信息
+     * @return 提示信息
+     */
+    @PostMapping
+    @Log(module = "字典类型管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @PreAuthorize("hasAuthority('sys:dict:save')")
+    public Result<String> save(@RequestBody @Valid DictTypeVO vo) {
+        dictTypeService.save(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 修改
+     * @param vo 字典类型信息
+     * @return 提示信息
+     */
+    @PostMapping("/update")
+    @Log(module = "字典类型管理", name = "修改", type = OperateTypeEnum.UPDATE)
+    @PreAuthorize("hasAuthority('sys:dict:update')")
+    public Result<String> update(@RequestBody @Valid DictTypeVO vo) {
+        dictTypeService.update(vo);
+
+        return Result.ok();
+    }
+
+    /**
+     * 删除
+     * @param idList 字典类型ID结合
+     * @return 提示信息
+     */
+    @PostMapping("/del")
+    @Log(module = "字典类型管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @PreAuthorize("hasAuthority('sys:dict:delete')")
+    public Result<String> delete(@RequestBody List<Long> idList) {
+        dictTypeService.delete(idList);
+
+        return Result.ok();
+    }
+
+    /**
+     * 全部字典类型数据
+     * @return 列表
+     */
+    @GetMapping("/all")
+    public Result<List<DictVO>> all() {
+        List<DictVO> dictList = dictTypeService.getDictList();
+
+        return Result.ok(dictList);
+    }
+
+    /**
+     * 获取字典列表
+     */
+    @GetMapping("/getByType/{dictType}")
+    public Result<List<DictDataVO>> getByType(@PathVariable("dictType") String dictType) {
+        return Result.ok(dictCache.getListData(dictType));
+    }
+
+    /**
+     * 刷新字典翻译缓存数据
+     * @return 提示信息
+     */
+    @GetMapping("/refreshTransCache")
+    @PreAuthorize("hasAuthority('sys:dict:refreshTransCache')")
+    public Result<String> refreshTransCache() {
+        dictTypeService.refreshTransCache();
+        return Result.ok();
+    }
+
+}

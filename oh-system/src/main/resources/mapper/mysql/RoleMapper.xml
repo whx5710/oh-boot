@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.RoleMapper">
+
+    <select id="getList" parameterType="com.finn.system.query.RoleQuery">
+        select a.*,GROUP_CONCAT(c.menu_id) menuIds
+        from sys_role a
+        left join sys_role_menu c on a.id = c.role_id and c.db_status = 1
+        where a.db_status != 0
+        <if test="name != null and name != ''">
+            and a.name like concat('%',#{name}, '%')
+        </if>
+        <if test="isSystem != null">and a.is_system = #{isSystem}</if>
+        <if test="startTime != null and endTime != null">and DATE_FORMAT(a.create_time,'%Y-%m-%d') between #{startTime} and #{endTime}</if>
+        <if test="remark != null and remark !=''">and a.remark like concat('%',#{remark},'%')</if>
+        group by a.id
+        order by a.create_time desc
+    </select>
+
+</mapper>

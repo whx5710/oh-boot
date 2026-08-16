@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.UserMapper">
+	<select id="getList" resultType="com.finn.system.entity.UserEntity">
+		select t1.*, t2.name deptName
+		from sys_user t1 left join sys_dept t2 on t1.dept_id = t2.id
+		where t1.super_admin = 0 and t1.db_status = 1
+		<if test="params.username != null and params.username.trim() != ''">
+			and t1.username = #{params.username}
+		</if>
+		<if test="params.userNames != null and params.userNames.size() > 0">
+			and t1.username in
+			<foreach item="item" index="index" collection="params.userNames" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="params.mobile != null and params.mobile.trim() != ''">
+			and t1.mobile = #{params.mobile}
+		</if>
+		<if test="params.gender != null">
+			and t1.gender = #{params.gender}
+		</if>
+		<if test="params.realName != null and params.realName.trim() != ''">
+			and t1.real_name like concat("%",#{params.realName},"%")
+		</if>
+		<if test="params.status != null">
+			and t1.status = #{params.status}
+		</if>
+		<if test="params.deptId != null and params.deptId != 0">
+			and t1.dept_id = #{params.deptId}
+		</if>
+		<if test="params.keyWord != null and params.keyWord.trim() != ''">
+			and (t2.name like concat("%",#{params.keyWord},"%") or t1.real_name like concat("%",#{params.keyWord},"%")
+			or t1.username like concat("%",#{params.keyWord},"%") or t1.mobile like concat("%",#{params.keyWord},"%")
+			or t1.email like concat("%",#{params.keyWord},"%") or t1.note like concat("%",#{params.keyWord},"%"))
+		</if>
+		order by t1.create_time desc
+	</select>
+
+	<select id="getRoleUserList" resultType="com.finn.system.entity.UserEntity">
+		select t1.*,t3.name as dept_name from sys_user t1 left join sys_user_role t2 on t1.id = t2.user_id
+		left join sys_dept t3 on t1.dept_id = t3.id
+		where t1.db_status = 1 and t2.db_status = 1 and t2.role_id = #{roleId}
+		<if test="username != null and username.trim() != ''">
+			and t1.username = #{username}
+		</if>
+		<if test="mobile != null and mobile.trim() != ''">
+			and t1.mobile = #{mobile}
+		</if>
+		<if test="gender != null">
+			and t1.gender = #{gender}
+		</if>
+	</select>
+
+	<select id="pageByRole" resultType="com.finn.system.entity.UserEntity">
+		select t1.*
+		from sys_user t1 inner join sys_user_role t2 on t1.id = t2.user_id
+						 inner join sys_role t3 on t2.role_id = t3.id
+		where t1.super_admin = 0 and t1.db_status = 1 and t2.db_status = 1
+		  and t3.db_status = 1 and t3.id = #{params.roleId}
+		<if test="params.keyWord != null and params.keyWord.trim() != ''">
+			and (t1.real_name like concat("%",#{params.keyWord},"%")
+			or t1.username like concat("%",#{params.keyWord},"%") or t1.mobile like concat("%",#{params.keyWord},"%")
+			or t1.email like concat("%",#{params.keyWord},"%") or t1.note like concat("%",#{params.keyWord},"%"))
+		</if>
+	</select>
+
+	<select id="getByUsername" resultType="com.finn.system.entity.UserEntity">
+		SELECT
+		a.*,
+		b.NAME AS dept_name
+		FROM
+		sys_user a
+		LEFT JOIN sys_dept b ON a.dept_id = b.id
+		WHERE
+		a.db_status = 1
+		AND a.username = #{username}
+	</select>
+
+	<select id="getByMobile" resultType="com.finn.system.entity.UserEntity">
+		SELECT
+		a.*,
+		b.NAME AS dept_name
+		FROM
+		sys_user a
+		LEFT JOIN sys_dept b ON a.dept_id = b.id
+		WHERE
+		a.db_status = 1
+		AND a.mobile = #{mobile}
+	</select>
+</mapper>

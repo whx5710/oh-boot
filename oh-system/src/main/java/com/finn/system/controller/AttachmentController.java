@@ -1,0 +1,68 @@
+package com.finn.system.controller;
+
+import com.finn.common.entity.PageResult;
+import com.finn.common.enums.OperateTypeEnum;
+import com.finn.framework.aop.annotations.Log;
+import com.finn.common.entity.Result;
+import com.finn.system.query.AttachmentQuery;
+import com.finn.system.service.AttachmentService;
+import com.finn.system.vo.AttachmentVO;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 附件管理
+ *
+ * @author 王小费 whx5710@qq.com
+ * 
+ */
+@RestController
+@RequestMapping("/sys/attachment")
+public class AttachmentController {
+    private final AttachmentService attachmentService;
+
+    public AttachmentController(AttachmentService attachmentService) {
+        this.attachmentService = attachmentService;
+    }
+
+    /**
+     * 分页查询
+     * @param query 查询条件
+     * @return 列表
+     */
+    @GetMapping("/page")
+    @PreAuthorize("hasAuthority('sys:attachment:page')")
+    public Result<PageResult<AttachmentVO>> page(@Valid AttachmentQuery query) {
+        return Result.ok(attachmentService.page(query));
+    }
+
+    /**
+     * 保存
+     * @param vo 附件信息
+     * @return 提示信息
+     */
+    @PostMapping
+    @Log(module = "附件管理", name = "保存", type = OperateTypeEnum.INSERT)
+    @PreAuthorize("hasAuthority('sys:attachment:save')")
+    public Result<String> save(@RequestBody AttachmentVO vo) {
+        Long id = attachmentService.save(vo);
+        return Result.ok(String.valueOf(id));
+    }
+
+    /**
+     * 删除
+     * @param idList 附件ID集合
+     * @return 提示信息
+     */
+    @PostMapping("/del")
+    @Log(module = "附件管理", name = "删除", type = OperateTypeEnum.DELETE)
+    @PreAuthorize("hasAuthority('sys:attachment:delete')")
+    public Result<String> delete(@RequestBody List<Long> idList) {
+        attachmentService.delete(idList);
+
+        return Result.ok();
+    }
+}

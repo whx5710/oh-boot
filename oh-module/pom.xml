@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.finn</groupId>
+        <artifactId>oh-boot</artifactId>
+        <version>5.0.0_260717</version>
+    </parent>
+    <groupId>com.finn.module</groupId>
+    <artifactId>oh-module</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <!-- 工作流 -->
+        <module>oh-flow</module>
+        <!-- 外部对接客户端 -->
+        <module>oh-app</module>
+        <!--文件服务-->
+        <module>oh-files</module>
+        <!-- 业务处理 -->
+        <module>oh-urban</module>
+    </modules>
+
+    <dependencies>
+        <!-- 系统框架：开箱即用启动包，已聚合 oh-common + oh-framework -->
+        <dependency>
+            <groupId>com.finn</groupId>
+            <artifactId>oh-framework</artifactId>
+        </dependency>
+    </dependencies>
+</project>

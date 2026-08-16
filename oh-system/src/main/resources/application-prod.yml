@@ -1,0 +1,179 @@
+# Tomcat
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 1000
+      min-spare: 30
+  port: 5712
+  servlet:
+    context-path: /
+    session.cookie.http-only: true
+finn:
+  security:
+    access-token-expire: 7200      # 过期时间-秒，2小时过期
+    refresh-token-expire: 43200    # 刷新token-秒 12小时
+    auth-count: 5                  # 多少次鉴权失败锁定，0表示不开启
+    lock-time: 3600                # 账号锁定时间(秒)
+    ignore-urls:                   # 忽略鉴权的url
+      - /webjars/**
+      - /upload/**
+  # 跨域配置
+  cors:
+    allowed-origins: http://127.0.0.1:9001,http://localhost:5777 # 多个用逗号隔开
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS # 请求方法
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600
+  open-api:
+    type: 1 # 1直接保存 2使用MQ异步保存
+    auto-start-up: false # Kafka监听是否开启
+    cache-time: 604800 # 缓存时间-秒，0不进行缓存，缓存日志可从redis中读取日志保存到表中
+  xss:
+    enabled: true
+    exclude-urls:
+      - /oh-generator/**
+  # 文件存储相关
+  storage:
+    enabled: true # 控制文件存储是否启用
+    type: local  # 存储类型：local、seaweedfs、minio
+    cache-record: true                      # 是否redis缓存文件信息，用于异步保存到表中，默认false
+    local:
+      path: /home/finn/文档/upFiles
+    seaweedfs:
+      endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
+      access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
+      secret-key: admin123                    # 同上
+      bucket: default-bucket                  # 默认存储桶名
+      region: us-east-1                       # SeaweedFS 不校验 region，任意填
+      path-style-access: true                 # 必须使用 path-style,必须开启，SeaweedFS 不支持 virtual-hosted style
+      # 允许上传的文件扩展名，如 .jpg
+      file-suffix:
+        - .jpg
+        - .png
+        - .jpeg
+        - .zip
+  # 微信相关配置
+  wechat:
+    api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
+    app-id: wxe04321234567 # 微信小程序app id
+    secret: ac123c96970f68c3c7c563c9123456 # 微信小程序密钥
+  # Redis 双数据源配置（主缓存 + 队列缓存）
+  redis:
+    primary:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      #password:
+    queue:
+      host: 127.0.0.1
+      port: 6379
+      database: 1
+      #password:
+# https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  datasource:
+    #数据源的类型,对应配置相关的连接池 com.zaxxer.hikari.HikariDataSource
+    type: com.zaxxer.hikari.HikariDataSource
+    sys-data-source:
+      primary: masterDb # 主数据源或者数据源组,默认 masterDb
+      sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
+    dynamic:
+      sysDb: # 系统管理数据源
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        #url: jdbc:mysql://127.0.0.1:3306/oh_sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
+        username: postgres
+        password: 123456
+        hikari:
+          minimum-idle: 10 # 连接池中保持的最小空闲连接数
+          maximum-pool-size: 100 # 连接池中允许的最大连接数
+          connection-timeout: 30000 # 连接超时时间 (毫秒) (默认: 30000)
+          max-lifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+          idle-timeout: 600000  # 连接空闲超时时间 (毫秒) (默认: 600000)
+          connection-test-query: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          auto-commit: true # 自动提交 (默认: true)
+          validation-timeout: 5000 # 验证超时时间，默认5秒
+          isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
+          check-connection: true # 初始化时是否检查连接，默认false
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
+          slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
+      masterDb: # 主数据源
+        #driver-class-name: com.mysql.cj.jdbc.Driver
+        #url: jdbc:mysql://127.0.0.1:3306/oh_boot_all?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot_all
+        username: postgres
+        password: 123456
+        hikari:
+          minimum-idle: 10 # 连接池中保持的最小空闲连接数
+          maximum-pool-size: 100 # 连接池中允许的最大连接数
+          connection-timeout: 30000 # 连接超时时间 (毫秒) (默认: 30000)
+          max-lifetime: 1800000 # Hikari属性,控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+          idle-timeout: 600000  # 连接空闲超时时间 (毫秒) (默认: 600000)
+          connection-test-query: SELECT 1 # 连接测试查询语句,默认SELECT 1
+          auto-commit: true # 自动提交 (默认: true)
+          validation-timeout: 5000 # 验证超时时间，默认5秒
+          isolate-internal-queries: false # 是否隔离自动提交事务 (默认: false)
+          check-connection: true # 初始化时是否检查连接，默认false
+          hikari-log: false # 是否开启hikari监控日志打印，默认false
+          slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    client-id: open-api-flow
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+      concurrency: 1  # 多任务
+      # type: BATCH #开启批量监听
+    consumer:
+      group-id: oh-group
+      max-poll-records: 10
+      auto-offset-reset: earliest  # Kafka中没有初始偏移或如果当前偏移在服务器上不再存在时,默认区最新 ，有三个选项 【latest, earliest, none】
+      enable-auto-commit: false    # 是否开启自动提交
+      auto-commit-interval: 1000   # 自动提交的时间间隔
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      acks: 1 # 0：producer 不等待 broker 的 ack  1：producer 等待 broker 的 ack，partition 的 leader 落盘成功后返回 ack，如果在 follower 同步成功之前 leader 故障，那么将会丢失数据 -1（all）：producer 等待 broker 的 ack，partition 的 leader 和 follower （ISRL里的follower，不是全部的follower）全部落盘成功后才 返回 ack
+      batch-size: 4096
+      buffer-memory: 40960000
+      client-id: open-api-flow-producer
+      compression-type: zstd # 压缩算法
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3 # 重复次数
+      properties:
+        spring.json.add.type.headers: false
+        max.request.size: 126951500
+        max.block.ms: 30000 # 最大阻塞时间默认60000ms
+
+# 日志信息
+logging:
+  # 字符集设置
+  charset:
+    file: UTF-8
+    console: UTF-8
+  level:  # 默认的全局日志级别 TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+    com.finn: INFO
+    org.springframework.web: INFO # web相关的日志级别
+    #root: DEBUG
+#  pattern:
+#    # 在控制台输出的日志格式
+#    # 无颜色 '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n'
+#    # 有颜色 '%red(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
+#    console: '%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %green([%thread]) %boldMagenta(%logger{50}) - %msg%n'
+#  file:
+#    # 日志存放的路径 path和 file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性
+#    # path: logs
+#    name: logs/${spring.application.name}.out.log
+#  logback:
+#    rollingPolicy:
+#      clean-history-on-start: true                        # 是否在启动时清除存档日志文件
+#      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz # 滚动日志文件名的模式
+#      max-history: 10                                     # 要保留的存档日志文件的最大数量
+#      max-file-size: 100MB                                # 最大文件大小，默认10MB

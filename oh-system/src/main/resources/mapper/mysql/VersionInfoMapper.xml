@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.VersionInfoMapper">
+
+    <select id="getList" resultType="com.finn.system.entity.VersionInfoEntity">
+        select * from sys_version_info where db_status = 1
+        <if test="keyWord != null and keyWord != ''">
+            and (content like concat('%', #{keyWord}, '%') or version_num like concat('%',#{versionNum}, '%'))
+        </if>
+        <if test="isCurrVersion != null">and is_curr_version = #{isCurrVersion}</if>
+        order by release_time desc
+    </select>
+
+</mapper>

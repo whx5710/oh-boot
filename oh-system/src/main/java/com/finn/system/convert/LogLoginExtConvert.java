@@ -1,0 +1,64 @@
+package com.finn.system.convert;
+
+import com.finn.framework.utils.ServiceFactory;
+import com.finn.system.cache.DictCache;
+import com.finn.system.entity.LoginLogEntity;
+import com.finn.system.vo.DictDataVO;
+import com.finn.system.vo.LoginLogVO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 自定义转换
+ * @author 王小费 whx5710@qq.com
+ * @since 1.0.0 2025-06-14
+ */
+public class LogLoginExtConvert implements LoginLogConvert {
+
+    private final LoginLogConvert loginLogConvert;
+
+    DictCache dictCache = ServiceFactory.getBean("dictCache", DictCache.class);
+
+    public LogLoginExtConvert(LoginLogConvert loginLogConvert){
+        this.loginLogConvert = loginLogConvert;
+    }
+
+    @Override
+    public LoginLogEntity convert(LoginLogVO vo) {
+        return loginLogConvert.convert(vo);
+    }
+
+    @Override
+    public LoginLogVO convert(LoginLogEntity entity) {
+        LoginLogVO vo = loginLogConvert.convert(entity);
+
+        // 登录状态 0：失败   1：成功
+        if(entity.getStatus() == 1){
+            vo.setStatusLabel("成功");
+        }else{
+            vo.setStatusLabel("失败");
+        }
+
+        // 登录操作信息 操作信息   0：登录成功   1：退出成功  2：验证码错误  3：账号密码错误
+        if(entity.getOperation() != null){
+            DictDataVO dictDataVO = dictCache.get("login_operation", String.valueOf(entity.getOperation()));
+            if(dictDataVO != null){
+                vo.setOperationLabel(dictDataVO.getDictLabel());
+            }
+        }
+        return vo;
+    }
+
+    @Override
+    public List<LoginLogVO> convertList(List<LoginLogEntity> list) {
+        if ( list == null ) {
+            return null;
+        }
+        List<LoginLogVO> list1 = new ArrayList<LoginLogVO>( list.size() );
+        for ( LoginLogEntity loginLogEntity : list ) {
+            list1.add( convert(loginLogEntity) );
+        }
+        return list1;
+    }
+}

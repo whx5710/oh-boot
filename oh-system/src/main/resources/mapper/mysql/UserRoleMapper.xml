@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.UserRoleMapper">
+
+    <select id="getUserAuthorityList" resultType="string">
+        select distinct a.authority from sys_menu a inner join sys_role_menu b on a.id = b.menu_id
+        where a.db_status = 1 and b.db_status = 1 and b.role_id in
+        <foreach collection="roleIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getAuthorityList" resultType="string">
+        select distinct authority from sys_menu where db_status = 1 and authority is not null
+    </select>
+</mapper>

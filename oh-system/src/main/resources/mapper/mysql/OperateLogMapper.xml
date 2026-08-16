@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finn.system.mapper.OperateLogMapper">
+
+    <select id="getList" resultType="com.finn.system.entity.OperateLogEntity">
+        select * from sys_log_operate
+        <where>
+            <if test="status != null">and status = #{status}</if>
+            <if test="realName != null and realName != ''">and real_name = #{realName}</if>
+            <if test="module != null and module != ''">and module like concat('%',#{module}, '%')</if>
+            <if test="reqUri != null and reqUri != ''">and req_uri like concat('%',#{reqUri}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+</mapper>
