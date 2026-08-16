@@ -60,7 +60,7 @@ public class ProcessHandlerService {
                     .addClasspathResource(path) // 绑定需要部署的流程文件
                     .deploy();// 部署流程
         }catch (FlowableIllegalArgumentException e){
-            throw new ServerException("流程部署失败！", e.getMessage());
+            throw new ServerException("流程部署失败！", e);
         }
     }
 
@@ -87,7 +87,7 @@ public class ProcessHandlerService {
                     .addString(svgName, svgStr) // svg图片(ACT_GE_BYTEARRAY)      名称对应ACT_RE_PROCDEF.DGRM_RESOURCE_NAME_
                     .deploy();                  // 部署流程
         }catch (XMLException | FlowableException | NoClassDefFoundError e){
-            throw new ServerException("流程部署失败！", e.getMessage());
+            throw new ServerException("流程部署失败！", e);
         }
         // 历史发布记录，取最近的一次
         String preProcDefId = null; // 前一次发布的
