@@ -53,6 +53,18 @@ public class TrajectoryEntity extends BaseEntity {
     private BigDecimal verticalAccuracy;
 
     /**
+     * gps定位时间
+     */
+    @TableField("gps_time")
+    private Long gpsTime;
+
+    /**
+     * 坐标系，默认gcj02
+     */
+    @TableField("type")
+    private String type;
+
+    /**
      * 备注
      */
     private String remark;
@@ -119,5 +131,21 @@ public class TrajectoryEntity extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getGpsTime() {
+        return gpsTime;
+    }
+
+    public void setGpsTime(Long gpsTime) {
+        this.gpsTime = gpsTime;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

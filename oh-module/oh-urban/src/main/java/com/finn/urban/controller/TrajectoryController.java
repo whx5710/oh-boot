@@ -56,7 +56,7 @@ public class TrajectoryController {
      */
     @PostMapping("/save")
     @Log(module = "轨迹坐标", name = "保存", type = OperateTypeEnum.INSERT)
-    @PreAuthorize("hasAuthority('urban:trajectory:save')")
+//    @PreAuthorize("hasAuthority('urban:trajectory:save')")
     public Result<String> save(@RequestBody List<TrajectoryVO> list) {
         trajectoryService.saveBatch(list);
         return Result.ok();

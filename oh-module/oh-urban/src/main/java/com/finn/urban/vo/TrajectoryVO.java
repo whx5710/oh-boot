@@ -56,6 +56,16 @@ public class TrajectoryVO implements Serializable {
     private BigDecimal verticalAccuracy;
 
     /**
+     * gps定位时间
+     */
+    private Long gpsTime;
+
+    /**
+     * 坐标系，默认gcj02
+     */
+    private String type;
+
+    /**
      * 备注
      */
     private String remark;
@@ -130,5 +140,21 @@ public class TrajectoryVO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getGpsTime() {
+        return gpsTime;
+    }
+
+    public void setGpsTime(Long gpsTime) {
+        this.gpsTime = gpsTime;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
