@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2026-08-17
  */
 @RestController
-@RequestMapping("/ur/trajectory")
+@RequestMapping("/trajectory")
 public class TrajectoryController {
 
     private final TrajectoryService trajectoryService;
