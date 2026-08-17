@@ -1,11 +1,13 @@
-version: '3.9'
 services:
   oh-boot:
     image: oh-finn:1.0.0
     container_name: oh-boot
+    restart: unless-stopped
     ports:
-      - 8080:8080
+      - "5710:5710"
     environment:
       - spring.profiles.active=prod
+      - JAVA_OPTS=-Xms2048M -Xmx2048M  # 还可以动态调整内存
+      - LICENSE_MACHINE_CODE=my-server-001
     volumes:
       - /work/oh-server.jar:/app/oh-server.jar
