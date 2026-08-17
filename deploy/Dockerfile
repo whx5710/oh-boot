@@ -3,7 +3,8 @@
 
 # 使用 Eclipse Temurin JDK 21（官方推荐，Alpine 版更轻量）
 FROM eclipse-temurin:21-jre-alpine
-MAINTAINER 王小费
+
+LABEL maintainer="Finn"
 
 # 定义环境变量（带默认值，运行时可覆盖）
 ENV LICENSE_MACHINE_CODE=default-machine-code

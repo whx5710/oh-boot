@@ -5,7 +5,7 @@ server:
     threads:
       max: 1000
       min-spare: 30
-  port: 5712
+  port: 5710
   servlet:
     context-path: /
     session.cookie.http-only: true
@@ -23,7 +23,7 @@ finn:
     allowed-origins: http://127.0.0.1:9001,http://localhost:5777 # 多个用逗号隔开
     allowed-methods: GET,POST,PUT,DELETE,OPTIONS # 请求方法
     allowed-headers: "*"
-    allow-credentials: true
+    allow-credentials: false
     max-age: 3600
   open-api:
     type: 1 # 1直接保存 2使用MQ异步保存
@@ -39,7 +39,7 @@ finn:
     type: local  # 存储类型：local、seaweedfs、minio
     cache-record: true                      # 是否redis缓存文件信息，用于异步保存到表中，默认false
     local:
-      path: /home/finn/文档/upFiles
+      path: /home/finn/upFiles
     seaweedfs:
       endpoint: http://localhost:8333         # SeaweedFS S3 网关地址
       access-key: admin                       # SeaweedFS 默认不校验，如果 SeaweedFS S3 网关未配置认证，可任意填
@@ -61,15 +61,15 @@ finn:
   # Redis 双数据源配置（主缓存 + 队列缓存）
   redis:
     primary:
-      host: 127.0.0.1
+      host: redis-server
       port: 6379
       database: 0
-      #password:
+      password: Finn123456
     queue:
-      host: 127.0.0.1
+      host: redis-server
       port: 6379
       database: 1
-      #password:
+      password: Finn123456
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
@@ -87,9 +87,9 @@ spring:
         #driver-class-name: com.mysql.cj.jdbc.Driver
         #url: jdbc:mysql://127.0.0.1:3306/oh_sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_sys
+        url: jdbc:postgresql://postgres-server:5432/stepping_stone?currentSchema=oh_sys
         username: postgres
-        password: 123456
+        password: Finn123456
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
           maximum-pool-size: 100 # 连接池中允许的最大连接数
@@ -107,9 +107,9 @@ spring:
         #driver-class-name: com.mysql.cj.jdbc.Driver
         #url: jdbc:mysql://127.0.0.1:3306/oh_boot_all?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
         driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://127.0.0.1:5432/stepping_stone?currentSchema=oh_boot_all
+        url: jdbc:postgresql://postgres-server:5432/stepping_stone?currentSchema=oh_boot_all
         username: postgres
-        password: 123456
+        password: Finn123456
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
           maximum-pool-size: 100 # 连接池中允许的最大连接数

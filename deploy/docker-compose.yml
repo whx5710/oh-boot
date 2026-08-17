@@ -8,6 +8,33 @@ services:
     environment:
       - spring.profiles.active=prod
       - JAVA_OPTS=-Xms2048M -Xmx2048M  # 还可以动态调整内存
-      - LICENSE_MACHINE_CODE=my-server-001
+      - LICENSE_MACHINE_CODE=my-server-2026
     volumes:
-      - /work/oh-server.jar:/app/oh-server.jar
+      - /home/finn/data/oh-server.jar:/app/oh-server.jar
+
+  redis-server:
+    image: redis:7-alpine
+    container_name: my-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass Finn123456
+
+  postgres-server:
+    image: postgres:18-alpine
+    container_name: my-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Finn123456
+      POSTGRES_DB: stepping_stone
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  redis_data:
+  postgres_data:
