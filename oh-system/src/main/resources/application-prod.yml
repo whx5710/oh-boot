@@ -64,12 +64,12 @@ finn:
       host: finn-redis
       port: 6379
       database: 0
-      password: Finn123456
+      password: Finn!2026r
     queue:
       host: finn-redis
       port: 6379
       database: 1
-      password: Finn123456
+      password: Finn!2026r
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
@@ -89,7 +89,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         url: jdbc:postgresql://finn-postgres:5432/stepping_stone?currentSchema=oh_sys
         username: postgres
-        password: Finn123456
+        password: Finn!2026p
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
           maximum-pool-size: 100 # 连接池中允许的最大连接数
@@ -109,7 +109,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         url: jdbc:postgresql://finn-postgres:5432/stepping_stone?currentSchema=oh_boot
         username: postgres
-        password: Finn123456
+        password: Finn!2026p
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
           maximum-pool-size: 100 # 连接池中允许的最大连接数

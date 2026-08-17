@@ -1,5 +1,5 @@
-# 构建镜像，执行命令：【docker build -t oh-finn:1.0.0 .】
-# 启动容器，执行命令： docker run --name oh-finn -d -p 5710:5710 oh-finn:1.0.0
+# 构建镜像，执行命令：【docker build -t oh-boot:1.0.0 .】
+# 启动容器，执行命令： docker run --name oh-boot -d -p 5710:5710 oh-boot:1.0.0
 
 # 使用 Eclipse Temurin JDK 21（官方推荐，Alpine 版更轻量）
 FROM eclipse-temurin:21-jre-alpine

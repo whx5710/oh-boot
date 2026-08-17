@@ -1,7 +1,7 @@
 services:
-  oh-boot:
-    image: oh-finn:1.0.0
-    container_name: oh-boot
+  oh-server:
+    image: oh-boot:1.0.0
+    container_name: oh-server
     restart: unless-stopped
     ports:
       - "5710:5710"
@@ -20,7 +20,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes --requirepass Finn123456
+    command: redis-server --appendonly yes --requirepass Finn!2026r
 
   finn-postgres:
     image: postgres:18-alpine
@@ -30,7 +30,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Finn123456
+      POSTGRES_PASSWORD: Finn!2026p
       POSTGRES_DB: stepping_stone
     volumes:
       - postgres_data:/var/lib/postgresql
