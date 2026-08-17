@@ -145,7 +145,7 @@ public class TaskHandlerService {
             // 完成任务
             taskService.complete(taskVO.getTaskId(), taskVO.getParams());
         }catch (FlowableException e){
-            throw new ServerException("流程操作失败", e.getMessage());
+            throw new ServerException("流程操作失败", e);
         }
         // 保存环节
         taskRecordService.saveTaskRecord(taskVO.getProInstId(), taskVO.getTaskId());
