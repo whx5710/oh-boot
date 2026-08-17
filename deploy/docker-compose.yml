@@ -12,9 +12,9 @@ services:
     volumes:
       - /home/finn/data/oh-server.jar:/app/oh-server.jar
 
-  redis-server:
+  finn-redis:
     image: redis:7-alpine
-    container_name: my-redis
+    container_name: finn-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -22,9 +22,9 @@ services:
       - redis_data:/data
     command: redis-server --appendonly yes --requirepass Finn123456
 
-  postgres-server:
+  finn-postgres:
     image: postgres:18-alpine
-    container_name: my-postgres
+    container_name: finn-postgres
     restart: unless-stopped
     ports:
       - "5432:5432"
