@@ -60,15 +60,15 @@ finn:
   # Redis 双数据源配置（主缓存 + 队列缓存）
   redis:
     primary:
-      host: finn-redis
+      host: 10.49.6.156
       port: 6379
-      database: 0
-      password: Finn!2026r
+      database: 13
+      password: Topevery@2023
     queue:
-      host: finn-redis
+      host: 10.49.6.156
       port: 6379
-      database: 1
-      password: Finn!2026r
+      database: 13
+      password: Topevery@2023
 # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
 spring:
   servlet:
@@ -83,12 +83,12 @@ spring:
       sys-default: sysDb # 系统管理的数据源，用于基础管理的库，如果合并为一个库，则主数据库与系统管理数据库相同，默认 sysDb
     dynamic:
       sysDb: # 系统管理数据源
-        #driver-class-name: com.mysql.cj.jdbc.Driver
-        #url: jdbc:mysql://127.0.0.1:3306/oh_sys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://finn-postgres:5432/stepping_stone?currentSchema=oh_sys
-        username: postgres
-        password: Finn!2026p
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://10.49.6.154:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        #driver-class-name: org.postgresql.Driver
+        #url: jdbc:postgresql://finn-postgres:5432/stepping_stone?currentSchema=oh_sys
+        username: root
+        password: 1qaz@WSX123
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
           maximum-pool-size: 100 # 连接池中允许的最大连接数
@@ -103,12 +103,12 @@ spring:
           hikari-log: false # 是否开启hikari监控日志打印，默认false
           slow-threshold: 500 # 慢查询阈值,默认500（毫秒）
       masterDb: # 主数据源
-        #driver-class-name: com.mysql.cj.jdbc.Driver
-        #url: jdbc:mysql://127.0.0.1:3306/oh_boot_all?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://finn-postgres:5432/stepping_stone?currentSchema=oh_boot
-        username: postgres
-        password: Finn!2026p
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://10.49.6.154:3306/oh-boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+        #driver-class-name: org.postgresql.Driver
+        #url: jdbc:postgresql://finn-postgres:5432/stepping_stone?currentSchema=oh_boot
+        username: root
+        password: 1qaz@WSX123
         hikari:
           minimum-idle: 10 # 连接池中保持的最小空闲连接数
           maximum-pool-size: 100 # 连接池中允许的最大连接数
