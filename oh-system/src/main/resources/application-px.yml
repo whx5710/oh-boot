@@ -54,9 +54,9 @@ finn:
         - .zip
   # 微信相关配置
   wechat:
-    api: https://api.weixin.qq.com # 微信小程序请求基础路径或代理路径
-    app-id: wxe04321234567 # 微信小程序app id
-    secret: ac123c96970f68c3c7c563c9123456 # 微信小程序密钥
+    api: http://10.49.8.116:8080/weixin # 微信小程序请求基础路径或代理路径
+    app-id: wx684ab7dbf78cd5f3 # 微信小程序app id
+    secret: 45ac3a920b63428ff15eb001aa24edcdwhx # 微信小程序密钥
   # Redis 双数据源配置（主缓存 + 队列缓存）
   redis:
     primary:
