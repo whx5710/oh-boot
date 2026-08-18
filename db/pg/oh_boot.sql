@@ -637,6 +637,7 @@ CREATE TABLE "oh_boot"."ur_trajectory" (
   "update_time" timestamp(6),
   "db_status" int2 DEFAULT 1,
   "gps_time" int8,
+  "group_id" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "type" varchar(20) COLLATE "pg_catalog"."default"
 )
 ;
@@ -656,6 +657,7 @@ COMMENT ON COLUMN "oh_boot"."ur_trajectory"."update_time" IS '更新时间';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."gps_time" IS 'GPS时间';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."type" IS '坐标系，默认gcj02';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."group_id" IS '分组ID，同一次运动，分组ID相同';
 COMMENT ON TABLE "oh_boot"."ur_trajectory" IS '轨迹坐标';
 
 -- ----------------------------
