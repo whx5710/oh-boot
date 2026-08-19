@@ -8,14 +8,19 @@ import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.urban.convert.SportRecordConvert;
 import com.finn.urban.entity.SportRecordEntity;
+import com.finn.urban.entity.TrajectoryEntity;
 import com.finn.urban.mapper.SportRecordMapper;
+import com.finn.urban.mapper.TrajectoryMapper;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.service.SportRecordService;
+import com.finn.urban.vo.PointVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.finn.common.constant.Constant.DESC;
@@ -31,8 +36,11 @@ public class SportRecordServiceImpl implements SportRecordService {
 
     private final SportRecordMapper sportRecordMapper;
 
-    public SportRecordServiceImpl(SportRecordMapper sportRecordMapper) {
+    private final TrajectoryMapper trajectoryMapper;
+
+    public SportRecordServiceImpl(SportRecordMapper sportRecordMapper, TrajectoryMapper trajectoryMapper) {
         this.sportRecordMapper = sportRecordMapper;
+        this.trajectoryMapper = trajectoryMapper;
     }
 
     @Override
@@ -49,7 +57,21 @@ public class SportRecordServiceImpl implements SportRecordService {
         if (entity == null || entity.getId() == null) {
             throw new ServerException("未找到运动记录信息");
         }
-        return SportRecordConvert.INSTANCE.convert(entity);
+        SportRecordVO vo = SportRecordConvert.INSTANCE.convert(entity);
+
+        // 处理坐标点
+        QueryWrapper<TrajectoryEntity> queryWrapper = QueryWrapper.of(TrajectoryEntity.class);
+        queryWrapper.eq(TrajectoryEntity::getDbStatus, 1).eq(TrajectoryEntity::getCreator, vo.getUserId())
+                        .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
+        List<TrajectoryEntity> list = trajectoryMapper.listByWrapper(queryWrapper);
+        if(list != null && !list.isEmpty()){
+            List<PointVO> points = new ArrayList<>(list.size());
+            for(TrajectoryEntity item: list){
+                points.add(new PointVO(item.getLongitude(), item.getLatitude()));
+            }
+            vo.setPoints(points);
+        }
+        return vo;
     }
 
     @Override
@@ -78,6 +100,7 @@ public class SportRecordServiceImpl implements SportRecordService {
         LocalDateTime now = LocalDateTime.now();
         entity.setStartTime(now);
         entity.setRecordDate(DateUtils.format(now, "yyyyMMdd"));
+        entity.setName(DateUtils.format(now, "yyyyMMddHHmmss"));
         entity.setUserId(userId);
         entity.setDbStatus(1);
         entity.setCreator(userId);
@@ -100,7 +123,10 @@ public class SportRecordServiceImpl implements SportRecordService {
         if(entity.getEndTime() != null){
             throw new ServerException("运动已结束，无需重复结束");
         }
-        entity.setEndTime(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        entity.setEndTime(now);
+        Duration duration = Duration.between(entity.getStartTime(), now);
+        entity.setDuration(duration.getSeconds());
         sportRecordMapper.updateById(entity);
     }
 

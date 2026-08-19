@@ -2,7 +2,7 @@ package com.finn.urban.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 运动记录表
@@ -21,6 +21,11 @@ public class SportRecordVO implements Serializable {
     private Long id;
 
     /**
+     * 轨迹名称
+     */
+    private String name;
+
+    /**
      * 用户ID
      */
     private Long userId;
@@ -33,12 +38,12 @@ public class SportRecordVO implements Serializable {
     /**
      * 开始时间
      */
-    private LocalDateTime startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private LocalDateTime endTime;
+    private String endTime;
 
     /**
      * 时长，单位秒
@@ -50,12 +55,22 @@ public class SportRecordVO implements Serializable {
      */
     private String remark;
 
+    private List<PointVO> points;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getUserId() {
@@ -74,19 +89,19 @@ public class SportRecordVO implements Serializable {
         this.recordDate = recordDate;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -104,5 +119,13 @@ public class SportRecordVO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<PointVO> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<PointVO> points) {
+        this.points = points;
     }
 }

@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @TableName("ur_sport_record")
 public class SportRecordEntity extends BaseEntity {
 
+    private String name;
+
     /**
      * 用户ID
      */
@@ -55,6 +57,14 @@ public class SportRecordEntity extends BaseEntity {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRecordDate() {

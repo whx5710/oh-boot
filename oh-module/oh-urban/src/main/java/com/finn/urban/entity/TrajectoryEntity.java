@@ -74,7 +74,7 @@ public class TrajectoryEntity extends BaseEntity {
      * 分组ID，同一次运动，分组ID相同
      */
     @TableField("group_id")
-    private String groupId;
+    private Long groupId;
 
     /**
      * 备注
@@ -169,11 +169,11 @@ public class TrajectoryEntity extends BaseEntity {
         this.type = type;
     }
 
-    public String getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 }

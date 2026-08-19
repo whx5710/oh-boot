@@ -73,7 +73,7 @@ public class TrajectoryVO implements Serializable {
     /**
      * 分组ID，同一次运动，分组ID相同
      */
-    private String groupId;
+    private Long groupId;
 
     /**
      * 备注
@@ -176,11 +176,11 @@ public class TrajectoryVO implements Serializable {
         this.type = type;
     }
 
-    public String getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 }
