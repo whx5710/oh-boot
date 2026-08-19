@@ -15,7 +15,6 @@ import java.util.List;
  * @since 2026-08-19
  */
 @Mapper
-@DecoratedWith(SportRecordExtConvert.class) // 指定实现类
 public interface SportRecordConvert {
 
     SportRecordConvert INSTANCE = Mappers.getMapper(SportRecordConvert.class);

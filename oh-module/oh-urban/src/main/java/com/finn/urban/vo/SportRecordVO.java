@@ -3,6 +3,7 @@ package com.finn.urban.vo;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -39,17 +40,17 @@ public class SportRecordVO implements Serializable {
     /**
      * 开始时间
      */
-    private String startTime;
+    private LocalDateTime startTime;
 
     /**
      * 结束时间
      */
-    private String endTime;
+    private LocalDateTime endTime;
 
     /**
      * 时长
      */
-    private String duration;
+    private Long duration;
 
     /**
      * 距离
@@ -95,27 +96,27 @@ public class SportRecordVO implements Serializable {
         this.recordDate = recordDate;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public String getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
