@@ -304,7 +304,7 @@ CREATE TABLE `ur_trajectory`  (
   `speed` decimal(6, 2) NULL DEFAULT NULL COMMENT '速度，单位 m/s',
   `vertical_accuracy` decimal(6, 2) NULL DEFAULT NULL COMMENT '垂直精度，单位 m（Android 无法获取，返回 0）',
   `gps_time` bigint NULL DEFAULT NULL COMMENT 'GPS时间',
-  `group_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组ID，同一次运动，分组ID相同',
+  `group_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组ID，对应ur_sport_record.id',
   `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '坐标系，默认gcj02',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
@@ -315,6 +315,24 @@ CREATE TABLE `ur_trajectory`  (
   INDEX `traject_idx_user_id`(`creator`) USING BTREE,
   INDEX `traject_idx_group_id`(`group_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `ur_sport_record`  (
+  `id` bigint NOT NULL,
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `record_date` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '记录日期，yyyymmdd',
+  `start_time` datetime NOT NULL COMMENT '开始时间',
+  `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
+  `duration` bigint NULL DEFAULT NULL COMMENT '时长，单位秒',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `db_status` int NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint NOT NULL COMMENT '创建者',
+  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `sport_re_user_id`(`user_id`) USING BTREE,
+  INDEX `sport_re_user_date`(`record_date`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运动记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of ur_trajectory

@@ -2,8 +2,6 @@ package com.finn.urban.controller;
 
 import com.finn.common.entity.PageResult;
 import com.finn.common.entity.Result;
-import com.finn.common.enums.OperateTypeEnum;
-import com.finn.framework.aop.annotations.Log;
 import com.finn.urban.convert.TrajectoryConvert;
 import com.finn.urban.entity.TrajectoryEntity;
 import com.finn.urban.query.TrajectoryQuery;
@@ -55,7 +53,6 @@ public class TrajectoryController {
      * 批量保存
      */
     @PostMapping("/save")
-    @Log(module = "轨迹坐标", name = "保存", type = OperateTypeEnum.INSERT)
 //    @PreAuthorize("hasAuthority('urban:trajectory:save')")
     public Result<String> save(@RequestBody List<TrajectoryVO> list) {
         trajectoryService.saveBatch(list);
@@ -66,7 +63,6 @@ public class TrajectoryController {
      * 修改
      */
     @PostMapping("/update")
-    @Log(module = "轨迹坐标", name = "修改", type = OperateTypeEnum.UPDATE)
     @PreAuthorize("hasAuthority('urban:trajectory:update')")
     public Result<String> update(@RequestBody TrajectoryVO vo) {
         trajectoryService.update(vo);
@@ -77,7 +73,6 @@ public class TrajectoryController {
      * 删除
      */
     @PostMapping("/del")
-    @Log(module = "轨迹坐标", name = "删除", type = OperateTypeEnum.DELETE)
     @PreAuthorize("hasAuthority('urban:trajectory:delete')")
     public Result<String> delete(@RequestBody List<Long> idList) {
         trajectoryService.delete(idList);
