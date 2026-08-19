@@ -2,6 +2,7 @@ package com.finn.urban.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -46,9 +47,14 @@ public class SportRecordVO implements Serializable {
     private String endTime;
 
     /**
-     * 时长，单位秒
+     * 时长
      */
-    private Long duration;
+    private String duration;
+
+    /**
+     * 距离
+     */
+    private BigDecimal distance;
 
     /**
      * 备注
@@ -105,12 +111,20 @@ public class SportRecordVO implements Serializable {
         this.endTime = endTime;
     }
 
-    public Long getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public BigDecimal getDistance() {
+        return distance;
+    }
+
+    public void setDistance(BigDecimal distance) {
+        this.distance = distance;
     }
 
     public String getRemark() {

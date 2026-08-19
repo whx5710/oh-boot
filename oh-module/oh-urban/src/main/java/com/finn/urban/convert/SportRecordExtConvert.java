@@ -27,7 +27,9 @@ public class SportRecordExtConvert implements SportRecordConvert{
         vo.setName(entity.getName());
         vo.setUserId(entity.getUserId());
         vo.setRecordDate(entity.getRecordDate());
-        vo.setDuration(entity.getDuration());
+        if(entity.getDuration() != null){
+            vo.setDuration(DateUtils.formatDuration(entity.getDuration()));
+        }
         vo.setRemark(entity.getRemark());
         vo.setStartTime(DateUtils.format(entity.getStartTime(), "yyyy年MM月dd日 HH:mm"));
         if(entity.getEndTime() != null){

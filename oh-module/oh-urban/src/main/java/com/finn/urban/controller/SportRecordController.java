@@ -34,7 +34,7 @@ public class SportRecordController {
      * 分页查询
      */
     @GetMapping("/page")
-    @PreAuthorize("hasAuthority('urban:sport-record:page')")
+    // @PreAuthorize("hasAuthority('urban:sport-record:page')")
     public Result<PageResult<SportRecordVO>> page(@Valid SportRecordQuery query) {
         Page<SportRecordEntity> page = sportRecordService.page(query);
         return Result.ok(SportRecordConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
@@ -44,7 +44,7 @@ public class SportRecordController {
      * 根据ID查询详情
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('urban:sport-record:info')")
+    // @PreAuthorize("hasAuthority('urban:sport-record:info')")
     public Result<SportRecordVO> info(@PathVariable("id") Long id) {
         return Result.ok(sportRecordService.detail(id));
     }
