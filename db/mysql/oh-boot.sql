@@ -304,6 +304,7 @@ CREATE TABLE `ur_trajectory`  (
   `speed` decimal(6, 2) NULL DEFAULT NULL COMMENT '速度，单位 m/s',
   `vertical_accuracy` decimal(6, 2) NULL DEFAULT NULL COMMENT '垂直精度，单位 m（Android 无法获取，返回 0）',
   `gps_time` bigint NULL DEFAULT NULL COMMENT 'GPS时间',
+  `gps_time_show` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'GPS时间直观展示',
   `group_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组ID，对应ur_sport_record.id',
   `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '坐标系，默认gcj02',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',

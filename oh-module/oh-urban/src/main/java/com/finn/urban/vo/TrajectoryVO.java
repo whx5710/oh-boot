@@ -61,6 +61,11 @@ public class TrajectoryVO implements Serializable {
     private Long gpsTime;
 
     /**
+     * GPS时间直观展示
+     */
+    private String gpsTimeShow;
+
+    /**
      * 坐标系，默认gcj02
      */
     private String type;
@@ -153,6 +158,14 @@ public class TrajectoryVO implements Serializable {
 
     public void setGpsTime(Long gpsTime) {
         this.gpsTime = gpsTime;
+    }
+
+    public String getGpsTimeShow() {
+        return gpsTimeShow;
+    }
+
+    public void setGpsTimeShow(String gpsTimeShow) {
+        this.gpsTimeShow = gpsTimeShow;
     }
 
     public String getType() {

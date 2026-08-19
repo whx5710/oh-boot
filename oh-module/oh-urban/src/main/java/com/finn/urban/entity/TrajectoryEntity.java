@@ -59,6 +59,12 @@ public class TrajectoryEntity extends BaseEntity {
     private Long gpsTime;
 
     /**
+     * GPS时间直观展示
+     */
+    @TableField("gps_time_show")
+    private String gpsTimeShow;
+
+    /**
      * 坐标系，默认gcj02
      */
     @TableField("type")
@@ -145,6 +151,14 @@ public class TrajectoryEntity extends BaseEntity {
 
     public void setGpsTime(Long gpsTime) {
         this.gpsTime = gpsTime;
+    }
+
+    public String getGpsTimeShow() {
+        return gpsTimeShow;
+    }
+
+    public void setGpsTimeShow(String gpsTimeShow) {
+        this.gpsTimeShow = gpsTimeShow;
     }
 
     public String getType() {

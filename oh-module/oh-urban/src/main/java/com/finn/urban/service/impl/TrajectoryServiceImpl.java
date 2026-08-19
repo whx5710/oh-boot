@@ -1,6 +1,7 @@
 package com.finn.urban.service.impl;
 
 import com.finn.common.utils.AssertUtils;
+import com.finn.common.utils.DateUtils;
 import com.finn.common.utils.ExceptionUtils;
 import com.finn.common.utils.NamedDaemonThreadFactory;
 import com.finn.framework.cache.RedisCache;
@@ -20,13 +21,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.finn.common.constant.Constant.DESC;
+import static com.finn.common.utils.DateUtils.DATE_TIME_MIL_PATTERN;
 
 /**
  * 轨迹坐标表
@@ -92,8 +96,6 @@ public class TrajectoryServiceImpl implements TrajectoryService {
             entity.setDbStatus(1);
             entity.setCreator(userId);
             entity.setCreateTime(now);
-            entity.setUpdater(userId);
-            entity.setUpdateTime(now);
             redisCache.leftPush(TRAJECTORY_QUEUE_KEY, entity, QUEUE_EXPIRE_SECONDS);
         }
     }
@@ -143,7 +145,12 @@ public class TrajectoryServiceImpl implements TrajectoryService {
                     if (object == null) {
                         break;
                     }
-                    list.add((TrajectoryEntity) object);
+                    TrajectoryEntity t = (TrajectoryEntity) object;
+                    if(t.getGpsTime() != null){
+                        LocalDateTime gpsTime = Instant.ofEpochMilli(t.getGpsTime()).atZone(ZoneOffset.of("+8")).toLocalDateTime();
+                        t.setGpsTimeShow(DateUtils.format(gpsTime, DATE_TIME_MIL_PATTERN));
+                    }
+                    list.add(t);
                 }
                 if (!list.isEmpty()) {
                     trajectoryMapper.insertBatch(list);
