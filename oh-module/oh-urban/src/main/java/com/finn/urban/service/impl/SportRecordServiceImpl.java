@@ -67,6 +67,10 @@ public class SportRecordServiceImpl implements SportRecordService {
         return entity.getId();
     }
 
+    /**
+     * 开始运动
+     * @return
+     */
     @Override
     public Long start() {
         SportRecordEntity entity = new SportRecordEntity();
@@ -80,6 +84,24 @@ public class SportRecordServiceImpl implements SportRecordService {
         entity.setCreateTime(now);
         sportRecordMapper.insert(entity);
         return entity.getId();
+    }
+
+    /**
+     * 结束运动
+     * @param id
+     */
+    @Override
+    public void finish(Long id) {
+        AssertUtils.isNull(id, "ID");
+        SportRecordEntity entity = sportRecordMapper.findById(id, SportRecordEntity.class);
+        if(entity == null || entity.getId() == null){
+            throw new ServerException("未找到对应的运动记录");
+        }
+        if(entity.getEndTime() != null){
+            throw new ServerException("运动已结束，无需重复结束");
+        }
+        entity.setEndTime(LocalDateTime.now());
+        sportRecordMapper.updateById(entity);
     }
 
     @Override

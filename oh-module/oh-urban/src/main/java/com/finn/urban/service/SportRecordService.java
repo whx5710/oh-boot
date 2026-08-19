@@ -35,6 +35,12 @@ public interface SportRecordService {
      * @return
      */
     Long start();
+
+    /**
+     * 结束运动
+     * @param id
+     */
+    void finish(Long id);
     /**
      * 修改
      */

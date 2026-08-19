@@ -59,7 +59,6 @@ public class SportRecordController {
         return Result.ok(String.valueOf(id));
     }
 
-
     /**
      * 新增运动
      */
@@ -68,6 +67,16 @@ public class SportRecordController {
     public Result<String> start() {
         Long id = sportRecordService.start();
         return Result.ok(String.valueOf(id));
+    }
+
+    /**
+     * 结束运动
+     */
+    @PostMapping("/finish/{id}")
+    // @PreAuthorize("hasAuthority('urban:sport-record:finish')")
+    public Result<String> finish(@PathVariable("id") Long id) {
+        sportRecordService.finish(id);
+        return Result.ok("结束");
     }
 
     /**
