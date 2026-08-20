@@ -158,6 +158,6 @@ public class TrajectoryServiceImpl implements TrajectoryService {
             } catch (Exception e) {
                 log.error("保存轨迹坐标发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 10, 60, TimeUnit.SECONDS);
+        }, 10, 45, TimeUnit.SECONDS);
     }
 }

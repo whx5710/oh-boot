@@ -100,6 +100,22 @@ public class SportRecordServiceImpl implements SportRecordService {
         if(userId == null){
             throw new ServerException("请先登录");
         }
+        // 判断之前的运动是否已结束
+        QueryWrapper<SportRecordEntity> queryWrapper = QueryWrapper.of(SportRecordEntity.class);
+        queryWrapper.eq(SportRecordEntity::getDbStatus, 1).eq(SportRecordEntity::getUserId, userId)
+                .isNull(SportRecordEntity::getEndTime);
+        List<SportRecordEntity> list = sportRecordMapper.listByWrapper(queryWrapper);
+        if(list != null && !list.isEmpty()){
+            LocalDateTime now = LocalDateTime.now();
+            for(SportRecordEntity item : list){
+                item.setEndTime(now);
+                Duration duration = Duration.between(item.getStartTime(), now);
+                item.setDuration(duration.getSeconds());
+                item.setRemark("启动了新的运动，结束之前的");
+                sportRecordMapper.updateById(item);
+            }
+        }
+
         SportRecordEntity entity = new SportRecordEntity();
         LocalDateTime now = LocalDateTime.now();
         entity.setStartTime(now);
