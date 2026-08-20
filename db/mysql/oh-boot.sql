@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 18/08/2026 15:27:43
+ Date: 20/08/2026 17:32:26
 */
 
 SET NAMES utf8mb4;
@@ -284,40 +284,16 @@ CREATE TABLE `ur_poi`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '兴趣点' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '兴趣点' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ur_poi
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ur_trajectory
+-- Table structure for ur_sport_record
 -- ----------------------------
-DROP TABLE IF EXISTS `ur_trajectory`;
-CREATE TABLE `ur_trajectory`  (
-    `id` bigint NOT NULL COMMENT 'id',
-    `accuracy` double NULL DEFAULT NULL COMMENT '位置的精确度，反应与真实位置之间的接近程度可以理解成10即与真实位置相差10m，越小越精确',
-    `altitude` double NULL DEFAULT NULL COMMENT '高度，单位 m',
-    `horizontal_accuracy` double NULL DEFAULT NULL COMMENT '水平精度，单位 m',
-    `longitude` decimal(12, 8) NULL DEFAULT NULL COMMENT '经度，范围为 -180~180，负数表示西经。使用 gcj02 国测局坐标系',
-    `latitude` decimal(12, 8) NULL DEFAULT NULL COMMENT '纬度，范围为 -90~90，负数表示南纬。使用 gcj02 国测局坐标系',
-    `speed` double NULL DEFAULT NULL COMMENT '速度，单位 m/s',
-    `vertical_accuracy` double NULL DEFAULT NULL COMMENT '垂直精度，单位 m（Android 无法获取，返回 0）',
-    `gps_time` bigint NULL DEFAULT NULL COMMENT 'GPS时间',
-    `gps_time_show` datetime(6) NULL DEFAULT NULL COMMENT 'GPS时间直观展示',
-    `group_id` bigint NOT NULL COMMENT '分组ID，对应ur_sport_record.id',
-    `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '坐标系，默认gcj02',
-    `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-    `db_status` smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-    `creator` bigint NOT NULL COMMENT '创建者',
-    `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
-    `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-    `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `traject_idx_user_id`(`creator`) USING BTREE,
-    INDEX `traject_idx_group_id`(`group_id`) USING BTREE
- ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
+DROP TABLE IF EXISTS `ur_sport_record`;
 CREATE TABLE `ur_sport_record`  (
   `id` bigint NOT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '轨迹名称',
@@ -338,8 +314,42 @@ CREATE TABLE `ur_sport_record`  (
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `sport_re_user_id`(`user_id`) USING BTREE,
-  INDEX `sport_re_user_date`(`record_date`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运动记录表' ROW_FORMAT = Dynamic;
+  INDEX `sport_re_user_date`(`record_date`) USING BTREE,
+  INDEX `sport_re_user_start_time`(`start_time`) USING BTREE,
+  INDEX `sport_re_user_end_time`(`end_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运动记录表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of ur_sport_record
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ur_trajectory
+-- ----------------------------
+DROP TABLE IF EXISTS `ur_trajectory`;
+CREATE TABLE `ur_trajectory`  (
+  `id` bigint NOT NULL COMMENT 'id',
+  `accuracy` double NULL DEFAULT NULL COMMENT '位置的精确度，反应与真实位置之间的接近程度可以理解成10即与真实位置相差10m，越小越精确',
+  `altitude` double NULL DEFAULT NULL COMMENT '高度，单位 m',
+  `horizontal_accuracy` double NULL DEFAULT NULL COMMENT '水平精度，单位 m',
+  `longitude` decimal(12, 8) NULL DEFAULT NULL COMMENT '经度，范围为 -180~180，负数表示西经。使用 gcj02 国测局坐标系',
+  `latitude` decimal(12, 8) NULL DEFAULT NULL COMMENT '纬度，范围为 -90~90，负数表示南纬。使用 gcj02 国测局坐标系',
+  `speed` double NULL DEFAULT NULL COMMENT '速度，单位 m/s',
+  `vertical_accuracy` double NULL DEFAULT NULL COMMENT '垂直精度，单位 m（Android 无法获取，返回 0）',
+  `gps_time` bigint NULL DEFAULT NULL COMMENT 'GPS时间',
+  `gps_time_show` datetime(6) NULL DEFAULT NULL COMMENT 'GPS时间直观展示',
+  `group_id` bigint NOT NULL COMMENT '分组ID，对应ur_sport_record.id',
+  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '坐标系，默认gcj02',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `db_status` smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+  `creator` bigint NOT NULL COMMENT '创建者',
+  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+  `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `traject_idx_user_id`(`creator`) USING BTREE,
+  INDEX `traject_idx_group_id`(`group_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ur_trajectory
