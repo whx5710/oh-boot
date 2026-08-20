@@ -2,7 +2,6 @@ package com.finn.urban.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,14 +47,29 @@ public class SportRecordVO implements Serializable {
     private LocalDateTime endTime;
 
     /**
+     * 起始地址
+     */
+    private String startAddress;
+
+    /**
+     * 终止地址
+     */
+    private String endAddress;
+
+    /**
      * 时长
      */
     private Long duration;
 
     /**
-     * 距离
+     * 距离 里程，公里
      */
-    private BigDecimal distance;
+    private Double distance;
+
+    /**
+     * 平均速度，米/秒
+     */
+    private Double avgSpeed;
 
     /**
      * 备注
@@ -120,11 +134,11 @@ public class SportRecordVO implements Serializable {
         this.duration = duration;
     }
 
-    public BigDecimal getDistance() {
+    public Double getDistance() {
         return distance;
     }
 
-    public void setDistance(BigDecimal distance) {
+    public void setDistance(Double distance) {
         this.distance = distance;
     }
 
@@ -134,6 +148,30 @@ public class SportRecordVO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
+
+    public Double getAvgSpeed() {
+        return avgSpeed;
+    }
+
+    public void setAvgSpeed(Double avgSpeed) {
+        this.avgSpeed = avgSpeed;
     }
 
     public List<PointVO> getPoints() {

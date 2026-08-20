@@ -23,17 +23,17 @@ public class TrajectoryVO implements Serializable {
     /**
      * 位置的精确度，反应与真实位置之间的接近程度，数值越小越精确
      */
-    private BigDecimal accuracy;
+    private Double accuracy;
 
     /**
      * 高度，单位 m
      */
-    private BigDecimal altitude;
+    private Double altitude;
 
     /**
      * 水平精度，单位 m
      */
-    private BigDecimal horizontalAccuracy;
+    private Double horizontalAccuracy;
 
     /**
      * 经度，范围为 -180~180，负数表示西经，使用 gcj02 国测局坐标系
@@ -48,12 +48,12 @@ public class TrajectoryVO implements Serializable {
     /**
      * 速度，单位 m/s
      */
-    private BigDecimal speed;
+    private Double speed;
 
     /**
      * 垂直精度，单位 m
      */
-    private BigDecimal verticalAccuracy;
+    private Double verticalAccuracy;
 
     /**
      * gps定位时间
@@ -88,27 +88,27 @@ public class TrajectoryVO implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getAccuracy() {
+    public Double getAccuracy() {
         return accuracy;
     }
 
-    public void setAccuracy(BigDecimal accuracy) {
+    public void setAccuracy(Double accuracy) {
         this.accuracy = accuracy;
     }
 
-    public BigDecimal getAltitude() {
+    public Double getAltitude() {
         return altitude;
     }
 
-    public void setAltitude(BigDecimal altitude) {
+    public void setAltitude(Double altitude) {
         this.altitude = altitude;
     }
 
-    public BigDecimal getHorizontalAccuracy() {
+    public Double getHorizontalAccuracy() {
         return horizontalAccuracy;
     }
 
-    public void setHorizontalAccuracy(BigDecimal horizontalAccuracy) {
+    public void setHorizontalAccuracy(Double horizontalAccuracy) {
         this.horizontalAccuracy = horizontalAccuracy;
     }
 
@@ -128,19 +128,19 @@ public class TrajectoryVO implements Serializable {
         this.latitude = latitude;
     }
 
-    public BigDecimal getSpeed() {
+    public Double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(BigDecimal speed) {
+    public void setSpeed(Double speed) {
         this.speed = speed;
     }
 
-    public BigDecimal getVerticalAccuracy() {
+    public Double getVerticalAccuracy() {
         return verticalAccuracy;
     }
 
-    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+    public void setVerticalAccuracy(Double verticalAccuracy) {
         this.verticalAccuracy = verticalAccuracy;
     }
 

@@ -42,9 +42,32 @@ public class SportRecordEntity extends BaseEntity {
     private LocalDateTime endTime;
 
     /**
+     * 起始地址
+     */
+    @TableField("start_address")
+    private String startAddress;
+
+    /**
+     * 终止地址
+     */
+    @TableField("end_address")
+    private String endAddress;
+
+    /**
      * 时长，单位秒
      */
     private Long duration;
+
+    /**
+     * 里程，公里
+     */
+    private Double distance;
+
+    /**
+     * 平均速度，米/秒
+     */
+    @TableField("avg_speed")
+    private Double avgSpeed;
 
     /**
      * 备注
@@ -105,5 +128,37 @@ public class SportRecordEntity extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public Double getAvgSpeed() {
+        return avgSpeed;
+    }
+
+    public void setAvgSpeed(Double avgSpeed) {
+        this.avgSpeed = avgSpeed;
     }
 }

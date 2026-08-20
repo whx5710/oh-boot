@@ -2,6 +2,7 @@ package com.finn.urban.service.impl;
 
 import com.finn.common.utils.AssertUtils;
 import com.finn.common.utils.DateUtils;
+import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.exception.ServerException;
@@ -46,7 +47,7 @@ public class SportRecordServiceImpl implements SportRecordService {
     @Override
     public Page<SportRecordEntity> page(SportRecordQuery query) {
         QueryWrapper<SportRecordEntity> queryWrapper = getQueryWrapper(query);
-        queryWrapper.page(query.getPageNum(), query.getPageSize());
+        queryWrapper.page(query.getPageNum(), query.getPageSize()).orderBy("create_time desc");
         return sportRecordMapper.listByWrapper(queryWrapper);
     }
 
@@ -94,14 +95,18 @@ public class SportRecordServiceImpl implements SportRecordService {
      * @return
      */
     @Override
-    public Long start() {
-        SportRecordEntity entity = new SportRecordEntity();
+    public Long start(SportRecordVO vo) {
         Long userId = SecurityUser.getUserId();
+        if(userId == null){
+            throw new ServerException("请先登录");
+        }
+        SportRecordEntity entity = new SportRecordEntity();
         LocalDateTime now = LocalDateTime.now();
         entity.setStartTime(now);
         entity.setRecordDate(DateUtils.format(now, "yyyyMMdd"));
         entity.setName(DateUtils.format(now, "yyyyMMddHHmmss"));
         entity.setUserId(userId);
+        entity.setStartAddress(vo.getStartAddress());
         entity.setDbStatus(1);
         entity.setCreator(userId);
         entity.setCreateTime(now);
@@ -114,7 +119,7 @@ public class SportRecordServiceImpl implements SportRecordService {
      * @param id
      */
     @Override
-    public void finish(Long id) {
+    public String finish(Long id, SportRecordVO vo) {
         AssertUtils.isNull(id, "ID");
         SportRecordEntity entity = sportRecordMapper.findById(id, SportRecordEntity.class);
         if(entity == null || entity.getId() == null){
@@ -123,11 +128,26 @@ public class SportRecordServiceImpl implements SportRecordService {
         if(entity.getEndTime() != null){
             throw new ServerException("运动已结束，无需重复结束");
         }
+        // 查询轨迹坐标是否有效，小于20条定位点，不记录此次运动
+        CountWrapper<TrajectoryEntity> countWrapper = CountWrapper.of(TrajectoryEntity.class);
+        countWrapper.eq(TrajectoryEntity::getCreator, entity.getUserId()).eq(TrajectoryEntity::getGroupId, entity.getId())
+                .eq(TrajectoryEntity::getDbStatus, 1);
+        long num = trajectoryMapper.count(countWrapper);
+        String msg = "结束成功";
+        if(num < 20){
+            msg = "轨迹太短，不保存";
+            entity.setDbStatus(0);
+        }
         LocalDateTime now = LocalDateTime.now();
         entity.setEndTime(now);
         Duration duration = Duration.between(entity.getStartTime(), now);
         entity.setDuration(duration.getSeconds());
+
+        entity.setEndAddress(vo.getEndAddress());
+        entity.setDistance(vo.getDistance());
+
         sportRecordMapper.updateById(entity);
+        return msg;
     }
 
     @Override

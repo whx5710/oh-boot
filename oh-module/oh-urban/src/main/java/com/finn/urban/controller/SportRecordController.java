@@ -64,8 +64,8 @@ public class SportRecordController {
      */
     @PostMapping("/start")
     // @PreAuthorize("hasAuthority('urban:sport-record:start')")
-    public Result<String> start() {
-        Long id = sportRecordService.start();
+    public Result<String> start(@RequestBody SportRecordVO vo) {
+        Long id = sportRecordService.start(vo);
         return Result.ok(String.valueOf(id));
     }
 
@@ -74,9 +74,8 @@ public class SportRecordController {
      */
     @PostMapping("/finish/{id}")
     // @PreAuthorize("hasAuthority('urban:sport-record:finish')")
-    public Result<String> finish(@PathVariable("id") Long id) {
-        sportRecordService.finish(id);
-        return Result.ok("结束");
+    public Result<String> finish(@PathVariable("id") Long id, @RequestBody SportRecordVO vo) {
+        return Result.ok(sportRecordService.finish(id, vo));
     }
 
     /**

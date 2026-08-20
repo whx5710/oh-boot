@@ -4,6 +4,7 @@ import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -34,13 +35,13 @@ public interface SportRecordService {
      * 开始运动
      * @return
      */
-    Long start();
+    Long start(SportRecordVO vo);
 
     /**
      * 结束运动
      * @param id
      */
-    void finish(Long id);
+    String finish(Long id, SportRecordVO vo);
     /**
      * 修改
      */
