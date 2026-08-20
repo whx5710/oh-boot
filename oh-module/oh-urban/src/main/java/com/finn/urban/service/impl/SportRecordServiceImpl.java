@@ -159,6 +159,7 @@ public class SportRecordServiceImpl implements SportRecordService {
         if(num < 20){
             msg = "轨迹太短，不保存";
             entity.setDbStatus(0);
+            entity.setRemark(msg);
         }
         LocalDateTime now = LocalDateTime.now();
         entity.setEndTime(now);
