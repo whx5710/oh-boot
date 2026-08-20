@@ -1,7 +1,6 @@
 package com.finn.urban.service.impl;
 
 import com.finn.common.utils.AssertUtils;
-import com.finn.common.utils.DateUtils;
 import com.finn.common.utils.ExceptionUtils;
 import com.finn.common.utils.NamedDaemonThreadFactory;
 import com.finn.framework.cache.RedisCache;
@@ -30,7 +29,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.finn.common.constant.Constant.DESC;
-import static com.finn.common.utils.DateUtils.DATE_TIME_MIL_PATTERN;
 
 /**
  * 轨迹坐标表
@@ -148,7 +146,8 @@ public class TrajectoryServiceImpl implements TrajectoryService {
                     TrajectoryEntity t = (TrajectoryEntity) object;
                     if(t.getGpsTime() != null){
                         LocalDateTime gpsTime = Instant.ofEpochMilli(t.getGpsTime()).atZone(ZoneOffset.of("+8")).toLocalDateTime();
-                        t.setGpsTimeShow(DateUtils.format(gpsTime, DATE_TIME_MIL_PATTERN));
+                        // t.setGpsTimeShow(DateUtils.format(gpsTime, DATE_TIME_MIL_PATTERN));
+                        t.setGpsTimeShow(gpsTime);
                     }
                     list.add(t);
                 }
@@ -158,6 +157,6 @@ public class TrajectoryServiceImpl implements TrajectoryService {
             } catch (Exception e) {
                 log.error("保存轨迹坐标发生异常：{}", ExceptionUtils.getExceptionMessage(e));
             }
-        }, 10, 45, TimeUnit.SECONDS);
+        }, 10, 40, TimeUnit.SECONDS);
     }
 }

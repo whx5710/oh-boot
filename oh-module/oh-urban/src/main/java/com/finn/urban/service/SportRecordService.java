@@ -4,7 +4,6 @@ import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -42,6 +41,13 @@ public interface SportRecordService {
      * @param id
      */
     String finish(Long id, SportRecordVO vo);
+
+    /**
+     * 是否正在运动期间
+     * @param id
+     * @return
+     */
+    Boolean isRunning(Long id);
     /**
      * 修改
      */

@@ -3,6 +3,7 @@ package com.finn.urban.vo;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 轨迹坐标表
@@ -63,7 +64,7 @@ public class TrajectoryVO implements Serializable {
     /**
      * GPS时间直观展示
      */
-    private String gpsTimeShow;
+    private LocalDateTime gpsTimeShow;
 
     /**
      * 坐标系，默认gcj02
@@ -160,11 +161,11 @@ public class TrajectoryVO implements Serializable {
         this.gpsTime = gpsTime;
     }
 
-    public String getGpsTimeShow() {
+    public LocalDateTime getGpsTimeShow() {
         return gpsTimeShow;
     }
 
-    public void setGpsTimeShow(String gpsTimeShow) {
+    public void setGpsTimeShow(LocalDateTime gpsTimeShow) {
         this.gpsTimeShow = gpsTimeShow;
     }
 

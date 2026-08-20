@@ -79,6 +79,15 @@ public class SportRecordController {
     }
 
     /**
+     * 是否正在运动期间
+     */
+    @GetMapping("/isRunning/{id}")
+    // @PreAuthorize("hasAuthority('urban:sport-record:isRun')")
+    public Result<Boolean> isRunning(@PathVariable("id") Long id) {
+        return Result.ok(sportRecordService.isRunning(id));
+    }
+
+    /**
      * 修改
      */
     @PostMapping("/update")

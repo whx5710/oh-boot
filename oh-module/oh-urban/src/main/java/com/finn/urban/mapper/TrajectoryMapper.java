@@ -13,4 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TrajectoryMapper extends BaseMapper<TrajectoryEntity> {
 
+    long cleanData();
 }

@@ -2,6 +2,7 @@ package com.finn.urban.service.impl;
 
 import com.finn.common.utils.AssertUtils;
 import com.finn.common.utils.DateUtils;
+import com.finn.framework.cache.RedisCache;
 import com.finn.framework.datasource.wrapper.CountWrapper;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
@@ -17,6 +18,7 @@ import com.finn.urban.service.SportRecordService;
 import com.finn.urban.vo.PointVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -39,9 +41,13 @@ public class SportRecordServiceImpl implements SportRecordService {
 
     private final TrajectoryMapper trajectoryMapper;
 
-    public SportRecordServiceImpl(SportRecordMapper sportRecordMapper, TrajectoryMapper trajectoryMapper) {
+    private final RedisCache redisCache;
+
+    public SportRecordServiceImpl(SportRecordMapper sportRecordMapper, TrajectoryMapper trajectoryMapper,
+                                  RedisCache redisCache) {
         this.sportRecordMapper = sportRecordMapper;
         this.trajectoryMapper = trajectoryMapper;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -166,6 +172,22 @@ public class SportRecordServiceImpl implements SportRecordService {
         return msg;
     }
 
+    /**
+     * 是否正在运动期间
+     * @param id
+     * @return
+     */
+    @Override
+    public Boolean isRunning(Long id) {
+        AssertUtils.isNull(id, "groupId");
+        SportRecordEntity entity = sportRecordMapper.findById(id, SportRecordEntity.class);
+        if(entity == null || entity.getId() == null){
+            return false;
+        }else{
+            return entity.getEndTime() == null;
+        }
+    }
+
     @Override
     public void update(SportRecordVO vo) {
         AssertUtils.isNull(vo.getId(), "ID");
@@ -197,5 +219,58 @@ public class SportRecordServiceImpl implements SportRecordService {
             queryWrapper.like(SportRecordEntity::getRemark, query.getKeyWord());
         }
         return queryWrapper;
+    }
+
+    /**
+     * 定时清理数据
+     * 1、清理轨迹不在运动时间内的数据
+     * 2、结束掉未结束且无轨迹上传的运动
+     */
+    @Scheduled(fixedDelayString = "#{${urban.trajectory.check-interval:3600} * 1000}")
+    public void cleanData() {
+        String key = "urban:trajectory:clean";
+        if(!redisCache.hasKey(key)){
+            redisCache.set(key, "clock", 180);
+            // 清理轨迹
+            trajectoryMapper.cleanData();
+
+            // 结束掉最近无轨迹的运动（12小时前启动的,近4小时无轨迹上传）
+            LocalDateTime time = LocalDateTime.now();
+            time = time.minusHours(12);
+            // 4小时前
+            LocalDateTime time4 = LocalDateTime.now();
+            time4 = time4.minusHours(4);
+
+            QueryWrapper<SportRecordEntity> queryWrapper = QueryWrapper.of(SportRecordEntity.class);
+            queryWrapper.eq(SportRecordEntity::getDbStatus, 1)
+                    .isNull(SportRecordEntity::getEndTime)
+                    .le(SportRecordEntity::getStartTime, time);
+            List<SportRecordEntity> list = sportRecordMapper.listByWrapper(queryWrapper);
+            if(list != null && !list.isEmpty()){
+                for(SportRecordEntity item: list){
+                    QueryWrapper<TrajectoryEntity> trajectoryEntityQueryWrapper = QueryWrapper.of(TrajectoryEntity.class);
+                    trajectoryEntityQueryWrapper.eq(TrajectoryEntity::getDbStatus, 1)
+                            .eq(TrajectoryEntity::getGroupId, item.getId())
+                            .ge(TrajectoryEntity::getGpsTimeShow, time4);
+                    long l = trajectoryMapper.count(trajectoryEntityQueryWrapper);
+                    // 近4小时都无轨迹，查最后的轨迹时间
+                    if(l == 0){
+                        QueryWrapper<TrajectoryEntity> entityQueryWrapper = QueryWrapper.of(TrajectoryEntity.class);
+                        entityQueryWrapper.eq(TrajectoryEntity::getDbStatus, 1)
+                                .eq(TrajectoryEntity::getGroupId, item.getId()).orderBy(TrajectoryEntity::getGpsTimeShow, DESC)
+                                .page(1, 5);
+                        List<TrajectoryEntity> trajectoryEntityList = trajectoryMapper.listByWrapper(entityQueryWrapper);
+                        item.setRemark("无轨迹数据，自动结束");
+                        if(trajectoryEntityList != null && !trajectoryEntityList.isEmpty()){
+                            item.setEndTime(trajectoryEntityList.getFirst().getGpsTimeShow());
+                        }else{
+                            item.setEndTime(LocalDateTime.now());
+                        }
+                        sportRecordMapper.updateById(item);
+                    }
+                }
+            }
+            redisCache.delete(key);
+        }
     }
 }

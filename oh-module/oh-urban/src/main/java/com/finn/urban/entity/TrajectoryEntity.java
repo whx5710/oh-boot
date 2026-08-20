@@ -5,6 +5,7 @@ import com.finn.framework.aop.annotations.TableName;
 import com.finn.framework.entity.BaseEntity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 轨迹坐标表
@@ -62,7 +63,7 @@ public class TrajectoryEntity extends BaseEntity {
      * GPS时间直观展示
      */
     @TableField("gps_time_show")
-    private String gpsTimeShow;
+    private LocalDateTime gpsTimeShow;
 
     /**
      * 坐标系，默认gcj02
@@ -153,11 +154,11 @@ public class TrajectoryEntity extends BaseEntity {
         this.gpsTime = gpsTime;
     }
 
-    public String getGpsTimeShow() {
+    public LocalDateTime getGpsTimeShow() {
         return gpsTimeShow;
     }
 
-    public void setGpsTimeShow(String gpsTimeShow) {
+    public void setGpsTimeShow(LocalDateTime gpsTimeShow) {
         this.gpsTimeShow = gpsTimeShow;
     }
 
