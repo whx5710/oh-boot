@@ -1,18 +1,18 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : 192.168.23.129
+ Source Server         : postgresql
  Source Server Type    : PostgreSQL
- Source Server Version : 180006 (180006)
- Source Host           : 192.168.23.129:5432
+ Source Server Version : 180004 (180004)
+ Source Host           : localhost:5432
  Source Catalog        : stepping_stone
  Source Schema         : oh_boot
 
  Target Server Type    : PostgreSQL
- Target Server Version : 180006 (180006)
+ Target Server Version : 180004 (180004)
  File Encoding         : 65001
 
- Date: 17/08/2026 21:22:56
+ Date: 22/08/2026 00:23:54
 */
 
 
@@ -618,6 +618,93 @@ COMMENT ON TABLE "oh_boot"."oh_work_order" IS '工单表';
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for ur_sport_checkin
+-- ----------------------------
+DROP TABLE IF EXISTS "oh_boot"."ur_sport_checkin";
+CREATE TABLE "oh_boot"."ur_sport_checkin" (
+  "id" int8 NOT NULL,
+  "group_id" int8 NOT NULL,
+  "client_id" varchar(64) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "latitude" numeric(12,8) NOT NULL,
+  "longitude" numeric(12,8) NOT NULL,
+  "address" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "photos" text COLLATE "pg_catalog"."default",
+  "description" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "created_at" int8,
+  "db_status" int2 NOT NULL DEFAULT (1)::smallint,
+  "creator" int8,
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "updater" int8,
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
+)
+;
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."id" IS 'id';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."group_id" IS '运动记录ID，关联 ur_sport_record.id（与 ur_trajectory.group_id 一致）';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."client_id" IS '前端生成的打卡点标识，结束时去重用';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."latitude" IS '纬度，gcj02 坐标系';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."longitude" IS '经度，gcj02 坐标系';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."address" IS '打卡地址';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."photos" IS '打卡照片，JSON 数组字符串，存文件key';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."description" IS '打卡描述';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."created_at" IS '打卡时间戳（毫秒），前端传入';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."creator" IS '创建者';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."updater" IS '更新者';
+COMMENT ON COLUMN "oh_boot"."ur_sport_checkin"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_sport_checkin" IS '运动打卡点表';
+
+-- ----------------------------
+-- Records of ur_sport_checkin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ur_sport_record
+-- ----------------------------
+DROP TABLE IF EXISTS "oh_boot"."ur_sport_record";
+CREATE TABLE "oh_boot"."ur_sport_record" (
+  "id" int8 NOT NULL,
+  "name" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "user_id" int8 NOT NULL,
+  "record_date" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
+  "start_time" timestamp(6) NOT NULL,
+  "end_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "start_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "end_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "duration" int8,
+  "distance" numeric(8,2) DEFAULT NULL::numeric,
+  "avg_speed" numeric(8,2) DEFAULT NULL::numeric,
+  "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "db_status" int4 DEFAULT (1)::smallint,
+  "creator" int8 NOT NULL,
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "updater" int8,
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
+)
+;
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."name" IS '轨迹名称';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."user_id" IS '用户ID';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."record_date" IS '记录日期，yyyymmdd';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."start_time" IS '开始时间';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."end_time" IS '结束时间';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."start_address" IS '起始地址';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."end_address" IS '终止地址';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."duration" IS '时长，单位秒';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."distance" IS '里程，公里';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."avg_speed" IS '平均速度，米/秒';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."remark" IS '备注';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."creator" IS '创建者';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."updater" IS '更新者';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_sport_record" IS '运动记录表';
+
+-- ----------------------------
+-- Records of ur_sport_record
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for ur_trajectory
 -- ----------------------------
 DROP TABLE IF EXISTS "oh_boot"."ur_trajectory";
@@ -656,8 +743,8 @@ COMMENT ON COLUMN "oh_boot"."ur_trajectory"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."update_time" IS '更新时间';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."gps_time" IS 'GPS时间';
-COMMENT ON COLUMN "oh_boot"."ur_trajectory"."type" IS '坐标系，默认gcj02';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."group_id" IS '分组ID，同一次运动，分组ID相同';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."type" IS '坐标系，默认gcj02';
 COMMENT ON TABLE "oh_boot"."ur_trajectory" IS '轨迹坐标';
 
 -- ----------------------------
@@ -787,6 +874,43 @@ ALTER TABLE "oh_boot"."oh_work_order" ADD CONSTRAINT "oh_work_order_order_code_k
 -- Primary Key structure for table oh_work_order
 -- ----------------------------
 ALTER TABLE "oh_boot"."oh_work_order" ADD CONSTRAINT "oh_work_order_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table ur_sport_checkin
+-- ----------------------------
+CREATE INDEX "idx_checkin_client_id" ON "oh_boot"."ur_sport_checkin" USING btree (
+  "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "client_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "idx_checkin_group_id" ON "oh_boot"."ur_sport_checkin" USING btree (
+  "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table ur_sport_checkin
+-- ----------------------------
+ALTER TABLE "oh_boot"."ur_sport_checkin" ADD CONSTRAINT "ur_sport_checkin_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table ur_sport_record
+-- ----------------------------
+CREATE INDEX "sport_re_user_date" ON "oh_boot"."ur_sport_record" USING btree (
+  "record_date" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "sport_re_user_end_time" ON "oh_boot"."ur_sport_record" USING btree (
+  "end_time" "pg_catalog"."timestamp_ops" ASC NULLS LAST
+);
+CREATE INDEX "sport_re_user_id" ON "oh_boot"."ur_sport_record" USING btree (
+  "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "sport_re_user_start_time" ON "oh_boot"."ur_sport_record" USING btree (
+  "start_time" "pg_catalog"."timestamp_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table ur_sport_record
+-- ----------------------------
+ALTER TABLE "oh_boot"."ur_sport_record" ADD CONSTRAINT "ur_sport_record_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Indexes structure for table ur_trajectory

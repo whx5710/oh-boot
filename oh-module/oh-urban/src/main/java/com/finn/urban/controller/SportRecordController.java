@@ -2,10 +2,13 @@ package com.finn.urban.controller;
 
 import com.finn.common.entity.PageResult;
 import com.finn.common.entity.Result;
+import com.finn.common.enums.OperateTypeEnum;
+import com.finn.framework.aop.annotations.Log;
 import com.finn.urban.convert.SportRecordConvert;
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.service.SportRecordService;
+import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 import jakarta.validation.Valid;
@@ -15,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 运动记录表
+ * 运动记录表（微信小程序端）
+ * 提供运动开始/结束、拍照打卡保存、历史分页、详情(含轨迹与打卡点)接口
  *
  * @author 王小费 whx5710@qq.com
  * @since 2026-08-19
@@ -31,17 +35,19 @@ public class SportRecordController {
     }
 
     /**
-     * 分页查询
+     * 分页查询（列表项含打卡数量，不含坐标点）
      */
     @GetMapping("/page")
     // @PreAuthorize("hasAuthority('urban:sport-record:page')")
     public Result<PageResult<SportRecordVO>> page(@Valid SportRecordQuery query) {
         Page<SportRecordEntity> page = sportRecordService.page(query);
-        return Result.ok(SportRecordConvert.INSTANCE.convertList(page.getResult()), page.getTotal());
+        List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
+        sportRecordService.fillCheckinCount(vos);
+        return Result.ok(vos, page.getTotal());
     }
 
     /**
-     * 根据ID查询详情
+     * 根据ID查询详情（含轨迹坐标点 points 与打卡点 checkins）
      */
     @GetMapping("/{id}")
     // @PreAuthorize("hasAuthority('urban:sport-record:info')")
@@ -60,9 +66,10 @@ public class SportRecordController {
     }
 
     /**
-     * 新增运动
+     * 开始运动：创建运动记录，返回运动记录ID
      */
     @PostMapping("/start")
+    @Log(module = "运动", name = "开始", type = OperateTypeEnum.INSERT)
     // @PreAuthorize("hasAuthority('urban:sport-record:start')")
     public Result<String> start(@RequestBody SportRecordVO vo) {
         Long id = sportRecordService.start(vo);
@@ -70,9 +77,10 @@ public class SportRecordController {
     }
 
     /**
-     * 结束运动
+     * 结束运动：更新记录状态并按 clientId 去重落库打卡点
      */
     @PostMapping("/finish/{id}")
+    @Log(module = "运动", name = "结束", type = OperateTypeEnum.UPDATE)
     // @PreAuthorize("hasAuthority('urban:sport-record:finish')")
     public Result<String> finish(@PathVariable("id") Long id, @RequestBody SportRecordVO vo) {
         return Result.ok(sportRecordService.finish(id, vo));
@@ -85,6 +93,16 @@ public class SportRecordController {
     // @PreAuthorize("hasAuthority('urban:sport-record:isRun')")
     public Result<Boolean> isRunning(@PathVariable("id") Long id) {
         return Result.ok(sportRecordService.isRunning(id));
+    }
+
+    /**
+     * 保存运动打卡点（运动中途实时新增）
+     * photos 字段为已上传到文件服务的 key 列表
+     */
+    @PostMapping("/checkin")
+    @Log(module = "运动打卡", name = "保存", type = OperateTypeEnum.INSERT)
+    public Result<String> checkin(@RequestBody SportCheckinVO vo) {
+        return Result.ok(String.valueOf(sportRecordService.saveCheckin(vo)));
     }
 
     /**

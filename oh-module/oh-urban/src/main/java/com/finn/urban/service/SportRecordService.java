@@ -2,6 +2,7 @@ package com.finn.urban.service;
 
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
+import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 
@@ -21,7 +22,7 @@ public interface SportRecordService {
     Page<SportRecordEntity> page(SportRecordQuery query);
 
     /**
-     * 根据ID查询详情
+     * 根据ID查询详情（含轨迹点 + 打卡点）
      */
     SportRecordVO detail(Long id);
 
@@ -31,23 +32,20 @@ public interface SportRecordService {
     Long save(SportRecordVO vo);
 
     /**
-     * 开始运动
-     * @return
+     * 开始运动，返回运动记录ID
      */
     Long start(SportRecordVO vo);
 
     /**
-     * 结束运动
-     * @param id
+     * 结束运动：更新记录状态，按 clientId 去重落库打卡点
      */
     String finish(Long id, SportRecordVO vo);
 
     /**
      * 是否正在运动期间
-     * @param id
-     * @return
      */
     Boolean isRunning(Long id);
+
     /**
      * 修改
      */
@@ -57,4 +55,14 @@ public interface SportRecordService {
      * 删除
      */
     void delete(List<Long> idList);
+
+    /**
+     * 保存运动打卡点（运动中途实时新增），返回后端生成的 id
+     */
+    Long saveCheckin(SportCheckinVO vo);
+
+    /**
+     * 填充打卡点数量（列表页用）
+     */
+    void fillCheckinCount(List<SportRecordVO> vos);
 }

@@ -351,6 +351,32 @@ CREATE TABLE `ur_trajectory`  (
   INDEX `traject_idx_group_id`(`group_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
+
+-- ----------------------------
+-- 运动打卡点表（拍照打卡）
+-- photos 存 JSON 数组字符串，如 ["/file/preview/xxx","/file/preview/yyy"]
+-- client_id 为前端生成的打卡点标识，用于结束时去重
+-- ----------------------------
+DROP TABLE IF EXISTS `ur_sport_checkin`;
+CREATE TABLE `ur_sport_checkin`  (
+                                     `id` bigint NOT NULL COMMENT 'id',
+                                     `group_id` bigint NOT NULL COMMENT '运动记录ID，关联 ur_sport_record.id（与 ur_trajectory.group_id 一致）',
+                                     `client_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '前端生成的打卡点标识，结束时去重用',
+                                     `latitude` decimal(12, 8) NOT NULL COMMENT '纬度，gcj02 坐标系',
+                                     `longitude` decimal(12, 8) NOT NULL COMMENT '经度，gcj02 坐标系',
+                                     `address` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '打卡地址',
+                                     `photos` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '打卡照片，JSON 数组字符串，存文件key',
+                                     `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '打卡描述',
+                                     `created_at` bigint NULL DEFAULT NULL COMMENT '打卡时间戳（毫秒），前端传入',
+                                     `db_status` smallint NOT NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
+                                     `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
+                                     `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                     `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
+                                     `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     INDEX `idx_checkin_group_id`(`group_id`) USING BTREE,
+                                     INDEX `idx_checkin_client_id`(`group_id`, `client_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运动打卡点表' ROW_FORMAT = DYNAMIC;
 -- ----------------------------
 -- Records of ur_trajectory
 -- ----------------------------

@@ -78,6 +78,16 @@ public class SportRecordVO implements Serializable {
 
     private List<PointVO> points;
 
+    /**
+     * 打卡点数量（列表页用）
+     */
+    private Integer checkinCount;
+
+    /**
+     * 打卡点列表（详情页用，photos 为文件 key 列表）
+     */
+    private List<SportCheckinVO> checkins;
+
     public Long getId() {
         return id;
     }
@@ -180,5 +190,21 @@ public class SportRecordVO implements Serializable {
 
     public void setPoints(List<PointVO> points) {
         this.points = points;
+    }
+
+    public Integer getCheckinCount() {
+        return checkinCount;
+    }
+
+    public void setCheckinCount(Integer checkinCount) {
+        this.checkinCount = checkinCount;
+    }
+
+    public List<SportCheckinVO> getCheckins() {
+        return checkins;
+    }
+
+    public void setCheckins(List<SportCheckinVO> checkins) {
+        this.checkins = checkins;
     }
 }
