@@ -19,6 +19,7 @@ import com.finn.urban.mapper.SportRecordMapper;
 import com.finn.urban.mapper.TrajectoryMapper;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.service.SportRecordService;
+import com.finn.urban.util.TrajectorySimplifier;
 import com.finn.urban.vo.PointVO;
 import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
@@ -99,10 +100,8 @@ public class SportRecordServiceImpl implements SportRecordService {
                         .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
         List<TrajectoryEntity> list = trajectoryMapper.listByWrapper(queryWrapper);
         if(list != null && !list.isEmpty()){
-            List<PointVO> points = new ArrayList<>(list.size());
-            for(TrajectoryEntity item: list){
-                points.add(new PointVO(item.getLongitude(), item.getLatitude()));
-            }
+            // 使用轨迹抽稀算法简化轨迹点
+            List<PointVO> points = TrajectorySimplifier.simplifyEntities(list, 10.0, 300);
             vo.setPoints(points);
         }
 
