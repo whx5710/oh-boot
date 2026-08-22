@@ -73,16 +73,27 @@ public class SportRecordServiceImpl implements SportRecordService {
         return sportRecordMapper.listByWrapper(queryWrapper);
     }
 
+    private static final String DETAIL_CACHE_KEY = "sport:record:detail:";
+    private static final int DETAIL_CACHE_EXPIRE = 1800;
+
     @Override
     public SportRecordVO detail(Long id) {
         AssertUtils.isNull(id, "ID");
+
+        String cacheKey = DETAIL_CACHE_KEY + id;
+        if (redisCache.hasKey(cacheKey)) {
+            Object cached = redisCache.get(cacheKey);
+            if (cached != null) {
+                return JsonUtils.parseObject(cached.toString(), SportRecordVO.class);
+            }
+        }
+
         SportRecordEntity entity = sportRecordMapper.findById(id, SportRecordEntity.class);
         if (entity == null || entity.getId() == null) {
             throw new ServerException("未找到运动记录信息");
         }
         SportRecordVO vo = SportRecordConvert.INSTANCE.convert(entity);
 
-        // 处理坐标点
         QueryWrapper<TrajectoryEntity> queryWrapper = QueryWrapper.of(TrajectoryEntity.class);
         queryWrapper.eq(TrajectoryEntity::getDbStatus, 1).eq(TrajectoryEntity::getCreator, vo.getUserId())
                         .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
@@ -95,7 +106,6 @@ public class SportRecordServiceImpl implements SportRecordService {
             vo.setPoints(points);
         }
 
-        // 打卡点（按创建时间升序，photos JSON 解析回 List<String>）
         QueryWrapper<SportCheckin> cqw = QueryWrapper.of(SportCheckin.class);
         cqw.eq(SportCheckin::getGroupId, vo.getId())
                 .eq(SportCheckin::getDbStatus, 1)
@@ -104,11 +114,12 @@ public class SportRecordServiceImpl implements SportRecordService {
         if (checkins != null && !checkins.isEmpty()) {
             List<SportCheckinVO> cvos = SportCheckinConvert.INSTANCE.convertList(checkins);
             for (int i = 0; i < checkins.size(); i++) {
-                // cvos.get(i).setPhotos(fromJson(checkins.get(i).getPhotos()));
                 cvos.get(i).setPhotos(JsonUtils.parseArray(checkins.get(i).getPhotos(), String.class));
             }
             vo.setCheckins(cvos);
         }
+
+        redisCache.set(cacheKey, JsonUtils.toJsonString(vo), DETAIL_CACHE_EXPIRE);
         return vo;
     }
 
@@ -181,7 +192,6 @@ public class SportRecordServiceImpl implements SportRecordService {
         if(entity.getEndTime() != null){
             return "运动已结束，无需重复结束";
         }
-        // 查询轨迹坐标是否有效，小于20条定位点，不记录此次运动
         CountWrapper<TrajectoryEntity> countWrapper = CountWrapper.of(TrajectoryEntity.class);
         countWrapper.eq(TrajectoryEntity::getCreator, entity.getUserId()).eq(TrajectoryEntity::getGroupId, entity.getId())
                 .eq(TrajectoryEntity::getDbStatus, 1);
@@ -202,7 +212,6 @@ public class SportRecordServiceImpl implements SportRecordService {
 
         sportRecordMapper.updateById(entity);
 
-        // 按 clientId 去重落库打卡点（兼容中途已实时保存与离线补传两种场景）
         List<SportCheckinVO> checkins = vo.getCheckins();
         if (checkins != null && !checkins.isEmpty()) {
             for (SportCheckinVO c : checkins) {
@@ -210,6 +219,8 @@ public class SportRecordServiceImpl implements SportRecordService {
                 upsertCheckin(c);
             }
         }
+
+        redisCache.delete(DETAIL_CACHE_KEY + id);
         return msg;
     }
 
@@ -309,8 +320,9 @@ public class SportRecordServiceImpl implements SportRecordService {
         entity.setDbStatus(1);
         entity.setCreator(SecurityUser.getUserId());
         entity.setCreateTime(now);
-        entity.setUpdater(SecurityUser.getUserId());
-        entity.setUpdateTime(now);
+        if(entity.getCreatedAt() == null){
+            entity.setCreatedAt(System.currentTimeMillis());
+        }
         sportCheckinMapper.insert(entity);
         return entity.getId();
     }
