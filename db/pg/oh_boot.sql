@@ -12,7 +12,7 @@
  Target Server Version : 180004 (180004)
  File Encoding         : 65001
 
- Date: 22/08/2026 11:08:18
+ Date: 23/08/2026 00:00:55
 */
 
 
@@ -771,6 +771,11 @@ CREATE INDEX "idx_checkin_client_id" ON "oh_boot"."ur_sport_checkin" USING btree
 CREATE INDEX "idx_checkin_group_id" ON "oh_boot"."ur_sport_checkin" USING btree (
   "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
+CREATE INDEX "idx_checkin_group_status_created" ON "oh_boot"."ur_sport_checkin" USING btree (
+  "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "db_status" "pg_catalog"."int2_ops" ASC NULLS LAST,
+  "created_at" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
 
 -- ----------------------------
 -- Primary Key structure for table ur_sport_checkin
@@ -801,6 +806,12 @@ ALTER TABLE "oh_boot"."ur_sport_record" ADD CONSTRAINT "ur_sport_record_pkey" PR
 -- ----------------------------
 -- Indexes structure for table ur_trajectory
 -- ----------------------------
+CREATE INDEX "traject_idx_group_creator_status_time" ON "oh_boot"."ur_trajectory" USING btree (
+  "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "creator" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "db_status" "pg_catalog"."int2_ops" ASC NULLS LAST,
+  "gps_time" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
 CREATE INDEX "traject_idx_group_id" ON "oh_boot"."ur_trajectory" USING btree (
   "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
