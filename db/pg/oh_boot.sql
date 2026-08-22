@@ -12,7 +12,7 @@
  Target Server Version : 180004 (180004)
  File Encoding         : 65001
 
- Date: 22/08/2026 00:23:54
+ Date: 22/08/2026 11:08:18
 */
 
 
@@ -28,11 +28,11 @@ CREATE TABLE "oh_boot"."bpmn_flow" (
   "svg_str" text COLLATE "pg_catalog"."default",
   "version_tag" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "note" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int2 DEFAULT 1,
+  "db_status" int2 DEFAULT (1)::smallint,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6)
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
 COMMENT ON COLUMN "oh_boot"."bpmn_flow"."id" IS 'id';
@@ -182,12 +182,12 @@ CREATE TABLE "oh_boot"."bpmn_flow_node" (
   "condition_expression" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "json_params" varchar(800) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "note" varchar(1500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "sort" int2 DEFAULT 1,
-  "db_status" int2 DEFAULT 1,
+  "sort" int4 DEFAULT 1,
+  "db_status" int2 DEFAULT (1)::smallint,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6)
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
 COMMENT ON COLUMN "oh_boot"."bpmn_flow_node"."id" IS 'id';
@@ -229,14 +229,14 @@ CREATE TABLE "oh_boot"."bpmn_task_record" (
   "run_mark" int4 DEFAULT 0,
   "assignee" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "assignee_name" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "start_time" timestamp(6),
-  "end_time" timestamp(6),
+  "start_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "end_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "duration" int8,
-  "db_status" int2 DEFAULT 1,
+  "db_status" int2 DEFAULT (1)::smallint,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6)
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
 COMMENT ON COLUMN "oh_boot"."bpmn_task_record"."id" IS 'id';
@@ -278,10 +278,10 @@ CREATE TABLE "oh_boot"."data_app" (
   "secret_key" varchar(45) COLLATE "pg_catalog"."default" NOT NULL,
   "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6),
-  "db_status" int2 DEFAULT 1
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "db_status" int2 DEFAULT (1)::smallint
 )
 ;
 COMMENT ON COLUMN "oh_boot"."data_app"."id" IS 'id';
@@ -311,13 +311,13 @@ CREATE TABLE "oh_boot"."data_function" (
   "id" int8 NOT NULL,
   "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "func_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "is_async" bool NOT NULL,
+  "is_async" int2 NOT NULL,
   "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6),
-  "db_status" int2 DEFAULT 1
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "db_status" int2 DEFAULT (1)::smallint
 )
 ;
 COMMENT ON COLUMN "oh_boot"."data_function"."id" IS 'id';
@@ -335,9 +335,9 @@ COMMENT ON TABLE "oh_boot"."data_function" IS '功能列表';
 -- ----------------------------
 -- Records of data_function
 -- ----------------------------
-INSERT INTO "oh_boot"."data_function" VALUES (1, '用户信息上传', 'F1001', 't', '用户信息同步', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:13', 1);
-INSERT INTO "oh_boot"."data_function" VALUES (2, '账单查询', 'F1002', 'f', '查询账单信息', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:18', 1);
-INSERT INTO "oh_boot"."data_function" VALUES (3, '新增工单', 'F1003', 't', '', 10000, '2024-02-28 21:50:47', NULL, NULL, 1);
+INSERT INTO "oh_boot"."data_function" VALUES (1, '用户信息上传', 'F1001', 1, '用户信息同步', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:13', 1);
+INSERT INTO "oh_boot"."data_function" VALUES (2, '账单查询', 'F1002', 0, '查询账单信息', 10000, '2023-08-02 21:29:22', 10000, '2023-07-30 13:32:18', 1);
+INSERT INTO "oh_boot"."data_function" VALUES (3, '新增工单', 'F1003', 1, '', 10000, '2024-02-28 21:50:47', NULL, NULL, 1);
 
 -- ----------------------------
 -- Table structure for data_function_authority
@@ -349,10 +349,10 @@ CREATE TABLE "oh_boot"."data_function_authority" (
   "func_code" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6),
-  "db_status" int2 DEFAULT 1
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "db_status" int2 DEFAULT (1)::smallint
 )
 ;
 COMMENT ON COLUMN "oh_boot"."data_function_authority"."id" IS 'id';
@@ -388,10 +388,10 @@ CREATE TABLE "oh_boot"."data_message" (
   "result_msg" varchar(3000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "note" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "creator" int8,
-  "create_time" timestamp(3) DEFAULT NULL::timestamp without time zone,
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6),
-  "db_status" int2 DEFAULT 1
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "db_status" int2 DEFAULT (1)::smallint
 )
 ;
 COMMENT ON COLUMN "oh_boot"."data_message"."id" IS 'id';
@@ -414,207 +414,129 @@ COMMENT ON TABLE "oh_boot"."data_message" IS '接口参数数据';
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for oh_project
+-- Table structure for ur_event
 -- ----------------------------
-DROP TABLE IF EXISTS "oh_boot"."oh_project";
-CREATE TABLE "oh_boot"."oh_project" (
+DROP TABLE IF EXISTS "oh_boot"."ur_event";
+CREATE TABLE "oh_boot"."ur_event" (
   "id" int8 NOT NULL,
-  "project_code" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "project_name" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "project_alias" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "start_time" date,
-  "end_time" date,
-  "director" int8,
-  "director_name" varchar(60) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "status" int2,
-  "db_status" int2 DEFAULT 1,
+  "code" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "report_time" timestamp(6) NOT NULL,
+  "description" varchar(1000) COLLATE "pg_catalog"."default" NOT NULL,
+  "evt_type" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "location" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "longitude" numeric(12,8) DEFAULT NULL::numeric,
+  "latitude" numeric(12,8) DEFAULT NULL::numeric,
+  "mobile" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "anonymous" int2 DEFAULT (0)::smallint,
+  "open_id" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "accept_status" varchar(2) COLLATE "pg_catalog"."default" NOT NULL DEFAULT '1'::character varying,
+  "completion_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "rejection_opinion" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "handling_opinion" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "remark" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "db_status" int2 NOT NULL DEFAULT (1)::smallint,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6)
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
-COMMENT ON COLUMN "oh_boot"."oh_project"."id" IS 'ID';
-COMMENT ON COLUMN "oh_boot"."oh_project"."project_code" IS '项目编码';
-COMMENT ON COLUMN "oh_boot"."oh_project"."project_name" IS '项目名称';
-COMMENT ON COLUMN "oh_boot"."oh_project"."project_alias" IS '别名';
-COMMENT ON COLUMN "oh_boot"."oh_project"."start_time" IS '开始时间';
-COMMENT ON COLUMN "oh_boot"."oh_project"."end_time" IS '结束时间';
-COMMENT ON COLUMN "oh_boot"."oh_project"."director" IS '负责人ID';
-COMMENT ON COLUMN "oh_boot"."oh_project"."director_name" IS '负责人姓名';
-COMMENT ON COLUMN "oh_boot"."oh_project"."status" IS '状态（1开始2暂停3关闭）';
-COMMENT ON COLUMN "oh_boot"."oh_project"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_boot"."oh_project"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_boot"."oh_project"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_boot"."oh_project"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_boot"."oh_project"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_boot"."oh_project" IS '项目信息表';
+COMMENT ON COLUMN "oh_boot"."ur_event"."code" IS '事件编码';
+COMMENT ON COLUMN "oh_boot"."ur_event"."report_time" IS '上报时间';
+COMMENT ON COLUMN "oh_boot"."ur_event"."description" IS '问题描述';
+COMMENT ON COLUMN "oh_boot"."ur_event"."evt_type" IS '案件类别';
+COMMENT ON COLUMN "oh_boot"."ur_event"."location" IS '事发位置';
+COMMENT ON COLUMN "oh_boot"."ur_event"."longitude" IS '经度';
+COMMENT ON COLUMN "oh_boot"."ur_event"."latitude" IS '纬度';
+COMMENT ON COLUMN "oh_boot"."ur_event"."mobile" IS '联系电话';
+COMMENT ON COLUMN "oh_boot"."ur_event"."anonymous" IS '匿名标识1匿名';
+COMMENT ON COLUMN "oh_boot"."ur_event"."open_id" IS '对应第三方用户ID';
+COMMENT ON COLUMN "oh_boot"."ur_event"."accept_status" IS '受理状态，1待处理2处理中3已解决4已驳回';
+COMMENT ON COLUMN "oh_boot"."ur_event"."completion_time" IS '完成时间';
+COMMENT ON COLUMN "oh_boot"."ur_event"."rejection_opinion" IS '驳回意见';
+COMMENT ON COLUMN "oh_boot"."ur_event"."handling_opinion" IS '处理意见';
+COMMENT ON COLUMN "oh_boot"."ur_event"."remark" IS '备注';
+COMMENT ON COLUMN "oh_boot"."ur_event"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "oh_boot"."ur_event"."creator" IS '创建者';
+COMMENT ON COLUMN "oh_boot"."ur_event"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_boot"."ur_event"."updater" IS '更新者';
+COMMENT ON COLUMN "oh_boot"."ur_event"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_event" IS '事件表';
 
 -- ----------------------------
--- Records of oh_project
+-- Records of ur_event
 -- ----------------------------
-INSERT INTO "oh_boot"."oh_project" VALUES (2, 'P1001', '垫脚石计划', '垫脚石', '2022-12-01', NULL, 10001, '王小费', 1, 1, NULL, '2022-12-04 14:09:33', NULL, '2022-12-04 14:09:37');
 
 -- ----------------------------
--- Table structure for oh_project_log
+-- Table structure for ur_multi_media
 -- ----------------------------
-DROP TABLE IF EXISTS "oh_boot"."oh_project_log";
-CREATE TABLE "oh_boot"."oh_project_log" (
+DROP TABLE IF EXISTS "oh_boot"."ur_multi_media";
+CREATE TABLE "oh_boot"."ur_multi_media" (
   "id" int8 NOT NULL,
-  "project_id" int4,
-  "task_id" int8,
-  "operation" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "remark" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int2 DEFAULT 1,
+  "evt_id" int8 NOT NULL,
+  "file_id" varchar(80) COLLATE "pg_catalog"."default" NOT NULL,
+  "file_name" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "status_type" varchar(2) COLLATE "pg_catalog"."default" NOT NULL,
+  "remark" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "db_status" int4 NOT NULL DEFAULT 1,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6)
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."id" IS 'id';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."project_id" IS '项目ID';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."task_id" IS '任务ID';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."operation" IS '操作类型';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."remark" IS '备注';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_boot"."oh_project_log"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_boot"."oh_project_log" IS '项目、任务操作日志';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."evt_id" IS '事件ID';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."file_id" IS '文件ID';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."file_name" IS '文件名';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."status_type" IS '所属状态：1待处理2处理中3已解决4已驳回';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."remark" IS '备注';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."creator" IS '创建者';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."updater" IS '更新者';
+COMMENT ON COLUMN "oh_boot"."ur_multi_media"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_multi_media" IS '多媒体表';
 
 -- ----------------------------
--- Records of oh_project_log
+-- Records of ur_multi_media
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for oh_task
+-- Table structure for ur_poi
 -- ----------------------------
-DROP TABLE IF EXISTS "oh_boot"."oh_task";
-CREATE TABLE "oh_boot"."oh_task" (
+DROP TABLE IF EXISTS "oh_boot"."ur_poi";
+CREATE TABLE "oh_boot"."ur_poi" (
   "id" int8 NOT NULL,
-  "project_id" int4 NOT NULL,
-  "task_title" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "note" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "task_type" char(1) COLLATE "pg_catalog"."default" NOT NULL,
-  "parent_id" int8 NOT NULL DEFAULT 0,
-  "has_child" int2,
-  "start_time" timestamp(6),
-  "end_time" timestamp(6),
-  "status" char(1) COLLATE "pg_catalog"."default" DEFAULT '1'::bpchar,
-  "remark" varchar(500) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int2 DEFAULT 1,
+  "location" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "longitude" numeric(12,8) NOT NULL,
+  "latitude" numeric(12,8) NOT NULL,
+  "area_code" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "area_name" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "geo_type" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "remark" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "db_status" int2 NOT NULL DEFAULT (1)::smallint,
   "creator" int8,
-  "create_time" timestamp(6),
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
-  "update_time" timestamp(6)
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
-COMMENT ON COLUMN "oh_boot"."oh_task"."id" IS '序号';
-COMMENT ON COLUMN "oh_boot"."oh_task"."project_id" IS '所属项目';
-COMMENT ON COLUMN "oh_boot"."oh_task"."task_title" IS '任务标题';
-COMMENT ON COLUMN "oh_boot"."oh_task"."note" IS '任务描述';
-COMMENT ON COLUMN "oh_boot"."oh_task"."task_type" IS '1任务2需求3设计4缺陷9其他';
-COMMENT ON COLUMN "oh_boot"."oh_task"."parent_id" IS '父级任务ID';
-COMMENT ON COLUMN "oh_boot"."oh_task"."has_child" IS '是否有子任务';
-COMMENT ON COLUMN "oh_boot"."oh_task"."start_time" IS '计划开始时间';
-COMMENT ON COLUMN "oh_boot"."oh_task"."end_time" IS '计划结束时间';
-COMMENT ON COLUMN "oh_boot"."oh_task"."status" IS '状态（1待办项2进行中3已完成）';
-COMMENT ON COLUMN "oh_boot"."oh_task"."remark" IS '备注';
-COMMENT ON COLUMN "oh_boot"."oh_task"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_boot"."oh_task"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_boot"."oh_task"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_boot"."oh_task"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_boot"."oh_task"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_boot"."oh_task" IS '任务表';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."location" IS '地理位置';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."longitude" IS '经度';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."latitude" IS '纬度';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."area_code" IS '区域编码';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."area_name" IS '区域名称';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."geo_type" IS '坐标系，如WGS84、BD09';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."remark" IS '备注';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."db_status" IS '数据状态标识 0：已删除，1：正常';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."creator" IS '创建者';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."create_time" IS '创建时间';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."updater" IS '更新者';
+COMMENT ON COLUMN "oh_boot"."ur_poi"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_poi" IS '兴趣点';
 
 -- ----------------------------
--- Records of oh_task
--- ----------------------------
-
--- ----------------------------
--- Table structure for oh_task_user
--- ----------------------------
-DROP TABLE IF EXISTS "oh_boot"."oh_task_user";
-CREATE TABLE "oh_boot"."oh_task_user" (
-  "id" int8 NOT NULL,
-  "task_id" int8 NOT NULL,
-  "user_id" int8 NOT NULL,
-  "nick_name" varchar(30) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "person_type" char(1) COLLATE "pg_catalog"."default" NOT NULL,
-  "db_status" int2 DEFAULT 1,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "updater" int8,
-  "update_time" timestamp(6)
-)
-;
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."id" IS 'id';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."task_id" IS '任务ID';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."user_id" IS '人员ID';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."nick_name" IS '用户昵称';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."person_type" IS '人员类型1负责人2协作人';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_boot"."oh_task_user"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_boot"."oh_task_user" IS '任务人员表';
-
--- ----------------------------
--- Records of oh_task_user
--- ----------------------------
-
--- ----------------------------
--- Table structure for oh_work_order
--- ----------------------------
-DROP TABLE IF EXISTS "oh_boot"."oh_work_order";
-CREATE TABLE "oh_boot"."oh_work_order" (
-  "id" int8 NOT NULL,
-  "order_code" varchar(40) COLLATE "pg_catalog"."default" NOT NULL,
-  "order_source" varchar(2) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "report_time" timestamp(6),
-  "incident_time" timestamp(6),
-  "end_time" timestamp(6),
-  "title" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "comment" varchar(2000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "address" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "geo_x" numeric(12,9) DEFAULT NULL::numeric,
-  "geo_y" numeric(12,9) DEFAULT NULL::numeric,
-  "category" int4,
-  "extend_json" varchar(300) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "note" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int2 DEFAULT 1,
-  "creator" int8,
-  "create_time" timestamp(6),
-  "updater" int8,
-  "update_time" timestamp(6)
-)
-;
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."id" IS 'id';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."order_code" IS '工单编码';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."order_source" IS '工单来源';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."report_time" IS '上报时间';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."incident_time" IS '事发时间';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."end_time" IS '结束时间';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."title" IS '标题';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."comment" IS '内容';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."address" IS '位置';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."geo_x" IS '经度';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."geo_y" IS '纬度';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."category" IS '类别';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."extend_json" IS 'json扩展字段';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."note" IS '备注';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."creator" IS '创建者';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."create_time" IS '创建时间';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."updater" IS '更新者';
-COMMENT ON COLUMN "oh_boot"."oh_work_order"."update_time" IS '更新时间';
-COMMENT ON TABLE "oh_boot"."oh_work_order" IS '工单表';
-
--- ----------------------------
--- Records of oh_work_order
+-- Records of ur_poi
 -- ----------------------------
 
 -- ----------------------------
@@ -672,10 +594,10 @@ CREATE TABLE "oh_boot"."ur_sport_record" (
   "start_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "end_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "duration" int8,
-  "distance" numeric(8,2) DEFAULT NULL::numeric,
-  "avg_speed" numeric(8,2) DEFAULT NULL::numeric,
+  "distance" float8,
+  "avg_speed" float8,
   "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int4 DEFAULT (1)::smallint,
+  "db_status" int4 DEFAULT 1,
   "creator" int8 NOT NULL,
   "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
   "updater" int8,
@@ -710,22 +632,23 @@ COMMENT ON TABLE "oh_boot"."ur_sport_record" IS '运动记录表';
 DROP TABLE IF EXISTS "oh_boot"."ur_trajectory";
 CREATE TABLE "oh_boot"."ur_trajectory" (
   "id" int8 NOT NULL,
-  "accuracy" numeric(6,2),
-  "altitude" numeric(6,2),
-  "horizontal_accuracy" numeric(6,2),
-  "longitude" numeric(12,8),
-  "latitude" numeric(12,8),
-  "speed" numeric(6,2),
-  "vertical_accuracy" numeric(6,2),
-  "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "creator" int8 NOT NULL,
-  "create_time" timestamp(6),
-  "updater" int8,
-  "update_time" timestamp(6),
-  "db_status" int2 DEFAULT 1,
+  "accuracy" float8,
+  "altitude" float8,
+  "horizontal_accuracy" float8,
+  "longitude" numeric(12,8) DEFAULT NULL::numeric,
+  "latitude" numeric(12,8) DEFAULT NULL::numeric,
+  "speed" float8,
+  "vertical_accuracy" float8,
   "gps_time" int8,
-  "group_id" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "type" varchar(20) COLLATE "pg_catalog"."default"
+  "gps_time_show" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "group_id" int8 NOT NULL,
+  "type" varchar(20) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "db_status" int2 DEFAULT (1)::smallint,
+  "creator" int8 NOT NULL,
+  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+  "updater" int8,
+  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."id" IS 'id';
@@ -736,25 +659,20 @@ COMMENT ON COLUMN "oh_boot"."ur_trajectory"."longitude" IS '经度，范围为 -
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."latitude" IS '纬度，范围为 -90~90，负数表示南纬。使用 gcj02 国测局坐标系';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."speed" IS '速度，单位 m/s';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."vertical_accuracy" IS '垂直精度，单位 m（Android 无法获取，返回 0）';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."gps_time" IS 'GPS时间';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."gps_time_show" IS 'GPS时间直观展示';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."group_id" IS '分组ID，对应ur_sport_record.id';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."type" IS '坐标系，默认gcj02';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."remark" IS '备注';
+COMMENT ON COLUMN "oh_boot"."ur_trajectory"."db_status" IS '数据状态标识 0：已删除，1：正常';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."update_time" IS '更新时间';
-COMMENT ON COLUMN "oh_boot"."ur_trajectory"."db_status" IS '数据状态标识 0：已删除，1：正常';
-COMMENT ON COLUMN "oh_boot"."ur_trajectory"."gps_time" IS 'GPS时间';
-COMMENT ON COLUMN "oh_boot"."ur_trajectory"."group_id" IS '分组ID，同一次运动，分组ID相同';
-COMMENT ON COLUMN "oh_boot"."ur_trajectory"."type" IS '坐标系，默认gcj02';
-COMMENT ON TABLE "oh_boot"."ur_trajectory" IS '轨迹坐标';
 
 -- ----------------------------
 -- Records of ur_trajectory
 -- ----------------------------
-
--- ----------------------------
--- Uniques structure for table bpmn_flow
--- ----------------------------
-ALTER TABLE "oh_boot"."bpmn_flow" ADD CONSTRAINT "bpmn_flow_key_code_key" UNIQUE ("key_code");
 
 -- ----------------------------
 -- Primary Key structure for table bpmn_flow
@@ -784,11 +702,6 @@ CREATE INDEX "bpmn_task_record_proc_inst_id_idx" ON "oh_boot"."bpmn_task_record"
 -- Primary Key structure for table bpmn_task_record
 -- ----------------------------
 ALTER TABLE "oh_boot"."bpmn_task_record" ADD CONSTRAINT "bpmn_task_record_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Uniques structure for table data_app
--- ----------------------------
-ALTER TABLE "oh_boot"."data_app" ADD CONSTRAINT "data_app_client_id_key" UNIQUE ("client_id");
 
 -- ----------------------------
 -- Primary Key structure for table data_app
@@ -834,46 +747,19 @@ CREATE INDEX "data_message_idx_01" ON "oh_boot"."data_message" USING btree (
 ALTER TABLE "oh_boot"."data_message" ADD CONSTRAINT "data_message_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table oh_project
+-- Primary Key structure for table ur_event
 -- ----------------------------
-ALTER TABLE "oh_boot"."oh_project" ADD CONSTRAINT "oh_project_pkey" PRIMARY KEY ("id");
+ALTER TABLE "oh_boot"."ur_event" ADD CONSTRAINT "ur_event_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table oh_project_log
+-- Primary Key structure for table ur_multi_media
 -- ----------------------------
-ALTER TABLE "oh_boot"."oh_project_log" ADD CONSTRAINT "oh_project_log_pkey" PRIMARY KEY ("id");
+ALTER TABLE "oh_boot"."ur_multi_media" ADD CONSTRAINT "ur_multi_media_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table oh_task
+-- Primary Key structure for table ur_poi
 -- ----------------------------
-ALTER TABLE "oh_boot"."oh_task" ADD CONSTRAINT "oh_task_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table oh_task_user
--- ----------------------------
-CREATE INDEX "idx_02" ON "oh_boot"."oh_task_user" USING btree (
-  "task_id" "pg_catalog"."int8_ops" ASC NULLS LAST
-);
-
--- ----------------------------
--- Uniques structure for table oh_task_user
--- ----------------------------
-ALTER TABLE "oh_boot"."oh_task_user" ADD CONSTRAINT "oh_task_user_task_id_user_id_key" UNIQUE ("task_id", "user_id");
-
--- ----------------------------
--- Primary Key structure for table oh_task_user
--- ----------------------------
-ALTER TABLE "oh_boot"."oh_task_user" ADD CONSTRAINT "oh_task_user_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Uniques structure for table oh_work_order
--- ----------------------------
-ALTER TABLE "oh_boot"."oh_work_order" ADD CONSTRAINT "oh_work_order_order_code_key" UNIQUE ("order_code");
-
--- ----------------------------
--- Primary Key structure for table oh_work_order
--- ----------------------------
-ALTER TABLE "oh_boot"."oh_work_order" ADD CONSTRAINT "oh_work_order_pkey" PRIMARY KEY ("id");
+ALTER TABLE "oh_boot"."ur_poi" ADD CONSTRAINT "ur_poi_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Indexes structure for table ur_sport_checkin
@@ -915,7 +801,10 @@ ALTER TABLE "oh_boot"."ur_sport_record" ADD CONSTRAINT "ur_sport_record_pkey" PR
 -- ----------------------------
 -- Indexes structure for table ur_trajectory
 -- ----------------------------
-CREATE INDEX "traject_idx_01" ON "oh_boot"."ur_trajectory" USING btree (
+CREATE INDEX "traject_idx_group_id" ON "oh_boot"."ur_trajectory" USING btree (
+  "group_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "traject_idx_user_id" ON "oh_boot"."ur_trajectory" USING btree (
   "creator" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
