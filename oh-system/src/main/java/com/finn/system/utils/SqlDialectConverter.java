@@ -451,6 +451,34 @@ public class SqlDialectConverter {
             case "BOOL", "BOOLEAN" -> {
                 return "tinyint(1)";
             }
+            // PG float8 是 8 字节浮点，对应 MySQL double
+            case "FLOAT8", "DOUBLE PRECISION" -> {
+                return "double";
+            }
+            // 注意：PG 列定义 "double precision" 经 extractType 提取后只剩 "double"
+            case "DOUBLE" -> {
+                return "double";
+            }
+            // PG float4 是 4 字节浮点，对应 MySQL float
+            case "FLOAT4", "FLOAT" -> {
+                return "float";
+            }
+            case "BYTEA" -> {
+                return "longblob";
+            }
+            case "JSONB" -> {
+                return "json";
+            }
+            case "UUID" -> {
+                return "varchar(36)";
+            }
+            // PG serial/bigserial 自带自增语义，转 MySQL 仅给基础类型；auto_increment 需人工补
+            case "SERIAL" -> {
+                return "int";
+            }
+            case "BIGSERIAL" -> {
+                return "bigint";
+            }
         }
         if (upper.startsWith("VARCHAR")) {
             return pgType.toLowerCase();
@@ -644,6 +672,12 @@ public class SqlDialectConverter {
                 continue;
             }
 
+            if (upperStartsWith(trimmedNoComments, "INSERT INTO")) {
+                // INSERT 语句需要特殊处理字符串转义
+                result.append(convertMySqlInsertToPg(trimmedNoComments)).append("\n\n");
+                continue;
+            }
+
             if (upperStartsWith(trimmedNoComments, "ALTER TABLE") && trimmedNoComments.toUpperCase().contains("COMMENT")) {
                 String cmt = convertMySqlCommentToPg(trimmedNoComments);
                 if (cmt != null) {
@@ -804,7 +838,7 @@ public class SqlDialectConverter {
         if (upper.startsWith("DATETIME")) {
             return "timestamp(6)";
         }
-        if (upper.equals("LONGTEXT") || upper.equals("MEDIUMTEXT")) {
+        if (upper.equals("LONGTEXT") || upper.equals("MEDIUMTEXT") || upper.equals("TINYTEXT")) {
             return "text";
         }
         if (upper.startsWith("VARCHAR")) {
@@ -812,6 +846,28 @@ public class SqlDialectConverter {
         }
         if (upper.startsWith("DECIMAL")) {
             return mySqlType.toLowerCase().replace("decimal", "numeric");
+        }
+        // PG 无 double 类型，对应 double precision（8 字节浮点）
+        if (upper.startsWith("DOUBLE")) {
+            return "double precision";
+        }
+        // MySQL float 是 4 字节，PG real 是 float4 的别名，语义一致
+        if (upper.startsWith("FLOAT")) {
+            return "real";
+        }
+        // 二进制大对象统一转 bytea
+        if (upper.equals("BLOB") || upper.startsWith("TINYBLOB")
+                || upper.startsWith("MEDIUMBLOB") || upper.startsWith("LONGBLOB")
+                || upper.startsWith("BINARY") || upper.startsWith("VARBINARY")) {
+            return "bytea";
+        }
+        // MySQL YEAR 存年份(1901~2155)，转 smallint 足够
+        if (upper.startsWith("YEAR")) {
+            return "smallint";
+        }
+        // PG 不支持 enum/set 内联定义，统一降级为 varchar(255)
+        if (upper.startsWith("ENUM") || upper.startsWith("SET")) {
+            return "varchar(255)";
         }
         return mySqlType.toLowerCase();
     }
@@ -827,8 +883,22 @@ public class SqlDialectConverter {
         if (typeUpper.startsWith("VARCHAR") || typeUpper.startsWith("CHAR")) {
             return trimmed + "::character varying";
         }
-        if (typeUpper.startsWith("TINYINT") || typeUpper.startsWith("SMALLINT") || typeUpper.startsWith("INT")) {
+        // 注意顺序：BIGINT 必须在 INT 之前判断
+        if (typeUpper.startsWith("BIGINT")) {
+            return trimmed + "::int8";
+        }
+        if (typeUpper.startsWith("TINYINT") || typeUpper.startsWith("SMALLINT")) {
             return trimmed + "::smallint";
+        }
+        if (typeUpper.startsWith("INT") || typeUpper.startsWith("INTEGER")) {
+            // MySQL int 范围远超 smallint，必须 cast 成 int4，否则大默认值会报错
+            return trimmed + "::int4";
+        }
+        if (typeUpper.startsWith("DOUBLE")) {
+            return trimmed + "::double precision";
+        }
+        if (typeUpper.startsWith("FLOAT")) {
+            return trimmed + "::real";
         }
         return trimmed;
     }
@@ -868,6 +938,116 @@ public class SqlDialectConverter {
             return conDef.replace("`", "\"").replaceAll("(?i)\\s+USING\\s+\\w+", "");
         }
         return null;
+    }
+
+    /**
+     * 转换 MySQL INSERT 语句为 PostgreSQL 语法
+     * 关键处理：MySQL 字符串中的 \' \" \\ \n 等转义序列
+     */
+    private static String convertMySqlInsertToPg(String sql) {
+        // 解析表名
+        Pattern tablePattern = Pattern.compile("INSERT INTO\\s+`?([^`\\s(]+)`?", Pattern.CASE_INSENSITIVE);
+        Matcher tm = tablePattern.matcher(sql);
+        if (!tm.find()) {
+            return replaceMySqlQuotesOutsideStrings(sql);
+        }
+        String tableName = tm.group(1);
+
+        // 查找 VALUES 关键字后的内容
+        int valuesIdx = sql.toUpperCase().indexOf("VALUES");
+        if (valuesIdx < 0) {
+            return replaceMySqlQuotesOutsideStrings(sql);
+        }
+
+        // 保留列名部分，如果有的话
+        String header = sql.substring(0, valuesIdx + 6); // "INSERT INTO `xxx` (...) VALUES"
+        // 转换表名中的反引号
+        header = header.replace("`" + tableName + "`", "\"" + tableName + "\"");
+        // 转换列名中的反引号
+        header = header.replaceAll("`([^`]+)`", "\"$1\"");
+
+        String valuesPart = sql.substring(valuesIdx + 6).trim();
+
+        // 转换值部分的字符串转义
+        String convertedValues = convertMySqlValuesToPg(valuesPart);
+
+        return header + " " + convertedValues;
+    }
+
+    /**
+     * 转换 MySQL INSERT VALUES 部分，处理字符串转义
+     */
+    private static String convertMySqlValuesToPg(String valuesPart) {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        int depth = 0;
+        boolean inSingleQuote = false;
+
+        while (i < valuesPart.length()) {
+            char c = valuesPart.charAt(i);
+
+            if (!inSingleQuote) {
+                if (c == '(') {
+                    depth++;
+                    result.append(c);
+                    i++;
+                } else if (c == ')') {
+                    depth--;
+                    result.append(c);
+                    i++;
+                } else if (c == '\'') {
+                    // 开始一个字符串
+                    inSingleQuote = true;
+                    // PG 字符串开始
+                    result.append('\'');
+                    i++;
+                    // 读取完整字符串并转换转义
+                    StringBuilder strContent = new StringBuilder();
+                    while (i < valuesPart.length()) {
+                        char sc = valuesPart.charAt(i);
+                        if (sc == '\\' && i + 1 < valuesPart.length()) {
+                            // MySQL 转义序列
+                            char next = valuesPart.charAt(i + 1);
+                            switch (next) {
+                                case 'n': strContent.append('\n'); i += 2; break;
+                                case 'r': strContent.append('\r'); i += 2; break;
+                                case 't': strContent.append('\t'); i += 2; break;
+                                case '0': strContent.append('\0'); i += 2; break;
+                                case '\\': strContent.append('\\'); i += 2; break;
+                                case '\'':
+                                    // MySQL \' 表示字符串内的单引号
+                                    // PG 中单引号用 '' 转义
+                                    strContent.append("''");
+                                    i += 2;
+                                    break;
+                                case '"': strContent.append('"'); i += 2; break;
+                                default: strContent.append(next); i += 2; break;
+                            }
+                        } else if (sc == '\'') {
+                            // 字符串结束
+                            i++;
+                            break;
+                        } else {
+                            strContent.append(sc);
+                            i++;
+                        }
+                    }
+                    // PG 字符串内的单引号必须用 '' 转义
+                    // 上面的 \' 已经转换成 ''，普通字符中不会有单独的 '
+                    result.append(strContent);
+                    result.append('\'');
+                    inSingleQuote = false;
+                } else {
+                    result.append(c);
+                    i++;
+                }
+            } else {
+                result.append(c);
+                i++;
+            }
+        }
+
+        return result.toString();
     }
 
     private static String convertMySqlCommentToPg(String stmt) {
