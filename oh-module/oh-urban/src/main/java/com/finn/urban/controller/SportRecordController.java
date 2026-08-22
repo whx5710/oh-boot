@@ -100,7 +100,7 @@ public class SportRecordController {
      * photos 字段为已上传到文件服务的 key 列表
      */
     @PostMapping("/checkin")
-    @Log(module = "运动打卡", name = "保存", type = OperateTypeEnum.INSERT)
+    // @Log(module = "运动打卡", name = "保存", type = OperateTypeEnum.INSERT)
     public Result<String> checkin(@RequestBody SportCheckinVO vo) {
         return Result.ok(String.valueOf(sportRecordService.saveCheckin(vo)));
     }
