@@ -193,6 +193,9 @@ public class AuthServiceImpl implements AuthService {
             String ip = IpUtils.getIpAddress(request);
             // 重新查询用户信息
             UserEntity userEntity = userService.getUser(userDetail.getId());
+            if(userEntity == null){
+                throw new ServerException("未获取到用户信息，刷新token失败!");
+            }
             if(userEntity.getStatus() == 0){
                 throw new ServerException("用户已被禁用!");
             }
