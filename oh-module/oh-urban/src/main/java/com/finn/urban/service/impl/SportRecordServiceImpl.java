@@ -373,8 +373,8 @@ public class SportRecordServiceImpl implements SportRecordService {
         String key = "urban:trajectory:clean";
         if(!redisCache.hasKey(key)){
             redisCache.set(key, "clock", 180);
-            // 清理轨迹
-            trajectoryMapper.cleanData();
+            // 清理轨迹（占位参数防框架层 NPE）
+            trajectoryMapper.cleanData(1);
 
             // 结束掉最近无轨迹的运动（12小时前启动的,近4小时无轨迹上传）
             LocalDateTime time = LocalDateTime.now();
