@@ -25,13 +25,11 @@ import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,7 +179,7 @@ public class SportRecordServiceImpl implements SportRecordService {
             throw new ServerException("未找到对应的运动记录");
         }
         if(entity.getEndTime() != null){
-            throw new ServerException("运动已结束，无需重复结束");
+            return "运动已结束，无需重复结束";
         }
         // 查询轨迹坐标是否有效，小于20条定位点，不记录此次运动
         CountWrapper<TrajectoryEntity> countWrapper = CountWrapper.of(TrajectoryEntity.class);
