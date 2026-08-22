@@ -75,25 +75,32 @@ public class FileController {
 
     /**
      * 下载文件（支持断点续传、流式下载）
+     * key 可能包含 / 路径分隔符（如 upload/20260822/xxx.png），
+     * 使用 /** 通配符匹配，从 URI 中提取 key
      */
-    @GetMapping("/download/{key}")
-    public ResponseEntity<StreamingResponseBody> download(@PathVariable String key, HttpServletRequest request) {
+    @GetMapping("/download/**")
+    public ResponseEntity<StreamingResponseBody> download(HttpServletRequest request) {
+        String key = extractKey(request, "/file/download/");
         return streamResponse(key, request, true);
     }
 
     /**
      * 预览文件（浏览器直接显示图片、PDF，支持流式传输）
+     * key 可能包含 / 路径分隔符（如 upload/20260822/xxx.png），
+     * 使用 /** 通配符匹配，从 URI 中提取 key
      */
-    @GetMapping("/preview/{key}")
-    public ResponseEntity<StreamingResponseBody> preview(@PathVariable String key, HttpServletRequest request) {
+    @GetMapping("/preview/**")
+    public ResponseEntity<StreamingResponseBody> preview(HttpServletRequest request) {
+        String key = extractKey(request, "/file/preview/");
         return streamResponse(key, request, false);
     }
 
     /**
      * 删除文件
      */
-    @DeleteMapping("/delete/{key}")
-    public Result<String> delete(@PathVariable String key) {
+    @DeleteMapping("/delete/**")
+    public Result<String> delete(HttpServletRequest request) {
+        String key = extractKey(request, "/file/delete/");
         storageService.delete(key);
         return Result.ok("删除成功");
     }
@@ -101,8 +108,9 @@ public class FileController {
     /**
      * 检查文件是否存在
      */
-    @GetMapping("/exists/{key}")
-    public Result<Boolean> exists(@PathVariable String key) {
+    @GetMapping("/exists/**")
+    public Result<Boolean> exists(HttpServletRequest request) {
+        String key = extractKey(request, "/file/exists/");
         return Result.ok(storageService.exists(key));
     }
 
@@ -226,6 +234,28 @@ public class FileController {
     }
 
     // ===================== 私有方法 =====================
+
+    /**
+     * 从请求 URI 中提取文件 key
+     * 当 key 可能包含 / 时（如 upload/20260822/xxx.png），
+     * 使用 /** 通配符映射后，需手动从 URI 中截取 key 部分
+     *
+     * @param request  当前 HTTP 请求
+     * @param prefix   URI 前缀（如 "/file/preview/"）
+     * @return 文件 key
+     */
+    private String extractKey(HttpServletRequest request, String prefix) {
+        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        // 去掉 contextPath
+        String path = uri.substring(contextPath.length());
+        // 去掉 prefix 前缀，剩下的就是 key
+        if (path.startsWith(prefix)) {
+            return path.substring(prefix.length());
+        }
+        // 兜底：直接返回 path
+        return path;
+    }
 
     /**
      * 获取 SeaweedFS 服务，当前非 SeaweedFS 存储时抛出异常
