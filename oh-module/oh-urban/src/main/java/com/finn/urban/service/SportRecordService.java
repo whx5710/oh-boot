@@ -56,13 +56,4 @@ public interface SportRecordService {
      */
     void delete(List<Long> idList);
 
-    /**
-     * 保存运动打卡点（运动中途实时新增），返回后端生成的 id
-     */
-    Long saveCheckin(SportCheckinVO vo);
-
-    /**
-     * 填充打卡点数量（列表页用）
-     */
-    void fillCheckinCount(List<SportRecordVO> vos);
 }

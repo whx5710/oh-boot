@@ -7,8 +7,8 @@ import com.finn.framework.aop.annotations.Log;
 import com.finn.urban.convert.SportRecordConvert;
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
+import com.finn.urban.service.SportCheckinService;
 import com.finn.urban.service.SportRecordService;
-import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 import jakarta.validation.Valid;
@@ -30,8 +30,11 @@ public class SportRecordController {
 
     private final SportRecordService sportRecordService;
 
-    public SportRecordController(SportRecordService sportRecordService) {
+    private final SportCheckinService sportCheckinService;
+
+    public SportRecordController(SportRecordService sportRecordService, SportCheckinService sportCheckinService) {
         this.sportRecordService = sportRecordService;
+        this.sportCheckinService = sportCheckinService;
     }
 
     /**
@@ -42,7 +45,7 @@ public class SportRecordController {
     public Result<PageResult<SportRecordVO>> page(@Valid SportRecordQuery query) {
         Page<SportRecordEntity> page = sportRecordService.page(query);
         List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
-        sportRecordService.fillCheckinCount(vos);
+        sportCheckinService.fillCheckinCount(vos);
         return Result.ok(vos, page.getTotal());
     }
 
@@ -93,16 +96,6 @@ public class SportRecordController {
     // @PreAuthorize("hasAuthority('urban:sport-record:isRun')")
     public Result<Boolean> isRunning(@PathVariable("id") Long id) {
         return Result.ok(sportRecordService.isRunning(id));
-    }
-
-    /**
-     * 保存运动打卡点（运动中途实时新增）
-     * photos 字段为已上传到文件服务的 key 列表
-     */
-    @PostMapping("/checkin")
-    // @Log(module = "运动打卡", name = "保存", type = OperateTypeEnum.INSERT)
-    public Result<String> checkin(@RequestBody SportCheckinVO vo) {
-        return Result.ok(String.valueOf(sportRecordService.saveCheckin(vo)));
     }
 
     /**
