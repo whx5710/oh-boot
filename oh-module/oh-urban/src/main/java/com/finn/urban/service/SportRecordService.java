@@ -2,7 +2,6 @@ package com.finn.urban.service;
 
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
-import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 

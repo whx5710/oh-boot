@@ -4,6 +4,8 @@ import com.finn.common.entity.PageResult;
 import com.finn.common.entity.Result;
 import com.finn.common.enums.OperateTypeEnum;
 import com.finn.framework.aop.annotations.Log;
+import com.finn.framework.exception.ServerException;
+import com.finn.framework.security.user.SecurityUser;
 import com.finn.urban.convert.SportRecordConvert;
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
@@ -43,6 +45,22 @@ public class SportRecordController {
     @GetMapping("/page")
     // @PreAuthorize("hasAuthority('urban:sport-record:page')")
     public Result<PageResult<SportRecordVO>> page(@Valid SportRecordQuery query) {
+        Page<SportRecordEntity> page = sportRecordService.page(query);
+        List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
+        sportCheckinService.fillCheckinCount(vos);
+        return Result.ok(vos, page.getTotal());
+    }
+
+    /**
+     * 我的分页查询（列表项含打卡数量，不含坐标点）
+     */
+    @GetMapping("/mine")
+    public Result<PageResult<SportRecordVO>> mine(@Valid SportRecordQuery query) {
+        Long userId = SecurityUser.getUserId();
+        if(userId == null){
+            throw new ServerException("请先登录");
+        }
+        query.setUserId(userId);
         Page<SportRecordEntity> page = sportRecordService.page(query);
         List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
         sportCheckinService.fillCheckinCount(vos);
