@@ -26,7 +26,6 @@ import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -55,16 +54,12 @@ public class SportRecordServiceImpl implements SportRecordService {
 
     private final SportCheckinMapper sportCheckinMapper;
 
-    private final ObjectMapper objectMapper;
-
     public SportRecordServiceImpl(SportRecordMapper sportRecordMapper, TrajectoryMapper trajectoryMapper,
-                                  RedisCache redisCache, SportCheckinMapper sportCheckinMapper,
-                                  ObjectMapper objectMapper) {
+                                  RedisCache redisCache, SportCheckinMapper sportCheckinMapper) {
         this.sportRecordMapper = sportRecordMapper;
         this.trajectoryMapper = trajectoryMapper;
         this.redisCache = redisCache;
         this.sportCheckinMapper = sportCheckinMapper;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -312,6 +307,16 @@ public class SportRecordServiceImpl implements SportRecordService {
      * 插入一个打卡点，返回后端生成的 id
      */
     private Long doInsertCheckin(SportCheckinVO vo) {
+        // 本次打卡次数获取
+        Long groupId = vo.getGroupId();
+        CountWrapper<SportCheckin> countWrapper = CountWrapper.of(SportCheckin.class);
+        countWrapper.eq(SportCheckin::getDbStatus, 1)
+                .eq(SportCheckin::getGroupId, groupId);
+        long l = sportCheckinMapper.count(countWrapper);
+        if(l > 100){
+            throw new ServerException("本次运动打卡次数已高达100次");
+        }
+
         SportCheckin entity = SportCheckinConvert.INSTANCE.convert(vo);
         // entity.setPhotos(toJson(vo.getPhotos()));
         entity.setPhotos(JsonUtils.toJsonString(vo.getPhotos()));
@@ -325,35 +330,6 @@ public class SportRecordServiceImpl implements SportRecordService {
         sportCheckinMapper.insert(entity);
         return entity.getId();
     }
-
-    /**
-     * photos 列表转 JSON 字符串
-     */
-    /*private String toJson(List<String> photos) {
-        if (photos == null || photos.isEmpty()) {
-            return null;
-        }
-        try {
-            return objectMapper.writeValueAsString(photos);
-        } catch (Exception e) {
-            return null;
-        }
-    }*/
-
-    /**
-     * JSON 字符串转 photos 列表
-     */
-    /*private List<String> fromJson(String photos) {
-        if (photos == null || photos.isEmpty()) {
-            return Collections.emptyList();
-        }
-        try {
-            return objectMapper.readValue(photos, new TypeReference<List<String>>() {
-            });
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
-    }*/
 
     /**
      * 组装查询条件

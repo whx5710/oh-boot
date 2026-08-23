@@ -3,7 +3,6 @@ package com.finn.urban.util;
 import com.finn.urban.entity.TrajectoryEntity;
 import com.finn.urban.vo.PointVO;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
