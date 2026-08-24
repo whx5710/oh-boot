@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 22/08/2026 14:05:22
+ Date: 24/08/2026 10:38:14
 */
 
 SET NAMES utf8mb4;
@@ -34,8 +34,7 @@ CREATE TABLE `bpmn_flow`  (
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `bpmn_flow_key_code_key`(`key_code`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '自定义流程表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -120,8 +119,7 @@ CREATE TABLE `data_app`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   `db_status` smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `data_app_client_id_key`(`client_id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -139,7 +137,7 @@ CREATE TABLE `data_function`  (
   `id` bigint NOT NULL COMMENT 'id',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能名称',
   `func_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '功能号',
-  `is_async` tinyint(1) NOT NULL COMMENT '是否异步0否1是',
+  `is_async` smallint NOT NULL COMMENT '是否异步0否1是',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
@@ -197,7 +195,7 @@ CREATE TABLE `data_message`  (
   `result_msg` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '响应消息',
   `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   `db_status` smallint NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
@@ -255,9 +253,9 @@ CREATE TABLE `ur_multi_media`  (
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `db_status` int NOT NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '多媒体表' ROW_FORMAT = DYNAMIC;
 
@@ -301,7 +299,7 @@ CREATE TABLE `ur_sport_checkin`  (
   `latitude` decimal(12, 8) NOT NULL COMMENT '纬度，gcj02 坐标系',
   `longitude` decimal(12, 8) NOT NULL COMMENT '经度，gcj02 坐标系',
   `address` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '打卡地址',
-  `photos` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '打卡照片，JSON 数组字符串，存文件key',
+  `photos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '打卡照片，JSON 数组字符串，存文件key',
   `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '打卡描述',
   `created_at` bigint NULL DEFAULT NULL COMMENT '打卡时间戳（毫秒），前端传入',
   `db_status` smallint NOT NULL DEFAULT 1 COMMENT '数据状态标识 0：已删除，1：正常',
@@ -310,8 +308,9 @@ CREATE TABLE `ur_sport_checkin`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_checkin_client_id`(`group_id`, `client_id`) USING BTREE,
   INDEX `idx_checkin_group_id`(`group_id`) USING BTREE,
-  INDEX `idx_checkin_client_id`(`group_id`, `client_id`) USING BTREE
+  INDEX `idx_checkin_group_status_created`(`group_id`, `db_status`, `created_at`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运动打卡点表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -327,8 +326,8 @@ CREATE TABLE `ur_sport_record`  (
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '轨迹名称',
   `user_id` bigint NOT NULL COMMENT '用户ID',
   `record_date` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '记录日期，yyyymmdd',
-  `start_time` datetime NOT NULL COMMENT '开始时间',
-  `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
+  `start_time` datetime(6) NOT NULL COMMENT '开始时间',
+  `end_time` datetime(6) NULL DEFAULT NULL COMMENT '结束时间',
   `start_address` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '起始地址',
   `end_address` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终止地址',
   `duration` bigint NULL DEFAULT NULL COMMENT '时长，单位秒',
@@ -341,10 +340,10 @@ CREATE TABLE `ur_sport_record`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `sport_re_user_id`(`user_id`) USING BTREE,
   INDEX `sport_re_user_date`(`record_date`) USING BTREE,
-  INDEX `sport_re_user_start_time`(`start_time`) USING BTREE,
-  INDEX `sport_re_user_end_time`(`end_time`) USING BTREE
+  INDEX `sport_re_user_end_time`(`end_time`) USING BTREE,
+  INDEX `sport_re_user_id`(`user_id`) USING BTREE,
+  INDEX `sport_re_user_start_time`(`start_time`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运动记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -375,8 +374,9 @@ CREATE TABLE `ur_trajectory`  (
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `traject_idx_user_id`(`creator`) USING BTREE,
-  INDEX `traject_idx_group_id`(`group_id`) USING BTREE
+  INDEX `traject_idx_group_creator_status_time`(`group_id`, `creator`, `db_status`, `gps_time`) USING BTREE,
+  INDEX `traject_idx_group_id`(`group_id`) USING BTREE,
+  INDEX `traject_idx_user_id`(`creator`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
