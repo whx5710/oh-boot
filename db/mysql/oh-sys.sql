@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 06/07/2026 16:55:27
+ Date: 26/08/2026 14:34:42
 */
 
 SET NAMES utf8mb4;
@@ -78,7 +78,9 @@ CREATE TABLE `sys_attachment`  (
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间'
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+  INDEX `attach_idx_tmp`(`tmp_flag`) USING BTREE,
+  INDEX `attach_idx_time`(`create_time`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '附件管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -314,7 +316,8 @@ CREATE TABLE `sys_menu`  (
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间'
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+  INDEX `menu_p_id`(`parent_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -436,7 +439,7 @@ CREATE TABLE `sys_open_user`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_third_party_01`(`open_id`) USING BTREE,
   INDEX `idx_third_party_02`(`user_type`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方平台用户' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方平台用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_open_user
@@ -545,7 +548,8 @@ CREATE TABLE `sys_role_menu`  (
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间'
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+  INDEX `menu_role_id`(`role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色菜单关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -616,7 +620,9 @@ CREATE TABLE `sys_user_role`  (
   `creator` bigint NULL DEFAULT NULL COMMENT '创建者',
   `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间'
+  `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+  INDEX `user_role_idx_user_id`(`user_id`) USING BTREE,
+  INDEX `user_role_idx_role_id`(`role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户角色关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
