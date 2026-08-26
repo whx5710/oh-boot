@@ -4,6 +4,8 @@ import com.finn.common.entity.Result;
 import com.finn.files.service.StorageService;
 import com.finn.files.service.impl.SeaweedFSService;
 import com.finn.files.utils.MediaTypeUtils;
+import com.finn.files.utils.ThumbnailCacheManager;
+import com.finn.files.utils.ThumbnailUtils;
 import com.finn.files.vo.CompleteMultipartRequest;
 import com.finn.files.vo.FileMetadata;
 import com.finn.files.vo.MultipartUploadInitVO;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -88,11 +92,33 @@ public class FileController {
      * 预览文件（浏览器直接显示图片、PDF，支持流式传输）
      * key 可能包含 / 路径分隔符（如 upload/20260822/xxx.png），
      * 使用 /** 通配符匹配，从 URI 中提取 key
+     *
+     * 图片缩略图参数（仅图片生效，其他类型忽略）：
+     *   w / width   : 目标宽度（像素），0 或不传表示不缩放
+     *   q / quality : JPEG 质量 1-100，默认 80
+     *   shape       : "circle" 裁剪为正方形内接圆形（PNG，透明背景），用于地图 marker
      */
     @GetMapping("/preview/**")
-    public ResponseEntity<StreamingResponseBody> preview(HttpServletRequest request) {
+    public ResponseEntity<?> preview(HttpServletRequest request) {
         String key = extractKey(request, "/file/preview/");
-        return streamResponse(key, request, false);
+
+        // 解析缩略图参数
+        Integer width = parseIntParam(request, new String[]{"w", "width"});
+        Integer quality = parseIntParam(request, new String[]{"q", "quality"});
+        String shape = request.getParameter("shape");
+
+        boolean needThumb = (width != null && width > 0)
+                || (quality != null && quality > 0 && quality < 100)
+                || "circle".equalsIgnoreCase(shape);
+
+        if (!needThumb) {
+            // 无缩略图参数：走原有的流式预览（支持 Range 断点续传）
+            return streamResponse(key, request, false);
+        }
+        return thumbnailResponse(key,
+                width == null ? 0 : width,
+                quality == null ? 80 : quality,
+                shape);
     }
 
     /**
@@ -350,5 +376,128 @@ public class FileController {
         };
 
         return new ResponseEntity<>(responseBody, headers, status);
+    }
+
+    // ===================== 缩略图相关 =====================
+
+    /** 单张图片最大允许字节数：32MB，超过直接返回原图不压缩，防止内存爆炸 */
+    private static final long MAX_IMAGE_BYTES_FOR_THUMB = 32L * 1024 * 1024;
+
+    /**
+     * 解析 Integer 类型请求参数（支持多个别名），解析失败或未传返回 null
+     */
+    private Integer parseIntParam(HttpServletRequest request, String[] names) {
+        for (String name : names) {
+            String v = request.getParameter(name);
+            if (v != null && !v.isEmpty()) {
+                try {
+                    return Integer.parseInt(v);
+                } catch (NumberFormatException ignore) { /* 非法数字，跳过 */ }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回缩略图响应（字节级 + 浏览器强缓存，不走 Range 断点续传）
+     * 生成失败会静默降级为原图预览
+     */
+    private ResponseEntity<byte[]> thumbnailResponse(String key, int width, int quality, String shape) {
+        try {
+            FileMetadata metadata = storageService.getMetadata(key);
+            String contentType = metadata.getContentType();
+            if (contentType == null || contentType.isEmpty()) {
+                contentType = MediaTypeUtils.getMimeType(key).toString();
+            }
+
+            // 非图片或文件太大：降级走原图（不流式，直接读字节返回，避免 ResponseEntity 类型混乱）
+            if (!ThumbnailUtils.isSupportedImage(contentType) || metadata.getContentLength() > MAX_IMAGE_BYTES_FOR_THUMB) {
+                return directBytesResponse(key, metadata, contentType);
+            }
+
+            // 1) 命中磁盘缓存，直接返回
+            ThumbnailCacheManager.CachedResult cached = ThumbnailCacheManager.get(key, width, quality, shape);
+            if (cached != null && cached.getBytes() != null && cached.getBytes().length > 0) {
+                return buildThumbResponse(cached.getBytes(), cached.getContentType());
+            }
+
+            // 2) 未命中：读完整原图
+            byte[] originalBytes = readAllBytes(key);
+            if (originalBytes == null || originalBytes.length == 0) {
+                // 读取失败，降级走原图流响应
+                return buildRedirectToOriginal(key);
+            }
+
+            // 3) 生成缩略图
+            ThumbnailUtils.ThumbnailResult result = ThumbnailUtils.generate(
+                    originalBytes, contentType, width, quality, shape);
+
+            // 4) 写缓存（异常不影响响应）
+            ThumbnailCacheManager.put(key, width, quality, shape, result.getBytes(), result.getFormatName());
+
+            return buildThumbResponse(result.getBytes(), result.getContentType());
+        } catch (Exception e) {
+            log.warn("[preview] 缩略图处理失败，降级返回原图. key={}, err={}", key, e.getMessage());
+            return buildRedirectToOriginal(key);
+        }
+    }
+
+    /**
+     * 读取原图全部字节（用于缩略图生成）
+     * 注意：调用方应先判断 contentLength，避免大文件读入内存
+     */
+    private byte[] readAllBytes(String key) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream(8192)) {
+            storageService.streamFile(key, baos, 0, -1);
+            return baos.toByteArray();
+        } catch (Exception e) {
+            log.warn("[preview] 读取原图字节失败: key={}, err={}", key, e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 构造缩略图响应（带浏览器 HTTP 缓存：ETag + max-age 30 天）
+     */
+    private ResponseEntity<byte[]> buildThumbResponse(byte[] bytes, String contentType) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(contentType));
+        headers.setContentLength(bytes.length);
+        // 浏览器 + CDN 缓存：缩略图一般静态不变，强缓存 30 天
+        headers.setCacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePublic());
+        // inline：浏览器直接显示
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline");
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 非图片/超大图/生成失败时：直接一次性读原图返回（小文件 OK；大文件场景建议前端用无参数的 preview URL）
+     * 为避免重复代码，返回 302 让浏览器重定向到无参 preview 地址，复用 streamResponse 的 Range 能力
+     */
+    private ResponseEntity<byte[]> buildRedirectToOriginal(String key) {
+        // 此处返回的是 byte[] 类型，为保持 ResponseEntity 签名一致，用字节重定向实现
+        // 实际无法优雅返回 302+StreamingResponseBody，所以退化为直接读取原图字节
+        try {
+            FileMetadata metadata = storageService.getMetadata(key);
+            String contentType = metadata.getContentType();
+            if (contentType == null || contentType.isEmpty()) {
+                contentType = MediaTypeUtils.getMimeType(key).toString();
+            }
+            return directBytesResponse(key, metadata, contentType);
+        } catch (Exception ignore) {
+            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private ResponseEntity<byte[]> directBytesResponse(String key, FileMetadata metadata, String contentType) {
+        byte[] bytes = readAllBytes(key);
+        if (bytes == null) bytes = new byte[0];
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(contentType));
+        headers.setContentLength(bytes.length);
+        headers.add(HttpHeaders.ACCEPT_RANGES, "bytes");
+        headers.setCacheControl(CacheControl.maxAge(Duration.ofDays(7)).cachePublic());
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline");
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
 }
