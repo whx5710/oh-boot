@@ -19,7 +19,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data
+      - /home/finn/data/redis:/data        # 改为普通目录
     command: redis-server --appendonly yes --requirepass Finn!2026r
 
   finn-postgres:
@@ -33,7 +33,7 @@ services:
       POSTGRES_PASSWORD: Finn!2026p
       POSTGRES_DB: stepping_stone
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - /home/finn/data/postgres:/var/lib/postgresql/data   # 改为普通目录，指向 data 子目录
 
   seaweedfs:
     image: chrislusf/seaweedfs:latest
@@ -44,13 +44,9 @@ services:
       - "8888:8888"   # Filer UI
       - "8333:8333"   # S3 API
     volumes:
-      - ./fsdata:/fsdata                    # 路径对齐
+      - /home/finn/data/seaweedfs:/data
       - ./s3-config.json:/etc/seaweedfs/s3.json:ro
     command: >
       server -s3 -s3.config=/etc/seaweedfs/s3.json
-      -dir=/fsdata -volume.max=0 -master.volumeSizeLimitMB=1024
+      -dir=/data -volume.max=0 -master.volumeSizeLimitMB=1024
     restart: unless-stopped
-
-volumes:
-  redis_data:
-  postgres_data:
