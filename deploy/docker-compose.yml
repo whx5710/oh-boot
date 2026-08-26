@@ -35,6 +35,22 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
 
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    container_name: seaweedfs
+    ports:
+      - "9333:9333"   # Master UI
+      - "8080:8080"   # Volume
+      - "8888:8888"   # Filer UI
+      - "8333:8333"   # S3 API
+    volumes:
+      - ./fsdata:/fsdata                    # 路径对齐
+      - ./s3-config.json:/etc/seaweedfs/s3.json:ro
+    command: >
+      server -s3 -s3.config=/etc/seaweedfs/s3.json
+      -dir=/fsdata -volume.max=0 -master.volumeSizeLimitMB=1024
+    restart: unless-stopped
+
 volumes:
   redis_data:
   postgres_data:
