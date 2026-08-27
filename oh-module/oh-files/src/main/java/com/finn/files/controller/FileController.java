@@ -99,7 +99,7 @@ public class FileController {
      *   shape       : "circle" 裁剪为正方形内接圆形（PNG，透明背景），用于地图 marker
      */
     @GetMapping("/preview/**")
-    public ResponseEntity<?> preview(HttpServletRequest request) {
+    public ResponseEntity<StreamingResponseBody> preview(HttpServletRequest request) {
         String key = extractKey(request, "/file/preview/");
 
         // 解析缩略图参数
@@ -401,8 +401,10 @@ public class FileController {
     /**
      * 返回缩略图响应（字节级 + 浏览器强缓存，不走 Range 断点续传）
      * 生成失败会静默降级为原图预览
+     * 注意：统一包装为 StreamingResponseBody，与 preview 方法的返回类型保持一致，
+     * 避免 ResponseEntity&lt;?&gt; 通配符导致 StreamingResponseBody 无法被识别（No converter for Lambda）
      */
-    private ResponseEntity<byte[]> thumbnailResponse(String key, int width, int quality, String shape) {
+    private ResponseEntity<StreamingResponseBody> thumbnailResponse(String key, int width, int quality, String shape) {
         try {
             FileMetadata metadata = storageService.getMetadata(key);
             String contentType = metadata.getContentType();
@@ -459,7 +461,7 @@ public class FileController {
     /**
      * 构造缩略图响应（带浏览器 HTTP 缓存：ETag + max-age 30 天）
      */
-    private ResponseEntity<byte[]> buildThumbResponse(byte[] bytes, String contentType) {
+    private ResponseEntity<StreamingResponseBody> buildThumbResponse(byte[] bytes, String contentType) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(contentType));
         headers.setContentLength(bytes.length);
@@ -467,16 +469,22 @@ public class FileController {
         headers.setCacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePublic());
         // inline：浏览器直接显示
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline");
-        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+        return new ResponseEntity<>(bytesBody(bytes), headers, HttpStatus.OK);
     }
 
     /**
-     * 非图片/超大图/生成失败时：直接一次性读原图返回（小文件 OK；大文件场景建议前端用无参数的 preview URL）
-     * 为避免重复代码，返回 302 让浏览器重定向到无参 preview 地址，复用 streamResponse 的 Range 能力
+     * 将字节数组包装为 StreamingResponseBody，保持与流式响应一致的返回类型
      */
-    private ResponseEntity<byte[]> buildRedirectToOriginal(String key) {
-        // 此处返回的是 byte[] 类型，为保持 ResponseEntity 签名一致，用字节重定向实现
-        // 实际无法优雅返回 302+StreamingResponseBody，所以退化为直接读取原图字节
+    private StreamingResponseBody bytesBody(byte[] bytes) {
+        return outputStream -> outputStream.write(bytes);
+    }
+
+    /**
+     * 非图片/超大图/生成失败时：直接一次性读原图字节返回（小文件 OK；大文件场景建议前端用无参数的 preview URL）
+     * 与原图流式预览（streamResponse，支持 Range）相比没有断点续传，但能保证返回类型一致
+     */
+    private ResponseEntity<StreamingResponseBody> buildRedirectToOriginal(String key) {
+        // 降级：直接读取原图字节返回（与缩略图一致的 byte 包装方式）
         try {
             FileMetadata metadata = storageService.getMetadata(key);
             String contentType = metadata.getContentType();
@@ -485,11 +493,11 @@ public class FileController {
             }
             return directBytesResponse(key, metadata, contentType);
         } catch (Exception ignore) {
-            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(bytesBody(new byte[0]), HttpStatus.NOT_FOUND);
         }
     }
 
-    private ResponseEntity<byte[]> directBytesResponse(String key, FileMetadata metadata, String contentType) {
+    private ResponseEntity<StreamingResponseBody> directBytesResponse(String key, FileMetadata metadata, String contentType) {
         byte[] bytes = readAllBytes(key);
         if (bytes == null) bytes = new byte[0];
         HttpHeaders headers = new HttpHeaders();
@@ -498,6 +506,6 @@ public class FileController {
         headers.add(HttpHeaders.ACCEPT_RANGES, "bytes");
         headers.setCacheControl(CacheControl.maxAge(Duration.ofDays(7)).cachePublic());
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline");
-        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+        return new ResponseEntity<>(bytesBody(bytes), headers, HttpStatus.OK);
     }
 }
