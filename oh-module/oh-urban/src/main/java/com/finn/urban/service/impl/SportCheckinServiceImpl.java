@@ -73,6 +73,19 @@ public class SportCheckinServiceImpl implements SportCheckinService {
         return sportCheckinMapper.listByWrapper(cqw);
     }
 
+    @Override
+    public List<SportCheckinVO> listCheckinsByGroupId(Long groupId) {
+        List<SportCheckin> checkins = listByGroupId(groupId);
+        if (checkins == null || checkins.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<SportCheckinVO> cvos = SportCheckinConvert.INSTANCE.convertList(checkins);
+        for (int i = 0; i < checkins.size(); i++) {
+            cvos.get(i).setPhotos(JsonUtils.parseArray(checkins.get(i).getPhotos(), String.class));
+        }
+        return cvos;
+    }
+
     /**
      * 按 clientId 去重插入打卡点；clientId 为空则直接插入
      */

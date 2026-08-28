@@ -27,6 +27,13 @@ public interface SportCheckinService {
     List<SportCheckin> listByGroupId(Long groupId);
 
     /**
+     * 根据groupId获取打卡VO列表（photos 已解析为文件 key 列表）
+     * @param groupId
+     * @return
+     */
+    List<SportCheckinVO> listCheckinsByGroupId(Long groupId);
+
+    /**
      * 按 clientId 去重插入打卡点；clientId 为空则直接插入
      */
     void upsertCheckin(SportCheckinVO vo);

@@ -68,11 +68,55 @@ public class SportRecordServiceImpl implements SportRecordService {
     private static final String DETAIL_CACHE_KEY = "sport:record:detail:";
     private static final int DETAIL_CACHE_EXPIRE = 1800;
 
+//    @Override
+//    public SportRecordVO detail(Long id) {
+//        AssertUtils.isNull(id, "ID");
+//
+//        String cacheKey = DETAIL_CACHE_KEY + id;
+//        if (redisCache.hasKey(cacheKey)) {
+//            Object cached = redisCache.get(cacheKey);
+//            if (cached != null) {
+//                return JsonUtils.parseObject(cached.toString(), SportRecordVO.class);
+//            }
+//        }
+//
+//        SportRecordEntity entity = sportRecordMapper.findById(id, SportRecordEntity.class);
+//        if (entity == null || entity.getId() == null) {
+//            throw new ServerException("未找到运动记录信息");
+//        }
+//        SportRecordVO vo = SportRecordConvert.INSTANCE.convert(entity);
+//
+//        QueryWrapper<TrajectoryEntity> queryWrapper = QueryWrapper.of(TrajectoryEntity.class);
+//        queryWrapper.eq(TrajectoryEntity::getDbStatus, 1).eq(TrajectoryEntity::getCreator, vo.getUserId())
+//                        .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
+//        List<TrajectoryEntity> list = trajectoryMapper.listByWrapper(queryWrapper);
+//        if(list != null && !list.isEmpty()){
+//            // 使用轨迹抽稀算法简化轨迹点
+//            List<PointVO> points = TrajectorySimplifier.simplifyEntities(list, 10.0, 300);
+//            vo.setPoints(points);
+//        }
+//
+//        List<SportCheckin> checkins = sportCheckinService.listByGroupId(vo.getId());
+//        if (checkins != null && !checkins.isEmpty()) {
+//            List<SportCheckinVO> cvos = SportCheckinConvert.INSTANCE.convertList(checkins);
+//            for (int i = 0; i < checkins.size(); i++) {
+//                cvos.get(i).setPhotos(JsonUtils.parseArray(checkins.get(i).getPhotos(), String.class));
+//            }
+//            vo.setCheckins(cvos);
+//        }
+//
+//        redisCache.set(cacheKey, JsonUtils.toJsonString(vo), DETAIL_CACHE_EXPIRE);
+//        return vo;
+//    }
+
+    private static final String TRACK_CACHE_KEY = "sport:record:track:";
+    private static final int TRACK_CACHE_EXPIRE = 1800;
+
     @Override
-    public SportRecordVO detail(Long id) {
+    public SportRecordVO detailBaseWithTrack(Long id) {
         AssertUtils.isNull(id, "ID");
 
-        String cacheKey = DETAIL_CACHE_KEY + id;
+        String cacheKey = TRACK_CACHE_KEY + id;
         if (redisCache.hasKey(cacheKey)) {
             Object cached = redisCache.get(cacheKey);
             if (cached != null) {
@@ -88,24 +132,14 @@ public class SportRecordServiceImpl implements SportRecordService {
 
         QueryWrapper<TrajectoryEntity> queryWrapper = QueryWrapper.of(TrajectoryEntity.class);
         queryWrapper.eq(TrajectoryEntity::getDbStatus, 1).eq(TrajectoryEntity::getCreator, vo.getUserId())
-                        .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
+                .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
         List<TrajectoryEntity> list = trajectoryMapper.listByWrapper(queryWrapper);
-        if(list != null && !list.isEmpty()){
-            // 使用轨迹抽稀算法简化轨迹点
+        if (list != null && !list.isEmpty()) {
             List<PointVO> points = TrajectorySimplifier.simplifyEntities(list, 10.0, 300);
             vo.setPoints(points);
         }
 
-        List<SportCheckin> checkins = sportCheckinService.listByGroupId(vo.getId());
-        if (checkins != null && !checkins.isEmpty()) {
-            List<SportCheckinVO> cvos = SportCheckinConvert.INSTANCE.convertList(checkins);
-            for (int i = 0; i < checkins.size(); i++) {
-                cvos.get(i).setPhotos(JsonUtils.parseArray(checkins.get(i).getPhotos(), String.class));
-            }
-            vo.setCheckins(cvos);
-        }
-
-        redisCache.set(cacheKey, JsonUtils.toJsonString(vo), DETAIL_CACHE_EXPIRE);
+        redisCache.set(cacheKey, JsonUtils.toJsonString(vo), TRACK_CACHE_EXPIRE);
         return vo;
     }
 

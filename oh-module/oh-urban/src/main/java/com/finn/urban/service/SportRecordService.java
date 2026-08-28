@@ -23,7 +23,12 @@ public interface SportRecordService {
     /**
      * 根据ID查询详情（含轨迹点 + 打卡点）
      */
-    SportRecordVO detail(Long id);
+//    SportRecordVO detail(Long id);
+
+    /**
+     * 根据ID查询基础详情 + 轨迹点（不含打卡点）
+     */
+    SportRecordVO detailBaseWithTrack(Long id);
 
     /**
      * 保存
