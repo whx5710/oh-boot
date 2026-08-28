@@ -323,7 +323,7 @@ CREATE TABLE `ur_sport_checkin`  (
 DROP TABLE IF EXISTS `ur_sport_record`;
 CREATE TABLE `ur_sport_record`  (
   `id` bigint NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '轨迹名称',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '轨迹名称',
   `user_id` bigint NOT NULL COMMENT '用户ID',
   `record_date` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '记录日期，yyyymmdd',
   `start_time` datetime(6) NOT NULL COMMENT '开始时间',

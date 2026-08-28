@@ -586,7 +586,7 @@ COMMENT ON TABLE "oh_boot"."ur_sport_checkin" IS '运动打卡点表';
 DROP TABLE IF EXISTS "oh_boot"."ur_sport_record";
 CREATE TABLE "oh_boot"."ur_sport_record" (
   "id" int8 NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "name" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "user_id" int8 NOT NULL,
   "record_date" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
   "start_time" timestamp(6) NOT NULL,

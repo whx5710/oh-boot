@@ -188,7 +188,7 @@ public class SportRecordServiceImpl implements SportRecordService {
         LocalDateTime now = LocalDateTime.now();
         entity.setStartTime(now);
         entity.setRecordDate(DateUtils.format(now, "yyyyMMdd"));
-        entity.setName(DateUtils.format(now, "yyyyMMddHHmmss"));
+        entity.setName(vo.getName()==null?DateUtils.format(now, "yyyyMMddHHmmss"):vo.getName());
         entity.setUserId(userId);
         entity.setStartAddress(vo.getStartAddress());
         entity.setDbStatus(1);
@@ -217,7 +217,7 @@ public class SportRecordServiceImpl implements SportRecordService {
                 .eq(TrajectoryEntity::getDbStatus, 1);
         long num = trajectoryMapper.count(countWrapper);
         String msg = "结束成功";
-        if(num < 20){
+        if(num < 10){
             msg = "轨迹太短，不保存";
             entity.setDbStatus(0);
             entity.setRemark(msg);
