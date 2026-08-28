@@ -3,10 +3,9 @@ package com.finn.urban.controller;
 import com.finn.common.entity.Result;
 import com.finn.urban.service.SportCheckinService;
 import com.finn.urban.vo.SportCheckinVO;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 拍照打卡（微信小程序端）
@@ -32,4 +31,11 @@ public class SportCheckinController {
         return Result.ok(String.valueOf(sportCheckinService.saveCheckin(vo)));
     }
 
+    /**
+     * 根据ID查询打卡点列表
+     */
+    @GetMapping("/{id}")
+    public Result<List<SportCheckinVO>> checkins(@PathVariable("id") Long id) {
+        return Result.ok(sportCheckinService.listCheckinsByGroupId(id));
+    }
 }

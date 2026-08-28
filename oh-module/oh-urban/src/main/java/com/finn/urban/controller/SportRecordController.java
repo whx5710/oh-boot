@@ -11,7 +11,6 @@ import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.service.SportCheckinService;
 import com.finn.urban.service.SportRecordService;
-import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 import com.github.pagehelper.Page;
 import jakarta.validation.Valid;
@@ -75,15 +74,6 @@ public class SportRecordController {
     // @PreAuthorize("hasAuthority('urban:sport-record:info')")
     public Result<SportRecordVO> info(@PathVariable("id") Long id) {
         return Result.ok(sportRecordService.detailBaseWithTrack(id));
-    }
-
-    /**
-     * 根据ID查询打卡点列表
-     */
-    @GetMapping("/{id}/checkins")
-    // @PreAuthorize("hasAuthority('urban:sport-record:info')")
-    public Result<List<SportCheckinVO>> checkins(@PathVariable("id") Long id) {
-        return Result.ok(sportCheckinService.listCheckinsByGroupId(id));
     }
 
     /**
