@@ -2,6 +2,8 @@ package com.finn.urban.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -62,7 +64,7 @@ public class SportRecordVO implements Serializable {
     private Long duration;
 
     /**
-     * 距离 里程，公里
+     * 距离 里程，公里，保留3位小数（米）
      */
     private Double distance;
 
@@ -148,8 +150,18 @@ public class SportRecordVO implements Serializable {
         return distance;
     }
 
+    /**
+     * 保留3位小数（米）
+     * @param distance
+     */
     public void setDistance(Double distance) {
-        this.distance = distance;
+        if(distance != null){
+            BigDecimal bigDecimal = new BigDecimal(distance);
+            bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
+            this.distance = bigDecimal.doubleValue();
+        }else{
+            this.distance = null;
+        }
     }
 
     public String getRemark() {
