@@ -1,5 +1,6 @@
 package com.finn.urban.controller;
 
+import com.finn.common.entity.HashDto;
 import com.finn.common.entity.PageResult;
 import com.finn.common.entity.Result;
 import com.finn.common.enums.OperateTypeEnum;
@@ -135,4 +136,15 @@ public class SportRecordController {
         sportRecordService.delete(idList);
         return Result.ok();
     }
+
+    /**
+     * 按时间统计运动情况
+     * @param query
+     * @return
+     */
+    @PostMapping("/statistics")
+    public Result<HashDto> statistics(@RequestBody SportRecordQuery query){
+        return Result.ok(sportRecordService.statistics(query));
+    }
+
 }

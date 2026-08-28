@@ -1,8 +1,11 @@
 package com.finn.urban.mapper;
 
+import com.finn.common.entity.HashDto;
 import com.finn.framework.datasource.mapper.BaseMapper;
 import com.finn.urban.entity.SportRecordEntity;
+import com.finn.urban.query.SportRecordQuery;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 运动记录表
@@ -13,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SportRecordMapper extends BaseMapper<SportRecordEntity> {
 
+    HashDto statistics(@Param("params")SportRecordQuery params);
 }

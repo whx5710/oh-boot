@@ -1,5 +1,6 @@
 package com.finn.urban.service;
 
+import com.finn.common.entity.HashDto;
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.query.SportRecordQuery;
 import com.finn.urban.vo.SportRecordVO;
@@ -60,4 +61,10 @@ public interface SportRecordService {
      */
     void delete(List<Long> idList);
 
+    /**
+     * 统计运动情况
+     * @param query
+     * @return
+     */
+    HashDto statistics(SportRecordQuery query);
 }

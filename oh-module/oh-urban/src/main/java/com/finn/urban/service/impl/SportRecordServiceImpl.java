@@ -1,5 +1,6 @@
 package com.finn.urban.service.impl;
 
+import com.finn.common.entity.HashDto;
 import com.finn.common.utils.AssertUtils;
 import com.finn.common.utils.DateUtils;
 import com.finn.common.utils.JsonUtils;
@@ -9,9 +10,7 @@ import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.framework.datasource.wrapper.UpdateWrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
-import com.finn.urban.convert.SportCheckinConvert;
 import com.finn.urban.convert.SportRecordConvert;
-import com.finn.urban.entity.SportCheckin;
 import com.finn.urban.entity.SportRecordEntity;
 import com.finn.urban.entity.TrajectoryEntity;
 import com.finn.urban.mapper.SportRecordMapper;
@@ -27,6 +26,8 @@ import com.github.pagehelper.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,47 +68,6 @@ public class SportRecordServiceImpl implements SportRecordService {
 
     private static final String DETAIL_CACHE_KEY = "sport:record:detail:";
     private static final int DETAIL_CACHE_EXPIRE = 1800;
-
-//    @Override
-//    public SportRecordVO detail(Long id) {
-//        AssertUtils.isNull(id, "ID");
-//
-//        String cacheKey = DETAIL_CACHE_KEY + id;
-//        if (redisCache.hasKey(cacheKey)) {
-//            Object cached = redisCache.get(cacheKey);
-//            if (cached != null) {
-//                return JsonUtils.parseObject(cached.toString(), SportRecordVO.class);
-//            }
-//        }
-//
-//        SportRecordEntity entity = sportRecordMapper.findById(id, SportRecordEntity.class);
-//        if (entity == null || entity.getId() == null) {
-//            throw new ServerException("未找到运动记录信息");
-//        }
-//        SportRecordVO vo = SportRecordConvert.INSTANCE.convert(entity);
-//
-//        QueryWrapper<TrajectoryEntity> queryWrapper = QueryWrapper.of(TrajectoryEntity.class);
-//        queryWrapper.eq(TrajectoryEntity::getDbStatus, 1).eq(TrajectoryEntity::getCreator, vo.getUserId())
-//                        .eq(TrajectoryEntity::getGroupId, vo.getId()).orderBy("gps_time asc");
-//        List<TrajectoryEntity> list = trajectoryMapper.listByWrapper(queryWrapper);
-//        if(list != null && !list.isEmpty()){
-//            // 使用轨迹抽稀算法简化轨迹点
-//            List<PointVO> points = TrajectorySimplifier.simplifyEntities(list, 10.0, 300);
-//            vo.setPoints(points);
-//        }
-//
-//        List<SportCheckin> checkins = sportCheckinService.listByGroupId(vo.getId());
-//        if (checkins != null && !checkins.isEmpty()) {
-//            List<SportCheckinVO> cvos = SportCheckinConvert.INSTANCE.convertList(checkins);
-//            for (int i = 0; i < checkins.size(); i++) {
-//                cvos.get(i).setPhotos(JsonUtils.parseArray(checkins.get(i).getPhotos(), String.class));
-//            }
-//            vo.setCheckins(cvos);
-//        }
-//
-//        redisCache.set(cacheKey, JsonUtils.toJsonString(vo), DETAIL_CACHE_EXPIRE);
-//        return vo;
-//    }
 
     private static final String TRACK_CACHE_KEY = "sport:record:track:";
     private static final int TRACK_CACHE_EXPIRE = 1800;
@@ -276,6 +236,23 @@ public class SportRecordServiceImpl implements SportRecordService {
         sportRecordMapper.updateByWrapper(updateWrapper);
     }
 
+    @Override
+    public HashDto statistics(SportRecordQuery query) {
+        Long userId = SecurityUser.getUserId();
+        if(userId == null){
+            throw new ServerException("请先登录");
+        }
+        query.setUserId(userId);
+        HashDto hashDto = sportRecordMapper.statistics(query);
+        if(hashDto.containsKey("distance") && hashDto.get("distance") != null){
+            Double distance = hashDto.getDouble("distance");
+            BigDecimal bigDecimal = new BigDecimal(distance);
+            bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
+            hashDto.put("distance", bigDecimal);
+        }
+        return hashDto;
+    }
+
     /**
      * 组装查询条件
      */
@@ -284,8 +261,8 @@ public class SportRecordServiceImpl implements SportRecordService {
         queryWrapper.eq(SportRecordEntity::getDbStatus, 1)
                 .eq(SportRecordEntity::getUserId, query.getUserId())
                 .eq(SportRecordEntity::getRecordDate, query.getRecordDate())
-                .ge(SportRecordEntity::getRecordDate, query.getStartDate())
-                .le(SportRecordEntity::getRecordDate, query.getEndDate())
+                .ge(SportRecordEntity::getStartTime, query.getStartDate())
+                .le(SportRecordEntity::getStartTime, query.getEndDate())
                 .orderBy(SportRecordEntity::getRecordDate, DESC);
         if (query.getKeyWord() != null && !query.getKeyWord().isEmpty()) {
             queryWrapper.like(SportRecordEntity::getRemark, query.getKeyWord());

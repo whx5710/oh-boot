@@ -2,6 +2,8 @@ package com.finn.urban.query;
 
 import com.finn.framework.query.Query;
 
+import java.time.LocalDateTime;
+
 /**
  * 运动记录表查询
  *
@@ -21,14 +23,14 @@ public class SportRecordQuery extends Query {
     private String recordDate;
 
     /**
-     * 记录开始日期，yyyymmdd
+     * 记录开始日期
      */
-    private String startDate;
+    private LocalDateTime startDate;
 
     /**
-     * 记录结束日期，yyyymmdd
+     * 记录结束日期
      */
-    private String endDate;
+    private LocalDateTime endDate;
 
     /**
      * 关键字（备注）
@@ -51,19 +53,19 @@ public class SportRecordQuery extends Query {
         this.recordDate = recordDate;
     }
 
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
