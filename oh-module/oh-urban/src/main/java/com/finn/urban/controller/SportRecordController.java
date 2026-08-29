@@ -147,4 +147,15 @@ public class SportRecordController {
         return Result.ok(sportRecordService.statistics(query));
     }
 
+    /**
+     * 公开、取消公开
+     * id 运动ID
+     * visibility 0非公开 1公开
+     * coverFileId 封面图片
+     */
+    @PostMapping("/visibility")
+    public Result<String> handlerVisibility(@RequestBody SportRecordVO vo){
+        return Result.ok(sportRecordService.handlerVisibility(vo));
+    }
+
 }

@@ -67,4 +67,9 @@ public interface SportRecordService {
      * @return
      */
     HashDto statistics(SportRecordQuery query);
+
+    /**
+     * 公开、取消公开
+     */
+    String handlerVisibility(SportRecordVO vo);
 }

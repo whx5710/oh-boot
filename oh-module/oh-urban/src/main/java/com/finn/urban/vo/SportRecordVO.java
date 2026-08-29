@@ -90,6 +90,21 @@ public class SportRecordVO implements Serializable {
      */
     private List<SportCheckinVO> checkins;
 
+    /**
+     * 可见度0保密1公开
+     */
+    private Integer visibility = 0;
+
+    /**
+     * 公开日期
+     */
+    private LocalDateTime releaseTime;
+
+    /**
+     * 封面文件ID
+     */
+    private String coverFileId;
+
     public Long getId() {
         return id;
     }
@@ -218,5 +233,29 @@ public class SportRecordVO implements Serializable {
 
     public void setCheckins(List<SportCheckinVO> checkins) {
         this.checkins = checkins;
+    }
+
+    public Integer getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Integer visibility) {
+        this.visibility = visibility;
+    }
+
+    public LocalDateTime getReleaseTime() {
+        return releaseTime;
+    }
+
+    public void setReleaseTime(LocalDateTime releaseTime) {
+        this.releaseTime = releaseTime;
+    }
+
+    public String getCoverFileId() {
+        return coverFileId;
+    }
+
+    public void setCoverFileId(String coverFileId) {
+        this.coverFileId = coverFileId;
     }
 }

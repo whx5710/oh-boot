@@ -74,6 +74,23 @@ public class SportRecordEntity extends BaseEntity {
      */
     private String remark;
 
+    /**
+     * 可见度0保密1公开
+     */
+    private Integer visibility = 0;
+
+    /**
+     * 公开日期
+     */
+    @TableField("release_time")
+    private LocalDateTime releaseTime;
+
+    /**
+     * 封面文件ID
+     */
+    @TableField("cover_file_id")
+    private String coverFileId;
+
     public Long getUserId() {
         return userId;
     }
@@ -160,5 +177,29 @@ public class SportRecordEntity extends BaseEntity {
 
     public void setAvgSpeed(Double avgSpeed) {
         this.avgSpeed = avgSpeed;
+    }
+
+    public Integer getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Integer visibility) {
+        this.visibility = visibility;
+    }
+
+    public LocalDateTime getReleaseTime() {
+        return releaseTime;
+    }
+
+    public void setReleaseTime(LocalDateTime releaseTime) {
+        this.releaseTime = releaseTime;
+    }
+
+    public String getCoverFileId() {
+        return coverFileId;
+    }
+
+    public void setCoverFileId(String coverFileId) {
+        this.coverFileId = coverFileId;
     }
 }

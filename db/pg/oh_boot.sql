@@ -585,23 +585,26 @@ COMMENT ON TABLE "oh_boot"."ur_sport_checkin" IS '运动打卡点表';
 -- ----------------------------
 DROP TABLE IF EXISTS "oh_boot"."ur_sport_record";
 CREATE TABLE "oh_boot"."ur_sport_record" (
-  "id" int8 NOT NULL,
-  "name" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "user_id" int8 NOT NULL,
-  "record_date" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
-  "start_time" timestamp(6) NOT NULL,
-  "end_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
-  "start_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "end_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "duration" int8,
-  "distance" float8,
-  "avg_speed" float8,
-  "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "db_status" int4 DEFAULT 1,
-  "creator" int8 NOT NULL,
-  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
-  "updater" int8,
-  "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
+     "id" int8 NOT NULL,
+     "name" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+     "user_id" int8 NOT NULL,
+     "record_date" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
+     "start_time" timestamp(6) NOT NULL,
+     "end_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+     "start_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+     "end_address" varchar(80) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+     "duration" int8,
+     "distance" float8,
+     "avg_speed" float8,
+     "remark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+     "db_status" int4 DEFAULT 1,
+     "visibility" int2 NOT NULL DEFAULT 0,
+     "release_time" timestamp(6),
+     "cover_file_id" varchar(80) COLLATE "pg_catalog"."default",
+     "creator" int8 NOT NULL,
+     "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
+     "updater" int8,
+     "update_time" timestamp(6) DEFAULT NULL::timestamp without time zone
 )
 ;
 COMMENT ON COLUMN "oh_boot"."ur_sport_record"."name" IS '轨迹名称';
@@ -620,6 +623,9 @@ COMMENT ON COLUMN "oh_boot"."ur_sport_record"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_boot"."ur_sport_record"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_boot"."ur_sport_record"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_boot"."ur_sport_record"."update_time" IS '更新时间';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."visibility" IS '可见度0保密1公开';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."release_time" IS '公开日期';
+COMMENT ON COLUMN "oh_boot"."ur_sport_record"."cover_file_id" IS '封面文件ID';
 COMMENT ON TABLE "oh_boot"."ur_sport_record" IS '运动记录表';
 
 -- ----------------------------
@@ -669,6 +675,7 @@ COMMENT ON COLUMN "oh_boot"."ur_trajectory"."creator" IS '创建者';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."create_time" IS '创建时间';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."updater" IS '更新者';
 COMMENT ON COLUMN "oh_boot"."ur_trajectory"."update_time" IS '更新时间';
+COMMENT ON TABLE "oh_boot"."ur_trajectory" IS '轨迹表';
 
 -- ----------------------------
 -- Records of ur_trajectory

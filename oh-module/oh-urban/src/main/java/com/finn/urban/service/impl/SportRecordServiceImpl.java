@@ -254,6 +254,40 @@ public class SportRecordServiceImpl implements SportRecordService {
     }
 
     /**
+     * 公开、取消公开 0不公开 1公开
+     */
+    @Override
+    public String handlerVisibility(SportRecordVO vo) {
+        AssertUtils.isNull(vo.getId(), "运动ID");
+        String msg = "发布成功";
+        if(vo.getVisibility() == null){
+            vo.setVisibility(0);
+            msg = "取消发布";
+        }
+        SportRecordEntity sportRecord = sportRecordMapper.findById(vo.getId(), SportRecordEntity.class);
+        if(sportRecord == null || sportRecord.getId() == null || sportRecord.getDbStatus() == 0){
+            throw new ServerException("未找到对应的运动记录");
+        }
+        sportRecord.setVisibility(vo.getVisibility());
+        sportRecord.setReleaseTime(LocalDateTime.now());
+        // 发布时，判断封面图片是否为空
+        if(vo.getVisibility() == 1){
+            if(vo.getCoverFileId() == null || vo.getCoverFileId().isEmpty()){
+                List<SportCheckinVO> checkinVOS = sportCheckinService.listCheckinsByGroupId(vo.getId());
+                if(!checkinVOS.isEmpty()){
+                    // 使用第一次打卡的图片
+                    SportCheckinVO checkinVO = checkinVOS.getLast();
+                    sportRecord.setCoverFileId(checkinVO.getPhotos().getFirst());
+                }
+            }else{
+                sportRecord.setCoverFileId(vo.getCoverFileId());
+            }
+        }
+        sportRecordMapper.updateById(sportRecord);
+        return msg;
+    }
+
+    /**
      * 组装查询条件
      */
     private QueryWrapper<SportRecordEntity> getQueryWrapper(SportRecordQuery query) {
