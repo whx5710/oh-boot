@@ -28,4 +28,5 @@ public interface OpenUserService {
 
     UserVO info(Long userId);
 
+    void update(OpenUserEntity user);
 }

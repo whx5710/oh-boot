@@ -12,6 +12,7 @@ import com.finn.common.entity.PageResult;
 import com.finn.common.utils.Tools;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.framework.security.user.UserDetail;
+import com.finn.system.cache.UserCache;
 import com.finn.system.convert.UserConvert;
 import com.finn.system.entity.UserEntity;
 import com.finn.system.enums.DataScopeEnum;
@@ -55,6 +56,7 @@ public class UserServiceImpl implements UserService {
     private final DeptService deptService;
     private final RoleDataScopeMapper roleDataScopeMapper;
     private final RoleMapper roleMapper;
+    private final UserCache userCache;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -65,7 +67,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRoleService userRoleService, UserPostService userPostService,
                            RedisCache redisCache, UserMapper userMapper,
                            DeptService deptService, RoleDataScopeMapper roleDataScopeMapper,
-                           RoleMapper roleMapper) {
+                           RoleMapper roleMapper, UserCache userCache) {
         this.userRoleService = userRoleService;
         this.userPostService = userPostService;
         this.redisCache = redisCache;
@@ -73,6 +75,7 @@ public class UserServiceImpl implements UserService {
         this.deptService = deptService;
         this.roleDataScopeMapper = roleDataScopeMapper;
         this.roleMapper = roleMapper;
+        this.userCache = userCache;
     }
 
     @Override
@@ -168,6 +171,10 @@ public class UserServiceImpl implements UserService {
 
         // 更新用户岗位关系
         userPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
+
+        // 缓存用户
+        UserEntity userEntity = userMapper.findById(entity.getId(), UserEntity.class);
+        userCache.saveUser(userEntity);
     }
 
     @Override
@@ -209,6 +216,10 @@ public class UserServiceImpl implements UserService {
 
         // 更新用户岗位关系
         userPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
+
+        // 更新缓存用户
+        userDb = userMapper.getById(vo.getId());
+        userCache.saveUser(userDb);
     }
 
     /**

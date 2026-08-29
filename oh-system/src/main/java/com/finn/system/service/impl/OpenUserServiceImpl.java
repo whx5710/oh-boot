@@ -100,4 +100,17 @@ public class OpenUserServiceImpl implements OpenUserService {
         user.setPostIdList(new ArrayList<>());
         return user;
     }
+
+    @Override
+    public void update(OpenUserEntity user) {
+        AssertUtils.isNull(user.getId(), "用户ID");
+        // 不能修改的
+        user.setOpenId(null);
+        user.setUserName(null);
+        openUserMapper.updateById(user);
+
+        // 缓存用户
+        user = openUserMapper.findById(user.getId(), OpenUserEntity.class);
+        openUserCache.saveUser(user);
+    }
 }
