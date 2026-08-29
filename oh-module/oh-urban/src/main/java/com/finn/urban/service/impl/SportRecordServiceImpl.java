@@ -62,7 +62,7 @@ public class SportRecordServiceImpl implements SportRecordService {
     @Override
     public Page<SportRecordEntity> page(SportRecordQuery query) {
         QueryWrapper<SportRecordEntity> queryWrapper = getQueryWrapper(query);
-        queryWrapper.page(query.getPageNum(), query.getPageSize()).orderBy("create_time desc");
+        queryWrapper.page(query.getPageNum(), query.getPageSize());
         return sportRecordMapper.listByWrapper(queryWrapper);
     }
 
@@ -296,10 +296,15 @@ public class SportRecordServiceImpl implements SportRecordService {
                 .eq(SportRecordEntity::getUserId, query.getUserId())
                 .eq(SportRecordEntity::getRecordDate, query.getRecordDate())
                 .ge(SportRecordEntity::getStartTime, query.getStartDate())
-                .le(SportRecordEntity::getStartTime, query.getEndDate())
-                .orderBy(SportRecordEntity::getRecordDate, DESC);
+                .eq(SportRecordEntity::getVisibility, query.getVisibility())
+                .le(SportRecordEntity::getStartTime, query.getEndDate());
         if (query.getKeyWord() != null && !query.getKeyWord().isEmpty()) {
             queryWrapper.like(SportRecordEntity::getRemark, query.getKeyWord());
+        }
+        if(query.getOrderBy() != null && !query.getOrderBy().isEmpty()){
+            queryWrapper.orderBy(query.getOrderBy());
+        }else{
+            queryWrapper.orderBy("create_time desc");
         }
         return queryWrapper;
     }

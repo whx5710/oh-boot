@@ -33,6 +33,11 @@ public class SportRecordQuery extends Query {
     private LocalDateTime endDate;
 
     /**
+     * 可见度0保密1公开
+     */
+    private Integer visibility;
+
+    /**
      * 关键字（备注）
      */
     private String keyWord;
@@ -75,5 +80,13 @@ public class SportRecordQuery extends Query {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Integer getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Integer visibility) {
+        this.visibility = visibility;
     }
 }

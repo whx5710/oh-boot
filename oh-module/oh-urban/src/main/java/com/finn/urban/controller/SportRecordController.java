@@ -69,6 +69,22 @@ public class SportRecordController {
     }
 
     /**
+     * 广场
+     */
+    @GetMapping("/piazza")
+    public Result<PageResult<SportRecordVO>> piazza(@Valid SportRecordQuery query) {
+        query.setVisibility(1);
+        query.setOrderBy("release_time desc");
+        Page<SportRecordEntity> page = sportRecordService.page(query);
+        List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
+//        sportCheckinService.fillCheckinCount(vos);
+        return Result.ok(vos, page.getTotal());
+    }
+
+
+
+
+    /**
      * 根据ID查询详情（含轨迹坐标点 points，不含打卡点 checkins）
      */
     @GetMapping("/{id}")
