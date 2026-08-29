@@ -105,6 +105,16 @@ public class SportRecordVO implements Serializable {
      */
     private String coverFileId;
 
+    /**
+     * 昵称
+     */
+    private String realName;
+
+    /**
+     * 头像ID
+     */
+    private String avatar;
+
     public Long getId() {
         return id;
     }
@@ -257,5 +267,21 @@ public class SportRecordVO implements Serializable {
 
     public void setCoverFileId(String coverFileId) {
         this.coverFileId = coverFileId;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

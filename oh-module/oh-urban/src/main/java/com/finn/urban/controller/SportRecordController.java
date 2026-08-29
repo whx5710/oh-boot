@@ -4,7 +4,10 @@ import com.finn.common.entity.HashDto;
 import com.finn.common.entity.PageResult;
 import com.finn.common.entity.Result;
 import com.finn.common.enums.OperateTypeEnum;
+import com.finn.common.utils.JsonUtils;
 import com.finn.framework.aop.annotations.Log;
+import com.finn.framework.cache.RedisCache;
+import com.finn.framework.cache.RedisKeys;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.urban.convert.SportRecordConvert;
@@ -35,9 +38,13 @@ public class SportRecordController {
 
     private final SportCheckinService sportCheckinService;
 
-    public SportRecordController(SportRecordService sportRecordService, SportCheckinService sportCheckinService) {
+    private final RedisCache redisCache;
+
+    public SportRecordController(SportRecordService sportRecordService, SportCheckinService sportCheckinService,
+                                 RedisCache redisCache) {
         this.sportRecordService = sportRecordService;
         this.sportCheckinService = sportCheckinService;
+        this.redisCache = redisCache;
     }
 
     /**
@@ -77,7 +84,14 @@ public class SportRecordController {
         query.setOrderBy("release_time desc");
         Page<SportRecordEntity> page = sportRecordService.page(query);
         List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
-//        sportCheckinService.fillCheckinCount(vos);
+        String userKey = RedisKeys.PREFIX + "open-user:info:";
+        for(SportRecordVO vo: vos){
+            String key = userKey + vo.getUserId();
+            String userJson = redisCache.get(key).toString();
+            HashDto hashDto = JsonUtils.parseObject(userJson, HashDto.class);
+            vo.setRealName(hashDto.getStr("realName"));
+            vo.setAvatar(hashDto.getStr("avatar"));
+        }
         return Result.ok(vos, page.getTotal());
     }
 
