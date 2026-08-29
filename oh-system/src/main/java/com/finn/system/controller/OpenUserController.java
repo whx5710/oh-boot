@@ -1,8 +1,10 @@
 package com.finn.system.controller;
 
 import com.finn.common.entity.Result;
+import com.finn.system.entity.OpenUserEntity;
 import com.finn.system.service.OpenUserService;
 import com.finn.system.vo.UserVO;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,29 +24,6 @@ public class OpenUserController {
     }
 
     /**
-     * 用户列表-分页
-     * @param query 查询参数
-     * @return 用户列表
-     */
-//    @GetMapping("/page")
-//    @PreAuthorize("hasAuthority('sys:user:page')")
-//    public Result<PageResult<UserVO>> page(@Valid UserQuery query) {
-//        PageResult<UserVO> page = openUserService.page(query);
-//        return Result.ok(page);
-//    }
-
-    /**
-     * 根据用户ID获取用户信息
-     * @param id 用户ID
-     * @return 用户信息
-     */
-//    @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('sys:user:info')")
-//    public Result<UserVO> get(@PathVariable("id") Long id) {
-//        return Result.ok(openUserService.info(id));
-//    }
-
-    /**
      * 获取当前登录的用户
      * @return 用户信息
      */
@@ -58,13 +37,11 @@ public class OpenUserController {
      * @param vo 用户
      * @return 提示信息
      */
-//    @PostMapping("/update")
-//    @Log(module = "用户管理", name = "修改", type = OperateTypeEnum.UPDATE)
-//    @PreAuthorize("hasAuthority('sys:user:update')")
-//    public Result<String> update(@RequestBody @Valid UserVO vo) {
-//        openUserService.update(vo);
-//        return Result.ok("修改成功");
-//    }
+    @PostMapping("/update")
+    public Result<String> update(@RequestBody @Valid OpenUserEntity vo) {
+        openUserService.update(vo);
+        return Result.ok("修改成功");
+    }
 
     /**
      * 删除用户
