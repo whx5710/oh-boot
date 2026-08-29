@@ -600,7 +600,7 @@ CREATE TABLE "oh_boot"."ur_sport_record" (
      "db_status" int4 DEFAULT 1,
      "visibility" int2 NOT NULL DEFAULT 0,
      "release_time" timestamp(6),
-     "cover_file_id" varchar(80) COLLATE "pg_catalog"."default",
+     "cover_file_id" varchar(120) COLLATE "pg_catalog"."default",
      "creator" int8 NOT NULL,
      "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
      "updater" int8,
