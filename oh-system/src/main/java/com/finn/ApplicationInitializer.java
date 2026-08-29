@@ -28,8 +28,10 @@ import com.finn.framework.datasource.DynamicDataSource;
 import com.finn.framework.datasource.wrapper.QueryWrapper;
 import com.finn.license.LicenseUtils;
 import com.finn.system.cache.DictCache;
+import com.finn.system.cache.OpenUserCache;
 import com.finn.system.cache.ParamsCache;
 import com.finn.system.cache.UserCache;
+import com.finn.system.entity.OpenUserEntity;
 import com.finn.system.entity.ParamsEntity;
 import com.finn.system.entity.RoleEntity;
 import com.finn.system.entity.UserEntity;
@@ -64,11 +66,12 @@ public class ApplicationInitializer implements ApplicationRunner {
     private final DictCache dictCache;
     private final UserCache userCache;
     private final RoleService roleService;
+    private final OpenUserCache openUserCache;
 
     public ApplicationInitializer(ServerProperties serverProperties, DynamicDataSource dynamicDataSource,
                                   SysDataSourceProperties sysDataSourceProperties, ParamsCache paramsCache,
                                   DictCache dictCache, UserCache userCache,
-                                  RoleService roleService){
+                                  RoleService roleService, OpenUserCache openUserCache){
         this.serverProperties = serverProperties;
         this.dynamicDataSource = dynamicDataSource;
         this.sysDataSourceProperties = sysDataSourceProperties;
@@ -76,6 +79,7 @@ public class ApplicationInitializer implements ApplicationRunner {
         this.dictCache = dictCache;
         this.userCache = userCache;
         this.roleService = roleService;
+        this.openUserCache = openUserCache;
     }
     
     @Override
@@ -126,12 +130,18 @@ public class ApplicationInitializer implements ApplicationRunner {
             dictTypeService.refreshTransCache();
             log.debug("缓存数据字典");
 
-            // 缓存用户
+            // 缓存系统用户
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
             List<UserEntity> list = userMapper.listByWrapper(QueryWrapper.of(UserEntity.class)
                     .eq(UserEntity::getDbStatus, 1));
             userCache.saveList(list);
             log.debug("缓存用户信息！{}", list.size());
+
+            // 缓存公众用户
+            OpenUserMapper openUserMapper = sqlSession.getMapper(OpenUserMapper.class);
+            List<OpenUserEntity> openUsers = openUserMapper.listByWrapper(QueryWrapper.of(OpenUserEntity.class).eq(OpenUserEntity::getDbStatus, 1));
+            openUserCache.saveList(openUsers);
+            log.debug("缓存公众用户信息！{}", list.size());
 
             // 缓存角色
             RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
