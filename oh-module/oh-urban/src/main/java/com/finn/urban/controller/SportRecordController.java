@@ -84,6 +84,7 @@ public class SportRecordController {
         query.setOrderBy("release_time desc");
         Page<SportRecordEntity> page = sportRecordService.page(query);
         List<SportRecordVO> vos = SportRecordConvert.INSTANCE.convertList(page.getResult());
+        sportCheckinService.fillCheckinCount(vos);
         String userKey = RedisKeys.PREFIX + "open-user:info:";
         for(SportRecordVO vo: vos){
             String key = userKey + vo.getUserId();
