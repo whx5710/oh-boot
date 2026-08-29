@@ -5,6 +5,7 @@ import com.finn.framework.datasource.wrapper.Wrapper;
 import com.finn.framework.exception.ServerException;
 import com.finn.framework.security.user.SecurityUser;
 import com.finn.common.utils.AssertUtils;
+import com.finn.system.cache.OpenUserCache;
 import com.finn.system.convert.UserConvert;
 import com.finn.system.entity.OpenUserEntity;
 import com.finn.system.mapper.OpenUserMapper;
@@ -26,8 +27,11 @@ import java.util.List;
 public class OpenUserServiceImpl implements OpenUserService {
     private final OpenUserMapper openUserMapper;
 
-    public OpenUserServiceImpl(OpenUserMapper openUserMapper) {
+    private final OpenUserCache openUserCache;
+
+    public OpenUserServiceImpl(OpenUserMapper openUserMapper, OpenUserCache openUserCache) {
         this.openUserMapper = openUserMapper;
+        this.openUserCache = openUserCache;
     }
 
     /**
@@ -64,7 +68,10 @@ public class OpenUserServiceImpl implements OpenUserService {
     public long save(OpenUserEntity user) {
         AssertUtils.isBlank(user.getOpenId(), "第三方用户ID");
         AssertUtils.isBlank(user.getUserType(), "用户类型");
-        return openUserMapper.insert(user);
+        long userId = openUserMapper.insert(user);
+        OpenUserEntity openUserEntity = openUserMapper.findById(userId, OpenUserEntity.class);
+        openUserCache.saveUser(openUserEntity);
+        return userId;
     }
 
     @Override

@@ -38,13 +38,7 @@ public class UserCache {
         }else{
             UserEntity user = userMapper.getById(userId);
             if(user != null && user.getId() != null){
-                // 清空多余的数据
-                user.setPassword(null);
-                user.setAvatar(null);
-                user.setUpdater(null);
-                user.setUpdateTime(null);
-                user.setPwdModifyTime(null);
-                redisCache.set(key, user.toJson());
+                saveUser(user);
                 return user;
             }else{
                 return new UserEntity();
@@ -58,21 +52,22 @@ public class UserCache {
      */
     public void saveList(List<UserEntity> list){
         if(list != null){
-            list.forEach(item -> {
-                String key = RedisKeys.getUserCacheKey(item.getId());
-                if(redisCache.hasKey(key)){
-                    redisCache.delete(key);
-                }
-                // 清空多余的数据
-                item.setPassword(null);
-                item.setAvatar(null);
-                item.setUpdater(null);
-                item.setUpdateTime(null);
-                item.setPwdModifyTime(null);
-                // 缓存数据
-                redisCache.set(key, item.toJson());
-            });
+            list.forEach(this::saveUser);
         }
+    }
+
+    public void saveUser(UserEntity item){
+        String key = RedisKeys.getUserCacheKey(item.getId());
+        if(redisCache.hasKey(key)){
+            redisCache.delete(key);
+        }
+        // 清空多余的数据
+        item.setPassword(null);
+        item.setUpdater(null);
+        item.setUpdateTime(null);
+        item.setPwdModifyTime(null);
+        // 缓存数据
+        redisCache.set(key, item.toJson());
     }
 
 }
