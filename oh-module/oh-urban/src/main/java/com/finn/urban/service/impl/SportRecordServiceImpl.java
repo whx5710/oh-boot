@@ -260,7 +260,7 @@ public class SportRecordServiceImpl implements SportRecordService {
     public String handlerVisibility(SportRecordVO vo) {
         AssertUtils.isNull(vo.getId(), "运动ID");
         String msg = "发布成功";
-        if(vo.getVisibility() == null){
+        if(vo.getVisibility() == null || vo.getVisibility() == 0){
             vo.setVisibility(0);
             msg = "取消发布";
         }
@@ -284,6 +284,20 @@ public class SportRecordServiceImpl implements SportRecordService {
             }
         }
         sportRecordMapper.updateById(sportRecord);
+
+        String cacheKey = TRACK_CACHE_KEY + sportRecord.getId();
+        if (redisCache.hasKey(cacheKey)) {
+            Object cached = redisCache.get(cacheKey);
+            if (cached != null) {
+                SportRecordVO recordVO = JsonUtils.parseObject(cached.toString(), SportRecordVO.class);
+                recordVO.setVisibility(sportRecord.getVisibility());
+                recordVO.setCoverFileId(sportRecord.getCoverFileId());
+                recordVO.setReleaseTime(sportRecord.getReleaseTime());
+                redisCache.set(cacheKey, JsonUtils.toJsonString(recordVO), TRACK_CACHE_EXPIRE);
+            }
+        }
+
+
         return msg;
     }
 
