@@ -28,3 +28,7 @@ doc/
 hs_err_pid*
 license.lic
 .license-*
+
+# Deploy secrets
+deploy/.env
+deploy/ssl/
