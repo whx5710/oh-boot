@@ -68,10 +68,13 @@ public class OpenUserServiceImpl implements OpenUserService {
     public long save(OpenUserEntity user) {
         AssertUtils.isBlank(user.getOpenId(), "第三方用户ID");
         AssertUtils.isBlank(user.getUserType(), "用户类型");
-        long userId = openUserMapper.insert(user);
-        OpenUserEntity openUserEntity = openUserMapper.findById(userId, OpenUserEntity.class);
-        openUserCache.saveUser(openUserEntity);
-        return userId;
+        // 由 DataInnerInterceptor 自动填充雪花 ID，insert 返回的是影响行数，不是主键
+        openUserMapper.insert(user);
+        OpenUserEntity openUserEntity = openUserMapper.findById(user.getId(), OpenUserEntity.class);
+        if (openUserEntity != null) {
+            openUserCache.saveUser(openUserEntity);
+        }
+        return user.getId();
     }
 
     @Override

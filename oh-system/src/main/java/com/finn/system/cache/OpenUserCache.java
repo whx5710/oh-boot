@@ -37,6 +37,9 @@ public class OpenUserCache {
      * @param item
      */
     public void saveUser(OpenUserEntity item){
+        if (item == null || item.getId() == null) {
+            return;
+        }
         String userKey = RedisKeys.PREFIX + "open-user:info:";
         String key = userKey + item.getId();
         if(redisCache.hasKey(key)){
