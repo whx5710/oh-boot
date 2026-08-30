@@ -34,7 +34,7 @@ cp .env.example .env
 访问地址为：
 
 ```
-http://api.yourdomain.com:8443/sys/openUser/update
+http://www.cwalker.top:8443/api/sys/openUser/update
 ```
 
 > ⚠️ 微信小程序正式上线必须使用 HTTPS，HTTP 模式仅用于本地/内网测试或临时调试。
@@ -61,7 +61,7 @@ mkdir -p ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout ssl/key.pem \
   -out ssl/cert.pem \
-  -subj "/C=CN/ST=Beijing/L=Beijing/O=Test/CN=api.yourdomain.com"
+  -subj "/C=CN/ST=Beijing/L=Beijing/O=Test/CN=www.cwalker.top"
 ```
 
 **正式证书（推荐）：**
@@ -69,11 +69,11 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 - 腾讯云/阿里云免费证书
 - Let's Encrypt（可用 certbot 自动续期）
 
-### 3. 修改 nginx.conf 中的域名
+### 4. 修改 nginx.conf 中的域名
 
-将 `nginx.conf` 中的 `api.yourdomain.com` 替换为你的真实域名。
+当前已配置为 `www.cwalker.top`，如需更换域名，将 `nginx.conf` 中的 `www.cwalker.top` 替换为你的真实域名。
 
-### 4. 构建后端镜像
+### 5. 构建后端镜像
 
 ```bash
 cd ..
@@ -85,19 +85,19 @@ cd deploy
 docker build -t oh-boot:1.0.0 .
 ```
 
-### 5. 启动服务
+### 6. 启动服务
 
 ```bash
 cd deploy
 docker compose up -d
 ```
 
-### 6. 验证
+### 7. 验证
 
 当前为 HTTP 模式，验证地址：
 
-- `http://api.yourdomain.com:8443/nginx-health`
-- `http://api.yourdomain.com:8443/sys/openUser/update`
+- `http://www.cwalker.top:8443/nginx-health`
+- `http://www.cwalker.top:8443/api/sys/openUser/update`
 
 切换到 HTTPS 后，再把 `http://` 改成 `https://`。
 
