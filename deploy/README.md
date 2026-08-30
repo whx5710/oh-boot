@@ -27,19 +27,47 @@ cp .env.example .env
 # 编辑 .env，修改密码、数据库名、机器码等敏感信息
 ```
 
-### 2. 准备 SSL 证书
+### 2. 当前为 HTTP 模式（无 SSL）
 
-将证书文件放到 `deploy/ssl/` 目录，文件命名为：
+当前 `nginx.conf` 默认使用 **HTTP 模式**，不强制要求 SSL 证书，方便先跑起来。
 
-- `cert.pem`：证书文件（合并中间证书）
-- `key.pem`：私钥文件
+访问地址为：
 
-如果使用 Let's Encrypt，默认路径通常是：
+```
+http://api.yourdomain.com:8443/sys/openUser/update
+```
 
-- `/etc/letsencrypt/live/api.yourdomain.com/fullchain.pem`
-- `/etc/letsencrypt/live/api.yourdomain.com/privkey.pem`
+> ⚠️ 微信小程序正式上线必须使用 HTTPS，HTTP 模式仅用于本地/内网测试或临时调试。
 
-复制到 `deploy/ssl/` 后重命名为 `cert.pem` 和 `key.pem`。
+### 3. 切换到 HTTPS（上线前必须做）
+
+当你有了正式 SSL 证书后：
+
+1. 将证书文件放到 `deploy/ssl/` 目录，命名为 `cert.pem` 和 `key.pem`
+2. 编辑 `nginx.conf`：
+   - 注释掉当前 `listen 8443;` 的 HTTP server 块
+   - 取消注释下方的 HTTPS server 块
+3. 编辑 `docker-compose.yml` 中的 nginx 端口（可选）：
+   - 如需保留 HTTP 跳转入口，增加 `"8081:8081"`
+4. 重启 nginx：`docker compose restart nginx`
+
+#### SSL 证书获取方式
+
+**临时自签名证书（仅本地测试）：**
+
+```bash
+cd deploy
+mkdir -p ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout ssl/key.pem \
+  -out ssl/cert.pem \
+  -subj "/C=CN/ST=Beijing/L=Beijing/O=Test/CN=api.yourdomain.com"
+```
+
+**正式证书（推荐）：**
+
+- 腾讯云/阿里云免费证书
+- Let's Encrypt（可用 certbot 自动续期）
 
 ### 3. 修改 nginx.conf 中的域名
 
@@ -66,36 +94,38 @@ docker compose up -d
 
 ### 6. 验证
 
-- 访问 `https://api.yourdomain.com:8443/nginx-health` 检查 nginx
-- 访问 `https://api.yourdomain.com:8443/sys/openUser/update` 测试后端接口
+当前为 HTTP 模式，验证地址：
 
-> 注意：当前使用非标准端口 `8443`（HTTPS）和 `8081`（HTTP 跳转）。微信小程序后台配置服务器域名时，需要填写完整地址，如 `https://api.yourdomain.com:8443`。
+- `http://api.yourdomain.com:8443/nginx-health`
+- `http://api.yourdomain.com:8443/sys/openUser/update`
+
+切换到 HTTPS 后，再把 `http://` 改成 `https://`。
+
+> 注意：当前使用非标准端口 `8443`。微信小程序正式上线必须使用 HTTPS 和备案域名。
 
 ## 关于端口
 
-当前配置使用非标准端口：
+当前配置使用非标准端口 `8443`（HTTP 模式）。
 
-- HTTPS：`8443`
-- HTTP（仅用于跳转）：`8081`
-
-如果后续域名备案完成、服务器放行 80/443，可以将 `nginx.conf` 和 `docker-compose.yml` 中的端口改回标准端口：
+如果后续域名备案完成、服务器放行 80/443，可以改回标准端口，并将 `nginx.conf` 切换为 HTTPS 配置：
 
 ```yaml
 # docker-compose.yml
 ports:
-  - "8081:8081"
-  - "8443:8443"
+  - "80:80"
+  - "443:443"
 ```
 
 ```nginx
 # nginx.conf
 server {
-    listen 8081;
+    listen 80;
     return 301 https://$host$request_uri;
 }
 
 server {
-    listen 443 ssl http2;
+    listen 443 ssl;
+    http2 on;
     # ...
 }
 ```
