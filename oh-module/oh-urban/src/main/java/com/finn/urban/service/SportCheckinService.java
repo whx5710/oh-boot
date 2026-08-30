@@ -4,6 +4,7 @@ import com.finn.urban.entity.SportCheckin;
 import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -42,4 +43,12 @@ public interface SportCheckinService {
      * 填充打卡点数量（列表页用）
      */
     void fillCheckinCount(List<SportRecordVO> vos);
+
+    /**
+     * 查询坐标半径 5 千米内最近的 80 条打卡记录（按 created_at 倒序，gcj02 坐标系）
+     * @param latitude 纬度
+     * @param longitude 经度
+     * @return 打卡 VO 列表（photos 已解析为文件 key 列表）
+     */
+    List<SportCheckinVO> listNearby(BigDecimal latitude, BigDecimal longitude);
 }

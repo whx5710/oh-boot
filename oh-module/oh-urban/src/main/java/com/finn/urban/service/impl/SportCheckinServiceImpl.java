@@ -14,6 +14,7 @@ import com.finn.urban.vo.SportCheckinVO;
 import com.finn.urban.vo.SportRecordVO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,27 @@ public class SportCheckinServiceImpl implements SportCheckinService {
     @Override
     public List<SportCheckinVO> listCheckinsByGroupId(Long groupId) {
         List<SportCheckin> checkins = listByGroupId(groupId);
+        if (checkins == null || checkins.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<SportCheckinVO> cvos = SportCheckinConvert.INSTANCE.convertList(checkins);
+        for (int i = 0; i < checkins.size(); i++) {
+            cvos.get(i).setPhotos(JsonUtils.parseArray(checkins.get(i).getPhotos(), String.class));
+        }
+        return cvos;
+    }
+
+    @Override
+    public List<SportCheckinVO> listNearby(BigDecimal latitude, BigDecimal longitude) {
+        AssertUtils.isNull(latitude, "纬度");
+        AssertUtils.isNull(longitude, "经度");
+        if (latitude.compareTo(new BigDecimal("-90")) < 0 || latitude.compareTo(new BigDecimal("90")) > 0) {
+            throw new ServerException("纬度范围错误");
+        }
+        if (longitude.compareTo(new BigDecimal("-180")) < 0 || longitude.compareTo(new BigDecimal("180")) > 0) {
+            throw new ServerException("经度范围错误");
+        }
+        List<SportCheckin> checkins = sportCheckinMapper.listNearby(latitude, longitude);
         if (checkins == null || checkins.isEmpty()) {
             return new ArrayList<>();
         }

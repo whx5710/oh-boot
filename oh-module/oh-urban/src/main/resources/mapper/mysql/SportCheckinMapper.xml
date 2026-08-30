@@ -10,7 +10,7 @@
               POWER(SIN((#{latitude} - latitude) * PI() / 360), 2) +
               COS(#{latitude} * PI() / 180) * COS(latitude * PI() / 180) *
               POWER(SIN((#{longitude} - longitude) * PI() / 360), 2)
-          ))) &lt;= 5000
+          ))) <= 5000
         ORDER BY created_at DESC
         LIMIT 80
     </select>

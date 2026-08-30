@@ -5,6 +5,7 @@ import com.finn.urban.service.SportCheckinService;
 import com.finn.urban.vo.SportCheckinVO;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -37,5 +38,14 @@ public class SportCheckinController {
     @GetMapping("/{id}")
     public Result<List<SportCheckinVO>> checkins(@PathVariable("id") Long id) {
         return Result.ok(sportCheckinService.listCheckinsByGroupId(id));
+    }
+
+    /**
+     * 根据坐标查询半径 5 千米内最近的 80 条打卡记录（gcj02 坐标系，按时间倒序）
+     */
+    @GetMapping("/nearby")
+    public Result<List<SportCheckinVO>> nearby(@RequestParam BigDecimal latitude,
+                                               @RequestParam BigDecimal longitude) {
+        return Result.ok(sportCheckinService.listNearby(latitude, longitude));
     }
 }
